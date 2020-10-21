@@ -91,7 +91,7 @@ def extract_markdown_visa(visa: List[EnrichedString]) -> List[str]:
 
 def extract_markdown_text(text: StructuredText, level: int) -> List[str]:
     return [
-        '#' * level + f' {enriched_string_to_markdown(text.title)}',
+        '#' * level + f' {enriched_string_to_markdown(text.title)}' if text.title else ' -',
         *[enriched_string_to_markdown(alinea) for alinea in text.outer_alineas],
         *[line for section in text.sections for line in extract_markdown_text(section, level + 1)],
     ]
@@ -118,7 +118,7 @@ def am_to_markdown(am: StructuredArreteMinisteriel) -> str:
 def markdown_transform_and_write_am(input_filename: str, output_filename: str):
     input_ = json.load(open(input_filename))
     output = am_to_markdown(transform_arrete_ministeriel(input_))
-    json.dump(output, open(output_filename, 'w'))
+    open(output_filename, 'w').write(output)
 
 
 def _keep_visa_string(visas: List[str]) -> List[str]:
