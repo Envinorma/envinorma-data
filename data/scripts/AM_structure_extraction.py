@@ -71,6 +71,56 @@ class TableReference:
     reference: str
 
 
+def table_to_markdown(table: Table) -> str:
+    return 'Pas | Encore\n--- | ------\nImplé | menté'
+
+
+def enriched_string_to_markdown(str_: EnrichedString) -> str:
+    if str_.table:
+        return table_to_markdown(str_.table)
+    return str_.text  # TODO: add link
+
+
+def extract_markdown_title(title: EnrichedString) -> List[str]:
+    return [f'# {enriched_string_to_markdown(title)}']
+
+
+def extract_markdown_visa(visa: List[EnrichedString]) -> List[str]:
+    return ['## Visa'] + [enriched_string_to_markdown(vu) for vu in visa]
+
+
+def extract_markdown_text(text: StructuredText, level: int) -> List[str]:
+    return [
+        '#' * level + f' {enriched_string_to_markdown(text.title)}',
+        *[enriched_string_to_markdown(alinea) for alinea in text.outer_alineas],
+        *[line for section in text.sections for line in extract_markdown_text(section, level + 1)],
+    ]
+
+
+def extract_markdown_article(article: Article) -> List[str]:
+    return [f'## Article {article.num}'] + extract_markdown_text(article.text, 3)
+
+
+def extract_markdown_articles(articles: List[Article]) -> List[str]:
+    return [line for article in articles for line in extract_markdown_article(article)]
+
+
+def am_to_markdown(am: StructuredArreteMinisteriel) -> str:
+    lines = [
+        *extract_markdown_title(am.title),
+        *extract_markdown_visa(am.visa),
+        *extract_markdown_articles(am.articles),
+        *[line for section in am.sections for line in extract_markdown_text(section, 2)],
+    ]
+    return '\n'.join(lines)
+
+
+def markdown_transform_and_write_am(input_filename: str, output_filename: str):
+    input_ = json.load(open(input_filename))
+    output = am_to_markdown(transform_arrete_ministeriel(input_))
+    json.dump(output, open(output_filename, 'w'))
+
+
 def _keep_visa_string(visas: List[str]) -> List[str]:
     return [visa for visa in visas if visa[:2].lower() == 'vu']
 
@@ -321,22 +371,24 @@ def _extract_links(text: str) -> EnrichedString:
 
 def transform_arrete_ministeriel(input_text: Dict) -> StructuredArreteMinisteriel:
     visa = _extract_visa(input_text)
-    title = input_text['title']
+    title: str = input_text['title']
     articles = extract_articles(input_text)
     sections = extract_sections(input_text)
-    return StructuredArreteMinisteriel(title, articles, sections, visa)
+    return StructuredArreteMinisteriel(EnrichedString(title), articles, sections, visa)
 
 
 def test(filename: Optional[str] = None):
-    text = json.load(open(filename or 'data/example_AM.json'))
+    text = json.load(open(filename or 'data/data/AM/legifrance_texts/DEVP1706393A.json'))
     return transform_arrete_ministeriel(text)
 
 
 def transform_and_write_test_am(filename: Optional[str] = None, output_filename: Optional[str] = None):
     from dataclasses import asdict
 
+    if not output_filename:
+        raise ValueError()
     res = test(filename)
-    json.dump(asdict(res), open(output_filename or 'data/example_AM_output.json', 'w'), ensure_ascii=False)
+    json.dump(asdict(res), open(output_filename, 'w'), ensure_ascii=False)
 
 
 def transform_all_available_AM():
