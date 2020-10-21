@@ -112,7 +112,7 @@ def am_to_markdown(am: StructuredArreteMinisteriel) -> str:
         *extract_markdown_articles(am.articles),
         *[line for section in am.sections for line in extract_markdown_text(section, 2)],
     ]
-    return '\n'.join(lines)
+    return '\n\n'.join(lines)
 
 
 def markdown_transform_and_write_am(input_filename: str, output_filename: str):
