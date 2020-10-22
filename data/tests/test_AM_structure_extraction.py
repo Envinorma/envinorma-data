@@ -1,18 +1,22 @@
 import json
 from scripts.AM_structure_extraction import (
+    DataFormat,
+    Link,
     _extract_links,
+    _insert_links,
     _html_to_structured_text,
     am_to_markdown,
     table_to_markdown,
     transform_arrete_ministeriel,
     _extract_table,
     _extract_cell_data,
+    _extract_sorted_links_to_display,
 )
 
 
 def test_link_extraction():
     text = 'Hello, how <a href="rf">are</a>'
-    enriched_text = _extract_links(text)
+    enriched_text = _extract_links(text, False)
     assert enriched_text.table is None
     assert '<' not in enriched_text.text
     assert len(enriched_text.links) == 1
@@ -127,3 +131,19 @@ def test_markdown_to_html_with_rowspan():
         '<td colspan="1" rowspan="1">E</td><td colspan="1" rowspan="1">F</td></tr>'
         '<tr><td colspan="1" rowspan="1">G</td><td colspan="1" rowspan="1">H</td></tr></table>'
     )
+
+
+def test_compatible_links_extraction():
+    links = [Link('', 0, 5), Link('', 0, 4), Link('', 6, 2), Link('', 8, 2)]
+    filtered_links = _extract_sorted_links_to_display(links)
+    assert len(filtered_links) == 3
+    assert filtered_links[0].content_size == 5
+    assert filtered_links[1].position == 6
+    assert filtered_links[2].position == 8
+
+
+def test_links_inclusion():
+    links = [Link('A', 0, 5), Link('B', 0, 4), Link('C', 6, 2), Link('D', 8, 2)]
+    assert _insert_links('Hello PiPa!', links, DataFormat.MARKDOWN) == '[Hello](A) [Pi](C)[Pa](D)!'
+    html = _insert_links('Hello PiPa!', links, DataFormat.HTML)
+    assert html == '<a href="A">Hello</a> <a href="C">Pi</a><a href="D">Pa</a>!'
