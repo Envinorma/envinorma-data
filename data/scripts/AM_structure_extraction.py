@@ -20,11 +20,13 @@ class Link:
 class Cell:
     content: 'EnrichedString'
     colspan: int
+    rowspan: int
 
 
 @dataclass
 class Row:
     cells: List[Cell]
+    is_header: bool
 
 
 @dataclass
@@ -71,8 +73,30 @@ class TableReference:
     reference: str
 
 
-def table_to_markdown(table: Table) -> str:
-    return 'Pas | Encore\n--- | ------\nImplé | menté'
+def enriched_text_to_html(str_: EnrichedString) -> str:
+    return str_.text.replace('\n', '<br/>')  # TODO: add links
+
+
+def cell_to_html(cell: Cell, is_header: bool) -> str:
+    tag = 'th' if is_header else 'td'
+    return f'<{tag} colspan="{cell.colspan}" rowspan="{cell.rowspan}">{enriched_text_to_html(cell.content)}</{tag}>'
+
+
+def cells_to_html(cells: List[Cell], is_header: bool) -> str:
+    return ''.join([cell_to_html(cell, is_header) for cell in cells])
+
+
+def row_to_html(row: Row) -> str:
+    return f'<tr>{cells_to_html(row.cells, row.is_header)}</tr>'
+
+
+def rows_to_html(rows: List[Row]) -> str:
+    return ''.join([row_to_html(row) for row in rows])
+
+
+def table_to_markdown(table: Table) -> str:  # html required for merging cells
+    return f'<table>{rows_to_html(table.rows)}</table>'
+    # return 'Pas | Encore\n--- | ------\nImplé | menté'
 
 
 def enriched_string_to_markdown(str_: EnrichedString) -> str:
@@ -146,13 +170,20 @@ def extract_alineas(html_text: str) -> List[str]:
 
 
 def _extract_cell_data(cell: str) -> EnrichedString:
-    return _extract_links(cell.replace('<br />', '\n').replace('<br/>', '\n'))
+    return _extract_links('\n'.join(remove_empty(cell.replace('<br />', '\n').replace('<br/>', '\n').split('\n'))))
+
+
+def _is_header(row: bs4.Tag) -> bool:
+    return row.find('th') is not None
 
 
 def _extract_row_data(row: bs4.Tag) -> Row:
     cell_iterator = row.find_all('td' if row.find('td') else 'th')
-    res = [Cell(_extract_cell_data(str(cell)), int(cell.get('colspan') or 1)) for cell in cell_iterator]
-    return Row(res)
+    res = [
+        Cell(_extract_cell_data(str(cell)), int(cell.get('colspan') or 1), int(cell.get('rowspan') or 1))
+        for cell in cell_iterator
+    ]
+    return Row(res, _is_header(row))
 
 
 def _extract_table(html: str) -> Table:
