@@ -1,6 +1,15 @@
 import json
 from scripts.AM_structure_extraction import Link, EnrichedString, transform_arrete_ministeriel
-from scripts.aida import extract_hyperlinks, add_links_in_enriched_string, Hyperlink, add_aida_links, extract_anchors
+from scripts.aida import (
+    extract_hyperlinks,
+    add_links_in_enriched_string,
+    Hyperlink,
+    add_links_to_am,
+    extract_anchors,
+    aida_link_to_github_link,
+    _AIDA_BASE_URL,
+)
+from dataclasses import asdict
 
 
 def test_hyperlinks_extraction():
@@ -36,7 +45,7 @@ def test_no_fail_in_aida_links_addition():
     for nor in _SAMPLE_AM_NOR:
         aida_page = nor_to_page_id[nor]
         links = [Hyperlink(**link_doc) for link_doc in page_id_to_links[aida_page]]
-        add_aida_links(transform_arrete_ministeriel(json.load(open(f'data/AM/legifrance_texts/{nor}.json'))), links)
+        add_links_to_am(transform_arrete_ministeriel(json.load(open(f'data/AM/legifrance_texts/{nor}.json'))), links)
 
 
 def text_extract_anchors():
@@ -46,7 +55,7 @@ def text_extract_anchors():
         <p><a name='nope'></a>Je m'appelle Pipa.</p>
 
         <h2><a name='et-toi'></a>Et toi ?</h2>
-        
+
         <h3><a href='example.com'>Bye.</a></h2>
 
     '''
@@ -54,3 +63,34 @@ def text_extract_anchors():
     assert len(anchors) == 1
     assert anchors[0].anchored_text == 'Et toi ?'
     assert anchors[0].name == 'et-toi'
+
+
+def test_aida_link_to_github_link():
+    pairs = [
+        (
+            aida_link_to_github_link(Hyperlink('Bonjour', _AIDA_BASE_URL + '1234'), {}, 'NOR2', {'1234': 'NOR1'}),
+            asdict(Hyperlink(content='Bonjour', href='/NOR1.md')),
+        ),
+        (aida_link_to_github_link(Hyperlink('Bonjour', _AIDA_BASE_URL + '1234'), {}, 'NOR1', {'1234': 'NOR1'}), None),
+        (aida_link_to_github_link(Hyperlink('Bonjour', _AIDA_BASE_URL + '1234#1'), {}, 'NOR1', {'1234': 'NOR1'}), None),
+        (
+            aida_link_to_github_link(
+                Hyperlink('Bonjour', _AIDA_BASE_URL + '1234#1'), {'1': 'annexe-1'}, 'NOR1', {'1234': 'NOR1'}
+            ),
+            asdict(Hyperlink(content='Bonjour', href='#annexe-1')),
+        ),
+        (
+            aida_link_to_github_link(
+                Hyperlink('Bonjour', _AIDA_BASE_URL + '1234#1'), {'1': 'annexe-1'}, 'NOR2', {'1234': 'NOR1'}
+            ),
+            asdict(Hyperlink(content='Bonjour', href='/NOR1.md#annexe-1')),
+        ),
+        (
+            aida_link_to_github_link(
+                Hyperlink('Bonjour', _AIDA_BASE_URL + '1234#2'), {'1': 'annexe-1'}, 'NOR2', {'1234': 'NOR1'}
+            ),
+            None,
+        ),
+    ]
+    for computed, expected in pairs:
+        assert (asdict(computed) if computed else None) == expected

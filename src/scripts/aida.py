@@ -1,13 +1,15 @@
+import json
 import re
 import requests
 from copy import deepcopy
 from bs4 import BeautifulSoup, Tag
 from dataclasses import dataclass
-from typing import Any, DefaultDict, Dict, List, Set, Optional
+from typing import Any, DefaultDict, Dict, List, Set, Optional, Tuple
 from collections import defaultdict
 from scripts.AM_structure_extraction import EnrichedString, Link, StructuredArreteMinisteriel, StructuredText, Article
 
-_AIDA_URL = 'https://aida.ineris.fr/consultation_document/{}'
+_AIDA_BASE_URL = 'https://aida.ineris.fr/consultation_document/'
+_AIDA_URL = _AIDA_BASE_URL + '{}'
 _NOR_REGEXP = r'[A-Z]{4}[0-9]{7}[A-Z]'
 
 
@@ -182,7 +184,7 @@ def add_links_in_enriched_string(enriched_str: EnrichedString, str_to_target: Di
     return new_enriched_str
 
 
-def add_aida_links(text: StructuredArreteMinisteriel, new_hyperlinks: List[Hyperlink]) -> StructuredArreteMinisteriel:
+def add_links_to_am(text: StructuredArreteMinisteriel, new_hyperlinks: List[Hyperlink]) -> StructuredArreteMinisteriel:
     str_to_target = {link.content: link.href for link in new_hyperlinks}
     return StructuredArreteMinisteriel(
         title=text.title,
@@ -192,8 +194,75 @@ def add_aida_links(text: StructuredArreteMinisteriel, new_hyperlinks: List[Hyper
     )
 
 
-def transform_aida_links_to_github_markdown_links(aida_links: List[Hyperlink], aida_anchors: List[Anchors]):
-    pass
+def extract_number_in_the_beginning(str_: str) -> Optional[str]:
+    matches = re.findall(r'^[0-9]*', str_)
+    if not matches:
+        return None
+    return matches[0]
+
+
+def make_github_anchor(str_: str) -> str:
+    github_anchor = str_.replace(' ', '-').replace('.', '').lower()
+    particular_root = 'article-'
+    if github_anchor[: len(particular_root)] != particular_root:  # AIDA adds things in title
+        return github_anchor
+    article_number = extract_number_in_the_beginning(github_anchor[len(particular_root) :])
+    return f'{particular_root}{article_number}' if article_number else github_anchor
+
+
+def extract_page_and_anchor_from_aida_href(href: str) -> Optional[Tuple[str, Optional[str]]]:
+    clean_href = href.replace(_AIDA_BASE_URL, '')
+    nb_hash = clean_href.count('#')
+    if nb_hash == 0:
+        return clean_href, None
+    if nb_hash > 1:
+        return None
+    res = clean_href.split('#')
+    return res[0], res[1]
+
+
+def aida_anchor_to_github_anchor(anchor: Optional[str], aida_to_github_anchor_name: Dict[str, str]) -> Optional[str]:
+    new_anchor = ''
+    if anchor:
+        github_anchor_name = aida_to_github_anchor_name.get(anchor)
+        if not github_anchor_name:
+            return None
+        new_anchor = '#' + github_anchor_name
+    return new_anchor
+
+
+def aida_link_to_github_link(
+    link: Hyperlink,
+    aida_to_github_anchor_name: Dict[str, str],
+    current_nor: str,
+    aida_page_to_nor: Dict[str, str],
+    keep_unknown_aida_links: bool = True,
+) -> Optional[Hyperlink]:
+    page_and_anchor = extract_page_and_anchor_from_aida_href(link.href)
+    if not page_and_anchor:
+        return None
+    page, anchor = page_and_anchor
+    nor = aida_page_to_nor.get(page)
+    if not nor and keep_unknown_aida_links:
+        return link
+    github_page = f'/{nor}.md' if nor != current_nor else ''
+    if not anchor:
+        return Hyperlink(href=github_page, content=link.content) if github_page else None
+    github_anchor = aida_anchor_to_github_anchor(anchor, aida_to_github_anchor_name)
+    if not github_anchor:
+        return None
+    github_href = f'{github_page}{github_anchor}'
+    return Hyperlink(href=github_href, content=link.content) if github_href else None
+
+
+def transform_aida_links_to_github_markdown_links(
+    aida_links: List[Hyperlink], aida_anchors: List[Anchor], current_nor: str, aida_page_to_nor: Dict[str, str]
+) -> List[Hyperlink]:
+    aida_to_github_anchor_name = {anchor.name: make_github_anchor(anchor.anchored_text) for anchor in aida_anchors}
+    candidates = [
+        aida_link_to_github_link(link, aida_to_github_anchor_name, current_nor, aida_page_to_nor) for link in aida_links
+    ]
+    return [link for link in candidates if link]
 
 
 def scrap_all_anchors() -> None:
@@ -212,29 +281,84 @@ def scrap_all_anchors() -> None:
     json.dump(page_id_to_anchors_json, open('data/aida/hyperlinks/page_id_to_anchors.json', 'w'), ensure_ascii=False)
 
 
-def generate_1510_markdown() -> None:
+@dataclass
+class AMData:
+    content: List[Dict[str, Any]]
+    nor_to_aida: Dict[str, str]
+    aida_to_nor: Dict[str, str]
+
+
+@dataclass
+class AidaData:
+    page_id_to_links: Dict[str, List[Hyperlink]]
+    page_id_to_anchors: Dict[str, List[Anchor]]
+
+
+@dataclass
+class Data:
+    aida: AidaData
+    arretes_ministeriels: AMData
+
+
+def load_am_data() -> AMData:
+    arretes_ministeriels = json.load(open('data/AM/arretes_ministeriels.json'))
+    nor_to_aida = {doc['nor']: doc['aida_page'] for doc in arretes_ministeriels if 'nor' in doc and 'aida_page' in doc}
+    aida_to_nor = {doc['aida_page']: doc['nor'] for doc in arretes_ministeriels if 'nor' in doc and 'aida_page' in doc}
+    return AMData(arretes_ministeriels, nor_to_aida, aida_to_nor)
+
+
+def load_aida_data() -> AidaData:
+    page_id_to_links = json.load(open('data/aida/hyperlinks/page_id_to_links.json'))
+    page_id_to_anchors = json.load(open('data/aida/hyperlinks/page_id_to_anchors.json'))
+    links = {
+        aida_page: [Hyperlink(**link_doc) for link_doc in link_docs]
+        for aida_page, link_docs in page_id_to_links.items()
+    }
+    anchors = {
+        aida_page: [Anchor(**anchor_doc) for anchor_doc in anchor_docs]
+        for aida_page, anchor_docs in page_id_to_anchors.items()
+    }
+    return AidaData(links, anchors)
+
+
+def load_data() -> Data:
+    return Data(load_aida_data(), load_am_data())
+
+
+def generate_nor_markdown(nor: str, data: Data):
     import json
     from scripts.AM_structure_extraction import am_to_markdown, transform_arrete_ministeriel
 
-    page_id_to_links = json.load(open('data/aida/hyperlinks/page_id_to_links.json'))
-    arretes_ministeriels = json.load(open('data/AM/arretes_ministeriels.json'))
-    magic_nor = 'DEVP1706393A'
-    nor_to_page_id = {
-        doc['nor']: doc['aida_page'] for doc in arretes_ministeriels if 'nor' in doc and 'aida_page' in doc
-    }
-    aida_page = nor_to_page_id[magic_nor]
-    links = [Hyperlink(**link_doc) for link_doc in page_id_to_links[aida_page]]
-    open(f'data/AM/markdown_texts/{magic_nor}.md', 'w').write(
+    aida_page = data.arretes_ministeriels.nor_to_aida[nor]
+    internal_links = transform_aida_links_to_github_markdown_links(
+        data.aida.page_id_to_links[aida_page],
+        data.aida.page_id_to_anchors[aida_page],
+        nor,
+        data.arretes_ministeriels.aida_to_nor,
+    )
+    open(f'data/AM/markdown_texts/{nor}.md', 'w').write(
         am_to_markdown(
-            add_aida_links(
-                transform_arrete_ministeriel(json.load(open(f'data/AM/legifrance_texts/{magic_nor}.json'))), links
+            add_links_to_am(
+                transform_arrete_ministeriel(json.load(open(f'data/AM/legifrance_texts/{nor}.json'))), internal_links
             ),
             with_links=True,
         )
     )
 
 
-# if __name__ == '__main__':
-# DOC_ID = '39061'
-# print(scrap_nor(DOC_ID))
+def generate_1510_markdown() -> None:
+    data = load_data()
+    magic_nor = 'DEVP1706393A'
+    generate_nor_markdown(magic_nor, data)
 
+
+def generate_all_markdown() -> None:
+    from tqdm import tqdm
+
+    data = load_data()
+    nors = data.arretes_ministeriels.nor_to_aida.keys()
+    for nor in tqdm(nors):
+        try:
+            generate_nor_markdown(nor, data)
+        except Exception as exc:
+            print(nor, exc)
