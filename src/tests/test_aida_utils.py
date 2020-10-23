@@ -2,6 +2,7 @@ import json
 from scripts.AM_structure_extraction import Link, EnrichedString, transform_arrete_ministeriel
 from scripts.aida import (
     extract_hyperlinks,
+    _GITHUB_BASE_LOC,
     add_links_in_enriched_string,
     Hyperlink,
     add_links_to_am,
@@ -69,7 +70,7 @@ def test_aida_link_to_github_link():
     pairs = [
         (
             aida_link_to_github_link(Hyperlink('Bonjour', _AIDA_BASE_URL + '1234'), {}, 'NOR2', {'1234': 'NOR1'}),
-            asdict(Hyperlink(content='Bonjour', href='/NOR1.md')),
+            asdict(Hyperlink(content='Bonjour', href=f'{_GITHUB_BASE_LOC}/NOR1.md')),
         ),
         (aida_link_to_github_link(Hyperlink('Bonjour', _AIDA_BASE_URL + '1234'), {}, 'NOR1', {'1234': 'NOR1'}), None),
         (aida_link_to_github_link(Hyperlink('Bonjour', _AIDA_BASE_URL + '1234#1'), {}, 'NOR1', {'1234': 'NOR1'}), None),
@@ -83,7 +84,7 @@ def test_aida_link_to_github_link():
             aida_link_to_github_link(
                 Hyperlink('Bonjour', _AIDA_BASE_URL + '1234#1'), {'1': 'annexe-1'}, 'NOR2', {'1234': 'NOR1'}
             ),
-            asdict(Hyperlink(content='Bonjour', href='/NOR1.md#annexe-1')),
+            asdict(Hyperlink(content='Bonjour', href=f'{_GITHUB_BASE_LOC}/NOR1.md#annexe-1')),
         ),
         (
             aida_link_to_github_link(

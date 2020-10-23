@@ -231,6 +231,9 @@ def aida_anchor_to_github_anchor(anchor: Optional[str], aida_to_github_anchor_na
     return new_anchor
 
 
+_GITHUB_BASE_LOC = '/src/data/AM/markdown_texts'
+
+
 def aida_link_to_github_link(
     link: Hyperlink,
     aida_to_github_anchor_name: Dict[str, str],
@@ -245,7 +248,7 @@ def aida_link_to_github_link(
     nor = aida_page_to_nor.get(page)
     if not nor and keep_unknown_aida_links:
         return link
-    github_page = f'/{nor}.md' if nor != current_nor else ''
+    github_page = f'{_GITHUB_BASE_LOC}/{nor}.md' if nor != current_nor else ''
     if not anchor:
         return Hyperlink(href=github_page, content=link.content) if github_page else None
     github_anchor = aida_anchor_to_github_anchor(anchor, aida_to_github_anchor_name)
