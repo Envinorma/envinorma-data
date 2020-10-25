@@ -1,9 +1,10 @@
 import json
 import re
 import requests
-from copy import deepcopy
 from bs4 import BeautifulSoup, Tag
+from copy import deepcopy
 from dataclasses import dataclass
+from enum import Enum
 from typing import Any, DefaultDict, Dict, List, Set, Optional, Tuple
 from collections import defaultdict
 from scripts.AM_structure_extraction import EnrichedString, Link, StructuredArreteMinisteriel, StructuredText, Article
@@ -22,9 +23,9 @@ def _extract_nor_from_text(text: str) -> str:
 
 def extract_nor_from_html(html: str) -> str:
     soup = BeautifulSoup(html, 'html.parser')
-    for h5 in soup.find_all('h5'):
-        if 'NOR' in h5.text:
-            return _extract_nor_from_text(h5.text)
+    for tag in soup.find_all('h5'):
+        if 'NOR' in tag.text:
+            return _extract_nor_from_text(tag.text)
     raise ValueError('NOR not found!')
 
 
@@ -232,6 +233,7 @@ def aida_anchor_to_github_anchor(anchor: Optional[str], aida_to_github_anchor_na
 
 
 _GITHUB_BASE_LOC = '/src/data/AM/markdown_texts'
+_GITHUB_BASE_LOC = ''
 
 
 def aida_link_to_github_link(
@@ -328,7 +330,31 @@ def load_data() -> Data:
     return Data(load_aida_data(), load_am_data())
 
 
-def generate_nor_markdown(nor: str, data: Data):
+def classement_to_md(classements: List[Dict]) -> str:
+    if not classements:
+        return ''
+    rows = [f"{clss['rubrique']} | {clss['regime']} | {clss.get('alinea') or ''}" for clss in classements]
+    return '\n'.join(['Rubrique | Régime | Alinea', '---|---|---'] + rows)
+
+
+def generate_text_md(text: Dict[str, Any]) -> str:
+    nor = text.get('nor')
+    page_name = text.get('page_name') or ''
+    aida = text.get('aida_page')
+    table = classement_to_md(text['classements'])
+    return '\n\n'.join(
+        [f'## [{nor}](/{nor}.md)', f'_{page_name.strip()}_', f'[sur AIDA]({_AIDA_URL.format(aida)})']
+        + ([table] if table else [])
+    )
+
+
+def generate_index(am_data: AMData) -> str:
+    return '\n\n---\n\n'.join(
+        [generate_text_md(text) for text in sorted(am_data.content, key=lambda x: x.get('nor', 'zzzzz'))]
+    )
+
+
+def generate_nor_markdown(nor: str, data: Data, output_folder: str):
     import json
     from scripts.AM_structure_extraction import am_to_markdown, transform_arrete_ministeriel
 
@@ -339,7 +365,7 @@ def generate_nor_markdown(nor: str, data: Data):
         nor,
         data.arretes_ministeriels.aida_to_nor,
     )
-    open(f'data/AM/markdown_texts/{nor}.md', 'w').write(
+    open(f'{output_folder}/{nor}.md', 'w').write(
         am_to_markdown(
             add_links_to_am(
                 transform_arrete_ministeriel(json.load(open(f'data/AM/legifrance_texts/{nor}.json'))), internal_links
@@ -352,16 +378,18 @@ def generate_nor_markdown(nor: str, data: Data):
 def generate_1510_markdown() -> None:
     data = load_data()
     magic_nor = 'DEVP1706393A'
-    generate_nor_markdown(magic_nor, data)
+    generate_nor_markdown(magic_nor, data, 'data/AM/markdown_texts')
 
 
-def generate_all_markdown() -> None:
+def generate_all_markdown(output_folder: str = '/Users/remidelbouys/EnviNorma/envinorma.github.io') -> None:
     from tqdm import tqdm
 
     data = load_data()
+    open(f'{output_folder}/index.md', 'w').write(generate_index(data.arretes_ministeriels))
+
     nors = data.arretes_ministeriels.nor_to_aida.keys()
     for nor in tqdm(nors):
         try:
-            generate_nor_markdown(nor, data)
+            generate_nor_markdown(nor, data, output_folder)
         except Exception as exc:
             print(nor, exc)
