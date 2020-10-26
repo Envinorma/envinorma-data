@@ -1,13 +1,152 @@
-from enum import Enum
 import copy
-import random
 import json
+import os
+import random
 import re
-from typing import Any, Dict, Iterable, List, Tuple, Optional, TypeVar
 from dataclasses import dataclass, field
-
+from typing import Any, Dict, Iterable, List, Tuple, Optional, Union
+from tqdm import tqdm
 from bs4 import BeautifulSoup
 import bs4
+
+
+class AMStructurationError(Exception):
+    pass
+
+
+def _check_format(var: Any, type_: Union[type, Tuple], var_name: str) -> None:
+    if not isinstance(var, type_):
+        raise AMStructurationError(f'type of {var_name} is {type(var)}, nor {type_}')
+
+
+def _check_dict_field(
+    dict_: Dict[str, Any], key: str, expected_type: Union[type, Tuple], var_name: str, check_is_digit: bool = False
+) -> None:
+    if key not in dict_:
+        raise AMStructurationError(f'Expecting key {key} in {var_name}')
+    _check_format(dict_[key], expected_type, key)
+    if check_is_digit:
+        if not str.isdigit(dict_[key]):
+            raise AMStructurationError(f'{var_name}[{key}] is not a digit, but {dict_[key]}')
+
+
+def _check_lf_visa(legifrance_dict: Dict[str, Any]) -> None:
+    _check_dict_field(legifrance_dict, 'visa', str, 'legifrance_dict')
+
+
+def _check_lf_title(legifrance_dict: Dict[str, Any]) -> None:
+    _check_dict_field(legifrance_dict, 'title', str, 'legifrance_dict')
+
+
+def _check_lf_article(article: Dict[str, Any]) -> None:
+    if 'title' in article:
+        raise AMStructurationError('article should not have "title"')
+    if 'sections' in article:
+        raise AMStructurationError('article should not have "sections"')
+    _check_dict_field(article, 'num', (type(None), str), 'legifrance.article')
+    _check_dict_field(article, 'intOrdre', int, 'legifrance.article')
+    _check_dict_field(article, 'id', str, 'legifrance.article')
+    _check_dict_field(article, 'content', str, 'legifrance.article')
+
+
+def _check_lf_articles(legifrance_dict: Dict[str, Any], depth: int = 0) -> None:
+    _check_dict_field(legifrance_dict, 'articles', list, f'legifrance_dict_depth_{depth}')
+    articles = legifrance_dict['articles']
+    for article in articles:
+        _check_lf_article(article)
+
+
+def _check_lf_section(section: Dict[str, Any], depth: int = 0) -> None:
+    _check_dict_field(section, 'title', str, 'legifrance.section')
+    _check_dict_field(section, 'intOrdre', int, 'legifrance.section')
+    _check_dict_field(section, 'sections', list, 'legifrance.section')
+    _check_lf_sections(section, depth + 1)
+    _check_lf_articles(section, depth + 1)
+
+
+def _check_lf_sections(legifrance_dict: Dict[str, Any], depth: int = 0) -> None:
+    _check_dict_field(legifrance_dict, 'sections', list, f'legifrance_dict_depth_{depth}')
+    sections = legifrance_dict['sections']
+    for section in sections:
+        _check_lf_section(section, depth)
+
+
+def _article_nb_null_num(dict_) -> int:
+    return 1 if dict_['num'] is None else 0
+
+
+def _text_nb_null_num_in_arrete(dict_) -> int:
+    nb_null_in_articles = [_article_nb_null_num(article) for article in dict_['articles']]
+    nb_null_in_sections = [_text_nb_null_num_in_arrete(section) for section in dict_['sections']]
+    return sum(nb_null_in_articles + nb_null_in_sections)
+
+
+def _get_total_nb_articles_in_arrete(dict_) -> int:
+    return sum([len(dict_['articles'])] + [_get_total_nb_articles_in_arrete(section) for section in dict_['sections']])
+
+
+def _get_proportion_of_null_articles(dict_) -> Tuple[int, int]:
+    return _text_nb_null_num_in_arrete(dict_), _get_total_nb_articles_in_arrete(dict_)
+
+
+def _check_proportion_of_null_articles(dict_) -> None:
+    nb_null, total = _get_proportion_of_null_articles(dict_)
+    if nb_null / total >= 0.5:
+        raise AMStructurationError(f'Too many articles have null num: {nb_null}/{total}')
+
+
+def _check_legifrance_dict(legifrance_dict: Dict[str, Any]) -> None:
+    _check_lf_visa(legifrance_dict)
+    _check_lf_title(legifrance_dict)
+    _check_lf_articles(legifrance_dict)
+    _check_lf_sections(legifrance_dict)
+    _check_proportion_of_null_articles(legifrance_dict)
+
+
+@dataclass
+class LegifranceSection:
+    intOrdre: int
+    title: str
+    articles: List['LegifranceArticle']
+    sections: List['LegifranceSection']
+
+
+@dataclass
+class LegifranceArticle:
+    id: str
+    content: str
+    intOrdre: int
+    num: Optional[str]
+
+
+@dataclass
+class LegifranceText:
+    visa: str
+    title: str
+    articles: List[LegifranceArticle]
+    sections: List[LegifranceSection]
+
+
+def _load_legifrance_article(dict_: Dict[str, Any]) -> LegifranceArticle:
+    return LegifranceArticle(dict_['id'], dict_['content'], dict_['intOrdre'], dict_['num'])
+
+
+def _load_legifrance_section(dict_: Dict[str, Any]) -> LegifranceSection:
+    return LegifranceSection(
+        dict_['intOrdre'],
+        dict_['title'],
+        [_load_legifrance_article(article) for article in dict_['articles']],
+        [_load_legifrance_section(section) for section in dict_['sections']],
+    )
+
+
+def _load_legifrance_text(dict_: Dict[str, Any]) -> LegifranceText:
+    return LegifranceText(
+        dict_['visa'],
+        dict_['title'],
+        [_load_legifrance_article(article) for article in dict_['articles']],
+        [_load_legifrance_section(section) for section in dict_['sections']],
+    )
 
 
 @dataclass
@@ -51,19 +190,19 @@ class StructuredText:
     title: EnrichedString
     outer_alineas: List[EnrichedString]
     sections: List['StructuredText']
+    legifrance_article: Optional[LegifranceArticle]
 
 
-@dataclass
-class Article:
-    id: str
-    num: str
-    text: StructuredText
+# @dataclass
+# class Article:
+#     id: str
+#     num: str
+#     text: StructuredText
 
 
 @dataclass
 class StructuredArreteMinisteriel:
     title: EnrichedString
-    articles: List[Article]
     sections: List[StructuredText]
     visa: List[EnrichedString]
 
@@ -74,149 +213,12 @@ class TableReference:
     reference: str
 
 
-def enriched_text_to_html(str_: EnrichedString, with_links: bool = False) -> str:
-    if with_links:
-        text = _insert_links(str_.text, str_.links, DataFormat.HTML)
-    else:
-        text = str_.text
-    return text.replace('\n', '<br/>')
-
-
-def cell_to_html(cell: Cell, is_header: bool, with_links: bool = False) -> str:
-    tag = 'th' if is_header else 'td'
-    return (
-        f'<{tag} colspan="{cell.colspan}" rowspan="{cell.rowspan}">'
-        f'{enriched_text_to_html(cell.content, with_links)}'
-        f'</{tag}>'
-    )
-
-
-def cells_to_html(cells: List[Cell], is_header: bool, with_links: bool = False) -> str:
-    return ''.join([cell_to_html(cell, is_header, with_links) for cell in cells])
-
-
-def row_to_html(row: Row, with_links: bool = False) -> str:
-    return f'<tr>{cells_to_html(row.cells, row.is_header, with_links)}</tr>'
-
-
-def rows_to_html(rows: List[Row], with_links: bool = False) -> str:
-    return ''.join([row_to_html(row, with_links) for row in rows])
-
-
-def table_to_markdown(table: Table, with_links: bool = False) -> str:  # html required for merging cells
-    return f'<table>{rows_to_html(table.rows, with_links)}</table>'
-
-
-def _extract_sorted_links_to_display(links: List[Link]) -> List[Link]:
-    if not links:
-        return []
-    sorted_links = sorted(links, key=lambda link: (link.position, -link.content_size))
-    filtered_links = [sorted_links[0]]
-    for link in sorted_links[1:]:
-        if link.position >= filtered_links[-1].position + filtered_links[-1].content_size:
-            filtered_links.append(link)
-    return filtered_links
-
-
-class DataFormat(Enum):
-    MARKDOWN = 'MARKDOWN'
-    HTML = 'HTML'
-
-
-def _make_url(content: str, target: str, format_: DataFormat) -> str:
-    if format_ == DataFormat.MARKDOWN:
-        return f'[{content}]({target})'
-    if format_ == DataFormat.HTML:
-        return f'<a href="{target}">{content}</a>'
-    raise NotImplementedError(f'URL outputting is not implemented for format {format_}')
-
-
-TP = TypeVar('TP')
-
-
-def _alternate_merge(even_elements: List[TP], odd_elements: List[TP]) -> List[TP]:
-    if not 0 <= len(even_elements) - len(odd_elements) <= 1:
-        raise ValueError(
-            f'There should be the same number of elements or one extra even elements.'
-            f' Even: {len(even_elements)}, Odd: {len(odd_elements)}'
-        )
-    res = [x for a, b in zip(even_elements, odd_elements) for x in [a, b]]
-    if len(even_elements) > len(odd_elements):
-        res.append(even_elements[-1])
-    return res
-
-
-def divide_string(str_: str, hyphenations: List[int]) -> List[str]:
-    return [str_[start:end] for start, end in zip([0] + hyphenations, hyphenations + [len(str_)])]
-
-
-def _add_links_to_relevant_pieces(pieces: List[str], links: List[Link], format_: DataFormat) -> List[str]:
-    iso_pieces = pieces[0::2]
-    changing_pieces = pieces[1::2]
-    assert len(changing_pieces) == len(links)
-    changed_pieces = [_make_url(str_, link.target, format_) for str_, link in zip(changing_pieces, links)]
-    return _alternate_merge(iso_pieces, changed_pieces)
-
-
-def _insert_links(str_: str, links: List[Link], format_: DataFormat) -> str:
-    compatible_links = _extract_sorted_links_to_display(links)
-    hyphenations = [hyph for link in compatible_links for hyph in (link.position, link.position + link.content_size)]
-    pieces = divide_string(str_, hyphenations)
-    return ''.join(_add_links_to_relevant_pieces(pieces, compatible_links, format_))
-
-
-def enriched_string_to_markdown(str_: EnrichedString, with_links: bool = False) -> str:
-    if str_.table:
-        return table_to_markdown(str_.table, with_links)
-    return str_.text if not with_links else _insert_links(str_.text, str_.links, DataFormat.MARKDOWN)
-
-
-def extract_markdown_title(title: EnrichedString, with_links: bool = False) -> List[str]:
-    return [f'# {enriched_string_to_markdown(title, with_links)}']
-
-
-def extract_markdown_visa(visa: List[EnrichedString], with_links: bool = False) -> List[str]:
-    return ['## Visa'] + [enriched_string_to_markdown(vu, with_links) for vu in visa]
-
-
-def extract_markdown_text(text: StructuredText, level: int, with_links: bool = False) -> List[str]:
-    return [
-        '#' * level + f' {enriched_string_to_markdown(text.title, with_links)}' if text.title else ' -',
-        *[enriched_string_to_markdown(alinea, with_links) for alinea in text.outer_alineas],
-        *[line for section in text.sections for line in extract_markdown_text(section, level + 1, with_links)],
-    ]
-
-
-def extract_markdown_article(article: Article, with_links: bool = False) -> List[str]:
-    return [f'## Article {article.num}'] + extract_markdown_text(article.text, 3, with_links)
-
-
-def extract_markdown_articles(articles: List[Article], with_links: bool = False) -> List[str]:
-    return [line for article in articles for line in extract_markdown_article(article, with_links)]
-
-
-def am_to_markdown(am: StructuredArreteMinisteriel, with_links: bool = False) -> str:
-    lines = [
-        *extract_markdown_title(am.title, with_links),
-        *extract_markdown_visa(am.visa, with_links),
-        *extract_markdown_articles(am.articles, with_links),
-        *[line for section in am.sections for line in extract_markdown_text(section, 2, with_links)],
-    ]
-    return '\n\n'.join(lines)
-
-
-def markdown_transform_and_write_am(input_filename: str, output_filename: str):
-    input_ = json.load(open(input_filename))
-    output = am_to_markdown(transform_arrete_ministeriel(input_))
-    open(output_filename, 'w').write(output)
-
-
 def _keep_visa_string(visas: List[str]) -> List[str]:
     return [visa for visa in visas if visa[:2].lower() == 'vu']
 
 
-def _extract_visa(text: Dict) -> List[EnrichedString]:
-    return [_extract_links(str_) for str_ in _keep_visa_string((text.get('visa') or '').split('<br/>'))]
+def _extract_visa(visa_raw: str) -> List[EnrichedString]:
+    return [_extract_links(str_) for str_ in _keep_visa_string((visa_raw).split('<br/>'))]
 
 
 def remove_empty(strs: List[str]) -> List[str]:
@@ -340,20 +342,21 @@ def _detect_patterns(strings: List[str]) -> List[str]:
 def _structure_text(title: str, alineas: List[str]) -> StructuredText:
     patterns = _detect_patterns(alineas)
     if not patterns:
-        return StructuredText(_extract_links(title), list(map(_extract_links, alineas)), [])
+        return StructuredText(_extract_links(title), [_extract_links(al) for al in alineas], [], None)
     pattern_name = patterns[0]
     matches = [re.match(ALL_PATTERNS[pattern_name], line) is not None for line in alineas]
     outer_alineas, grouped_alineas = _split_alineas_in_sections(alineas, matches)
     return StructuredText(
         _extract_links(title),
-        list(map(_extract_links, outer_alineas)),
+        [_extract_links(al) for al in outer_alineas],
         [_structure_text(alinea_group[0], alinea_group[1:]) for alinea_group in grouped_alineas],
+        None,
     )
 
 
 def _make_section_from_alineas(title: str, alineas: List[str], depth: int) -> StructuredText:
     outer_text, sub_sections = _extract_outer_text_and_sections(alineas, depth)
-    return StructuredText(_extract_links(title), [_extract_links(line) for line in outer_text], sub_sections)
+    return StructuredText(_extract_links(title), [_extract_links(line) for line in outer_text], sub_sections, None)
 
 
 def _add_table_if_any(str_: EnrichedString, tables: List[TableReference]) -> EnrichedString:
@@ -376,6 +379,7 @@ def _put_tables_back(text: StructuredText, tables: List[TableReference]) -> Stru
         clean_title,
         [_add_table_if_any(alinea, tables) for alinea in text.outer_alineas],
         [_put_tables_back(section, tables) for section in text.sections],
+        None,
     )
 
 
@@ -387,36 +391,6 @@ def _html_to_structured_text(html: str) -> StructuredText:
 
 def sort_with_int_ordre(elts: List[Dict]) -> List[Dict]:
     return sorted(elts, key=lambda x: x['intOrdre'])
-
-
-def _extract_structured_text_from_section(section: Dict) -> StructuredText:
-    if section.get('sections'):
-        if section.get('articles'):
-            raise NotImplementedError()
-        return StructuredText(
-            _extract_links(section.get('title') or ''),
-            outer_alineas=[],
-            sections=[
-                _extract_structured_text_from_section(subsection)
-                for subsection in sort_with_int_ordre(section['sections'])
-            ],
-        )
-    return StructuredText(
-        _extract_links(section.get('title') or ''),
-        [],
-        [_html_to_structured_text(article['content']) for article in sort_with_int_ordre(section['articles'])],
-    )
-
-
-def extract_sections(text: Dict) -> List[StructuredText]:
-    return [_extract_structured_text_from_section(section) for section in sort_with_int_ordre(text['sections'])]
-
-
-def extract_articles(text: Dict) -> List[Article]:
-    return [
-        Article(article['id'], article['num'], _html_to_structured_text(article['content']))
-        for article in sort_with_int_ordre(text['articles'])
-    ]
 
 
 def print_structured_text(text: StructuredText, prefix: str = '') -> None:
@@ -469,12 +443,44 @@ def _extract_links(text: str, add_legifrance_prefix: bool = True) -> EnrichedStr
     return EnrichedString(final_text, links)
 
 
-def transform_arrete_ministeriel(input_text: Dict) -> StructuredArreteMinisteriel:
-    visa = _extract_visa(input_text)
-    title: str = input_text['title']
-    articles = extract_articles(input_text)
-    sections = extract_sections(input_text)
-    return StructuredArreteMinisteriel(EnrichedString(title), articles, sections, visa)
+def _extract_structured_text_from_legifrance_section(section: LegifranceSection) -> StructuredText:
+    return StructuredText(
+        _extract_links(section.title), [], _extract_sections(section.articles, section.sections), None
+    )
+
+
+def _generate_article_title(article: LegifranceArticle) -> EnrichedString:
+    return EnrichedString(f'Article {article.id}')
+
+
+def _extract_structured_text_from_legifrance_article(article: LegifranceArticle) -> StructuredText:
+
+    structured_text = _html_to_structured_text(article.content)
+    if structured_text.title.text:
+        raise ValueError(f'Should not happen. Article should not have titles. Article id : {article.id}')
+    return StructuredText(
+        _generate_article_title(article), structured_text.outer_alineas, structured_text.sections, article
+    )
+
+
+def _extract_structured_text(section_or_article: Union[LegifranceSection, LegifranceArticle]) -> StructuredText:
+    if isinstance(section_or_article, LegifranceSection):
+        return _extract_structured_text_from_legifrance_section(section_or_article)
+    return _extract_structured_text_from_legifrance_article(section_or_article)
+
+
+def _extract_sections(articles: List[LegifranceArticle], sections: List[LegifranceSection]) -> List[StructuredText]:
+    articles_and_sections: List[Union[LegifranceArticle, LegifranceSection]] = [*articles, *sections]
+    return [
+        _extract_structured_text(article_or_section)
+        for article_or_section in sorted(articles_and_sections, key=lambda x: x.intOrdre)
+    ]
+
+
+def transform_arrete_ministeriel(input_text: LegifranceText) -> StructuredArreteMinisteriel:
+    visa = _extract_visa(input_text.visa)
+    sections = _extract_sections(input_text.articles, input_text.sections)
+    return StructuredArreteMinisteriel(EnrichedString(input_text.title), sections, visa)
 
 
 def test(filename: Optional[str] = None):
@@ -502,10 +508,43 @@ def transform_all_available_AM():
     for file_ in tqdm(os.listdir(input_folder)):
         try:
             transform_and_write_test_am(f'{input_folder}/{file_}', f'{output_folder}/{file_}')
-        except Exception as exc:
+        except Exception as exc:  # pylint: disable=broad-except
             print(str(exc))
             file_to_error[file_] = traceback.format_exc()
 
 
-if __name__ == '__main__':
-    test()
+def _check_all_legifrance_dicts() -> None:
+    folder = 'data/AM/legifrance_texts'
+    for file_ in tqdm(os.listdir(folder)):
+        print(file_)
+        try:
+            _check_legifrance_dict(json.load(open(f'{folder}/{file_}')))
+        except AMStructurationError as exc:
+            print(exc)
+
+
+def _load_all_legifrance_texts() -> Dict[str, LegifranceText]:
+    folder = 'data/AM/legifrance_texts'
+    res: Dict[str, LegifranceText] = {}
+    for file_ in tqdm(os.listdir(folder)):
+        try:
+            text_json = json.load(open(f'{folder}/{file_}'))
+            _check_legifrance_dict(text_json)
+            res[file_.split('.')[0]] = _load_legifrance_text(text_json)
+        except AMStructurationError as exc:
+            print(file_, exc)
+    return res
+
+
+def _extract_text_structure(text: Union[LegifranceText, LegifranceSection], prefix: str = '') -> List[str]:
+    raw_elts: List[Union[LegifranceArticle, LegifranceSection]] = [*text.articles, *text.sections]
+    elts = sorted(raw_elts, key=lambda x: x.intOrdre)
+    res: List[str] = []
+    for elt in elts:
+        if isinstance(elt, LegifranceArticle):
+            res += [f'{prefix}Article {elt.intOrdre}']
+        elif isinstance(elt, LegifranceSection):
+            res += [(f'{prefix}Section {elt.intOrdre}')] + _extract_text_structure(elt, f'|--{prefix}')
+        else:
+            raise ValueError('')
+    return res

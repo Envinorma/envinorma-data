@@ -2,12 +2,17 @@ import json
 import re
 import requests
 from bs4 import BeautifulSoup, Tag
+from collections import defaultdict
 from copy import deepcopy
 from dataclasses import dataclass
-from enum import Enum
+from lib.am_structure_extraction import (
+    EnrichedString,
+    Link,
+    StructuredArreteMinisteriel,
+    StructuredText,
+    _load_legifrance_text,
+)
 from typing import Any, DefaultDict, Dict, List, Set, Optional, Tuple
-from collections import defaultdict
-from scripts.AM_structure_extraction import EnrichedString, Link, StructuredArreteMinisteriel, StructuredText, Article
 
 _AIDA_BASE_URL = 'https://aida.ineris.fr/consultation_document/'
 _AIDA_URL = _AIDA_BASE_URL + '{}'
@@ -155,15 +160,12 @@ def extract_all_anchors_from_aida(document_id: str) -> List[Anchor]:
     return keep_non_ambiguous_anchors(raw_anchors)
 
 
-def add_links_in_article(article: Article, str_to_target: Dict[str, str]) -> Article:
-    return Article(article.id, article.num, add_links_in_section(article.text, str_to_target))
-
-
 def add_links_in_section(section: StructuredText, str_to_target: Dict[str, str]) -> StructuredText:
     return StructuredText(
         add_links_in_enriched_string(section.title, str_to_target),
         [add_links_in_enriched_string(alinea, str_to_target) for alinea in section.outer_alineas],
         [add_links_in_section(subsection, str_to_target) for subsection in section.sections],
+        section.legifrance_article,
     )
 
 
@@ -189,7 +191,6 @@ def add_links_to_am(text: StructuredArreteMinisteriel, new_hyperlinks: List[Hype
     str_to_target = {link.content: link.href for link in new_hyperlinks}
     return StructuredArreteMinisteriel(
         title=text.title,
-        articles=[add_links_in_article(article, str_to_target) for article in text.articles],
         sections=[add_links_in_section(section, str_to_target) for section in text.sections],
         visa=[add_links_in_enriched_string(str_, str_to_target) for str_ in text.visa],
     )
@@ -356,7 +357,7 @@ def generate_index(am_data: AMData) -> str:
 
 def generate_nor_markdown(nor: str, data: Data, output_folder: str):
     import json
-    from scripts.AM_structure_extraction import am_to_markdown, transform_arrete_ministeriel
+    from lib.am_to_markdown import am_to_markdown, transform_arrete_ministeriel
 
     aida_page = data.arretes_ministeriels.nor_to_aida[nor]
     internal_links = transform_aida_links_to_github_markdown_links(
@@ -368,7 +369,10 @@ def generate_nor_markdown(nor: str, data: Data, output_folder: str):
     open(f'{output_folder}/{nor}.md', 'w').write(
         am_to_markdown(
             add_links_to_am(
-                transform_arrete_ministeriel(json.load(open(f'data/AM/legifrance_texts/{nor}.json'))), internal_links
+                transform_arrete_ministeriel(
+                    _load_legifrance_text(json.load(open(f'data/AM/legifrance_texts/{nor}.json')))
+                ),
+                internal_links,
             ),
             with_links=True,
         )
