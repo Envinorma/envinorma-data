@@ -12,6 +12,7 @@ from lib.am_structure_extraction import (
     StructuredArreteMinisteriel,
     transform_arrete_ministeriel,
     _load_legifrance_text,
+    _check_legifrance_dict,
 )
 from lib.aida import transform_aida_links_to_github_markdown_links, add_links_to_am, Hyperlink, _AIDA_URL, Anchor
 
@@ -224,14 +225,12 @@ def generate_nor_markdown(nor: str, data: Data, output_folder: str):
         nor,
         data.arretes_ministeriels.aida_to_nor,
     )
+
+    legifrance_text_json = json.load(open(f'data/AM/legifrance_texts/{nor}.json'))
+    _check_legifrance_dict(legifrance_text_json)
     open(f'{output_folder}/{nor}.md', 'w').write(
         am_to_markdown(
-            add_links_to_am(
-                transform_arrete_ministeriel(
-                    _load_legifrance_text(json.load(open(f'data/AM/legifrance_texts/{nor}.json')))
-                ),
-                internal_links,
-            ),
+            add_links_to_am(transform_arrete_ministeriel(_load_legifrance_text(legifrance_text_json)), internal_links),
             with_links=True,
         )
     )
@@ -253,5 +252,5 @@ def generate_all_markdown(output_folder: str = '/Users/remidelbouys/EnviNorma/en
     for nor in tqdm(nors):
         try:
             generate_nor_markdown(nor, data, output_folder)
-        except Exception as exc:
-            print(nor, exc)
+        except Exception as exc:  # pylint: disable = broad-except
+            print(nor, type(exc), str(exc))

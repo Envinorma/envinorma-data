@@ -309,6 +309,7 @@ ALL_PATTERNS = {
     'numeric-d1': r'^[0-9]+\. ',
     'numeric-d2': r'^([0-9]+\.){2} ',
     'numeric-d3': r'^([0-9]+\.){3} ',
+    'numeric-circle': r'^[0-9]+° ',
     'letters': r'^[a-z]\) ',
     'caps': r'^[A-Z]\. ',
     'annexe': rf'^ANNEXE {ROMAN_PATTERN}',
@@ -455,7 +456,7 @@ def _extract_structured_text_from_legifrance_section(section: LegifranceSection)
 
 
 def _generate_article_title(article: LegifranceArticle) -> EnrichedString:
-    return EnrichedString(f'Article {article.id}')
+    return EnrichedString(f'Article {article.num}')
 
 
 def _extract_structured_text_from_legifrance_article(article: LegifranceArticle) -> StructuredText:
@@ -541,15 +542,53 @@ def _load_all_legifrance_texts() -> Dict[str, LegifranceText]:
     return res
 
 
+@dataclass
+class LegifranceTextProperties:
+    structure: str
+    nb_articles: int
+    nb_non_numerotated_articles: int
+
+
+def _count_articles(text: Union[LegifranceText, LegifranceSection]) -> int:
+    return len(text.articles) + sum([_count_articles(section) for section in text.sections])
+
+
+def _count_non_numerotated_articles(text: Union[LegifranceText, LegifranceSection]) -> int:
+    tmp = len([article for article in text.articles if article.num is not None])
+    return tmp + sum([_count_articles(section) for section in text.sections])
+
+
 def _extract_text_structure(text: Union[LegifranceText, LegifranceSection], prefix: str = '') -> List[str]:
     raw_elts: List[Union[LegifranceArticle, LegifranceSection]] = [*text.articles, *text.sections]
     elts = sorted(raw_elts, key=lambda x: x.intOrdre)
     res: List[str] = []
     for elt in elts:
         if isinstance(elt, LegifranceArticle):
-            res += [f'{prefix}Article {elt.intOrdre}']
+            res += [f'{prefix}Article {elt.num}']
         elif isinstance(elt, LegifranceSection):
-            res += [(f'{prefix}Section {elt.intOrdre}')] + _extract_text_structure(elt, f'|--{prefix}')
+            res += [(f'{prefix}Section {elt.title}')] + _extract_text_structure(elt, f'|--{prefix}')
         else:
             raise ValueError('')
     return res
+
+
+def _compute_properties(text: LegifranceText) -> LegifranceTextProperties:
+    return LegifranceTextProperties(
+        '\n'.join(_extract_text_structure(text)), _count_articles(text), _count_non_numerotated_articles(text)
+    )
+
+
+@dataclass
+class AMProperties:
+    structure: str
+
+
+def _extract_am_structure(am: Union[StructuredArreteMinisteriel, StructuredText], prefix: str = '') -> List[str]:
+    res: List[str] = []
+    for section in am.sections:
+        res += [(f'{prefix}Section {section.title.text}')] + _extract_am_structure(section, f'|--{prefix}')
+    return res
+
+
+def _compute_am_properties(am: StructuredArreteMinisteriel) -> AMProperties:
+    return AMProperties('\n'.join(_extract_am_structure(am)))
