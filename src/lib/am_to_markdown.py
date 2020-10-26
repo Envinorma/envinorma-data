@@ -1,6 +1,7 @@
 import json
 from enum import Enum
-from typing import List, TypeVar
+from dataclasses import dataclass
+from typing import List, TypeVar, Dict, Any
 from lib.am_structure_extraction import (
     EnrichedString,
     Cell,
@@ -12,6 +13,7 @@ from lib.am_structure_extraction import (
     transform_arrete_ministeriel,
     _load_legifrance_text,
 )
+from lib.aida import transform_aida_links_to_github_markdown_links, add_links_to_am, Hyperlink, _AIDA_URL, Anchor
 
 
 def enriched_text_to_html(str_: EnrichedString, with_links: bool = False) -> str:
@@ -141,3 +143,115 @@ def markdown_transform_and_write_am(input_filename: str, output_filename: str):
     output = am_to_markdown(transform_arrete_ministeriel(input_))
     open(output_filename, 'w').write(output)
 
+
+@dataclass
+class AMData:
+    content: List[Dict[str, Any]]
+    nor_to_aida: Dict[str, str]
+    aida_to_nor: Dict[str, str]
+
+
+@dataclass
+class AidaData:
+    page_id_to_links: Dict[str, List[Hyperlink]]
+    page_id_to_anchors: Dict[str, List[Anchor]]
+
+
+@dataclass
+class Data:
+    aida: AidaData
+    arretes_ministeriels: AMData
+
+
+def load_am_data() -> AMData:
+    arretes_ministeriels = json.load(open('data/AM/arretes_ministeriels.json'))
+    nor_to_aida = {doc['nor']: doc['aida_page'] for doc in arretes_ministeriels if 'nor' in doc and 'aida_page' in doc}
+    aida_to_nor = {doc['aida_page']: doc['nor'] for doc in arretes_ministeriels if 'nor' in doc and 'aida_page' in doc}
+    return AMData(arretes_ministeriels, nor_to_aida, aida_to_nor)
+
+
+def load_aida_data() -> AidaData:
+    page_id_to_links = json.load(open('data/aida/hyperlinks/page_id_to_links.json'))
+    page_id_to_anchors = json.load(open('data/aida/hyperlinks/page_id_to_anchors.json'))
+    links = {
+        aida_page: [Hyperlink(**link_doc) for link_doc in link_docs]
+        for aida_page, link_docs in page_id_to_links.items()
+    }
+    anchors = {
+        aida_page: [Anchor(**anchor_doc) for anchor_doc in anchor_docs]
+        for aida_page, anchor_docs in page_id_to_anchors.items()
+    }
+    return AidaData(links, anchors)
+
+
+def load_data() -> Data:
+    return Data(load_aida_data(), load_am_data())
+
+
+def classement_to_md(classements: List[Dict]) -> str:
+    if not classements:
+        return ''
+    rows = [f"{clss['rubrique']} | {clss['regime']} | {clss.get('alinea') or ''}" for clss in classements]
+    return '\n'.join(['Rubrique | Régime | Alinea', '---|---|---'] + rows)
+
+
+def generate_text_md(text: Dict[str, Any]) -> str:
+    nor = text.get('nor')
+    page_name = text.get('page_name') or ''
+    aida = text.get('aida_page')
+    table = classement_to_md(text['classements'])
+    return '\n\n'.join(
+        [
+            f'## [{nor}](/{nor}.md)',
+            f'_{page_name.strip()}_',
+            f'[sur AIDA]({_AIDA_URL.format(aida)})',
+            *([table] if table else []),
+        ]
+    )
+
+
+def generate_index(am_data: AMData) -> str:
+    return '\n\n---\n\n'.join(
+        [generate_text_md(text) for text in sorted(am_data.content, key=lambda x: x.get('nor', 'zzzzz'))]
+    )
+
+
+def generate_nor_markdown(nor: str, data: Data, output_folder: str):
+    aida_page = data.arretes_ministeriels.nor_to_aida[nor]
+    internal_links = transform_aida_links_to_github_markdown_links(
+        data.aida.page_id_to_links[aida_page],
+        data.aida.page_id_to_anchors[aida_page],
+        nor,
+        data.arretes_ministeriels.aida_to_nor,
+    )
+    open(f'{output_folder}/{nor}.md', 'w').write(
+        am_to_markdown(
+            add_links_to_am(
+                transform_arrete_ministeriel(
+                    _load_legifrance_text(json.load(open(f'data/AM/legifrance_texts/{nor}.json')))
+                ),
+                internal_links,
+            ),
+            with_links=True,
+        )
+    )
+
+
+def generate_1510_markdown() -> None:
+    data = load_data()
+    magic_nor = 'DEVP1706393A'
+    generate_nor_markdown(magic_nor, data, 'data/AM/markdown_texts')
+
+
+def generate_all_markdown(output_folder: str = '/Users/remidelbouys/EnviNorma/envinorma.github.io') -> None:
+    from tqdm import tqdm
+
+    data = load_data()
+    open(f'{output_folder}/index.md', 'w').write(generate_index(data.arretes_ministeriels))
+
+    nors = data.arretes_ministeriels.nor_to_aida.keys()
+    for nor in tqdm(nors):
+        try:
+            generate_nor_markdown(nor, data, output_folder)
+        except Exception as exc:
+            print(nor, exc)
