@@ -5,7 +5,7 @@ from lib.am_structure_extraction import (
     transform_arrete_ministeriel,
     _extract_cell_data,
     _load_legifrance_text,
-    _load_legifrance_text,
+    _replace_weird_annexe_words,
 )
 
 
@@ -68,3 +68,15 @@ def test_cell_data_extraction():
         "(incluant le bruit de l'installation)"
     )
 
+
+def test_weird_annexe_replacement():
+    inputs_outputs = [
+        ('A N N E X E S I I', 'ANNEXES I I'),
+        ('A N N E X E I I I', 'ANNEXE III'),
+        ('A N N E X E I V', 'ANNEXE IV'),
+        ('A N N E X E I I', 'ANNEXE II'),
+        ('A N N E X E V', 'ANNEXE V'),
+        ('A N N E X E V I', 'ANNEXE VI'),
+    ]
+    for input_, output in inputs_outputs:
+        assert output == _replace_weird_annexe_words(input_)

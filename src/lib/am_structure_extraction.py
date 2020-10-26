@@ -193,13 +193,6 @@ class StructuredText:
     legifrance_article: Optional[LegifranceArticle]
 
 
-# @dataclass
-# class Article:
-#     id: str
-#     num: str
-#     text: StructuredText
-
-
 @dataclass
 class StructuredArreteMinisteriel:
     title: EnrichedString
@@ -230,6 +223,12 @@ def extract_alineas(html_text: str) -> List[str]:
     return remove_empty(
         html_text.replace('<br />', '<br/>')
         .replace('<p>', '<br/>')
+        .replace("<p align='center'>", '<br/>')
+        .replace('<p align=\"center\">', '<br/>')
+        .replace('<p align=\"left\">', '<br/>')
+        .replace('<p align=\"right\">', '<br/>')
+        .replace('<p class=\"note\">', '<br/>')
+        .replace('<p class=\"cliche\">', '<br/>')
         .replace('</p>', '<br/>')
         .replace(_REF_SIG_LEFT, f'<br/>{_REF_SIG_LEFT}')
         .replace(_REF_SIG_RIGHT, f'{_REF_SIG_RIGHT}<br/>')
@@ -303,18 +302,6 @@ def _split_alineas_in_sections(alineas: List[str], matches: List[bool]) -> Tuple
     )
 
 
-def _extract_outer_text_and_sections(alineas: List[str], depth: int) -> Tuple[List[str], List[StructuredText]]:
-    if depth >= 3:
-        return alineas, []
-    pattern = '^' + r'[0-9]+\.' * depth + ' '
-    matches = [re.match(pattern, line) is not None for line in alineas]
-    outer_alineas, grouped_alineas = _split_alineas_in_sections(alineas, matches)
-    return (
-        outer_alineas,
-        [_make_section_from_alineas(sub_alineas[0], sub_alineas[1:], depth + 1) for sub_alineas in grouped_alineas],
-    )
-
-
 ROMAN_PATTERN = '(CM|CD|D?C{0,3})(XC|XL|L?X{0,3})(IX|IV|V?I{0,3})'
 
 ALL_PATTERNS = {
@@ -324,6 +311,7 @@ ALL_PATTERNS = {
     'numeric-d3': r'^([0-9]+\.){3} ',
     'letters': r'^[a-z]\) ',
     'caps': r'^[A-Z]\. ',
+    'annexe': rf'^ANNEXE {ROMAN_PATTERN}',
 }
 
 
@@ -354,11 +342,6 @@ def _structure_text(title: str, alineas: List[str]) -> StructuredText:
     )
 
 
-def _make_section_from_alineas(title: str, alineas: List[str], depth: int) -> StructuredText:
-    outer_text, sub_sections = _extract_outer_text_and_sections(alineas, depth)
-    return StructuredText(_extract_links(title), [_extract_links(line) for line in outer_text], sub_sections, None)
-
-
 def _add_table_if_any(str_: EnrichedString, tables: List[TableReference]) -> EnrichedString:
     match: Optional[TableReference] = None
     for table in tables:
@@ -383,8 +366,30 @@ def _put_tables_back(text: StructuredText, tables: List[TableReference]) -> Stru
     )
 
 
+_WEIRD_ANNEXE = 'A N N E X E'
+_ROMAN_REPLACERS = [
+    ('I X', 'IX'),
+    ('V I I I', 'VIII'),
+    ('V I I', 'VII'),
+    ('V I', 'VI'),
+    ('I V', 'IV'),
+    ('I I I', 'III'),
+    ('I I', 'II'),
+]
+_ROMAN_ANNEXES = [(f'{_WEIRD_ANNEXE} {_BEF}', f'ANNEXE {_AF}') for _BEF, _AF in _ROMAN_REPLACERS]
+_ANNEXE_REPLACERS = [(f'{_WEIRD_ANNEXE} S', f'ANNEXES')] + _ROMAN_ANNEXES + [(_WEIRD_ANNEXE, 'ANNEXE')]
+
+
+def _replace_weird_annexe_words(str_: str) -> str:
+    res = str_
+    for bef, aft in _ANNEXE_REPLACERS:
+        res = res.replace(bef, aft)
+    return res
+
+
 def _html_to_structured_text(html: str) -> StructuredText:
-    html_without_tables, tables = _remove_tables(html)
+    html_with_correct_annexe = _replace_weird_annexe_words(html)
+    html_without_tables, tables = _remove_tables(html_with_correct_annexe)
     alineas = extract_alineas(html_without_tables)
     return _put_tables_back(_structure_text('', alineas), tables)
 
