@@ -208,12 +208,16 @@ class TableReference:
     reference: str
 
 
-def _keep_visa_string(visas: List[str]) -> List[str]:
+def keep_visa_string(visas: List[str]) -> List[str]:
     return [visa for visa in visas if visa[:2].lower() == 'vu']
 
 
+def split_in_non_empty_html_line(html: str) -> List[str]:
+    return [x for x in html.split('<br/>') if x]
+
+
 def _extract_visa(visa_raw: str) -> List[EnrichedString]:
-    return [_extract_links(str_) for str_ in _keep_visa_string((visa_raw).split('<br/>'))]
+    return [_extract_links(str_) for str_ in keep_visa_string(split_in_non_empty_html_line(visa_raw))]
 
 
 def remove_empty(strs: List[str]) -> List[str]:
@@ -325,13 +329,13 @@ def _detect_matched_pattern(string: str) -> Optional[str]:
     return None
 
 
-def _detect_patterns(strings: List[str]) -> List[str]:
+def detect_patterns(strings: List[str]) -> List[str]:
     matched_patterns = [_detect_matched_pattern(string) for string in strings]
     return [pattern for pattern in matched_patterns if pattern]
 
 
 def _structure_text(title: str, alineas: List[str]) -> StructuredText:
-    patterns = _detect_patterns(alineas)
+    patterns = detect_patterns(alineas)
     if not patterns:
         return StructuredText(_extract_links(title), [_extract_links(al) for al in alineas], [], None)
     pattern_name = patterns[0]

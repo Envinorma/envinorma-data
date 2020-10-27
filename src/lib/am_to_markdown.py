@@ -15,6 +15,13 @@ from lib.am_structure_extraction import (
     _check_legifrance_dict,
 )
 from lib.aida import transform_aida_links_to_github_markdown_links, add_links_to_am, Hyperlink, _AIDA_URL, Anchor
+from lib.texts_properties import (
+    AMProperties,
+    ComputeProperties,
+    LegifranceTextProperties,
+    TitleInconsistency,
+    compute_properties,
+)
 
 
 def enriched_text_to_html(str_: EnrichedString, with_links: bool = False) -> str:
@@ -230,6 +237,59 @@ def generate_index(am_data: AMData) -> str:
     )
 
 
+def lf_properties_to_markdown(properties: LegifranceTextProperties) -> str:
+    return properties.structure
+
+
+def _join_strings(strs: List[str]) -> str:
+    return '\n'.join(strs)
+
+
+def title_inconsistencies_to_markdown(inconsistencies: List[TitleInconsistency]) -> str:
+    return '\n\n'.join(
+        [
+            f'''
+#### {inconsistency.parent_section_title}
+
+*Incohérence*: {inconsistency.inconsistency}
+
+*Titles*:
+
+{_join_strings(inconsistency.titles)}
+'''
+            for inconsistency in inconsistencies
+        ]
+    )
+
+
+def am_properties_to_markdown(properties: AMProperties) -> str:
+    return f'''
+### Strucutre
+
+{properties.structure}
+
+
+### Incohérences
+
+{title_inconsistencies_to_markdown(properties.title_inconsistencies)}
+'''
+
+
+def properties_to_markdown(page_title: str, properties: ComputeProperties) -> str:
+    return f'''
+# {page_title}
+
+## Legifrance
+
+{lf_properties_to_markdown(properties.legifrance)}
+
+## Arrêté structuré
+
+{am_properties_to_markdown(properties.am)}
+
+'''
+
+
 def generate_nor_markdown(nor: str, data: Data, output_folder: str):
     aida_page = data.arretes_ministeriels.nor_to_aida[nor]
     internal_links = transform_aida_links_to_github_markdown_links(
@@ -241,12 +301,11 @@ def generate_nor_markdown(nor: str, data: Data, output_folder: str):
 
     legifrance_text_json = json.load(open(f'data/AM/legifrance_texts/{nor}.json'))
     _check_legifrance_dict(legifrance_text_json)
-    open(f'{output_folder}/{nor}.md', 'w').write(
-        am_to_markdown(
-            add_links_to_am(transform_arrete_ministeriel(_load_legifrance_text(legifrance_text_json)), internal_links),
-            with_links=True,
-        )
-    )
+    lf_text = _load_legifrance_text(legifrance_text_json)
+    am = transform_arrete_ministeriel(lf_text)
+    properties = compute_properties(lf_text, am)
+    open(f'{output_folder}/{nor}.md', 'w').write(am_to_markdown(add_links_to_am(am, internal_links), with_links=True))
+    open(f'{output_folder}/props/{nor}.md', 'w').write(properties_to_markdown(am.title.text, properties))
 
 
 def generate_1510_markdown() -> None:
@@ -267,3 +326,4 @@ def generate_all_markdown(output_folder: str = '/Users/remidelbouys/EnviNorma/en
             generate_nor_markdown(nor, data, output_folder)
         except Exception as exc:  # pylint: disable = broad-except
             print(nor, type(exc), str(exc))
+

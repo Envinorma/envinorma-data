@@ -9,8 +9,10 @@ from lib.am_structure_extraction import (
     LegifranceText,
     LegifranceSection,
     LegifranceArticle,
-    _detect_patterns,
+    detect_patterns,
     ALL_PATTERNS,
+    split_in_non_empty_html_line,
+    keep_visa_string,
 )
 
 
@@ -18,14 +20,15 @@ from lib.am_structure_extraction import (
 class LegifranceTextProperties:
     structure: str
     nb_articles: int
-    nb_non_numerotated_articles: int
+    nb_non_numbered_articles: int
+    nb_lost_vu_lines: int
 
 
 def _count_articles(text: Union[LegifranceText, LegifranceSection]) -> int:
     return len(text.articles) + sum([_count_articles(section) for section in text.sections])
 
 
-def _count_non_numerotated_articles(text: Union[LegifranceText, LegifranceSection]) -> int:
+def _count_non_numbered_articles(text: Union[LegifranceText, LegifranceSection]) -> int:
     tmp = len([article for article in text.articles if article.num is not None])
     return tmp + sum([_count_articles(section) for section in text.sections])
 
@@ -73,9 +76,18 @@ def _extract_article_num_list(text: LegifranceText) -> str:
     return '\n'.join([str(article.num) for article in articles])
 
 
-def _compute_properties(text: LegifranceText) -> LegifranceTextProperties:
+def _count_nb_lost_vu_lines(text: LegifranceText) -> int:
+    visa_lines_before = split_in_non_empty_html_line(text.visa)
+    visa_lines_after_ = keep_visa_string(visa_lines_before)
+    return len(visa_lines_after_) - len(visa_lines_before)
+
+
+def _compute_lf_properties(text: LegifranceText) -> LegifranceTextProperties:
     return LegifranceTextProperties(
-        '\n'.join(_extract_text_structure(text)), _count_articles(text), _count_non_numerotated_articles(text)
+        '\n'.join(_extract_text_structure(text)),
+        _count_articles(text),
+        _count_non_numbered_articles(text),
+        _count_nb_lost_vu_lines(text),
     )
 
 
@@ -167,7 +179,7 @@ def count_nb_empty_articles(am: ArreteMinisteriel) -> int:
 
 
 def _detect_first_pattern(strs: List[str]) -> Optional[str]:
-    patterns = _detect_patterns(strs)
+    patterns = detect_patterns(strs)
     if not patterns:
         return None
     return patterns[0]
@@ -249,3 +261,13 @@ def _compute_am_properties(am: ArreteMinisteriel) -> AMProperties:
         count_nb_empty_articles(am),
         extract_inconsistencies(am),
     )
+
+
+@dataclass
+class ComputeProperties:
+    legifrance: LegifranceTextProperties
+    am: AMProperties
+
+
+def compute_properties(text: LegifranceText, am: ArreteMinisteriel) -> ComputeProperties:
+    return ComputeProperties(_compute_lf_properties(text), _compute_am_properties(am))
