@@ -9,7 +9,7 @@ from lib.am_structure_extraction import (
     Table,
     Link,
     StructuredText,
-    StructuredArreteMinisteriel,
+    ArreteMinisteriel,
     transform_arrete_ministeriel,
     _load_legifrance_text,
     _check_legifrance_dict,
@@ -130,7 +130,7 @@ def extract_markdown_text(text: StructuredText, level: int, with_links: bool = F
     ]
 
 
-def am_to_markdown(am: StructuredArreteMinisteriel, with_links: bool = False) -> str:
+def am_to_markdown(am: ArreteMinisteriel, with_links: bool = False) -> str:
     lines = [
         *extract_markdown_title(am.title, with_links),
         *extract_markdown_visa(am.visa, with_links),
@@ -209,6 +209,19 @@ def generate_text_md(text: Dict[str, Any]) -> str:
             *([table] if table else []),
         ]
     )
+
+
+def _make_collapsible(details: str, hidden: str) -> str:
+    return f'''
+        <details>
+            <summary>
+                {details}
+            </summary>
+
+            {hidden}
+        </details>
+
+    '''
 
 
 def generate_index(am_data: AMData) -> str:

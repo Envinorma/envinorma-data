@@ -1,13 +1,13 @@
+import bs4
 import copy
 import json
 import os
 import random
 import re
+from bs4 import BeautifulSoup
 from dataclasses import dataclass, field
 from typing import Any, Dict, Iterable, List, Tuple, Optional, Union
 from tqdm import tqdm
-from bs4 import BeautifulSoup
-import bs4
 
 
 class AMStructurationError(Exception):
@@ -194,7 +194,7 @@ class StructuredText:
 
 
 @dataclass
-class StructuredArreteMinisteriel:
+class ArreteMinisteriel:
     title: EnrichedString
     sections: List[StructuredText]
     visa: List[EnrichedString]
@@ -483,10 +483,10 @@ def _extract_sections(articles: List[LegifranceArticle], sections: List[Legifran
     ]
 
 
-def transform_arrete_ministeriel(input_text: LegifranceText) -> StructuredArreteMinisteriel:
+def transform_arrete_ministeriel(input_text: LegifranceText) -> ArreteMinisteriel:
     visa = _extract_visa(input_text.visa)
     sections = _extract_sections(input_text.articles, input_text.sections)
-    return StructuredArreteMinisteriel(EnrichedString(input_text.title), sections, visa)
+    return ArreteMinisteriel(EnrichedString(input_text.title), sections, visa)
 
 
 def test(filename: Optional[str] = None):
@@ -572,6 +572,23 @@ def _extract_text_structure(text: Union[LegifranceText, LegifranceSection], pref
     return res
 
 
+def _extract_sorted_articles(text: Union[LegifranceText, LegifranceSection]) -> List[LegifranceArticle]:
+    raw_elts: List[Union[LegifranceArticle, LegifranceSection]] = [*text.articles, *text.sections]
+    elts = sorted(raw_elts, key=lambda x: x.intOrdre)
+    res: List[LegifranceArticle] = []
+    for elt in elts:
+        if isinstance(elt, LegifranceArticle):
+            res.append(elt)
+        elif isinstance(elt, LegifranceSection):
+            res.extend(_extract_sorted_articles(elt))
+    return res
+
+
+def _extract_article_num_list(text: LegifranceText) -> str:
+    articles = _extract_sorted_articles(text)
+    return '\n'.join([str(article.num) for article in articles])
+
+
 def _compute_properties(text: LegifranceText) -> LegifranceTextProperties:
     return LegifranceTextProperties(
         '\n'.join(_extract_text_structure(text)), _count_articles(text), _count_non_numerotated_articles(text)
@@ -583,12 +600,12 @@ class AMProperties:
     structure: str
 
 
-def _extract_am_structure(am: Union[StructuredArreteMinisteriel, StructuredText], prefix: str = '') -> List[str]:
+def _extract_am_structure(am: Union[ArreteMinisteriel, StructuredText], prefix: str = '') -> List[str]:
     res: List[str] = []
     for section in am.sections:
-        res += [(f'{prefix}Section {section.title.text}')] + _extract_am_structure(section, f'|--{prefix}')
+        res += [(f'{prefix}{section.title.text}')] + _extract_am_structure(section, f'|--{prefix}')
     return res
 
 
-def _compute_am_properties(am: StructuredArreteMinisteriel) -> AMProperties:
+def _compute_am_properties(am: ArreteMinisteriel) -> AMProperties:
     return AMProperties('\n'.join(_extract_am_structure(am)))

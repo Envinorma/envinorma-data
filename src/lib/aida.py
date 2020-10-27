@@ -5,13 +5,7 @@ from bs4 import BeautifulSoup, Tag
 from collections import defaultdict
 from copy import deepcopy
 from dataclasses import dataclass
-from lib.am_structure_extraction import (
-    EnrichedString,
-    Link,
-    StructuredArreteMinisteriel,
-    StructuredText,
-    _load_legifrance_text,
-)
+from lib.am_structure_extraction import EnrichedString, Link, ArreteMinisteriel, StructuredText, _load_legifrance_text
 from typing import Any, DefaultDict, Dict, List, Set, Optional, Tuple
 
 _AIDA_BASE_URL = 'https://aida.ineris.fr/consultation_document/'
@@ -187,9 +181,9 @@ def add_links_in_enriched_string(enriched_str: EnrichedString, str_to_target: Di
     return new_enriched_str
 
 
-def add_links_to_am(text: StructuredArreteMinisteriel, new_hyperlinks: List[Hyperlink]) -> StructuredArreteMinisteriel:
+def add_links_to_am(text: ArreteMinisteriel, new_hyperlinks: List[Hyperlink]) -> ArreteMinisteriel:
     str_to_target = {link.content: link.href for link in new_hyperlinks}
-    return StructuredArreteMinisteriel(
+    return ArreteMinisteriel(
         title=text.title,
         sections=[add_links_in_section(section, str_to_target) for section in text.sections],
         visa=[add_links_in_enriched_string(str_, str_to_target) for str_ in text.visa],
