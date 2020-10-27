@@ -5,7 +5,9 @@ import os
 import random
 import re
 from bs4 import BeautifulSoup
+from collections import Counter
 from dataclasses import dataclass, field
+from math import sqrt
 from typing import Any, Dict, Iterable, List, Tuple, Optional, Union
 from tqdm import tqdm
 
@@ -395,10 +397,6 @@ def _html_to_structured_text(html: str) -> StructuredText:
     return _put_tables_back(_structure_text('', alineas), tables)
 
 
-def sort_with_int_ordre(elts: List[Dict]) -> List[Dict]:
-    return sorted(elts, key=lambda x: x['intOrdre'])
-
-
 def print_structured_text(text: StructuredText, prefix: str = '') -> None:
     print(f'{prefix}{text.title}')
     new_prefix = f'\t{prefix}'
@@ -483,10 +481,101 @@ def _extract_sections(articles: List[LegifranceArticle], sections: List[Legifran
     ]
 
 
+def _norm_2(dict_: Dict[str, int]) -> float:
+    return sqrt(sum([x ** 2 for x in dict_.values()]))
+
+
+def _normalized_scalar_product(dict_1: Dict[str, int], dict_2: Dict[str, int]) -> float:
+    common_keys = {*dict_1.keys(), *dict_2.keys()}
+    numerator = sum([dict_1.get(key, 0) * dict_2.get(key, 0) for key in common_keys])
+    denominator = (_norm_2(dict_1) * _norm_2(dict_2)) or 1
+    return numerator / denominator
+
+
+def _compute_proximity(str_1: str, str_2: str) -> float:
+    tokens_1 = Counter(str_1.split(' '))
+    tokens_2 = Counter(str_2.split(' '))
+    return _normalized_scalar_product(tokens_1, tokens_2)
+
+
+def _html_to_str(html: str) -> str:
+    return BeautifulSoup(html, 'html.parser').text
+
+
+def _are_very_similar(article_1: LegifranceArticle, article_2: LegifranceArticle) -> bool:
+    return _compute_proximity(_html_to_str(article_1.content), _html_to_str(article_2.content)) >= 0.9
+
+
+_ArticlePair = Tuple[LegifranceArticle, LegifranceArticle]
+
+
+def _group_articles_to_merge(articles: List[LegifranceArticle]) -> List[Union[LegifranceArticle, _ArticlePair]]:
+    previous_is_not_none = False
+    groups: List[Union[LegifranceArticle, _ArticlePair]] = []
+    for i, article in enumerate(articles):
+        if article.num is not None:
+            previous_is_not_none = True
+            groups.append(article)
+        else:
+            if previous_is_not_none:
+                groups.pop()
+                groups.append((articles[i - 1], article))
+            else:
+                groups.append(article)
+            previous_is_not_none = False
+    return groups
+
+
+def _merge_articles(main_article: LegifranceArticle, article_to_append: LegifranceArticle) -> LegifranceArticle:
+    merged_content = main_article.content + '\n<br/>\n' + article_to_append.content
+    return LegifranceArticle(
+        main_article.id, content=merged_content, intOrdre=main_article.intOrdre, num=main_article.num
+    )
+
+
+def _handle_article_group(group: Union[LegifranceArticle, _ArticlePair]) -> LegifranceArticle:
+    if isinstance(group, LegifranceArticle):
+        return group
+    if _are_very_similar(*group):
+        return group[0]
+    return _merge_articles(*group)
+
+
+def _sort_with_int_ordre(articles: List[LegifranceArticle]) -> List[LegifranceArticle]:
+    return [art for art in sorted(articles, key=lambda x: x.intOrdre)]
+
+
+def _delete_or_merge_articles(articles_: List[LegifranceArticle]) -> List[LegifranceArticle]:
+    articles = copy.deepcopy(_sort_with_int_ordre(articles_))
+    if len(articles) == 1:
+        return articles
+    grouped_articles = _group_articles_to_merge(articles)
+    return [_handle_article_group(group) for group in grouped_articles]
+
+
+def _clean_section_articles(section: LegifranceSection) -> LegifranceSection:
+    return LegifranceSection(
+        section.intOrdre,
+        section.title,
+        _delete_or_merge_articles(section.articles),
+        [_clean_section_articles(subsection) for subsection in section.sections],
+    )
+
+
+def _clean_text_articles(text: LegifranceText) -> LegifranceText:
+    return LegifranceText(
+        text.visa,
+        text.title,
+        _delete_or_merge_articles(text.articles),
+        [_clean_section_articles(section) for section in text.sections],
+    )
+
+
 def transform_arrete_ministeriel(input_text: LegifranceText) -> ArreteMinisteriel:
     visa = _extract_visa(input_text.visa)
-    sections = _extract_sections(input_text.articles, input_text.sections)
-    return ArreteMinisteriel(EnrichedString(input_text.title), sections, visa)
+    text_with_merged_articles = _clean_text_articles(input_text)
+    sections = _extract_sections(text_with_merged_articles.articles, text_with_merged_articles.sections)
+    return ArreteMinisteriel(EnrichedString(text_with_merged_articles.title), sections, visa)
 
 
 def test(filename: Optional[str] = None):
@@ -541,71 +630,3 @@ def _load_all_legifrance_texts() -> Dict[str, LegifranceText]:
             print(file_, exc)
     return res
 
-
-@dataclass
-class LegifranceTextProperties:
-    structure: str
-    nb_articles: int
-    nb_non_numerotated_articles: int
-
-
-def _count_articles(text: Union[LegifranceText, LegifranceSection]) -> int:
-    return len(text.articles) + sum([_count_articles(section) for section in text.sections])
-
-
-def _count_non_numerotated_articles(text: Union[LegifranceText, LegifranceSection]) -> int:
-    tmp = len([article for article in text.articles if article.num is not None])
-    return tmp + sum([_count_articles(section) for section in text.sections])
-
-
-def _extract_text_structure(text: Union[LegifranceText, LegifranceSection], prefix: str = '') -> List[str]:
-    raw_elts: List[Union[LegifranceArticle, LegifranceSection]] = [*text.articles, *text.sections]
-    elts = sorted(raw_elts, key=lambda x: x.intOrdre)
-    res: List[str] = []
-    for elt in elts:
-        if isinstance(elt, LegifranceArticle):
-            res += [f'{prefix}Article {elt.num}']
-        elif isinstance(elt, LegifranceSection):
-            res += [(f'{prefix}Section {elt.title}')] + _extract_text_structure(elt, f'|--{prefix}')
-        else:
-            raise ValueError('')
-    return res
-
-
-def _extract_sorted_articles(text: Union[LegifranceText, LegifranceSection]) -> List[LegifranceArticle]:
-    raw_elts: List[Union[LegifranceArticle, LegifranceSection]] = [*text.articles, *text.sections]
-    elts = sorted(raw_elts, key=lambda x: x.intOrdre)
-    res: List[LegifranceArticle] = []
-    for elt in elts:
-        if isinstance(elt, LegifranceArticle):
-            res.append(elt)
-        elif isinstance(elt, LegifranceSection):
-            res.extend(_extract_sorted_articles(elt))
-    return res
-
-
-def _extract_article_num_list(text: LegifranceText) -> str:
-    articles = _extract_sorted_articles(text)
-    return '\n'.join([str(article.num) for article in articles])
-
-
-def _compute_properties(text: LegifranceText) -> LegifranceTextProperties:
-    return LegifranceTextProperties(
-        '\n'.join(_extract_text_structure(text)), _count_articles(text), _count_non_numerotated_articles(text)
-    )
-
-
-@dataclass
-class AMProperties:
-    structure: str
-
-
-def _extract_am_structure(am: Union[ArreteMinisteriel, StructuredText], prefix: str = '') -> List[str]:
-    res: List[str] = []
-    for section in am.sections:
-        res += [(f'{prefix}{section.title.text}')] + _extract_am_structure(section, f'|--{prefix}')
-    return res
-
-
-def _compute_am_properties(am: ArreteMinisteriel) -> AMProperties:
-    return AMProperties('\n'.join(_extract_am_structure(am)))
