@@ -1,5 +1,9 @@
 import json
+import re
 from lib.am_structure_extraction import (
+    ArreteMinisteriel,
+    EnrichedString,
+    StructuredText,
     LegifranceArticle,
     _extract_links,
     _html_to_structured_text,
@@ -10,6 +14,14 @@ from lib.am_structure_extraction import (
     _compute_proximity,
     _group_articles_to_merge,
     _delete_or_merge_articles,
+    ALL_PATTERNS,
+)
+from lib.texts_properties import (
+    count_sections,
+    count_tables,
+    count_articles_in_am,
+    _PATTERN_NAME_TO_LIST,
+    _extract_section_inconsistencies,
 )
 
 
@@ -127,3 +139,47 @@ def test_delete_or_merge_articles():
     assert [article.id for article in new_articles] == ['0', '1', '2', '4']
     assert new_articles[2].content == articles[2].content
     assert articles[4].content in new_articles[3].content and articles[4].content in new_articles[3].content
+
+
+def _get_am(filename: str) -> ArreteMinisteriel:
+    raw_text = _load_legifrance_text(json.load(open(filename)))
+    return transform_arrete_ministeriel(raw_text)
+
+
+def test_structuration():
+    am_1 = _get_am('test_data/AM/legifrance_texts/DEVP1706393A.json')
+    assert count_sections(am_1) == 103
+    assert count_tables(am_1) == 5
+    assert count_articles_in_am(am_1) == 14
+    assert len(am_1.sections) == 14
+
+    am_2 = _get_am('test_data/AM/legifrance_texts/TREP1835514A.json')
+    assert count_sections(am_2) == 89
+    assert count_tables(am_2) == 9
+    assert count_articles_in_am(am_2) == 60
+    assert len(am_2.sections) == 6
+
+
+def test_regex():
+    for key in _PATTERN_NAME_TO_LIST:
+        assert key in ALL_PATTERNS
+    for pattern_name, pattern in ALL_PATTERNS.items():
+        for elt in _PATTERN_NAME_TO_LIST[pattern_name]:
+            assert re.match(pattern, elt)
+
+
+def test_inconsistency_detection():
+    subsections = [
+        StructuredText(EnrichedString('1. Foo'), [], [], None),
+        StructuredText(EnrichedString('2. Bar'), [], [], None),
+        StructuredText(EnrichedString('3. Pi'), [], [], None),
+        StructuredText(EnrichedString('4. Pa'), [], [], None),
+    ]
+    section = StructuredText(EnrichedString(''), [], subsections, None)
+    inconsistencies = _extract_section_inconsistencies(section)
+    assert len(inconsistencies) == 0
+
+    subsections_err = [*subsections, StructuredText(EnrichedString('4. Pou'), [], [], None)]
+    section_err = StructuredText(EnrichedString(''), [], subsections_err, None)
+    inconsistencies_err = _extract_section_inconsistencies(section_err)
+    assert len(inconsistencies_err) == 1
