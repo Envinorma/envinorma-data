@@ -161,7 +161,7 @@ def test_structuration():
     assert len(am_1.sections) == 14
 
     am_2 = _get_am('test_data/AM/legifrance_texts/TREP1835514A.json')
-    assert count_sections(am_2) == 89
+    assert count_sections(am_2) == 85
     assert count_tables(am_2) == 9
     assert count_articles_in_am(am_2) == 60
     assert len(am_2.sections) == 6

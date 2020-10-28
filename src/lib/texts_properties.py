@@ -5,6 +5,7 @@ from typing import Optional, Tuple, Union, List
 
 from lib.am_structure_extraction import (
     ArreteMinisteriel,
+    EnrichedString,
     StructuredText,
     LegifranceText,
     LegifranceSection,
@@ -198,7 +199,7 @@ _PATTERN_NAME_TO_LIST = {
     'numeric-d2': [f'{x}.{y}. ' for x in range(1, 101) for y in range(1, 21)],
     'numeric-d3': [f'{x}.{y}.{z}. ' for x in range(1, 101) for y in range(1, 21) for z in range(1, 21)],
     'numeric-circle': [f'{x}° ' for x in range(1, 101)],
-    'letters': [f'{x}) ' for x in _LETTERS.lower()],
+    # 'letters': [f'{x}) ' for x in _LETTERS.lower()],
     'caps': [f'{x}. ' for x in _LETTERS],
     'annexe': [f'ANNEXE {x}' for x in range(1, 101)],
     'annexe-roman': [f'ANNEXE {x}' for x in _ROMAN_TO_XXX],
@@ -251,6 +252,31 @@ def _extract_section_inconsistencies(text: StructuredText) -> List[TitleInconsis
 
 def extract_inconsistencies(am: ArreteMinisteriel) -> List[TitleInconsistency]:
     return [inc for section in am.sections for inc in _extract_section_inconsistencies(section)]
+
+
+def _extract_alineas_with_neighbours(alineas: List[EnrichedString], position: int) -> str:
+    start = max(position - 1, 0)
+    end = min(position + 1, len(alineas))
+    return '\n'.join([x.text for x in alineas[start:end]])
+
+
+def _fetch_term_in_alineas(term: str, alineas: List[EnrichedString]) -> List[str]:
+    res = []
+    for i, alinea in enumerate(alineas):
+        if alinea.text.lower().strip()[: len(term)] == term:
+            res.append(_extract_alineas_with_neighbours(alineas, i))
+    return res
+
+
+def _fetch_term_in_text(term: str, text: StructuredText) -> List[str]:
+    in_title = _fetch_term_in_alineas(term, [text.title])
+    in_alineas = _fetch_term_in_alineas(term, text.outer_alineas)
+    in_sections = [result for section in text.sections for result in _fetch_term_in_text(term, section)]
+    return in_title + in_alineas + in_sections
+
+
+def _fetch_term(term: str, am: ArreteMinisteriel) -> List[str]:
+    return [result for section in am.sections for result in _fetch_term_in_text(term, section)]
 
 
 def _compute_am_properties(am: ArreteMinisteriel) -> AMProperties:

@@ -316,7 +316,7 @@ ALL_PATTERNS = {
     'numeric-d2': r'^([0-9]+\.){2} ',
     'numeric-d3': r'^([0-9]+\.){3} ',
     'numeric-circle': r'^[0-9]+° ',
-    'letters': r'^[a-z]\) ',
+    # 'letters': r'^[a-z]\)',
     'caps': r'^[A-Z]\. ',
     'annexe': rf'^ANNEXE [0-9]+',
     'annexe-roman': rf'^ANNEXE {ROMAN_PATTERN}',
