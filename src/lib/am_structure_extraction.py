@@ -308,7 +308,7 @@ def _split_alineas_in_sections(alineas: List[str], matches: List[bool]) -> Tuple
     )
 
 
-ROMAN_PATTERN = '(CM|CD|D?C{0,3})(XC|XL|L?X{0,3})(IX|IV|V?I{0,3})'
+ROMAN_PATTERN = '(?=[MDCLXVI])M*(C[MD]|D?C{0,3})(X[CL]|L?X{0,3})(I[XV]|V?I{0,3})'
 
 ALL_PATTERNS = {
     'roman': rf'^{ROMAN_PATTERN}\. ',
@@ -318,7 +318,8 @@ ALL_PATTERNS = {
     'numeric-circle': r'^[0-9]+° ',
     'letters': r'^[a-z]\) ',
     'caps': r'^[A-Z]\. ',
-    'annexe': rf'^ANNEXE {ROMAN_PATTERN}',
+    'annexe': rf'^ANNEXE [0-9]+',
+    'annexe-roman': rf'^ANNEXE {ROMAN_PATTERN}',
 }
 
 
