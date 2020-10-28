@@ -216,11 +216,11 @@ def _detect_inconsistency_in_numbering(
 ) -> Optional[TitleInconsistency]:
     first_match = _get_first_match(titles[0], prefixes)
     if first_match == -1:
-        return TitleInconsistency(titles, parent_title, f'No prefix found in title "{titles[0]}""')
+        return TitleInconsistency(titles, parent_title, f'No prefix found in title "{titles[0]}"')
     for title, prefix in zip(titles, prefixes[first_match:]):
         if title[: len(prefix)] == prefix:
             continue
-        return TitleInconsistency(titles, parent_title, f'Title "{title}"" is expected to start with prefix "{prefix}"')
+        return TitleInconsistency(titles, parent_title, f'Title "{title}" is expected to start with prefix "{prefix}"')
     if len(titles) > len(prefixes[first_match:]):
         raise ValueError(f'Missing prefixes in list {prefixes}.')
     return None

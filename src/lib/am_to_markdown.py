@@ -238,11 +238,11 @@ def generate_index(am_data: AMData) -> str:
 
 
 def lf_properties_to_markdown(properties: LegifranceTextProperties) -> str:
-    return properties.structure
+    return f'```\n{properties.structure}\n```'
 
 
 def _join_strings(strs: List[str]) -> str:
-    return '\n'.join(strs)
+    return '\n\n'.join(strs)
 
 
 def title_inconsistencies_to_markdown(inconsistencies: List[TitleInconsistency]) -> str:
@@ -251,10 +251,11 @@ def title_inconsistencies_to_markdown(inconsistencies: List[TitleInconsistency])
             f'''
 #### {inconsistency.parent_section_title}
 
-*Incohérence*: {inconsistency.inconsistency}
+##### Incohérence
 
-*Titles*:
+{inconsistency.inconsistency}
 
+##### Titres
 {_join_strings(inconsistency.titles)}
 '''
             for inconsistency in inconsistencies
@@ -264,10 +265,10 @@ def title_inconsistencies_to_markdown(inconsistencies: List[TitleInconsistency])
 
 def am_properties_to_markdown(properties: AMProperties) -> str:
     return f'''
-### Strucutre
-
+### Structure
+```
 {properties.structure}
-
+```
 
 ### Incohérences
 
