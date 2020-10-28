@@ -327,4 +327,3 @@ def generate_all_markdown(output_folder: str = '/Users/remidelbouys/EnviNorma/en
             generate_nor_markdown(nor, data, output_folder)
         except Exception as exc:  # pylint: disable = broad-except
             print(nor, type(exc), str(exc))
-

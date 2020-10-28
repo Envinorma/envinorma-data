@@ -308,7 +308,7 @@ def _split_alineas_in_sections(alineas: List[str], matches: List[bool]) -> Tuple
     )
 
 
-ROMAN_PATTERN = '(?=[MDCLXVI])M*(C[MD]|D?C{0,3})(X[CL]|L?X{0,3})(I[XV]|V?I{0,3})'
+ROMAN_PATTERN = '(?=[XVI])(X{0,3})(I[XV]|V?I{0,3})'
 
 ALL_PATTERNS = {
     'roman': rf'^{ROMAN_PATTERN}\. ',
@@ -531,8 +531,8 @@ def _group_articles_to_merge(articles: List[LegifranceArticle]) -> List[Union[Le
     return groups
 
 
-def _merge_articles(main_article: LegifranceArticle, article_to_append: LegifranceArticle) -> LegifranceArticle:
-    merged_content = main_article.content + '\n<br/>\n' + article_to_append.content
+def _merge_articles(main_article: LegifranceArticle, articles_to_append: List[LegifranceArticle]) -> LegifranceArticle:
+    merged_content = '\n<br/>\n'.join([main_article.content] + [art.content for art in articles_to_append])
     return LegifranceArticle(
         main_article.id, content=merged_content, intOrdre=main_article.intOrdre, num=main_article.num
     )
@@ -543,17 +543,23 @@ def _handle_article_group(group: Union[LegifranceArticle, _ArticlePair]) -> Legi
         return group
     if _are_very_similar(*group):
         return group[0]
-    return _merge_articles(*group)
+    return _merge_articles(group[0], [group[1]])
 
 
 def _sort_with_int_ordre(articles: List[LegifranceArticle]) -> List[LegifranceArticle]:
     return [art for art in sorted(articles, key=lambda x: x.intOrdre)]
 
 
+def _all_none_articles(articles: List[LegifranceArticle]) -> bool:
+    return all([article.num is None for article in articles])
+
+
 def _delete_or_merge_articles(articles_: List[LegifranceArticle]) -> List[LegifranceArticle]:
     articles = copy.deepcopy(_sort_with_int_ordre(articles_))
-    if len(articles) == 1:
+    if len(articles) <= 1:
         return articles
+    if _all_none_articles(articles):
+        return [_merge_articles(articles[0], articles[1:])]
     grouped_articles = _group_articles_to_merge(articles)
     return [_handle_article_group(group) for group in grouped_articles]
 
@@ -599,8 +605,8 @@ def transform_and_write_test_am(filename: Optional[str] = None, output_filename:
 
 def transform_all_available_AM():
     import os
-    from tqdm import tqdm
     import traceback
+    from tqdm import tqdm
 
     input_folder = 'data/legifrance_texts'
     output_folder = 'data/structured_texts'

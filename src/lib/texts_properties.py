@@ -200,8 +200,8 @@ _PATTERN_NAME_TO_LIST = {
     'numeric-circle': [f'{x}° ' for x in range(1, 101)],
     'letters': [f'{x}) ' for x in _LETTERS.lower()],
     'caps': [f'{x}. ' for x in _LETTERS],
-    'annexe': [f'ANNEXE {x} ' for x in range(1, 101)],
-    'annexe-roman': [f'ANNEXE {x} ' for x in _ROMAN_TO_XXX],
+    'annexe': [f'ANNEXE {x}' for x in range(1, 101)],
+    'annexe-roman': [f'ANNEXE {x}' for x in _ROMAN_TO_XXX],
 }
 
 

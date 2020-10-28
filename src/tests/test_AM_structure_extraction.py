@@ -15,6 +15,7 @@ from lib.am_structure_extraction import (
     _group_articles_to_merge,
     _delete_or_merge_articles,
     ALL_PATTERNS,
+    _structure_text,
 )
 from lib.texts_properties import (
     count_sections,
@@ -140,6 +141,12 @@ def test_delete_or_merge_articles():
     assert new_articles[2].content == articles[2].content
     assert articles[4].content in new_articles[3].content and articles[4].content in new_articles[3].content
 
+    articles = [LegifranceArticle('1', '', 1, None), LegifranceArticle('0', '', 0, None)]
+    new_articles = _delete_or_merge_articles(articles)
+    assert len(new_articles) == 1
+    assert new_articles[0].id == '0'
+    assert new_articles[0].content == '\n<br/>\n'
+
 
 def _get_am(filename: str) -> ArreteMinisteriel:
     raw_text = _load_legifrance_text(json.load(open(filename)))
@@ -183,3 +190,16 @@ def test_inconsistency_detection():
     section_err = StructuredText(EnrichedString(''), [], subsections_err, None)
     inconsistencies_err = _extract_section_inconsistencies(section_err)
     assert len(inconsistencies_err) == 1
+
+
+def test_structure_text():
+    alineas = ['I. Foo', 'A. pi', 'hola', 'B. pa', 'quetal', 'C. po', 'II. Bar']
+    text = _structure_text('', alineas)
+    assert len(text.sections) == 2
+    assert len(text.outer_alineas) == 0
+    assert text.sections[0].title.text == 'I. Foo'
+    assert text.sections[1].title.text == 'II. Bar'
+    assert len(text.sections[0].sections) == 3
+    assert text.sections[0].sections[0].title.text == 'A. pi'
+    assert text.sections[0].sections[1].title.text == 'B. pa'
+    assert text.sections[0].sections[2].title.text == 'C. po'
