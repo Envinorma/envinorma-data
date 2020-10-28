@@ -203,3 +203,14 @@ def test_structure_text():
     assert text.sections[0].sections[0].title.text == 'A. pi'
     assert text.sections[0].sections[1].title.text == 'B. pa'
     assert text.sections[0].sections[2].title.text == 'C. po'
+
+
+def test_structure_text_2():
+    alineas = ['I. Foo', 'a) pi', 'hola', 'b) pa', 'quetal', 'c) po', 'II. Bar']
+    text = _structure_text('', alineas)
+    assert len(text.sections) == 2
+    assert len(text.outer_alineas) == 0
+    assert text.sections[0].title.text == 'I. Foo'
+    assert text.sections[1].title.text == 'II. Bar'
+    assert len(text.sections[0].sections) == 0
+
