@@ -54,16 +54,17 @@ def test_no_fail_in_aida_links_addition():
         )
 
 
-def text_extract_anchors():
+def test_extract_anchors():
     html = '''
-        <h1>Bonjour<h1>
+        <div id="content-area">
+            <h1>Bonjour</h1>
 
-        <p><a name='nope'></a>Je m'appelle Pipa.</p>
+            <p><a name="nope"></a>Je m'appelle Pipa.</p>
 
-        <h2><a name='et-toi'></a>Et toi ?</h2>
+            <h2><a name="et-toi"></a>Et toi ?</h2>
 
-        <h3><a href='example.com'>Bye.</a></h2>
-
+            <h3><a href="example.com">Bye.</a></h3>
+        </div>
     '''
     anchors = extract_anchors(html)
     assert len(anchors) == 1

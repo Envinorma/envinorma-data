@@ -10,6 +10,7 @@ from dataclasses import dataclass, field
 from math import sqrt
 from typing import Any, Dict, Iterable, List, Tuple, Optional, Union
 from tqdm import tqdm
+from lib.structure_detection import NumberingPattern, guess_numbering_pattern, get_matched_strs
 
 
 class AMStructurationError(Exception):
@@ -284,7 +285,7 @@ def _remove_tables(text: str) -> Tuple[str, List[TableReference]]:
     soup = BeautifulSoup(text, 'html.parser')
     tables: List[Table] = []
     references: List[str] = []
-    for div in soup.find_all('div'):
+    for div in soup.find_all('table'):
         reference = _generate_reference()
         tables.append(_extract_table(str(div)))
         div.replace_with(reference)
@@ -308,45 +309,27 @@ def _split_alineas_in_sections(alineas: List[str], matches: List[bool]) -> Tuple
     )
 
 
-ROMAN_PATTERN = '(?=[XVI])(X{0,3})(I[XV]|V?I{0,3})'
-
-ALL_PATTERNS = {
-    'roman': rf'^{ROMAN_PATTERN}\. ',
-    'numeric-d1': r'^[0-9]+\. ',
-    'numeric-d2': r'^([0-9]+\.){2} ',
-    'numeric-d3': r'^([0-9]+\.){3} ',
-    'numeric-circle': r'^[0-9]+° ',
-    # 'letters': r'^[a-z]\)',
-    'caps': r'^[A-Z]\. ',
-    'annexe': rf'^ANNEXE [0-9]+',
-    'annexe-roman': rf'^ANNEXE {ROMAN_PATTERN}',
-}
+def remove_empty_enriched_str(strs: List[EnrichedString]) -> List[EnrichedString]:
+    return [str_ for str_ in strs if str_.text or str_.table]
 
 
-def _detect_matched_pattern(string: str) -> Optional[str]:
-    for pattern_name, pattern in ALL_PATTERNS.items():
-        if re.match(pattern, string):
-            return pattern_name
-    return None
-
-
-def detect_patterns(strings: List[str]) -> List[str]:
-    matched_patterns = [_detect_matched_pattern(string) for string in strings]
-    return [pattern for pattern in matched_patterns if pattern]
-
-
-def _structure_text(title: str, alineas: List[str]) -> StructuredText:
-    patterns = detect_patterns(alineas)
-    if not patterns:
-        return StructuredText(_extract_links(title), [_extract_links(al) for al in alineas], [], None)
-    pattern_name = patterns[0]
-    matches = [re.match(ALL_PATTERNS[pattern_name], line) is not None for line in alineas]
+def _build_structured_text(title: str, alineas: List[str], pattern: NumberingPattern) -> StructuredText:
+    matches = get_matched_strs(alineas, pattern)
     outer_alineas, grouped_alineas = _split_alineas_in_sections(alineas, matches)
     return StructuredText(
         _extract_links(title),
-        [_extract_links(al) for al in outer_alineas],
+        remove_empty_enriched_str([_extract_links(al) for al in outer_alineas]),
         [_structure_text(alinea_group[0], alinea_group[1:]) for alinea_group in grouped_alineas],
         None,
+    )
+
+
+def _structure_text(title: str, alineas: List[str]) -> StructuredText:
+    pattern_name = guess_numbering_pattern(alineas)
+    if pattern_name:
+        return _build_structured_text(title, alineas, pattern_name)
+    return StructuredText(
+        _extract_links(title), remove_empty_enriched_str([_extract_links(al) for al in alineas]), [], None
     )
 
 

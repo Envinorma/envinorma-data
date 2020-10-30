@@ -10,11 +10,10 @@ from lib.am_structure_extraction import (
     LegifranceText,
     LegifranceSection,
     LegifranceArticle,
-    detect_patterns,
-    ALL_PATTERNS,
     split_in_non_empty_html_line,
     keep_visa_string,
 )
+from lib.structure_detection import NUMBERING_PATTERNS, get_first_match, detect_first_pattern, PATTERN_NAME_TO_LIST
 
 
 @dataclass
@@ -114,6 +113,7 @@ class TitleInconsistency:
     titles: List[str]
     parent_section_title: str
     inconsistency: str
+    type: str
 
 
 @dataclass
@@ -179,50 +179,23 @@ def count_nb_empty_articles(am: ArreteMinisteriel) -> int:
     return len([article for article in articles if _text_seems_empty(article)])
 
 
-def _detect_first_pattern(strs: List[str]) -> Optional[str]:
-    patterns = detect_patterns(strs)
-    if not patterns:
-        return None
-    return patterns[0]
-
-
-_ROMAN_TO_XXX = [
-    f'{prefix}{unit}'
-    for prefix in ['', 'X', 'XX', 'XXX']
-    for unit in ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X']
-][:-1]
-_LETTERS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
-
-_PATTERN_NAME_TO_LIST = {
-    'roman': [f'{x}. ' for x in _ROMAN_TO_XXX],
-    'numeric-d1': [f'{x}. ' for x in range(1, 101)],
-    'numeric-d2': [f'{x}.{y}. ' for x in range(1, 101) for y in range(1, 21)],
-    'numeric-d3': [f'{x}.{y}.{z}. ' for x in range(1, 101) for y in range(1, 21) for z in range(1, 21)],
-    'numeric-circle': [f'{x}° ' for x in range(1, 101)],
-    # 'letters': [f'{x}) ' for x in _LETTERS.lower()],
-    'caps': [f'{x}. ' for x in _LETTERS],
-    'annexe': [f'ANNEXE {x}' for x in range(1, 101)],
-    'annexe-roman': [f'ANNEXE {x}' for x in _ROMAN_TO_XXX],
-}
-
-
-def _get_first_match(title: str, prefixes: List[str]) -> int:
-    for i, prefix in enumerate(prefixes):
-        if title[: len(prefix)] == prefix:
-            return i
-    return -1
-
-
 def _detect_inconsistency_in_numbering(
     titles: List[str], parent_title: str, prefixes: List[str]
 ) -> Optional[TitleInconsistency]:
-    first_match = _get_first_match(titles[0], prefixes)
+    first_match = get_first_match(titles[0], prefixes)
     if first_match == -1:
-        return TitleInconsistency(titles, parent_title, f'No prefix found in title "{titles[0]}"')
+        return TitleInconsistency(
+            titles, parent_title, f'No prefix found in title "{titles[0]}"', 'numbering-not-found'
+        )
     for title, prefix in zip(titles, prefixes[first_match:]):
         if title[: len(prefix)] == prefix:
             continue
-        return TitleInconsistency(titles, parent_title, f'Title "{title}" is expected to start with prefix "{prefix}"')
+        return TitleInconsistency(
+            titles,
+            parent_title,
+            f'Title "{title}" is expected to start with prefix "{prefix}"',
+            'inconsistent-numbering',
+        )
     if len(titles) > len(prefixes[first_match:]):
         raise ValueError(f'Missing prefixes in list {prefixes}.')
     return None
@@ -231,16 +204,19 @@ def _detect_inconsistency_in_numbering(
 def _detect_inconsistency(titles: List[str], parent_title: str) -> Optional[TitleInconsistency]:
     if len(titles) <= 1:
         return None
-    pattern_name = _detect_first_pattern(titles)
+    pattern_name = detect_first_pattern(titles)
     if not pattern_name:
         return None
-    no_match = [title for title in titles if not re.match(ALL_PATTERNS[pattern_name], title)]
+    no_match = [title for title in titles if not re.match(NUMBERING_PATTERNS[pattern_name], title)]
     if no_match:
         no_match_titles = '\n' + '\n'.join(no_match)
         return TitleInconsistency(
-            titles, parent_title, f'Some titles do not match pattern {pattern_name}: {no_match_titles}'
+            titles,
+            parent_title,
+            f'Some titles do not match pattern {pattern_name}: {no_match_titles}',
+            'missing-numbering',
         )
-    return _detect_inconsistency_in_numbering(titles, parent_title, _PATTERN_NAME_TO_LIST[pattern_name])
+    return _detect_inconsistency_in_numbering(titles, parent_title, PATTERN_NAME_TO_LIST[pattern_name])
 
 
 def _extract_section_inconsistencies(text: StructuredText) -> List[TitleInconsistency]:

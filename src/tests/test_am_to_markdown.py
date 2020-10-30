@@ -7,8 +7,14 @@ from lib.am_to_markdown import (
     table_to_markdown,
     _extract_sorted_links_to_display,
     am_to_markdown,
+    extract_markdown_text,
 )
-from lib.am_structure_extraction import _extract_table, transform_arrete_ministeriel, _load_legifrance_text
+from lib.am_structure_extraction import (
+    _extract_table,
+    transform_arrete_ministeriel,
+    _load_legifrance_text,
+    _structure_text,
+)
 
 
 def test_markdown_to_html():
@@ -89,3 +95,31 @@ def test_no_fail_in_markdown_extraction():
         am_to_markdown(
             transform_arrete_ministeriel(_load_legifrance_text(json.load(open(f'data/AM/legifrance_texts/{nor}.json'))))
         )
+
+
+def test_structure_via_markdown():
+    strs = [
+        "1. Dispositions générales",
+        "1. 1. Conformité de l'installation au dossier d'enregistrement",
+        "1. 2. Dossier installation classée",
+        "1. 3. Intégration dans le paysage",
+        "2. Risques",
+        "2. 1. Généralités",
+        "2. 1. 1. Surveillance de l'installation",
+        "1. Les zones d'effets Z1 et Z2 définies par l'arrêté du 20 a erez",  # in EXCEPTION_PREFIXES
+        "2. 1. 2. Clôture",
+        "2. 1. 3. Entretien de l'installation",
+        "2. 2. Implantation",
+        "2. 2. 1. Distances d'éloignement",
+        "2. 2. 1. 1. Installations nouvelles",
+    ]
+    text = _structure_text('', strs)
+    res = extract_markdown_text(text, 0)
+    assert res[1][:2] == '# '
+    assert res[2][:3] == '## '
+    assert res[3][:3] == '## '
+    assert res[4][:3] == '## '
+    assert res[5][:2] == '# '
+    assert res[6][:3] == '## '
+    assert res[7][:4] == '### '
+    assert res[8][:4] == '1. L'
