@@ -110,8 +110,7 @@ def _starts_with_prefix(string: str, prefix: str) -> bool:
     return string[: len(prefix)] == prefix
 
 
-def _pattern_is_increasing(pattern: NumberingPattern, strings: List[str]) -> bool:
-    prefixes = PATTERN_NAME_TO_LIST[pattern]
+def prefixes_are_increasing(prefixes: List[str], strings: List[str]) -> bool:
     i = 0
     for string in strings:
         while True:
@@ -122,6 +121,22 @@ def _pattern_is_increasing(pattern: NumberingPattern, strings: List[str]) -> boo
             i += 1
     if i >= len(prefixes):
         return False
+    return True
+
+
+def _pattern_is_increasing(pattern: NumberingPattern, strings: List[str]) -> bool:
+    prefixes = PATTERN_NAME_TO_LIST[pattern]
+    return prefixes_are_increasing(prefixes, strings)
+
+
+def prefixes_are_continuous(prefixes: List[str], strings: List[str]) -> bool:
+    for prefix, string in zip(prefixes, strings):
+        if not _starts_with_prefix(string, prefix):
+            return False
+    if len(strings) > len(prefixes):
+        raise ValueError(
+            f'Missing prefixes to check continuity. First prefix: {prefixes[0]}, first string: {strings[0]}'
+        )
     return True
 
 

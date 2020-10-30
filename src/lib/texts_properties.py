@@ -13,7 +13,14 @@ from lib.am_structure_extraction import (
     split_in_non_empty_html_line,
     keep_visa_string,
 )
-from lib.structure_detection import NUMBERING_PATTERNS, get_first_match, detect_first_pattern, PATTERN_NAME_TO_LIST
+from lib.structure_detection import (
+    NUMBERING_PATTERNS,
+    get_first_match,
+    detect_first_pattern,
+    PATTERN_NAME_TO_LIST,
+    prefixes_are_increasing,
+    prefixes_are_continuous,
+)
 
 
 @dataclass
@@ -113,7 +120,6 @@ class TitleInconsistency:
     titles: List[str]
     parent_section_title: str
     inconsistency: str
-    type: str
 
 
 @dataclass
@@ -179,29 +185,38 @@ def count_nb_empty_articles(am: ArreteMinisteriel) -> int:
     return len([article for article in articles if _text_seems_empty(article)])
 
 
+@dataclass
+class PrefixPattern:
+    found: bool
+    increasing: bool
+    continuous: bool
+
+
+def _compute_prefix_pattern(titles: List[str], prefixes: List[str]) -> PrefixPattern:
+    first_match = get_first_match(titles[0], prefixes)
+    if first_match == -1:
+        return PrefixPattern(False, False, False)
+    if not prefixes_are_increasing(prefixes, titles):
+        return PrefixPattern(True, False, False)
+    if not prefixes_are_continuous(prefixes, titles):
+        return PrefixPattern(True, True, False)
+    return PrefixPattern(True, True, True)
+
+
 def _detect_inconsistency_in_numbering(
     titles: List[str], parent_title: str, prefixes: List[str]
 ) -> Optional[TitleInconsistency]:
-    first_match = get_first_match(titles[0], prefixes)
-    if first_match == -1:
-        return TitleInconsistency(
-            titles, parent_title, f'No prefix found in title "{titles[0]}"', 'numbering-not-found'
-        )
-    for title, prefix in zip(titles, prefixes[first_match:]):
-        if title[: len(prefix)] == prefix:
-            continue
-        return TitleInconsistency(
-            titles,
-            parent_title,
-            f'Title "{title}" is expected to start with prefix "{prefix}"',
-            'inconsistent-numbering',
-        )
-    if len(titles) > len(prefixes[first_match:]):
-        raise ValueError(f'Missing prefixes in list {prefixes}.')
+    prefix_pattern = _compute_prefix_pattern(titles, prefixes)
+    if not prefix_pattern.found:
+        return TitleInconsistency(titles, parent_title, 'Numerotation non détectée dans le 1er titre')
+    if not prefix_pattern.increasing:
+        return TitleInconsistency(titles, parent_title, 'Numérotation décroissante')
+    if not prefix_pattern.continuous:
+        return TitleInconsistency(titles, parent_title, 'Numérotation discontinue')
     return None
 
 
-def _detect_inconsistency(titles: List[str], parent_title: str) -> Optional[TitleInconsistency]:
+def _detect_inconsistency(titles: List[str], context: str = '') -> Optional[TitleInconsistency]:
     if len(titles) <= 1:
         return None
     pattern_name = detect_first_pattern(titles)
@@ -209,14 +224,8 @@ def _detect_inconsistency(titles: List[str], parent_title: str) -> Optional[Titl
         return None
     no_match = [title for title in titles if not re.match(NUMBERING_PATTERNS[pattern_name], title)]
     if no_match:
-        no_match_titles = '\n' + '\n'.join(no_match)
-        return TitleInconsistency(
-            titles,
-            parent_title,
-            f'Some titles do not match pattern {pattern_name}: {no_match_titles}',
-            'missing-numbering',
-        )
-    return _detect_inconsistency_in_numbering(titles, parent_title, PATTERN_NAME_TO_LIST[pattern_name])
+        return TitleInconsistency(titles, context, f'Numérotation manquante dans certains titres')
+    return _detect_inconsistency_in_numbering(titles, context, PATTERN_NAME_TO_LIST[pattern_name])
 
 
 def _extract_section_inconsistencies(text: StructuredText) -> List[TitleInconsistency]:
