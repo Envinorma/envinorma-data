@@ -134,7 +134,7 @@ def extract_anchors_from_soup(content_area: Tag) -> List[Anchor]:
 
 
 def extract_anchors(html: str) -> List[Anchor]:
-    soup = BeautifulSoup(html)
+    soup = BeautifulSoup(html, 'html.parser')
     content_area = get_aida_content_area(soup)
     return extract_anchors_from_soup(content_area)
 
