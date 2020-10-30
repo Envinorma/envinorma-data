@@ -198,7 +198,7 @@ def _compute_prefix_pattern(titles: List[str], prefixes: List[str]) -> PrefixPat
         return PrefixPattern(False, False, False)
     if not prefixes_are_increasing(prefixes, titles):
         return PrefixPattern(True, False, False)
-    if not prefixes_are_continuous(prefixes, titles):
+    if not prefixes_are_continuous(prefixes[first_match:], titles):
         return PrefixPattern(True, True, False)
     return PrefixPattern(True, True, True)
 

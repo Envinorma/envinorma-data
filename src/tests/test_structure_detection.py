@@ -4,6 +4,8 @@ from lib.structure_detection import (
     _is_valid,
     _detect_longest_matched_pattern,
     NumberingPattern,
+    prefixes_are_continuous,
+    PATTERN_NAME_TO_LIST,
 )
 from lib.numbering_exceptions import MAX_PREFIX_LEN, EXCEPTION_PREFIXES
 
@@ -12,6 +14,12 @@ def test_pattern_is_increasing():
     assert _pattern_is_increasing(NumberingPattern.LETTERS, ['a) ', 'b) ', 'c) ', 'd) '])
     assert not _pattern_is_increasing(NumberingPattern.LETTERS, ['a) ', 'b) ', 'c) ', 'd) ', 'a) '])
     assert _pattern_is_increasing(NumberingPattern.LETTERS, ['a) ', 'b) ', 'c) ', 'x) ', 'y) '])
+
+
+def test_prefixes_are_continuous():
+    prefixes = PATTERN_NAME_TO_LIST[NumberingPattern.NUMERIC_D1]
+    assert prefixes_are_continuous(prefixes, prefixes)
+    assert not prefixes_are_continuous(prefixes, prefixes[1:5])
 
 
 def test_is_valid():
