@@ -164,11 +164,21 @@ def test_structuration():
     assert count_articles_in_am(am_1) == 14
     assert len(am_1.sections) == 14
 
+
+def test_structuration_2():
     am_2 = _get_am('test_data/AM/legifrance_texts/TREP1835514A.json')
     assert count_sections(am_2) == 89
     assert count_tables(am_2) == 9
     assert count_articles_in_am(am_2) == 60
     assert len(am_2.sections) == 6
+
+
+def test_structuration_3():
+    am_3 = _get_am('test_data/AM/legifrance_texts/fake_am.json')
+    assert count_sections(am_3) == 103
+    assert count_tables(am_3) == 1
+    assert count_articles_in_am(am_3) == 1
+    assert len(am_3.sections) == 1
 
 
 def test_regex():
@@ -246,4 +256,3 @@ Au sens du présent arrêté, on entend par :
     alineas = remove_empty(alineas_str.split('\n'))
     filtered_alineas = remove_summaries(alineas)
     assert filtered_alineas == alineas[:1] + alineas[-4:]
-

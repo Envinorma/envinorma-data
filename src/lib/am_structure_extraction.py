@@ -236,6 +236,8 @@ def extract_alineas(html_text: str) -> List[str]:
         .replace('<p align=\"right\">', '<br/>')
         .replace('<p class=\"note\">', '<br/>')
         .replace('<p class=\"cliche\">', '<br/>')
+        .replace('<font color=\'rgb(51,51,51)\'>', '<br/>')
+        .replace('</font>', '<br/>')
         .replace('</p>', '<br/>')
         .replace(_REF_SIG_LEFT, f'<br/>{_REF_SIG_LEFT}')
         .replace(_REF_SIG_RIGHT, f'{_REF_SIG_RIGHT}<br/>')

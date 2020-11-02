@@ -14,6 +14,9 @@ from lib.am_structure_extraction import (
     transform_arrete_ministeriel,
     _load_legifrance_text,
     _structure_text,
+    LegifranceArticle,
+    LegifranceSection,
+    _extract_sections,
 )
 
 
@@ -123,3 +126,62 @@ def test_structure_via_markdown():
     assert res[6][:3] == '## '
     assert res[7][:4] == '### '
     assert res[8][:4] == '1. L'
+
+
+def test_existing_installations():
+    alineas_strs = [
+        '''
+1. Dispositions générales.
+1.1. Conformité de l'installation.
+1.2. Modifications.
+1.3. Contenu de la déclaration.
+2. Implantation. ― Aménagement.
+2.1. Règles d'implantation.
+2.2. Intégration dans le paysage.
+    ''',
+        '''
+1. Dispositions générales.
+1.1. Conformité de l'installation.
+1.2. Modifications.
+1.3. Contenu de la déclaration.
+2. Implantation. ― Aménagement.
+2.1. Règles d'implantation.
+2.2. Intégration dans le paysage.
+    ''',
+    ]
+    titles = ['A. First title', 'B. Dispositions applicables aux installations existantes.']
+    alineas_html = [str_.replace('\n', '<br/>') for str_ in alineas_strs]
+    sections = [
+        LegifranceSection(i, title, [LegifranceArticle('', html, i, f'Annexe {i}')], [])
+        for i, (title, html) in enumerate(zip(titles, alineas_html))
+    ]
+    res = [extract_markdown_text(sec, 1) for sec in _extract_sections([], sections, [])]
+
+    expected_res = [
+        [
+            "# A. First title",
+            "## Article Annexe 0",
+            "### 1. Dispositions générales.",
+            "#### 1.1. Conformité de l'installation.",
+            "#### 1.2. Modifications.",
+            "#### 1.3. Contenu de la déclaration.",
+            "### 2. Implantation. ― Aménagement.",
+            "#### 2.1. Règles d'implantation.",
+            "#### 2.2. Intégration dans le paysage.",
+        ],
+        [
+            "# B. Dispositions applicables aux installations existantes.",
+            "## Article Annexe 1",
+            "1. Dispositions générales.",
+            "1.1. Conformité de l'installation.",
+            "1.2. Modifications.",
+            "1.3. Contenu de la déclaration.",
+            "2. Implantation. ― Aménagement.",
+            "2.1. Règles d'implantation.",
+            "2.2. Intégration dans le paysage.",
+        ],
+    ]
+
+    for true, expected in zip(res, expected_res):
+        assert true == expected
+
