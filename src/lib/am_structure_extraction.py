@@ -674,7 +674,7 @@ def _clean_text_articles(text: LegifranceText) -> LegifranceText:
 
 
 def extract_short_title(input_title: str) -> str:
-    return input_title.split('relatif')[0].split('fixant')[0]
+    return input_title.split('relatif')[0].split('fixant')[0].strip()
 
 
 def transform_arrete_ministeriel(input_text: LegifranceText) -> ArreteMinisteriel:
