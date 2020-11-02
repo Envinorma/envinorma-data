@@ -1,5 +1,4 @@
 import json
-import re
 from lib.am_structure_extraction import (
     ArreteMinisteriel,
     EnrichedString,
@@ -18,14 +17,7 @@ from lib.am_structure_extraction import (
     _delete_or_merge_articles,
     _structure_text,
 )
-from lib.texts_properties import (
-    count_sections,
-    count_tables,
-    count_articles_in_am,
-    PATTERN_NAME_TO_LIST,
-    _extract_section_inconsistencies,
-)
-from lib.structure_detection import NUMBERING_PATTERNS
+from lib.texts_properties import count_sections, count_tables, count_articles_in_am, _extract_section_inconsistencies
 
 
 def test_link_extraction():
@@ -179,14 +171,6 @@ def test_structuration_3():
     assert count_tables(am_3) == 1
     assert count_articles_in_am(am_3) == 1
     assert len(am_3.sections) == 1
-
-
-def test_regex():
-    for key in PATTERN_NAME_TO_LIST:
-        assert key in NUMBERING_PATTERNS
-    for pattern_name, pattern in NUMBERING_PATTERNS.items():
-        for elt in PATTERN_NAME_TO_LIST[pattern_name]:
-            assert re.match(pattern, elt)
 
 
 def test_inconsistency_detection():

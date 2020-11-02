@@ -1,3 +1,4 @@
+import re
 from lib.structure_detection import (
     _pattern_is_increasing,
     NumberingPattern,
@@ -8,6 +9,7 @@ from lib.structure_detection import (
     PATTERN_NAME_TO_LIST,
     _smart_detect_pattern,
     detect_patterns_if_exists,
+    NUMBERING_PATTERNS,
 )
 from lib.numbering_exceptions import MAX_PREFIX_LEN, EXCEPTION_PREFIXES
 
@@ -16,6 +18,14 @@ def test_pattern_is_increasing():
     assert _pattern_is_increasing(NumberingPattern.LETTERS, ['a) ', 'b) ', 'c) ', 'd) '])
     assert not _pattern_is_increasing(NumberingPattern.LETTERS, ['a) ', 'b) ', 'c) ', 'd) ', 'a) '])
     assert _pattern_is_increasing(NumberingPattern.LETTERS, ['a) ', 'b) ', 'c) ', 'x) ', 'y) '])
+
+
+def test_regex():
+    for key in PATTERN_NAME_TO_LIST:
+        assert key in NUMBERING_PATTERNS
+    for pattern_name, pattern in NUMBERING_PATTERNS.items():
+        for elt in PATTERN_NAME_TO_LIST[pattern_name]:
+            assert re.match(pattern, elt)
 
 
 def test_prefixes_are_continuous():
