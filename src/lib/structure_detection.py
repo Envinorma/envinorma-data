@@ -73,12 +73,17 @@ def _detect_longest_matched_pattern(string: str) -> Optional[NumberingPattern]:
 
 def _smart_detect_pattern(string: str) -> Optional[NumberingPattern]:
     if string[:MAX_PREFIX_LEN] in EXCEPTION_PREFIXES:
-        return None
+        pattern = EXCEPTION_PREFIXES[string[:MAX_PREFIX_LEN]]
+        return NumberingPattern(pattern) if pattern else None
     return _detect_longest_matched_pattern(string)
 
 
+def detect_patterns_if_exists(strings: List[str]) -> List[Optional[NumberingPattern]]:
+    return [_smart_detect_pattern(string) for string in strings]
+
+
 def detect_patterns(strings: List[str]) -> List[NumberingPattern]:
-    matched_patterns = [_smart_detect_pattern(string) for string in strings]
+    matched_patterns = detect_patterns_if_exists(strings)
     return [pattern for pattern in matched_patterns if pattern]
 
 

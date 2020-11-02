@@ -6,6 +6,8 @@ from lib.structure_detection import (
     NumberingPattern,
     prefixes_are_continuous,
     PATTERN_NAME_TO_LIST,
+    _smart_detect_pattern,
+    detect_patterns_if_exists,
 )
 from lib.numbering_exceptions import MAX_PREFIX_LEN, EXCEPTION_PREFIXES
 
@@ -36,6 +38,32 @@ def test_detect_longest_matched_pattern():
     assert _detect_longest_matched_pattern('') is None
 
 
-def text_exceptions():
+def test_exceptions():
     for exc in EXCEPTION_PREFIXES:
         assert len(exc) <= MAX_PREFIX_LEN
+
+
+def test_smart_detect_pattern():
+    pattern = _smart_detect_pattern(
+        "1. Les zones d'effets Z1 et Z2 définies par l'arrêté du 20 a erez"
+    )  # in EXCEPTION_PREFIXES
+    assert pattern is None
+
+
+def test_structure_extraction():
+    patterns = detect_patterns_if_exists(
+        [
+            "1. Dispositions générales",
+            "1. 1. Conformité de l'installation au dossier d'enregistrement",
+            "1. 2. Dossier installation classée",
+            "2. Risques",
+            "2. 1. Généralités",
+            "2. 1. 1. Surveillance de l'installation",
+            "1. Les zones d'effets Z1 et Z2 définies par l'arrêté du 20 a erez",  # in EXCEPTION_PREFIXES
+            "2. 1. 2. Clôture",
+        ]
+    )
+    assert patterns[0] == NumberingPattern.NUMERIC_D1
+    assert patterns[1] == NumberingPattern.NUMERIC_D2_SPACE
+    assert patterns[6] is None
+
