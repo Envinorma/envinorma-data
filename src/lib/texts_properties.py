@@ -283,3 +283,24 @@ class ComputeProperties:
 
 def compute_properties(text: LegifranceText, am: ArreteMinisteriel) -> ComputeProperties:
     return ComputeProperties(_compute_lf_properties(text), _compute_am_properties(am))
+
+
+def detect_upper_case_first_lines(text: StructuredText, ascendant_titles: List[str]) -> None:
+    found = False
+    for title in ascendant_titles:
+        if 'annexe' in title.lower():
+            found = True
+    if not found:
+        for section in text.sections:
+            detect_upper_case_first_lines(section, ascendant_titles + [section.title.text])
+    else:
+        for str_ in text.outer_alineas[:2]:
+            if str_.text.isupper():
+                print(str_.text)
+            else:
+                break
+
+
+def detect_upper_case(text: ArreteMinisteriel) -> None:
+    for section in text.sections:
+        detect_upper_case_first_lines(section, [])
