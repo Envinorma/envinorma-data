@@ -67,3 +67,22 @@ def test_structure_extraction():
     assert patterns[1] == NumberingPattern.NUMERIC_D2_SPACE
     assert patterns[6] is None
 
+
+def test_structure_extraction_2():
+    patterns = detect_patterns_if_exists(
+        [
+            "I. First title",
+            "A. First section",
+            "B. Second section",
+            "H. H-th section",
+            "I. ― Les aires de chargement et de déchargement des produits",  # must be letter (exception)
+        ]
+    )
+    assert patterns == [
+        NumberingPattern.ROMAN,
+        NumberingPattern.CAPS,
+        NumberingPattern.CAPS,
+        NumberingPattern.CAPS,
+        NumberingPattern.CAPS,
+    ]
+

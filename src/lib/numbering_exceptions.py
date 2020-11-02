@@ -3,7 +3,7 @@ EXCEPTION_PREFIXES = {
     '''1. Le démantèlement des installations de production d'électr''': None,
     '''2. L'excavation de la totalité des fondations, jusqu'à la ba''': None,
     '''3. La remise en état qui consiste en le décaissement des air''': None,
-    '''I. ― Les aires de chargement et de déchargement des produits''': 'letters',
+    '''I. ― Les aires de chargement et de déchargement des produits''': 'caps',
     '''1. Les zones d'effets Z1 et Z2 définies par l'arrêté du 20 a''': None,
     '''2. La zone d'effets Z3 définie par l'arrêté du 20 avril 2007''': None,
     '''3. La zone d'effets Z4 définie par l'arrêté du 20 avril 2007''': None,
