@@ -425,12 +425,16 @@ def remove_summaries(alineas: List[str]) -> List[str]:
     return alineas
 
 
-def _html_to_structured_text(html: str) -> StructuredText:
+def _html_to_structured_text(html: str, extract_structure: bool = False) -> StructuredText:
     html_with_correct_annexe = _replace_weird_annexe_words(html)
     html_without_tables, tables = _remove_tables(html_with_correct_annexe)
     alineas = extract_alineas(html_without_tables)
     filtered_alineas = remove_summaries(alineas)
-    return _put_tables_back(_structure_text('', filtered_alineas), tables)
+    if extract_structure:
+        final_text = _structure_text('', filtered_alineas)
+    else:
+        final_text = _build_structured_text('', filtered_alineas, [None for _ in range(len(filtered_alineas))])
+    return _put_tables_back(final_text, tables)
 
 
 def print_structured_text(text: StructuredText, prefix: str = '') -> None:
@@ -483,19 +487,33 @@ def _extract_links(text: str, add_legifrance_prefix: bool = True) -> EnrichedStr
     return EnrichedString(final_text, links)
 
 
-def _extract_structured_text_from_legifrance_section(section: LegifranceSection) -> StructuredText:
-    return StructuredText(
-        _extract_links(section.title), [], _extract_sections(section.articles, section.sections), None
-    )
-
-
 def _generate_article_title(article: LegifranceArticle) -> EnrichedString:
     return EnrichedString(f'Article {article.num}')
 
 
-def _extract_structured_text_from_legifrance_article(article: LegifranceArticle) -> StructuredText:
+_EXISTING_INSTALLATIONS_PATTERN = 'dispositions applicables aux installations existantes'
 
-    structured_text = _html_to_structured_text(article.content)
+
+def _contains_lower(strs: List[str], pattern: str) -> bool:
+    for str_ in strs:
+        if pattern in str_.lower():
+            return True
+    return False
+
+
+def _is_about_existing_installations(article: LegifranceArticle, ascendant_titles: List[str]) -> bool:
+    if _contains_lower(ascendant_titles, _EXISTING_INSTALLATIONS_PATTERN):
+        return True
+    in_annexe = _contains_lower(ascendant_titles + [article.num or ''], 'annexe')
+    return in_annexe and _EXISTING_INSTALLATIONS_PATTERN in article.content.lower()
+
+
+def _extract_structured_text_from_legifrance_article(
+    article: LegifranceArticle, ascendant_titles: List[str]
+) -> StructuredText:
+    structured_text = _html_to_structured_text(
+        article.content, not _is_about_existing_installations(article, ascendant_titles)
+    )
     if structured_text.title.text:
         raise ValueError(f'Should not happen. Article should not have titles. Article id : {article.id}')
     return StructuredText(
@@ -503,16 +521,30 @@ def _extract_structured_text_from_legifrance_article(article: LegifranceArticle)
     )
 
 
-def _extract_structured_text(section_or_article: Union[LegifranceSection, LegifranceArticle]) -> StructuredText:
+def _extract_structured_text_from_legifrance_section(
+    section: LegifranceSection, ascendant_titles: List[str]
+) -> StructuredText:
+    return StructuredText(
+        _extract_links(section.title), [], _extract_sections(section.articles, section.sections, ascendant_titles), None
+    )
+
+
+def _extract_structured_text(
+    section_or_article: Union[LegifranceSection, LegifranceArticle], ascendant_titles: List[str]
+) -> StructuredText:
     if isinstance(section_or_article, LegifranceSection):
-        return _extract_structured_text_from_legifrance_section(section_or_article)
-    return _extract_structured_text_from_legifrance_article(section_or_article)
+        return _extract_structured_text_from_legifrance_section(
+            section_or_article, ascendant_titles + [section_or_article.title]
+        )
+    return _extract_structured_text_from_legifrance_article(section_or_article, ascendant_titles)
 
 
-def _extract_sections(articles: List[LegifranceArticle], sections: List[LegifranceSection]) -> List[StructuredText]:
+def _extract_sections(
+    articles: List[LegifranceArticle], sections: List[LegifranceSection], ascendant_titles: List[str]
+) -> List[StructuredText]:
     articles_and_sections: List[Union[LegifranceArticle, LegifranceSection]] = [*articles, *sections]
     return [
-        _extract_structured_text(article_or_section)
+        _extract_structured_text(article_or_section, ascendant_titles)
         for article_or_section in sorted(articles_and_sections, key=lambda x: x.intOrdre)
     ]
 
@@ -616,7 +648,7 @@ def _clean_text_articles(text: LegifranceText) -> LegifranceText:
 def transform_arrete_ministeriel(input_text: LegifranceText) -> ArreteMinisteriel:
     visa = _extract_visa(input_text.visa)
     text_with_merged_articles = _clean_text_articles(input_text)
-    sections = _extract_sections(text_with_merged_articles.articles, text_with_merged_articles.sections)
+    sections = _extract_sections(text_with_merged_articles.articles, text_with_merged_articles.sections, [])
     return ArreteMinisteriel(EnrichedString(text_with_merged_articles.title), sections, visa)
 
 

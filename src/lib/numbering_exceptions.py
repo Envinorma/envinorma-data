@@ -1,5 +1,12 @@
 MAX_PREFIX_LEN = 60
 EXCEPTION_PREFIXES = {
+    '''1. Une attestation de la maîtrise foncière sur l'emprise de ''': None,
+    '''2. Un plan de l'exploitation à une échelle adaptée à la supe''': None,
+    '''3. Une note succincte indiquant la nature de la substance ex''': None,
+    '''4. Pour les carrières visées à la rubrique 2510-6, la justif''': None,
+    '''5. Une description des modalités d'extraction et de remise e''': None,
+    '''Les documents et registres prévus aux articles 3.5 et 4.7 du''': None,
+    '''7. Les résultats des dernières mesures sur les effluents et ''': None,
     '''1. Le démantèlement des installations de production d'électr''': None,
     '''2. L'excavation de la totalité des fondations, jusqu'à la ba''': None,
     '''3. La remise en état qui consiste en le décaissement des air''': None,
