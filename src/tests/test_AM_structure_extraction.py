@@ -7,6 +7,8 @@ from lib.am_structure_extraction import (
     LegifranceArticle,
     _extract_links,
     _html_to_structured_text,
+    remove_empty,
+    remove_summaries,
     transform_arrete_ministeriel,
     _extract_cell_data,
     _load_legifrance_text,
@@ -215,3 +217,33 @@ def test_structure_text():
 #     assert text.sections[0].title.text == 'I. Foo'
 #     assert text.sections[1].title.text == 'II. Bar'
 #     assert len(text.sections[0].sections) == 0
+
+
+def test_remove_summaries():
+    alineas_str = '''
+PRESCRIPTIONS GÉNÉRALES APPLICABLES AUX INSTALLATIONS CLASSÉES POUR LA PROTECTION DE L'ENVIRONNEMENT [...]
+
+SOMMAIRE
+
+Annexe I.
+1. Dispositions générales.
+1.1. Conformité de l'installation.
+1.2. Modifications.
+1.3. Contenu de la déclaration.
+2. Implantation. ― Aménagement.
+2.1. Règles d'implantation.
+2.2. Intégration dans le paysage.
+
+Annexe II.
+Modalités de calcul du dimensionnement du plan d'épandage.
+
+Définitions
+
+Au sens du présent arrêté, on entend par :
+"Habitation" : un local destiné à servir de résidence permanente ou temporaire à des personnes, [...]
+"Local habituellement occupé par des tiers" : un local destiné à être utilisé couramment par des [...]
+'''
+    alineas = remove_empty(alineas_str.split('\n'))
+    filtered_alineas = remove_summaries(alineas)
+    assert filtered_alineas == alineas[:1] + alineas[-4:]
+

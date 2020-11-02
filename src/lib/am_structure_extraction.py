@@ -410,11 +410,27 @@ def _replace_weird_annexe_words(str_: str) -> str:
     return res
 
 
+def remove_summaries(alineas: List[str]) -> List[str]:
+    i = 0
+    found = False
+    for i, alinea in enumerate(alineas):
+        if alinea == 'SOMMAIRE' and i + 1 < len(alineas) and alineas[i + 1] == 'Annexe I.':
+            found = True
+            break
+    if not found:
+        return alineas
+    for j in range(i + 1, len(alineas)):
+        if alineas[j] == 'Modalités de calcul du dimensionnement du plan d\'épandage.':
+            return alineas[:i] + alineas[j + 1 :]
+    return alineas
+
+
 def _html_to_structured_text(html: str) -> StructuredText:
     html_with_correct_annexe = _replace_weird_annexe_words(html)
     html_without_tables, tables = _remove_tables(html_with_correct_annexe)
     alineas = extract_alineas(html_without_tables)
-    return _put_tables_back(_structure_text('', alineas), tables)
+    filtered_alineas = remove_summaries(alineas)
+    return _put_tables_back(_structure_text('', filtered_alineas), tables)
 
 
 def print_structured_text(text: StructuredText, prefix: str = '') -> None:
