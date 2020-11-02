@@ -10,6 +10,7 @@ class NumberingPattern(Enum):
     NUMERIC_D1 = 'numeric-d1'
     NUMERIC_D2 = 'numeric-d2'
     NUMERIC_D3 = 'numeric-d3'
+    NUMERIC_D1_PAREN = 'numeric-d1-paren'
     NUMERIC_D2_SPACE = 'numeric-d2-space'
     NUMERIC_D3_SPACE = 'numeric-d3-space'
     NUMERIC_D4_SPACE = 'numeric-d4-space'
@@ -28,6 +29,7 @@ NUMBERING_PATTERNS = {
     NumberingPattern.NUMERIC_D1: r'^[0-9]+\. ',
     NumberingPattern.NUMERIC_D2: r'^([0-9]+\.){2} ',
     NumberingPattern.NUMERIC_D3: r'^([0-9]+\.){3} ',
+    NumberingPattern.NUMERIC_D1_PAREN: r'^[0-9]+\) ',
     NumberingPattern.NUMERIC_D2_SPACE: r'^([0-9]+\. ){2}',
     NumberingPattern.NUMERIC_D3_SPACE: r'^([0-9]+\. ){3}',
     NumberingPattern.NUMERIC_D4_SPACE: r'^([0-9]+\. ){4}',
@@ -187,6 +189,7 @@ PATTERN_NAME_TO_LIST = {
     NumberingPattern.NUMERIC_D1: [f'{x}. ' for x in range(1, 101)],
     NumberingPattern.NUMERIC_D2: [f'{x}.{y}. ' for x in range(1, 31) for y in range(1, 21)],
     NumberingPattern.NUMERIC_D3: [f'{x}.{y}.{z}. ' for x in range(1, 31) for y in range(1, 21) for z in range(1, 21)],
+    NumberingPattern.NUMERIC_D1_PAREN: [f'{x}) ' for x in range(1, 101)],
     NumberingPattern.NUMERIC_D2_SPACE: [f'{x}. {y}. ' for x in range(1, 31) for y in range(1, 21)],
     NumberingPattern.NUMERIC_D3_SPACE: [
         f'{x}. {y}. {z}. ' for x in range(1, 31) for y in range(1, 31) for z in range(1, 21)

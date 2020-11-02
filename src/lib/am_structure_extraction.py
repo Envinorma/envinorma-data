@@ -579,16 +579,32 @@ def _html_to_str(html: str) -> str:
 
 
 def _are_very_similar(article_1: LegifranceArticle, article_2: LegifranceArticle) -> bool:
-    return _compute_proximity(_html_to_str(article_1.content), _html_to_str(article_2.content)) >= 0.9
+    return _compute_proximity(_html_to_str(article_1.content), _html_to_str(article_2.content)) >= 0.95
+
+
+def _particular_case(article_1: LegifranceArticle, article_2: LegifranceArticle) -> bool:
+    return article_1.num == 'Annexe I' and article_2.num == 'Annexe I (suite)'
 
 
 _ArticlePair = Tuple[LegifranceArticle, LegifranceArticle]
+_ArticleGroup = Union[LegifranceArticle, _ArticlePair]
 
 
-def _group_articles_to_merge(articles: List[LegifranceArticle]) -> List[Union[LegifranceArticle, _ArticlePair]]:
+def _check_number_of_articles(groups: List[_ArticleGroup], expected_nb_articles: int) -> None:
+    nb_articles = sum([1 if isinstance(group, LegifranceArticle) else 2 for group in groups])
+    if nb_articles != expected_nb_articles:
+        raise ValueError(f'Expecting {expected_nb_articles} articles, received {nb_articles}.')
+
+
+def _group_articles_to_merge(articles: List[LegifranceArticle]) -> List[_ArticleGroup]:
     previous_is_not_none = False
-    groups: List[Union[LegifranceArticle, _ArticlePair]] = []
+    groups: List[_ArticleGroup] = []
     for i, article in enumerate(articles):
+        if i and _particular_case(articles[i - 1], article):
+            groups.pop()
+            groups.append((articles[i - 1], article))
+            previous_is_not_none = False
+            continue
         if article.num is not None:
             previous_is_not_none = True
             groups.append(article)
@@ -599,6 +615,7 @@ def _group_articles_to_merge(articles: List[LegifranceArticle]) -> List[Union[Le
             else:
                 groups.append(article)
             previous_is_not_none = False
+    _check_number_of_articles(groups, len(articles))
     return groups
 
 
@@ -609,7 +626,7 @@ def _merge_articles(main_article: LegifranceArticle, articles_to_append: List[Le
     )
 
 
-def _handle_article_group(group: Union[LegifranceArticle, _ArticlePair]) -> LegifranceArticle:
+def _handle_article_group(group: _ArticleGroup) -> LegifranceArticle:
     if isinstance(group, LegifranceArticle):
         return group
     if _are_very_similar(*group):

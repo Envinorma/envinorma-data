@@ -151,7 +151,7 @@ def _get_am(filename: str) -> ArreteMinisteriel:
 
 def test_structuration():
     am_1 = _get_am('test_data/AM/legifrance_texts/DEVP1706393A.json')
-    assert count_sections(am_1) == 99
+    assert count_sections(am_1) == 93
     assert count_tables(am_1) == 5
     assert count_articles_in_am(am_1) == 14
     assert len(am_1.sections) == 14
