@@ -5,7 +5,7 @@ EXCEPTION_PREFIXES = {
     '''3. Une note succincte indiquant la nature de la substance ex''': None,
     '''4. Pour les carrières visées à la rubrique 2510-6, la justif''': None,
     '''5. Une description des modalités d'extraction et de remise e''': None,
-    '''Les documents et registres prévus aux articles 3.5 et 4.7 du''': None,
+    '''6. Les documents et registres prévus aux articles 3.5 et 4.7''': None,
     '''7. Les résultats des dernières mesures sur les effluents et ''': None,
     '''1. Le démantèlement des installations de production d'électr''': None,
     '''2. L'excavation de la totalité des fondations, jusqu'à la ba''': None,
@@ -48,4 +48,5 @@ EXCEPTION_PREFIXES = {
     '''2. Lorsque la puissance est supérieure ou égale à 10 MW :''': None,
     '''1. Réception :''': None,
     '''2. Expédition :''': None,
+    '''1. - = Courant d'électrolyse, en A''': None,
 }
