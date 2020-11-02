@@ -187,6 +187,7 @@ def add_links_to_am(text: ArreteMinisteriel, new_hyperlinks: List[Hyperlink]) ->
         title=text.title,
         sections=[add_links_in_section(section, str_to_target) for section in text.sections],
         visa=[add_links_in_enriched_string(str_, str_to_target) for str_ in text.visa],
+        short_title=text.short_title
     )
 
 

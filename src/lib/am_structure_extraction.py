@@ -201,6 +201,7 @@ class ArreteMinisteriel:
     title: EnrichedString
     sections: List[StructuredText]
     visa: List[EnrichedString]
+    short_title: str
 
 
 @dataclass
@@ -236,6 +237,8 @@ def extract_alineas(html_text: str) -> List[str]:
         .replace('<p align=\"right\">', '<br/>')
         .replace('<p class=\"note\">', '<br/>')
         .replace('<p class=\"cliche\">', '<br/>')
+        .replace('<div align="left">', '<br/><div align="left">')
+        .replace('<div align=\'left\'>', '<br/><div align="left">')
         .replace('<font color="rgb(51,51,51)">', '')
         .replace('<font color="#808080">', '')
         .replace('<font color="808080">', '')
@@ -670,19 +673,26 @@ def _clean_text_articles(text: LegifranceText) -> LegifranceText:
     )
 
 
+def extract_short_title(input_title: str) -> str:
+    return input_title.split('relatif')[0].split('fixant')[0]
+
+
 def transform_arrete_ministeriel(input_text: LegifranceText) -> ArreteMinisteriel:
     visa = _extract_visa(input_text.visa)
     text_with_merged_articles = _clean_text_articles(input_text)
     sections = _extract_sections(text_with_merged_articles.articles, text_with_merged_articles.sections, [])
-    return ArreteMinisteriel(EnrichedString(text_with_merged_articles.title), sections, visa)
+    short_title = extract_short_title(input_text.title)
+    return ArreteMinisteriel(EnrichedString(text_with_merged_articles.title), sections, visa, short_title)
 
 
-def test(filename: Optional[str] = None):
-    text = json.load(open(filename or 'data/data/AM/legifrance_texts/DEVP1706393A.json'))
-    return transform_arrete_ministeriel(text)
+def test(lf_text_filename: str) -> ArreteMinisteriel:
+    legifrance_text_json = json.load(open(lf_text_filename))
+    _check_legifrance_dict(legifrance_text_json)
+    lf_text = _load_legifrance_text(legifrance_text_json)
+    return transform_arrete_ministeriel(lf_text)
 
 
-def transform_and_write_test_am(filename: Optional[str] = None, output_filename: Optional[str] = None):
+def transform_and_write_test_am(filename: str, output_filename: Optional[str] = None):
     from dataclasses import asdict
 
     if not output_filename:
@@ -696,10 +706,12 @@ def transform_all_available_AM():
     import traceback
     from tqdm import tqdm
 
-    input_folder = 'data/legifrance_texts'
-    output_folder = 'data/structured_texts'
+    input_folder = 'data/AM/legifrance_texts'
+    output_folder = 'data/AM/structured_texts'
     file_to_error = {}
     for file_ in tqdm(os.listdir(input_folder)):
+        if file_[0] == '.':
+            continue
         try:
             transform_and_write_test_am(f'{input_folder}/{file_}', f'{output_folder}/{file_}')
         except Exception as exc:  # pylint: disable=broad-except
@@ -721,6 +733,8 @@ def _load_all_legifrance_texts() -> Dict[str, LegifranceText]:
     folder = 'data/AM/legifrance_texts'
     res: Dict[str, LegifranceText] = {}
     for file_ in tqdm(os.listdir(folder)):
+        if file_[0] == '.':
+            continue
         try:
             text_json = json.load(open(f'{folder}/{file_}'))
             _check_legifrance_dict(text_json)
