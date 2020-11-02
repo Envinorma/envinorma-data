@@ -8,9 +8,9 @@ from bs4 import BeautifulSoup
 from collections import Counter
 from dataclasses import dataclass, field
 from math import sqrt
-from typing import Any, Dict, Iterable, List, Tuple, Optional, Union
+from typing import Any, Dict, Iterable, List, Tuple, Optional, TypeVar, Union
 from tqdm import tqdm
-from lib.structure_detection import NumberingPattern, guess_numbering_pattern, get_matched_strs
+from lib.structure_detection import NumberingPattern, detect_patterns_if_exists
 
 
 class AMStructurationError(Exception):
@@ -294,7 +294,10 @@ def _remove_tables(text: str) -> Tuple[str, List[TableReference]]:
     return str(soup), table_refs
 
 
-def _split_alineas_in_sections(alineas: List[str], matches: List[bool]) -> Tuple[List[str], List[List[str]]]:
+TP = TypeVar('TP')
+
+
+def _split_alineas_in_sections(alineas: List[TP], matches: List[bool]) -> Tuple[List[TP], List[List[TP]]]:
     first_match = -1
     for first_match, match in enumerate(matches):
         if match:
@@ -313,24 +316,53 @@ def remove_empty_enriched_str(strs: List[EnrichedString]) -> List[EnrichedString
     return [str_ for str_ in strs if str_.text or str_.table]
 
 
-def _build_structured_text(title: str, alineas: List[str], pattern: NumberingPattern) -> StructuredText:
-    matches = get_matched_strs(alineas, pattern)
-    outer_alineas, grouped_alineas = _split_alineas_in_sections(alineas, matches)
+def _extract_first_non_null_elt(elements: List[TP]) -> Optional[TP]:
+    for element in elements:
+        if element is not None:
+            return element
+    return None
+
+
+def select_alineas_for_splitting(alineas: List[str], pattern_names: List[Optional[NumberingPattern]]) -> List[bool]:
+    if len(alineas) != len(pattern_names):
+        raise ValueError(f'Expecting same lengths, received {len(alineas)} and {len(pattern_names)}')
+    first_pattern = _extract_first_non_null_elt(pattern_names)
+    if first_pattern is None:
+        return [False] * len(alineas)
+    return [pattern == first_pattern for pattern in pattern_names]
+
+
+def _build_structured_text(
+    title: str, alineas: List[str], pattern_names: List[Optional[NumberingPattern]]
+) -> StructuredText:
+    if len(alineas) != len(pattern_names):
+        raise ValueError(f'{len(pattern_names)} pattern_names != {len(alineas)} alineas')
+    if not any(pattern_names):
+        outer_alineas = alineas
+        grouped_alineas: List[List[str]] = []
+        grouped_pattern_names: List[List[Optional[NumberingPattern]]] = []
+    else:
+        selected_alineas_for_section = select_alineas_for_splitting(alineas, pattern_names)
+        outer_alineas, grouped_alineas = _split_alineas_in_sections(alineas, selected_alineas_for_section)
+        _, grouped_pattern_names = _split_alineas_in_sections(pattern_names, selected_alineas_for_section)
     return StructuredText(
         _extract_links(title),
         remove_empty_enriched_str([_extract_links(al) for al in outer_alineas]),
-        [_structure_text(alinea_group[0], alinea_group[1:]) for alinea_group in grouped_alineas],
+        [
+            _build_structured_text(alinea_group[0], alinea_group[1:], pattern_name_group[1:])
+            for alinea_group, pattern_name_group in zip(grouped_alineas, grouped_pattern_names)
+        ],
         None,
     )
 
 
+def extract_pattern_names(alineas: List[str]) -> List[Optional[NumberingPattern]]:
+    return detect_patterns_if_exists(alineas)
+
+
 def _structure_text(title: str, alineas: List[str]) -> StructuredText:
-    pattern_name = guess_numbering_pattern(alineas)
-    if pattern_name:
-        return _build_structured_text(title, alineas, pattern_name)
-    return StructuredText(
-        _extract_links(title), remove_empty_enriched_str([_extract_links(al) for al in alineas]), [], None
-    )
+    pattern_names = extract_pattern_names(alineas)
+    return _build_structured_text(title, alineas, pattern_names)
 
 
 def _add_table_if_any(str_: EnrichedString, tables: List[TableReference]) -> EnrichedString:
