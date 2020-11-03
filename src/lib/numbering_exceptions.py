@@ -177,4 +177,9 @@ EXCEPTION_PREFIXES = {
     'G.1. Des analyses sont effectuées, sur un échantillonnage re': 'caps',
     'G.2. Seuils en éléments-traces métalliques et en substances ': 'caps',
     "G.3. Les méthodes d'échantillonnage et d'analyse sont défini": 'caps',
+    "G.3. Les méthodes d'échantillonnage et d'analyse s'appuient ": 'caps',
 }
+# I.a. - Les valeurs limites suivantes s'appliquent jusqu'au 31 décembre 2015, exceptées les valeurs limites en poussières lorsque le combustible est de la biomasse qui s'appliquent jusqu'au 31 décembre 2017 :
+# I.b. - En fonction des renvois du tableau du I.a du présent point et lorsque les installations respectent les conditions déterminées dans le tableau du présent alinéa, les valeurs limites d'émission suivantes remplacent les valeurs limites d'émission fixées au I.a du présent point.
+# II.a. - Les valeurs limites suivantes s'appliquent à compter du 1er janvier 2016, exceptées les valeurs limites en poussières lorsque le combustible est de la biomasse qui s'appliquent à compter du 1er janvier 2018 :
+# II.b. - En fonction des renvois du tableau du II.a du présent point lorsque les installations respectent les conditions déterminées dans le tableau du présent alinéa, les valeurs limites d'émission suivantes remplacent les valeurs limites d'émission fixées au II.a du présent point.

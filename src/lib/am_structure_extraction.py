@@ -131,6 +131,8 @@ class LegifranceText:
 
 
 def _load_legifrance_article(dict_: Dict[str, Any]) -> LegifranceArticle:
+    if dict_['etat'] == 'ABROGE':
+        print('ABROGATED ARTICLE')
     return LegifranceArticle(dict_['id'], dict_['content'], dict_['intOrdre'], dict_['num'])
 
 
@@ -235,29 +237,11 @@ def remove_empty(strs: List[str]) -> List[str]:
 
 
 def extract_alineas(html_text: str) -> List[str]:
-    return remove_empty(
-        html_text.replace('<br />', '<br/>')
-        .replace('<p>', '<br/>')
-        .replace("<p align='center'>", '<br/>')
-        .replace('<p align=\"center\">', '<br/>')
-        .replace('<p align=\"left\">', '<br/>')
-        .replace('<p align=\"right\">', '<br/>')
-        .replace('<p class=\"note\">', '<br/>')
-        .replace('<p class=\"cliche\">', '<br/>')
-        .replace('<div align="left">', '<br/><div align="left">')
-        .replace('<div align=\'left\'>', '<br/><div align="left">')
-        .replace('<font color="rgb(51,51,51)">', '')
-        .replace('<font color="#808080">', '')
-        .replace('<font color="808080">', '')
-        .replace('<font color="#000000">', '')
-        .replace('<font color="#000000" size="1">', '')
-        .replace('<font size="1">', '')
-        .replace('<font color="black">', '')
-        .replace('</font>', '')
-        .replace('</p>', '<br/>')
-        .replace('\n', '<br/>')
-        .split('<br/>')
-    )
+    soup = BeautifulSoup(html_text, 'html.parser')
+    for tag_type in ['sup', 'sub', 'font', 'strong', 'b', 'i', 'em']:
+        for tag in soup.find_all(tag_type):
+            tag.unwrap()
+    return list(BeautifulSoup(str(soup), 'html.parser').stripped_strings)
 
 
 def _extract_cell_data(cell: str) -> EnrichedString:

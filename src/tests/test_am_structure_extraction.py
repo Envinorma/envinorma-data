@@ -8,6 +8,7 @@ from lib.am_structure_extraction import (
     Link,
     LinkReference,
     StructuredText,
+    _BASE_LEGIFRANCE_URL,
     _add_links_if_any,
     LegifranceArticle,
     _extract_links,
@@ -40,14 +41,14 @@ def test_link_extraction():
 
 def test_remove_links():
     random.seed(0)
-    text = 'Hello, how <a href="rf1">are</a> you <a href="rf2">now</a> ?'
+    text = 'Hello, how <a href="/rf1">are</a> you <a href="/rf2">now</a> ?'
     rf1 = '$$REF_L$$CD18FC$$REF_R$$'
     rf2 = '$$REF_L$$9FB649$$REF_R$$'
     text, link_references = _remove_links(text)
     assert len(link_references) == 2
-    assert link_references[0].target == 'rf1'
+    assert link_references[0].target == f'{_BASE_LEGIFRANCE_URL}/rf1'
     assert link_references[0].reference == rf1
-    assert link_references[1].target == 'rf2'
+    assert link_references[1].target == f'{_BASE_LEGIFRANCE_URL}/rf2'
     assert link_references[1].reference == rf2
     assert text == f'Hello, how {rf1} you {rf2} ?'
 
