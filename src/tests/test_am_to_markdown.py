@@ -1,3 +1,4 @@
+import pytest
 import json
 
 from lib.am_to_markdown import (
@@ -93,6 +94,7 @@ def test_links_inclusion():
 _SAMPLE_AM_NOR = ['DEVP1706393A', 'TREP1815737A', 'ATEP9870263A', 'DEVP1519168A', 'DEVP1430916A', 'DEVP1001990A']
 
 
+@pytest.mark.filterwarnings('ignore')
 def test_no_fail_in_markdown_extraction():
     for nor in _SAMPLE_AM_NOR:
         am_to_markdown(

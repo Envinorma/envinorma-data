@@ -210,6 +210,13 @@ class TableReference:
     reference: str
 
 
+@dataclass
+class LinkReference:
+    reference: str
+    target: str
+    text: str
+
+
 def keep_visa_string(visas: List[str]) -> List[str]:
     return [visa for visa in visas if visa[:2].lower() == 'vu']
 
@@ -248,8 +255,7 @@ def extract_alineas(html_text: str) -> List[str]:
         .replace('<font color="black">', '')
         .replace('</font>', '')
         .replace('</p>', '<br/>')
-        .replace(_REF_SIG_LEFT, f'<br/>{_REF_SIG_LEFT}')
-        .replace(_REF_SIG_RIGHT, f'{_REF_SIG_RIGHT}<br/>')
+        .replace('\n', '<br/>')
         .split('<br/>')
     )
 
@@ -299,10 +305,22 @@ def _remove_tables(text: str) -> Tuple[str, List[TableReference]]:
     for div in soup.find_all('table'):
         reference = _generate_reference()
         tables.append(_extract_table(str(div)))
-        div.replace_with(reference)
+        div.replace_with(f'\n{reference}\n')
         references.append(reference)
     table_refs = [TableReference(table, reference) for table, reference in zip(tables, references)]
     return str(soup), table_refs
+
+
+def _remove_links(text: str) -> Tuple[str, List[LinkReference]]:
+    soup = BeautifulSoup(text, 'html.parser')
+    links: List[LinkReference] = []
+    for tag in soup.find_all('a'):
+        if 'href' not in tag.attrs:
+            continue
+        reference = _generate_reference()
+        links.append(LinkReference(reference, _BASE_LEGIFRANCE_URL + tag['href'], tag.text))
+        tag.replace_with(reference)
+    return str(soup), links
 
 
 TP = TypeVar('TP')
@@ -376,16 +394,26 @@ def _structure_text(title: str, alineas: List[str]) -> StructuredText:
     return _build_structured_text(title, alineas, pattern_names)
 
 
+REF = TypeVar('REF', bound=Union[TableReference, LinkReference])
+
+
+def _find_reference(str_: EnrichedString, references: List[REF], exact_match: bool = True) -> Optional[REF]:
+    for reference in references:
+        if reference.reference in str_.text:
+            if exact_match and str_.text != reference.reference:
+                raise ValueError(f'There is sth else than a reference in this string: {str_}')
+            return reference
+    return None
+
+
+def _find_references(str_: EnrichedString, references: List[REF]) -> List[REF]:
+    return [reference for reference in references if reference.reference in str_.text]
+
+
 def _add_table_if_any(str_: EnrichedString, tables: List[TableReference]) -> EnrichedString:
-    match: Optional[TableReference] = None
-    for table in tables:
-        if table.reference in str_.text:
-            match = table
-            break
+    match = _find_reference(str_, tables)
     if not match:
         return copy.deepcopy(str_)
-    if str_.text != match.reference:
-        raise ValueError(f'There is sth else than a table in this string: {str_}')
     return EnrichedString('', [], match.table)
 
 
@@ -396,6 +424,31 @@ def _put_tables_back(text: StructuredText, tables: List[TableReference]) -> Stru
         clean_title,
         [_add_table_if_any(alinea, tables) for alinea in text.outer_alineas],
         [_put_tables_back(section, tables) for section in text.sections],
+        None,
+    )
+
+
+_LINK_PLACEHOLDER = '{{LINK}}'
+
+
+def _add_links_if_any(str_: EnrichedString, links: List[LinkReference]) -> EnrichedString:
+    matches = _find_references(str_, links)
+    str_copy = copy.deepcopy(str_)
+    for match in matches:
+        str_copy.text = str_copy.text.replace(match.reference, f'{_LINK_PLACEHOLDER}{match.text}{_LINK_PLACEHOLDER}')
+    str_copy.text, positions = _extract_placeholder_positions(str_copy.text, _LINK_PLACEHOLDER)
+    for match, start, end in zip(matches, positions[::2], positions[1::2]):
+        str_copy.links.append(Link(match.target, start, end - start))
+    return str_copy
+
+
+def _put_links_back(text: StructuredText, links: List[LinkReference]) -> StructuredText:
+    clean_title = _add_links_if_any(text.title, links)
+
+    return StructuredText(
+        clean_title,
+        [_add_links_if_any(alinea, links) for alinea in text.outer_alineas],
+        [_put_links_back(section, links) for section in text.sections],
         None,
     )
 
@@ -439,13 +492,14 @@ def remove_summaries(alineas: List[str]) -> List[str]:
 def _html_to_structured_text(html: str, extract_structure: bool = False) -> StructuredText:
     html_with_correct_annexe = _replace_weird_annexe_words(html)
     html_without_tables, tables = _remove_tables(html_with_correct_annexe)
-    alineas = extract_alineas(html_without_tables)
+    html_without_links, links = _remove_links(html_without_tables)
+    alineas = extract_alineas(html_without_links)
     filtered_alineas = remove_summaries(alineas)
     if extract_structure:
         final_text = _structure_text('', filtered_alineas)
     else:
         final_text = _build_structured_text('', filtered_alineas, [None for _ in range(len(filtered_alineas))])
-    return _put_tables_back(final_text, tables)
+    return _put_tables_back(_put_links_back(final_text, links), tables)
 
 
 def print_structured_text(text: StructuredText, prefix: str = '') -> None:

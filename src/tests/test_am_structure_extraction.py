@@ -1,8 +1,14 @@
+import pytest
 import json
+import random
 from lib.am_structure_extraction import (
     ArreteMinisteriel,
     EnrichedString,
+    _find_references,
+    Link,
+    LinkReference,
     StructuredText,
+    _add_links_if_any,
     LegifranceArticle,
     _extract_links,
     _html_to_structured_text,
@@ -16,6 +22,7 @@ from lib.am_structure_extraction import (
     _group_articles_to_merge,
     _delete_or_merge_articles,
     _structure_text,
+    _remove_links,
 )
 from lib.texts_properties import count_sections, count_tables, count_articles_in_am, _extract_section_inconsistencies
 
@@ -29,6 +36,42 @@ def test_link_extraction():
     assert enriched_text.links[0].target == 'rf'
     assert enriched_text.links[0].content_size == 3
     assert enriched_text.links[0].position == 11
+
+
+def test_remove_links():
+    random.seed(0)
+    text = 'Hello, how <a href="rf1">are</a> you <a href="rf2">now</a> ?'
+    rf1 = '$$REF_L$$CD18FC$$REF_R$$'
+    rf2 = '$$REF_L$$9FB649$$REF_R$$'
+    text, link_references = _remove_links(text)
+    assert len(link_references) == 2
+    assert link_references[0].target == 'rf1'
+    assert link_references[0].reference == rf1
+    assert link_references[1].target == 'rf2'
+    assert link_references[1].reference == rf2
+    assert text == f'Hello, how {rf1} you {rf2} ?'
+
+
+def test_find_references():
+    links = [LinkReference('RF1', 'rf1', 'are'), LinkReference('RF2', 'rf2', 'now')]
+    text = EnrichedString('Hello, how RF1 you RF2 ?', [])
+    matches = _find_references(text, links)
+    assert len(matches) == 2
+    assert matches[0] == links[0]
+    assert matches[1] == links[1]
+
+
+def test_add_links_if_any():
+    links = [LinkReference('RF1', 'rf1', 'are'), LinkReference('RF2', 'rf2', 'now')]
+    text = EnrichedString('Hello, how RF1 you RF2 ?', [Link('rf0', 0, 5)])
+    result = _add_links_if_any(text, links)
+    assert len(result.links) == 3
+    assert result.links[1].content_size == 3
+    assert result.links[2].content_size == 3
+    assert result.links[1].target == 'rf1'
+    assert result.links[2].target == 'rf2'
+    assert result.table is None
+    assert result.text == 'Hello, how are you now ?'
 
 
 def test_structure_extraction():
@@ -64,6 +107,7 @@ def test_structure_extraction():
 _SAMPLE_AM_NOR = ['DEVP1706393A', 'TREP1815737A', 'ATEP9870263A', 'DEVP1519168A', 'DEVP1430916A', 'DEVP1001990A']
 
 
+@pytest.mark.filterwarnings('ignore')
 def test_no_fail_in_structure_extraction():
     for nor in _SAMPLE_AM_NOR:
         transform_arrete_ministeriel(_load_legifrance_text(json.load(open(f'data/AM/legifrance_texts/{nor}.json'))))
@@ -149,6 +193,7 @@ def _get_am(filename: str) -> ArreteMinisteriel:
     return transform_arrete_ministeriel(raw_text)
 
 
+@pytest.mark.filterwarnings('ignore')
 def test_structuration():
     am_1 = _get_am('test_data/AM/legifrance_texts/DEVP1706393A.json')
     assert count_sections(am_1) == 93
@@ -157,6 +202,7 @@ def test_structuration():
     assert len(am_1.sections) == 14
 
 
+@pytest.mark.filterwarnings('ignore')
 def test_structuration_2():
     am_2 = _get_am('test_data/AM/legifrance_texts/TREP1835514A.json')
     assert count_sections(am_2) == 89

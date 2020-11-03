@@ -1,3 +1,4 @@
+import pytest
 import json
 from lib.am_structure_extraction import Link, EnrichedString, transform_arrete_ministeriel, _load_legifrance_text
 from lib.aida import (
@@ -37,6 +38,7 @@ def test_link_addition():
 _SAMPLE_AM_NOR = ['DEVP1706393A', 'TREP1815737A', 'ATEP9870263A', 'DEVP1519168A', 'DEVP1430916A', 'DEVP1001990A']
 
 
+@pytest.mark.filterwarnings('ignore')
 def test_no_fail_in_aida_links_addition():
     page_id_to_links = json.load(open('data/aida/hyperlinks/page_id_to_links.json'))
     arretes_ministeriels = json.load(open('data/AM/arretes_ministeriels.json'))
