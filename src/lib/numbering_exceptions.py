@@ -178,8 +178,12 @@ EXCEPTION_PREFIXES = {
     'G.2. Seuils en éléments-traces métalliques et en substances ': 'caps',
     "G.3. Les méthodes d'échantillonnage et d'analyse sont défini": 'caps',
     "G.3. Les méthodes d'échantillonnage et d'analyse s'appuient ": 'caps',
+    '22-3. La hauteur des parois des rétentions est au minimum de': 'numeric-d3-dash',
+    '22-4. La distance entre les parois de la rétention et la par': 'numeric-d3-dash',
+    '22-5. Dans tous les cas, la surface nette (réservoirs déduit': 'numeric-d3-dash',
+    "22-6. Les rétentions sont accessibles aux moyens d'extinctio": 'numeric-d3-dash',
+    '22-8. Une pompe de liquides inflammables peut être placée da': 'numeric-d3-dash',
+    "22-9. Lorsqu'une perte de confinement sur un réservoir peut ": 'numeric-d3-dash',
+    "22-10. A l'exception du point 22-9 du présent arrêté, les di": 'numeric-d3-dash',
 }
-# I.a. - Les valeurs limites suivantes s'appliquent jusqu'au 31 décembre 2015, exceptées les valeurs limites en poussières lorsque le combustible est de la biomasse qui s'appliquent jusqu'au 31 décembre 2017 :
-# I.b. - En fonction des renvois du tableau du I.a du présent point et lorsque les installations respectent les conditions déterminées dans le tableau du présent alinéa, les valeurs limites d'émission suivantes remplacent les valeurs limites d'émission fixées au I.a du présent point.
-# II.a. - Les valeurs limites suivantes s'appliquent à compter du 1er janvier 2016, exceptées les valeurs limites en poussières lorsque le combustible est de la biomasse qui s'appliquent à compter du 1er janvier 2018 :
-# II.b. - En fonction des renvois du tableau du II.a du présent point lorsque les installations respectent les conditions déterminées dans le tableau du présent alinéa, les valeurs limites d'émission suivantes remplacent les valeurs limites d'émission fixées au II.a du présent point.
+

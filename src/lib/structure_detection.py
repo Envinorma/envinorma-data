@@ -12,6 +12,8 @@ class NumberingPattern(Enum):
     NUMERIC_D3 = 'numeric-d3'
     NUMERIC_D1_PAREN = 'numeric-d1-paren'
     NUMERIC_D2_SPACE = 'numeric-d2-space'
+    NUMERIC_D2_DASH = 'numeric-d2-dash'
+    NUMERIC_D3_DASH = 'numeric-d3-dash'
     NUMERIC_D3_SPACE = 'numeric-d3-space'
     NUMERIC_D4_SPACE = 'numeric-d4-space'
     NUMERIC_CIRCLE = 'numeric-circle'
@@ -31,7 +33,9 @@ NUMBERING_PATTERNS = {
     NumberingPattern.NUMERIC_D3: r'^([0-9]+\.){3} ',
     NumberingPattern.NUMERIC_D1_PAREN: r'^[0-9]+\) ',
     NumberingPattern.NUMERIC_D2_SPACE: r'^([0-9]+\. ){2}',
+    NumberingPattern.NUMERIC_D2_DASH: r'^[0-9]+\-[0-9]+\. ',
     NumberingPattern.NUMERIC_D3_SPACE: r'^([0-9]+\. ){3}',
+    NumberingPattern.NUMERIC_D3_DASH: r'^[0-9]+\-[0-9]+\-[0-9]+\. ',
     NumberingPattern.NUMERIC_D4_SPACE: r'^([0-9]+\. ){4}',
     NumberingPattern.NUMERIC_CIRCLE: r'^[0-9]+° ',
     NumberingPattern.LETTERS: r'^[a-z]\)',
@@ -45,7 +49,9 @@ INCREASING_PATTERNS = {
     NumberingPattern.ROMAN_DASH,
     NumberingPattern.NUMERIC_D1,
     NumberingPattern.NUMERIC_D2,
+    NumberingPattern.NUMERIC_D2_DASH,
     NumberingPattern.NUMERIC_D3,
+    NumberingPattern.NUMERIC_D3_DASH,
     NumberingPattern.NUMERIC_CIRCLE,
     NumberingPattern.LETTERS,
     NumberingPattern.CAPS,
@@ -191,6 +197,10 @@ PATTERN_NAME_TO_LIST = {
     NumberingPattern.NUMERIC_D3: [f'{x}.{y}.{z}. ' for x in range(1, 31) for y in range(1, 21) for z in range(1, 21)],
     NumberingPattern.NUMERIC_D1_PAREN: [f'{x}) ' for x in range(1, 101)],
     NumberingPattern.NUMERIC_D2_SPACE: [f'{x}. {y}. ' for x in range(1, 31) for y in range(1, 21)],
+    NumberingPattern.NUMERIC_D2_DASH: [f'{x}-{y}. ' for x in range(1, 101) for y in range(1, 21)],
+    NumberingPattern.NUMERIC_D3_DASH: [
+        f'{x}-{y}-{z}. ' for x in range(1, 60) for y in range(1, 21) for z in range(1, 11)
+    ],
     NumberingPattern.NUMERIC_D3_SPACE: [
         f'{x}. {y}. {z}. ' for x in range(1, 31) for y in range(1, 31) for z in range(1, 21)
     ],
