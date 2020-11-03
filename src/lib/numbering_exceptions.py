@@ -185,5 +185,10 @@ EXCEPTION_PREFIXES = {
     '22-8. Une pompe de liquides inflammables peut être placée da': 'numeric-d3-dash',
     "22-9. Lorsqu'une perte de confinement sur un réservoir peut ": 'numeric-d3-dash',
     "22-10. A l'exception du point 22-9 du présent arrêté, les di": 'numeric-d3-dash',
+    "Art. 2.1. - Au sens du présent arrêté on entend par :": 'roman',
+    "Art. 2.2. - I. - Le pétitionnaire et l'exploitant sont tenus": 'roman',
+    "Art. 2.3. - I. - L'exploitant tient à la disposition de l'in": 'roman',
+    "Art. 4-1.-I.-Afin de satisfaire au premier alinéa du présent": 'roman-dash',
+    "Art. 4-2.-I.-Afin de satisfaire au premier alinéa du présent": 'roman-dash',
+    "Art. 4-3.-Les règles applicables aux avis conformes du minis": 'roman-dash',
 }
-
