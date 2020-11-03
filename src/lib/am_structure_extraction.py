@@ -3,10 +3,10 @@ import copy
 import json
 import os
 import random
-import re
 from bs4 import BeautifulSoup
 from collections import Counter
 from dataclasses import dataclass, field
+from enum import Enum
 from math import sqrt
 from typing import Any, Dict, Iterable, List, Tuple, Optional, TypeVar, Union
 from tqdm import tqdm
@@ -50,6 +50,7 @@ def _check_lf_article(article: Dict[str, Any]) -> None:
     _check_dict_field(article, 'intOrdre', int, 'legifrance.article')
     _check_dict_field(article, 'id', str, 'legifrance.article')
     _check_dict_field(article, 'content', str, 'legifrance.article')
+    _check_dict_field(article, 'etat', str, f'legifrance.article')
 
 
 def _check_lf_articles(legifrance_dict: Dict[str, Any], depth: int = 0) -> None:
@@ -63,6 +64,7 @@ def _check_lf_section(section: Dict[str, Any], depth: int = 0) -> None:
     _check_dict_field(section, 'title', str, 'legifrance.section')
     _check_dict_field(section, 'intOrdre', int, 'legifrance.section')
     _check_dict_field(section, 'sections', list, 'legifrance.section')
+    _check_dict_field(section, 'etat', str, f'legifrance.section')
     _check_lf_sections(section, depth + 1)
     _check_lf_articles(section, depth + 1)
 
@@ -106,12 +108,18 @@ def _check_legifrance_dict(legifrance_dict: Dict[str, Any]) -> None:
     _check_proportion_of_null_articles(legifrance_dict)
 
 
+class ArticleStatus(Enum):
+    VIGUEUR = 'VIGUEUR'
+    ABROGE = 'ABROGE'
+
+
 @dataclass
 class LegifranceSection:
     intOrdre: int
     title: str
     articles: List['LegifranceArticle']
     sections: List['LegifranceSection']
+    etat: ArticleStatus
 
 
 @dataclass
@@ -120,6 +128,7 @@ class LegifranceArticle:
     content: str
     intOrdre: int
     num: Optional[str]
+    etat: ArticleStatus
 
 
 @dataclass
@@ -131,9 +140,9 @@ class LegifranceText:
 
 
 def _load_legifrance_article(dict_: Dict[str, Any]) -> LegifranceArticle:
-    if dict_['etat'] == 'ABROGE':
-        print('ABROGATED ARTICLE')
-    return LegifranceArticle(dict_['id'], dict_['content'], dict_['intOrdre'], dict_['num'])
+    return LegifranceArticle(
+        dict_['id'], dict_['content'], dict_['intOrdre'], dict_['num'], ArticleStatus(dict_['etat'])
+    )
 
 
 def _load_legifrance_section(dict_: Dict[str, Any]) -> LegifranceSection:
@@ -142,6 +151,7 @@ def _load_legifrance_section(dict_: Dict[str, Any]) -> LegifranceSection:
         dict_['title'],
         [_load_legifrance_article(article) for article in dict_['articles']],
         [_load_legifrance_section(section) for section in dict_['sections']],
+        ArticleStatus(dict_['etat']),
     )
 
 
@@ -241,7 +251,7 @@ def extract_alineas(html_text: str) -> List[str]:
     for tag_type in ['sup', 'sub', 'font', 'strong', 'b', 'i', 'em']:
         for tag in soup.find_all(tag_type):
             tag.unwrap()
-    return list(BeautifulSoup(str(soup), 'html.parser').stripped_strings)
+    return [str(sstr) for sstr in BeautifulSoup(str(soup), 'html.parser').stripped_strings]
 
 
 def _extract_cell_data(cell: str) -> EnrichedString:
@@ -282,6 +292,9 @@ def secure_zip(*lists: List) -> Iterable[Tuple]:
     return zip(*lists)
 
 
+_BR_PLACEHOLDER = '{{BR_PLACEHOLDER}}'
+
+
 def _remove_tables(text: str) -> Tuple[str, List[TableReference]]:
     soup = BeautifulSoup(text, 'html.parser')
     tables: List[Table] = []
@@ -289,10 +302,10 @@ def _remove_tables(text: str) -> Tuple[str, List[TableReference]]:
     for div in soup.find_all('table'):
         reference = _generate_reference()
         tables.append(_extract_table(str(div)))
-        div.replace_with(f'\n{reference}\n')
+        div.replace_with(f'{_BR_PLACEHOLDER}{reference}{_BR_PLACEHOLDER}')
         references.append(reference)
     table_refs = [TableReference(table, reference) for table, reference in zip(tables, references)]
-    return str(soup), table_refs
+    return str(soup).replace(_BR_PLACEHOLDER, '<br/>'), table_refs
 
 
 def _remove_links(text: str) -> Tuple[str, List[LinkReference]]:
@@ -663,7 +676,11 @@ def _group_articles_to_merge(articles: List[LegifranceArticle]) -> List[_Article
 def _merge_articles(main_article: LegifranceArticle, articles_to_append: List[LegifranceArticle]) -> LegifranceArticle:
     merged_content = '\n<br/>\n'.join([main_article.content] + [art.content for art in articles_to_append])
     return LegifranceArticle(
-        main_article.id, content=merged_content, intOrdre=main_article.intOrdre, num=main_article.num
+        main_article.id,
+        content=merged_content,
+        intOrdre=main_article.intOrdre,
+        num=main_article.num,
+        etat=main_article.etat,
     )
 
 
@@ -699,15 +716,35 @@ def _clean_section_articles(section: LegifranceSection) -> LegifranceSection:
         section.title,
         _delete_or_merge_articles(section.articles),
         [_clean_section_articles(subsection) for subsection in section.sections],
+        section.etat,
     )
 
 
-def _clean_text_articles(text: LegifranceText) -> LegifranceText:
+def in_force(legifrance_element: Union[LegifranceArticle, LegifranceSection]) -> bool:
+    return legifrance_element.etat == ArticleStatus.VIGUEUR
+
+
+LFTP = TypeVar('LFTP', bound=Union[LegifranceText, LegifranceSection])
+
+
+def _remove_abrogated(text: LFTP) -> LFTP:
+    articles = [article for article in text.articles if in_force(article)]
+    sections = [_remove_abrogated(section) for section in text.sections if in_force(section)]
+    if isinstance(text, LegifranceText):
+        return LegifranceText(text.visa, text.title, articles, sections)
+    return LegifranceSection(text.intOrdre, text.title, articles, sections, text.etat)
+
+
+def _clean_text_articles(text: LegifranceText, keep_abrogated: bool) -> LegifranceText:
+    if keep_abrogated:
+        input_text = text
+    else:
+        input_text = _remove_abrogated(text)
     return LegifranceText(
-        text.visa,
-        text.title,
-        _delete_or_merge_articles(text.articles),
-        [_clean_section_articles(section) for section in text.sections],
+        input_text.visa,
+        input_text.title,
+        _delete_or_merge_articles(input_text.articles),
+        [_clean_section_articles(section) for section in input_text.sections],
     )
 
 
@@ -715,9 +752,11 @@ def extract_short_title(input_title: str) -> str:
     return input_title.split('relatif')[0].split('fixant')[0].strip()
 
 
-def transform_arrete_ministeriel(input_text: LegifranceText) -> ArreteMinisteriel:
+def transform_arrete_ministeriel(
+    input_text: LegifranceText, keep_abrogated_articles: bool = False
+) -> ArreteMinisteriel:
     visa = _extract_visa(input_text.visa)
-    text_with_merged_articles = _clean_text_articles(input_text)
+    text_with_merged_articles = _clean_text_articles(input_text, keep_abrogated_articles)
     sections = _extract_sections(text_with_merged_articles.articles, text_with_merged_articles.sections, [])
     short_title = extract_short_title(input_text.title)
     return ArreteMinisteriel(EnrichedString(text_with_merged_articles.title), sections, visa, short_title)

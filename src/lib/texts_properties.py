@@ -5,6 +5,7 @@ from typing import Optional, Tuple, Union, List
 
 from lib.am_structure_extraction import (
     ArreteMinisteriel,
+    ArticleStatus,
     EnrichedString,
     StructuredText,
     LegifranceText,
@@ -45,10 +46,11 @@ def _extract_text_structure(text: Union[LegifranceText, LegifranceSection], pref
     elts = sorted(raw_elts, key=lambda x: x.intOrdre)
     res: List[str] = []
     for elt in elts:
+        etat = ' (abrogé)' if elt.etat == ArticleStatus.ABROGE else ''
         if isinstance(elt, LegifranceArticle):
-            res += [f'{prefix}Article {elt.num}']
+            res += [f'{prefix}Article {elt.num}{etat}']
         elif isinstance(elt, LegifranceSection):
-            res += [(f'{prefix}Section {elt.title}')] + _extract_text_structure(elt, f'|--{prefix}')
+            res += [(f'{prefix}Section {elt.title}{etat}')] + _extract_text_structure(elt, f'|--{prefix}')
         else:
             raise ValueError('')
     return res

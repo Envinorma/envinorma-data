@@ -11,6 +11,7 @@ from lib.am_to_markdown import (
     extract_markdown_text,
 )
 from lib.am_structure_extraction import (
+    ArticleStatus,
     _extract_table,
     transform_arrete_ministeriel,
     _load_legifrance_text,
@@ -154,7 +155,13 @@ def test_existing_installations():
     titles = ['A. First title', 'B. Dispositions applicables aux installations existantes.']
     alineas_html = [str_.replace('\n', '<br/>') for str_ in alineas_strs]
     sections = [
-        LegifranceSection(i, title, [LegifranceArticle('', html, i, f'Annexe {i}')], [])
+        LegifranceSection(
+            i,
+            title,
+            [LegifranceArticle('', html, i, f'Annexe {i}', ArticleStatus('VIGUEUR'))],
+            [],
+            ArticleStatus('VIGUEUR'),
+        )
         for i, (title, html) in enumerate(zip(titles, alineas_html))
     ]
     res = [extract_markdown_text(sec, 1) for sec in _extract_sections([], sections, [])]

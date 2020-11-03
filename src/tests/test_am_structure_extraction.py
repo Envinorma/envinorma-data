@@ -3,6 +3,7 @@ import json
 import random
 from lib.am_structure_extraction import (
     ArreteMinisteriel,
+    ArticleStatus,
     EnrichedString,
     _find_references,
     Link,
@@ -149,10 +150,10 @@ def test_compute_proximity():
 
 
 def test_group_articles_to_merge():
-    article_0 = LegifranceArticle('0', '', 0, None)
-    article_1 = LegifranceArticle('1', '', 1, '1')
-    article_2 = LegifranceArticle('2', '', 2, '2')
-    article_3 = LegifranceArticle('3', '', 3, None)
+    article_0 = LegifranceArticle('0', '', 0, None, ArticleStatus('VIGUEUR'))
+    article_1 = LegifranceArticle('1', '', 1, '1', ArticleStatus('VIGUEUR'))
+    article_2 = LegifranceArticle('2', '', 2, '2', ArticleStatus('VIGUEUR'))
+    article_3 = LegifranceArticle('3', '', 3, None, ArticleStatus('VIGUEUR'))
 
     groups = _group_articles_to_merge([article_0, article_1, article_2, article_3])
     assert len(groups) == 3
@@ -169,12 +170,12 @@ def test_delete_or_merge_articles():
     sentence_3 = 'Les VLE sont disponibles dans ce tableau:'
     sentence_4 = '<table><tr><td>CO <= 0.6 unités</table></tr></td>'
     articles = [
-        LegifranceArticle('0', '', 0, None),
-        LegifranceArticle('1', '', 1, '1'),
-        LegifranceArticle('2', sentence_1, 2, '2'),
-        LegifranceArticle('3', sentence_2, 3, None),
-        LegifranceArticle('4', sentence_3, 4, '3'),
-        LegifranceArticle('5', sentence_4, 5, None),
+        LegifranceArticle('0', '', 0, None, ArticleStatus('VIGUEUR')),
+        LegifranceArticle('1', '', 1, '1', ArticleStatus('VIGUEUR')),
+        LegifranceArticle('2', sentence_1, 2, '2', ArticleStatus('VIGUEUR')),
+        LegifranceArticle('3', sentence_2, 3, None, ArticleStatus('VIGUEUR')),
+        LegifranceArticle('4', sentence_3, 4, '3', ArticleStatus('VIGUEUR')),
+        LegifranceArticle('5', sentence_4, 5, None, ArticleStatus('VIGUEUR')),
     ]
     new_articles = _delete_or_merge_articles(articles)
     assert len(new_articles) == 4
@@ -182,7 +183,10 @@ def test_delete_or_merge_articles():
     assert new_articles[2].content == articles[2].content
     assert articles[4].content in new_articles[3].content and articles[4].content in new_articles[3].content
 
-    articles = [LegifranceArticle('1', '', 1, None), LegifranceArticle('0', '', 0, None)]
+    articles = [
+        LegifranceArticle('1', '', 1, None, ArticleStatus('VIGUEUR')),
+        LegifranceArticle('0', '', 0, None, ArticleStatus('VIGUEUR')),
+    ]
     new_articles = _delete_or_merge_articles(articles)
     assert len(new_articles) == 1
     assert new_articles[0].id == '0'
