@@ -9,7 +9,8 @@
                 "rubrique": "1138"
             }
         ],
-        "cid": "JORFTEXT000000568479"
+        "cid": "JORFTEXT000000568479",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "4651",
@@ -21,7 +22,8 @@
                 "rubrique": "1212"
             }
         ],
-        "cid": "JORFTEXT000017734021"
+        "cid": "JORFTEXT000017734021",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "4123",
@@ -37,7 +39,8 @@
                 "rubrique": "1332"
             }
         ],
-        "cid": "JORFTEXT000022092771"
+        "cid": "JORFTEXT000022092771",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "4589",
@@ -49,7 +52,8 @@
                 "rubrique": "1412"
             }
         ],
-        "cid": "JORFTEXT000018008144"
+        "cid": "JORFTEXT000018008144",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "3991",
@@ -61,7 +65,8 @@
                 "rubrique": "1432"
             }
         ],
-        "cid": "JORFTEXT000023081678"
+        "cid": "JORFTEXT000023081678",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "3401",
@@ -73,7 +78,8 @@
                 "rubrique": "1432"
             }
         ],
-        "cid": "JORFTEXT000026251890"
+        "cid": "JORFTEXT000026251890",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "4111",
@@ -146,7 +152,8 @@
                 "rubrique": "4748"
             }
         ],
-        "cid": "JORFTEXT000023081678"
+        "cid": "JORFTEXT000023081678",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "35819",
@@ -206,7 +213,8 @@
                 "rubrique": "4748"
             }
         ],
-        "cid": "JORFTEXT000026251890"
+        "cid": "JORFTEXT000026251890",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "35807",
@@ -266,7 +274,8 @@
                 "rubrique": "4748"
             }
         ],
-        "cid": "JORFTEXT000018820571"
+        "cid": "JORFTEXT000018820571",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "38104",
@@ -315,7 +324,8 @@
                 "rubrique": "1510"
             }
         ],
-        "cid": "JORFTEXT000034429274"
+        "cid": "JORFTEXT000034429274",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "4445",
@@ -327,7 +337,8 @@
                 "rubrique": "1530"
             }
         ],
-        "cid": "JORFTEXT000019860739"
+        "cid": "JORFTEXT000019860739",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "35697",
@@ -347,7 +358,8 @@
                 "rubrique": "2797"
             }
         ],
-        "cid": "JORFTEXT000030885472"
+        "cid": "JORFTEXT000030885472",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "28552",
@@ -371,7 +383,8 @@
                 "rubrique": "3660"
             }
         ],
-        "cid": "JORFTEXT000028409297"
+        "cid": "JORFTEXT000028409297",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "4889",
@@ -383,7 +396,8 @@
                 "rubrique": "2110"
             }
         ],
-        "cid": "JORFTEXT000000246408"
+        "cid": "JORFTEXT000000246408",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "5129",
@@ -395,7 +409,8 @@
                 "rubrique": "2113"
             }
         ],
-        "cid": "JORFTEXT000000624760"
+        "cid": "JORFTEXT000000624760",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "37312",
@@ -406,7 +421,8 @@
                 "rubrique": "2113"
             }
         ],
-        "cid": "LEGITEXT000006074852"
+        "cid": "LEGITEXT000006074852",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "4861",
@@ -418,7 +434,8 @@
                 "rubrique": "2120"
             }
         ],
-        "cid": "JORFTEXT000000615876"
+        "cid": "JORFTEXT000000615876",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "4543",
@@ -430,7 +447,8 @@
                 "rubrique": "2130"
             }
         ],
-        "cid": "JORFTEXT000018622600"
+        "cid": "JORFTEXT000018622600",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "5165",
@@ -442,7 +460,8 @@
                 "rubrique": "2140"
             }
         ],
-        "cid": "JORFTEXT000000610915"
+        "cid": "JORFTEXT000000610915",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "39942",
@@ -454,7 +473,8 @@
                 "regime": "A",
                 "rubrique": "2150"
             }
-        ]
+        ],
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "5163",
@@ -466,7 +486,8 @@
                 "rubrique": "2160"
             }
         ],
-        "cid": "JORFTEXT000000797999"
+        "cid": "JORFTEXT000000797999",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "5161",
@@ -478,7 +499,8 @@
                 "rubrique": "2210"
             }
         ],
-        "cid": "JORFTEXT000000803657"
+        "cid": "JORFTEXT000000803657",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "5491",
@@ -490,7 +512,8 @@
                 "rubrique": "2251"
             }
         ],
-        "cid": "JORFTEXT000000399672"
+        "cid": "JORFTEXT000000399672",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "4141",
@@ -502,7 +525,8 @@
                 "rubrique": "2260"
             }
         ],
-        "cid": "JORFTEXT000022039323"
+        "cid": "JORFTEXT000022039323",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "5509",
@@ -539,7 +563,8 @@
                 "rubrique": "3610"
             }
         ],
-        "cid": "JORFTEXT000042344843"
+        "cid": "JORFTEXT000042344843",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "5809",
@@ -551,7 +576,8 @@
                 "rubrique": "2510"
             }
         ],
-        "cid": "JORFTEXT000000347845"
+        "cid": "JORFTEXT000000347845",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "5859",
@@ -563,7 +589,8 @@
                 "rubrique": "2520"
             }
         ],
-        "cid": "JORFTEXT000000346445"
+        "cid": "JORFTEXT000000346445",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "5235",
@@ -579,7 +606,8 @@
                 "rubrique": "2531"
             }
         ],
-        "cid": "JORFTEXT000000411785"
+        "cid": "JORFTEXT000000411785",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "4919",
@@ -595,7 +623,8 @@
                 "rubrique": "3260"
             }
         ],
-        "cid": "JORFTEXT000000644060"
+        "cid": "JORFTEXT000000644060",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "5625",
@@ -607,7 +636,8 @@
                 "rubrique": "2680"
             }
         ],
-        "cid": "JORFTEXT000000389425"
+        "cid": "JORFTEXT000000389425",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "4097",
@@ -619,7 +649,8 @@
                 "rubrique": "2720"
             }
         ],
-        "cid": "JORFTEXT000022673160"
+        "cid": "JORFTEXT000022673160",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "5245",
@@ -631,7 +662,8 @@
                 "rubrique": "2730"
             }
         ],
-        "cid": "JORFTEXT000000419523"
+        "cid": "JORFTEXT000000419523",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "5247",
@@ -643,7 +675,8 @@
                 "rubrique": "2731"
             }
         ],
-        "cid": "JORFTEXT000000785128"
+        "cid": "JORFTEXT000000785128",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "4279",
@@ -668,7 +701,8 @@
                 "rubrique": "2740"
             }
         ],
-        "cid": "JORFTEXT000037078514"
+        "cid": "JORFTEXT000037078514",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "37314",
@@ -680,7 +714,8 @@
                 "rubrique": "2760"
             }
         ],
-        "cid": "JORFTEXT000032275960"
+        "cid": "JORFTEXT000032275960",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "5275",
@@ -692,7 +727,8 @@
                 "rubrique": "2771"
             }
         ],
-        "cid": "JORFTEXT000000234557"
+        "cid": "JORFTEXT000000234557",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "4529",
@@ -704,7 +740,8 @@
                 "rubrique": "2780"
             }
         ],
-        "cid": "JORFTEXT000018800981"
+        "cid": "JORFTEXT000018800981",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "4223",
@@ -716,7 +753,8 @@
                 "rubrique": "2781"
             }
         ],
-        "cid": "JORFTEXT000021334497"
+        "cid": "JORFTEXT000021334497",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "27198",
@@ -788,7 +826,8 @@
                 "rubrique": "3110"
             }
         ],
-        "cid": "JORFTEXT000037284792"
+        "cid": "JORFTEXT000037284792",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "37522",
@@ -800,7 +839,8 @@
                 "regime": "A",
                 "rubrique": "2971"
             }
-        ]
+        ],
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "35876",
@@ -812,7 +852,8 @@
                 "rubrique": "2980"
             }
         ],
-        "cid": "JORFTEXT000024507365"
+        "cid": "JORFTEXT000024507365",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "41057",
@@ -824,7 +865,8 @@
                 "rubrique": "3110"
             }
         ],
-        "cid": "JORFTEXT000037284870"
+        "cid": "JORFTEXT000037284870",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "35378",
@@ -852,7 +894,8 @@
                 "rubrique": "4422"
             }
         ],
-        "cid": "JORFTEXT000017734021"
+        "cid": "JORFTEXT000017734021",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "35408",
@@ -868,7 +911,8 @@
                 "rubrique": "4703"
             }
         ],
-        "cid": "JORFTEXT000022092771"
+        "cid": "JORFTEXT000022092771",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "35346",
@@ -880,7 +924,8 @@
                 "rubrique": "4710"
             }
         ],
-        "cid": "JORFTEXT000000568479"
+        "cid": "JORFTEXT000000568479",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "35412",
@@ -892,7 +937,8 @@
                 "rubrique": "4718"
             }
         ],
-        "cid": "JORFTEXT000018008144"
+        "cid": "JORFTEXT000018008144",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "35821",
@@ -909,7 +955,8 @@
                 "alinea": "1"
             }
         ],
-        "cid": "JORFTEXT000000190990"
+        "cid": "JORFTEXT000000190990",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "5687",
@@ -921,7 +968,8 @@
                 "rubrique": "4735"
             }
         ],
-        "cid": "JORFTEXT000000202155"
+        "cid": "JORFTEXT000000202155",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "4033",
@@ -933,7 +981,8 @@
                 "rubrique": "1311"
             }
         ],
-        "cid": "JORFTEXT000022593820"
+        "cid": "JORFTEXT000022593820",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "4121",
@@ -945,7 +994,8 @@
                 "rubrique": "1435"
             }
         ],
-        "cid": "JORFTEXT000022097882"
+        "cid": "JORFTEXT000022097882",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "4117",
@@ -970,7 +1020,8 @@
                 "rubrique": "1511"
             }
         ],
-        "cid": "JORFTEXT000022097955"
+        "cid": "JORFTEXT000022097955",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "4115",
@@ -982,7 +1033,8 @@
                 "rubrique": "1530"
             }
         ],
-        "cid": "JORFTEXT000022097909"
+        "cid": "JORFTEXT000022097909",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "27126",
@@ -994,7 +1046,8 @@
                 "rubrique": "1532"
             }
         ],
-        "cid": "JORFTEXT000027945320"
+        "cid": "JORFTEXT000027945320",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "28554",
@@ -1014,7 +1067,8 @@
                 "rubrique": "2111"
             }
         ],
-        "cid": "JORFTEXT000028409384"
+        "cid": "JORFTEXT000028409384",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "41355",
@@ -1026,7 +1080,8 @@
                 "rubrique": "2120"
             }
         ],
-        "cid": "JORFTEXT000037518992"
+        "cid": "JORFTEXT000037518992",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "22363",
@@ -1038,7 +1093,8 @@
                 "rubrique": "2160"
             }
         ],
-        "cid": "JORFTEXT000026694666"
+        "cid": "JORFTEXT000026694666",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "28562",
@@ -1050,7 +1106,8 @@
                 "rubrique": "2220"
             }
         ],
-        "cid": "JORFTEXT000028374558"
+        "cid": "JORFTEXT000028374558",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "3501",
@@ -1062,7 +1119,8 @@
                 "rubrique": "2221"
             }
         ],
-        "cid": "JORFTEXT000025673104"
+        "cid": "JORFTEXT000025673104",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "39127",
@@ -1074,7 +1132,8 @@
                 "regime": "E",
                 "rubrique": "2230"
             }
-        ]
+        ],
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "39125",
@@ -1086,7 +1145,8 @@
                 "regime": "E",
                 "rubrique": "2240"
             }
-        ]
+        ],
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "3885",
@@ -1098,7 +1158,8 @@
                 "rubrique": "2250"
             }
         ],
-        "cid": "JORFTEXT000023689944"
+        "cid": "JORFTEXT000023689944",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "22368",
@@ -1110,7 +1171,8 @@
                 "rubrique": "2251"
             }
         ],
-        "cid": "JORFTEXT000026694774"
+        "cid": "JORFTEXT000026694774",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "41357",
@@ -1126,7 +1188,8 @@
                 "rubrique": "2260"
             }
         ],
-        "cid": "JORFTEXT000037519057"
+        "cid": "JORFTEXT000037519057",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "3883",
@@ -1138,7 +1201,8 @@
                 "rubrique": "2340"
             }
         ],
-        "cid": "JORFTEXT000023713720"
+        "cid": "JORFTEXT000023713720",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "32625",
@@ -1150,7 +1214,8 @@
                 "rubrique": "2410"
             }
         ],
-        "cid": "JORFTEXT000029419186"
+        "cid": "JORFTEXT000029419186",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "22367",
@@ -1162,7 +1227,8 @@
                 "rubrique": "2515"
             }
         ],
-        "cid": "JORFTEXT000026694913"
+        "cid": "JORFTEXT000026694913",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "28564",
@@ -1174,7 +1240,8 @@
                 "rubrique": "2516"
             }
         ],
-        "cid": "JORFTEXT000028379475"
+        "cid": "JORFTEXT000028379475",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "28570",
@@ -1186,7 +1253,8 @@
                 "rubrique": "2517"
             }
         ],
-        "cid": "JORFTEXT000028379599"
+        "cid": "JORFTEXT000028379599",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "3723",
@@ -1198,7 +1266,8 @@
                 "rubrique": "2518"
             }
         ],
-        "cid": "JORFTEXT000024490187"
+        "cid": "JORFTEXT000024490187",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "41901",
@@ -1210,7 +1279,8 @@
                 "rubrique": "2521"
             }
         ],
-        "cid": "JORFTEXT000038358856"
+        "cid": "JORFTEXT000038358856",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "3721",
@@ -1222,7 +1292,8 @@
                 "rubrique": "2522"
             }
         ],
-        "cid": "JORFTEXT000024490314"
+        "cid": "JORFTEXT000024490314",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "28575",
@@ -1234,7 +1305,8 @@
                 "rubrique": "2560"
             }
         ],
-        "cid": "JORFTEXT000028374698"
+        "cid": "JORFTEXT000028374698",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "28590",
@@ -1246,7 +1318,8 @@
                 "rubrique": "2563"
             }
         ],
-        "cid": "JORFTEXT000028374816"
+        "cid": "JORFTEXT000028374816",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "41897",
@@ -1262,7 +1335,8 @@
                 "rubrique": "2565"
             }
         ],
-        "cid": "JORFTEXT000038358667"
+        "cid": "JORFTEXT000038358667",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "28599",
@@ -1274,7 +1348,8 @@
                 "rubrique": "2661"
             }
         ],
-        "cid": "JORFTEXT000028409140"
+        "cid": "JORFTEXT000028409140",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "4107",
@@ -1286,7 +1361,8 @@
                 "rubrique": "2662"
             }
         ],
-        "cid": "JORFTEXT000022198234"
+        "cid": "JORFTEXT000022198234",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "4105",
@@ -1298,7 +1374,8 @@
                 "rubrique": "2663"
             }
         ],
-        "cid": "JORFTEXT000022198256"
+        "cid": "JORFTEXT000022198256",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "33655",
@@ -1310,7 +1387,8 @@
                 "rubrique": "2760"
             }
         ],
-        "cid": "JORFTEXT000029893853"
+        "cid": "JORFTEXT000029893853",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "3465",
@@ -1322,7 +1400,8 @@
                 "rubrique": "2780"
             }
         ],
-        "cid": "JORFTEXT000025789288"
+        "cid": "JORFTEXT000025789288",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "40755",
@@ -1334,7 +1413,8 @@
                 "regime": "E",
                 "rubrique": "2794"
             }
-        ]
+        ],
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "40749",
@@ -1346,7 +1426,8 @@
                 "regime": "D",
                 "rubrique": "2794"
             }
-        ]
+        ],
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "28582",
@@ -1358,7 +1439,8 @@
                 "rubrique": "2921"
             }
         ],
-        "cid": "JORFTEXT000028374941"
+        "cid": "JORFTEXT000028374941",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "35386",
@@ -1370,7 +1452,8 @@
                 "rubrique": "4220"
             }
         ],
-        "cid": "JORFTEXT000022593820"
+        "cid": "JORFTEXT000022593820",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "35344",
@@ -1386,7 +1469,8 @@
                 "rubrique": "4734"
             }
         ],
-        "cid": "JORFTEXT000030673177"
+        "cid": "JORFTEXT000030673177",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "5619",
@@ -1398,7 +1482,8 @@
                 "rubrique": "1111"
             }
         ],
-        "cid": "JORFTEXT000000756621"
+        "cid": "JORFTEXT000000756621",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "5023",
@@ -1410,7 +1495,8 @@
                 "rubrique": "1116"
             }
         ],
-        "cid": "JORFTEXT000000446932"
+        "cid": "JORFTEXT000000446932",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "5621",
@@ -1422,7 +1508,8 @@
                 "rubrique": "1131"
             }
         ],
-        "cid": "JORFTEXT000000756654"
+        "cid": "JORFTEXT000000756654",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "5647",
@@ -1448,7 +1535,8 @@
                 "rubrique": "1136"
             }
         ],
-        "cid": "JORFTEXT000021519796"
+        "cid": "JORFTEXT000021519796",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "4403",
@@ -1460,7 +1548,8 @@
                 "rubrique": "1138"
             }
         ],
-        "cid": "JORFTEXT000019982074"
+        "cid": "JORFTEXT000019982074",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "5671",
@@ -1472,7 +1561,8 @@
                 "rubrique": "1139"
             }
         ],
-        "cid": "JORFTEXT000000370053"
+        "cid": "JORFTEXT000000370053",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "4653",
@@ -1484,7 +1574,8 @@
                 "rubrique": "1140"
             }
         ],
-        "cid": "JORFTEXT000017640626"
+        "cid": "JORFTEXT000017640626",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "5501",
@@ -1496,7 +1587,8 @@
                 "rubrique": "1141"
             }
         ],
-        "cid": "JORFTEXT000000765521"
+        "cid": "JORFTEXT000000765521",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "4661",
@@ -1508,7 +1600,8 @@
                 "rubrique": "1150"
             }
         ],
-        "cid": "JORFTEXT000017640600"
+        "cid": "JORFTEXT000017640600",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "5319",
@@ -1520,7 +1613,8 @@
                 "rubrique": "1155"
             }
         ],
-        "cid": "JORFTEXT000000777935"
+        "cid": "JORFTEXT000000777935",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "5503",
@@ -1532,7 +1626,8 @@
                 "rubrique": "1156"
             }
         ],
-        "cid": "JORFTEXT000000400526"
+        "cid": "JORFTEXT000000400526",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "5677",
@@ -1544,7 +1639,8 @@
                 "rubrique": "1157"
             }
         ],
-        "cid": "JORFTEXT000000551230"
+        "cid": "JORFTEXT000000551230",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "4665",
@@ -1556,7 +1652,8 @@
                 "rubrique": "1158"
             }
         ],
-        "cid": "JORFTEXT000017640584"
+        "cid": "JORFTEXT000017640584",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "5589",
@@ -1568,7 +1665,8 @@
                 "rubrique": "1172"
             }
         ],
-        "cid": "JORFTEXT000000392482"
+        "cid": "JORFTEXT000000392482",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "5591",
@@ -1580,7 +1678,8 @@
                 "rubrique": "1173"
             }
         ],
-        "cid": "JORFTEXT000000574817"
+        "cid": "JORFTEXT000000574817",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "5333",
@@ -1592,7 +1691,8 @@
                 "rubrique": "1185"
             }
         ],
-        "cid": "JORFTEXT000000592074"
+        "cid": "JORFTEXT000000592074",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "32401",
@@ -1608,7 +1708,8 @@
                 "rubrique": "4802"
             }
         ],
-        "cid": "JORFTEXT000029359291"
+        "cid": "JORFTEXT000029359291",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "4421",
@@ -1620,7 +1721,8 @@
                 "rubrique": "1212"
             }
         ],
-        "cid": "JORFTEXT000019776628"
+        "cid": "JORFTEXT000019776628",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "5727",
@@ -1632,7 +1734,8 @@
                 "rubrique": "1220"
             }
         ],
-        "cid": "JORFTEXT000000381759"
+        "cid": "JORFTEXT000000381759",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "33661",
@@ -1644,7 +1747,8 @@
                 "rubrique": "1310"
             }
         ],
-        "cid": "JORFTEXT000029893770"
+        "cid": "JORFTEXT000029893770",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "4565",
@@ -1656,7 +1760,8 @@
                 "rubrique": "1311"
             }
         ],
-        "cid": "JORFTEXT000018332514"
+        "cid": "JORFTEXT000018332514",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "4395",
@@ -1668,7 +1773,8 @@
                 "rubrique": "1330"
             }
         ],
-        "cid": "JORFTEXT000019982114"
+        "cid": "JORFTEXT000019982114",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "4917",
@@ -1680,7 +1786,8 @@
                 "rubrique": "1331"
             }
         ],
-        "cid": "JORFTEXT000000609220"
+        "cid": "JORFTEXT000000609220",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "5021",
@@ -1692,7 +1799,8 @@
                 "rubrique": "1412"
             }
         ],
-        "cid": "JORFTEXT000000447400"
+        "cid": "JORFTEXT000000447400",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "5253",
@@ -1704,7 +1812,8 @@
                 "rubrique": "1413"
             }
         ],
-        "cid": "JORFTEXT000000418677"
+        "cid": "JORFTEXT000000418677",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "35414",
@@ -1720,7 +1829,8 @@
                 "rubrique": "4718"
             }
         ],
-        "cid": "JORFTEXT000000418677"
+        "cid": "JORFTEXT000000418677",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "5649",
@@ -1732,7 +1842,8 @@
                 "rubrique": "1416"
             }
         ],
-        "cid": "JORFTEXT000000571176"
+        "cid": "JORFTEXT000000571176",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "41364",
@@ -1744,7 +1855,8 @@
                 "rubrique": "1416"
             }
         ],
-        "cid": "JORFTEXT000037519292"
+        "cid": "JORFTEXT000037519292",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "5729",
@@ -1756,7 +1868,8 @@
                 "rubrique": "1418"
             }
         ],
-        "cid": "JORFTEXT000000564940"
+        "cid": "JORFTEXT000000564940",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "5723",
@@ -1768,7 +1881,8 @@
                 "rubrique": "1419"
             }
         ],
-        "cid": "JORFTEXT000000383619"
+        "cid": "JORFTEXT000000383619",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "4379",
@@ -1780,7 +1894,8 @@
                 "rubrique": "1432"
             }
         ],
-        "cid": "JORFTEXT000019996765"
+        "cid": "JORFTEXT000019996765",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "5063",
@@ -1792,7 +1907,8 @@
                 "rubrique": "1433"
             }
         ],
-        "cid": "JORFTEXT000000630475"
+        "cid": "JORFTEXT000000630475",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "35846",
@@ -1804,7 +1920,8 @@
                 "rubrique": "1435"
             }
         ],
-        "cid": "JORFTEXT000022097853"
+        "cid": "JORFTEXT000022097853",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "35811",
@@ -1868,7 +1985,8 @@
                 "rubrique": "4748"
             }
         ],
-        "cid": "JORFTEXT000019996765"
+        "cid": "JORFTEXT000019996765",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "35813",
@@ -1924,7 +2042,8 @@
                 "rubrique": "4747"
             }
         ],
-        "cid": "JORFTEXT000000630475"
+        "cid": "JORFTEXT000000630475",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "38417",
@@ -2070,7 +2189,8 @@
                 "alinea": "2"
             }
         ],
-        "cid": "JORFTEXT000033560858"
+        "cid": "JORFTEXT000033560858",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "5489",
@@ -2082,7 +2202,8 @@
                 "rubrique": "1455"
             }
         ],
-        "cid": "JORFTEXT000000399730"
+        "cid": "JORFTEXT000000399730",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "4375",
@@ -2111,7 +2232,8 @@
                 "rubrique": "1511"
             }
         ],
-        "cid": "JORFTEXT000028814820"
+        "cid": "JORFTEXT000028814820",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "4443",
@@ -2123,7 +2245,8 @@
                 "rubrique": "1530"
             }
         ],
-        "cid": "JORFTEXT000019831346"
+        "cid": "JORFTEXT000019831346",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "5507",
@@ -2135,7 +2258,8 @@
                 "rubrique": "1531"
             }
         ],
-        "cid": "JORFTEXT000000764048"
+        "cid": "JORFTEXT000000764048",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "5467",
@@ -2147,7 +2271,8 @@
                 "rubrique": "1611"
             }
         ],
-        "cid": "JORFTEXT000000573432"
+        "cid": "JORFTEXT000000573432",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "4659",
@@ -2159,7 +2284,8 @@
                 "rubrique": "1612"
             }
         ],
-        "cid": "JORFTEXT000017640613"
+        "cid": "JORFTEXT000017640613",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "5397",
@@ -2171,7 +2297,8 @@
                 "rubrique": "1630"
             }
         ],
-        "cid": "JORFTEXT000000772915"
+        "cid": "JORFTEXT000000772915",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "33687",
@@ -2183,7 +2310,8 @@
                 "rubrique": "1716"
             }
         ],
-        "cid": "JORFTEXT000029917414"
+        "cid": "JORFTEXT000029917414",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "5429",
@@ -2195,7 +2323,8 @@
                 "rubrique": "1810"
             }
         ],
-        "cid": "JORFTEXT000000770271"
+        "cid": "JORFTEXT000000770271",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "5427",
@@ -2207,7 +2336,8 @@
                 "rubrique": "1820"
             }
         ],
-        "cid": "JORFTEXT000000770272"
+        "cid": "JORFTEXT000000770272",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "42852",
@@ -2219,7 +2349,8 @@
                 "rubrique": "1978"
             }
         ],
-        "cid": "JORFTEXT000041413405"
+        "cid": "JORFTEXT000041413405",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "5091",
@@ -2271,7 +2402,8 @@
                 "alinea": "3"
             }
         ],
-        "cid": "JORFTEXT000028409472"
+        "cid": "JORFTEXT000028409472",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "4891",
@@ -2283,7 +2415,8 @@
                 "rubrique": "2110"
             }
         ],
-        "cid": "JORFTEXT000000425804"
+        "cid": "JORFTEXT000000425804",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "5083",
@@ -2295,7 +2428,8 @@
                 "rubrique": "2112"
             }
         ],
-        "cid": "JORFTEXT000000444667"
+        "cid": "JORFTEXT000000444667",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "4863",
@@ -2307,7 +2441,8 @@
                 "rubrique": "2120"
             }
         ],
-        "cid": "JORFTEXT000000791749"
+        "cid": "JORFTEXT000000791749",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "39978",
@@ -2319,7 +2454,8 @@
                 "rubrique": "2150"
             }
         ],
-        "cid": "JORFTEXT000036074702"
+        "cid": "JORFTEXT000036074702",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "5359",
@@ -2344,7 +2480,8 @@
                 "rubrique": "2210"
             }
         ],
-        "cid": "JORFTEXT000000418135"
+        "cid": "JORFTEXT000000418135",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "5045",
@@ -2356,7 +2493,8 @@
                 "rubrique": "2220"
             }
         ],
-        "cid": "JORFTEXT000000812308"
+        "cid": "JORFTEXT000000812308",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "4727",
@@ -2368,7 +2506,8 @@
                 "rubrique": "2221"
             }
         ],
-        "cid": "JORFTEXT000000277959"
+        "cid": "JORFTEXT000000277959",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "3427",
@@ -2380,7 +2519,8 @@
                 "rubrique": "2250"
             }
         ],
-        "cid": "JORFTEXT000026140269"
+        "cid": "JORFTEXT000026140269",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "5571",
@@ -2392,7 +2532,8 @@
                 "regime": "D",
                 "rubrique": "2251"
             }
-        ]
+        ],
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "34787",
@@ -2404,7 +2545,8 @@
                 "rubrique": "2253"
             }
         ],
-        "cid": "JORFTEXT000030426541"
+        "cid": "JORFTEXT000030426541",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "4935",
@@ -2416,7 +2558,8 @@
                 "rubrique": "2260"
             }
         ],
-        "cid": "JORFTEXT000000792853"
+        "cid": "JORFTEXT000000792853",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "33845",
@@ -2428,7 +2571,8 @@
                 "rubrique": "2265"
             }
         ],
-        "cid": "JORFTEXT000030024830"
+        "cid": "JORFTEXT000030024830",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "5403",
@@ -2440,7 +2584,8 @@
                 "regime": "D",
                 "rubrique": "2330"
             }
-        ]
+        ],
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "3887",
@@ -2452,7 +2597,8 @@
                 "rubrique": "2340"
             }
         ],
-        "cid": "JORFTEXT000023596449"
+        "cid": "JORFTEXT000023596449",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "5321",
@@ -2464,7 +2610,8 @@
                 "rubrique": "2345"
             }
         ],
-        "cid": "JORFTEXT000000413046"
+        "cid": "JORFTEXT000000413046",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "4259",
@@ -2476,7 +2623,8 @@
                 "rubrique": "2345"
             }
         ],
-        "cid": "JORFTEXT000021030687"
+        "cid": "JORFTEXT000021030687",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "5401",
@@ -2488,7 +2636,8 @@
                 "regime": "D",
                 "rubrique": "2351"
             }
-        ]
+        ],
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "5399",
@@ -2500,7 +2649,8 @@
                 "regime": "D",
                 "rubrique": "2360"
             }
-        ]
+        ],
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "5105",
@@ -2512,7 +2662,8 @@
                 "rubrique": "2415"
             }
         ],
-        "cid": "JORFTEXT000000786106"
+        "cid": "JORFTEXT000000786106",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "5207",
@@ -2524,7 +2675,8 @@
                 "rubrique": "2450"
             }
         ],
-        "cid": "JORFTEXT000000432338"
+        "cid": "JORFTEXT000000432338",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "4851",
@@ -2536,7 +2688,8 @@
                 "rubrique": "2510"
             }
         ],
-        "cid": "JORFTEXT000000427983"
+        "cid": "JORFTEXT000000427983",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "5689",
@@ -2548,7 +2701,8 @@
                 "rubrique": "2515"
             }
         ],
-        "cid": "JORFTEXT000000552021"
+        "cid": "JORFTEXT000000552021",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "5691",
@@ -2560,7 +2714,8 @@
                 "rubrique": "2516"
             }
         ],
-        "cid": "JORFTEXT000000369331"
+        "cid": "JORFTEXT000000369331",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "5693",
@@ -2572,7 +2727,8 @@
                 "rubrique": "2517"
             }
         ],
-        "cid": "JORFTEXT000000369330"
+        "cid": "JORFTEXT000000369330",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "3641",
@@ -2584,7 +2740,8 @@
                 "rubrique": "2518"
             }
         ],
-        "cid": "JORFTEXT000024968167"
+        "cid": "JORFTEXT000024968167",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "5695",
@@ -2596,7 +2753,8 @@
                 "rubrique": "2521"
             }
         ],
-        "cid": "JORFTEXT000000552020"
+        "cid": "JORFTEXT000000552020",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "5697",
@@ -2621,7 +2779,8 @@
                 "rubrique": "2522"
             }
         ],
-        "cid": "JORFTEXT000024968178"
+        "cid": "JORFTEXT000024968178",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "5699",
@@ -2633,7 +2792,8 @@
                 "rubrique": "2524"
             }
         ],
-        "cid": "JORFTEXT000000369301"
+        "cid": "JORFTEXT000000369301",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "4825",
@@ -2645,7 +2805,8 @@
                 "rubrique": "2530"
             }
         ],
-        "cid": "JORFTEXT000000793557"
+        "cid": "JORFTEXT000000793557",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "4823",
@@ -2657,7 +2818,8 @@
                 "rubrique": "2531"
             }
         ],
-        "cid": "JORFTEXT000000793558"
+        "cid": "JORFTEXT000000793558",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "5701",
@@ -2669,7 +2831,8 @@
                 "rubrique": "2550"
             }
         ],
-        "cid": "JORFTEXT000000734395"
+        "cid": "JORFTEXT000000734395",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "5703",
@@ -2681,7 +2844,8 @@
                 "rubrique": "2551"
             }
         ],
-        "cid": "JORFTEXT000000182387"
+        "cid": "JORFTEXT000000182387",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "5705",
@@ -2693,7 +2857,8 @@
                 "rubrique": "2552"
             }
         ],
-        "cid": "JORFTEXT000000552051"
+        "cid": "JORFTEXT000000552051",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "35912",
@@ -2705,7 +2870,8 @@
                 "rubrique": "2560"
             }
         ],
-        "cid": "JORFTEXT000031027065"
+        "cid": "JORFTEXT000031027065",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "5707",
@@ -2730,7 +2896,8 @@
                 "rubrique": "2561"
             }
         ],
-        "cid": "JORFTEXT000031027083"
+        "cid": "JORFTEXT000031027083",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "5709",
@@ -2755,7 +2922,8 @@
                 "rubrique": "2562"
             }
         ],
-        "cid": "JORFTEXT000000369300"
+        "cid": "JORFTEXT000000369300",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "35916",
@@ -2767,7 +2935,8 @@
                 "rubrique": "2563"
             }
         ],
-        "cid": "JORFTEXT000031027101"
+        "cid": "JORFTEXT000031027101",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "5145",
@@ -2792,7 +2961,8 @@
                 "rubrique": "2564"
             }
         ],
-        "cid": "JORFTEXT000038358780"
+        "cid": "JORFTEXT000038358780",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "5713",
@@ -2804,7 +2974,8 @@
                 "rubrique": "2565"
             }
         ],
-        "cid": "JORFTEXT000000551978"
+        "cid": "JORFTEXT000000551978",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "36022",
@@ -2816,7 +2987,8 @@
                 "rubrique": "2566"
             }
         ],
-        "cid": "JORFTEXT000031027118"
+        "cid": "JORFTEXT000031027118",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "36020",
@@ -2828,7 +3000,8 @@
                 "rubrique": "2567"
             }
         ],
-        "cid": "JORFTEXT000031027133"
+        "cid": "JORFTEXT000031027133",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "4293",
@@ -2840,7 +3013,8 @@
                 "rubrique": "2570"
             }
         ],
-        "cid": "JORFTEXT000021028173"
+        "cid": "JORFTEXT000021028173",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "5715",
@@ -2852,7 +3026,8 @@
                 "rubrique": "2575"
             }
         ],
-        "cid": "JORFTEXT000000369299"
+        "cid": "JORFTEXT000000369299",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "5521",
@@ -2868,7 +3043,8 @@
                 "rubrique": "2661"
             }
         ],
-        "cid": "JORFTEXT000000202785"
+        "cid": "JORFTEXT000000202785",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "5519",
@@ -2880,7 +3056,8 @@
                 "rubrique": "2662"
             }
         ],
-        "cid": "JORFTEXT000000202754"
+        "cid": "JORFTEXT000000202754",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "5517",
@@ -2892,7 +3069,8 @@
                 "rubrique": "2663"
             }
         ],
-        "cid": "JORFTEXT000000567521"
+        "cid": "JORFTEXT000000567521",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "5125",
@@ -2904,7 +3082,8 @@
                 "rubrique": "2685"
             }
         ],
-        "cid": "JORFTEXT000000807264"
+        "cid": "JORFTEXT000000807264",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "5725",
@@ -2954,7 +3133,8 @@
                 "rubrique": "2716"
             }
         ],
-        "cid": "JORFTEXT000037032196"
+        "cid": "JORFTEXT000037032196",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "3985",
@@ -2992,7 +3172,8 @@
                 "rubrique": "2715"
             }
         ],
-        "cid": "JORFTEXT000023022769"
+        "cid": "JORFTEXT000023022769",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "3979",
@@ -3017,7 +3198,8 @@
                 "rubrique": "2719"
             }
         ],
-        "cid": "JORFTEXT000026274584"
+        "cid": "JORFTEXT000026274584",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "3755",
@@ -3029,7 +3211,8 @@
                 "rubrique": "2780"
             }
         ],
-        "cid": "JORFTEXT000024446891"
+        "cid": "JORFTEXT000024446891",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "3643",
@@ -3041,7 +3224,8 @@
                 "rubrique": "2791"
             }
         ],
-        "cid": "JORFTEXT000024908356"
+        "cid": "JORFTEXT000024908356",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "35868",
@@ -3053,7 +3237,8 @@
                 "rubrique": "2795"
             }
         ],
-        "cid": "JORFTEXT000025126196"
+        "cid": "JORFTEXT000025126196",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "33685",
@@ -3065,7 +3250,8 @@
                 "rubrique": "2798"
             }
         ],
-        "cid": "JORFTEXT000029917403"
+        "cid": "JORFTEXT000029917403",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "5683",
@@ -3103,7 +3289,8 @@
                 "rubrique": "2921"
             }
         ],
-        "cid": "JORFTEXT000028375083"
+        "cid": "JORFTEXT000028375083",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "5481",
@@ -3115,7 +3302,8 @@
                 "rubrique": "2925"
             }
         ],
-        "cid": "JORFTEXT000000584145"
+        "cid": "JORFTEXT000000584145",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "41031",
@@ -3127,7 +3315,8 @@
                 "rubrique": "2925"
             }
         ],
-        "cid": "JORFTEXT000037311523"
+        "cid": "JORFTEXT000037311523",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "5149",
@@ -3139,7 +3328,8 @@
                 "rubrique": "2930"
             }
         ],
-        "cid": "JORFTEXT000000619924"
+        "cid": "JORFTEXT000000619924",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "5505",
@@ -3151,7 +3341,8 @@
                 "rubrique": "2935"
             }
         ],
-        "cid": "JORFTEXT000000764047"
+        "cid": "JORFTEXT000000764047",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "5323",
@@ -3163,7 +3354,8 @@
                 "rubrique": "2940"
             }
         ],
-        "cid": "JORFTEXT000000413047"
+        "cid": "JORFTEXT000000413047",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "5735",
@@ -3175,7 +3367,8 @@
                 "rubrique": "2950"
             }
         ],
-        "cid": "JORFTEXT000000199989"
+        "cid": "JORFTEXT000000199989",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "35874",
@@ -3187,7 +3380,8 @@
                 "rubrique": "2980"
             }
         ],
-        "cid": "JORFTEXT000024507356"
+        "cid": "JORFTEXT000024507356",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "35318",
@@ -3215,7 +3409,8 @@
                 "rubrique": "4737"
             }
         ],
-        "cid": "JORFTEXT000000756621"
+        "cid": "JORFTEXT000000756621",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "35330",
@@ -3251,7 +3446,8 @@
                 "rubrique": "4740"
             }
         ],
-        "cid": "JORFTEXT000000756654"
+        "cid": "JORFTEXT000000756654",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "38030",
@@ -3263,7 +3459,8 @@
                 "regime": "D",
                 "rubrique": "4210"
             }
-        ]
+        ],
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "35384",
@@ -3275,7 +3472,8 @@
                 "rubrique": "4220"
             }
         ],
-        "cid": "JORFTEXT000018332514"
+        "cid": "JORFTEXT000018332514",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "35358",
@@ -3303,7 +3501,8 @@
                 "rubrique": "4422"
             }
         ],
-        "cid": "JORFTEXT000019776628"
+        "cid": "JORFTEXT000019776628",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "42468",
@@ -3323,7 +3522,8 @@
                 "rubrique": "4442"
             }
         ],
-        "cid": "JORFTEXT000039104029"
+        "cid": "JORFTEXT000039104029",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "35352",
@@ -3343,7 +3543,8 @@
                 "rubrique": "4745"
             }
         ],
-        "cid": "JORFTEXT000000392482"
+        "cid": "JORFTEXT000000392482",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "35354",
@@ -3355,7 +3556,8 @@
                 "rubrique": "4511"
             }
         ],
-        "cid": "JORFTEXT000000574817"
+        "cid": "JORFTEXT000000574817",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "35855",
@@ -3367,7 +3569,8 @@
                 "rubrique": "4610"
             }
         ],
-        "cid": "JORFTEXT000000770271"
+        "cid": "JORFTEXT000000770271",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "35858",
@@ -3383,7 +3586,8 @@
                 "rubrique": "4630"
             }
         ],
-        "cid": "JORFTEXT000000770272"
+        "cid": "JORFTEXT000000770272",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "35388",
@@ -3395,7 +3599,8 @@
                 "rubrique": "4701"
             }
         ],
-        "cid": "JORFTEXT000019982114"
+        "cid": "JORFTEXT000019982114",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "35406",
@@ -3407,7 +3612,8 @@
                 "rubrique": "4702"
             }
         ],
-        "cid": "JORFTEXT000000609220"
+        "cid": "JORFTEXT000000609220",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "35348",
@@ -3459,7 +3665,8 @@
                 "rubrique": "4733"
             }
         ],
-        "cid": "JORFTEXT000017640600"
+        "cid": "JORFTEXT000017640600",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "35334",
@@ -3471,7 +3678,8 @@
                 "rubrique": "4710"
             }
         ],
-        "cid": "JORFTEXT000019982074"
+        "cid": "JORFTEXT000019982074",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "35337",
@@ -3483,7 +3691,8 @@
                 "rubrique": "4714"
             }
         ],
-        "cid": "JORFTEXT000017640626"
+        "cid": "JORFTEXT000017640626",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "35416",
@@ -3495,7 +3704,8 @@
                 "rubrique": "4715"
             }
         ],
-        "cid": "JORFTEXT000000571176"
+        "cid": "JORFTEXT000000571176",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "35410",
@@ -3507,7 +3717,8 @@
                 "rubrique": "4718"
             }
         ],
-        "cid": "JORFTEXT000000447400"
+        "cid": "JORFTEXT000000447400",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "35801",
@@ -3519,7 +3730,8 @@
                 "rubrique": "4719"
             }
         ],
-        "cid": "JORFTEXT000000564940"
+        "cid": "JORFTEXT000000564940",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "35803",
@@ -3535,7 +3747,8 @@
                 "rubrique": "4721"
             }
         ],
-        "cid": "JORFTEXT000000383619"
+        "cid": "JORFTEXT000000383619",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "35382",
@@ -3547,7 +3760,8 @@
                 "rubrique": "4725"
             }
         ],
-        "cid": "JORFTEXT000000381759"
+        "cid": "JORFTEXT000000381759",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "35322",
@@ -3559,7 +3773,8 @@
                 "rubrique": "4727"
             }
         ],
-        "cid": "JORFTEXT000000446932"
+        "cid": "JORFTEXT000000446932",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "35350",
@@ -3571,7 +3786,8 @@
                 "rubrique": "4731"
             }
         ],
-        "cid": "JORFTEXT000000551230"
+        "cid": "JORFTEXT000000551230",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "35370",
@@ -3583,7 +3799,8 @@
                 "rubrique": "4735"
             }
         ],
-        "cid": "JORFTEXT000021519796"
+        "cid": "JORFTEXT000021519796",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "35826",
@@ -3596,7 +3813,8 @@
                 "alinea": "1"
             }
         ],
-        "cid": "JORFTEXT000019994396"
+        "cid": "JORFTEXT000019994396",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "35844",
@@ -3609,7 +3827,8 @@
                 "alinea": "2"
             }
         ],
-        "cid": "JORFTEXT000024778832"
+        "cid": "JORFTEXT000024778832",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "37316",
@@ -3627,7 +3846,8 @@
                 "alinea": "2"
             }
         ],
-        "cid": "JORFTEXT000032282438"
+        "cid": "JORFTEXT000032282438",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "3497",
@@ -3640,7 +3860,8 @@
                 "alinea": "2"
             }
         ],
-        "cid": "JORFTEXT000025634333"
+        "cid": "JORFTEXT000025634333",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "40759",
@@ -3668,7 +3889,8 @@
                 "alinea": "1"
             }
         ],
-        "cid": "JORFTEXT000037032383"
+        "cid": "JORFTEXT000037032383",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "22371",
@@ -3681,7 +3903,8 @@
                 "alinea": "1"
             }
         ],
-        "cid": "JORFTEXT000026695033"
+        "cid": "JORFTEXT000026695033",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "40753",
@@ -3694,7 +3917,8 @@
                 "alinea": "3"
             }
         ],
-        "cid": "JORFTEXT000037032238"
+        "cid": "JORFTEXT000037032238",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "36244",
@@ -3707,7 +3931,8 @@
                 "alinea": "1"
             }
         ],
-        "cid": "JORFTEXT000031259868"
+        "cid": "JORFTEXT000031259868",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "41576",
@@ -3720,7 +3945,8 @@
                 "alinea": "2.a"
             }
         ],
-        "cid": "JORFTEXT000037832596"
+        "cid": "JORFTEXT000037832596",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "4015",
@@ -3733,7 +3959,8 @@
                 "alinea": "1"
             }
         ],
-        "cid": "JORFTEXT000022727437"
+        "cid": "JORFTEXT000022727437",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "27539",
@@ -3779,7 +4006,8 @@
                 "alinea": "C"
             }
         ],
-        "cid": "JORFTEXT000037284611"
+        "cid": "JORFTEXT000037284611",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "43224",
@@ -3792,7 +4020,8 @@
                 "alinea": "1"
             }
         ],
-        "cid": "JORFTEXT000041875990"
+        "cid": "JORFTEXT000041875990",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "43226",
@@ -3810,7 +4039,8 @@
                 "alinea": "1"
             }
         ],
-        "cid": "JORFTEXT000041876039"
+        "cid": "JORFTEXT000041876039",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "43228",
@@ -3833,7 +4063,8 @@
                 "alinea": "3"
             }
         ],
-        "cid": "JORFTEXT000041876133"
+        "cid": "JORFTEXT000041876133",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "4989",
@@ -3861,7 +4092,8 @@
                 "alinea": "3"
             }
         ],
-        "cid": "JORFTEXT000022865723"
+        "cid": "JORFTEXT000022865723",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "35823",
@@ -3874,7 +4106,8 @@
                 "alinea": "1"
             }
         ],
-        "cid": "JORFTEXT000020008930"
+        "cid": "JORFTEXT000020008930",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "4835",
@@ -3887,7 +4120,8 @@
                 "alinea": "4"
             }
         ],
-        "cid": "JORFTEXT000000464327"
+        "cid": "JORFTEXT000000464327",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "5587",
@@ -3919,7 +4153,8 @@
                 "alinea": "2"
             }
         ],
-        "cid": "JORFTEXT000018049814"
+        "cid": "JORFTEXT000018049814",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "5455",
@@ -3946,7 +4181,8 @@
                 "alinea": "3"
             }
         ],
-        "cid": "JORFTEXT000039397758"
+        "cid": "JORFTEXT000039397758",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "5627",
@@ -3959,7 +4195,8 @@
                 "alinea": "1"
             }
         ],
-        "cid": "JORFTEXT000000194255"
+        "cid": "JORFTEXT000000194255",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "3489",
@@ -3972,7 +4209,8 @@
                 "alinea": "1"
             }
         ],
-        "cid": "JORFTEXT000025687401"
+        "cid": "JORFTEXT000025687401",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "3491",
@@ -3985,7 +4223,8 @@
                 "alinea": "2"
             }
         ],
-        "cid": "JORFTEXT000025687415"
+        "cid": "JORFTEXT000025687415",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "3749",
@@ -4011,7 +4250,8 @@
                 "alinea": "3"
             }
         ],
-        "cid": "JORFTEXT000037518915"
+        "cid": "JORFTEXT000037518915",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "4221",
@@ -4024,7 +4264,8 @@
                 "alinea": "1"
             }
         ],
-        "cid": "JORFTEXT000021334587"
+        "cid": "JORFTEXT000021334587",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "42121",
@@ -4037,7 +4278,8 @@
                 "alinea": "1"
             }
         ],
-        "cid": "JORFTEXT000038528312"
+        "cid": "JORFTEXT000038528312",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "33745",
@@ -4050,7 +4292,8 @@
                 "alinea": "1"
             }
         ],
-        "cid": "JORFTEXT000029964686"
+        "cid": "JORFTEXT000029964686",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "33747",
@@ -4063,7 +4306,8 @@
                 "alinea": "2"
             }
         ],
-        "cid": "JORFTEXT000029964692"
+        "cid": "JORFTEXT000029964692",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "39938",
@@ -4076,7 +4320,8 @@
                 "alinea": "3"
             }
         ],
-        "cid": "JORFTEXT000036126905"
+        "cid": "JORFTEXT000036126905",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "3625",
@@ -4103,7 +4348,8 @@
                 "alinea": "A.2"
             }
         ],
-        "cid": "JORFTEXT000037284579"
+        "cid": "JORFTEXT000037284579",
+        "etat": "VIGUEUR"
     },
     {
         "aida_page": "41025",
@@ -4116,6 +4362,7 @@
                 "alinea": "A.2"
             }
         ],
-        "cid": "JORFTEXT000037284510"
+        "cid": "JORFTEXT000037284510",
+        "etat": "VIGUEUR"
     }
 ]
