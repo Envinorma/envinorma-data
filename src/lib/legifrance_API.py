@@ -1,4 +1,5 @@
 import json
+import os
 import requests
 from datetime import datetime
 from typing import Dict, Optional
@@ -14,7 +15,7 @@ def get_legifrance_client() -> OAuth2Session:
     data = {
         'grant_type': 'client_credentials',
         'client_id': 'a5b0a4be-9406-4481-925d-e1bfb784f691',
-        'client_secret': CLIENT_SECRET,
+        'client_secret': os.environ['CLIENT_SECRET'],
         'scope': 'openid',
     }
     response = requests.post(_TOKEN_URL, data=data)
@@ -73,11 +74,14 @@ def search(nor: str, client: OAuth2Session) -> Dict:
     return _extract_response_content(response)
 
 
-def get_current_loda_via_cid(cid: str, client: OAuth2Session) -> Dict:
+def get_current_loda_via_cid_response(cid: str, client: OAuth2Session) -> requests.Response:
     json_ = {'date': int(datetime.now().timestamp()) * 1000, 'textId': cid}
     url = _API_HOST + '/consult/lawDecree'
-    response = client.post(url, json=json_)
-    return _extract_response_content(response)
+    return client.post(url, json=json_)
+
+
+def get_current_loda_via_cid(cid: str, client: OAuth2Session) -> Dict:
+    return _extract_response_content(get_current_loda_via_cid_response(cid, client))
 
 
 def get_article_by_id(cid: str, client: OAuth2Session) -> Dict:
@@ -87,15 +91,11 @@ def get_article_by_id(cid: str, client: OAuth2Session) -> Dict:
     return _extract_response_content(response)
 
 
-def download_text(cid: str, nor: str, client: Optional[OAuth2Session]) -> None:
+def download_text(cid: str, output_filename: str, client: Optional[OAuth2Session]) -> None:
     if not client:
         client = get_legifrance_client()
-    try:
-        res = get_current_loda_via_cid(cid, client)
-    except Exception as exc:
-        print(f'{cid}, {nor},', str(exc))
-        return
-    json.dump(res, open(f'data/AM/legifrance_texts/{nor}.json', 'w'), ensure_ascii=False)
+    res = get_current_loda_via_cid(cid, client)
+    json.dump(res, open(f'data/AM/legifrance_texts/{output_filename}', 'w'), ensure_ascii=False)
 
 
 def download_all_lf_texts() -> None:
@@ -103,5 +103,8 @@ def download_all_lf_texts() -> None:
     client = get_legifrance_client()
     for text in tqdm(texts):
         if 'nor' in text and 'cid' in text:
-            download_text(text['cid'], text['nor'], client)
+            try:
+                download_text(text['cid'], text['nor'] + '.json', client)
+            except Exception as exc:
+                print(text['cid'], text['nor'], str(exc))
 
