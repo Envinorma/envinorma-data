@@ -14,7 +14,7 @@ from lib.am_structure_extraction import (
     ArticleStatus,
     _extract_table,
     transform_arrete_ministeriel,
-    _load_legifrance_text,
+    load_legifrance_text,
     _structure_text,
     LegifranceArticle,
     LegifranceSection,
@@ -99,7 +99,7 @@ _SAMPLE_AM_NOR = ['DEVP1706393A', 'TREP1815737A', 'ATEP9870263A', 'DEVP1519168A'
 def test_no_fail_in_markdown_extraction():
     for nor in _SAMPLE_AM_NOR:
         am_to_markdown(
-            transform_arrete_ministeriel(_load_legifrance_text(json.load(open(f'data/AM/legifrance_texts/{nor}.json'))))
+            transform_arrete_ministeriel(load_legifrance_text(json.load(open(f'data/AM/legifrance_texts/{nor}.json'))))
         )
 
 
