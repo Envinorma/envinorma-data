@@ -1,6 +1,6 @@
 import pytest
 import json
-from lib.am_structure_extraction import Link, EnrichedString, transform_arrete_ministeriel, _load_legifrance_text
+from lib.am_structure_extraction import Link, EnrichedString, transform_arrete_ministeriel, load_legifrance_text
 from lib.aida import (
     extract_hyperlinks,
     _GITHUB_BASE_LOC,
@@ -49,9 +49,7 @@ def test_no_fail_in_aida_links_addition():
         aida_page = nor_to_page_id[nor]
         links = [Hyperlink(**link_doc) for link_doc in page_id_to_links[aida_page]]
         add_links_to_am(
-            transform_arrete_ministeriel(
-                _load_legifrance_text(json.load(open(f'data/AM/legifrance_texts/{nor}.json')))
-            ),
+            transform_arrete_ministeriel(load_legifrance_text(json.load(open(f'data/AM/legifrance_texts/{nor}.json')))),
             links,
         )
 

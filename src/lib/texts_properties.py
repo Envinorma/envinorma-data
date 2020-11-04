@@ -278,13 +278,13 @@ def _compute_am_properties(am: ArreteMinisteriel) -> AMProperties:
 
 
 @dataclass
-class ComputeProperties:
+class TextProperties:
     legifrance: LegifranceTextProperties
-    am: AMProperties
+    am: Optional[AMProperties]
 
 
-def compute_properties(text: LegifranceText, am: ArreteMinisteriel) -> ComputeProperties:
-    return ComputeProperties(_compute_lf_properties(text), _compute_am_properties(am))
+def compute_properties(text: LegifranceText, am: Optional[ArreteMinisteriel]) -> TextProperties:
+    return TextProperties(_compute_lf_properties(text), _compute_am_properties(am) if am else None)
 
 
 def detect_upper_case_first_lines(text: StructuredText, ascendant_titles: List[str]) -> None:

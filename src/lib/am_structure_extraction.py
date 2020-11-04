@@ -100,7 +100,7 @@ def _check_proportion_of_null_articles(dict_) -> None:
         raise AMStructurationError(f'Too many articles have null num: {nb_null}/{total}')
 
 
-def _check_legifrance_dict(legifrance_dict: Dict[str, Any]) -> None:
+def check_legifrance_dict(legifrance_dict: Dict[str, Any]) -> None:
     _check_lf_visa(legifrance_dict)
     _check_lf_title(legifrance_dict)
     _check_lf_articles(legifrance_dict)
@@ -155,7 +155,7 @@ def _load_legifrance_section(dict_: Dict[str, Any]) -> LegifranceSection:
     )
 
 
-def _load_legifrance_text(dict_: Dict[str, Any]) -> LegifranceText:
+def load_legifrance_text(dict_: Dict[str, Any]) -> LegifranceText:
     return LegifranceText(
         dict_['visa'],
         dict_['title'],
@@ -764,8 +764,8 @@ def transform_arrete_ministeriel(
 
 def test(lf_text_filename: str) -> ArreteMinisteriel:
     legifrance_text_json = json.load(open(lf_text_filename))
-    _check_legifrance_dict(legifrance_text_json)
-    lf_text = _load_legifrance_text(legifrance_text_json)
+    check_legifrance_dict(legifrance_text_json)
+    lf_text = load_legifrance_text(legifrance_text_json)
     return transform_arrete_ministeriel(lf_text)
 
 
@@ -801,7 +801,7 @@ def _check_all_legifrance_dicts() -> None:
     for file_ in tqdm(os.listdir(folder)):
         print(file_)
         try:
-            _check_legifrance_dict(json.load(open(f'{folder}/{file_}')))
+            check_legifrance_dict(json.load(open(f'{folder}/{file_}')))
         except AMStructurationError as exc:
             print(exc)
 
@@ -814,8 +814,8 @@ def _load_all_legifrance_texts() -> Dict[str, LegifranceText]:
             continue
         try:
             text_json = json.load(open(f'{folder}/{file_}'))
-            _check_legifrance_dict(text_json)
-            res[file_.split('.')[0]] = _load_legifrance_text(text_json)
+            check_legifrance_dict(text_json)
+            res[file_.split('.')[0]] = load_legifrance_text(text_json)
         except AMStructurationError as exc:
             print(file_, exc)
     return res

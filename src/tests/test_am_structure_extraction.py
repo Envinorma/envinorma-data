@@ -18,7 +18,7 @@ from lib.am_structure_extraction import (
     remove_summaries,
     transform_arrete_ministeriel,
     _extract_cell_data,
-    _load_legifrance_text,
+    load_legifrance_text,
     _replace_weird_annexe_words,
     _compute_proximity,
     _group_articles_to_merge,
@@ -112,7 +112,7 @@ _SAMPLE_AM_NOR = ['DEVP1706393A', 'TREP1815737A', 'ATEP9870263A', 'DEVP1519168A'
 @pytest.mark.filterwarnings('ignore')
 def test_no_fail_in_structure_extraction():
     for nor in _SAMPLE_AM_NOR:
-        transform_arrete_ministeriel(_load_legifrance_text(json.load(open(f'data/AM/legifrance_texts/{nor}.json'))))
+        transform_arrete_ministeriel(load_legifrance_text(json.load(open(f'data/AM/legifrance_texts/{nor}.json'))))
 
 
 def test_cell_data_extraction():
@@ -194,7 +194,7 @@ def test_delete_or_merge_articles():
 
 
 def _get_am(filename: str) -> ArreteMinisteriel:
-    raw_text = _load_legifrance_text(json.load(open(filename)))
+    raw_text = load_legifrance_text(json.load(open(filename)))
     return transform_arrete_ministeriel(raw_text)
 
 

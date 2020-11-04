@@ -1,7 +1,9 @@
 import json
 from enum import Enum
-from dataclasses import dataclass
-from typing import List, TypeVar, Dict, Any
+from collections import Counter
+from typing import Dict, List, Optional, TypeVar
+from tqdm import tqdm
+
 from lib.am_structure_extraction import (
     EnrichedString,
     Cell,
@@ -11,16 +13,19 @@ from lib.am_structure_extraction import (
     StructuredText,
     ArreteMinisteriel,
     transform_arrete_ministeriel,
-    _load_legifrance_text,
-    _check_legifrance_dict,
+    load_legifrance_text,
 )
-from lib.aida import transform_aida_links_to_github_markdown_links, add_links_to_am, Hyperlink, _AIDA_URL, Anchor
-from lib.texts_properties import (
-    AMProperties,
-    ComputeProperties,
-    LegifranceTextProperties,
-    TitleInconsistency,
-    compute_properties,
+from lib.aida import transform_aida_links_to_github_markdown_links, add_links_to_am, _AIDA_URL
+from lib.texts_properties import AMProperties, TextProperties, LegifranceTextProperties, TitleInconsistency
+from lib.compute_properties import (
+    AMStructurationLog,
+    get_text_defined_id,
+    Classement,
+    AMState,
+    AMData,
+    Data,
+    AMMetadata,
+    handle_all_am,
 )
 
 
@@ -147,72 +152,44 @@ def am_to_markdown(am: ArreteMinisteriel, with_links: bool = False) -> str:
 
 
 def markdown_transform_and_write_am(input_filename: str, output_filename: str):
-    input_ = _load_legifrance_text(json.load(open(input_filename)))
+    input_ = load_legifrance_text(json.load(open(input_filename)))
     output = am_to_markdown(transform_arrete_ministeriel(input_))
     open(output_filename, 'w').write(output)
 
 
-@dataclass
-class AMData:
-    content: List[Dict[str, Any]]
-    nor_to_aida: Dict[str, str]
-    aida_to_nor: Dict[str, str]
-
-
-@dataclass
-class AidaData:
-    page_id_to_links: Dict[str, List[Hyperlink]]
-    page_id_to_anchors: Dict[str, List[Anchor]]
-
-
-@dataclass
-class Data:
-    aida: AidaData
-    arretes_ministeriels: AMData
-
-
-def load_am_data() -> AMData:
-    arretes_ministeriels = json.load(open('data/AM/arretes_ministeriels.json'))
-    nor_to_aida = {doc['nor']: doc['aida_page'] for doc in arretes_ministeriels if 'nor' in doc and 'aida_page' in doc}
-    aida_to_nor = {doc['aida_page']: doc['nor'] for doc in arretes_ministeriels if 'nor' in doc and 'aida_page' in doc}
-    return AMData(arretes_ministeriels, nor_to_aida, aida_to_nor)
-
-
-def load_aida_data() -> AidaData:
-    page_id_to_links = json.load(open('data/aida/hyperlinks/page_id_to_links.json'))
-    page_id_to_anchors = json.load(open('data/aida/hyperlinks/page_id_to_anchors.json'))
-    links = {
-        aida_page: [Hyperlink(**link_doc) for link_doc in link_docs]
-        for aida_page, link_docs in page_id_to_links.items()
-    }
-    anchors = {
-        aida_page: [Anchor(**anchor_doc) for anchor_doc in anchor_docs]
-        for aida_page, anchor_docs in page_id_to_anchors.items()
-    }
-    return AidaData(links, anchors)
-
-
-def load_data() -> Data:
-    return Data(load_aida_data(), load_am_data())
-
-
-def classement_to_md(classements: List[Dict]) -> str:
+def classement_to_md(classements: List[Classement]) -> str:
     if not classements:
         return ''
-    rows = [f"{clss['rubrique']} | {clss['regime']} | {clss.get('alinea') or ''}" for clss in classements]
+    rows = [f"{clss.rubrique} | {clss.regime.value} | {clss.alinea or ''}" for clss in classements]
     return '\n'.join(['Rubrique | Régime | Alinea', '---|---|---'] + rows)
 
 
-def generate_text_md(text: Dict[str, Any]) -> str:
-    nor = text.get('nor')
-    page_name = text.get('page_name') or ''
-    aida = text.get('aida_page')
-    table = classement_to_md(text['classements'])
+_LEGIFRANCE_URL = 'https://www.legifrance.gouv.fr/jorf/id/{}'
+
+
+def log_to_md(log: AMStructurationLog) -> str:
+    if log.legifrance_api_error:
+        return 'erreur-lf-api'
+    if log.legifrance_text_format_error:
+        return 'erreur-structure-entrante'
+    if log.structuration_error:
+        return 'erreur-structuration'
+    return 'pas-d-erreur'
+
+
+def generate_text_md(text: AMMetadata, log: AMStructurationLog) -> str:
+    page_name = get_text_defined_id(text)
+    table = classement_to_md(text.classements)
     return '\n\n'.join(
         [
-            f'## [{nor}](/{nor}.md)',
+            f'## [{text.short_title}](/{page_name}.md)',
+            f'Etat: {text.state.value}',
+            f'NOR: {text.nor or "non défini"}',
+            f'CID: {text.cid}',
+            f'Statut de structuration: {log_to_md(log)}',
             f'_{page_name.strip()}_',
-            f'[sur AIDA]({_AIDA_URL.format(aida)})',
+            f'- [sur Légifrance]({_LEGIFRANCE_URL.format(text.cid)})',
+            f'- [sur AIDA]({_AIDA_URL.format(text.aida_page)})',
             *([table] if table else []),
         ]
     )
@@ -231,10 +208,80 @@ def _make_collapsible(details: str, hidden: str) -> str:
     '''
 
 
-def generate_index(am_data: AMData) -> str:
+def _score(log: AMStructurationLog) -> int:
+    if log.legifrance_api_error:
+        return 4
+    if log.legifrance_text_format_error:
+        return 3
+    if log.structuration_error:
+        return 2
+    return 1
+
+
+def magic_sort_texts(texts: List[AMMetadata], cid_to_log: Dict[str, AMStructurationLog]) -> List[AMMetadata]:
+    return list(sorted(texts, key=lambda x: (_score(cid_to_log[x.cid]), -x.publication_date)))
+
+
+def generate_metadata_md(am_data: AMData, cid_to_log: Dict[str, AMStructurationLog]) -> str:
+    abrogated = [text for text in am_data.metadata if text.state == AMState.ABROGE]
+    in_force = [text for text in am_data.metadata if text.state == AMState.VIGUEUR]
     return '\n\n---\n\n'.join(
-        [generate_text_md(text) for text in sorted(am_data.content, key=lambda x: x.get('nor', 'zzzzz'))]
+        [
+            '# Textes en vigueur',
+            *[generate_text_md(text, cid_to_log[text.cid]) for text in magic_sort_texts(in_force, cid_to_log)],
+            '# Textes abrogés',
+            *[generate_text_md(text, cid_to_log[text.cid]) for text in magic_sort_texts(abrogated, cid_to_log)],
+        ]
     )
+
+
+def generate_index_header_md(metadata: List[AMMetadata], cid_to_log: Dict[str, AMStructurationLog]) -> str:
+    cid_in_force = {md.cid for md in metadata if md.state == AMState.VIGUEUR}
+
+    api_errors = [
+        cid_to_log[cid].legifrance_api_error for cid in cid_in_force if cid_to_log[cid].legifrance_api_error is not None
+    ]
+    api_errors_cids = ', '.join([cid for cid in cid_in_force if cid_to_log[cid].legifrance_api_error is not None])
+    status_codes = ', '.join(
+        [f'{status} ({occs})' for status, occs in Counter([error.status_code for error in api_errors]).most_common()]
+    )
+    unhandled_schemas = [cid for cid in cid_in_force if cid_to_log[cid].legifrance_text_format_error is not None]
+    unhandled_schemas_str = ', '.join(unhandled_schemas)
+    structuration_errors = ', '.join([cid for cid in cid_in_force if cid_to_log[cid].structuration_error is not None])
+    properties = [cid_to_log[cid].properties for cid in cid_in_force if cid_to_log[cid].properties]
+    inconsistencies = Counter(
+        [inc.inconsistency for prop in properties if prop.am for inc in prop.am.title_inconsistencies]
+    )
+    inconsistencies_str = [f' - {inc} ({occs})' for inc, occs in inconsistencies.most_common()]
+
+    return '\n\n'.join(
+        [
+            '# Stats',
+            '## Nombre d\'arrêtés.',
+            f'- {len(cid_to_log)} arrêtés.',
+            f'- {len(cid_in_force)} en vigueur.',
+            f'- {len(cid_to_log) - len(cid_in_force)} abrogés.',
+            'Seuls les arrêtés en vigueur sont gérés.',
+            '## API Errors',
+            f'- {len(api_errors)} erreur(s).',
+            f'- Status codes (avec occurrences): {status_codes}',
+            f'- CIDs: {api_errors_cids}',
+            '## Schemas non supportés',
+            f'- {len(unhandled_schemas)} erreur(s).',
+            f'- CIDs: {unhandled_schemas_str}',
+            '## Erreurs de structuration',
+            f'- {len(structuration_errors)} erreur(s).',
+            f'- CIDs: {structuration_errors}',
+            '## Incohérences détectées',
+            *inconsistencies_str,
+        ]
+    )
+
+
+def generate_index(am_data: AMData, cid_to_log: Dict[str, AMStructurationLog]) -> str:
+    header = generate_index_header_md(am_data.metadata, cid_to_log)
+    metadata = generate_metadata_md(am_data, cid_to_log)
+    return header + '\n\n---\n\n' + metadata
 
 
 def lf_properties_to_markdown(properties: LegifranceTextProperties) -> str:
@@ -276,54 +323,65 @@ def am_properties_to_markdown(properties: AMProperties) -> str:
 '''
 
 
-def properties_to_markdown(page_title: str, properties: ComputeProperties) -> str:
+def properties_to_markdown(properties: TextProperties) -> str:
     return f'''
-# {page_title}
-
 ## Legifrance
 
 {lf_properties_to_markdown(properties.legifrance)}
 
 ## Arrêté structuré
 
-{am_properties_to_markdown(properties.am)}
+{am_properties_to_markdown(properties.am) if properties.am else 'Not computed.'}
 
 '''
 
 
-def generate_nor_markdown(nor: str, data: Data, output_folder: str):
-    aida_page = data.arretes_ministeriels.nor_to_aida[nor]
+def generate_header_md(title: str) -> str:
+    return f'''
+# {title}
+
+'''
+
+
+def am_and_properties_to_markdown(am: ArreteMinisteriel, properties: Optional[TextProperties]) -> str:
+    header_md = generate_header_md(am.title.text)
+    props_md = properties_to_markdown(properties) if properties else ''
+    am_md = am_to_markdown(am, with_links=True)
+    return '\n\n'.join([header_md, props_md, am_md])
+
+
+def dump_md(markdown: str, filename: str) -> None:
+    open(filename, 'w').write(markdown)
+
+
+def add_aida_links_to_am(metadata: AMMetadata, am: ArreteMinisteriel, data: Data) -> ArreteMinisteriel:
+    if metadata.nor is None or metadata.nor not in data.arretes_ministeriels.nor_to_aida:
+        return am
+    aida_page = data.arretes_ministeriels.nor_to_aida[metadata.nor]
+    if aida_page not in data.aida.page_id_to_links or aida_page not in data.aida.page_id_to_anchors:
+        return am
     internal_links = transform_aida_links_to_github_markdown_links(
         data.aida.page_id_to_links[aida_page],
         data.aida.page_id_to_anchors[aida_page],
-        nor,
+        metadata.nor,
         data.arretes_ministeriels.aida_to_nor,
     )
-
-    legifrance_text_json = json.load(open(f'data/AM/legifrance_texts/{nor}.json'))
-    _check_legifrance_dict(legifrance_text_json)
-    lf_text = _load_legifrance_text(legifrance_text_json)
-    am = transform_arrete_ministeriel(lf_text)
-    properties = compute_properties(lf_text, am)
-    open(f'{output_folder}/{nor}.md', 'w').write(am_to_markdown(add_links_to_am(am, internal_links), with_links=True))
-    open(f'{output_folder}/props/{nor}.md', 'w').write(properties_to_markdown(am.title.text, properties))
+    return add_links_to_am(am, internal_links)
 
 
-def generate_1510_markdown() -> None:
-    data = load_data()
-    magic_nor = 'DEVP1706393A'
-    generate_nor_markdown(magic_nor, data, 'data/AM/markdown_texts')
+def generate_am_markdown(
+    data: Data, metadata: AMMetadata, log: AMStructurationLog, am: Optional[ArreteMinisteriel]
+) -> str:
+    if not am:
+        return f"# {metadata.short_title}\n\nError in computation"
+    am = add_aida_links_to_am(metadata, am, data)
+    return am_and_properties_to_markdown(am, log.properties)
 
 
 def generate_all_markdown(output_folder: str = '/Users/remidelbouys/EnviNorma/envinorma.github.io') -> None:
-    from tqdm import tqdm
-
-    data = load_data()
-    open(f'{output_folder}/index.md', 'w').write(generate_index(data.arretes_ministeriels))
-
-    nors = data.arretes_ministeriels.nor_to_aida.keys()
-    for nor in tqdm(nors):
-        try:
-            generate_nor_markdown(nor, data, output_folder)
-        except Exception as exc:  # pylint: disable = broad-except
-            print(nor, type(exc), str(exc))
+    data, cid_to_log, cid_to_am = handle_all_am()
+    dump_md(generate_index(data.arretes_ministeriels, cid_to_log), f'{output_folder}/index.md')
+    for metadata in tqdm(data.arretes_ministeriels.metadata, 'Genrating markdown'):
+        id_ = get_text_defined_id(metadata)
+        cid = metadata.cid
+        dump_md(generate_am_markdown(data, metadata, cid_to_log[cid], cid_to_am.get(cid)), f'{output_folder}/{id_}.md')
