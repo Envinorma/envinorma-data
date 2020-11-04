@@ -85,7 +85,8 @@
                 "rubrique": "1435"
             }
         ],
-        "cid": "JORFTEXT000022097828"
+        "cid": "JORFTEXT000022097828",
+        "etat": "ABROGE"
     },
     {
         "aida_page": "35815",
@@ -297,7 +298,8 @@
                 "rubrique": "1532"
             }
         ],
-        "cid": "JORFTEXT000033117556"
+        "cid": "JORFTEXT000033117556",
+        "etat": "ABROGE"
     },
     {
         "aida_page": "39061",
@@ -385,7 +387,7 @@
     },
     {
         "aida_page": "5129",
-        "page_name": " Arrêté du 10/08/04 fixant les conditions d'autorisation de détention d'animaux de certaines espèces non domestiques dans les établissements d'élevage, de vente, de location, de transit ou de présentation au public d'animaux d'espèces non domestiques ",
+        "page_name": "Arrêté du 10/08/04 fixant les conditions d'autorisation de détention d'animaux de certaines espèces non domestiques dans les établissements d'élevage, de vente, de location, de transit ou de présentation au public d'animaux d'espèces non domestiques",
         "nor": "DEVN0430298A",
         "classements": [
             {
@@ -403,7 +405,8 @@
                 "regime": "A",
                 "rubrique": "2113"
             }
-        ]
+        ],
+        "cid": "LEGITEXT000006074852"
     },
     {
         "aida_page": "4861",
@@ -442,8 +445,10 @@
         "cid": "JORFTEXT000000610915"
     },
     {
-        "aida_page": "10543",
-        "page_name": " 2150. Coléoptères, diptères, orthoptères (activité d'élevage de) ",
+        "aida_page": "39942",
+        "page_name": "Arrêté du 21/11/17 relatif aux prescriptions générales applicables aux installations relevant du régime de l’autorisation au titre de la rubrique n° 2150 de la nomenclature des installations classées pour la protection de l’environnement",
+        "nor": "TREP1712882A",
+        "cid": "JORFTEXT000036074614",
         "classements": [
             {
                 "regime": "A",
@@ -517,7 +522,8 @@
                 "rubrique": "3610"
             }
         ],
-        "cid": "JORFTEXT000000570621"
+        "cid": "JORFTEXT000000570621",
+        "etat": "ABROGE" // à partir du 1er janvier 2021
     },
     {
         "aida_page": "43534",
@@ -737,7 +743,8 @@
                 "rubrique": "2910"
             }
         ],
-        "cid": "JORFTEXT000000248169"
+        "cid": "JORFTEXT000000248169",
+        "etat": "ABROGE"
     },
     {
         "aida_page": "5297",
@@ -749,7 +756,8 @@
                 "rubrique": "2910"
             }
         ],
-        "cid": "JORFTEXT000000779198"
+        "cid": "JORFTEXT000000779198",
+        "etat": "ABROGE"
     },
     {
         "aida_page": "5551",
@@ -761,7 +769,8 @@
                 "rubrique": "2910"
             }
         ],
-        "cid": "JORFTEXT000000763103"
+        "cid": "JORFTEXT000000763103",
+        "etat": "ABROGE"
     },
     {
         "aida_page": "41041",
@@ -780,8 +789,10 @@
         "cid": "JORFTEXT000037284792"
     },
     {
-        "aida_page": "37556",
-        "page_name": " 2971. Installation de production de chaleur ou d'électricité à partir de déchets non dangereux préparés sous forme de combustibles solides de récupération dans une installation prévue à cet effet, associés ou non à un autre combustible ",
+        "aida_page": "37522",
+        "nor": "DEVP1525037A",
+        "cid": "JORFTEXT000032575814",
+        "page_name": "Arrêté du 23/05/16 relatif aux installations de production de chaleur et/ou d'électricité à partir de déchets non dangereux préparés sous forme de combustibles solides de récupération dans des installations prévues à cet effet associés ou non à un autre combustible et relevant de la rubrique 2971 de la nomenclature des installations classées pour la protection de l'environnement",
         "classements": [
             {
                 "regime": "A",
@@ -944,7 +955,8 @@
                 "rubrique": "1510"
             }
         ],
-        "cid": "JORFTEXT000022097930"
+        "cid": "JORFTEXT000022097930",
+        "etat": "ABROGE"
     },
     {
         "aida_page": "4119",
@@ -1051,8 +1063,10 @@
         "cid": "JORFTEXT000025673104"
     },
     {
-        "aida_page": "10565",
-        "page_name": " 2230. Traitement et transformation du lait ou des produits issus du lait ",
+        "aida_page": "39127",
+        "page_name": "Arrêté du 24/04/17 relatif aux prescriptions générales applicables aux installations relevant du régime de l’enregistrement au titre de la rubrique n° 2230 de la nomenclature des installations classées pour la protection de l’environnement",
+        "nor": "DEVP1634272A",
+        "cid": "JORFTEXT000034485050",
         "classements": [
             {
                 "regime": "E",
@@ -1061,8 +1075,10 @@
         ]
     },
     {
-        "aida_page": "10567",
+        "aida_page": "39125",
         "page_name": " 2240. Extraction ou traitement des huiles et corps gras d'origine animale ou végétale ",
+        "nor": "DEVP1628601A",
+        "cid": "JORFTEXT000034484917",
         "classements": [
             {
                 "regime": "E",
@@ -1307,13 +1323,23 @@
         "cid": "JORFTEXT000025789288"
     },
     {
-        "aida_page": "40765",
-        "page_name": " 2794. Installation de broyage de déchets végétaux non dangereux ",
+        "aida_page": "40755",
+        "page_name": "Arrêté du 06/06/18 relatif aux prescriptions générales applicables aux installations de broyage de déchets végétaux non dangereux relevant du régime de l'enregistrement au titre de la rubrique n° 2794 de la nomenclature des installations classées pour la protection de l'environnement",
+        "nor": "TREP1800790A",
+        "cid": "JORFTEXT000037032291",
         "classements": [
             {
                 "regime": "E",
                 "rubrique": "2794"
-            },
+            }
+        ]
+    },
+    {
+        "aida_page": "40749",
+        "page_name": "Arrêté du 18/05/18 relatif aux prescriptions générales applicables aux installations de broyage de déchets végétaux non dangereux relevant du régime de la déclaration au titre de la rubrique n° 2794 de la nomenclature des installations classées pour la protection de l'environnement",
+        "nor": "TREP1800788A",
+        "cid": "JORFTEXT000036976496",
+        "classements": [
             {
                 "regime": "D",
                 "rubrique": "2794"
@@ -1911,6 +1937,10 @@
             },
             {
                 "regime": "D",
+                "rubrique": "2113"
+            },
+            {
+                "regime": "D",
                 "rubrique": "2171"
             },
             {
@@ -1935,11 +1965,23 @@
             },
             {
                 "regime": "D",
+                "rubrique": "2275"
+            },
+            {
+                "regime": "D",
                 "rubrique": "2311"
             },
             {
                 "regime": "D",
                 "rubrique": "2321"
+            },
+            {
+                "regime": "D",
+                "rubrique": "2350"
+            },
+            {
+                "regime": "D",
+                "rubrique": "2355"
             },
             {
                 "regime": "D",
@@ -1951,7 +1993,19 @@
             },
             {
                 "regime": "D",
+                "rubrique": "2430"
+            },
+            {
+                "regime": "D",
+                "rubrique": "2440"
+            },
+            {
+                "regime": "D",
                 "rubrique": "2445"
+            },
+            {
+                "regime": "D",
+                "rubrique": "2546"
             },
             {
                 "regime": "D",
@@ -1968,6 +2022,10 @@
             {
                 "regime": "D",
                 "rubrique": "2690"
+            },
+            {
+                "regime": "D",
+                "rubrique": "2915"
             },
             {
                 "regime": "D",
@@ -2036,7 +2094,8 @@
                 "rubrique": "1510"
             }
         ],
-        "cid": "JORFTEXT000020009023"
+        "cid": "JORFTEXT000020009023",
+        "etat": "ABROGE"
     },
     {
         "aida_page": "30277",
@@ -2234,14 +2293,11 @@
         "cid": "JORFTEXT000000444667"
     },
     {
-        "aida_page": "10535",
-        "page_name": " 2113. Elevage, vente, transit etc. d'animaux carnassiers à fourrure ",
-        "classements": [
-            {
-                "regime": "D",
-                "rubrique": "2113"
-            }
-        ]
+        "aida_page": "38417",
+        "nor": "DEVP1628687A",
+        "cid": "JORFTEXT000033560858",
+        "page_name": "Arrêté du 05/12/16 relatif aux prescriptions applicables à certaines installations classées pour la protection de l’environnement soumises à déclaration (applicable jusqu'au 31/12/19 pour ce qui concerne les rubriques 4440, 4441 ou 4442)",
+        "classements": []
     },
     {
         "aida_page": "4863",
@@ -2277,7 +2333,8 @@
                 "rubrique": "2170"
             }
         ],
-        "cid": "JORFTEXT000000593036"
+        "cid": "JORFTEXT000000593036",
+        "etat": "ABROGE"
     },
     {
         "aida_page": "5159",
@@ -2329,8 +2386,9 @@
     },
     {
         "aida_page": "5571",
-        "page_name": " Arrêté du 15/03/99 relatif aux prescriptions générales applicables aux installations classées pour la protection de l'environnement soumises à déclaration sous la rubrique n° 2251 (Préparation, conditionnement de vin, la capacité de production étant supérieure à 500 hl/an mais inférieure ou égale à 20 000 hl/an). ",
+        "page_name": "Arrêté du 15/03/99 relatif aux prescriptions générales applicables aux installations classées pour la protection de l'environnement soumises à déclaration sous la rubrique n° 2251 (Préparation, conditionnement de vin, la capacité de production étant supérieure à 500 hl/an mais inférieure ou égale à 20 000 hl/an).",
         "nor": "ATEP9980125A",
+        "cid": "JORFTEXT000000210657",
         "classements": [
             {
                 "regime": "D",
@@ -2375,19 +2433,10 @@
         "cid": "JORFTEXT000030024830"
     },
     {
-        "aida_page": "10585",
-        "page_name": " 2275. Fabrication de levure et autres productions fongiques à vocation alimentaire ",
-        "classements": [
-            {
-                "regime": "D",
-                "rubrique": "2275"
-            }
-        ]
-    },
-    {
         "aida_page": "5403",
         "page_name": " Arrêté du 25/07/01 relatif aux prescriptions générales applicables aux installations classées pour la protection de l'environnement soumises à déclaration sous la rubrique n° 2330 « Teinture, impression, apprêt, enduction, blanchiment et délavage de matières textiles » ",
         "nor": "ATEP0100260A",
+        "cid": "JORFTEXT000000582313",
         "classements": [
             {
                 "regime": "D",
@@ -2432,19 +2481,10 @@
         "cid": "JORFTEXT000021030687"
     },
     {
-        "aida_page": "10603",
-        "page_name": " 2350. Tannerie, mégisseries ... ",
-        "classements": [
-            {
-                "regime": "D",
-                "rubrique": "2350"
-            }
-        ]
-    },
-    {
         "aida_page": "5401",
         "page_name": " Arrêté du 25/07/01 relatif aux prescriptions générales applicables aux installations classées pour la protection de l'environnement soumises à déclaration sous la rubrique n° 2351 « Teinture et pigmentation de peaux » ",
         "nor": "ATEP0100261A",
+        "cid": "JORFTEXT000000215138",
         "classements": [
             {
                 "regime": "D",
@@ -2453,19 +2493,10 @@
         ]
     },
     {
-        "aida_page": "10609",
-        "page_name": " 2355. Dépôts de peaux ",
-        "classements": [
-            {
-                "regime": "D",
-                "rubrique": "2355"
-            }
-        ]
-    },
-    {
         "aida_page": "5399",
         "page_name": " Arrêté du 25/07/01 relatif aux prescriptions générales applicables aux installations classées pour la protection de l'environnement soumises à déclaration sous la rubrique n° 2360 « Ateliers de fabrication de chaussures, maroquinerie ou travail des cuirs et des peaux » ",
         "nor": "ATEP0100262A",
+        "cid": "JORFTEXT000000582314",
         "classements": [
             {
                 "regime": "D",
@@ -2484,26 +2515,6 @@
             }
         ],
         "cid": "JORFTEXT000000786106"
-    },
-    {
-        "aida_page": "10619",
-        "page_name": " 2430. Préparation de la pâte à papier ",
-        "classements": [
-            {
-                "regime": "D",
-                "rubrique": "2430"
-            }
-        ]
-    },
-    {
-        "aida_page": "10621",
-        "page_name": " 2440. Fabrication de papier carton ",
-        "classements": [
-            {
-                "regime": "D",
-                "rubrique": "2440"
-            }
-        ]
     },
     {
         "aida_page": "5207",
@@ -2599,7 +2610,8 @@
                 "rubrique": "2522"
             }
         ],
-        "cid": "JORFTEXT000000552019"
+        "cid": "JORFTEXT000000552019",
+        "etat": "ABROGE"
     },
     {
         "aida_page": "3639",
@@ -2648,16 +2660,6 @@
             }
         ],
         "cid": "JORFTEXT000000793558"
-    },
-    {
-        "aida_page": "10661",
-        "page_name": " 2546. Traitement industriel des minerais non ferreux, élaboration des métaux et alliages non ferreux ",
-        "classements": [
-            {
-                "regime": "D",
-                "rubrique": "2546"
-            }
-        ]
     },
     {
         "aida_page": "5701",
@@ -2711,12 +2713,14 @@
         "aida_page": "5707",
         "page_name": " Arrêté du 30/06/97 relatif aux prescriptions générales applicables aux installations classées pour la protection de l'environnement soumises à déclaration sous la rubrique n° 2560 : \" Métaux et alliages (travail mécanique des) \" : Abrogé à compter du 31 décembre 2015 ",
         "nor": "ATEP9760299A",
+        "cid": "JORFTEXT000000183180",
         "classements": [
             {
                 "regime": "D",
                 "rubrique": "2560"
             }
-        ]
+        ],
+        "etat": "ABROGE"
     },
     {
         "aida_page": "36024",
@@ -2734,12 +2738,14 @@
         "aida_page": "5709",
         "page_name": " Arrêté du 30/06/97 relatif aux prescriptions générales applicables aux installations classées pour la protection de l'environnement soumises à déclaration sous la rubrique n° 2561 : \" Métaux et alliages (trempe, recuit ou revenu) \" : abrogé à compter du 1er janvier 2016 ",
         "nor": "ATEP9760300A",
+        "cid": "JORFTEXT000000183179",
         "classements": [
             {
                 "regime": "D",
                 "rubrique": "2561"
             }
-        ]
+        ],
+        "etat": "ABROGE"
     },
     {
         "aida_page": "5711",
@@ -2775,7 +2781,8 @@
                 "rubrique": "2564"
             }
         ],
-        "cid": "JORFTEXT000000619925"
+        "cid": "JORFTEXT000000619925",
+        "etat": "ABROGE"
     },
     {
         "aida_page": "41899",
@@ -2850,20 +2857,14 @@
         "cid": "JORFTEXT000000369299"
     },
     {
-        "aida_page": "10699",
-        "page_name": " 2660. Fabrication industrielle ou régénération de polymères ",
-        "classements": [
-            {
-                "regime": "D",
-                "rubrique": "2660"
-            }
-        ]
-    },
-    {
         "aida_page": "5521",
         "page_name": " Arrêté du 14/01/00 relatif aux prescriptions générales applicables aux installations classées pour la protection de l'environnement soumises à déclaration sous la rubrique n° 2660 ou 2661 (Fabrication, régénération ou transformation de polymères [matières plastiques, caoutchouc, élastomères, résines et adhésifs synthétiques]) ",
         "nor": "ATEP0090027A",
         "classements": [
+            {
+                "regime": "D",
+                "rubrique": "2660"
+            },
             {
                 "regime": "D",
                 "rubrique": "2661"
@@ -2917,7 +2918,8 @@
                 "rubrique": "2710"
             }
         ],
-        "cid": "JORFTEXT000000565555"
+        "cid": "JORFTEXT000000565555",
+        "etat": "ABROGE"
     },
     {
         "aida_page": "4633",
@@ -2929,7 +2931,8 @@
                 "rubrique": "2711"
             }
         ],
-        "cid": "JORFTEXT000017883576"
+        "cid": "JORFTEXT000017883576",
+        "etat": "ABROGE"
     },
     {
         "aida_page": "40992",
@@ -2965,7 +2968,8 @@
                 "rubrique": "2713"
             }
         ],
-        "cid": "JORFTEXT000023022747"
+        "cid": "JORFTEXT000023022747",
+        "etat": "ABROGE"
     },
     {
         "aida_page": "3983",
@@ -2977,7 +2981,8 @@
                 "rubrique": "2714"
             }
         ],
-        "cid": "JORFTEXT000023022756"
+        "cid": "JORFTEXT000023022756",
+        "etat": "ABROGE"
     },
     {
         "aida_page": "3981",
@@ -3001,7 +3006,8 @@
                 "rubrique": "2716"
             }
         ],
-        "cid": "JORFTEXT000023022778"
+        "cid": "JORFTEXT000023022778",
+        "etat": "ABROGE"
     },
     {
         "aida_page": "3385",
@@ -3073,17 +3079,8 @@
                 "rubrique": "2910"
             }
         ],
-        "cid": "JORFTEXT000000202304"
-    },
-    {
-        "aida_page": "10953",
-        "page_name": " Arrêté type - Rubrique n° 120 : Chauffage (Procédés de) ",
-        "classements": [
-            {
-                "regime": "D",
-                "rubrique": "2915"
-            }
-        ]
+        "cid": "JORFTEXT000000202304",
+        "etat": "ABROGE"
     },
     {
         "aida_page": "5109",
@@ -3095,7 +3092,8 @@
                 "rubrique": "2921"
             }
         ],
-        "cid": "JORFTEXT000000424501"
+        "cid": "JORFTEXT000000424501",
+        "etat": "ABROGE"
     },
     {
         "aida_page": "28559",
@@ -3258,8 +3256,10 @@
         "cid": "JORFTEXT000000756654"
     },
     {
-        "aida_page": "29992",
-        "page_name": " 4210. Produits explosifs à l'exclusion de la fabrication industrielle par transformation chimique ou biologique. ",
+        "aida_page": "38030",
+        "page_name": "Arrêté du 12/12/14 relatif aux prescriptions générales applicables aux installations classées pour la protection de l'environnement soumises à déclaration sous la rubrique n° 4210",
+        "nor": "DEVP1404789A",
+        "cid": "JORFTEXT000029893770",
         "classements": [
             {
                 "regime": "D",
@@ -3308,16 +3308,6 @@
         "cid": "JORFTEXT000019776628"
     },
     {
-        "aida_page": "30044",
-        "page_name": " 4440. Solides comburants catégorie 1, 2 ou 3. ",
-        "classements": [
-            {
-                "regime": "D",
-                "rubrique": "4440"
-            }
-        ]
-    },
-    {
         "aida_page": "42468",
         "page_name": " Arrêté du 01/08/19 relatif aux prescriptions générales applicables aux installations classées pour la protection de l’environnement soumises à déclaration sous l’une au moins des rubriques no 4440, 4441 ou 4442 (applicable à compter du 1er janvier 2020) ",
         "nor": "TREP1915883A",
@@ -3336,16 +3326,6 @@
             }
         ],
         "cid": "JORFTEXT000039104029"
-    },
-    {
-        "aida_page": "30046",
-        "page_name": " 4441. Liquides comburants catégorie 1, 2 ou 3. ",
-        "classements": [
-            {
-                "regime": "D",
-                "rubrique": "4441"
-            }
-        ]
     },
     {
         "aida_page": "35352",
@@ -3863,10 +3843,12 @@
             {
                 "regime": "D",
                 "rubrique": "1310",
-                "alinea": "2.c"
+                "alinea": "2.c",
+                "etat": "SUPPRIMEE"
             }
         ],
-        "cid": "JORFTEXT000000263777"
+        "cid": "JORFTEXT000000263777",
+        "etat": "ABROGE"
     },
     {
         "aida_page": "4003",
@@ -3918,7 +3900,8 @@
                 "alinea": "1"
             }
         ],
-        "cid": "JORFTEXT000000208529"
+        "cid": "JORFTEXT000000208529",
+        "etat": "ABROGE"
     },
     {
         "aida_page": "4591",
@@ -3949,7 +3932,8 @@
                 "alinea": "2"
             }
         ],
-        "cid": "JORFTEXT000000768178"
+        "cid": "JORFTEXT000000768178",
+        "etat": "ABROGE"
     },
     {
         "aida_page": "42632",
