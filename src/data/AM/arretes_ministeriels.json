@@ -523,7 +523,7 @@
             }
         ],
         "cid": "JORFTEXT000000570621",
-        "etat": "ABROGE" // à partir du 1er janvier 2021
+        "etat": "ABROGE"
     },
     {
         "aida_page": "43534",
@@ -655,7 +655,8 @@
                 "rubrique": "2740"
             }
         ],
-        "cid": "JORFTEXT000021187144"
+        "cid": "JORFTEXT000021187144",
+        "etat": "ABROGE"
     },
     {
         "aida_page": "40816",
@@ -731,7 +732,8 @@
                 "rubrique": "2931"
             }
         ],
-        "cid": "JORFTEXT000027995928"
+        "cid": "JORFTEXT000027995928",
+        "etat": "ABROGE"
     },
     {
         "aida_page": "5199",
@@ -1429,10 +1431,12 @@
         "classements": [
             {
                 "regime": "D",
-                "rubrique": "1136"
+                "rubrique": "1136",
+                "etat": "SUPPRIMEE"
             }
         ],
-        "cid": "JORFTEXT000000753815"
+        "cid": "JORFTEXT000000753815",
+        "etat": "ABROGE"
     },
     {
         "aida_page": "4211",
@@ -2235,7 +2239,8 @@
                 "rubrique": "2111"
             }
         ],
-        "cid": "JORFTEXT000000444709"
+        "cid": "JORFTEXT000000444709",
+        "etat": "ABROGE"
     },
     {
         "aida_page": "28556",
@@ -2291,13 +2296,6 @@
             }
         ],
         "cid": "JORFTEXT000000444667"
-    },
-    {
-        "aida_page": "38417",
-        "nor": "DEVP1628687A",
-        "cid": "JORFTEXT000033560858",
-        "page_name": "Arrêté du 05/12/16 relatif aux prescriptions applicables à certaines installations classées pour la protection de l’environnement soumises à déclaration (applicable jusqu'au 31/12/19 pour ce qui concerne les rubriques 4440, 4441 ou 4442)",
-        "classements": []
     },
     {
         "aida_page": "4863",
@@ -3748,7 +3746,8 @@
                 "alinea": "B"
             }
         ],
-        "cid": "JORFTEXT000028071164"
+        "cid": "JORFTEXT000028071164",
+        "etat": "ABROGE"
     },
     {
         "aida_page": "3623",
@@ -3761,7 +3760,8 @@
                 "alinea": "C"
             }
         ],
-        "cid": "JORFTEXT000025178828"
+        "cid": "JORFTEXT000025178828",
+        "etat": "ABROGE"
     },
     {
         "aida_page": "41029",
@@ -3997,7 +3997,8 @@
                 "rubrique": "2718"
             }
         ],
-        "cid": "JORFTEXT000024433621"
+        "cid": "JORFTEXT000024433621",
+        "etat": "ABROGE"
     },
     {
         "aida_page": "41351",
@@ -4088,7 +4089,8 @@
                 "alinea": "C"
             }
         ],
-        "cid": "JORFTEXT000025014944"
+        "cid": "JORFTEXT000025014944",
+        "etat": "ABROGE"
     },
     {
         "aida_page": "41027",
