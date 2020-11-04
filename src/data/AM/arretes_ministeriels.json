@@ -10,7 +10,9 @@
             }
         ],
         "cid": "JORFTEXT000000568479",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 23/07/97",
+        "publication_date": 869608800
     },
     {
         "aida_page": "4651",
@@ -23,7 +25,9 @@
             }
         ],
         "cid": "JORFTEXT000017734021",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 06/11/07",
+        "publication_date": 1194303600
     },
     {
         "aida_page": "4123",
@@ -40,7 +44,9 @@
             }
         ],
         "cid": "JORFTEXT000022092771",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 13/04/10",
+        "publication_date": 1271109600
     },
     {
         "aida_page": "4589",
@@ -53,7 +59,9 @@
             }
         ],
         "cid": "JORFTEXT000018008144",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 02/01/08",
+        "publication_date": 1199228400
     },
     {
         "aida_page": "3991",
@@ -66,7 +74,9 @@
             }
         ],
         "cid": "JORFTEXT000023081678",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 03/10/10",
+        "publication_date": 1286056800
     },
     {
         "aida_page": "3401",
@@ -79,7 +89,9 @@
             }
         ],
         "cid": "JORFTEXT000026251890",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 16/07/12",
+        "publication_date": 1342389600
     },
     {
         "aida_page": "4111",
@@ -92,7 +104,9 @@
             }
         ],
         "cid": "JORFTEXT000022097828",
-        "etat": "ABROGE"
+        "state": "ABROGE",
+        "short_title": "Arrêté du 15/04/10",
+        "publication_date": 1271282400
     },
     {
         "aida_page": "35815",
@@ -153,7 +167,9 @@
             }
         ],
         "cid": "JORFTEXT000023081678",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 03/10/10",
+        "publication_date": 1286056800
     },
     {
         "aida_page": "35819",
@@ -214,7 +230,9 @@
             }
         ],
         "cid": "JORFTEXT000026251890",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 16/07/12",
+        "publication_date": 1342389600
     },
     {
         "aida_page": "35807",
@@ -275,7 +293,9 @@
             }
         ],
         "cid": "JORFTEXT000018820571",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 18/04/08",
+        "publication_date": 1208469600
     },
     {
         "aida_page": "38104",
@@ -308,7 +328,9 @@
             }
         ],
         "cid": "JORFTEXT000033117556",
-        "etat": "ABROGE"
+        "state": "ABROGE",
+        "short_title": "Arrêté du 17/08/16",
+        "publication_date": 1471384800
     },
     {
         "aida_page": "39061",
@@ -325,7 +347,9 @@
             }
         ],
         "cid": "JORFTEXT000034429274",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 11/04/17",
+        "publication_date": 1491861600
     },
     {
         "aida_page": "4445",
@@ -338,7 +362,9 @@
             }
         ],
         "cid": "JORFTEXT000019860739",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 29/09/08",
+        "publication_date": 1222639200
     },
     {
         "aida_page": "35697",
@@ -359,7 +385,9 @@
             }
         ],
         "cid": "JORFTEXT000030885472",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 23/06/15",
+        "publication_date": 1435010400
     },
     {
         "aida_page": "28552",
@@ -384,7 +412,9 @@
             }
         ],
         "cid": "JORFTEXT000028409297",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 27/12/13",
+        "publication_date": 1388098800
     },
     {
         "aida_page": "4889",
@@ -397,7 +427,9 @@
             }
         ],
         "cid": "JORFTEXT000000246408",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 31/10/06",
+        "publication_date": 1162249200
     },
     {
         "aida_page": "5129",
@@ -410,7 +442,9 @@
             }
         ],
         "cid": "JORFTEXT000000624760",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 10/08/04",
+        "publication_date": 1092088800
     },
     {
         "aida_page": "37312",
@@ -422,7 +456,9 @@
             }
         ],
         "cid": "LEGITEXT000006074852",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 15/09/86",
+        "publication_date": 527119200
     },
     {
         "aida_page": "4861",
@@ -435,7 +471,9 @@
             }
         ],
         "cid": "JORFTEXT000000615876",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 08/12/06",
+        "publication_date": 1165532400
     },
     {
         "aida_page": "4543",
@@ -448,7 +486,9 @@
             }
         ],
         "cid": "JORFTEXT000018622600",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 01/04/08",
+        "publication_date": 1207000800
     },
     {
         "aida_page": "5165",
@@ -461,7 +501,9 @@
             }
         ],
         "cid": "JORFTEXT000000610915",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 25/03/04",
+        "publication_date": 1080169200
     },
     {
         "aida_page": "39942",
@@ -474,7 +516,9 @@
                 "rubrique": "2150"
             }
         ],
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 21/11/17",
+        "publication_date": 1511218800
     },
     {
         "aida_page": "5163",
@@ -487,7 +531,9 @@
             }
         ],
         "cid": "JORFTEXT000000797999",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 29/03/04",
+        "publication_date": 1080511200
     },
     {
         "aida_page": "5161",
@@ -500,7 +546,9 @@
             }
         ],
         "cid": "JORFTEXT000000803657",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 30/04/04",
+        "publication_date": 1083276000
     },
     {
         "aida_page": "5491",
@@ -513,7 +561,9 @@
             }
         ],
         "cid": "JORFTEXT000000399672",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 03/05/00",
+        "publication_date": 957304800
     },
     {
         "aida_page": "4141",
@@ -526,7 +576,9 @@
             }
         ],
         "cid": "JORFTEXT000022039323",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 18/02/10",
+        "publication_date": 1266447600
     },
     {
         "aida_page": "5509",
@@ -547,7 +599,9 @@
             }
         ],
         "cid": "JORFTEXT000000570621",
-        "etat": "ABROGE"
+        "state": "ABROGE",
+        "short_title": "Arrêté du 03/04/00",
+        "publication_date": 954712800
     },
     {
         "aida_page": "43534",
@@ -564,7 +618,9 @@
             }
         ],
         "cid": "JORFTEXT000042344843",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 10/09/20",
+        "publication_date": 1599688800
     },
     {
         "aida_page": "5809",
@@ -577,7 +633,9 @@
             }
         ],
         "cid": "JORFTEXT000000347845",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 22/09/94",
+        "publication_date": 780184800
     },
     {
         "aida_page": "5859",
@@ -590,7 +648,9 @@
             }
         ],
         "cid": "JORFTEXT000000346445",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 03/05/93",
+        "publication_date": 736380000
     },
     {
         "aida_page": "5235",
@@ -607,7 +667,9 @@
             }
         ],
         "cid": "JORFTEXT000000411785",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 12/03/03",
+        "publication_date": 1047423600
     },
     {
         "aida_page": "4919",
@@ -624,7 +686,9 @@
             }
         ],
         "cid": "JORFTEXT000000644060",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 30/06/06",
+        "publication_date": 1151618400
     },
     {
         "aida_page": "5625",
@@ -637,7 +701,9 @@
             }
         ],
         "cid": "JORFTEXT000000389425",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 02/06/98",
+        "publication_date": 896738400
     },
     {
         "aida_page": "4097",
@@ -650,7 +716,9 @@
             }
         ],
         "cid": "JORFTEXT000022673160",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 19/04/10",
+        "publication_date": 1271628000
     },
     {
         "aida_page": "5245",
@@ -663,7 +731,9 @@
             }
         ],
         "cid": "JORFTEXT000000419523",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 12/02/03",
+        "publication_date": 1045004400
     },
     {
         "aida_page": "5247",
@@ -676,7 +746,9 @@
             }
         ],
         "cid": "JORFTEXT000000785128",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 12/02/03",
+        "publication_date": 1045004400
     },
     {
         "aida_page": "4279",
@@ -689,7 +761,9 @@
             }
         ],
         "cid": "JORFTEXT000021187144",
-        "etat": "ABROGE"
+        "state": "ABROGE",
+        "short_title": "Arrêté du 17/07/09",
+        "publication_date": 1247781600
     },
     {
         "aida_page": "40816",
@@ -702,7 +776,9 @@
             }
         ],
         "cid": "JORFTEXT000037078514",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 06/06/18",
+        "publication_date": 1528236000
     },
     {
         "aida_page": "37314",
@@ -715,7 +791,9 @@
             }
         ],
         "cid": "JORFTEXT000032275960",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 15/02/16",
+        "publication_date": 1455490800
     },
     {
         "aida_page": "5275",
@@ -728,7 +806,9 @@
             }
         ],
         "cid": "JORFTEXT000000234557",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 20/09/02",
+        "publication_date": 1032472800
     },
     {
         "aida_page": "4529",
@@ -741,7 +821,9 @@
             }
         ],
         "cid": "JORFTEXT000018800981",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 22/04/08",
+        "publication_date": 1208815200
     },
     {
         "aida_page": "4223",
@@ -754,7 +836,9 @@
             }
         ],
         "cid": "JORFTEXT000021334497",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 10/11/09",
+        "publication_date": 1257807600
     },
     {
         "aida_page": "27198",
@@ -771,7 +855,9 @@
             }
         ],
         "cid": "JORFTEXT000027995928",
-        "etat": "ABROGE"
+        "state": "ABROGE",
+        "short_title": "Arrêté du 26/08/13",
+        "publication_date": 1377468000
     },
     {
         "aida_page": "5199",
@@ -784,7 +870,9 @@
             }
         ],
         "cid": "JORFTEXT000000248169",
-        "etat": "ABROGE"
+        "state": "ABROGE",
+        "short_title": "Arrêté du 30/07/03",
+        "publication_date": 1059516000
     },
     {
         "aida_page": "5297",
@@ -797,7 +885,9 @@
             }
         ],
         "cid": "JORFTEXT000000779198",
-        "etat": "ABROGE"
+        "state": "ABROGE",
+        "short_title": "Arrêté du 20/06/02",
+        "publication_date": 1024524000
     },
     {
         "aida_page": "5551",
@@ -810,7 +900,9 @@
             }
         ],
         "cid": "JORFTEXT000000763103",
-        "etat": "ABROGE"
+        "state": "ABROGE",
+        "short_title": "Arrêté du 11/08/99",
+        "publication_date": 934322400
     },
     {
         "aida_page": "41041",
@@ -827,7 +919,9 @@
             }
         ],
         "cid": "JORFTEXT000037284792",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 03/08/18",
+        "publication_date": 1533247200
     },
     {
         "aida_page": "37522",
@@ -840,7 +934,9 @@
                 "rubrique": "2971"
             }
         ],
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 23/05/16",
+        "publication_date": 1463954400
     },
     {
         "aida_page": "35876",
@@ -853,7 +949,9 @@
             }
         ],
         "cid": "JORFTEXT000024507365",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 26/08/11",
+        "publication_date": 1314309600
     },
     {
         "aida_page": "41057",
@@ -866,7 +964,9 @@
             }
         ],
         "cid": "JORFTEXT000037284870",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 03/08/18",
+        "publication_date": 1533247200
     },
     {
         "aida_page": "35378",
@@ -895,7 +995,9 @@
             }
         ],
         "cid": "JORFTEXT000017734021",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 06/11/07",
+        "publication_date": 1194303600
     },
     {
         "aida_page": "35408",
@@ -912,7 +1014,9 @@
             }
         ],
         "cid": "JORFTEXT000022092771",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 13/04/10",
+        "publication_date": 1271109600
     },
     {
         "aida_page": "35346",
@@ -925,7 +1029,9 @@
             }
         ],
         "cid": "JORFTEXT000000568479",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 23/07/97",
+        "publication_date": 869608800
     },
     {
         "aida_page": "35412",
@@ -938,7 +1044,9 @@
             }
         ],
         "cid": "JORFTEXT000018008144",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 02/01/08",
+        "publication_date": 1199228400
     },
     {
         "aida_page": "35821",
@@ -956,7 +1064,9 @@
             }
         ],
         "cid": "JORFTEXT000000190990",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 08/12/95",
+        "publication_date": 818377200
     },
     {
         "aida_page": "5687",
@@ -969,7 +1079,9 @@
             }
         ],
         "cid": "JORFTEXT000000202155",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 16/07/97",
+        "publication_date": 869004000
     },
     {
         "aida_page": "4033",
@@ -982,7 +1094,9 @@
             }
         ],
         "cid": "JORFTEXT000022593820",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 29/07/10",
+        "publication_date": 1280354400
     },
     {
         "aida_page": "4121",
@@ -995,7 +1109,9 @@
             }
         ],
         "cid": "JORFTEXT000022097882",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 15/04/10",
+        "publication_date": 1271282400
     },
     {
         "aida_page": "4117",
@@ -1008,7 +1124,9 @@
             }
         ],
         "cid": "JORFTEXT000022097930",
-        "etat": "ABROGE"
+        "state": "ABROGE",
+        "short_title": "Arrêté du 15/04/10",
+        "publication_date": 1271282400
     },
     {
         "aida_page": "4119",
@@ -1021,7 +1139,9 @@
             }
         ],
         "cid": "JORFTEXT000022097955",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 15/04/10",
+        "publication_date": 1271282400
     },
     {
         "aida_page": "4115",
@@ -1034,7 +1154,9 @@
             }
         ],
         "cid": "JORFTEXT000022097909",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 15/04/10",
+        "publication_date": 1271282400
     },
     {
         "aida_page": "27126",
@@ -1047,7 +1169,9 @@
             }
         ],
         "cid": "JORFTEXT000027945320",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 11/09/13",
+        "publication_date": 1378850400
     },
     {
         "aida_page": "28554",
@@ -1068,7 +1192,9 @@
             }
         ],
         "cid": "JORFTEXT000028409384",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 27/12/13",
+        "publication_date": 1388098800
     },
     {
         "aida_page": "41355",
@@ -1081,7 +1207,9 @@
             }
         ],
         "cid": "JORFTEXT000037518992",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 22/10/18",
+        "publication_date": 1540159200
     },
     {
         "aida_page": "22363",
@@ -1094,7 +1222,9 @@
             }
         ],
         "cid": "JORFTEXT000026694666",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 26/11/12",
+        "publication_date": 1353884400
     },
     {
         "aida_page": "28562",
@@ -1107,7 +1237,9 @@
             }
         ],
         "cid": "JORFTEXT000028374558",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 14/12/13",
+        "publication_date": 1386975600
     },
     {
         "aida_page": "3501",
@@ -1120,7 +1252,9 @@
             }
         ],
         "cid": "JORFTEXT000025673104",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 23/03/12",
+        "publication_date": 1332457200
     },
     {
         "aida_page": "39127",
@@ -1133,11 +1267,13 @@
                 "rubrique": "2230"
             }
         ],
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 24/04/17",
+        "publication_date": 1492984800
     },
     {
         "aida_page": "39125",
-        "page_name": " 2240. Extraction ou traitement des huiles et corps gras d'origine animale ou végétale ",
+        "page_name": "Arrêté du 24/04/17 relatif aux prescriptions générales applicables aux installations relevant du régime de l'enregistrement au titre de la rubrique n° 2240 de la nomenclature des installations classées pour la protection de l'environnement",
         "nor": "DEVP1628601A",
         "cid": "JORFTEXT000034484917",
         "classements": [
@@ -1146,7 +1282,9 @@
                 "rubrique": "2240"
             }
         ],
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 24/04/17",
+        "publication_date": 1492984800
     },
     {
         "aida_page": "3885",
@@ -1159,7 +1297,9 @@
             }
         ],
         "cid": "JORFTEXT000023689944",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 14/01/11",
+        "publication_date": 1294959600
     },
     {
         "aida_page": "22368",
@@ -1172,7 +1312,9 @@
             }
         ],
         "cid": "JORFTEXT000026694774",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 26/11/12",
+        "publication_date": 1353884400
     },
     {
         "aida_page": "41357",
@@ -1189,7 +1331,9 @@
             }
         ],
         "cid": "JORFTEXT000037519057",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 22/10/18",
+        "publication_date": 1540159200
     },
     {
         "aida_page": "3883",
@@ -1202,7 +1346,9 @@
             }
         ],
         "cid": "JORFTEXT000023713720",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 14/01/11",
+        "publication_date": 1294959600
     },
     {
         "aida_page": "32625",
@@ -1215,7 +1361,9 @@
             }
         ],
         "cid": "JORFTEXT000029419186",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 02/09/14",
+        "publication_date": 1409608800
     },
     {
         "aida_page": "22367",
@@ -1228,7 +1376,9 @@
             }
         ],
         "cid": "JORFTEXT000026694913",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 26/11/12",
+        "publication_date": 1353884400
     },
     {
         "aida_page": "28564",
@@ -1241,7 +1391,9 @@
             }
         ],
         "cid": "JORFTEXT000028379475",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 10/12/13",
+        "publication_date": 1386630000
     },
     {
         "aida_page": "28570",
@@ -1254,7 +1406,9 @@
             }
         ],
         "cid": "JORFTEXT000028379599",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 10/12/13",
+        "publication_date": 1386630000
     },
     {
         "aida_page": "3723",
@@ -1267,7 +1421,9 @@
             }
         ],
         "cid": "JORFTEXT000024490187",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 08/08/11",
+        "publication_date": 1312754400
     },
     {
         "aida_page": "41901",
@@ -1280,7 +1436,9 @@
             }
         ],
         "cid": "JORFTEXT000038358856",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 09/04/19",
+        "publication_date": 1554760800
     },
     {
         "aida_page": "3721",
@@ -1293,7 +1451,9 @@
             }
         ],
         "cid": "JORFTEXT000024490314",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 08/08/11",
+        "publication_date": 1312754400
     },
     {
         "aida_page": "28575",
@@ -1306,7 +1466,9 @@
             }
         ],
         "cid": "JORFTEXT000028374698",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 14/12/13",
+        "publication_date": 1386975600
     },
     {
         "aida_page": "28590",
@@ -1319,7 +1481,9 @@
             }
         ],
         "cid": "JORFTEXT000028374816",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 14/12/13",
+        "publication_date": 1386975600
     },
     {
         "aida_page": "41897",
@@ -1336,7 +1500,9 @@
             }
         ],
         "cid": "JORFTEXT000038358667",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 09/04/19",
+        "publication_date": 1554760800
     },
     {
         "aida_page": "28599",
@@ -1349,7 +1515,9 @@
             }
         ],
         "cid": "JORFTEXT000028409140",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 27/12/13",
+        "publication_date": 1388098800
     },
     {
         "aida_page": "4107",
@@ -1362,7 +1530,9 @@
             }
         ],
         "cid": "JORFTEXT000022198234",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 15/04/10",
+        "publication_date": 1271282400
     },
     {
         "aida_page": "4105",
@@ -1375,7 +1545,9 @@
             }
         ],
         "cid": "JORFTEXT000022198256",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 15/04/10",
+        "publication_date": 1271282400
     },
     {
         "aida_page": "33655",
@@ -1388,7 +1560,9 @@
             }
         ],
         "cid": "JORFTEXT000029893853",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 12/12/14",
+        "publication_date": 1418338800
     },
     {
         "aida_page": "3465",
@@ -1401,7 +1575,9 @@
             }
         ],
         "cid": "JORFTEXT000025789288",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 20/04/12",
+        "publication_date": 1334872800
     },
     {
         "aida_page": "40755",
@@ -1414,7 +1590,9 @@
                 "rubrique": "2794"
             }
         ],
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 06/06/18",
+        "publication_date": 1528236000
     },
     {
         "aida_page": "40749",
@@ -1427,7 +1605,9 @@
                 "rubrique": "2794"
             }
         ],
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 18/05/18",
+        "publication_date": 1526594400
     },
     {
         "aida_page": "28582",
@@ -1440,7 +1620,9 @@
             }
         ],
         "cid": "JORFTEXT000028374941",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 14/12/13",
+        "publication_date": 1386975600
     },
     {
         "aida_page": "35386",
@@ -1453,7 +1635,9 @@
             }
         ],
         "cid": "JORFTEXT000022593820",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 29/07/10",
+        "publication_date": 1280354400
     },
     {
         "aida_page": "35344",
@@ -1470,7 +1654,9 @@
             }
         ],
         "cid": "JORFTEXT000030673177",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 01/06/15",
+        "publication_date": 1433109600
     },
     {
         "aida_page": "5619",
@@ -1483,7 +1669,9 @@
             }
         ],
         "cid": "JORFTEXT000000756621",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 13/07/98",
+        "publication_date": 900280800
     },
     {
         "aida_page": "5023",
@@ -1496,7 +1684,9 @@
             }
         ],
         "cid": "JORFTEXT000000446932",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 23/08/05",
+        "publication_date": 1124748000
     },
     {
         "aida_page": "5621",
@@ -1509,7 +1699,9 @@
             }
         ],
         "cid": "JORFTEXT000000756654",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 13/07/98",
+        "publication_date": 900280800
     },
     {
         "aida_page": "5647",
@@ -1519,11 +1711,13 @@
             {
                 "regime": "D",
                 "rubrique": "1136",
-                "etat": "SUPPRIMEE"
+                "state": "SUPPRIMEE"
             }
         ],
         "cid": "JORFTEXT000000753815",
-        "etat": "ABROGE"
+        "state": "ABROGE",
+        "short_title": "Arrêté du 23/02/98",
+        "publication_date": 888188400
     },
     {
         "aida_page": "4211",
@@ -1536,7 +1730,9 @@
             }
         ],
         "cid": "JORFTEXT000021519796",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 19/11/09",
+        "publication_date": 1258585200
     },
     {
         "aida_page": "4403",
@@ -1549,7 +1745,9 @@
             }
         ],
         "cid": "JORFTEXT000019982074",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 17/12/08",
+        "publication_date": 1229468400
     },
     {
         "aida_page": "5671",
@@ -1562,7 +1760,9 @@
             }
         ],
         "cid": "JORFTEXT000000370053",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 08/10/97",
+        "publication_date": 876261600
     },
     {
         "aida_page": "4653",
@@ -1575,7 +1775,9 @@
             }
         ],
         "cid": "JORFTEXT000017640626",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 02/11/07",
+        "publication_date": 1193958000
     },
     {
         "aida_page": "5501",
@@ -1588,7 +1790,9 @@
             }
         ],
         "cid": "JORFTEXT000000765521",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 10/04/00",
+        "publication_date": 955317600
     },
     {
         "aida_page": "4661",
@@ -1601,7 +1805,9 @@
             }
         ],
         "cid": "JORFTEXT000017640600",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 30/10/07",
+        "publication_date": 1193698800
     },
     {
         "aida_page": "5319",
@@ -1614,7 +1820,9 @@
             }
         ],
         "cid": "JORFTEXT000000777935",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 02/05/02",
+        "publication_date": 1020290400
     },
     {
         "aida_page": "5503",
@@ -1627,7 +1835,9 @@
             }
         ],
         "cid": "JORFTEXT000000400526",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 10/04/00",
+        "publication_date": 955317600
     },
     {
         "aida_page": "5677",
@@ -1640,7 +1850,9 @@
             }
         ],
         "cid": "JORFTEXT000000551230",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 08/08/97",
+        "publication_date": 870991200
     },
     {
         "aida_page": "4665",
@@ -1653,7 +1865,9 @@
             }
         ],
         "cid": "JORFTEXT000017640584",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 29/10/07",
+        "publication_date": 1193612400
     },
     {
         "aida_page": "5589",
@@ -1666,7 +1880,9 @@
             }
         ],
         "cid": "JORFTEXT000000392482",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 23/12/98",
+        "publication_date": 914367600
     },
     {
         "aida_page": "5591",
@@ -1679,7 +1895,9 @@
             }
         ],
         "cid": "JORFTEXT000000574817",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 23/12/98",
+        "publication_date": 914367600
     },
     {
         "aida_page": "5333",
@@ -1692,7 +1910,9 @@
             }
         ],
         "cid": "JORFTEXT000000592074",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 02/04/02",
+        "publication_date": 1017698400
     },
     {
         "aida_page": "32401",
@@ -1709,7 +1929,9 @@
             }
         ],
         "cid": "JORFTEXT000029359291",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 04/08/14",
+        "publication_date": 1407103200
     },
     {
         "aida_page": "4421",
@@ -1722,7 +1944,9 @@
             }
         ],
         "cid": "JORFTEXT000019776628",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 10/11/08",
+        "publication_date": 1226271600
     },
     {
         "aida_page": "5727",
@@ -1735,7 +1959,9 @@
             }
         ],
         "cid": "JORFTEXT000000381759",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 10/03/97",
+        "publication_date": 857948400
     },
     {
         "aida_page": "33661",
@@ -1748,7 +1974,9 @@
             }
         ],
         "cid": "JORFTEXT000029893770",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 12/12/14",
+        "publication_date": 1418338800
     },
     {
         "aida_page": "4565",
@@ -1761,7 +1989,9 @@
             }
         ],
         "cid": "JORFTEXT000018332514",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 29/02/08",
+        "publication_date": 1204239600
     },
     {
         "aida_page": "4395",
@@ -1774,7 +2004,9 @@
             }
         ],
         "cid": "JORFTEXT000019982114",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 18/12/08",
+        "publication_date": 1229554800
     },
     {
         "aida_page": "4917",
@@ -1787,7 +2019,9 @@
             }
         ],
         "cid": "JORFTEXT000000609220",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 06/07/06",
+        "publication_date": 1152136800
     },
     {
         "aida_page": "5021",
@@ -1800,7 +2034,9 @@
             }
         ],
         "cid": "JORFTEXT000000447400",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 23/08/05",
+        "publication_date": 1124748000
     },
     {
         "aida_page": "5253",
@@ -1813,7 +2049,9 @@
             }
         ],
         "cid": "JORFTEXT000000418677",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 07/01/03",
+        "publication_date": 1041894000
     },
     {
         "aida_page": "35414",
@@ -1830,7 +2068,9 @@
             }
         ],
         "cid": "JORFTEXT000000418677",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 07/01/03",
+        "publication_date": 1041894000
     },
     {
         "aida_page": "5649",
@@ -1843,7 +2083,9 @@
             }
         ],
         "cid": "JORFTEXT000000571176",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 12/02/98",
+        "publication_date": 887238000
     },
     {
         "aida_page": "41364",
@@ -1856,7 +2098,9 @@
             }
         ],
         "cid": "JORFTEXT000037519292",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 22/10/18",
+        "publication_date": 1540159200
     },
     {
         "aida_page": "5729",
@@ -1869,7 +2113,9 @@
             }
         ],
         "cid": "JORFTEXT000000564940",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 10/03/97",
+        "publication_date": 857948400
     },
     {
         "aida_page": "5723",
@@ -1882,7 +2128,9 @@
             }
         ],
         "cid": "JORFTEXT000000383619",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 06/05/97",
+        "publication_date": 862869600
     },
     {
         "aida_page": "4379",
@@ -1895,7 +2143,9 @@
             }
         ],
         "cid": "JORFTEXT000019996765",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 22/12/08",
+        "publication_date": 1229900400
     },
     {
         "aida_page": "5063",
@@ -1908,7 +2158,9 @@
             }
         ],
         "cid": "JORFTEXT000000630475",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 20/04/05",
+        "publication_date": 1113948000
     },
     {
         "aida_page": "35846",
@@ -1921,7 +2173,9 @@
             }
         ],
         "cid": "JORFTEXT000022097853",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 15/04/10",
+        "publication_date": 1271282400
     },
     {
         "aida_page": "35811",
@@ -1986,7 +2240,9 @@
             }
         ],
         "cid": "JORFTEXT000019996765",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 22/12/08",
+        "publication_date": 1229900400
     },
     {
         "aida_page": "35813",
@@ -2043,7 +2299,9 @@
             }
         ],
         "cid": "JORFTEXT000000630475",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 20/04/05",
+        "publication_date": 1113948000
     },
     {
         "aida_page": "38417",
@@ -2190,7 +2448,9 @@
             }
         ],
         "cid": "JORFTEXT000033560858",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 05/12/16",
+        "publication_date": 1480892400
     },
     {
         "aida_page": "5489",
@@ -2203,7 +2463,9 @@
             }
         ],
         "cid": "JORFTEXT000000399730",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 03/05/00",
+        "publication_date": 957304800
     },
     {
         "aida_page": "4375",
@@ -2220,7 +2482,9 @@
             }
         ],
         "cid": "JORFTEXT000020009023",
-        "etat": "ABROGE"
+        "state": "ABROGE",
+        "short_title": "Arrêté du 23/12/08",
+        "publication_date": 1229986800
     },
     {
         "aida_page": "30277",
@@ -2233,7 +2497,9 @@
             }
         ],
         "cid": "JORFTEXT000028814820",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 27/03/14",
+        "publication_date": 1395874800
     },
     {
         "aida_page": "4443",
@@ -2246,7 +2512,9 @@
             }
         ],
         "cid": "JORFTEXT000019831346",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 30/09/08",
+        "publication_date": 1222725600
     },
     {
         "aida_page": "5507",
@@ -2259,7 +2527,9 @@
             }
         ],
         "cid": "JORFTEXT000000764048",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 03/04/00",
+        "publication_date": 954712800
     },
     {
         "aida_page": "5467",
@@ -2272,7 +2542,9 @@
             }
         ],
         "cid": "JORFTEXT000000573432",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 06/09/00",
+        "publication_date": 968191200
     },
     {
         "aida_page": "4659",
@@ -2285,7 +2557,9 @@
             }
         ],
         "cid": "JORFTEXT000017640613",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 31/10/07",
+        "publication_date": 1193785200
     },
     {
         "aida_page": "5397",
@@ -2298,7 +2572,9 @@
             }
         ],
         "cid": "JORFTEXT000000772915",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 26/07/01",
+        "publication_date": 996098400
     },
     {
         "aida_page": "33687",
@@ -2311,7 +2587,9 @@
             }
         ],
         "cid": "JORFTEXT000029917414",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 03/12/14",
+        "publication_date": 1417561200
     },
     {
         "aida_page": "5429",
@@ -2324,7 +2602,9 @@
             }
         ],
         "cid": "JORFTEXT000000770271",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 15/05/01",
+        "publication_date": 989877600
     },
     {
         "aida_page": "5427",
@@ -2337,7 +2617,9 @@
             }
         ],
         "cid": "JORFTEXT000000770272",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 15/05/01",
+        "publication_date": 989877600
     },
     {
         "aida_page": "42852",
@@ -2350,7 +2632,9 @@
             }
         ],
         "cid": "JORFTEXT000041413405",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 13/12/19",
+        "publication_date": 1576191600
     },
     {
         "aida_page": "5091",
@@ -2371,7 +2655,9 @@
             }
         ],
         "cid": "JORFTEXT000000444709",
-        "etat": "ABROGE"
+        "state": "ABROGE",
+        "short_title": "Arrêté du 07/02/05",
+        "publication_date": 1107730800
     },
     {
         "aida_page": "28556",
@@ -2403,7 +2689,9 @@
             }
         ],
         "cid": "JORFTEXT000028409472",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 27/12/13",
+        "publication_date": 1388098800
     },
     {
         "aida_page": "4891",
@@ -2416,7 +2704,9 @@
             }
         ],
         "cid": "JORFTEXT000000425804",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 30/10/06",
+        "publication_date": 1162162800
     },
     {
         "aida_page": "5083",
@@ -2429,7 +2719,9 @@
             }
         ],
         "cid": "JORFTEXT000000444667",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 10/02/05",
+        "publication_date": 1107990000
     },
     {
         "aida_page": "4863",
@@ -2442,7 +2734,9 @@
             }
         ],
         "cid": "JORFTEXT000000791749",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 08/12/06",
+        "publication_date": 1165532400
     },
     {
         "aida_page": "39978",
@@ -2455,7 +2749,9 @@
             }
         ],
         "cid": "JORFTEXT000036074702",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 21/11/17",
+        "publication_date": 1511218800
     },
     {
         "aida_page": "5359",
@@ -2468,7 +2764,9 @@
             }
         ],
         "cid": "JORFTEXT000000593036",
-        "etat": "ABROGE"
+        "state": "ABROGE",
+        "short_title": "Arrêté du 07/01/02",
+        "publication_date": 1010358000
     },
     {
         "aida_page": "5159",
@@ -2481,7 +2779,9 @@
             }
         ],
         "cid": "JORFTEXT000000418135",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 30/04/04",
+        "publication_date": 1083276000
     },
     {
         "aida_page": "5045",
@@ -2494,7 +2794,9 @@
             }
         ],
         "cid": "JORFTEXT000000812308",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 17/06/05",
+        "publication_date": 1118959200
     },
     {
         "aida_page": "4727",
@@ -2507,7 +2809,9 @@
             }
         ],
         "cid": "JORFTEXT000000277959",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 09/08/07",
+        "publication_date": 1186610400
     },
     {
         "aida_page": "3427",
@@ -2520,7 +2824,9 @@
             }
         ],
         "cid": "JORFTEXT000026140269",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 25/05/12",
+        "publication_date": 1337896800
     },
     {
         "aida_page": "5571",
@@ -2533,7 +2839,9 @@
                 "rubrique": "2251"
             }
         ],
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 15/03/99",
+        "publication_date": 921452400
     },
     {
         "aida_page": "34787",
@@ -2546,7 +2854,9 @@
             }
         ],
         "cid": "JORFTEXT000030426541",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 18/12/14",
+        "publication_date": 1418857200
     },
     {
         "aida_page": "4935",
@@ -2559,7 +2869,9 @@
             }
         ],
         "cid": "JORFTEXT000000792853",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 23/05/06",
+        "publication_date": 1148335200
     },
     {
         "aida_page": "33845",
@@ -2572,7 +2884,9 @@
             }
         ],
         "cid": "JORFTEXT000030024830",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 18/12/14",
+        "publication_date": 1418857200
     },
     {
         "aida_page": "5403",
@@ -2585,7 +2899,9 @@
                 "rubrique": "2330"
             }
         ],
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 25/07/01",
+        "publication_date": 996012000
     },
     {
         "aida_page": "3887",
@@ -2598,7 +2914,9 @@
             }
         ],
         "cid": "JORFTEXT000023596449",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 14/01/11",
+        "publication_date": 1294959600
     },
     {
         "aida_page": "5321",
@@ -2611,7 +2929,9 @@
             }
         ],
         "cid": "JORFTEXT000000413046",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 02/05/02",
+        "publication_date": 1020290400
     },
     {
         "aida_page": "4259",
@@ -2624,7 +2944,9 @@
             }
         ],
         "cid": "JORFTEXT000021030687",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 31/08/09",
+        "publication_date": 1251669600
     },
     {
         "aida_page": "5401",
@@ -2637,7 +2959,9 @@
                 "rubrique": "2351"
             }
         ],
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 25/07/01",
+        "publication_date": 996012000
     },
     {
         "aida_page": "5399",
@@ -2650,7 +2974,9 @@
                 "rubrique": "2360"
             }
         ],
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 25/07/01",
+        "publication_date": 996012000
     },
     {
         "aida_page": "5105",
@@ -2663,7 +2989,9 @@
             }
         ],
         "cid": "JORFTEXT000000786106",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 17/12/04",
+        "publication_date": 1103238000
     },
     {
         "aida_page": "5207",
@@ -2676,7 +3004,9 @@
             }
         ],
         "cid": "JORFTEXT000000432338",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 16/07/03",
+        "publication_date": 1058306400
     },
     {
         "aida_page": "4851",
@@ -2689,7 +3019,9 @@
             }
         ],
         "cid": "JORFTEXT000000427983",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 26/12/06",
+        "publication_date": 1167087600
     },
     {
         "aida_page": "5689",
@@ -2702,7 +3034,9 @@
             }
         ],
         "cid": "JORFTEXT000000552021",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 30/06/97",
+        "publication_date": 867621600
     },
     {
         "aida_page": "5691",
@@ -2715,7 +3049,9 @@
             }
         ],
         "cid": "JORFTEXT000000369331",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 30/06/97",
+        "publication_date": 867621600
     },
     {
         "aida_page": "5693",
@@ -2728,7 +3064,9 @@
             }
         ],
         "cid": "JORFTEXT000000369330",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 30/06/97",
+        "publication_date": 867621600
     },
     {
         "aida_page": "3641",
@@ -2741,7 +3079,9 @@
             }
         ],
         "cid": "JORFTEXT000024968167",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 26/11/11",
+        "publication_date": 1322262000
     },
     {
         "aida_page": "5695",
@@ -2754,7 +3094,9 @@
             }
         ],
         "cid": "JORFTEXT000000552020",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 30/06/97",
+        "publication_date": 867621600
     },
     {
         "aida_page": "5697",
@@ -2767,7 +3109,9 @@
             }
         ],
         "cid": "JORFTEXT000000552019",
-        "etat": "ABROGE"
+        "state": "ABROGE",
+        "short_title": "Arrêté du 30/06/97",
+        "publication_date": 867621600
     },
     {
         "aida_page": "3639",
@@ -2780,7 +3124,9 @@
             }
         ],
         "cid": "JORFTEXT000024968178",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 26/11/11",
+        "publication_date": 1322262000
     },
     {
         "aida_page": "5699",
@@ -2793,7 +3139,9 @@
             }
         ],
         "cid": "JORFTEXT000000369301",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 30/06/97",
+        "publication_date": 867621600
     },
     {
         "aida_page": "4825",
@@ -2806,7 +3154,9 @@
             }
         ],
         "cid": "JORFTEXT000000793557",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 14/02/07",
+        "publication_date": 1171407600
     },
     {
         "aida_page": "4823",
@@ -2819,7 +3169,9 @@
             }
         ],
         "cid": "JORFTEXT000000793558",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 14/02/07",
+        "publication_date": 1171407600
     },
     {
         "aida_page": "5701",
@@ -2832,7 +3184,9 @@
             }
         ],
         "cid": "JORFTEXT000000734395",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 30/06/97",
+        "publication_date": 867621600
     },
     {
         "aida_page": "5703",
@@ -2845,7 +3199,9 @@
             }
         ],
         "cid": "JORFTEXT000000182387",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 30/06/97",
+        "publication_date": 867621600
     },
     {
         "aida_page": "5705",
@@ -2858,7 +3214,9 @@
             }
         ],
         "cid": "JORFTEXT000000552051",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 30/06/97",
+        "publication_date": 867621600
     },
     {
         "aida_page": "35912",
@@ -2871,7 +3229,9 @@
             }
         ],
         "cid": "JORFTEXT000031027065",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 27/07/15",
+        "publication_date": 1437948000
     },
     {
         "aida_page": "5707",
@@ -2884,7 +3244,9 @@
                 "rubrique": "2560"
             }
         ],
-        "etat": "ABROGE"
+        "state": "ABROGE",
+        "short_title": "Arrêté du 30/06/97",
+        "publication_date": 867621600
     },
     {
         "aida_page": "36024",
@@ -2897,7 +3259,9 @@
             }
         ],
         "cid": "JORFTEXT000031027083",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 27/07/15",
+        "publication_date": 1437948000
     },
     {
         "aida_page": "5709",
@@ -2910,7 +3274,9 @@
                 "rubrique": "2561"
             }
         ],
-        "etat": "ABROGE"
+        "state": "ABROGE",
+        "short_title": "Arrêté du 30/06/97",
+        "publication_date": 867621600
     },
     {
         "aida_page": "5711",
@@ -2923,7 +3289,9 @@
             }
         ],
         "cid": "JORFTEXT000000369300",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 30/06/97",
+        "publication_date": 867621600
     },
     {
         "aida_page": "35916",
@@ -2936,7 +3304,9 @@
             }
         ],
         "cid": "JORFTEXT000031027101",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 27/07/15",
+        "publication_date": 1437948000
     },
     {
         "aida_page": "5145",
@@ -2949,7 +3319,9 @@
             }
         ],
         "cid": "JORFTEXT000000619925",
-        "etat": "ABROGE"
+        "state": "ABROGE",
+        "short_title": "Arrêté du 21/06/04",
+        "publication_date": 1087768800
     },
     {
         "aida_page": "41899",
@@ -2962,7 +3334,9 @@
             }
         ],
         "cid": "JORFTEXT000038358780",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 09/04/19",
+        "publication_date": 1554760800
     },
     {
         "aida_page": "5713",
@@ -2975,7 +3349,9 @@
             }
         ],
         "cid": "JORFTEXT000000551978",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 30/06/97",
+        "publication_date": 867621600
     },
     {
         "aida_page": "36022",
@@ -2988,7 +3364,9 @@
             }
         ],
         "cid": "JORFTEXT000031027118",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 27/07/15",
+        "publication_date": 1437948000
     },
     {
         "aida_page": "36020",
@@ -3001,7 +3379,9 @@
             }
         ],
         "cid": "JORFTEXT000031027133",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 27/07/15",
+        "publication_date": 1437948000
     },
     {
         "aida_page": "4293",
@@ -3014,7 +3394,9 @@
             }
         ],
         "cid": "JORFTEXT000021028173",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 07/07/09",
+        "publication_date": 1246917600
     },
     {
         "aida_page": "5715",
@@ -3027,7 +3409,9 @@
             }
         ],
         "cid": "JORFTEXT000000369299",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 30/06/97",
+        "publication_date": 867621600
     },
     {
         "aida_page": "5521",
@@ -3044,7 +3428,9 @@
             }
         ],
         "cid": "JORFTEXT000000202785",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 14/01/00",
+        "publication_date": 947804400
     },
     {
         "aida_page": "5519",
@@ -3057,7 +3443,9 @@
             }
         ],
         "cid": "JORFTEXT000000202754",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 14/01/00",
+        "publication_date": 947804400
     },
     {
         "aida_page": "5517",
@@ -3070,7 +3458,9 @@
             }
         ],
         "cid": "JORFTEXT000000567521",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 14/01/00",
+        "publication_date": 947804400
     },
     {
         "aida_page": "5125",
@@ -3083,7 +3473,9 @@
             }
         ],
         "cid": "JORFTEXT000000807264",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 13/10/04",
+        "publication_date": 1097618400
     },
     {
         "aida_page": "5725",
@@ -3096,7 +3488,9 @@
             }
         ],
         "cid": "JORFTEXT000000565555",
-        "etat": "ABROGE"
+        "state": "ABROGE",
+        "short_title": "Arrêté du 02/04/97",
+        "publication_date": 859932000
     },
     {
         "aida_page": "4633",
@@ -3109,7 +3503,9 @@
             }
         ],
         "cid": "JORFTEXT000017883576",
-        "etat": "ABROGE"
+        "state": "ABROGE",
+        "short_title": "Arrêté du 12/12/07",
+        "publication_date": 1197414000
     },
     {
         "aida_page": "40992",
@@ -3134,7 +3530,9 @@
             }
         ],
         "cid": "JORFTEXT000037032196",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 06/06/18",
+        "publication_date": 1528236000
     },
     {
         "aida_page": "3985",
@@ -3147,7 +3545,9 @@
             }
         ],
         "cid": "JORFTEXT000023022747",
-        "etat": "ABROGE"
+        "state": "ABROGE",
+        "short_title": "Arrêté du 13/10/10",
+        "publication_date": 1286920800
     },
     {
         "aida_page": "3983",
@@ -3160,7 +3560,9 @@
             }
         ],
         "cid": "JORFTEXT000023022756",
-        "etat": "ABROGE"
+        "state": "ABROGE",
+        "short_title": "Arrêté du 14/10/10",
+        "publication_date": 1287007200
     },
     {
         "aida_page": "3981",
@@ -3173,7 +3575,9 @@
             }
         ],
         "cid": "JORFTEXT000023022769",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 15/10/10",
+        "publication_date": 1287093600
     },
     {
         "aida_page": "3979",
@@ -3186,7 +3590,9 @@
             }
         ],
         "cid": "JORFTEXT000023022778",
-        "etat": "ABROGE"
+        "state": "ABROGE",
+        "short_title": "Arrêté du 16/10/10",
+        "publication_date": 1287180000
     },
     {
         "aida_page": "3385",
@@ -3199,7 +3605,9 @@
             }
         ],
         "cid": "JORFTEXT000026274584",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 30/07/12",
+        "publication_date": 1343599200
     },
     {
         "aida_page": "3755",
@@ -3212,7 +3620,9 @@
             }
         ],
         "cid": "JORFTEXT000024446891",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 12/07/11",
+        "publication_date": 1310421600
     },
     {
         "aida_page": "3643",
@@ -3225,7 +3635,9 @@
             }
         ],
         "cid": "JORFTEXT000024908356",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 23/11/11",
+        "publication_date": 1322002800
     },
     {
         "aida_page": "35868",
@@ -3238,7 +3650,9 @@
             }
         ],
         "cid": "JORFTEXT000025126196",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 23/12/11",
+        "publication_date": 1324594800
     },
     {
         "aida_page": "33685",
@@ -3251,7 +3665,9 @@
             }
         ],
         "cid": "JORFTEXT000029917403",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 03/12/14",
+        "publication_date": 1417561200
     },
     {
         "aida_page": "5683",
@@ -3264,7 +3680,9 @@
             }
         ],
         "cid": "JORFTEXT000000202304",
-        "etat": "ABROGE"
+        "state": "ABROGE",
+        "short_title": "Arrêté du 25/07/97",
+        "publication_date": 869781600
     },
     {
         "aida_page": "5109",
@@ -3277,7 +3695,9 @@
             }
         ],
         "cid": "JORFTEXT000000424501",
-        "etat": "ABROGE"
+        "state": "ABROGE",
+        "short_title": "Arrêté du 13/12/04",
+        "publication_date": 1102892400
     },
     {
         "aida_page": "28559",
@@ -3290,7 +3710,9 @@
             }
         ],
         "cid": "JORFTEXT000028375083",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 14/12/13",
+        "publication_date": 1386975600
     },
     {
         "aida_page": "5481",
@@ -3303,7 +3725,9 @@
             }
         ],
         "cid": "JORFTEXT000000584145",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 29/05/00",
+        "publication_date": 959551200
     },
     {
         "aida_page": "41031",
@@ -3316,7 +3740,9 @@
             }
         ],
         "cid": "JORFTEXT000037311523",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 03/08/18",
+        "publication_date": 1533247200
     },
     {
         "aida_page": "5149",
@@ -3329,7 +3755,9 @@
             }
         ],
         "cid": "JORFTEXT000000619924",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 04/06/04",
+        "publication_date": 1086300000
     },
     {
         "aida_page": "5505",
@@ -3342,7 +3770,9 @@
             }
         ],
         "cid": "JORFTEXT000000764047",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 03/04/00",
+        "publication_date": 954712800
     },
     {
         "aida_page": "5323",
@@ -3355,7 +3785,9 @@
             }
         ],
         "cid": "JORFTEXT000000413047",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 02/05/02",
+        "publication_date": 1020290400
     },
     {
         "aida_page": "5735",
@@ -3368,7 +3800,9 @@
             }
         ],
         "cid": "JORFTEXT000000199989",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 23/01/97",
+        "publication_date": 853974000
     },
     {
         "aida_page": "35874",
@@ -3381,7 +3815,9 @@
             }
         ],
         "cid": "JORFTEXT000024507356",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 26/08/11",
+        "publication_date": 1314309600
     },
     {
         "aida_page": "35318",
@@ -3410,7 +3846,9 @@
             }
         ],
         "cid": "JORFTEXT000000756621",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 13/07/98",
+        "publication_date": 900280800
     },
     {
         "aida_page": "35330",
@@ -3447,7 +3885,9 @@
             }
         ],
         "cid": "JORFTEXT000000756654",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 13/07/98",
+        "publication_date": 900280800
     },
     {
         "aida_page": "38030",
@@ -3460,7 +3900,9 @@
                 "rubrique": "4210"
             }
         ],
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 12/12/14",
+        "publication_date": 1418338800
     },
     {
         "aida_page": "35384",
@@ -3473,7 +3915,9 @@
             }
         ],
         "cid": "JORFTEXT000018332514",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 29/02/08",
+        "publication_date": 1204239600
     },
     {
         "aida_page": "35358",
@@ -3502,7 +3946,9 @@
             }
         ],
         "cid": "JORFTEXT000019776628",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 10/11/08",
+        "publication_date": 1226271600
     },
     {
         "aida_page": "42468",
@@ -3523,7 +3969,9 @@
             }
         ],
         "cid": "JORFTEXT000039104029",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 01/08/19",
+        "publication_date": 1564610400
     },
     {
         "aida_page": "35352",
@@ -3544,7 +3992,9 @@
             }
         ],
         "cid": "JORFTEXT000000392482",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 23/12/98",
+        "publication_date": 914367600
     },
     {
         "aida_page": "35354",
@@ -3557,7 +4007,9 @@
             }
         ],
         "cid": "JORFTEXT000000574817",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 23/12/98",
+        "publication_date": 914367600
     },
     {
         "aida_page": "35855",
@@ -3570,7 +4022,9 @@
             }
         ],
         "cid": "JORFTEXT000000770271",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 15/05/01",
+        "publication_date": 989877600
     },
     {
         "aida_page": "35858",
@@ -3587,7 +4041,9 @@
             }
         ],
         "cid": "JORFTEXT000000770272",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 15/05/01",
+        "publication_date": 989877600
     },
     {
         "aida_page": "35388",
@@ -3600,7 +4056,9 @@
             }
         ],
         "cid": "JORFTEXT000019982114",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 18/12/08",
+        "publication_date": 1229554800
     },
     {
         "aida_page": "35406",
@@ -3613,7 +4071,9 @@
             }
         ],
         "cid": "JORFTEXT000000609220",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 06/07/06",
+        "publication_date": 1152136800
     },
     {
         "aida_page": "35348",
@@ -3666,7 +4126,9 @@
             }
         ],
         "cid": "JORFTEXT000017640600",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 30/10/07",
+        "publication_date": 1193698800
     },
     {
         "aida_page": "35334",
@@ -3679,7 +4141,9 @@
             }
         ],
         "cid": "JORFTEXT000019982074",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 17/12/08",
+        "publication_date": 1229468400
     },
     {
         "aida_page": "35337",
@@ -3692,7 +4156,9 @@
             }
         ],
         "cid": "JORFTEXT000017640626",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 02/11/07",
+        "publication_date": 1193958000
     },
     {
         "aida_page": "35416",
@@ -3705,7 +4171,9 @@
             }
         ],
         "cid": "JORFTEXT000000571176",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 12/02/98",
+        "publication_date": 887238000
     },
     {
         "aida_page": "35410",
@@ -3718,7 +4186,9 @@
             }
         ],
         "cid": "JORFTEXT000000447400",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 23/08/05",
+        "publication_date": 1124748000
     },
     {
         "aida_page": "35801",
@@ -3731,7 +4201,9 @@
             }
         ],
         "cid": "JORFTEXT000000564940",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 10/03/97",
+        "publication_date": 857948400
     },
     {
         "aida_page": "35803",
@@ -3748,7 +4220,9 @@
             }
         ],
         "cid": "JORFTEXT000000383619",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 06/05/97",
+        "publication_date": 862869600
     },
     {
         "aida_page": "35382",
@@ -3761,7 +4235,9 @@
             }
         ],
         "cid": "JORFTEXT000000381759",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 10/03/97",
+        "publication_date": 857948400
     },
     {
         "aida_page": "35322",
@@ -3774,7 +4250,9 @@
             }
         ],
         "cid": "JORFTEXT000000446932",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 23/08/05",
+        "publication_date": 1124748000
     },
     {
         "aida_page": "35350",
@@ -3787,7 +4265,9 @@
             }
         ],
         "cid": "JORFTEXT000000551230",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 08/08/97",
+        "publication_date": 870991200
     },
     {
         "aida_page": "35370",
@@ -3800,7 +4280,9 @@
             }
         ],
         "cid": "JORFTEXT000021519796",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 19/11/09",
+        "publication_date": 1258585200
     },
     {
         "aida_page": "35826",
@@ -3814,7 +4296,9 @@
             }
         ],
         "cid": "JORFTEXT000019994396",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 19/12/08",
+        "publication_date": 1229641200
     },
     {
         "aida_page": "35844",
@@ -3828,7 +4312,9 @@
             }
         ],
         "cid": "JORFTEXT000024778832",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 12/10/11",
+        "publication_date": 1318370400
     },
     {
         "aida_page": "37316",
@@ -3847,7 +4333,9 @@
             }
         ],
         "cid": "JORFTEXT000032282438",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 15/02/16",
+        "publication_date": 1455490800
     },
     {
         "aida_page": "3497",
@@ -3861,7 +4349,9 @@
             }
         ],
         "cid": "JORFTEXT000025634333",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 26/03/12",
+        "publication_date": 1332712800
     },
     {
         "aida_page": "40759",
@@ -3890,7 +4380,9 @@
             }
         ],
         "cid": "JORFTEXT000037032383",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 06/06/18",
+        "publication_date": 1528236000
     },
     {
         "aida_page": "22371",
@@ -3904,7 +4396,9 @@
             }
         ],
         "cid": "JORFTEXT000026695033",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 26/11/12",
+        "publication_date": 1353884400
     },
     {
         "aida_page": "40753",
@@ -3918,7 +4412,9 @@
             }
         ],
         "cid": "JORFTEXT000037032238",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 06/06/18",
+        "publication_date": 1528236000
     },
     {
         "aida_page": "36244",
@@ -3932,7 +4428,9 @@
             }
         ],
         "cid": "JORFTEXT000031259868",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 02/10/15",
+        "publication_date": 1443736800
     },
     {
         "aida_page": "41576",
@@ -3946,7 +4444,9 @@
             }
         ],
         "cid": "JORFTEXT000037832596",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 27/11/18",
+        "publication_date": 1543273200
     },
     {
         "aida_page": "4015",
@@ -3960,7 +4460,9 @@
             }
         ],
         "cid": "JORFTEXT000022727437",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 12/08/10",
+        "publication_date": 1281564000
     },
     {
         "aida_page": "27539",
@@ -3974,7 +4476,9 @@
             }
         ],
         "cid": "JORFTEXT000028071164",
-        "etat": "ABROGE"
+        "state": "ABROGE",
+        "short_title": "Arrêté du 24/09/13",
+        "publication_date": 1379973600
     },
     {
         "aida_page": "3623",
@@ -3988,7 +4492,9 @@
             }
         ],
         "cid": "JORFTEXT000025178828",
-        "etat": "ABROGE"
+        "state": "ABROGE",
+        "short_title": "Arrêté du 08/12/11",
+        "publication_date": 1323298800
     },
     {
         "aida_page": "41029",
@@ -4007,7 +4513,9 @@
             }
         ],
         "cid": "JORFTEXT000037284611",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 03/08/18",
+        "publication_date": 1533247200
     },
     {
         "aida_page": "43224",
@@ -4021,7 +4529,9 @@
             }
         ],
         "cid": "JORFTEXT000041875990",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 12/05/20",
+        "publication_date": 1589234400
     },
     {
         "aida_page": "43226",
@@ -4040,7 +4550,9 @@
             }
         ],
         "cid": "JORFTEXT000041876039",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 12/05/20",
+        "publication_date": 1589234400
     },
     {
         "aida_page": "43228",
@@ -4064,7 +4576,9 @@
             }
         ],
         "cid": "JORFTEXT000041876133",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 12/05/20",
+        "publication_date": 1589234400
     },
     {
         "aida_page": "4989",
@@ -4075,11 +4589,13 @@
                 "regime": "D",
                 "rubrique": "1310",
                 "alinea": "2.c",
-                "etat": "SUPPRIMEE"
+                "state": "SUPPRIMEE"
             }
         ],
         "cid": "JORFTEXT000000263777",
-        "etat": "ABROGE"
+        "state": "ABROGE",
+        "short_title": "Arrêté du 12/12/05",
+        "publication_date": 1134342000
     },
     {
         "aida_page": "4003",
@@ -4093,7 +4609,9 @@
             }
         ],
         "cid": "JORFTEXT000022865723",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 30/08/10",
+        "publication_date": 1283119200
     },
     {
         "aida_page": "35823",
@@ -4107,7 +4625,9 @@
             }
         ],
         "cid": "JORFTEXT000020008930",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 19/12/08",
+        "publication_date": 1229641200
     },
     {
         "aida_page": "4835",
@@ -4121,7 +4641,9 @@
             }
         ],
         "cid": "JORFTEXT000000464327",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 22/01/07",
+        "publication_date": 1169420400
     },
     {
         "aida_page": "5587",
@@ -4135,7 +4657,9 @@
             }
         ],
         "cid": "JORFTEXT000000208529",
-        "etat": "ABROGE"
+        "state": "ABROGE",
+        "short_title": "Arrêté du 29/12/98",
+        "publication_date": 914886000
     },
     {
         "aida_page": "4591",
@@ -4154,7 +4678,9 @@
             }
         ],
         "cid": "JORFTEXT000018049814",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 28/12/07",
+        "publication_date": 1198796400
     },
     {
         "aida_page": "5455",
@@ -4168,7 +4694,9 @@
             }
         ],
         "cid": "JORFTEXT000000768178",
-        "etat": "ABROGE"
+        "state": "ABROGE",
+        "short_title": "Arrêté du 18/12/00",
+        "publication_date": 977094000
     },
     {
         "aida_page": "42632",
@@ -4182,7 +4710,9 @@
             }
         ],
         "cid": "JORFTEXT000039397758",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 30/10/19",
+        "publication_date": 1572390000
     },
     {
         "aida_page": "5627",
@@ -4196,7 +4726,9 @@
             }
         ],
         "cid": "JORFTEXT000000194255",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 02/06/98",
+        "publication_date": 896738400
     },
     {
         "aida_page": "3489",
@@ -4210,7 +4742,9 @@
             }
         ],
         "cid": "JORFTEXT000025687401",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 27/03/12",
+        "publication_date": 1332799200
     },
     {
         "aida_page": "3491",
@@ -4224,7 +4758,9 @@
             }
         ],
         "cid": "JORFTEXT000025687415",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 27/03/12",
+        "publication_date": 1332799200
     },
     {
         "aida_page": "3749",
@@ -4237,7 +4773,9 @@
             }
         ],
         "cid": "JORFTEXT000024433621",
-        "etat": "ABROGE"
+        "state": "ABROGE",
+        "short_title": "Arrêté du 18/07/11",
+        "publication_date": 1310940000
     },
     {
         "aida_page": "41351",
@@ -4251,7 +4789,9 @@
             }
         ],
         "cid": "JORFTEXT000037518915",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 22/10/18",
+        "publication_date": 1540159200
     },
     {
         "aida_page": "4221",
@@ -4265,7 +4805,9 @@
             }
         ],
         "cid": "JORFTEXT000021334587",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 10/11/09",
+        "publication_date": 1257807600
     },
     {
         "aida_page": "42121",
@@ -4279,7 +4821,9 @@
             }
         ],
         "cid": "JORFTEXT000038528312",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 08/03/19",
+        "publication_date": 1551999600
     },
     {
         "aida_page": "33745",
@@ -4293,7 +4837,9 @@
             }
         ],
         "cid": "JORFTEXT000029964686",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 16/12/14",
+        "publication_date": 1418684400
     },
     {
         "aida_page": "33747",
@@ -4307,7 +4853,9 @@
             }
         ],
         "cid": "JORFTEXT000029964692",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 16/12/14",
+        "publication_date": 1418684400
     },
     {
         "aida_page": "39938",
@@ -4321,7 +4869,9 @@
             }
         ],
         "cid": "JORFTEXT000036126905",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 21/11/17",
+        "publication_date": 1511218800
     },
     {
         "aida_page": "3625",
@@ -4335,7 +4885,9 @@
             }
         ],
         "cid": "JORFTEXT000025014944",
-        "etat": "ABROGE"
+        "state": "ABROGE",
+        "short_title": "Arrêté du 08/12/11",
+        "publication_date": 1323298800
     },
     {
         "aida_page": "41027",
@@ -4349,7 +4901,9 @@
             }
         ],
         "cid": "JORFTEXT000037284579",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 03/08/18",
+        "publication_date": 1533247200
     },
     {
         "aida_page": "41025",
@@ -4363,6 +4917,8 @@
             }
         ],
         "cid": "JORFTEXT000037284510",
-        "etat": "VIGUEUR"
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 03/08/18",
+        "publication_date": 1533247200
     }
 ]
