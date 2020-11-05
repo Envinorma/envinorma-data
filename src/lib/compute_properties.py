@@ -156,10 +156,15 @@ def _get_legifrance_filename(metadata: AMMetadata) -> str:
     return f'data/AM/legifrance_texts/{id_}.json'
 
 
+def _get_structured_am_filename(metadata: AMMetadata) -> str:
+    id_ = get_text_defined_id(metadata)
+    return f'data/AM/structured_texts/{id_}.json'
+
+
 def _download_text_if_absent(metadata: AMMetadata, client: OAuth2Session) -> Optional[LegifranceAPIError]:
     filename = _get_legifrance_filename(metadata)
-    # if os.path.exists(filename):
-    #     return None
+    if os.path.exists(filename):
+        return None
     response = get_current_loda_via_cid_response(metadata.cid, client)
     if 200 <= response.status_code < 300:
         write_json(response.json(), filename)
@@ -183,7 +188,9 @@ def _structure_am(legifrance_text: LegifranceText) -> Tuple[Optional[ArreteMinis
         return None, StructurationError(str(exc), traceback.format_exc())
 
 
-def handle_am(metadata: AMMetadata, client: OAuth2Session) -> Tuple[Optional[ArreteMinisteriel], AMStructurationLog]:
+def handle_am(
+    metadata: AMMetadata, client: OAuth2Session, dump_am: bool = False
+) -> Tuple[Optional[ArreteMinisteriel], AMStructurationLog]:
     api_result = _download_text_if_absent(metadata, client)
     if api_result:
         return None, AMStructurationLog(api_result)
@@ -193,6 +200,8 @@ def handle_am(metadata: AMMetadata, client: OAuth2Session) -> Tuple[Optional[Arr
         return None, AMStructurationLog(api_result, lf_format_error)
     legifrance_text = load_legifrance_text(legifrance_text_json)
     am, structuration_error = _structure_am(legifrance_text)
+    if dump_am and am:
+        write_json(am.as_dict(), _get_structured_am_filename(metadata))
     properties = compute_properties(legifrance_text, am)
     return am, AMStructurationLog(api_result, lf_format_error, structuration_error, properties)
 

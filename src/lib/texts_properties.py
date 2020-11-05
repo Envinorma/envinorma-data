@@ -134,10 +134,10 @@ class AMProperties:
     title_inconsistencies: List[TitleInconsistency]
 
 
-def _extract_am_structure(am: Union[ArreteMinisteriel, StructuredText], prefix: str = '') -> List[str]:
+def extract_am_structure(am: Union[ArreteMinisteriel, StructuredText], prefix: str = '') -> List[str]:
     res: List[str] = []
     for section in am.sections:
-        res += [(f'{prefix}{section.title.text}')] + _extract_am_structure(section, f'|--{prefix}')
+        res += [(f'{prefix}{section.title.text}')] + extract_am_structure(section, f'|--{prefix}')
     return res
 
 
@@ -268,7 +268,7 @@ def _fetch_term(term: str, am: ArreteMinisteriel) -> List[str]:
 
 def _compute_am_properties(am: ArreteMinisteriel) -> AMProperties:
     return AMProperties(
-        '\n'.join(_extract_am_structure(am)),
+        '\n'.join(extract_am_structure(am)),
         count_sections(am),
         count_articles_in_am(am),
         count_tables(am),

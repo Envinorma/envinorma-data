@@ -5,7 +5,7 @@ import os
 import random
 from bs4 import BeautifulSoup
 from collections import Counter
-from dataclasses import dataclass, field
+from dataclasses import asdict, dataclass, field
 from enum import Enum
 from math import sqrt
 from typing import Any, Dict, Iterable, List, Tuple, Optional, TypeVar, Union
@@ -130,6 +130,15 @@ class LegifranceArticle:
     num: Optional[str]
     etat: ArticleStatus
 
+    def as_dict(self):
+        return {
+            'id': self.id,
+            'content': self.content,
+            'intOrdre': self.intOrdre,
+            'num': self.num,
+            'etat': self.etat.value,
+        }
+
 
 @dataclass
 class LegifranceText:
@@ -207,6 +216,12 @@ class StructuredText:
     sections: List['StructuredText']
     legifrance_article: Optional[LegifranceArticle]
 
+    def as_dict(self) -> Dict[str, Any]:
+        res = asdict(self)
+        res['sections'] = [se.as_dict() for se in self.sections]
+        res['legifrance_article'] = self.legifrance_article.as_dict() if self.legifrance_article else None
+        return res
+
 
 @dataclass
 class ArreteMinisteriel:
@@ -214,6 +229,54 @@ class ArreteMinisteriel:
     sections: List[StructuredText]
     visa: List[EnrichedString]
     short_title: str
+
+    def as_dict(self) -> Dict[str, Any]:
+        res = asdict(self)
+        res['sections'] = [section.as_dict() for section in self.sections]
+        return res
+
+
+def load_link(dict_: Dict[str, Any]) -> Link:
+    return Link(dict_['target'], dict_['position'], dict_['content_size'])
+
+
+def load_cell(dict_: Dict[str, Any]) -> Cell:
+    return Cell(load_enriched_string(dict_['content']), dict_['colspan'], dict_['rowspan'])
+
+
+def load_row(dict_: Dict[str, Any]) -> Row:
+    return Row([load_cell(cell) for cell in dict_['cells']], dict_['is_header'])
+
+
+def load_table(dict_: Dict[str, Any]) -> Table:
+    return Table([load_row(row) for row in dict_['rows']])
+
+
+def load_enriched_string(dict_: Dict[str, Any]) -> EnrichedString:
+    links = [load_link(link) for link in dict_['links']]
+    table = load_table(dict_['table']) if dict_['table'] else None
+    return EnrichedString(dict_['text'], links, table)
+
+
+def load_legifrance_article(dict_: Dict[str, Any]) -> LegifranceArticle:
+    return LegifranceArticle(
+        dict_['id'], dict_['content'], dict_['intOrdre'], dict_['num'], ArticleStatus(dict_['etat'])
+    )
+
+
+def load_structured_text(dict_: Dict[str, Any]) -> StructuredText:
+    title = load_enriched_string(dict_['title'])
+    outer_alineas = [load_enriched_string(al) for al in dict_['outer_alineas']]
+    sections = [load_structured_text(sec) for sec in dict_['sections']]
+    legifrance_article = load_legifrance_article(dict_['legifrance_article']) if dict_['legifrance_article'] else None
+    return StructuredText(title, outer_alineas, sections, legifrance_article)
+
+
+def load_arrete_ministeriel(dict_: Dict[str, Any]) -> ArreteMinisteriel:
+    title = load_enriched_string(dict_['title'])
+    sections = [load_structured_text(sec) for sec in dict_['sections']]
+    visa = [load_enriched_string(vu) for vu in dict_['visa']]
+    return ArreteMinisteriel(title, sections, visa, dict_['short_title'])
 
 
 @dataclass
