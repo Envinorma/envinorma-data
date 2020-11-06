@@ -216,6 +216,8 @@ class StructuredText:
     sections: List['StructuredText']
     legifrance_article: Optional[LegifranceArticle]
     active: bool = True
+    reason_inactive: str = ''
+    warnings: List[str] = field(default_factory=list)
 
     def as_dict(self) -> Dict[str, Any]:
         res = asdict(self)

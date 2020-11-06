@@ -134,10 +134,18 @@ class AMProperties:
     title_inconsistencies: List[TitleInconsistency]
 
 
-def extract_am_structure(am: Union[ArreteMinisteriel, StructuredText], prefix: str = '') -> List[str]:
+_TREE_DEPTH_PREFIX = '|--'
+
+
+def extract_am_structure(
+    am: Union[ArreteMinisteriel, StructuredText], paths: Optional[List[int]] = None, with_paths: bool = False
+) -> List[str]:
     res: List[str] = []
-    for section in am.sections:
-        res += [(f'{prefix}{section.title.text}')] + extract_am_structure(section, f'|--{prefix}')
+    paths = paths or []
+    prefix = len(paths) * _TREE_DEPTH_PREFIX
+    for i, section in enumerate(am.sections):
+        section_title = f'{prefix}{section.title.text}' + (' ' + str(paths + [i]) if with_paths else '')
+        res += [section_title] + extract_am_structure(section, paths + [i], with_paths)
     return res
 
 

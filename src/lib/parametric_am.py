@@ -1,9 +1,8 @@
 from copy import copy
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from enum import Enum
 from typing import Any, Dict, KeysView, List, Optional, Set, Tuple, Union
-from lib.am_structure_extraction import ArreteMinisteriel, EnrichedString, LegifranceArticle, StructuredText
-from lib.texts_properties import extract_am_structure
+from lib.am_structure_extraction import ArreteMinisteriel, StructuredText
 
 
 class ParameterType(Enum):
@@ -32,13 +31,13 @@ class ConditionType(Enum):
 
 @dataclass
 class AndCondition:
-    conditions: List['ApplicationCondition']
+    conditions: List['Condition']
     type: ConditionType = ConditionType.AND
 
 
 @dataclass
 class OrCondition:
-    conditions: List['ApplicationCondition']
+    conditions: List['Condition']
     type: ConditionType = ConditionType.OR
 
 
@@ -75,169 +74,88 @@ class Range:
     type: ConditionType = ConditionType.RANGE
 
 
-ApplicationCondition = Union[Equal, Range, Greater, Littler, AndCondition, OrCondition]
+Condition = Union[Equal, Range, Greater, Littler, AndCondition, OrCondition]
+
+Ints = Tuple[int, ...]
 
 
 @dataclass
-class ConditionalText:
-    text: StructuredText
-    condition: ApplicationCondition
+class SectionReference:
+    path: Ints
 
 
 @dataclass
-class AlineaReference:
-    section_path: List[int]
+class EntityReference:
+    section: SectionReference
     outer_alinea_indices: Optional[List[int]]
 
 
 @dataclass
-class ParametrizationSource:
+class ConditionSource:
     explanation: str
-    reference: AlineaReference
+    reference: EntityReference
 
 
 @dataclass
-class TextWithParametricSections:
-    title: EnrichedString
-    outer_alineas: List[EnrichedString]
-    sections: List['ParametricText']
-    legifrance_article: Optional[LegifranceArticle]
+class ApplicationCondition:
+    targeted_entity: EntityReference
+    condition: Condition
+    source: ConditionSource
 
 
 @dataclass
-class ParametricText:
-    default: TextWithParametricSections
-    parametric_versions: List[ConditionalText]
-    parametrization_sources: List[ParametrizationSource]
+class AlternativeSection:
+    targeted_section: SectionReference
+    new_text: StructuredText
+    condition: Condition
+    source: ConditionSource
 
 
 @dataclass
-class ParametricAM:
-    title: EnrichedString
-    visa: List[EnrichedString]
-    sections: List[ParametricText]
-    short_title: str
+class Parametrization:
+    application_conditions: List[ApplicationCondition]
+    alternative_sections: List[AlternativeSection]
+    path_to_conditions: Dict[Ints, List[ApplicationCondition]] = field(init=False)
+    path_to_alternative_sections: Dict[Ints, List[AlternativeSection]] = field(init=False)
+
+    def __post_init__(self):
+        self.path_to_conditions = {}
+        for cd in self.application_conditions:
+            path = cd.targeted_entity.section.path
+            if path not in self.path_to_conditions:
+                self.path_to_conditions[path] = []
+            self.path_to_conditions[path].append(cd)
+
+        self.path_to_alternative_sections = {}
+        for sec in self.alternative_sections:
+            path = sec.targeted_section.path
+            if path not in self.path_to_alternative_sections:
+                self.path_to_alternative_sections[path] = []
+            self.path_to_alternative_sections[path].append(sec)
 
 
 def _generate_bool_condition(parameter_str: str) -> Equal:
     return Equal(Parameter(parameter_str, ParameterType.BOOLEAN), True)
 
 
-def structured_text_to_parametric_text(text: StructuredText) -> ParametricText:
-    return ParametricText(
-        TextWithParametricSections(
-            text.title,
-            text.outer_alineas,
-            [structured_text_to_parametric_text(section) for section in text.sections],
-            text.legifrance_article,
-        ),
-        [],
-        [],
-    )
-
-
-def am_to_parametric_am(am: ArreteMinisteriel) -> ParametricAM:
-    return ParametricAM(
-        am.title, am.visa, [structured_text_to_parametric_text(section) for section in am.sections], am.short_title
-    )
-
-
-def _extract_section_titles(am: Union[ParametricAM, ParametricText], path: List[int]) -> Dict[int, str]:
-    sections = am.sections if isinstance(am, ParametricAM) else am.default.sections
+def _extract_section_titles(am: Union[StructuredText, ArreteMinisteriel], path: List[int]) -> Dict[int, str]:
+    sections = am.sections if isinstance(am, ArreteMinisteriel) else am.sections
     if not path:
-        titles = {i: section.default.title.text for i, section in enumerate(sections)}
+        titles = {i: section.title.text for i, section in enumerate(sections)}
         return titles
     return _extract_section_titles(sections[path[0]], path[1:])
 
 
-def _extract_section(am: Union[ParametricAM, ParametricText], path: List[int]) -> ParametricText:
+def _extract_section(am: Union[StructuredText, ArreteMinisteriel], path: List[int]) -> StructuredText:
     if not path:
-        if isinstance(am, ParametricAM):
+        if isinstance(am, ArreteMinisteriel):
             raise ValueError()
         return am
-    sections = am.sections if isinstance(am, ParametricAM) else am.default.sections
+    sections = am.sections if isinstance(am, ArreteMinisteriel) else am.sections
     return _extract_section(sections[0], path[1:])
 
 
-def _parametric_text_to_structured_text(text: TextWithParametricSections) -> StructuredText:
-    return StructuredText(
-        text.title,
-        text.outer_alineas,
-        [_parametric_text_to_structured_text(section.default) for section in text.sections],
-        text.legifrance_article,
-    )
-
-
-def _condition_text(
-    text: ParametricText, condition: ApplicationCondition, source: ParametrizationSource
-) -> ParametricText:
-    if text.parametric_versions:
-        raise ValueError('Can only add new parametric version.')
-    if text.parametrization_sources:
-        raise ValueError('Can only add new parametrization source.')
-    parametric_version = ConditionalText(_parametric_text_to_structured_text(text.default), condition)
-    return ParametricText(text.default, [parametric_version], [source])
-
-
-def _condition_text_subsection(
-    text: ParametricText, condition: ApplicationCondition, source: ParametrizationSource, path: List[int]
-) -> ParametricText:
-    if not path:
-        return _condition_text(text, condition, source)
-    default = copy(text.default)
-    default.sections = [
-        _condition_text_subsection(section, condition, source, path[1:]) if i == path[0] else section
-        for i, section in enumerate(default.sections)
-    ]
-    return ParametricText(default, text.parametric_versions, text.parametrization_sources)
-
-
-def _condition_am_subsection(
-    am: ParametricAM, condition: ApplicationCondition, source: ParametrizationSource, path: List[int]
-) -> ParametricAM:
-    if not path:
-        raise ValueError('Path can\'t be empty.')
-    sections = [
-        _condition_text_subsection(section, condition, source, path[1:]) if i == path[0] else section
-        for i, section in enumerate(am.sections)
-    ]
-    return ParametricAM(am.title, am.visa, sections, am.short_title)
-
-
-def _add_conditional_version(
-    text: ParametricText, new_section: ConditionalText, source: Optional[ParametrizationSource]
-) -> ParametricText:
-    final_text = copy(text)
-    text.parametric_versions.append(new_section)
-    if source:
-        text.parametrization_sources.append(source)
-    return final_text
-
-
-def _add_conditional_version_subsection(
-    text: ParametricText, new_section: ConditionalText, source: Optional[ParametrizationSource], path: List[int]
-) -> ParametricText:
-    if not path:
-        return _add_conditional_version(text, new_section, source)
-    default = copy(text.default)
-    default.sections = [
-        _add_conditional_version_subsection(section, new_section, source, path[1:]) if i == path[0] else section
-        for i, section in enumerate(default.sections)
-    ]
-    return ParametricText(default, text.parametric_versions, text.parametrization_sources)
-
-
-def _add_conditional_version_in_am(
-    am: ParametricAM, new_section: ConditionalText, source: Optional[ParametrizationSource], path: List[int]
-) -> ParametricAM:
-    sections = [
-        _add_conditional_version_subsection(section, new_section, source, path[1:]) if i == path[0] else section
-        for i, section in enumerate(am.sections)
-    ]
-    return ParametricAM(am.title, am.visa, sections, am.short_title)
-
-
-def condition_to_str(condition: ApplicationCondition) -> str:
+def condition_to_str(condition: Condition) -> str:
     if isinstance(condition, Equal):
         return f'Si {condition.parameter.id} == {condition.target}:'
     if isinstance(condition, Littler):
@@ -249,72 +167,32 @@ def condition_to_str(condition: ApplicationCondition) -> str:
     raise NotImplementedError(f'stringifying condition {condition.type} is not implemented yet.')
 
 
-def _extract_conditional_text_structure(
-    text: ConditionalText, depth: int, with_paths: bool, path: List[int]
-) -> List[str]:
-    prefix = '|--' * depth
-    return [
-        prefix + condition_to_str(text.condition) + ' ' + (str(path) if with_paths else ''),
-        prefix + '|--' + text.text.title.text,
-        *extract_am_structure(text.text, '|--' * (depth + 2)),
-    ]
-
-
-def _extract_parametrized_text_structure(
-    text: ParametricText, depth: int, with_paths: bool, path_prefix: List[int]
-) -> List[str]:
-    prefix = '|--' * depth
-    if not text.parametric_versions:
-        return [
-            f'{prefix}{text.default.title.text}' + ' ' + (str(path_prefix) if with_paths else ''),
-            *[
-                str_
-                for i, section in enumerate(text.default.sections)
-                for str_ in _extract_parametrized_text_structure(section, depth + 1, with_paths, path_prefix + [i])
-            ],
-        ]
-    return [
-        str_
-        for i, text in enumerate(text.parametric_versions)
-        for str_ in _extract_conditional_text_structure(text, depth, with_paths, path_prefix + [i])
-    ]
-
-
-def _extract_parametric_am_structure(am: ParametricAM, with_paths: bool) -> List[str]:
-    return [
-        am.title.text,
-        *[
-            str_
-            for i, section in enumerate(am.sections)
-            for str_ in _extract_parametrized_text_structure(section, 1, with_paths, [i])
-        ],
-    ]
-
-
-def _extract_parameters_from_condition(condition: ApplicationCondition) -> List[Parameter]:
+def _extract_parameters_from_condition(condition: Condition) -> List[Parameter]:
     if isinstance(condition, (OrCondition, AndCondition)):
         return [param for cd in condition.conditions for param in _extract_parameters_from_condition(cd)]
     return [condition.parameter]
 
 
-def _extract_parameters_from_text(text: ParametricText) -> Set[Parameter]:
-    if not text.parametric_versions:
-        return {str_ for section in text.default.sections for str_ in _extract_parameters_from_text(section)}
-    return {cd for txt in text.parametric_versions for cd in _extract_parameters_from_condition(txt.condition)}
+def _extract_parameters_from_parametrization(parametrization: Parametrization) -> Set[Parameter]:
+    application_conditions = {
+        cd
+        for app_cond in parametrization.application_conditions
+        for cd in _extract_parameters_from_condition(app_cond.condition)
+    }
+    alternative_sections = {
+        cd
+        for alt_sec in parametrization.alternative_sections
+        for cd in _extract_parameters_from_condition(alt_sec.condition)
+    }
+    return application_conditions.union(alternative_sections)
 
 
-def _extract_parameters(am: ParametricAM) -> Set[Parameter]:
-    return {str_ for section in am.sections for str_ in _extract_parameters_from_text(section)}
-
-
-def _any_parameter_is_undefined(
-    conditional_texts: List[ConditionalText], defined_parameters: KeysView[Parameter]
-) -> bool:
-    parameters = {cd for text in conditional_texts for cd in _extract_parameters_from_condition(text.condition)}
+def _any_parameter_is_undefined(parametrization: Parametrization, defined_parameters: KeysView[Parameter]) -> bool:
+    parameters = _extract_parameters_from_parametrization(parametrization)
     return any([parameter not in defined_parameters for parameter in parameters])
 
 
-def _condition_is_fulfilled(condition: ApplicationCondition, parameter_values: Dict[Parameter, Any]) -> bool:
+def _condition_is_fulfilled(condition: Condition, parameter_values: Dict[Parameter, Any]) -> bool:
     if isinstance(condition, AndCondition):
         return all([_condition_is_fulfilled(cd, parameter_values) for cd in condition.conditions])
     if isinstance(condition, OrCondition):
@@ -331,21 +209,62 @@ def _condition_is_fulfilled(condition: ApplicationCondition, parameter_values: D
     raise NotImplementedError('Condition {condition.type} not implemented yet.')
 
 
-def _generate_inactive_section(title: EnrichedString) -> StructuredText:
-    return StructuredText(title, [], [], None, False)
+def _generate_warning_missing_value(condition: ApplicationCondition) -> str:
+    parameters = _extract_parameters_from_condition(condition.condition)
+    if len(parameters) == 1:
+        parameter = list(parameters)[0]
+        return f'Ce paragraphe pourrait ne pas être applicable selon la valeur du paramètre {parameter.id}.'
+    ids = ', '.join([param.id for param in parameters])
+    return f'Ce paragraphe pourrait ne pas être applicable selon la valeur des paramètres suivants: {ids}.'
 
 
-def _apply_parameter_values_in_text(text: ParametricText, parameter_values: Dict[Parameter, Any]) -> StructuredText:
-    if not text.parametric_versions or _any_parameter_is_undefined(text.parametric_versions, parameter_values.keys()):
-        sections = [_apply_parameter_values_in_text(sec, parameter_values) for sec in text.default.sections]
-        return StructuredText(text.default.title, text.default.outer_alineas, sections, text.default.legifrance_article)
-    for parametric_version in text.parametric_versions:
-        if _condition_is_fulfilled(parametric_version.condition, parameter_values):
-            return parametric_version.text
-    return _generate_inactive_section(text.default.title)
+def _generate_reason_inactive(condition: Condition, parameter_values: Dict[Parameter, Any]) -> str:
+    if isinstance(condition, AndCondition):
+        unfulfilled_conditions = [
+            condition_to_str(subcondition)
+            for subcondition in condition.conditions
+            if not _condition_is_fulfilled(subcondition, parameter_values)
+        ]
+        if len(unfulfilled_conditions) == 1:
+            return f'La condition d\'application suivante n\'est respectée: {unfulfilled_conditions[0]}'
+        return 'Les conditions d\'application suivantes ne sont pas respectées: ' + ', '.join(unfulfilled_conditions)
+    if isinstance(condition, OrCondition):
+        str_ = [condition_to_str(subcondition) for subcondition in condition.conditions]
+        if len(str_) == 1:
+            return f'La condition d\'application suivante n\'est respectée: {str_[0]}'
+        return 'Aucune des conditions d\'application suivantes ne sont pas respectées: ' + ', '.join(str_)
+    parameter = condition.parameter
+    if isinstance(condition, Equal):
+        value = parameter_values[parameter]
+        return f'Le paramètre {parameter.id} n\'est pas égal à {value}'
+    raise NotImplementedError(f'stringifying condition {condition.type} is not implemented yet.')
 
 
-def _apply_parameter_values_in_am(am: ParametricAM, parameter_values: Dict[Parameter, Any]) -> ArreteMinisteriel:
-    sections = [_apply_parameter_values_in_text(section, parameter_values) for section in am.sections]
-    return ArreteMinisteriel(am.title, sections, am.visa, am.short_title)
+def _apply_parameter_values_in_text(
+    text: StructuredText, parametrization: Parametrization, parameter_values: Dict[Parameter, Any], path: Ints
+) -> StructuredText:
+    new_text = copy(text)
+    new_text.sections = [
+        _apply_parameter_values_in_text(section, parametrization, parameter_values, path + (i,))
+        for i, section in enumerate(text.sections)
+    ]
+    for condition in parametrization.path_to_conditions.get(path) or []:
+        if _any_parameter_is_undefined(parametrization, parameter_values.keys()):
+            new_text.warnings.append(_generate_warning_missing_value(condition))
+        else:
+            if not _condition_is_fulfilled(condition.condition, parameter_values):
+                new_text.active = False
+                new_text.reason_inactive = _generate_reason_inactive(condition.condition, parameter_values)
+    return new_text
+
+
+def _apply_parameter_values_to_am(
+    am: ArreteMinisteriel, parametrization: Parametrization, parameter_values: Dict[Parameter, Any]
+) -> ArreteMinisteriel:
+    new_am = copy(am)
+    new_am.sections = [
+        _apply_parameter_values_in_text(section, parametrization, parameter_values, (i,))
+        for i, section in enumerate(am.sections)
+    ]
+    return new_am
 
