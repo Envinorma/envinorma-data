@@ -215,6 +215,7 @@ class StructuredText:
     outer_alineas: List[EnrichedString]
     sections: List['StructuredText']
     legifrance_article: Optional[LegifranceArticle]
+    active: bool = True
 
     def as_dict(self) -> Dict[str, Any]:
         res = asdict(self)
