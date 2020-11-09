@@ -1,12 +1,15 @@
 import json
 import re
+from copy import deepcopy
+from collections import defaultdict
+from dataclasses import dataclass, asdict
+from typing import Any, DefaultDict, Dict, List, Set, Optional, Tuple
+
 import requests
 from bs4 import BeautifulSoup, Tag
-from collections import defaultdict
-from copy import deepcopy
-from dataclasses import dataclass
+from tqdm import tqdm
+
 from lib.am_structure_extraction import EnrichedString, Link, ArreteMinisteriel, StructuredText
-from typing import Any, DefaultDict, Dict, List, Set, Optional, Tuple
 
 _AIDA_BASE_URL = 'https://aida.ineris.fr/consultation_document/'
 _AIDA_URL = _AIDA_BASE_URL + '{}'
@@ -267,10 +270,6 @@ def transform_aida_links_to_github_markdown_links(
 
 
 def scrap_all_anchors() -> None:
-    import json
-    from tqdm import tqdm
-    from dataclasses import asdict
-
     arretes_ministeriels = json.load(open('data/AM/arretes_ministeriels.json'))
     page_ids = [am['aida_page'] for am in arretes_ministeriels]
     page_id_to_anchors_json: Dict[str, List[Dict[str, Any]]] = {}

@@ -267,4 +267,3 @@ def _apply_parameter_values_to_am(
         for i, section in enumerate(am.sections)
     ]
     return new_am
-

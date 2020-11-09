@@ -1,15 +1,19 @@
-import bs4
 import copy
 import json
 import os
 import random
-from bs4 import BeautifulSoup
+import traceback
+
 from collections import Counter
 from dataclasses import asdict, dataclass, field
 from enum import Enum
 from math import sqrt
 from typing import Any, Dict, Iterable, List, Tuple, Optional, TypeVar, Union
+
+import bs4
+from bs4 import BeautifulSoup
 from tqdm import tqdm
+
 from lib.structure_detection import NumberingPattern, detect_patterns_if_exists
 
 
@@ -836,8 +840,6 @@ def test(lf_text_filename: str) -> ArreteMinisteriel:
 
 
 def transform_and_write_test_am(filename: str, output_filename: Optional[str] = None):
-    from dataclasses import asdict
-
     if not output_filename:
         raise ValueError()
     res = test(filename)
@@ -845,10 +847,6 @@ def transform_and_write_test_am(filename: str, output_filename: Optional[str] = 
 
 
 def transform_all_available_AM():
-    import os
-    import traceback
-    from tqdm import tqdm
-
     input_folder = 'data/AM/legifrance_texts'
     output_folder = 'data/AM/structured_texts'
     file_to_error = {}
@@ -885,4 +883,3 @@ def _load_all_legifrance_texts() -> Dict[str, LegifranceText]:
         except AMStructurationError as exc:
             print(file_, exc)
     return res
-

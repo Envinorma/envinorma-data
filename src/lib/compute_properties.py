@@ -4,10 +4,12 @@ import traceback
 from dataclasses import dataclass, asdict
 from datetime import datetime
 from enum import Enum
-from requests_oauthlib import OAuth2Session
 from typing import List, Dict, Optional, Tuple, Union
+
+from requests_oauthlib import OAuth2Session
 from tqdm import tqdm
 
+from lib.aida import Hyperlink, Anchor
 from lib.legifrance_API import get_current_loda_via_cid_response, get_legifrance_client
 from lib.texts_properties import LegifranceText, TextProperties, compute_properties
 from lib.am_structure_extraction import (
@@ -17,7 +19,6 @@ from lib.am_structure_extraction import (
     check_legifrance_dict,
     AMStructurationError,
 )
-from lib.aida import Hyperlink, Anchor
 
 
 class Regime(Enum):
@@ -227,4 +228,3 @@ def handle_all_am(dump_log: bool = True) -> Tuple[Data, Dict[str, AMStructuratio
     if dump_log:
         write_json({cid: asdict(log) for cid, log in cid_to_log.items()}, 'data/AM/structuration_log.json', safe=True)
     return data, cid_to_log, cid_to_am
-

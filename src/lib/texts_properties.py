@@ -1,7 +1,8 @@
 import re
-from bs4 import BeautifulSoup
 from dataclasses import dataclass
 from typing import Optional, Tuple, Union, List
+
+from bs4 import BeautifulSoup
 
 from lib.am_structure_extraction import (
     ArreteMinisteriel,

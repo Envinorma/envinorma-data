@@ -1,8 +1,9 @@
 import json
 import os
-import requests
 from datetime import datetime
 from typing import Dict, Optional
+
+import requests
 from requests_oauthlib import OAuth2Session
 from tqdm import tqdm
 
@@ -105,6 +106,5 @@ def download_all_lf_texts() -> None:
         if 'nor' in text and 'cid' in text:
             try:
                 download_text(text['cid'], text['nor'] + '.json', client)
-            except Exception as exc:
+            except Exception as exc:  # pylint: disable=broad-except
                 print(text['cid'], text['nor'], str(exc))
-

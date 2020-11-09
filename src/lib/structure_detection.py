@@ -1,7 +1,8 @@
-from lib.numbering_exceptions import EXCEPTION_PREFIXES, MAX_PREFIX_LEN
 import re
-from typing import Dict, Optional, List, Set
 from enum import Enum
+from typing import Dict, Optional, List, Set
+
+from lib.numbering_exceptions import EXCEPTION_PREFIXES, MAX_PREFIX_LEN
 
 
 class NumberingPattern(Enum):
@@ -224,4 +225,3 @@ def get_first_match(title: str, prefixes: List[str]) -> int:
 
 def get_matched_strs(strs: List[str], pattern: NumberingPattern) -> List[bool]:
     return [_smart_detect_pattern(str_) == pattern for str_ in strs]
-
