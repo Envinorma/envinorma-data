@@ -1,17 +1,30 @@
+import random
+from copy import copy
 from datetime import datetime
+from string import ascii_letters
+
+from lib.data import ArreteMinisteriel, EnrichedString, StructuredText
 from lib.parametric_am import (
+    AlternativeSection,
+    ApplicationCondition,
+    ConditionSource,
+    EntityReference,
     Equal,
     Greater,
     Littler,
     ParameterType,
+    Parametrization,
     Range,
+    Parameter,
+    SectionReference,
     _mean,
     _extract_interval_midpoints,
     _generate_options_dict,
     _extract_sorted_targets,
     _generate_combinations,
     _change_value,
-    Parameter,
+    _apply_parameter_values_to_am,
+    _extract_parameters_from_parametrization,
 )
 
 
@@ -88,3 +101,118 @@ def test_generate_combinations():
     assert ('test_2 != True', 'test_1 < a') in res
     assert ('test_2 == True', 'test_1 >= a') in res
     assert ('test_2 != True', 'test_1 >= a') in res
+
+
+def _random_string() -> str:
+    return ''.join([random.choice(ascii_letters) for _ in range(9)])
+
+
+def _random_enriched_string() -> EnrichedString:
+    return EnrichedString(_random_string(), [], None)
+
+
+def test_apply_parameter_values_to_am_whole_arrete():
+    sections = [
+        StructuredText(_random_enriched_string(), [EnrichedString('Initial version 1')], [], None, None),
+        StructuredText(_random_enriched_string(), [EnrichedString('Initial version 2')], [], None, None),
+        StructuredText(
+            EnrichedString('Conditions d\'application', []),
+            [EnrichedString('Cet arrete ne s\'applique qu\'aux nouvelles installations.')],
+            [],
+            None,
+            None,
+        ),
+    ]
+    am = ArreteMinisteriel(_random_enriched_string(), sections, [], '', None)
+
+    parameter = Parameter('nouvelle-installation', ParameterType.BOOLEAN)
+    condition = Equal(parameter, True)
+    source = ConditionSource('', EntityReference(SectionReference((2,)), None, False))
+    parametrization = Parametrization(
+        [ApplicationCondition(EntityReference(SectionReference(tuple()), None, True), condition, source)], []
+    )
+
+    new_am_1 = _apply_parameter_values_to_am(am, parametrization, {parameter: False})
+    assert not new_am_1.applicability.active
+
+    new_am_2 = _apply_parameter_values_to_am(am, parametrization, {parameter: True})
+    assert new_am_2.applicability.active
+
+    new_am_3 = _apply_parameter_values_to_am(am, parametrization, {})
+    assert len(new_am_3.applicability.warnings) == 1
+
+
+def test_apply_parameter_values_to_am():
+    sections = [
+        StructuredText(EnrichedString('Art. 1', []), [EnrichedString('Initial version 1')], [], None, None),
+        StructuredText(EnrichedString('Art. 2', []), [EnrichedString('Initial version 2')], [], None, None),
+        StructuredText(
+            EnrichedString('Conditions d\'application', []),
+            [
+                EnrichedString('L\'article 1 ne s\'applique qu\'aux nouvelles installations'),
+                EnrichedString('Pour les installations existantes, l\'article 2 est remplacé par "version modifiée"'),
+            ],
+            [],
+            None,
+            None,
+        ),
+    ]
+    am = ArreteMinisteriel(_random_enriched_string(), sections, [], '', None)
+
+    parameter = Parameter('nouvelle-installation', ParameterType.BOOLEAN)
+    condition = Equal(parameter, True)
+    source = ConditionSource('', EntityReference(SectionReference((2,)), None, False))
+    new_text = StructuredText(EnrichedString('Art. 2', []), [EnrichedString('version modifiée')], [], None, None)
+    parametrization = Parametrization(
+        [ApplicationCondition(EntityReference(SectionReference((0,)), None), condition, source)],
+        [AlternativeSection(SectionReference((1,)), new_text, condition, source)],
+    )
+
+    new_am_1 = _apply_parameter_values_to_am(am, parametrization, {parameter: False})
+    assert not new_am_1.sections[0].applicability.active
+    assert new_am_1.sections[1].applicability.modified
+    assert new_am_1.sections[1].outer_alineas[0].text == 'version modifiée'
+
+    new_am_2 = _apply_parameter_values_to_am(am, parametrization, {parameter: True})
+    assert new_am_2.sections[0].applicability.active
+    assert not new_am_2.sections[1].applicability.modified
+
+    new_am_3 = _apply_parameter_values_to_am(am, parametrization, {})
+    assert len(new_am_3.sections[0].applicability.warnings) == 1
+    assert len(new_am_3.sections[1].applicability.warnings) == 1
+
+
+def test_extract_parameters_from_parametrization():
+    parameter_1 = Parameter('nouvelle-installation', ParameterType.BOOLEAN)
+    condition_1 = Equal(parameter_1, True)
+    parameter_2 = Parameter('nouvelle-installation', ParameterType.BOOLEAN)
+    condition_2 = Equal(parameter_2, True)
+    source = ConditionSource('', EntityReference(SectionReference((2,)), None, False))
+    new_text = StructuredText(EnrichedString('Art. 2', []), [EnrichedString('version modifiée')], [], None, None)
+    parametrization = Parametrization(
+        [ApplicationCondition(EntityReference(SectionReference((0,)), None), condition_1, source)],
+        [AlternativeSection(SectionReference((1,)), new_text, condition_2, source)],
+    )
+
+    parameters = _extract_parameters_from_parametrization(parametrization)
+    assert len(parameters) == 1
+    assert list(parameters)[0].id == 'nouvelle-installation'
+
+
+def test_extract_parameters_from_parametrization_2():
+    parameter_1 = Parameter('nouvelle-installation', ParameterType.BOOLEAN)
+    condition_1 = Equal(parameter_1, True)
+    parameter_2 = Parameter('nouvelle-installation-2', ParameterType.BOOLEAN)
+    condition_2 = Equal(parameter_2, True)
+    source = ConditionSource('', EntityReference(SectionReference((2,)), None, False))
+    new_text = StructuredText(EnrichedString('Art. 2', []), [EnrichedString('version modifiée')], [], None, None)
+    parametrization = Parametrization(
+        [ApplicationCondition(EntityReference(SectionReference((0,)), None), condition_1, source)],
+        [AlternativeSection(SectionReference((1,)), new_text, condition_2, source)],
+    )
+
+    parameters = _extract_parameters_from_parametrization(parametrization)
+    assert len(parameters) == 2
+    assert copy(parameter_1) in parameters
+    assert copy(parameter_2) in parameters
+

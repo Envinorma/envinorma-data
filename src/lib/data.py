@@ -107,7 +107,9 @@ class EnrichedString:
 @dataclass
 class Applicability:
     active: bool
-    reason_inactive: str
+    reason_inactive: Optional[str] = None
+    modified: bool = False
+    reason_modified: Optional[str] = None
     warnings: List[str] = field(default_factory=list)
 
     def as_dict(self) -> Dict[str, Any]:

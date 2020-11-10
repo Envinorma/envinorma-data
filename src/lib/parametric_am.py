@@ -3,7 +3,7 @@ from dataclasses import dataclass, field, asdict
 from datetime import datetime, timedelta
 from enum import Enum
 from typing import Any, Dict, KeysView, List, Optional, Set, Tuple, Union
-from lib.data import ArreteMinisteriel, StructuredText, load_structured_text
+from lib.data import Applicability, ArreteMinisteriel, EnrichedString, StructuredText, load_structured_text
 
 
 class ParameterType(Enum):
@@ -397,8 +397,8 @@ def _extract_parameters_from_parametrization(parametrization: Parametrization) -
     return application_conditions.union(alternative_sections)
 
 
-def _any_parameter_is_undefined(parametrization: Parametrization, defined_parameters: KeysView[Parameter]) -> bool:
-    parameters = _extract_parameters_from_parametrization(parametrization)
+def _any_parameter_is_undefined(condition: Condition, defined_parameters: KeysView[Parameter]) -> bool:
+    parameters = _extract_parameters_from_condition(condition)
     return any([parameter not in defined_parameters for parameter in parameters])
 
 
@@ -416,11 +416,13 @@ def _condition_is_fulfilled(condition: Condition, parameter_values: Dict[Paramet
         if condition.strict:
             return value > condition.target
         return value >= condition.target
-    raise NotImplementedError('Condition {condition.type} not implemented yet.')
+    if isinstance(condition, Equal):
+        return value == condition.target
+    raise NotImplementedError(f'Condition {type(condition)} not implemented yet.')
 
 
-def _generate_warning_missing_value(condition: ApplicationCondition) -> str:
-    parameters = _extract_parameters_from_condition(condition.condition)
+def _generate_warning_missing_value(condition: Condition) -> str:
+    parameters = _extract_parameters_from_condition(condition)
     if len(parameters) == 1:
         parameter = list(parameters)[0]
         return f'Ce paragraphe pourrait ne pas être applicable selon la valeur du paramètre {parameter.id}.'
@@ -452,25 +454,94 @@ def _generate_reason_inactive(condition: Condition, parameter_values: Dict[Param
         return f'Le paramètre {parameter.id} est supérieur à {condition.target}'
     if isinstance(condition, Range):
         return f'Le paramètre {parameter.id} n\'est pas entre {condition.left} et {condition.right}'
-    raise NotImplementedError(f'stringifying condition {condition.type} is not implemented yet.')
+    raise NotImplementedError(f'stringifying condition {type(condition)} is not implemented yet.')
+
+
+def _compute_applicability(condition: ApplicationCondition, parameter_values: Dict[Parameter, Any]) -> Applicability:
+    result = Applicability(True, '', False)
+    if _any_parameter_is_undefined(condition.condition, parameter_values.keys()):
+        result.warnings.append(_generate_warning_missing_value(condition.condition))
+    else:
+        if not _condition_is_fulfilled(condition.condition, parameter_values):
+            result.active = False
+            result.reason_inactive = _generate_reason_inactive(condition.condition, parameter_values)
+    return result
+
+
+def _merge_applicabilities(applicabilities: List[Applicability]) -> Applicability:
+    all_active = all([app.active for app in applicabilities])
+    reason_inactive = '\n'.join([app.reason_inactive for app in applicabilities if app.reason_inactive])
+    warnings = [warn for app in applicabilities for warn in app.warnings]
+    return Applicability(all_active, reason_inactive, False, warnings=warnings)
+
+
+def _compute_applicability_alternative_section(
+    section: AlternativeSection, parameter_values: Dict[Parameter, Any]
+) -> Applicability:
+    result = Applicability(True, None, False, None, [])
+    if _any_parameter_is_undefined(section.condition, parameter_values.keys()):
+        result.warnings.append(_generate_warning_missing_value(section.condition))
+    else:
+        if not _condition_is_fulfilled(section.condition, parameter_values):
+            result.modified = True
+            result.reason_modified = _generate_reason_inactive(section.condition, parameter_values)
+    return result
+
+
+def _find_index_modified(applicabilities: List[Applicability]) -> int:
+    for i, app in enumerate(applicabilities):
+        if app.modified:
+            return i
+    raise NotImplementedError('No modified applicability found.')
+
+
+def _build_alternative_text(
+    text: StructuredText, alternative_sections: List[AlternativeSection], parameter_values: Dict[Parameter, Any]
+) -> StructuredText:
+    applicabilities = [
+        _compute_applicability_alternative_section(section, parameter_values) for section in alternative_sections
+    ]
+    modified = [app for app in applicabilities if app.modified]
+    warnings = [warn for app in applicabilities for warn in app.warnings]
+    if len(modified) >= 2:
+        raise NotImplementedError('Cannot apply 2 applicable modifications on one section.')
+    if len(modified) == 0:
+        new_text = copy(text)
+        new_text.applicability = Applicability(True, None, False, None, warnings)
+        return new_text
+    index_modified = _find_index_modified(applicabilities)
+    new_text = alternative_sections[index_modified].new_text
+    new_text.applicability = Applicability(True, None, True, modified[0].reason_modified, warnings=warnings)
+    return new_text
 
 
 def _apply_parameter_values_in_text(
     text: StructuredText, parametrization: Parametrization, parameter_values: Dict[Parameter, Any], path: Ints
 ) -> StructuredText:
+    application_conditions = parametrization.path_to_conditions.get(path) or []
+    alternative_sections = parametrization.path_to_alternative_sections.get(path) or []
+    if application_conditions and alternative_sections:
+        raise NotImplementedError('Cannot apply conditions and alternative sections on one section.')
+
+    if alternative_sections:
+        return _build_alternative_text(text, alternative_sections, parameter_values)
+
     new_text = copy(text)
     new_text.sections = [
         _apply_parameter_values_in_text(section, parametrization, parameter_values, path + (i,))
         for i, section in enumerate(text.sections)
     ]
-    for condition in parametrization.path_to_conditions.get(path) or []:
-        if _any_parameter_is_undefined(parametrization, parameter_values.keys()):
-            new_text.warnings.append(_generate_warning_missing_value(condition))
-        else:
-            if not _condition_is_fulfilled(condition.condition, parameter_values):
-                new_text.active = False
-                new_text.reason_inactive = _generate_reason_inactive(condition.condition, parameter_values)
+    if application_conditions:
+        applicabilities = [_compute_applicability(condition, parameter_values) for condition in application_conditions]
+        new_text.applicability = _merge_applicabilities(applicabilities)
     return new_text
+
+
+def _compute_whole_text_applicability(
+    application_conditions: List[ApplicationCondition], parameter_values: Dict[Parameter, Any]
+) -> Applicability:
+    applicabilities = [_compute_applicability(condition, parameter_values) for condition in application_conditions]
+    return _merge_applicabilities(applicabilities)
 
 
 def _apply_parameter_values_to_am(
@@ -481,6 +552,9 @@ def _apply_parameter_values_to_am(
         _apply_parameter_values_in_text(section, parametrization, parameter_values, (i,))
         for i, section in enumerate(am.sections)
     ]
+    new_am.applicability = _compute_whole_text_applicability(
+        parametrization.path_to_conditions.get(tuple()) or [], parameter_values
+    )
     return new_am
 
 
@@ -635,33 +709,42 @@ def _build_simple_parametrization(
 def _build_TREP1900331A_parametrization() -> Parametrization:
     new_articles = {
         tuple([3, 3, 1]): StructuredText(
-            title='',
+            title=EnrichedString(''),
             outer_alineas=[
-                'Rétention et isolement.',
-                'Toutes mesures sont prises pour recueillir l’ensemble des eaux et écoulements'
-                ' susceptibles d’être pollués lors d’un sinistre, y compris les eaux utilisées'
-                ' lors d’un incendie, afin que celles-ci soient récupérées ou traitées afin de'
-                ' prévenir toute pollution des sols, des égouts, des cours d’eau ou du milieu '
-                'naturel.',
-                'En cas de recours à des systèmes de relevage autonomes, l’exploitant est en m'
-                'esure de justifier à tout instant d’un entretien et d’une maintenance rigoure'
-                'ux de ces dispositifs. Des tests réguliers sont par ailleurs menés sur ces éq'
-                'uipements.',
-                'En cas de confinement interne, les orifices d’écoulement sont en position fer'
-                'mée par défaut. En cas de confinement externe, les orifices d’écoulement issu'
-                's de ces dispositifs sont munis d’un dispositif automatique d’obturation pour'
-                ' assurer ce confinement lorsque des eaux susceptibles d’être pollués y sont p'
-                'ortées. Tout moyen est mis en place pour éviter la propagation de l’incendie '
-                'par ces écoulements.',
-                'Des dispositifs permettant l’obturation des réseaux d’évacuation des eaux de '
-                'ruissellement sont implantés de sorte à maintenir sur le site les eaux d’exti'
-                'nction d’un sinistre ou les épandages accidentels. Ils sont clairement signal'
-                'és et facilement accessibles et peuvent être mis en œuvre dans des délais bre'
-                'fs et à tout moment. Une consigne définit les modalités de mise en œuvre de c'
-                'es dispositifs. Cette consigne est affichée à l’accueil de l’établissement.',
+                EnrichedString('Rétention et isolement.'),
+                EnrichedString(
+                    'Toutes mesures sont prises pour recueillir l’ensemble des eaux et écoulements'
+                    ' susceptibles d’être pollués lors d’un sinistre, y compris les eaux utilisées'
+                    ' lors d’un incendie, afin que celles-ci soient récupérées ou traitées afin de'
+                    ' prévenir toute pollution des sols, des égouts, des cours d’eau ou du milieu '
+                    'naturel.'
+                ),
+                EnrichedString(
+                    'En cas de recours à des systèmes de relevage autonomes, l’exploitant est en m'
+                    'esure de justifier à tout instant d’un entretien et d’une maintenance rigoure'
+                    'ux de ces dispositifs. Des tests réguliers sont par ailleurs menés sur ces éq'
+                    'uipements.'
+                ),
+                EnrichedString(
+                    'En cas de confinement interne, les orifices d’écoulement sont en position fer'
+                    'mée par défaut. En cas de confinement externe, les orifices d’écoulement issu'
+                    's de ces dispositifs sont munis d’un dispositif automatique d’obturation pour'
+                    ' assurer ce confinement lorsque des eaux susceptibles d’être pollués y sont p'
+                    'ortées. Tout moyen est mis en place pour éviter la propagation de l’incendie '
+                    'par ces écoulements.'
+                ),
+                EnrichedString(
+                    'Des dispositifs permettant l’obturation des réseaux d’évacuation des eaux de '
+                    'ruissellement sont implantés de sorte à maintenir sur le site les eaux d’exti'
+                    'nction d’un sinistre ou les épandages accidentels. Ils sont clairement signal'
+                    'és et facilement accessibles et peuvent être mis en œuvre dans des délais bre'
+                    'fs et à tout moment. Une consigne définit les modalités de mise en œuvre de c'
+                    'es dispositifs. Cette consigne est affichée à l’accueil de l’établissement.'
+                ),
             ],
             sections=[],
             legifrance_article=None,
+            applicability=None,
         )
     }
     return _build_simple_parametrization(
