@@ -1,5 +1,5 @@
 from lib.data import ArreteMinisteriel, EnrichedString, StructuredText, Topic
-from lib.am_enriching import add_prescriptive_power, add_topics
+from lib.am_enriching import remove_prescriptive_power, add_topics
 
 
 def test_add_topics():
@@ -13,7 +13,7 @@ def test_add_topics():
     assert am_with_topics.sections[0].sections[0].annotations.topic == Topic.INCENDIE
     assert am_with_topics.sections[1].annotations.topic == Topic.BRUIT
 
-    am_with_non_prescriptive = add_prescriptive_power(am_with_topics, {(1,)})
+    am_with_non_prescriptive = remove_prescriptive_power(am_with_topics, {(1,)})
     assert am_with_non_prescriptive.sections[0].annotations.prescriptive
     assert am_with_non_prescriptive.sections[0].sections[0].annotations.prescriptive
     assert not am_with_non_prescriptive.sections[1].annotations.prescriptive

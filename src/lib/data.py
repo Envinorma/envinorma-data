@@ -123,6 +123,9 @@ class Applicability:
 class Topic(Enum):
     INCENDIE = 'INCENDIE'
     BRUIT = 'BRUIT'
+    EAU = 'EAU'
+    AIR = 'AIR'
+    DECHETS = 'DECHETS'
 
 
 @dataclass

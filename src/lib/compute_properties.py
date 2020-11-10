@@ -210,10 +210,11 @@ def handle_am(
 def write_json(obj: Union[Dict, List], filename: str, safe: bool = False) -> None:
     if not safe:
         json.dump(obj, open(filename, 'w'), indent=4, sort_keys=True, ensure_ascii=False)
-    try:
-        json.dump(obj, open(filename, 'w'), indent=4, sort_keys=True, ensure_ascii=False)
-    except Exception:  # pylint: disable=broad-except
-        print(traceback.format_exc())
+    else:
+        try:
+            json.dump(obj, open(filename, 'w'), indent=4, sort_keys=True, ensure_ascii=False)
+        except Exception:  # pylint: disable=broad-except
+            print(traceback.format_exc())
 
 
 def handle_all_am(dump_log: bool = True) -> Tuple[Data, Dict[str, AMStructurationLog], Dict[str, ArreteMinisteriel]]:

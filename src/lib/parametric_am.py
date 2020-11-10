@@ -3,7 +3,7 @@ from dataclasses import dataclass, field, asdict
 from datetime import datetime, timedelta
 from enum import Enum
 from typing import Any, Dict, KeysView, List, Optional, Set, Tuple, Union
-from lib.data import Applicability, ArreteMinisteriel, EnrichedString, StructuredText, load_structured_text
+from lib.data import Applicability, ArreteMinisteriel, StructuredText, load_structured_text
 
 
 class ParameterType(Enum):
@@ -667,7 +667,7 @@ def _generate_options_dict(conditions: List[Condition]) -> Dict[str, Tuple[Param
     raise NotImplementedError(f'Option dict generation not implemented for {conditions}')
 
 
-def _generate_all_am_versions(
+def generate_all_am_versions(
     am: ArreteMinisteriel, parametrization: Parametrization
 ) -> Dict[Tuple[str, ...], ArreteMinisteriel]:
     parameters = _extract_parameters_from_parametrization(parametrization)
@@ -683,7 +683,7 @@ def _generate_all_am_versions(
     }
 
 
-def _build_simple_parametrization(
+def build_simple_parametrization(
     non_applicable_section_references: List[Ints],
     modified_articles: Dict[Ints, StructuredText],
     source_section: Ints,
@@ -705,60 +705,3 @@ def _build_simple_parametrization(
     ]
     return Parametrization(application_conditions, alternative_sections)
 
-
-def _build_TREP1900331A_parametrization() -> Parametrization:
-    new_articles = {
-        tuple([3, 3, 1]): StructuredText(
-            title=EnrichedString(''),
-            outer_alineas=[
-                EnrichedString('Rétention et isolement.'),
-                EnrichedString(
-                    'Toutes mesures sont prises pour recueillir l’ensemble des eaux et écoulements'
-                    ' susceptibles d’être pollués lors d’un sinistre, y compris les eaux utilisées'
-                    ' lors d’un incendie, afin que celles-ci soient récupérées ou traitées afin de'
-                    ' prévenir toute pollution des sols, des égouts, des cours d’eau ou du milieu '
-                    'naturel.'
-                ),
-                EnrichedString(
-                    'En cas de recours à des systèmes de relevage autonomes, l’exploitant est en m'
-                    'esure de justifier à tout instant d’un entretien et d’une maintenance rigoure'
-                    'ux de ces dispositifs. Des tests réguliers sont par ailleurs menés sur ces éq'
-                    'uipements.'
-                ),
-                EnrichedString(
-                    'En cas de confinement interne, les orifices d’écoulement sont en position fer'
-                    'mée par défaut. En cas de confinement externe, les orifices d’écoulement issu'
-                    's de ces dispositifs sont munis d’un dispositif automatique d’obturation pour'
-                    ' assurer ce confinement lorsque des eaux susceptibles d’être pollués y sont p'
-                    'ortées. Tout moyen est mis en place pour éviter la propagation de l’incendie '
-                    'par ces écoulements.'
-                ),
-                EnrichedString(
-                    'Des dispositifs permettant l’obturation des réseaux d’évacuation des eaux de '
-                    'ruissellement sont implantés de sorte à maintenir sur le site les eaux d’exti'
-                    'nction d’un sinistre ou les épandages accidentels. Ils sont clairement signal'
-                    'és et facilement accessibles et peuvent être mis en œuvre dans des délais bre'
-                    'fs et à tout moment. Une consigne définit les modalités de mise en œuvre de c'
-                    'es dispositifs. Cette consigne est affichée à l’accueil de l’établissement.'
-                ),
-            ],
-            sections=[],
-            legifrance_article=None,
-            applicability=None,
-        )
-    }
-    return _build_simple_parametrization(
-        [(1, 0), (3, 1, 0), (3, 1, 1), (3, 1, 2), (5, 1, 2)], new_articles, (10, 0), datetime(2019, 4, 9)
-    )
-
-
-def _build_DEVP1329353A_parametrization() -> Parametrization:
-    source = ConditionSource(
-        'Paragraphe décrivant ce qui s\'applique aux installations existantes',
-        EntityReference(SectionReference((0,)), None),
-    )
-    condition = Greater(Parameter('date-d-installation', ParameterType.DATE), datetime(2013, 12, 10), False)
-    application_conditions = [
-        ApplicationCondition(EntityReference(SectionReference(()), None, True), condition, source)
-    ]
-    return Parametrization(application_conditions, [])
