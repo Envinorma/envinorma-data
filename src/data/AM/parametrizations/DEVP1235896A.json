@@ -1,13 +1,30 @@
 {
+    "alternative_sections": [],
     "application_conditions": [
         {
-            "targeted_entity": {
-                "section": {
-                    "path": [
-                        2,
-                        1
-                    ]
+            "condition": {
+                "parameter": {
+                    "id": "date-d-installation",
+                    "type": "DATE"
                 },
+                "strict": false,
+                "target": 1353884400,
+                "type": "GREATER"
+            },
+            "source": {
+                "explanation": "Paragraphe décrivant ce qui s'applique aux installations existantes",
+                "reference": {
+                    "outer_alinea_indices": null,
+                    "section": {
+                        "path": [
+                            11,
+                            1
+                        ]
+                    },
+                    "whole_arrete": false
+                }
+            },
+            "targeted_entity": {
                 "outer_alinea_indices": [
                     0,
                     1,
@@ -32,64 +49,75 @@
                     20,
                     21,
                     22
-                ]
-            },
+                ],
+                "section": {
+                    "path": [
+                        2,
+                        1
+                    ]
+                },
+                "whole_arrete": false
+            }
+        },
+        {
             "condition": {
                 "parameter": {
                     "id": "date-d-installation",
                     "type": "DATE"
                 },
-                "target": 1353884400,
                 "strict": false,
+                "target": 1353884400,
                 "type": "GREATER"
             },
             "source": {
                 "explanation": "Paragraphe décrivant ce qui s'applique aux installations existantes",
                 "reference": {
+                    "outer_alinea_indices": null,
                     "section": {
                         "path": [
                             11,
                             1
                         ]
                     },
-                    "outer_alinea_indices": null
+                    "whole_arrete": false
                 }
-            }
-        },
-        {
+            },
             "targeted_entity": {
+                "outer_alinea_indices": null,
                 "section": {
                     "path": [
                         2,
                         2
                     ]
                 },
-                "outer_alinea_indices": null
-            },
+                "whole_arrete": false
+            }
+        },
+        {
             "condition": {
                 "parameter": {
                     "id": "date-d-installation",
                     "type": "DATE"
                 },
-                "target": 1353884400,
                 "strict": false,
+                "target": 1353884400,
                 "type": "GREATER"
             },
             "source": {
                 "explanation": "Paragraphe décrivant ce qui s'applique aux installations existantes",
                 "reference": {
+                    "outer_alinea_indices": null,
                     "section": {
                         "path": [
                             11,
                             1
                         ]
                     },
-                    "outer_alinea_indices": null
+                    "whole_arrete": false
                 }
-            }
-        },
-        {
+            },
             "targeted_entity": {
+                "outer_alinea_indices": null,
                 "section": {
                     "path": [
                         3,
@@ -97,32 +125,36 @@
                         0
                     ]
                 },
-                "outer_alinea_indices": null
-            },
+                "whole_arrete": false
+            }
+        },
+        {
             "condition": {
                 "parameter": {
                     "id": "date-d-installation",
                     "type": "DATE"
                 },
-                "target": 1353884400,
                 "strict": false,
+                "target": 1353884400,
                 "type": "GREATER"
             },
             "source": {
                 "explanation": "Paragraphe décrivant ce qui s'applique aux installations existantes",
                 "reference": {
+                    "outer_alinea_indices": null,
                     "section": {
                         "path": [
                             11,
                             1
                         ]
                     },
-                    "outer_alinea_indices": null
+                    "whole_arrete": false
                 }
-            }
-        },
-        {
+            },
             "targeted_entity": {
+                "outer_alinea_indices": [
+                    0
+                ],
                 "section": {
                     "path": [
                         4,
@@ -130,34 +162,36 @@
                         1
                     ]
                 },
-                "outer_alinea_indices": [
-                    0
-                ]
-            },
+                "whole_arrete": false
+            }
+        },
+        {
             "condition": {
                 "parameter": {
                     "id": "date-d-installation",
                     "type": "DATE"
                 },
-                "target": 1353884400,
                 "strict": false,
+                "target": 1353884400,
                 "type": "GREATER"
             },
             "source": {
                 "explanation": "Paragraphe décrivant ce qui s'applique aux installations existantes",
                 "reference": {
+                    "outer_alinea_indices": null,
                     "section": {
                         "path": [
                             11,
                             1
                         ]
                     },
-                    "outer_alinea_indices": null
+                    "whole_arrete": false
                 }
-            }
-        },
-        {
+            },
             "targeted_entity": {
+                "outer_alinea_indices": [
+                    1
+                ],
                 "section": {
                     "path": [
                         4,
@@ -165,32 +199,8 @@
                         1
                     ]
                 },
-                "outer_alinea_indices": [
-                    1
-                ]
-            },
-            "condition": {
-                "parameter": {
-                    "id": "date-d-installation",
-                    "type": "DATE"
-                },
-                "target": 1353884400,
-                "strict": false,
-                "type": "GREATER"
-            },
-            "source": {
-                "explanation": "Paragraphe décrivant ce qui s'applique aux installations existantes",
-                "reference": {
-                    "section": {
-                        "path": [
-                            11,
-                            1
-                        ]
-                    },
-                    "outer_alinea_indices": null
-                }
+                "whole_arrete": false
             }
         }
-    ],
-    "alternative_sections": []
+    ]
 }

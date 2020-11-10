@@ -1,11 +1,5 @@
 {
-    "applicability": {
-        "active": true,
-        "modified": false,
-        "reason_inactive": "",
-        "reason_modified": null,
-        "warnings": []
-    },
+    "applicability": null,
     "sections": [
         {
             "annotations": {
@@ -241,13 +235,7 @@
                 },
                 {
                     "annotations": null,
-                    "applicability": {
-                        "active": false,
-                        "modified": false,
-                        "reason_inactive": "Le paramètre date-d-installation est inférieur à 2012-11-26 00:00:00",
-                        "reason_modified": null,
-                        "warnings": []
-                    },
+                    "applicability": null,
                     "legifrance_article": {
                         "content": "<p>Une fois l'arrêté préfectoral d'enregistrement notifié, le dossier d'enregistrement comprend :<br/>\nUne copie de la demande d'enregistrement et ses pièces jointes.<br/>\nL'arrêté d'enregistrement délivré par le préfet ainsi que tout arrêté préfectoral relatif à l'installation.<br/>\nUne déclaration de mise en service pour les installations fonctionnant sur une période unique d'une durée inférieure ou égale à six mois.</p><p></p><p>Le plan général des stockages de produits ou déchets non dangereux inertes (art. 3).<br/>\nUn extrait du règlement d'urbanisme concernant la zone occupée par les installations classées (art. 3).<br/>\nLa notice récapitulant les mesures mises en œuvre pour réduire l'impact sur l'environnement des opérations de transport ou de manipulation de matériaux (art. 6 et 37).<br/>\nLa description des caractéristiques et modalités d'approvisionnement et de livraison des matériaux et les moyens mis en œuvre (art. 6).<br/>\nLes dispositions permettant l'intégration paysagère de l'installation (art. 7).<br/>\nLe plan de localisation des risques (art. 10).<br/>\nLe registre des produits dangereux détenus (nature, quantité) (art. 11).<br/>\nLe plan général des stockages de produits dangereux (art. 11).<br/>\nLes justificatifs attestant des propriétés de résistance au feu des locaux à risque incendie (art. 14).<br/>\nLes moyens de lutte contre l'incendie et l'avis écrit des services d'incendie et de secours, s'il existe, et les justificatifs relatifs aux capacités de lutte contre l'incendie (art. 17).</p><p></p><p><br/>\nLa description des dispositions mises en œuvre pour l'implantation, l'exploitation, le suivi, l'entretien, la surveillance et la mise à l'arrêt des ouvrages de prélèvement (art. 24).<br/>\nLe plan des réseaux de collecte des effluents liquides (art. 26).<br/>\nLa description du nombre de points de mesures de retombées de poussières et des conditions dans lesquelles les appareils de mesures sont installés et exploités (art. 39).<br/>\nLes justificatifs attestant de la conformité des rejets liquides (art. 32 et 33).</p><p></p><p>La justification du nombre de points de rejet atmosphérique (art. 38).</p><p><br/>\nLes documents ayant trait à la gestion des rejets atmosphériques (art. 38 et 42).<br/>\nLes mesures de prévention mises en place pour réduire les nuisances acoustiques (art. 44).<br/>\nLe programme de surveillance des émissions (art. 56).</p><p>Le type de réseau de surveillance, le nombre de relevés par point de mesure, la durée d'exposition et les périodes de l'année au cours desquelles les points de mesures sont relevés (art. 57).</p><p><br/>\nL'exploitant établit, date et tient à jour un dossier d'exploitation comportant les documents suivants :<br/>\nLa copie des documents informant le préfet des modifications apportées à l'installation.<br/>\nLes résultats des mesures sur les effluents (art. 58 et 59), le bruit (art. 52) et l'air (art. 57) sur les cinq dernières années.<br/>\nLe registre rassemblant l'ensemble des déclarations d'accidents ou d'incidents faites à l'inspection des installations classées, pour les installations appelées à fonctionner plus de six mois.<br/>\nLe registre indiquant la nature et la quantité des produits dangereux détenus (art. 11).<br/>\nLes fiches de données de sécurité des produits dangereux présents dans l'installation (art. 12).<br/>\nLes rapports de vérifications périodiques (art. 13 et 20).<br/>\nLes éléments justifiant de l'entretien et de la vérification des installations (art. 16).<br/>\nLes consignes d'exploitation (art. 19).<br/>\nLe registre d'entretien et de vérification des systèmes de relevage autonomes (art. 21-III).<br/>\nLe registre des résultats de mesure de prélèvement d'eau (art. 24).<br/>\nLe registre des résultats des mesures des principaux paramètres permettant de s'assurer de la bonne marche de l'installation de traitement des effluents si elle existe au sein de l'installation (art. 35).<br/>\nLes registres des déchets (art. 54 et 55).<br/>\nCes dossiers (dossier d'enregistrement et dossier d'exploitation) sont tenus à la disposition de l'inspection des installations classées, le cas échéant, en tout ou partie, sous format informatique.</p>",
                         "etat": "VIGUEUR",
@@ -452,13 +440,7 @@
                 },
                 {
                     "annotations": null,
-                    "applicability": {
-                        "active": false,
-                        "modified": false,
-                        "reason_inactive": "Le paramètre date-d-installation est inférieur à 2012-11-26 00:00:00",
-                        "reason_modified": null,
-                        "warnings": []
-                    },
+                    "applicability": null,
                     "legifrance_article": {
                         "content": "<p>Les installations de broyage, concassage, criblage, ensachage, pulvérisation, lavage, nettoyage, tamisage, mélange sont implantées à une distance minimale de 20 mètres des limites du site.</p><p>Les zones de stockage sont, à la date de délivrance de l'arrêté préfectoral, implantées à une distance d'éloignement de 20 mètres des constructions à usage d'habitation ou des établissements destinés à recevoir des personnes sensibles (hôpital, clinique, maison de retraite, école, collège, lycée et crèche).<br/><br/>\nToutefois, pour les installations situées en bord de voie d'eau ou de voie ferrée, lorsque celles-ci sont utilisées pour l'acheminement de produits ou déchets, cette distance est réduite à 10 mètres et ne concerne alors que les limites autres que celles contiguës à ces voies.<br/>\nLes dispositions du présent article ne s'appliquent pas :<br/>\n– aux installations et les zones de stockage fonctionnant sur une période unique d'une durée inférieure ou égale à six mois ;<br/>\n– aux installations existantes telles que définies à l'article 1er.<br/>\nLes distances ci-dessus sont celles figurant sur le plan prévu au 3° de <a href='/affichCodeArticle.do?cidTexte=LEGITEXT000006074220&idArticle=LEGIARTI000022093994&dateTexte=&categorieLien=cid'>l'article R. 512-46-4</a> du code de l'environnement.</p>",
                         "etat": "VIGUEUR",
@@ -889,13 +871,7 @@
                     "sections": [
                         {
                             "annotations": null,
-                            "applicability": {
-                                "active": false,
-                                "modified": false,
-                                "reason_inactive": "Le paramètre date-d-installation est inférieur à 2012-11-26 00:00:00",
-                                "reason_modified": null,
-                                "warnings": []
-                            },
+                            "applicability": null,
                             "legifrance_article": {
                                 "content": "<p><br/>Les locaux à risque incendie, identifiés à l'article 10, présentent les caractéristiques de réaction et de résistance au feu minimales suivantes :<br/> ― murs extérieurs REI 60 ;<br/> ― murs séparatifs E 30 ;<br/> ― planchers/sol REI 30 ;<br/> ― portes et fermetures EI 30 ;<br/> ― toitures et couvertures de toiture R 30.<br/> Les ouvertures effectuées dans les éléments séparatifs (passage de gaines, de canalisations ou de convoyeurs, etc.) sont munies de dispositifs assurant un degré coupe-feu équivalent à celui exigé pour ces éléments séparatifs.<br/> Les justificatifs attestant des propriétés de résistance au feu sont conservés et tenus à la disposition de l'inspection des installations classées.<br/> Les dispositions du présent article ne s'appliquent pas :<br/> ― aux installations fonctionnant sur une période unique d'une durée inférieure ou égale à six mois ;<br/> ― aux installations existantes telles que définies à l'article 1er.</p>",
                                 "etat": "VIGUEUR",
@@ -1744,13 +1720,7 @@
                                 "prescriptive": true,
                                 "topic": "EAU"
                             },
-                            "applicability": {
-                                "active": false,
-                                "modified": false,
-                                "reason_inactive": "Le paramètre date-d-installation est inférieur à 2012-11-26 00:00:00",
-                                "reason_modified": null,
-                                "warnings": []
-                            },
+                            "applicability": null,
                             "legifrance_article": {
                                 "content": "<p><br/>L'exploitant indique, dans son dossier d'enregistrement, les dispositions prises pour l'implantation, l'exploitation, le suivi, l'entretien, la surveillance et la mise à l'arrêt des ouvrages de prélèvement.<br/> Les installations de prélèvement d'eau sont munies d'un dispositif de mesure totalisateur. Ce dispositif est relevé mensuellement. Ces relevés sont enregistrés et conservés dans le dossier de l'installation.<br/> En cas de raccordement, sur un réseau public ou sur un forage en nappe, l'ouvrage est équipé d'un dispositif de disconnexion.<br/> Les ouvrages de prélèvement dans les cours d'eau ne gênent pas l'écoulement normal des eaux et n'entravent pas les continuités écologiques.</p>",
                                 "etat": "VIGUEUR",
@@ -2120,13 +2090,7 @@
                                 "prescriptive": true,
                                 "topic": "EAU"
                             },
-                            "applicability": {
-                                "active": false,
-                                "modified": false,
-                                "reason_inactive": "Le paramètre date-d-installation est inférieur à 2012-11-26 00:00:00",
-                                "reason_modified": null,
-                                "warnings": []
-                            },
+                            "applicability": null,
                             "legifrance_article": {
                                 "content": "<p><br/>Les prescriptions de cet article s'appliquent uniquement aux rejets directs au milieu naturel.<br/> L'exploitant justifie, dans son dossier d'enregistrement, que le débit maximum journalier ne dépasse pas 1/10e du débit moyen interannuel du cours d'eau.<br/> La température des effluents rejetés est inférieure à 30 °C et leur pH est compris entre 5,5 et 8,5.<br/> La modification de couleur du milieu récepteur (cours d'eau, lac, étang, canal), mesurée en un point représentatif de la zone de mélange, ne dépasse pas 100 mg Pt/l.<br/> Pour les eaux réceptrices, les rejets n'induisent pas en dehors de la zone de mélange :<br/> ― une élévation de température supérieure à 1,5 °C pour les eaux salmonicoles, à 3 °C pour les eaux cyprinicoles et de 2 °C pour les eaux conchylicoles ;<br/> ― une température supérieure à 21,5 °C pour les eaux salmonicoles, à 28 °C pour les eaux cyprinicoles et à 25 °C pour les eaux destinées à la production d'eau alimentaire ;<br/> ― un pH en dehors des plages de valeurs suivantes : 6/9 pour les eaux salmonicoles, cyprinicoles et pour les eaux de baignade ; 6,5/8,5 pour les eaux destinées à la production alimentaire et 7/9 pour les eaux conchylicoles.<br/> ― un accroissement supérieur à 30 % des matières en suspension et une variation supérieure à 10 % de la salinité pour les eaux conchylicoles.<br/> Les dispositions de l'alinéa précédent ne s'appliquent pas aux eaux marines des départements d'outre-mer.</p>",
                                 "etat": "VIGUEUR",

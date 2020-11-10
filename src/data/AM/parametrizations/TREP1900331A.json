@@ -1,39 +1,136 @@
 {
-    "application_conditions": [
+    "alternative_sections": [
         {
-            "targeted_entity": {
-                "section": {
-                    "path": [
-                        1,
-                        0
-                    ]
-                },
-                "outer_alinea_indices": null
-            },
             "condition": {
                 "parameter": {
                     "id": "date-d-installation",
                     "type": "DATE"
                 },
-                "target": 1554760800,
                 "strict": false,
+                "target": 1554760800,
                 "type": "GREATER"
+            },
+            "new_text": {
+                "annotations": null,
+                "applicability": null,
+                "legifrance_article": null,
+                "outer_alineas": [
+                    {
+                        "links": [],
+                        "table": null,
+                        "text": "Rétention et isolement."
+                    },
+                    {
+                        "links": [],
+                        "table": null,
+                        "text": "Toutes mesures sont prises pour recueillir l’ensemble des eaux et écoulements susceptibles d’être pollués lors d’un sinistre, y compris les eaux utilisées lors d’un incendie, afin que celles-ci soient récupérées ou traitées afin de prévenir toute pollution des sols, des égouts, des cours d’eau ou du milieu naturel."
+                    },
+                    {
+                        "links": [],
+                        "table": null,
+                        "text": "En cas de recours à des systèmes de relevage autonomes, l’exploitant est en mesure de justifier à tout instant d’un entretien et d’une maintenance rigoureux de ces dispositifs. Des tests réguliers sont par ailleurs menés sur ces équipements."
+                    },
+                    {
+                        "links": [],
+                        "table": null,
+                        "text": "En cas de confinement interne, les orifices d’écoulement sont en position fermée par défaut. En cas de confinement externe, les orifices d’écoulement issus de ces dispositifs sont munis d’un dispositif automatique d’obturation pour assurer ce confinement lorsque des eaux susceptibles d’être pollués y sont portées. Tout moyen est mis en place pour éviter la propagation de l’incendie par ces écoulements."
+                    },
+                    {
+                        "links": [],
+                        "table": null,
+                        "text": "Des dispositifs permettant l’obturation des réseaux d’évacuation des eaux de ruissellement sont implantés de sorte à maintenir sur le site les eaux d’extinction d’un sinistre ou les épandages accidentels. Ils sont clairement signalés et facilement accessibles et peuvent être mis en œuvre dans des délais brefs et à tout moment. Une consigne définit les modalités de mise en œuvre de ces dispositifs. Cette consigne est affichée à l’accueil de l’établissement."
+                    }
+                ],
+                "reference_str": null,
+                "sections": [],
+                "title": {
+                    "links": [],
+                    "table": null,
+                    "text": ""
+                }
             },
             "source": {
                 "explanation": "Paragraphe décrivant ce qui s'applique aux installations existantes",
                 "reference": {
+                    "outer_alinea_indices": null,
                     "section": {
                         "path": [
                             10,
                             0
                         ]
                     },
-                    "outer_alinea_indices": null
+                    "whole_arrete": false
                 }
+            },
+            "targeted_section": {
+                "path": [
+                    3,
+                    3,
+                    1
+                ]
+            }
+        }
+    ],
+    "application_conditions": [
+        {
+            "condition": {
+                "parameter": {
+                    "id": "date-d-installation",
+                    "type": "DATE"
+                },
+                "strict": false,
+                "target": 1554760800,
+                "type": "GREATER"
+            },
+            "source": {
+                "explanation": "Paragraphe décrivant ce qui s'applique aux installations existantes",
+                "reference": {
+                    "outer_alinea_indices": null,
+                    "section": {
+                        "path": [
+                            10,
+                            0
+                        ]
+                    },
+                    "whole_arrete": false
+                }
+            },
+            "targeted_entity": {
+                "outer_alinea_indices": null,
+                "section": {
+                    "path": [
+                        1,
+                        0
+                    ]
+                },
+                "whole_arrete": false
             }
         },
         {
+            "condition": {
+                "parameter": {
+                    "id": "date-d-installation",
+                    "type": "DATE"
+                },
+                "strict": false,
+                "target": 1554760800,
+                "type": "GREATER"
+            },
+            "source": {
+                "explanation": "Paragraphe décrivant ce qui s'applique aux installations existantes",
+                "reference": {
+                    "outer_alinea_indices": null,
+                    "section": {
+                        "path": [
+                            10,
+                            0
+                        ]
+                    },
+                    "whole_arrete": false
+                }
+            },
             "targeted_entity": {
+                "outer_alinea_indices": null,
                 "section": {
                     "path": [
                         3,
@@ -41,32 +138,34 @@
                         0
                     ]
                 },
-                "outer_alinea_indices": null
-            },
+                "whole_arrete": false
+            }
+        },
+        {
             "condition": {
                 "parameter": {
                     "id": "date-d-installation",
                     "type": "DATE"
                 },
-                "target": 1554760800,
                 "strict": false,
+                "target": 1554760800,
                 "type": "GREATER"
             },
             "source": {
                 "explanation": "Paragraphe décrivant ce qui s'applique aux installations existantes",
                 "reference": {
+                    "outer_alinea_indices": null,
                     "section": {
                         "path": [
                             10,
                             0
                         ]
                     },
-                    "outer_alinea_indices": null
+                    "whole_arrete": false
                 }
-            }
-        },
-        {
+            },
             "targeted_entity": {
+                "outer_alinea_indices": null,
                 "section": {
                     "path": [
                         3,
@@ -74,32 +173,34 @@
                         1
                     ]
                 },
-                "outer_alinea_indices": null
-            },
+                "whole_arrete": false
+            }
+        },
+        {
             "condition": {
                 "parameter": {
                     "id": "date-d-installation",
                     "type": "DATE"
                 },
-                "target": 1554760800,
                 "strict": false,
+                "target": 1554760800,
                 "type": "GREATER"
             },
             "source": {
                 "explanation": "Paragraphe décrivant ce qui s'applique aux installations existantes",
                 "reference": {
+                    "outer_alinea_indices": null,
                     "section": {
                         "path": [
                             10,
                             0
                         ]
                     },
-                    "outer_alinea_indices": null
+                    "whole_arrete": false
                 }
-            }
-        },
-        {
+            },
             "targeted_entity": {
+                "outer_alinea_indices": null,
                 "section": {
                     "path": [
                         3,
@@ -107,32 +208,34 @@
                         2
                     ]
                 },
-                "outer_alinea_indices": null
-            },
+                "whole_arrete": false
+            }
+        },
+        {
             "condition": {
                 "parameter": {
                     "id": "date-d-installation",
                     "type": "DATE"
                 },
-                "target": 1554760800,
                 "strict": false,
+                "target": 1554760800,
                 "type": "GREATER"
             },
             "source": {
                 "explanation": "Paragraphe décrivant ce qui s'applique aux installations existantes",
                 "reference": {
+                    "outer_alinea_indices": null,
                     "section": {
                         "path": [
                             10,
                             0
                         ]
                     },
-                    "outer_alinea_indices": null
+                    "whole_arrete": false
                 }
-            }
-        },
-        {
+            },
             "targeted_entity": {
+                "outer_alinea_indices": null,
                 "section": {
                     "path": [
                         5,
@@ -140,75 +243,7 @@
                         2
                     ]
                 },
-                "outer_alinea_indices": null
-            },
-            "condition": {
-                "parameter": {
-                    "id": "date-d-installation",
-                    "type": "DATE"
-                },
-                "target": 1554760800,
-                "strict": false,
-                "type": "GREATER"
-            },
-            "source": {
-                "explanation": "Paragraphe décrivant ce qui s'applique aux installations existantes",
-                "reference": {
-                    "section": {
-                        "path": [
-                            10,
-                            0
-                        ]
-                    },
-                    "outer_alinea_indices": null
-                }
-            }
-        }
-    ],
-    "alternative_sections": [
-        {
-            "targeted_section": {
-                "path": [
-                    3,
-                    3,
-                    1
-                ]
-            },
-            "new_text": {
-                "title": "",
-                "outer_alineas": [
-                    "Rétention et isolement.",
-                    "Toutes mesures sont prises pour recueillir l’ensemble des eaux et écoulements susceptibles d’être pollués lors d’un sinistre, y compris les eaux utilisées lors d’un incendie, afin que celles-ci soient récupérées ou traitées afin de prévenir toute pollution des sols, des égouts, des cours d’eau ou du milieu naturel.",
-                    "En cas de recours à des systèmes de relevage autonomes, l’exploitant est en mesure de justifier à tout instant d’un entretien et d’une maintenance rigoureux de ces dispositifs. Des tests réguliers sont par ailleurs menés sur ces équipements.",
-                    "En cas de confinement interne, les orifices d’écoulement sont en position fermée par défaut. En cas de confinement externe, les orifices d’écoulement issus de ces dispositifs sont munis d’un dispositif automatique d’obturation pour assurer ce confinement lorsque des eaux susceptibles d’être pollués y sont portées. Tout moyen est mis en place pour éviter la propagation de l’incendie par ces écoulements.",
-                    "Des dispositifs permettant l’obturation des réseaux d’évacuation des eaux de ruissellement sont implantés de sorte à maintenir sur le site les eaux d’extinction d’un sinistre ou les épandages accidentels. Ils sont clairement signalés et facilement accessibles et peuvent être mis en œuvre dans des délais brefs et à tout moment. Une consigne définit les modalités de mise en œuvre de ces dispositifs. Cette consigne est affichée à l’accueil de l’établissement."
-                ],
-                "sections": [],
-                "legifrance_article": null,
-                "active": true,
-                "reason_inactive": "",
-                "warnings": []
-            },
-            "condition": {
-                "parameter": {
-                    "id": "date-d-installation",
-                    "type": "DATE"
-                },
-                "target": 1554760800,
-                "strict": false,
-                "type": "GREATER"
-            },
-            "source": {
-                "explanation": "Paragraphe décrivant ce qui s'applique aux installations existantes",
-                "reference": {
-                    "section": {
-                        "path": [
-                            10,
-                            0
-                        ]
-                    },
-                    "outer_alinea_indices": null
-                }
+                "whole_arrete": false
             }
         }
     ]
