@@ -5,8 +5,7 @@ import random
 import traceback
 
 from collections import Counter
-from dataclasses import asdict, dataclass, field
-from enum import Enum
+from dataclasses import asdict
 from math import sqrt
 from typing import Any, Dict, Iterable, List, Tuple, Optional, TypeVar, Union
 
@@ -14,6 +13,22 @@ import bs4
 from bs4 import BeautifulSoup
 from tqdm import tqdm
 
+from lib.data import (
+    Link,
+    LinkReference,
+    LegifranceArticle,
+    LegifranceSection,
+    LegifranceText,
+    EnrichedString,
+    StructuredText,
+    ArreteMinisteriel,
+    Row,
+    Cell,
+    Table,
+    TableReference,
+    ArticleStatus,
+    load_legifrance_text,
+)
 from lib.structure_detection import NumberingPattern, detect_patterns_if_exists
 
 
@@ -110,193 +125,6 @@ def check_legifrance_dict(legifrance_dict: Dict[str, Any]) -> None:
     _check_lf_articles(legifrance_dict)
     _check_lf_sections(legifrance_dict)
     _check_proportion_of_null_articles(legifrance_dict)
-
-
-class ArticleStatus(Enum):
-    VIGUEUR = 'VIGUEUR'
-    ABROGE = 'ABROGE'
-
-
-@dataclass
-class LegifranceSection:
-    intOrdre: int
-    title: str
-    articles: List['LegifranceArticle']
-    sections: List['LegifranceSection']
-    etat: ArticleStatus
-
-
-@dataclass
-class LegifranceArticle:
-    id: str
-    content: str
-    intOrdre: int
-    num: Optional[str]
-    etat: ArticleStatus
-
-    def as_dict(self):
-        return {
-            'id': self.id,
-            'content': self.content,
-            'intOrdre': self.intOrdre,
-            'num': self.num,
-            'etat': self.etat.value,
-        }
-
-
-@dataclass
-class LegifranceText:
-    visa: str
-    title: str
-    articles: List[LegifranceArticle]
-    sections: List[LegifranceSection]
-
-
-def _load_legifrance_article(dict_: Dict[str, Any]) -> LegifranceArticle:
-    return LegifranceArticle(
-        dict_['id'], dict_['content'], dict_['intOrdre'], dict_['num'], ArticleStatus(dict_['etat'])
-    )
-
-
-def _load_legifrance_section(dict_: Dict[str, Any]) -> LegifranceSection:
-    return LegifranceSection(
-        dict_['intOrdre'],
-        dict_['title'],
-        [_load_legifrance_article(article) for article in dict_['articles']],
-        [_load_legifrance_section(section) for section in dict_['sections']],
-        ArticleStatus(dict_['etat']),
-    )
-
-
-def load_legifrance_text(dict_: Dict[str, Any]) -> LegifranceText:
-    return LegifranceText(
-        dict_['visa'],
-        dict_['title'],
-        [_load_legifrance_article(article) for article in dict_['articles']],
-        [_load_legifrance_section(section) for section in dict_['sections']],
-    )
-
-
-@dataclass
-class Link:
-    target: str
-    position: int
-    content_size: int
-
-
-@dataclass
-class Cell:
-    content: 'EnrichedString'
-    colspan: int
-    rowspan: int
-
-
-@dataclass
-class Row:
-    cells: List[Cell]
-    is_header: bool
-
-
-@dataclass
-class Table:
-    rows: List[Row]
-
-
-def empty_link_list() -> List[Link]:
-    return []
-
-
-@dataclass
-class EnrichedString:
-    text: str
-    links: List[Link] = field(default_factory=empty_link_list)
-    table: Optional[Table] = None
-
-
-@dataclass
-class StructuredText:
-    title: EnrichedString
-    outer_alineas: List[EnrichedString]
-    sections: List['StructuredText']
-    legifrance_article: Optional[LegifranceArticle]
-    active: bool = True
-    reason_inactive: str = ''
-    warnings: List[str] = field(default_factory=list)
-
-    def as_dict(self) -> Dict[str, Any]:
-        res = asdict(self)
-        res['sections'] = [se.as_dict() for se in self.sections]
-        res['legifrance_article'] = self.legifrance_article.as_dict() if self.legifrance_article else None
-        return res
-
-
-@dataclass
-class ArreteMinisteriel:
-    title: EnrichedString
-    sections: List[StructuredText]
-    visa: List[EnrichedString]
-    short_title: str
-
-    def as_dict(self) -> Dict[str, Any]:
-        res = asdict(self)
-        res['sections'] = [section.as_dict() for section in self.sections]
-        return res
-
-
-def load_link(dict_: Dict[str, Any]) -> Link:
-    return Link(dict_['target'], dict_['position'], dict_['content_size'])
-
-
-def load_cell(dict_: Dict[str, Any]) -> Cell:
-    return Cell(load_enriched_string(dict_['content']), dict_['colspan'], dict_['rowspan'])
-
-
-def load_row(dict_: Dict[str, Any]) -> Row:
-    return Row([load_cell(cell) for cell in dict_['cells']], dict_['is_header'])
-
-
-def load_table(dict_: Dict[str, Any]) -> Table:
-    return Table([load_row(row) for row in dict_['rows']])
-
-
-def load_enriched_string(dict_: Dict[str, Any]) -> EnrichedString:
-    links = [load_link(link) for link in dict_['links']]
-    table = load_table(dict_['table']) if dict_['table'] else None
-    return EnrichedString(dict_['text'], links, table)
-
-
-def load_legifrance_article(dict_: Dict[str, Any]) -> LegifranceArticle:
-    return LegifranceArticle(
-        dict_['id'], dict_['content'], dict_['intOrdre'], dict_['num'], ArticleStatus(dict_['etat'])
-    )
-
-
-def load_structured_text(dict_: Dict[str, Any]) -> StructuredText:
-    title = load_enriched_string(dict_['title'])
-    outer_alineas = [load_enriched_string(al) for al in dict_['outer_alineas']]
-    sections = [load_structured_text(sec) for sec in dict_['sections']]
-    legifrance_article = load_legifrance_article(dict_['legifrance_article']) if dict_['legifrance_article'] else None
-    return StructuredText(title, outer_alineas, sections, legifrance_article)
-
-
-def load_arrete_ministeriel(dict_: Dict[str, Any]) -> ArreteMinisteriel:
-    title = load_enriched_string(dict_['title'])
-    sections = [load_structured_text(sec) for sec in dict_['sections']]
-    visa = [load_enriched_string(vu) for vu in dict_['visa']]
-    return ArreteMinisteriel(title, sections, visa, dict_['short_title'])
-
-
-@dataclass
-class TableReference:
-    table: Table
-    reference: str
-
-
-@dataclass
-class LinkReference:
-    reference: str
-    target: str
-    text: str
 
 
 def keep_visa_string(visas: List[str]) -> List[str]:
@@ -449,6 +277,7 @@ def _build_structured_text(
             for alinea_group, pattern_name_group in zip(grouped_alineas, grouped_pattern_names)
         ],
         None,
+        None,
     )
 
 
@@ -492,6 +321,7 @@ def _put_tables_back(text: StructuredText, tables: List[TableReference]) -> Stru
         [_add_table_if_any(alinea, tables) for alinea in text.outer_alineas],
         [_put_tables_back(section, tables) for section in text.sections],
         None,
+        None,
     )
 
 
@@ -516,6 +346,7 @@ def _put_links_back(text: StructuredText, links: List[LinkReference]) -> Structu
         clean_title,
         [_add_links_if_any(alinea, links) for alinea in text.outer_alineas],
         [_put_links_back(section, links) for section in text.sections],
+        None,
         None,
     )
 
@@ -649,7 +480,7 @@ def _extract_structured_text_from_legifrance_article(
     if structured_text.title.text:
         raise ValueError(f'Should not happen. Article should not have titles. Article id : {article.id}')
     return StructuredText(
-        _generate_article_title(article), structured_text.outer_alineas, structured_text.sections, article
+        _generate_article_title(article), structured_text.outer_alineas, structured_text.sections, article, None
     )
 
 
@@ -657,7 +488,11 @@ def _extract_structured_text_from_legifrance_section(
     section: LegifranceSection, ascendant_titles: List[str]
 ) -> StructuredText:
     return StructuredText(
-        _extract_links(section.title), [], _extract_sections(section.articles, section.sections, ascendant_titles), None
+        _extract_links(section.title),
+        [],
+        _extract_sections(section.articles, section.sections, ascendant_titles),
+        None,
+        None,
     )
 
 
@@ -829,7 +664,7 @@ def transform_arrete_ministeriel(
     text_with_merged_articles = _clean_text_articles(input_text, keep_abrogated_articles)
     sections = _extract_sections(text_with_merged_articles.articles, text_with_merged_articles.sections, [])
     short_title = extract_short_title(input_text.title)
-    return ArreteMinisteriel(EnrichedString(text_with_merged_articles.title), sections, visa, short_title)
+    return ArreteMinisteriel(EnrichedString(text_with_merged_articles.title), sections, visa, short_title, None)
 
 
 def test(lf_text_filename: str) -> ArreteMinisteriel:

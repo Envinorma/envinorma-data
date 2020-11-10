@@ -11,7 +11,6 @@ from lib.parametric_am import (
     _extract_sorted_targets,
     _generate_combinations,
     _change_value,
-    Condition,
     Parameter,
 )
 

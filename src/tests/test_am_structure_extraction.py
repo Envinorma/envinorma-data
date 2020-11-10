@@ -157,11 +157,10 @@ def test_group_articles_to_merge():
 
     groups = _group_articles_to_merge([article_0, article_1, article_2, article_3])
     assert len(groups) == 3
-    group_1, group_2, group_3 = groups
-    assert isinstance(group_1, LegifranceArticle) and group_1.id == article_0.id
-    assert isinstance(group_2, LegifranceArticle) and group_2.id == article_1.id
-    assert isinstance(group_3, tuple) and group_3[0].id == article_2.id
-    assert isinstance(group_3, tuple) and group_3[1].id == article_3.id
+    assert isinstance(groups[0], LegifranceArticle) and groups[0].id == article_0.id
+    assert isinstance(groups[1], LegifranceArticle) and groups[1].id == article_1.id
+    assert isinstance(groups[2], tuple) and groups[2][0].id == article_2.id
+    assert isinstance(groups[2], tuple) and groups[2][1].id == article_3.id
 
 
 def test_delete_or_merge_articles():
@@ -226,17 +225,17 @@ def test_structuration_3():
 
 def test_inconsistency_detection():
     subsections = [
-        StructuredText(EnrichedString('1. Foo'), [], [], None),
-        StructuredText(EnrichedString('2. Bar'), [], [], None),
-        StructuredText(EnrichedString('3. Pi'), [], [], None),
-        StructuredText(EnrichedString('4. Pa'), [], [], None),
+        StructuredText(EnrichedString('1. Foo'), [], [], None, None),
+        StructuredText(EnrichedString('2. Bar'), [], [], None, None),
+        StructuredText(EnrichedString('3. Pi'), [], [], None, None),
+        StructuredText(EnrichedString('4. Pa'), [], [], None, None),
     ]
-    section = StructuredText(EnrichedString(''), [], subsections, None)
+    section = StructuredText(EnrichedString(''), [], subsections, None, None)
     inconsistencies = _extract_section_inconsistencies(section)
     assert len(inconsistencies) == 0
 
-    subsections_err = [*subsections, StructuredText(EnrichedString('4. Pou'), [], [], None)]
-    section_err = StructuredText(EnrichedString(''), [], subsections_err, None)
+    subsections_err = [*subsections, StructuredText(EnrichedString('4. Pou'), [], [], None, None)]
+    section_err = StructuredText(EnrichedString(''), [], subsections_err, None, None)
     inconsistencies_err = _extract_section_inconsistencies(section_err)
     assert len(inconsistencies_err) == 1
 

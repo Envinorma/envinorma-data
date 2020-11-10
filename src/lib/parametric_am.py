@@ -3,7 +3,7 @@ from dataclasses import dataclass, field, asdict
 from datetime import datetime, timedelta
 from enum import Enum
 from typing import Any, Dict, KeysView, List, Optional, Set, Tuple, Union
-from lib.am_structure_extraction import ArreteMinisteriel, StructuredText, load_structured_text
+from lib.data import ArreteMinisteriel, StructuredText, load_structured_text
 
 
 class ParameterType(Enum):

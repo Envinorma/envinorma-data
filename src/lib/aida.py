@@ -1,6 +1,6 @@
 import json
 import re
-from copy import deepcopy
+from copy import deepcopy, copy
 from collections import defaultdict
 from dataclasses import dataclass, asdict
 from typing import Any, DefaultDict, Dict, List, Set, Optional, Tuple
@@ -158,12 +158,13 @@ def extract_all_anchors_from_aida(document_id: str) -> List[Anchor]:
 
 
 def add_links_in_section(section: StructuredText, str_to_target: Dict[str, str]) -> StructuredText:
-    return StructuredText(
-        add_links_in_enriched_string(section.title, str_to_target),
+    section_copy = copy(section)
+    section_copy.title = (add_links_in_enriched_string(section.title, str_to_target),)
+    section_copy.outer_alineas = (
         [add_links_in_enriched_string(alinea, str_to_target) for alinea in section.outer_alineas],
-        [add_links_in_section(subsection, str_to_target) for subsection in section.sections],
-        section.legifrance_article,
     )
+    section_copy.sections = ([add_links_in_section(subsection, str_to_target) for subsection in section.sections],)
+    return section_copy
 
 
 def generate_re_pattern_not_followed_by_alphanumeric(str_: str) -> str:
@@ -186,12 +187,10 @@ def add_links_in_enriched_string(enriched_str: EnrichedString, str_to_target: Di
 
 def add_links_to_am(text: ArreteMinisteriel, new_hyperlinks: List[Hyperlink]) -> ArreteMinisteriel:
     str_to_target = {link.content: link.href for link in new_hyperlinks}
-    return ArreteMinisteriel(
-        title=text.title,
-        sections=[add_links_in_section(section, str_to_target) for section in text.sections],
-        visa=[add_links_in_enriched_string(str_, str_to_target) for str_ in text.visa],
-        short_title=text.short_title,
-    )
+    output_text = copy(text)
+    output_text.sections = [add_links_in_section(section, str_to_target) for section in text.sections]
+    output_text.visa = [add_links_in_enriched_string(str_, str_to_target) for str_ in text.visa]
+    return output_text
 
 
 def extract_number_in_the_beginning(str_: str) -> Optional[str]:
