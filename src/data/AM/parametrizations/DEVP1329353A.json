@@ -1,0 +1,35 @@
+{
+    "application_conditions": [
+        {
+            "targeted_entity": {
+                "section": {
+                    "path": []
+                },
+                "outer_alinea_indices": null,
+                "whole_arrete": true
+            },
+            "condition": {
+                "parameter": {
+                    "id": "date-d-installation",
+                    "type": "DATE"
+                },
+                "target": 1386630000,
+                "strict": false,
+                "type": "GREATER"
+            },
+            "source": {
+                "explanation": "Paragraphe décrivant ce qui s'applique aux installations existantes",
+                "reference": {
+                    "section": {
+                        "path": [
+                            0
+                        ]
+                    },
+                    "outer_alinea_indices": null,
+                    "whole_arrete": false
+                }
+            }
+        }
+    ],
+    "alternative_sections": []
+}

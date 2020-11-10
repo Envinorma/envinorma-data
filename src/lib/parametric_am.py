@@ -208,6 +208,7 @@ class SectionReference:
 class EntityReference:
     section: SectionReference
     outer_alinea_indices: Optional[List[int]]
+    whole_arrete: bool = False
 
     def to_dict(self) -> Dict[str, Any]:
         res = asdict(self)
@@ -215,7 +216,10 @@ class EntityReference:
 
     @classmethod
     def from_dict(cls, dict_: Dict[str, Any]) -> 'EntityReference':
-        return EntityReference(SectionReference.from_dict(dict_['section']), dict_['outer_alinea_indices'])
+        whole_arrete = dict_['whole_arrete'] if 'whole_arrete' in dict_ else False
+        return EntityReference(
+            SectionReference.from_dict(dict_['section']), dict_['outer_alinea_indices'], whole_arrete
+        )
 
 
 @dataclass
@@ -603,3 +607,75 @@ def _generate_all_am_versions(
         combination_name: _apply_parameter_values_to_am(am, parametrization, parameter_values)
         for combination_name, parameter_values in combinations.items()
     }
+
+
+def _build_simple_parametrization(
+    non_applicable_section_references: List[Ints],
+    modified_articles: Dict[Ints, StructuredText],
+    source_section: Ints,
+    date: datetime,
+) -> Parametrization:
+    source = ConditionSource.from_dict(
+        {
+            'explanation': 'Paragraphe décrivant ce qui s\'applique aux installations existantes',
+            'reference': {'section': {'path': source_section}, 'outer_alinea_indices': None},
+        }
+    )
+    condition = Greater(Parameter('date-d-installation', ParameterType.DATE), date, False)
+    application_conditions = [
+        ApplicationCondition(EntityReference(SectionReference(tuple(ref)), None), condition, source)
+        for ref in non_applicable_section_references
+    ]
+    alternative_sections = [
+        AlternativeSection(SectionReference(ref), value, condition, source) for ref, value in modified_articles.items()
+    ]
+    return Parametrization(application_conditions, alternative_sections)
+
+
+def _build_TREP1900331A_parametrization() -> Parametrization:
+    new_articles = {
+        tuple([3, 3, 1]): StructuredText(
+            title='',
+            outer_alineas=[
+                'Rétention et isolement.',
+                'Toutes mesures sont prises pour recueillir l’ensemble des eaux et écoulements'
+                ' susceptibles d’être pollués lors d’un sinistre, y compris les eaux utilisées'
+                ' lors d’un incendie, afin que celles-ci soient récupérées ou traitées afin de'
+                ' prévenir toute pollution des sols, des égouts, des cours d’eau ou du milieu '
+                'naturel.',
+                'En cas de recours à des systèmes de relevage autonomes, l’exploitant est en m'
+                'esure de justifier à tout instant d’un entretien et d’une maintenance rigoure'
+                'ux de ces dispositifs. Des tests réguliers sont par ailleurs menés sur ces éq'
+                'uipements.',
+                'En cas de confinement interne, les orifices d’écoulement sont en position fer'
+                'mée par défaut. En cas de confinement externe, les orifices d’écoulement issu'
+                's de ces dispositifs sont munis d’un dispositif automatique d’obturation pour'
+                ' assurer ce confinement lorsque des eaux susceptibles d’être pollués y sont p'
+                'ortées. Tout moyen est mis en place pour éviter la propagation de l’incendie '
+                'par ces écoulements.',
+                'Des dispositifs permettant l’obturation des réseaux d’évacuation des eaux de '
+                'ruissellement sont implantés de sorte à maintenir sur le site les eaux d’exti'
+                'nction d’un sinistre ou les épandages accidentels. Ils sont clairement signal'
+                'és et facilement accessibles et peuvent être mis en œuvre dans des délais bre'
+                'fs et à tout moment. Une consigne définit les modalités de mise en œuvre de c'
+                'es dispositifs. Cette consigne est affichée à l’accueil de l’établissement.',
+            ],
+            sections=[],
+            legifrance_article=None,
+        )
+    }
+    return _build_simple_parametrization(
+        [(1, 0), (3, 1, 0), (3, 1, 1), (3, 1, 2), (5, 1, 2)], new_articles, (10, 0), datetime(2019, 4, 9)
+    )
+
+
+def _build_DEVP1329353A_parametrization() -> Parametrization:
+    source = ConditionSource(
+        'Paragraphe décrivant ce qui s\'applique aux installations existantes',
+        EntityReference(SectionReference((0,)), None),
+    )
+    condition = Greater(Parameter('date-d-installation', ParameterType.DATE), datetime(2013, 12, 10), False)
+    application_conditions = [
+        ApplicationCondition(EntityReference(SectionReference(()), None, True), condition, source)
+    ]
+    return Parametrization(application_conditions, [])
