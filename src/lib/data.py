@@ -120,6 +120,30 @@ class Applicability:
         return Applicability(**dict_)
 
 
+class Topic(Enum):
+    INCENDIE = 'INCENDIE'
+    BRUIT = 'BRUIT'
+
+
+@dataclass
+class Annotations:
+    topic: Optional[Topic] = None
+    prescriptive: bool = True
+    guide: Optional[str] = None
+
+    def as_dict(self) -> Dict[str, Any]:
+        res = asdict(self)
+        if self.topic:
+            res['topic'] = self.topic.value
+        return res
+
+    @classmethod
+    def from_dict(cls, dict_: Dict) -> 'Annotations':
+        new_dict = dict_.copy()
+        new_dict['topic'] = Topic(dict_['topic'])
+        return Annotations(**new_dict)
+
+
 @dataclass
 class StructuredText:
     title: EnrichedString
@@ -127,12 +151,15 @@ class StructuredText:
     sections: List['StructuredText']
     legifrance_article: Optional[LegifranceArticle]
     applicability: Optional[Applicability]
+    reference_str: Optional[str] = None
+    annotations: Optional[Annotations] = None
 
     def as_dict(self) -> Dict[str, Any]:
         res = asdict(self)
         res['sections'] = [se.as_dict() for se in self.sections]
         res['legifrance_article'] = self.legifrance_article.as_dict() if self.legifrance_article else None
         res['applicability'] = self.applicability.as_dict() if self.applicability else None
+        res['annotations'] = self.annotations.as_dict() if self.annotations else None
         return res
 
 

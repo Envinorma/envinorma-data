@@ -2,6 +2,7 @@ import random
 from copy import copy
 from datetime import datetime
 from string import ascii_letters
+from typing import List
 
 from lib.data import ArreteMinisteriel, EnrichedString, StructuredText
 from lib.parametric_am import (
@@ -17,6 +18,7 @@ from lib.parametric_am import (
     Range,
     Parameter,
     SectionReference,
+    Condition,
     _mean,
     _extract_interval_midpoints,
     _generate_options_dict,
@@ -41,7 +43,7 @@ def test_extract_interval_midpoints():
 
 def test_generate_options_dict():
     parameter = Parameter('test', ParameterType.BOOLEAN)
-    conditions = [Equal(parameter, True), Equal(parameter, True)]
+    conditions: List[Condition] = [Equal(parameter, True), Equal(parameter, True)]
     res = _generate_options_dict(conditions)
     assert len(res) == 2
     assert 'test == True' in res
@@ -215,4 +217,3 @@ def test_extract_parameters_from_parametrization_2():
     assert len(parameters) == 2
     assert copy(parameter_1) in parameters
     assert copy(parameter_2) in parameters
-
