@@ -5,12 +5,7 @@ from typing import Dict, List, Optional, Set
 
 from lib.data import Annotations, ArreteMinisteriel, StructuredText, Topic
 from lib.parametric_am import Ints
-from lib.structure_detection import (
-    NUMBERING_PATTERNS,
-    NumberingPattern,
-    ROMAN_PATTERN,
-    detect_longest_matched_string,
-)
+from lib.structure_detection import NUMBERING_PATTERNS, NumberingPattern, ROMAN_PATTERN, detect_longest_matched_string
 
 
 def _add_topic_in_text(text: StructuredText, topics: Dict[Ints, Topic], path: Ints) -> StructuredText:
@@ -59,14 +54,24 @@ def _is_probably_section_number(candidate: str) -> bool:
 
 
 def _extract_article_prefix(title: str) -> Optional[str]:
-    article_number = title.split(' ')[1]
+    split = title.split(' ')
+    if len(split) == 0:
+        return None
+    if len(split) == 1:
+        return 'Art.'
+    article_number = split[1]
     if _is_probably_section_number(article_number):
         return 'Art. ' + article_number
     return 'Art. ?'
 
 
 def _extract_annexe_prefix(title: str) -> Optional[str]:
-    annexe_number = title.split(' ')[1]
+    split = title.split(' ')
+    if len(split) == 0:
+        return None
+    if len(split) == 1:
+        return 'Annexe'
+    annexe_number = split[1]
     if _is_probably_section_number(annexe_number):
         return 'Annexe ' + annexe_number
     return 'Annexe ?'

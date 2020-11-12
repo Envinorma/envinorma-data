@@ -59,7 +59,7 @@
                     "text": "– des autres législations ainsi que des schémas, plans et autres documents d'orientation et de planification approuvés."
                 }
             ],
-            "reference_str": null,
+            "reference_str": "Art. 1",
             "sections": [],
             "title": {
                 "links": [],
@@ -193,7 +193,7 @@
                     "text": "« Zones destinées à l'habitation » : zones destinées à l'habitation définies par des documents d'urbanisme opposables aux tiers."
                 }
             ],
-            "reference_str": null,
+            "reference_str": "Art. 2",
             "sections": [],
             "title": {
                 "links": [],
@@ -206,7 +206,7 @@
             "applicability": null,
             "legifrance_article": null,
             "outer_alineas": [],
-            "reference_str": null,
+            "reference_str": "?",
             "sections": [
                 {
                     "annotations": null,
@@ -230,7 +230,7 @@
                             "text": "L'exploitant énumère et justifie en tant que de besoin toutes les dispositions prises pour la conception, la construction et l'exploitation des installations afin de respecter les prescriptions du présent arrêté."
                         }
                     ],
-                    "reference_str": null,
+                    "reference_str": "? Art. 3",
                     "sections": [],
                     "title": {
                         "links": [],
@@ -415,7 +415,7 @@
                             "text": "Ce dossier est tenu à la disposition de l'inspection des installations classées, le cas échéant, en tout ou partie, sous format informatique."
                         }
                     ],
-                    "reference_str": null,
+                    "reference_str": "? Art. 4",
                     "sections": [],
                     "title": {
                         "links": [],
@@ -475,7 +475,7 @@
                             "text": "Ces distances d'éloignement ne s'appliquent pas aux installations fonctionnant sur une période unique d'une durée inférieure ou égale à six mois."
                         }
                     ],
-                    "reference_str": null,
+                    "reference_str": "? Art. 5",
                     "sections": [],
                     "title": {
                         "links": [],
@@ -530,7 +530,7 @@
                             "text": "Pour les produits de granulométrie 0/D, en fonction de l'humidité des produits ou des déchets, les camions entrant ou sortant du site sont bâchés si nécessaire."
                         }
                     ],
-                    "reference_str": null,
+                    "reference_str": "? Art. 6",
                     "sections": [],
                     "title": {
                         "links": [],
@@ -570,7 +570,7 @@
                             "text": "Les points d'accumulation de poussières, tels que les superstructures ou les contreventements, sont nettoyés régulièrement. Les opérations de nettoyage doivent être conduites en limitant au maximum l'envol des poussières."
                         }
                     ],
-                    "reference_str": null,
+                    "reference_str": "? Art. 7",
                     "sections": [],
                     "title": {
                         "links": [],
@@ -590,14 +590,14 @@
             "applicability": null,
             "legifrance_article": null,
             "outer_alineas": [],
-            "reference_str": null,
+            "reference_str": "?",
             "sections": [
                 {
                     "annotations": null,
                     "applicability": null,
                     "legifrance_article": null,
                     "outer_alineas": [],
-                    "reference_str": null,
+                    "reference_str": "? ?",
                     "sections": [
                         {
                             "annotations": null,
@@ -621,7 +621,7 @@
                                     "text": "Les personnes étrangères à l'établissement n'ont pas l'accès libre aux installations."
                                 }
                             ],
-                            "reference_str": null,
+                            "reference_str": "? ? Art. 8",
                             "sections": [],
                             "title": {
                                 "links": [],
@@ -651,7 +651,7 @@
                                     "text": "L'utilisation de dispositifs soufflant de l'air comprimé à des fins de nettoyage est interdite, à l'exclusion de ceux spécialement conçus à cet effet (cabine de dépoussiérage des vêtements de travail, par exemple)."
                                 }
                             ],
-                            "reference_str": null,
+                            "reference_str": "? ? Art. 9",
                             "sections": [],
                             "title": {
                                 "links": [],
@@ -697,7 +697,7 @@
                                     "text": "Les silos et réservoirs doivent être conçus pour pouvoir résister aux charges auxquelles ils pourraient être soumis (vent, neige, etc.)."
                                 }
                             ],
-                            "reference_str": null,
+                            "reference_str": "? ? Art. 10",
                             "sections": [],
                             "title": {
                                 "links": [],
@@ -732,7 +732,7 @@
                                     "text": "En cas de présence de telles matières, l'exploitant tient à jour un registre indiquant la nature et la quantité maximale des produits dangereux détenus, auquel est annexé un plan général des stockages. Ce registre est tenu à la disposition des services d'incendie et de secours et de l'inspection des installations classées."
                                 }
                             ],
-                            "reference_str": null,
+                            "reference_str": "? ? Art. 11",
                             "sections": [],
                             "title": {
                                 "links": [],
@@ -762,7 +762,7 @@
                                     "text": "Les récipients portent en caractères lisibles le nom des produits et, s'il y a lieu, les symboles de danger conformément à la législation relative à l'étiquetage des substances, préparations et mélanges dangereux."
                                 }
                             ],
-                            "reference_str": null,
+                            "reference_str": "? ? Art. 12",
                             "sections": [],
                             "title": {
                                 "links": [],
@@ -782,7 +782,7 @@
                     "applicability": null,
                     "legifrance_article": null,
                     "outer_alineas": [],
-                    "reference_str": null,
+                    "reference_str": "? ?",
                     "sections": [
                         {
                             "annotations": null,
@@ -806,7 +806,7 @@
                                     "text": "Les flexibles utilisés lors des transferts doivent être entretenus et contrôlés. En cas de mise à l'air libre, l'opération de transvasement doit s'arrêter automatiquement."
                                 }
                             ],
-                            "reference_str": null,
+                            "reference_str": "? ? Art. 13",
                             "sections": [],
                             "title": {
                                 "links": [],
@@ -826,7 +826,7 @@
                     "applicability": null,
                     "legifrance_article": null,
                     "outer_alineas": [],
-                    "reference_str": null,
+                    "reference_str": "? ?",
                     "sections": [
                         {
                             "annotations": null,
@@ -885,7 +885,7 @@
                                     "text": "Les dispositions du présent article ne s'appliquent pas aux installations fonctionnant sur une période unique d'une durée inférieure ou égale à six mois."
                                 }
                             ],
-                            "reference_str": null,
+                            "reference_str": "? ? Art. 14",
                             "sections": [],
                             "title": {
                                 "links": [],
@@ -905,7 +905,7 @@
                     "applicability": null,
                     "legifrance_article": null,
                     "outer_alineas": [],
-                    "reference_str": null,
+                    "reference_str": "? ?",
                     "sections": [
                         {
                             "annotations": null,
@@ -934,7 +934,7 @@
                                     "text": "Les véhicules stationnent sur le site sans occasionner de gêne pour l'accessibilité des engins des services de secours depuis les voies de circulation externes à l'installation, même en dehors des heures d'exploitation et d'ouverture de l'installation."
                                 }
                             ],
-                            "reference_str": null,
+                            "reference_str": "? ? Art. 15",
                             "sections": [],
                             "title": {
                                 "links": [],
@@ -964,7 +964,7 @@
                                     "text": "Toutes les précautions sont prises pour éviter un échauffement dangereux ou une surpression des installations. Des appareils d'extinction appropriés ainsi que des dispositifs d'arrêt d'urgence sont entretenus constamment en bon état et vérifiés par des tests périodiques."
                                 }
                             ],
-                            "reference_str": null,
+                            "reference_str": "? ? Art. 16",
                             "sections": [],
                             "title": {
                                 "links": [],
@@ -989,7 +989,7 @@
                                     "text": "Dans les parties de l'installation mentionnées à l'article 10 et recensées \"atmosphères explosibles\", les installations électriques, mécaniques, hydrauliques et pneumatiques sont conformes aux dispositions du   décret n° 2015-799 du 1er juillet 2015 relatif aux produits et équipements à risques  ou, le cas échéant, aux dispositions réglementaires en vigueur. Elles sont réduites à ce qui est strictement nécessaire aux besoins de l'exploitation et sont entièrement constituées de matériels utilisables dans les atmosphères explosives."
                                 }
                             ],
-                            "reference_str": null,
+                            "reference_str": "? ? Art. 17",
                             "sections": [],
                             "title": {
                                 "links": [],
@@ -1024,7 +1024,7 @@
                                     "text": "Les matériaux utilisés pour l'éclairage naturel ne produisent pas, lors d'un incendie, de gouttes enflammées."
                                 }
                             ],
-                            "reference_str": null,
+                            "reference_str": "? ? Art. 18",
                             "sections": [],
                             "title": {
                                 "links": [],
@@ -1074,7 +1074,7 @@
                                     "text": "Les moyens de lutte contre l'incendie sont capables de fonctionner efficacement quelle que soit la température et notamment en période de gel. L'exploitant s'assure de la vérification périodique et de la maintenance des matériels de sécurité et de lutte contre l'incendie conformément aux référentiels en vigueur."
                                 }
                             ],
-                            "reference_str": null,
+                            "reference_str": "? ? Art. 19",
                             "sections": [],
                             "title": {
                                 "links": [],
@@ -1094,7 +1094,7 @@
                     "applicability": null,
                     "legifrance_article": null,
                     "outer_alineas": [],
-                    "reference_str": null,
+                    "reference_str": "? ?",
                     "sections": [
                         {
                             "annotations": null,
@@ -1128,7 +1128,7 @@
                                     "text": "Dans les parties de l'installation présentant des risques d'incendie ou d'explosion, il est interdit d'apporter du feu sous une forme quelconque, sauf pour la réalisation de travaux ayant fait l'objet d'un « permis de feu ». Cette interdiction est affichée en caractères apparents."
                                 }
                             ],
-                            "reference_str": null,
+                            "reference_str": "? ? Art. 20",
                             "sections": [],
                             "title": {
                                 "links": [],
@@ -1238,7 +1238,7 @@
                                     "text": "Les préposés à la surveillance et à l'entretien des installations sont formés à la conduite à tenir en cas d'incident ou d'accident et familiarisés avec l'emploi des moyens de lutte contre l'incendie."
                                 }
                             ],
-                            "reference_str": null,
+                            "reference_str": "? ? Art. 21",
                             "sections": [],
                             "title": {
                                 "links": [],
@@ -1268,7 +1268,7 @@
                                     "text": "Les vérifications périodiques de ces matériels sont portées dans un registre dans lequel sont également mentionnées les suites données à ces vérifications."
                                 }
                             ],
-                            "reference_str": null,
+                            "reference_str": "? ? Art. 22",
                             "sections": [],
                             "title": {
                                 "links": [],
@@ -1288,7 +1288,7 @@
                     "applicability": null,
                     "legifrance_article": null,
                     "outer_alineas": [],
-                    "reference_str": null,
+                    "reference_str": "? ?",
                     "sections": [
                         {
                             "annotations": null,
@@ -1301,7 +1301,7 @@
                                 "num": "23"
                             },
                             "outer_alineas": [],
-                            "reference_str": null,
+                            "reference_str": "? ? Art. 23",
                             "sections": [
                                 {
                                     "annotations": null,
@@ -1344,7 +1344,7 @@
                                             "text": "― dans tous les cas 800 litres minimum ou égale à la capacité totale lorsque celle-là est inférieure à 800 litres."
                                         }
                                     ],
-                                    "reference_str": null,
+                                    "reference_str": "? ? Art. 23 I.",
                                     "sections": [],
                                     "title": {
                                         "links": [],
@@ -1368,7 +1368,7 @@
                                             "text": "Le stockage des liquides inflammables ainsi que des autres produits toxiques, corrosifs ou dangereux pour l'environnement n'est permis sous le niveau du sol que dans des réservoirs en fosse maçonnée, ou assimilés et, pour les liquides inflammables, dans les conditions énoncées aux paragraphes I et II du présent article. Tout nouveau réservoir installé sous le niveau du sol est à double enveloppe."
                                         }
                                     ],
-                                    "reference_str": null,
+                                    "reference_str": "? ? Art. 23 II.",
                                     "sections": [],
                                     "title": {
                                         "links": [],
@@ -1510,7 +1510,7 @@
                                             "text": ""
                                         }
                                     ],
-                                    "reference_str": null,
+                                    "reference_str": "? ? Art. 23 III.",
                                     "sections": [],
                                     "title": {
                                         "links": [],
@@ -1529,7 +1529,7 @@
                                             "text": "Le circuit nécessaire à la réutilisation des eaux industrielles telle que prévue au dernier alinéa de l'article 25 est conçu de telle manière qu'il ne puisse donner lieu à des pollutions accidentelles. Un dispositif d'arrêt d'alimentation en eau de procédé de l'installation, en cas de rejet accidentel des eaux réutilisées, est prévu."
                                         }
                                     ],
-                                    "reference_str": null,
+                                    "reference_str": "? ? Art. 23 IV.",
                                     "sections": [],
                                     "title": {
                                         "links": [],
@@ -1567,7 +1567,7 @@
             "applicability": null,
             "legifrance_article": null,
             "outer_alineas": [],
-            "reference_str": null,
+            "reference_str": "?",
             "sections": [
                 {
                     "annotations": {
@@ -1578,7 +1578,7 @@
                     "applicability": null,
                     "legifrance_article": null,
                     "outer_alineas": [],
-                    "reference_str": null,
+                    "reference_str": "? ?",
                     "sections": [
                         {
                             "annotations": {
@@ -1622,7 +1622,7 @@
                                     "text": "La conception et l'exploitation des installations permettent de limiter les débits d'eau et les flux polluants."
                                 }
                             ],
-                            "reference_str": null,
+                            "reference_str": "? ? Art. 24",
                             "sections": [],
                             "title": {
                                 "links": [],
@@ -1646,7 +1646,7 @@
                     "applicability": null,
                     "legifrance_article": null,
                     "outer_alineas": [],
-                    "reference_str": null,
+                    "reference_str": "? ?",
                     "sections": [
                         {
                             "annotations": {
@@ -1690,7 +1690,7 @@
                                     "text": "Les eaux d'arrosage des pistes non revêtues et les eaux d'arrosage des stockages sont réutilisées chaque fois que possible."
                                 }
                             ],
-                            "reference_str": null,
+                            "reference_str": "? ? Art. 25",
                             "sections": [],
                             "title": {
                                 "links": [],
@@ -1734,7 +1734,7 @@
                                     "text": "Les ouvrages de prélèvement dans les cours d'eau ne gênent pas l'écoulement normal des eaux et n'entravent pas les continuités écologiques."
                                 }
                             ],
-                            "reference_str": null,
+                            "reference_str": "? ? Art. 26",
                             "sections": [],
                             "title": {
                                 "links": [],
@@ -1794,7 +1794,7 @@
                                     "text": "La réalisation de tout nouveau forage ou la mise hors service d'un forage est portée à la connaissance du préfet avec tous les éléments d'appréciation de l'impact hydrogéologique."
                                 }
                             ],
-                            "reference_str": null,
+                            "reference_str": "? ? Art. 27",
                             "sections": [],
                             "title": {
                                 "links": [],
@@ -1818,7 +1818,7 @@
                     "applicability": null,
                     "legifrance_article": null,
                     "outer_alineas": [],
-                    "reference_str": null,
+                    "reference_str": "? ?",
                     "sections": [
                         {
                             "annotations": {
@@ -1856,7 +1856,7 @@
                                     "text": "Le plan des ouvrages de collecte des effluents fait apparaître les types d'ouvrages (fossés ou tuyauteries), les secteurs collectés, le sens d'écoulement, les points de branchement, regards, avaloirs, postes de relevage, postes de mesure, vannes manuelles et automatiques, etc. Il est conservé dans le dossier de demande d'enregistrement, daté et mis à jour en tant que de besoin."
                                 }
                             ],
-                            "reference_str": null,
+                            "reference_str": "? ? Art. 28",
                             "sections": [],
                             "title": {
                                 "links": [],
@@ -1895,7 +1895,7 @@
                                     "text": "Les dispositifs de rejet des eaux résiduaires sont aménagés de manière à réduire autant que possible la perturbation apportée au milieu récepteur aux abords du point de rejet, en fonction de l'utilisation de l'eau à proximité immédiate et à l'aval de celui-ci, et à ne pas gêner la navigation."
                                 }
                             ],
-                            "reference_str": null,
+                            "reference_str": "? ? Art. 29",
                             "sections": [],
                             "title": {
                                 "links": [],
@@ -1934,7 +1934,7 @@
                                     "text": "Ces points sont aménagés de manière à être aisément accessibles et permettre des interventions en toute sécurité. Toutes dispositions sont également prises pour faciliter l'intervention d'organismes extérieurs à la demande de l'inspection des installations classées."
                                 }
                             ],
-                            "reference_str": null,
+                            "reference_str": "? ? Art. 30",
                             "sections": [],
                             "title": {
                                 "links": [],
@@ -2005,7 +2005,7 @@
                                     "text": "Les eaux pluviales polluées (EPp) ne peuvent être rejetées au milieu naturel que sous réserve de respecter les objectifs de qualité et les valeurs limites d'émission fixés par le présent arrêté (article 34 à 36). Leur rejet est étalé dans le temps en tant que de besoin en vue de respecter les valeurs limites fixées par le présent arrêté, sous réserve de la compatibilité des rejets présentant les niveaux de pollution définis ci-dessous avec les objectifs de qualité et de quantité des eaux visés au IV de l'article L. 212-1 du code de l'environnement."
                                 }
                             ],
-                            "reference_str": null,
+                            "reference_str": "? ? Art. 31",
                             "sections": [],
                             "title": {
                                 "links": [],
@@ -2034,7 +2034,7 @@
                                     "text": "Les rejets directs ou indirects d'eau résiduaires vers les eaux souterraines sont interdits."
                                 }
                             ],
-                            "reference_str": null,
+                            "reference_str": "? ? Art. 32",
                             "sections": [],
                             "title": {
                                 "links": [],
@@ -2058,7 +2058,7 @@
                     "applicability": null,
                     "legifrance_article": null,
                     "outer_alineas": [],
-                    "reference_str": null,
+                    "reference_str": "? ?",
                     "sections": [
                         {
                             "annotations": {
@@ -2081,7 +2081,7 @@
                                     "text": "La dilution des effluents est interdite."
                                 }
                             ],
-                            "reference_str": null,
+                            "reference_str": "? ? Art. 33",
                             "sections": [],
                             "title": {
                                 "links": [],
@@ -2155,7 +2155,7 @@
                                     "text": "Les dispositions de l'alinéa précédent ne s'appliquent pas aux eaux marines des départements d'outre-mer."
                                 }
                             ],
-                            "reference_str": null,
+                            "reference_str": "? ? Art. 34",
                             "sections": [],
                             "title": {
                                 "links": [],
@@ -2209,7 +2209,7 @@
                                     "text": "Dans le cas de prélèvements instantanés, aucun résultat de mesure ne dépasse le double de la valeur limite prescrite."
                                 }
                             ],
-                            "reference_str": null,
+                            "reference_str": "? ? Art. 35",
                             "sections": [],
                             "title": {
                                 "links": [],
@@ -2273,7 +2273,7 @@
                                     "text": "Dans le cas de prélèvements instantanés, aucun résultat de mesure ne dépasse le double de la valeur limite prescrite."
                                 }
                             ],
-                            "reference_str": null,
+                            "reference_str": "? ? Art. 36",
                             "sections": [],
                             "title": {
                                 "links": [],
@@ -2297,7 +2297,7 @@
                     "applicability": null,
                     "legifrance_article": null,
                     "outer_alineas": [],
-                    "reference_str": null,
+                    "reference_str": "? ?",
                     "sections": [
                         {
                             "annotations": {
@@ -2345,7 +2345,7 @@
                                     "text": "Lors de la vidange, une vérification du bon fonctionnement du dispositif d'obturation est également réalisée. Les fiches de suivi du nettoyage du dispositif de traitement ainsi que les bordereaux de traitement des déchets détruits ou retraités sont tenus à la disposition de l'inspection des installations classées."
                                 }
                             ],
-                            "reference_str": null,
+                            "reference_str": "? ? Art. 37",
                             "sections": [],
                             "title": {
                                 "links": [],
@@ -2374,7 +2374,7 @@
                                     "text": "L'épandage des boues, déchets, effluents ou sous-produits est interdit."
                                 }
                             ],
-                            "reference_str": null,
+                            "reference_str": "? ? Art. 38",
                             "sections": [],
                             "title": {
                                 "links": [],
@@ -2405,7 +2405,7 @@
             "applicability": null,
             "legifrance_article": null,
             "outer_alineas": [],
-            "reference_str": null,
+            "reference_str": "?",
             "sections": [
                 {
                     "annotations": {
@@ -2416,7 +2416,7 @@
                     "applicability": null,
                     "legifrance_article": null,
                     "outer_alineas": [],
-                    "reference_str": null,
+                    "reference_str": "? ?",
                     "sections": [
                         {
                             "annotations": {
@@ -2474,7 +2474,7 @@
                                     "text": "Les fillers (éléments fins inférieurs à 80 µm) doivent être confinés (sachets, récipients, silos, bâtiments fermés). Le cas échéant, les silos doivent être munis de dispositifs de contrôle de niveau de manière à éviter les débordements. L'air s'échappant de ces silos doit être dépoussiéré."
                                 }
                             ],
-                            "reference_str": null,
+                            "reference_str": "? ? Art. 39",
                             "sections": [],
                             "title": {
                                 "links": [],
@@ -2498,7 +2498,7 @@
                     "applicability": null,
                     "legifrance_article": null,
                     "outer_alineas": [],
-                    "reference_str": null,
+                    "reference_str": "? ?",
                     "sections": [
                         {
                             "annotations": {
@@ -2541,7 +2541,7 @@
                                     "text": "Les dispositions du présent article ne s'appliquent pas aux installations fonctionnant sur une période unique d'une durée inférieure ou égale à six mois."
                                 }
                             ],
-                            "reference_str": null,
+                            "reference_str": "? ? Art. 40",
                             "sections": [],
                             "title": {
                                 "links": [],
@@ -2565,7 +2565,7 @@
                     "applicability": null,
                     "legifrance_article": null,
                     "outer_alineas": [],
-                    "reference_str": null,
+                    "reference_str": "? ?",
                     "sections": [
                         {
                             "annotations": {
@@ -2628,7 +2628,7 @@
                                     "text": "Les mesures de retombées de poussières par la méthode des jauges de retombées sont réalisées conformément aux dispositions de la norme NF X 43-014, version novembre 2003."
                                 }
                             ],
-                            "reference_str": null,
+                            "reference_str": "? ? Art. 41",
                             "sections": [],
                             "title": {
                                 "links": [],
@@ -2659,7 +2659,7 @@
             "applicability": null,
             "legifrance_article": null,
             "outer_alineas": [],
-            "reference_str": null,
+            "reference_str": "?",
             "sections": [
                 {
                     "annotations": {
@@ -2687,7 +2687,7 @@
                             "text": "La livraison des matières premières et l'expédition des produits se font préférentiellement en période diurne."
                         }
                     ],
-                    "reference_str": null,
+                    "reference_str": "? Art. 42",
                     "sections": [],
                     "title": {
                         "links": [],
@@ -2840,7 +2840,7 @@
                             "text": "Dans le cas où le bruit particulier de l'établissement est à tonalité marquée, de manière établie ou cyclique, sa durée d'apparition n'excède pas 30 % de la durée de fonctionnement de l'établissement dans chacune des périodes diurne ou nocturne définies au point 1.9 de l'annexe I du présent arrêté."
                         }
                     ],
-                    "reference_str": null,
+                    "reference_str": "? Art. 43",
                     "sections": [],
                     "title": {
                         "links": [],
@@ -2874,7 +2874,7 @@
                             "text": "L'usage de tous appareils de communication par voie acoustique (sirènes, avertisseurs, haut-parleurs, etc.), gênant pour le voisinage, est interdit, sauf si leur emploi est réservé à la prévention et au signalement d'incidents graves ou d'accidents."
                         }
                     ],
-                    "reference_str": null,
+                    "reference_str": "? Art. 44",
                     "sections": [],
                     "title": {
                         "links": [],
@@ -2903,7 +2903,7 @@
                             "text": "L'installation est construite, équipée et exploitée afin que son fonctionnement ne soit pas à l'origine de vibrations dans les constructions avoisinantes susceptibles de compromettre la santé ou la sécurité du voisinage ou de constituer une nuisance pour celui-ci."
                         }
                     ],
-                    "reference_str": null,
+                    "reference_str": "? Art. 45",
                     "sections": [],
                     "title": {
                         "links": [],
@@ -2927,7 +2927,7 @@
             "applicability": null,
             "legifrance_article": null,
             "outer_alineas": [],
-            "reference_str": null,
+            "reference_str": "?",
             "sections": [
                 {
                     "annotations": {
@@ -2991,7 +2991,7 @@
                             "text": "De façon générale, l'exploitant organise la gestion des déchets dans des conditions propres à garantir la préservation des intérêts visés à l'article L. 511-1 et L. 541-1 du code de l'environnement. Il s'assure que les installations de destination et que les intermédiaires disposent des autorisation, enregistrement ou déclaration et agrément nécessaires."
                         }
                     ],
-                    "reference_str": null,
+                    "reference_str": "? Art. 46",
                     "sections": [],
                     "title": {
                         "links": [],
@@ -3035,7 +3035,7 @@
                             "text": "L'exploitant tient à jour un registre caractérisant et quantifiant tous les déchets dangereux générés par ses activités (nature, tonnage, filière d'élimination, etc.). Il émet un bordereau de suivi dès qu'il remet ses déchets à un tiers."
                         }
                     ],
-                    "reference_str": null,
+                    "reference_str": "? Art. 47",
                     "sections": [],
                     "title": {
                         "links": [],
@@ -3069,7 +3069,7 @@
                             "text": "L'exploitant assure la traçabilité des déchets sortant de l'installation selon les dispositions de l'arrêté du 29 février 2012 susvisé."
                         }
                     ],
-                    "reference_str": null,
+                    "reference_str": "? Art. 48",
                     "sections": [],
                     "title": {
                         "links": [],
@@ -3089,14 +3089,14 @@
             "applicability": null,
             "legifrance_article": null,
             "outer_alineas": [],
-            "reference_str": null,
+            "reference_str": "?",
             "sections": [
                 {
                     "annotations": null,
                     "applicability": null,
                     "legifrance_article": null,
                     "outer_alineas": [],
-                    "reference_str": null,
+                    "reference_str": "? ?",
                     "sections": [
                         {
                             "annotations": null,
@@ -3130,7 +3130,7 @@
                                     "text": "L'inspection des installations classées peut prescrire tout prélèvement ou contrôle qu'elle pourrait juger nécessaire pour la protection de l'environnement. Les frais y afférents sont alors à la charge de l'exploitant."
                                 }
                             ],
-                            "reference_str": null,
+                            "reference_str": "? ? Art. 49",
                             "sections": [],
                             "title": {
                                 "links": [],
@@ -3150,7 +3150,7 @@
                     "applicability": null,
                     "legifrance_article": null,
                     "outer_alineas": [],
-                    "reference_str": null,
+                    "reference_str": "? ?",
                     "sections": [
                         {
                             "annotations": null,
@@ -3189,7 +3189,7 @@
                                     "text": "Les dispositions du présent article ne s'appliquent pas aux installations fonctionnant sur une période unique d'une durée inférieure ou égale à six mois."
                                 }
                             ],
-                            "reference_str": null,
+                            "reference_str": "? ? Art. 50",
                             "sections": [],
                             "title": {
                                 "links": [],
@@ -3219,7 +3219,7 @@
                                     "text": "Une mesure du niveau de bruit et de l'émergence est effectuée au moins tous les trois ans par une personne ou un organisme qualifié en limite de propriété et de zone à émergence réglementée."
                                 }
                             ],
-                            "reference_str": null,
+                            "reference_str": "? ? Art. 51",
                             "sections": [],
                             "title": {
                                 "links": [],
@@ -3239,7 +3239,7 @@
                     "applicability": null,
                     "legifrance_article": null,
                     "outer_alineas": [],
-                    "reference_str": null,
+                    "reference_str": "? ?",
                     "sections": [
                         {
                             "annotations": null,
@@ -3330,7 +3330,7 @@
                                     "text": "Les dispositions du présent article ne s'appliquent pas aux installations fonctionnant sur une période unique d'une durée inférieure ou égale à six mois."
                                 }
                             ],
-                            "reference_str": null,
+                            "reference_str": "? ? Art. 52",
                             "sections": [],
                             "title": {
                                 "links": [],
@@ -3350,7 +3350,7 @@
                     "applicability": null,
                     "legifrance_article": null,
                     "outer_alineas": [],
-                    "reference_str": null,
+                    "reference_str": "? ?",
                     "sections": [
                         {
                             "annotations": null,
@@ -3375,7 +3375,7 @@
                                     "text": "Dans le cas où l'exploitation de l'installation entraînerait l'émission directe ou indirecte de polluants figurant aux annexes de l'arrêté du 17 juillet 2009 susvisé, une surveillance est mise en place afin de vérifier que l'introduction de ces polluants dans les eaux souterraines n'entraîne pas de dégradation ou de tendances à la hausse significatives et durables des concentrations de polluants dans les eaux souterraines."
                                 }
                             ],
-                            "reference_str": null,
+                            "reference_str": "? ? Art. 53",
                             "sections": [],
                             "title": {
                                 "links": [],
@@ -3406,7 +3406,7 @@
             "applicability": null,
             "legifrance_article": null,
             "outer_alineas": [],
-            "reference_str": null,
+            "reference_str": "?",
             "sections": [
                 {
                     "annotations": null,
@@ -3425,7 +3425,7 @@
                             "text": "La directrice générale de la prévention des risques est chargée de l'exécution du présent arrêté, qui sera publié au Journal officiel de la République française."
                         }
                     ],
-                    "reference_str": null,
+                    "reference_str": "? Art. 54",
                     "sections": [],
                     "title": {
                         "links": [],
@@ -3449,7 +3449,7 @@
             "applicability": null,
             "legifrance_article": null,
             "outer_alineas": [],
-            "reference_str": null,
+            "reference_str": "Annexe",
             "sections": [
                 {
                     "annotations": null,
@@ -3483,14 +3483,14 @@
                             "text": "Cette norme fixe deux méthodes de mesure se différenciant par les moyens à mettre en œuvre et par la précision des résultats. La méthode de mesure à utiliser est la méthode dite d' expertise  définie au point 6 de la norme. Cependant, un simple contrôle du respect des prescriptions peut être effectué selon la méthode dite de  contrôle  définie au point 5 de la norme. Dans ce cas, une conclusion quant à la conformité des émissions sonores de l'établissement ne pourra être tirée que si le résultat de la mesure diffère de la valeur limite considérée (émergence ou niveau admissible) de plus de 2 dB(A)."
                         }
                     ],
-                    "reference_str": null,
+                    "reference_str": "Annexe Art. ?",
                     "sections": [
                         {
                             "annotations": null,
                             "applicability": null,
                             "legifrance_article": null,
                             "outer_alineas": [],
-                            "reference_str": null,
+                            "reference_str": "Annexe Art. ? 1.",
                             "sections": [
                                 {
                                     "annotations": null,
@@ -3503,7 +3503,7 @@
                                             "text": "Niveau de pression acoustique continu équivalent pondéré A obtenu sur un intervalle de temps  court . Cet intervalle de temps, appelé durée d'intégration, a pour symbole t. Le LAeq court est utilisé pour obtenir une répartition fine de l'évolution temporelle des événements acoustiques pendant l'intervalle de mesurage. La durée d'intégration retenue dépend de la durée des phénomènes que l'on veut mettre en évidence. Elle est généralement de durée inférieure ou égale à 10 s."
                                         }
                                     ],
-                                    "reference_str": null,
+                                    "reference_str": "Annexe Art. ? 1.1.",
                                     "sections": [],
                                     "title": {
                                         "links": [],
@@ -3522,7 +3522,7 @@
                                             "text": "Par analyse statistique de LAeq courts, on peut déterminer le niveau de pression acoustique pondéré A qui est dépassé pendant N % de l'intervalle de temps considéré, dénommé  niveau acoustique fractile . Son symbole est LAN,t : par exemple, LA90,1s est le niveau de pression acoustique continu équivalent pondéré A dépassé pendant 90 % de l'intervalle de mesurage, avec une durée d'intégration égale à 1 seconde."
                                         }
                                     ],
-                                    "reference_str": null,
+                                    "reference_str": "Annexe Art. ? 1.2.",
                                     "sections": [],
                                     "title": {
                                         "links": [],
@@ -3541,7 +3541,7 @@
                                             "text": "Intervalle de temps au cours duquel la pression acoustique quadratique pondérée A est intégrée et moyennée."
                                         }
                                     ],
-                                    "reference_str": null,
+                                    "reference_str": "Annexe Art. ? 1.3.",
                                     "sections": [],
                                     "title": {
                                         "links": [],
@@ -3560,7 +3560,7 @@
                                             "text": "Intervalle de temps au cours duquel tous les mesurages nécessaires à la caractérisation de la situation sonore sont effectués soit en continu, soit par intermittence."
                                         }
                                     ],
-                                    "reference_str": null,
+                                    "reference_str": "Annexe Art. ? 1.4.",
                                     "sections": [],
                                     "title": {
                                         "links": [],
@@ -3579,7 +3579,7 @@
                                             "text": "Intervalle de temps retenu pour caractériser une situation acoustique et pour déterminer de façon représentative l'exposition au bruit des personnes."
                                         }
                                     ],
-                                    "reference_str": null,
+                                    "reference_str": "Annexe Art. ? 1.5.",
                                     "sections": [],
                                     "title": {
                                         "links": [],
@@ -3598,7 +3598,7 @@
                                             "text": "Bruit total existant dans une situation donnée pendant un intervalle de temps donné. Il est composé de l'ensemble des bruits émis par toutes les sources proches et éloignées."
                                         }
                                     ],
-                                    "reference_str": null,
+                                    "reference_str": "Annexe Art. ? 1.6.",
                                     "sections": [],
                                     "title": {
                                         "links": [],
@@ -3622,7 +3622,7 @@
                                             "text": "Au sens du présent arrêté, le bruit particulier est constitué de l'ensemble des bruits émis par l'établissement considéré."
                                         }
                                     ],
-                                    "reference_str": null,
+                                    "reference_str": "Annexe Art. ? 1.7.",
                                     "sections": [],
                                     "title": {
                                         "links": [],
@@ -3641,7 +3641,7 @@
                                             "text": "Bruit ambiant, en l'absence du (des) bruits(s) particulier(s), objet(s) de la requête considérée."
                                         }
                                     ],
-                                    "reference_str": null,
+                                    "reference_str": "Annexe Art. ? 1.8.",
                                     "sections": [],
                                     "title": {
                                         "links": [],
@@ -3756,7 +3756,7 @@
                                             "text": "Les bandes sont définies par fréquence centrale de tiers d'octave."
                                         }
                                     ],
-                                    "reference_str": null,
+                                    "reference_str": "Annexe Art. ? 1.9.",
                                     "sections": [],
                                     "title": {
                                         "links": [],
@@ -3776,7 +3776,7 @@
                             "applicability": null,
                             "legifrance_article": null,
                             "outer_alineas": [],
-                            "reference_str": null,
+                            "reference_str": "Annexe Art. ? 2.",
                             "sections": [
                                 {
                                     "annotations": null,
@@ -3799,7 +3799,7 @@
                                             "text": "Avant chaque série de mesurage, le sonomètre est calibré."
                                         }
                                     ],
-                                    "reference_str": null,
+                                    "reference_str": "Annexe Art. ? 2.1.",
                                     "sections": [],
                                     "title": {
                                         "links": [],
@@ -3823,7 +3823,7 @@
                                             "text": "Le contrôle de l'émergence est effectué aux emplacements jugés les plus représentatifs des zones à émergence réglementée. Dans le cas du traitement d'une plainte, on privilégiera les emplacements où la gêne est ressentie, en tenant compte de l'utilisation normale ou habituelle des lieux."
                                         }
                                     ],
-                                    "reference_str": null,
+                                    "reference_str": "Annexe Art. ? 2.2.",
                                     "sections": [],
                                     "title": {
                                         "links": [],
@@ -3842,7 +3842,7 @@
                                             "text": "Les dispositions de la norme sont applicables."
                                         }
                                     ],
-                                    "reference_str": null,
+                                    "reference_str": "Annexe Art. ? 2.3.",
                                     "sections": [],
                                     "title": {
                                         "links": [],
@@ -3861,7 +3861,7 @@
                                             "text": "Les dispositions de la norme sont applicables."
                                         }
                                     ],
-                                    "reference_str": null,
+                                    "reference_str": "Annexe Art. ? 2.4.",
                                     "sections": [],
                                     "title": {
                                         "links": [],
@@ -3880,7 +3880,7 @@
                                             "text": "Les indicateurs acoustiques sont destinés à fournir une description synthétique d'une situation sonore complexe."
                                         }
                                     ],
-                                    "reference_str": null,
+                                    "reference_str": "Annexe Art. ? 2.5.",
                                     "sections": [
                                         {
                                             "annotations": null,
@@ -3934,7 +3934,7 @@
                                                     "text": "ti est la durée de la période représentée par l'intervalle de mesurage i (avec ∑ti = T)."
                                                 }
                                             ],
-                                            "reference_str": null,
+                                            "reference_str": "Annexe Art. ? 2.5. a)",
                                             "sections": [],
                                             "title": {
                                                 "links": [],
@@ -3973,7 +3973,7 @@
                                                     "text": "Le point 6.5.2 de la norme n'est pas applicable, sauf en ce qui concerne la disposition relative à la tonalité marquée."
                                                 }
                                             ],
-                                            "reference_str": null,
+                                            "reference_str": "Annexe Art. ? 2.5. b)",
                                             "sections": [],
                                             "title": {
                                                 "links": [],
@@ -4084,7 +4084,7 @@
                                             "text": "Si les valeurs mesurées sont proches des valeurs limites (niveaux admissibles et/ou émergence), un soin particulier sera pris dans le choix, la durée et le nombre des intervalles de mesurage."
                                         }
                                     ],
-                                    "reference_str": null,
+                                    "reference_str": "Annexe Art. ? 2.6.",
                                     "sections": [],
                                     "title": {
                                         "links": [],
@@ -4125,7 +4125,7 @@
                                     "text": "― elle ne peut être mise en œuvre en cas de présence de bruit à tonalité marquée ainsi que dans les situations nécessitant l'utilisation d'un indice fractile et décrites au point 2.5 ci-dessus."
                                 }
                             ],
-                            "reference_str": null,
+                            "reference_str": "Annexe Art. ? 3.",
                             "sections": [],
                             "title": {
                                 "links": [],
@@ -4144,7 +4144,7 @@
                                     "text": "Le rapport de mesurage établi par la personne ou l'organisme qualifié qui effectue des mesures de contrôle en application des dispositions réglementaires applicables contient les éléments mentionnés au point 7.1 de la norme, à l'exception de la référence à cette dernière, qui est remplacée par la référence au présent arrêté."
                                 }
                             ],
-                            "reference_str": null,
+                            "reference_str": "Annexe Art. ? 4.",
                             "sections": [],
                             "title": {
                                 "links": [],

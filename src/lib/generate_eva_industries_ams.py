@@ -1,6 +1,6 @@
 import json
 from datetime import datetime
-from lib.am_enriching import add_topics, remove_prescriptive_power
+from lib.am_enriching import add_references, add_topics, remove_prescriptive_power
 from typing import Callable, List, Dict, Set, Tuple
 
 from lib.data import ArreteMinisteriel, EnrichedString, StructuredText, load_arrete_ministeriel, Topic
@@ -43,7 +43,7 @@ def _generate_filename(version_descriptor: Tuple[str, ...]) -> str:
 
 def _handle_nor(nor: str, parametrization: Parametrization, enricher: Callable[[ArreteMinisteriel], ArreteMinisteriel]):
     am = _generate_structured_am(nor)
-    enriched_am = enricher(am)
+    enriched_am = add_references(enricher(am))
     write_json(enriched_am.as_dict(), f'data/AM/enriched_texts/{nor}.json')
     write_json(parametrization.to_dict(), f'data/AM/parametrizations/{nor}.json')
     all_versions = generate_all_am_versions(enriched_am, parametrization)

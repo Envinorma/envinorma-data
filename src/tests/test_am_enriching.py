@@ -34,6 +34,7 @@ def test_add_topics():
 def test_extract_special_prefix():
     assert _extract_special_prefix('Annexe I') == 'Annexe I'
     assert _extract_special_prefix('ANNEXE I') == 'Annexe I'
+    assert _extract_special_prefix('ANNEXE') == 'Annexe'
     assert _extract_special_prefix('ANNEXE CONCERNANT LES DISPOSITIONS') == 'Annexe ?'
     assert _extract_special_prefix('Article fixant les dispositions') == 'Art. ?'
     assert _extract_special_prefix('Article 1') == 'Art. 1'
