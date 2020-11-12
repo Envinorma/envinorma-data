@@ -675,7 +675,8 @@ def generate_all_am_versions(
     for parameter in parameters:
         conditions = _extract_conditions_from_parametrization(parameter, parametrization)
         options_dicts.append(_generate_options_dict(conditions))
-
+    if not options_dicts:
+        return {tuple(): am}
     combinations = _generate_combinations(options_dicts)
     return {
         combination_name: _apply_parameter_values_to_am(am, parametrization, parameter_values)

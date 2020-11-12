@@ -8,7 +8,6 @@ from lib.parametric_am import Ints
 from lib.structure_detection import (
     NUMBERING_PATTERNS,
     NumberingPattern,
-    PATTERN_NAME_TO_LIST,
     ROMAN_PATTERN,
     detect_longest_matched_string,
 )

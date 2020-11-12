@@ -19,6 +19,7 @@ from lib.parametric_am import (
     Parameter,
     SectionReference,
     Condition,
+    generate_all_am_versions,
     _mean,
     _extract_interval_midpoints,
     _generate_options_dict,
@@ -217,3 +218,31 @@ def test_extract_parameters_from_parametrization_2():
     assert len(parameters) == 2
     assert copy(parameter_1) in parameters
     assert copy(parameter_2) in parameters
+
+
+def test_generate_all_am_versions():
+    sections = [
+        StructuredText(EnrichedString('Art. 1', []), [EnrichedString('Initial version 1')], [], None, None),
+        StructuredText(EnrichedString('Art. 2', []), [EnrichedString('Initial version 2')], [], None, None),
+        StructuredText(EnrichedString('Art. 3', []), [EnrichedString('condition source')], [], None, None),
+    ]
+    am = ArreteMinisteriel(_random_enriched_string(), sections, [], '', None)
+
+    parameter = Parameter('nouvelle-installation', ParameterType.BOOLEAN)
+    condition = Equal(parameter, True)
+    source = ConditionSource('', EntityReference(SectionReference((2,)), None, False))
+    parametrization = Parametrization(
+        [ApplicationCondition(EntityReference(SectionReference((0,)), None), condition, source)], []
+    )
+
+    res = generate_all_am_versions(am, parametrization)
+    assert len(res) == 2
+    assert ('nouvelle-installation == True',) in res
+    assert ('nouvelle-installation != True',) in res
+    assert not res[('nouvelle-installation != True',)].sections[0].applicability.active
+    assert res[('nouvelle-installation == True',)].sections[0].applicability.active
+
+    res_2 = generate_all_am_versions(am, Parametrization([], []))
+    assert len(res_2) == 1
+    assert tuple() in res_2
+    assert res_2[tuple()].sections[0].applicability is None
