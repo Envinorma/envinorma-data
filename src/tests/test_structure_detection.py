@@ -1,14 +1,14 @@
 import re
 from lib.structure_detection import (
-    _pattern_is_increasing,
     NumberingPattern,
-    _is_valid,
-    _detect_longest_matched_pattern,
-    NumberingPattern,
-    prefixes_are_continuous,
-    PATTERN_NAME_TO_LIST,
-    _smart_detect_pattern,
+    detect_longest_matched_pattern,
+    detect_longest_matched_string,
     detect_patterns_if_exists,
+    prefixes_are_continuous,
+    _pattern_is_increasing,
+    _is_valid,
+    _smart_detect_pattern,
+    PATTERN_NAME_TO_LIST,
     NUMBERING_PATTERNS,
 )
 from lib.numbering_exceptions import MAX_PREFIX_LEN, EXCEPTION_PREFIXES
@@ -41,11 +41,11 @@ def test_is_valid():
 
 
 def test_detect_longest_matched_pattern():
-    assert _detect_longest_matched_pattern('1. 1. bnjr') == NumberingPattern.NUMERIC_D2_SPACE
-    assert _detect_longest_matched_pattern('1. 2. 3. bnjr') == NumberingPattern.NUMERIC_D3_SPACE
-    assert _detect_longest_matched_pattern('1. 2.3. bnjr') == NumberingPattern.NUMERIC_D1
-    assert _detect_longest_matched_pattern('1.') is None
-    assert _detect_longest_matched_pattern('') is None
+    assert detect_longest_matched_pattern('1. 1. bnjr') == NumberingPattern.NUMERIC_D2_SPACE
+    assert detect_longest_matched_pattern('1. 2. 3. bnjr') == NumberingPattern.NUMERIC_D3_SPACE
+    assert detect_longest_matched_pattern('1. 2.3. bnjr') == NumberingPattern.NUMERIC_D1
+    assert detect_longest_matched_pattern('1.') is None
+    assert detect_longest_matched_pattern('') is None
 
 
 def test_exceptions():
@@ -96,3 +96,17 @@ def test_structure_extraction_2():
         NumberingPattern.CAPS,
     ]
 
+
+def test_detect_longest_matched_string():
+    titles_to_target = {
+        'I. First title': 'I. ',
+        'A. First section': 'A. ',
+        'B. Second section': 'B. ',
+        'H. H-th section': 'H. ',
+        'I. ― Les aires de chargement et de déchargement des produits': 'I. ',
+        '1.1. Bonjour': '1.1. ',
+        '1. 15. Bonjour': '1. 15. ',
+    }
+
+    for title, target in titles_to_target.items():
+        assert detect_longest_matched_string(title) == target
