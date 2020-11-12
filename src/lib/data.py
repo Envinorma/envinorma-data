@@ -167,12 +167,19 @@ class StructuredText:
 
 
 @dataclass
+class DateCriterion:
+    left_date: Optional[str]
+    right_date: Optional[str]
+
+
+@dataclass
 class ArreteMinisteriel:
     title: EnrichedString
     sections: List[StructuredText]
     visa: List[EnrichedString]
     short_title: str
     applicability: Optional[Applicability]
+    installation_date_criterion: Optional[DateCriterion] = None
 
     def as_dict(self) -> Dict[str, Any]:
         res = asdict(self)

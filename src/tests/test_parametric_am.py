@@ -1,6 +1,6 @@
 import random
 from copy import copy
-from datetime import datetime
+from datetime import datetime, timedelta
 from string import ascii_letters
 from typing import List
 
@@ -13,6 +13,7 @@ from lib.parametric_am import (
     Equal,
     Greater,
     Littler,
+    ParameterEnum,
     ParameterType,
     Parametrization,
     Range,
@@ -28,6 +29,7 @@ from lib.parametric_am import (
     _change_value,
     _apply_parameter_values_to_am,
     _extract_parameters_from_parametrization,
+    _extract_installation_date_criterion,
 )
 
 
@@ -246,3 +248,34 @@ def test_generate_all_am_versions():
     assert len(res_2) == 1
     assert tuple() in res_2
     assert res_2[tuple()].sections[0].applicability is None
+
+
+def test_extract_installation_date_criterion():
+    parameter = ParameterEnum.DATE_INSTALLATION.value
+    date_1 = datetime(2018, 1, 1)
+    date_2 = datetime(2019, 1, 1)
+    condition_1 = Littler(parameter, date_1, True)
+    condition_2 = Range(parameter, date_1, date_2, left_strict=False, right_strict=True)
+    condition_3 = Greater(parameter, date_2, False)
+    source = ConditionSource('', EntityReference(SectionReference((2,)), None, False))
+    new_text = StructuredText(EnrichedString('Art. 2', []), [EnrichedString('version modifiée')], [], None, None)
+    parametrization = Parametrization(
+        [
+            ApplicationCondition(EntityReference(SectionReference((0,)), None), condition_1, source),
+            ApplicationCondition(EntityReference(SectionReference((0,)), None), condition_3, source),
+        ],
+        [AlternativeSection(SectionReference((1,)), new_text, condition_2, source)],
+    )
+
+    oldest = _extract_installation_date_criterion(parametrization, {parameter: date_1 - timedelta(1)})
+    assert oldest
+    assert oldest.left_date is None
+    assert oldest.right_date == '2018-01-01'
+    mid = _extract_installation_date_criterion(parametrization, {parameter: date_1 + timedelta(1)})
+    assert mid
+    assert mid.left_date == '2018-01-01'
+    assert mid.right_date == '2019-01-01'
+    youngest = _extract_installation_date_criterion(parametrization, {parameter: date_2 + timedelta(1)})
+    assert youngest
+    assert youngest.left_date == '2019-01-01'
+    assert youngest.right_date is None

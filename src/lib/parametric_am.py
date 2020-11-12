@@ -3,7 +3,7 @@ from dataclasses import dataclass, field, asdict
 from datetime import datetime, timedelta
 from enum import Enum
 from typing import Any, Dict, KeysView, List, Optional, Set, Tuple, Union
-from lib.data import Applicability, ArreteMinisteriel, StructuredText, load_structured_text
+from lib.data import Applicability, ArreteMinisteriel, DateCriterion, StructuredText, load_structured_text
 
 
 class ParameterType(Enum):
@@ -544,10 +544,32 @@ def _compute_whole_text_applicability(
     return _merge_applicabilities(applicabilities)
 
 
+def _date_to_str(date: datetime) -> str:
+    return date.strftime('%Y-%m-%d')
+
+
+def _extract_installation_date_criterion(
+    parametrization: Parametrization, parameter_values: Dict[Parameter, Any]
+) -> Optional[DateCriterion]:
+    targets = _extract_sorted_targets(
+        _extract_conditions_from_parametrization(ParameterEnum.DATE_INSTALLATION.value, parametrization), True
+    )
+    if not targets:
+        return None
+    value = parameter_values[ParameterEnum.DATE_INSTALLATION.value]
+    if value < targets[0]:
+        return DateCriterion(None, _date_to_str(targets[0]))
+    for date_before, date_after in zip(targets, targets[1:]):
+        if value < date_after:
+            return DateCriterion(_date_to_str(date_before), _date_to_str(date_after))
+    return DateCriterion(_date_to_str(targets[-1]), None)
+
+
 def _apply_parameter_values_to_am(
     am: ArreteMinisteriel, parametrization: Parametrization, parameter_values: Dict[Parameter, Any]
 ) -> ArreteMinisteriel:
     new_am = copy(am)
+    new_am.installation_date_criterion = _extract_installation_date_criterion(parametrization, parameter_values)
     new_am.sections = [
         _apply_parameter_values_in_text(section, parametrization, parameter_values, (i,))
         for i, section in enumerate(am.sections)

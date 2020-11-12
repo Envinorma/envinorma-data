@@ -6,6 +6,10 @@
         "reason_modified": null,
         "warnings": []
     },
+    "installation_date_criterion": {
+        "left_date": null,
+        "right_date": "2013-12-10"
+    },
     "sections": [
         {
             "annotations": {
