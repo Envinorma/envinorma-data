@@ -1,9 +1,9 @@
 import re
 from copy import copy
 from dataclasses import replace
-from typing import Dict, List, Optional, Set
+from typing import Dict, List, Optional, Set, Tuple
 
-from lib.data import Annotations, ArreteMinisteriel, StructuredText, Topic
+from lib.data import Annotations, ArreteMinisteriel, EnrichedString, StructuredText, Topic
 from lib.parametric_am import Ints
 from lib.structure_detection import NUMBERING_PATTERNS, NumberingPattern, ROMAN_PATTERN, detect_longest_matched_string
 
@@ -59,6 +59,8 @@ def _extract_article_prefix(title: str) -> Optional[str]:
         return None
     if len(split) == 1:
         return 'Art.'
+    if split[1].lower() == 'annexe':
+        return _extract_annexe_prefix(' '.join(split[1:]))
     article_number = split[1]
     if _is_probably_section_number(article_number):
         return 'Art. ' + article_number
@@ -139,8 +141,11 @@ def _merge_prefix_list(prefixes: List[Optional[str]]) -> str:
 def add_references_in_section(section: StructuredText, previous_prefixes: List[Optional[str]]) -> StructuredText:
     result = copy(section)
     del section
-    prefixes = previous_prefixes + [_extract_prefix(result.title.text)]
-    result.reference_str = _merge_prefix_list(prefixes)
+    if previous_prefixes or result.legifrance_article:
+        prefixes = previous_prefixes + [_extract_prefix(result.title.text)]
+        result.reference_str = _merge_prefix_list(prefixes)
+    else:
+        prefixes = []
     result.sections = [add_references_in_section(subsection, prefixes) for subsection in result.sections]
     return result
 
@@ -149,3 +154,13 @@ def add_references(am: ArreteMinisteriel) -> ArreteMinisteriel:
     result = copy(am)
     result.sections = [add_references_in_section(section, []) for section in am.sections]
     return result
+
+
+def _extract_titles_and_reference_pairs_from_section(text: StructuredText) -> List[Tuple[str, str]]:
+    return [(text.title.text, text.reference_str or '')] + [
+        pair for section in text.sections for pair in _extract_titles_and_reference_pairs_from_section(section)
+    ]
+
+
+def extract_titles_and_reference_pairs(am: ArreteMinisteriel) -> List[Tuple[str, str]]:
+    return [pair for section in am.sections for pair in _extract_titles_and_reference_pairs_from_section(section)]

@@ -1,4 +1,4 @@
-from lib.data import ArreteMinisteriel, EnrichedString, StructuredText, Topic
+from lib.data import ArreteMinisteriel, ArticleStatus, EnrichedString, LegifranceArticle, StructuredText, Topic
 from lib.am_enriching import (
     remove_prescriptive_power,
     add_topics,
@@ -70,26 +70,29 @@ def test_merge_prefix_list():
 
 
 def test_add_references():
-    sub_sections = [
+    sub_sub_sections = [
         StructuredText(EnrichedString('1.1. azeaze'), [], [], None, None),
         StructuredText(EnrichedString('1. 2. azeaze'), [], [], None, None),
     ]
+    sub_sections = [StructuredText(EnrichedString('1. azeaze'), [], sub_sub_sections, None, None)]
+    article = LegifranceArticle('', '', 0, '', ArticleStatus.VIGUEUR)
     sections = [
-        StructuredText(EnrichedString('1. efzefz'), [], sub_sections, None, None),
-        StructuredText(EnrichedString('2. zefez'), [], [], None, None),
-        StructuredText(EnrichedString('A. zefze'), [], [], None, None),
-        StructuredText(EnrichedString('a) zefze'), [], [], None, None),
-        StructuredText(EnrichedString('V. zefze'), [], [], None, None),
-        StructuredText(EnrichedString('ANNEXE I zefze'), [], [], None, None),
-        StructuredText(EnrichedString('Article 18.1'), [], [], None, None),
-        StructuredText(EnrichedString('Article 1'), [], [], None, None),
+        StructuredText(EnrichedString('Article 1. efzefz'), [], sub_sections, article, None),
+        StructuredText(EnrichedString('2. zefez'), [], [], article, None),
+        StructuredText(EnrichedString('A. zefze'), [], [], article, None),
+        StructuredText(EnrichedString('a) zefze'), [], [], article, None),
+        StructuredText(EnrichedString('V. zefze'), [], [], article, None),
+        StructuredText(EnrichedString('ANNEXE I zefze'), [], [], article, None),
+        StructuredText(EnrichedString('Article 18.1'), [], [], article, None),
+        StructuredText(EnrichedString('Article 1'), [], [], article, None),
     ]
     am = ArreteMinisteriel(EnrichedString(''), sections, [], '', None)
     am_with_references = add_references(am)
 
-    assert am_with_references.sections[0].reference_str == '1.'
-    assert am_with_references.sections[0].sections[0].reference_str == '1.1.'
-    assert am_with_references.sections[0].sections[1].reference_str == '1.2.'
+    assert am_with_references.sections[0].reference_str == 'Art. 1.'
+    assert am_with_references.sections[0].sections[0].reference_str == 'Art. 1. 1.'
+    assert am_with_references.sections[0].sections[0].sections[0].reference_str == 'Art. 1. 1.1.'
+    assert am_with_references.sections[0].sections[0].sections[1].reference_str == 'Art. 1. 1.2.'
     assert am_with_references.sections[1].reference_str == '2.'
     assert am_with_references.sections[2].reference_str == 'A.'
     assert am_with_references.sections[3].reference_str == 'a)'
