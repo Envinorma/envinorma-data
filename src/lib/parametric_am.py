@@ -8,6 +8,7 @@ from lib.data import Applicability, ArreteMinisteriel, DateCriterion, Structured
 
 class ParameterType(Enum):
     DATE = 'DATE'
+    REGIME = 'REGIME'
     BOOLEAN = 'BOOLEAN'
 
 
