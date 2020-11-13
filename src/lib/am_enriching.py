@@ -164,3 +164,18 @@ def _extract_titles_and_reference_pairs_from_section(text: StructuredText) -> Li
 
 def extract_titles_and_reference_pairs(am: ArreteMinisteriel) -> List[Tuple[str, str]]:
     return [pair for section in am.sections for pair in _extract_titles_and_reference_pairs_from_section(section)]
+
+
+def _minify_section(text: StructuredText) -> StructuredText:
+    return StructuredText(
+        text.title,
+        [],
+        [_minify_section(sec) for sec in text.sections],
+        replace(text.legifrance_article, content='') if text.legifrance_article else None,
+        None,
+    )
+
+
+def _minify_am(am: ArreteMinisteriel) -> ArreteMinisteriel:
+    return ArreteMinisteriel(am.title, [_minify_section(sec) for sec in am.sections], [], '', None, None)
+

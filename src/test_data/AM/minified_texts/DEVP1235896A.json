@@ -1,0 +1,2020 @@
+{
+    "applicability": null,
+    "installation_date_criterion": null,
+    "sections": [
+        {
+            "annotations": null,
+            "applicability": null,
+            "legifrance_article": {
+                "content": "",
+                "etat": "VIGUEUR",
+                "id": "LEGIARTI000037532716",
+                "intOrdre": 524287,
+                "num": "1"
+            },
+            "outer_alineas": [],
+            "reference_str": null,
+            "sections": [],
+            "title": {
+                "links": [],
+                "table": null,
+                "text": "Article 1"
+            }
+        },
+        {
+            "annotations": null,
+            "applicability": null,
+            "legifrance_article": {
+                "content": "",
+                "etat": "VIGUEUR",
+                "id": "LEGIARTI000037532724",
+                "intOrdre": 1048574,
+                "num": "2"
+            },
+            "outer_alineas": [],
+            "reference_str": null,
+            "sections": [],
+            "title": {
+                "links": [],
+                "table": null,
+                "text": "Article 2"
+            }
+        },
+        {
+            "annotations": null,
+            "applicability": null,
+            "legifrance_article": null,
+            "outer_alineas": [],
+            "reference_str": null,
+            "sections": [
+                {
+                    "annotations": null,
+                    "applicability": null,
+                    "legifrance_article": {
+                        "content": "",
+                        "etat": "VIGUEUR",
+                        "id": "LEGIARTI000026700199",
+                        "intOrdre": 524287,
+                        "num": "3"
+                    },
+                    "outer_alineas": [],
+                    "reference_str": null,
+                    "sections": [],
+                    "title": {
+                        "links": [],
+                        "table": null,
+                        "text": "Article 3"
+                    }
+                },
+                {
+                    "annotations": null,
+                    "applicability": null,
+                    "legifrance_article": {
+                        "content": "",
+                        "etat": "VIGUEUR",
+                        "id": "LEGIARTI000037532726",
+                        "intOrdre": 1048574,
+                        "num": "4"
+                    },
+                    "outer_alineas": [],
+                    "reference_str": null,
+                    "sections": [],
+                    "title": {
+                        "links": [],
+                        "table": null,
+                        "text": "Article 4"
+                    }
+                },
+                {
+                    "annotations": null,
+                    "applicability": null,
+                    "legifrance_article": {
+                        "content": "",
+                        "etat": "VIGUEUR",
+                        "id": "LEGIARTI000037532728",
+                        "intOrdre": 1572861,
+                        "num": "5"
+                    },
+                    "outer_alineas": [],
+                    "reference_str": null,
+                    "sections": [],
+                    "title": {
+                        "links": [],
+                        "table": null,
+                        "text": "Article 5"
+                    }
+                },
+                {
+                    "annotations": null,
+                    "applicability": null,
+                    "legifrance_article": {
+                        "content": "",
+                        "etat": "VIGUEUR",
+                        "id": "LEGIARTI000037532732",
+                        "intOrdre": 2097148,
+                        "num": "6"
+                    },
+                    "outer_alineas": [],
+                    "reference_str": null,
+                    "sections": [],
+                    "title": {
+                        "links": [],
+                        "table": null,
+                        "text": "Article 6"
+                    }
+                },
+                {
+                    "annotations": null,
+                    "applicability": null,
+                    "legifrance_article": {
+                        "content": "",
+                        "etat": "VIGUEUR",
+                        "id": "LEGIARTI000037532734",
+                        "intOrdre": 2621435,
+                        "num": "7"
+                    },
+                    "outer_alineas": [],
+                    "reference_str": null,
+                    "sections": [],
+                    "title": {
+                        "links": [],
+                        "table": null,
+                        "text": "Article 7"
+                    }
+                }
+            ],
+            "title": {
+                "links": [],
+                "table": null,
+                "text": "Chapitre Ier : Dispositions générales"
+            }
+        },
+        {
+            "annotations": null,
+            "applicability": null,
+            "legifrance_article": null,
+            "outer_alineas": [],
+            "reference_str": null,
+            "sections": [
+                {
+                    "annotations": null,
+                    "applicability": null,
+                    "legifrance_article": null,
+                    "outer_alineas": [],
+                    "reference_str": null,
+                    "sections": [
+                        {
+                            "annotations": null,
+                            "applicability": null,
+                            "legifrance_article": {
+                                "content": "",
+                                "etat": "VIGUEUR",
+                                "id": "LEGIARTI000026700236",
+                                "intOrdre": 524287,
+                                "num": "8"
+                            },
+                            "outer_alineas": [],
+                            "reference_str": null,
+                            "sections": [],
+                            "title": {
+                                "links": [],
+                                "table": null,
+                                "text": "Article 8"
+                            }
+                        },
+                        {
+                            "annotations": null,
+                            "applicability": null,
+                            "legifrance_article": {
+                                "content": "",
+                                "etat": "VIGUEUR",
+                                "id": "LEGIARTI000026700237",
+                                "intOrdre": 1048574,
+                                "num": "9"
+                            },
+                            "outer_alineas": [],
+                            "reference_str": null,
+                            "sections": [],
+                            "title": {
+                                "links": [],
+                                "table": null,
+                                "text": "Article 9"
+                            }
+                        },
+                        {
+                            "annotations": null,
+                            "applicability": null,
+                            "legifrance_article": {
+                                "content": "",
+                                "etat": "VIGUEUR",
+                                "id": "LEGIARTI000037532736",
+                                "intOrdre": 1572861,
+                                "num": "10"
+                            },
+                            "outer_alineas": [],
+                            "reference_str": null,
+                            "sections": [],
+                            "title": {
+                                "links": [],
+                                "table": null,
+                                "text": "Article 10"
+                            }
+                        },
+                        {
+                            "annotations": null,
+                            "applicability": null,
+                            "legifrance_article": {
+                                "content": "",
+                                "etat": "VIGUEUR",
+                                "id": "LEGIARTI000037532740",
+                                "intOrdre": 2097148,
+                                "num": "11"
+                            },
+                            "outer_alineas": [],
+                            "reference_str": null,
+                            "sections": [],
+                            "title": {
+                                "links": [],
+                                "table": null,
+                                "text": "Article 11"
+                            }
+                        },
+                        {
+                            "annotations": null,
+                            "applicability": null,
+                            "legifrance_article": {
+                                "content": "",
+                                "etat": "VIGUEUR",
+                                "id": "LEGIARTI000037532742",
+                                "intOrdre": 2621435,
+                                "num": "12"
+                            },
+                            "outer_alineas": [],
+                            "reference_str": null,
+                            "sections": [],
+                            "title": {
+                                "links": [],
+                                "table": null,
+                                "text": "Article 12"
+                            }
+                        }
+                    ],
+                    "title": {
+                        "links": [],
+                        "table": null,
+                        "text": "Section I : Généralités"
+                    }
+                },
+                {
+                    "annotations": null,
+                    "applicability": null,
+                    "legifrance_article": null,
+                    "outer_alineas": [],
+                    "reference_str": null,
+                    "sections": [
+                        {
+                            "annotations": null,
+                            "applicability": null,
+                            "legifrance_article": {
+                                "content": "",
+                                "etat": "VIGUEUR",
+                                "id": "LEGIARTI000037532744",
+                                "intOrdre": 524287,
+                                "num": "13"
+                            },
+                            "outer_alineas": [],
+                            "reference_str": null,
+                            "sections": [],
+                            "title": {
+                                "links": [],
+                                "table": null,
+                                "text": "Article 13"
+                            }
+                        }
+                    ],
+                    "title": {
+                        "links": [],
+                        "table": null,
+                        "text": "Section II : Tuyauteries de fluides"
+                    }
+                },
+                {
+                    "annotations": null,
+                    "applicability": null,
+                    "legifrance_article": null,
+                    "outer_alineas": [],
+                    "reference_str": null,
+                    "sections": [
+                        {
+                            "annotations": null,
+                            "applicability": null,
+                            "legifrance_article": {
+                                "content": "",
+                                "etat": "VIGUEUR",
+                                "id": "LEGIARTI000026700244",
+                                "intOrdre": 524287,
+                                "num": "14"
+                            },
+                            "outer_alineas": [],
+                            "reference_str": null,
+                            "sections": [],
+                            "title": {
+                                "links": [],
+                                "table": null,
+                                "text": "Article 14"
+                            }
+                        }
+                    ],
+                    "title": {
+                        "links": [],
+                        "table": null,
+                        "text": "Section III : Comportement au feu des locaux"
+                    }
+                },
+                {
+                    "annotations": null,
+                    "applicability": null,
+                    "legifrance_article": null,
+                    "outer_alineas": [],
+                    "reference_str": null,
+                    "sections": [
+                        {
+                            "annotations": null,
+                            "applicability": null,
+                            "legifrance_article": {
+                                "content": "",
+                                "etat": "VIGUEUR",
+                                "id": "LEGIARTI000026700245",
+                                "intOrdre": 524287,
+                                "num": "15"
+                            },
+                            "outer_alineas": [],
+                            "reference_str": null,
+                            "sections": [],
+                            "title": {
+                                "links": [],
+                                "table": null,
+                                "text": "Article 15"
+                            }
+                        },
+                        {
+                            "annotations": null,
+                            "applicability": null,
+                            "legifrance_article": {
+                                "content": "",
+                                "etat": "VIGUEUR",
+                                "id": "LEGIARTI000037532746",
+                                "intOrdre": 1048574,
+                                "num": "16"
+                            },
+                            "outer_alineas": [],
+                            "reference_str": null,
+                            "sections": [],
+                            "title": {
+                                "links": [],
+                                "table": null,
+                                "text": "Article 16"
+                            }
+                        },
+                        {
+                            "annotations": null,
+                            "applicability": null,
+                            "legifrance_article": {
+                                "content": "",
+                                "etat": "VIGUEUR",
+                                "id": "LEGIARTI000026700247",
+                                "intOrdre": 1572861,
+                                "num": "17"
+                            },
+                            "outer_alineas": [],
+                            "reference_str": null,
+                            "sections": [],
+                            "title": {
+                                "links": [],
+                                "table": null,
+                                "text": "Article 17"
+                            }
+                        }
+                    ],
+                    "title": {
+                        "links": [],
+                        "table": null,
+                        "text": "Section IV : Dispositions de sécurité"
+                    }
+                },
+                {
+                    "annotations": null,
+                    "applicability": null,
+                    "legifrance_article": null,
+                    "outer_alineas": [],
+                    "reference_str": null,
+                    "sections": [
+                        {
+                            "annotations": null,
+                            "applicability": null,
+                            "legifrance_article": {
+                                "content": "",
+                                "etat": "VIGUEUR",
+                                "id": "LEGIARTI000026700248",
+                                "intOrdre": 524287,
+                                "num": "18"
+                            },
+                            "outer_alineas": [],
+                            "reference_str": null,
+                            "sections": [],
+                            "title": {
+                                "links": [],
+                                "table": null,
+                                "text": "Article 18"
+                            }
+                        },
+                        {
+                            "annotations": null,
+                            "applicability": null,
+                            "legifrance_article": {
+                                "content": "",
+                                "etat": "VIGUEUR",
+                                "id": "LEGIARTI000037532748",
+                                "intOrdre": 1048574,
+                                "num": "19"
+                            },
+                            "outer_alineas": [],
+                            "reference_str": null,
+                            "sections": [],
+                            "title": {
+                                "links": [],
+                                "table": null,
+                                "text": "Article 19"
+                            }
+                        },
+                        {
+                            "annotations": null,
+                            "applicability": null,
+                            "legifrance_article": {
+                                "content": "",
+                                "etat": "VIGUEUR",
+                                "id": "LEGIARTI000037532750",
+                                "intOrdre": 1572861,
+                                "num": "20"
+                            },
+                            "outer_alineas": [],
+                            "reference_str": null,
+                            "sections": [],
+                            "title": {
+                                "links": [],
+                                "table": null,
+                                "text": "Article 20"
+                            }
+                        }
+                    ],
+                    "title": {
+                        "links": [],
+                        "table": null,
+                        "text": "Section V : Exploitation"
+                    }
+                },
+                {
+                    "annotations": null,
+                    "applicability": null,
+                    "legifrance_article": null,
+                    "outer_alineas": [],
+                    "reference_str": null,
+                    "sections": [
+                        {
+                            "annotations": null,
+                            "applicability": null,
+                            "legifrance_article": {
+                                "content": "",
+                                "etat": "VIGUEUR",
+                                "id": "LEGIARTI000026700251",
+                                "intOrdre": 524287,
+                                "num": "21"
+                            },
+                            "outer_alineas": [],
+                            "reference_str": null,
+                            "sections": [
+                                {
+                                    "annotations": null,
+                                    "applicability": null,
+                                    "legifrance_article": null,
+                                    "outer_alineas": [],
+                                    "reference_str": null,
+                                    "sections": [],
+                                    "title": {
+                                        "links": [],
+                                        "table": null,
+                                        "text": "I. ― Tout stockage d'un liquide susceptible de créer une pollution des eaux ou des sols est associé à une capacité de rétention dont le volume est au moins égal à la plus grande des deux valeurs suivantes :"
+                                    }
+                                },
+                                {
+                                    "annotations": null,
+                                    "applicability": null,
+                                    "legifrance_article": null,
+                                    "outer_alineas": [],
+                                    "reference_str": null,
+                                    "sections": [],
+                                    "title": {
+                                        "links": [],
+                                        "table": null,
+                                        "text": "II. ― La capacité de rétention est étanche aux produits qu'elle pourrait contenir et résiste à l'action physique et chimique des fluides. Il en est de même pour son dispositif d'obturation qui est maintenu fermé."
+                                    }
+                                },
+                                {
+                                    "annotations": null,
+                                    "applicability": null,
+                                    "legifrance_article": null,
+                                    "outer_alineas": [],
+                                    "reference_str": null,
+                                    "sections": [],
+                                    "title": {
+                                        "links": [],
+                                        "table": null,
+                                        "text": "III. ― Rétention et confinement."
+                                    }
+                                },
+                                {
+                                    "annotations": null,
+                                    "applicability": null,
+                                    "legifrance_article": null,
+                                    "outer_alineas": [],
+                                    "reference_str": null,
+                                    "sections": [],
+                                    "title": {
+                                        "links": [],
+                                        "table": null,
+                                        "text": "IV. ― Isolement des réseaux d'eau."
+                                    }
+                                }
+                            ],
+                            "title": {
+                                "links": [],
+                                "table": null,
+                                "text": "Article 21"
+                            }
+                        }
+                    ],
+                    "title": {
+                        "links": [],
+                        "table": null,
+                        "text": "Section VI : Pollutions accidentelles"
+                    }
+                }
+            ],
+            "title": {
+                "links": [],
+                "table": null,
+                "text": "Chapitre II : Prévention des accidents et des pollutions"
+            }
+        },
+        {
+            "annotations": null,
+            "applicability": null,
+            "legifrance_article": null,
+            "outer_alineas": [],
+            "reference_str": null,
+            "sections": [
+                {
+                    "annotations": null,
+                    "applicability": null,
+                    "legifrance_article": null,
+                    "outer_alineas": [],
+                    "reference_str": null,
+                    "sections": [
+                        {
+                            "annotations": null,
+                            "applicability": null,
+                            "legifrance_article": {
+                                "content": "",
+                                "etat": "VIGUEUR",
+                                "id": "LEGIARTI000026700253",
+                                "intOrdre": 524287,
+                                "num": "22"
+                            },
+                            "outer_alineas": [],
+                            "reference_str": null,
+                            "sections": [],
+                            "title": {
+                                "links": [],
+                                "table": null,
+                                "text": "Article 22"
+                            }
+                        }
+                    ],
+                    "title": {
+                        "links": [],
+                        "table": null,
+                        "text": "Section I : Principes généraux"
+                    }
+                },
+                {
+                    "annotations": null,
+                    "applicability": null,
+                    "legifrance_article": null,
+                    "outer_alineas": [],
+                    "reference_str": null,
+                    "sections": [
+                        {
+                            "annotations": null,
+                            "applicability": null,
+                            "legifrance_article": {
+                                "content": "",
+                                "etat": "VIGUEUR",
+                                "id": "LEGIARTI000037532752",
+                                "intOrdre": 524287,
+                                "num": "23"
+                            },
+                            "outer_alineas": [],
+                            "reference_str": null,
+                            "sections": [],
+                            "title": {
+                                "links": [],
+                                "table": null,
+                                "text": "Article 23"
+                            }
+                        },
+                        {
+                            "annotations": null,
+                            "applicability": null,
+                            "legifrance_article": {
+                                "content": "",
+                                "etat": "VIGUEUR",
+                                "id": "LEGIARTI000026700258",
+                                "intOrdre": 1048574,
+                                "num": "24"
+                            },
+                            "outer_alineas": [],
+                            "reference_str": null,
+                            "sections": [],
+                            "title": {
+                                "links": [],
+                                "table": null,
+                                "text": "Article 24"
+                            }
+                        },
+                        {
+                            "annotations": null,
+                            "applicability": null,
+                            "legifrance_article": {
+                                "content": "",
+                                "etat": "VIGUEUR",
+                                "id": "LEGIARTI000026700259",
+                                "intOrdre": 1572861,
+                                "num": "25"
+                            },
+                            "outer_alineas": [],
+                            "reference_str": null,
+                            "sections": [],
+                            "title": {
+                                "links": [],
+                                "table": null,
+                                "text": "Article 25"
+                            }
+                        }
+                    ],
+                    "title": {
+                        "links": [],
+                        "table": null,
+                        "text": "Section II : Prélèvements et consommation d'eau"
+                    }
+                },
+                {
+                    "annotations": null,
+                    "applicability": null,
+                    "legifrance_article": null,
+                    "outer_alineas": [],
+                    "reference_str": null,
+                    "sections": [
+                        {
+                            "annotations": null,
+                            "applicability": null,
+                            "legifrance_article": {
+                                "content": "",
+                                "etat": "VIGUEUR",
+                                "id": "LEGIARTI000026700260",
+                                "intOrdre": 524287,
+                                "num": "26"
+                            },
+                            "outer_alineas": [],
+                            "reference_str": null,
+                            "sections": [],
+                            "title": {
+                                "links": [],
+                                "table": null,
+                                "text": "Article 26"
+                            }
+                        },
+                        {
+                            "annotations": null,
+                            "applicability": null,
+                            "legifrance_article": {
+                                "content": "",
+                                "etat": "VIGUEUR",
+                                "id": "LEGIARTI000026700263",
+                                "intOrdre": 1048574,
+                                "num": "27"
+                            },
+                            "outer_alineas": [],
+                            "reference_str": null,
+                            "sections": [],
+                            "title": {
+                                "links": [],
+                                "table": null,
+                                "text": "Article 27"
+                            }
+                        },
+                        {
+                            "annotations": null,
+                            "applicability": null,
+                            "legifrance_article": {
+                                "content": "",
+                                "etat": "VIGUEUR",
+                                "id": "LEGIARTI000026700264",
+                                "intOrdre": 1572861,
+                                "num": "28"
+                            },
+                            "outer_alineas": [],
+                            "reference_str": null,
+                            "sections": [],
+                            "title": {
+                                "links": [],
+                                "table": null,
+                                "text": "Article 28"
+                            }
+                        },
+                        {
+                            "annotations": null,
+                            "applicability": null,
+                            "legifrance_article": {
+                                "content": "",
+                                "etat": "VIGUEUR",
+                                "id": "LEGIARTI000026700265",
+                                "intOrdre": 2097148,
+                                "num": "29"
+                            },
+                            "outer_alineas": [],
+                            "reference_str": null,
+                            "sections": [],
+                            "title": {
+                                "links": [],
+                                "table": null,
+                                "text": "Article 29"
+                            }
+                        },
+                        {
+                            "annotations": null,
+                            "applicability": null,
+                            "legifrance_article": {
+                                "content": "",
+                                "etat": "VIGUEUR",
+                                "id": "LEGIARTI000026700268",
+                                "intOrdre": 2621435,
+                                "num": "30"
+                            },
+                            "outer_alineas": [],
+                            "reference_str": null,
+                            "sections": [],
+                            "title": {
+                                "links": [],
+                                "table": null,
+                                "text": "Article 30"
+                            }
+                        }
+                    ],
+                    "title": {
+                        "links": [],
+                        "table": null,
+                        "text": "Section III : Collecte et rejet des effluents liquides"
+                    }
+                },
+                {
+                    "annotations": null,
+                    "applicability": null,
+                    "legifrance_article": null,
+                    "outer_alineas": [],
+                    "reference_str": null,
+                    "sections": [
+                        {
+                            "annotations": null,
+                            "applicability": null,
+                            "legifrance_article": {
+                                "content": "",
+                                "etat": "VIGUEUR",
+                                "id": "LEGIARTI000026700269",
+                                "intOrdre": 524287,
+                                "num": "31"
+                            },
+                            "outer_alineas": [],
+                            "reference_str": null,
+                            "sections": [],
+                            "title": {
+                                "links": [],
+                                "table": null,
+                                "text": "Article 31"
+                            }
+                        },
+                        {
+                            "annotations": null,
+                            "applicability": null,
+                            "legifrance_article": {
+                                "content": "",
+                                "etat": "VIGUEUR",
+                                "id": "LEGIARTI000026700274",
+                                "intOrdre": 1048574,
+                                "num": "32"
+                            },
+                            "outer_alineas": [],
+                            "reference_str": null,
+                            "sections": [],
+                            "title": {
+                                "links": [],
+                                "table": null,
+                                "text": "Article 32"
+                            }
+                        },
+                        {
+                            "annotations": null,
+                            "applicability": null,
+                            "legifrance_article": {
+                                "content": "",
+                                "etat": "VIGUEUR",
+                                "id": "LEGIARTI000026700275",
+                                "intOrdre": 1572861,
+                                "num": "33"
+                            },
+                            "outer_alineas": [],
+                            "reference_str": null,
+                            "sections": [],
+                            "title": {
+                                "links": [],
+                                "table": null,
+                                "text": "Article 33"
+                            }
+                        },
+                        {
+                            "annotations": null,
+                            "applicability": null,
+                            "legifrance_article": {
+                                "content": "",
+                                "etat": "VIGUEUR",
+                                "id": "LEGIARTI000026700257",
+                                "intOrdre": 2097148,
+                                "num": "34"
+                            },
+                            "outer_alineas": [],
+                            "reference_str": null,
+                            "sections": [],
+                            "title": {
+                                "links": [],
+                                "table": null,
+                                "text": "Article 34"
+                            }
+                        }
+                    ],
+                    "title": {
+                        "links": [],
+                        "table": null,
+                        "text": "Section IV : Valeurs limites de rejet"
+                    }
+                },
+                {
+                    "annotations": null,
+                    "applicability": null,
+                    "legifrance_article": null,
+                    "outer_alineas": [],
+                    "reference_str": null,
+                    "sections": [
+                        {
+                            "annotations": null,
+                            "applicability": null,
+                            "legifrance_article": {
+                                "content": "",
+                                "etat": "VIGUEUR",
+                                "id": "LEGIARTI000026700261",
+                                "intOrdre": 524287,
+                                "num": "35"
+                            },
+                            "outer_alineas": [],
+                            "reference_str": null,
+                            "sections": [],
+                            "title": {
+                                "links": [],
+                                "table": null,
+                                "text": "Article 35"
+                            }
+                        },
+                        {
+                            "annotations": null,
+                            "applicability": null,
+                            "legifrance_article": {
+                                "content": "",
+                                "etat": "VIGUEUR",
+                                "id": "LEGIARTI000026700219",
+                                "intOrdre": 1048574,
+                                "num": "36"
+                            },
+                            "outer_alineas": [],
+                            "reference_str": null,
+                            "sections": [],
+                            "title": {
+                                "links": [],
+                                "table": null,
+                                "text": "Article 36"
+                            }
+                        }
+                    ],
+                    "title": {
+                        "links": [],
+                        "table": null,
+                        "text": "Section V : Traitement des effluents"
+                    }
+                }
+            ],
+            "title": {
+                "links": [],
+                "table": null,
+                "text": "Chapitre III : Emissions dans l'eau"
+            }
+        },
+        {
+            "annotations": null,
+            "applicability": null,
+            "legifrance_article": null,
+            "outer_alineas": [],
+            "reference_str": null,
+            "sections": [
+                {
+                    "annotations": null,
+                    "applicability": null,
+                    "legifrance_article": null,
+                    "outer_alineas": [],
+                    "reference_str": null,
+                    "sections": [
+                        {
+                            "annotations": null,
+                            "applicability": null,
+                            "legifrance_article": {
+                                "content": "",
+                                "etat": "VIGUEUR",
+                                "id": "LEGIARTI000037532756",
+                                "intOrdre": 524287,
+                                "num": "37"
+                            },
+                            "outer_alineas": [],
+                            "reference_str": null,
+                            "sections": [],
+                            "title": {
+                                "links": [],
+                                "table": null,
+                                "text": "Article 37"
+                            }
+                        }
+                    ],
+                    "title": {
+                        "links": [],
+                        "table": null,
+                        "text": "Section I : Généralités"
+                    }
+                },
+                {
+                    "annotations": null,
+                    "applicability": null,
+                    "legifrance_article": null,
+                    "outer_alineas": [],
+                    "reference_str": null,
+                    "sections": [
+                        {
+                            "annotations": null,
+                            "applicability": null,
+                            "legifrance_article": {
+                                "content": "",
+                                "etat": "VIGUEUR",
+                                "id": "LEGIARTI000037532758",
+                                "intOrdre": 524287,
+                                "num": "38"
+                            },
+                            "outer_alineas": [],
+                            "reference_str": null,
+                            "sections": [],
+                            "title": {
+                                "links": [],
+                                "table": null,
+                                "text": "Article 38"
+                            }
+                        },
+                        {
+                            "annotations": null,
+                            "applicability": null,
+                            "legifrance_article": {
+                                "content": "",
+                                "etat": "VIGUEUR",
+                                "id": "LEGIARTI000037532760",
+                                "intOrdre": 1048574,
+                                "num": "39"
+                            },
+                            "outer_alineas": [],
+                            "reference_str": null,
+                            "sections": [],
+                            "title": {
+                                "links": [],
+                                "table": null,
+                                "text": "Article 39"
+                            }
+                        }
+                    ],
+                    "title": {
+                        "links": [],
+                        "table": null,
+                        "text": "Section II : Rejets à l'atmosphère"
+                    }
+                },
+                {
+                    "annotations": null,
+                    "applicability": null,
+                    "legifrance_article": null,
+                    "outer_alineas": [],
+                    "reference_str": null,
+                    "sections": [
+                        {
+                            "annotations": null,
+                            "applicability": null,
+                            "legifrance_article": {
+                                "content": "",
+                                "etat": "VIGUEUR",
+                                "id": "LEGIARTI000037532762",
+                                "intOrdre": 524287,
+                                "num": "40"
+                            },
+                            "outer_alineas": [],
+                            "reference_str": null,
+                            "sections": [],
+                            "title": {
+                                "links": [],
+                                "table": null,
+                                "text": "Article 40"
+                            }
+                        },
+                        {
+                            "annotations": null,
+                            "applicability": null,
+                            "legifrance_article": {
+                                "content": "",
+                                "etat": "VIGUEUR",
+                                "id": "LEGIARTI000037532764",
+                                "intOrdre": 1048574,
+                                "num": "41"
+                            },
+                            "outer_alineas": [],
+                            "reference_str": null,
+                            "sections": [
+                                {
+                                    "annotations": null,
+                                    "applicability": null,
+                                    "legifrance_article": null,
+                                    "outer_alineas": [],
+                                    "reference_str": null,
+                                    "sections": [],
+                                    "title": {
+                                        "links": [],
+                                        "table": null,
+                                        "text": "a) Capacité d'aspiration supérieure à 7 000 m³/h."
+                                    }
+                                },
+                                {
+                                    "annotations": null,
+                                    "applicability": null,
+                                    "legifrance_article": null,
+                                    "outer_alineas": [],
+                                    "reference_str": null,
+                                    "sections": [],
+                                    "title": {
+                                        "links": [],
+                                        "table": null,
+                                        "text": "b) Capacité d'aspiration inférieure ou égale à 7 000 m3/h."
+                                    }
+                                }
+                            ],
+                            "title": {
+                                "links": [],
+                                "table": null,
+                                "text": "Article 41"
+                            }
+                        },
+                        {
+                            "annotations": null,
+                            "applicability": null,
+                            "legifrance_article": {
+                                "content": "",
+                                "etat": "VIGUEUR",
+                                "id": "LEGIARTI000037532766",
+                                "intOrdre": 1572861,
+                                "num": "42"
+                            },
+                            "outer_alineas": [],
+                            "reference_str": null,
+                            "sections": [],
+                            "title": {
+                                "links": [],
+                                "table": null,
+                                "text": "Article 42"
+                            }
+                        }
+                    ],
+                    "title": {
+                        "links": [],
+                        "table": null,
+                        "text": "Section III : Valeurs limites d'émission"
+                    }
+                }
+            ],
+            "title": {
+                "links": [],
+                "table": null,
+                "text": "Chapitre IV : Emissions dans l'air"
+            }
+        },
+        {
+            "annotations": null,
+            "applicability": null,
+            "legifrance_article": null,
+            "outer_alineas": [],
+            "reference_str": null,
+            "sections": [
+                {
+                    "annotations": null,
+                    "applicability": null,
+                    "legifrance_article": {
+                        "content": "",
+                        "etat": "VIGUEUR",
+                        "id": "LEGIARTI000026700205",
+                        "intOrdre": 524287,
+                        "num": "43"
+                    },
+                    "outer_alineas": [],
+                    "reference_str": null,
+                    "sections": [],
+                    "title": {
+                        "links": [],
+                        "table": null,
+                        "text": "Article 43"
+                    }
+                }
+            ],
+            "title": {
+                "links": [],
+                "table": null,
+                "text": "Chapitre V : Emissions dans les sols"
+            }
+        },
+        {
+            "annotations": null,
+            "applicability": null,
+            "legifrance_article": null,
+            "outer_alineas": [],
+            "reference_str": null,
+            "sections": [
+                {
+                    "annotations": null,
+                    "applicability": null,
+                    "legifrance_article": {
+                        "content": "",
+                        "etat": "VIGUEUR",
+                        "id": "LEGIARTI000026700206",
+                        "intOrdre": 524287,
+                        "num": "44"
+                    },
+                    "outer_alineas": [],
+                    "reference_str": null,
+                    "sections": [],
+                    "title": {
+                        "links": [],
+                        "table": null,
+                        "text": "Article 44"
+                    }
+                },
+                {
+                    "annotations": null,
+                    "applicability": null,
+                    "legifrance_article": {
+                        "content": "",
+                        "etat": "VIGUEUR",
+                        "id": "LEGIARTI000026700207",
+                        "intOrdre": 1048574,
+                        "num": "45"
+                    },
+                    "outer_alineas": [],
+                    "reference_str": null,
+                    "sections": [],
+                    "title": {
+                        "links": [],
+                        "table": null,
+                        "text": "Article 45"
+                    }
+                },
+                {
+                    "annotations": null,
+                    "applicability": null,
+                    "legifrance_article": {
+                        "content": "",
+                        "etat": "VIGUEUR",
+                        "id": "LEGIARTI000026700209",
+                        "intOrdre": 2097148,
+                        "num": "46"
+                    },
+                    "outer_alineas": [],
+                    "reference_str": null,
+                    "sections": [],
+                    "title": {
+                        "links": [],
+                        "table": null,
+                        "text": "Article 46"
+                    }
+                },
+                {
+                    "annotations": null,
+                    "applicability": null,
+                    "legifrance_article": {
+                        "content": "",
+                        "etat": "VIGUEUR",
+                        "id": "LEGIARTI000026700210",
+                        "intOrdre": 2621435,
+                        "num": "47"
+                    },
+                    "outer_alineas": [],
+                    "reference_str": null,
+                    "sections": [],
+                    "title": {
+                        "links": [],
+                        "table": null,
+                        "text": "Article 47"
+                    }
+                },
+                {
+                    "annotations": null,
+                    "applicability": null,
+                    "legifrance_article": {
+                        "content": "",
+                        "etat": "VIGUEUR",
+                        "id": "LEGIARTI000026700211",
+                        "intOrdre": 3145722,
+                        "num": "48"
+                    },
+                    "outer_alineas": [],
+                    "reference_str": null,
+                    "sections": [],
+                    "title": {
+                        "links": [],
+                        "table": null,
+                        "text": "Article 48"
+                    }
+                },
+                {
+                    "annotations": null,
+                    "applicability": null,
+                    "legifrance_article": {
+                        "content": "",
+                        "etat": "VIGUEUR",
+                        "id": "LEGIARTI000026700213",
+                        "intOrdre": 4194296,
+                        "num": "49"
+                    },
+                    "outer_alineas": [],
+                    "reference_str": null,
+                    "sections": [],
+                    "title": {
+                        "links": [],
+                        "table": null,
+                        "text": "Article 49"
+                    }
+                },
+                {
+                    "annotations": null,
+                    "applicability": null,
+                    "legifrance_article": {
+                        "content": "",
+                        "etat": "VIGUEUR",
+                        "id": "LEGIARTI000026700215",
+                        "intOrdre": 5242870,
+                        "num": "50"
+                    },
+                    "outer_alineas": [],
+                    "reference_str": null,
+                    "sections": [],
+                    "title": {
+                        "links": [],
+                        "table": null,
+                        "text": "Article 50"
+                    }
+                },
+                {
+                    "annotations": null,
+                    "applicability": null,
+                    "legifrance_article": {
+                        "content": "",
+                        "etat": "VIGUEUR",
+                        "id": "LEGIARTI000026700220",
+                        "intOrdre": 5767157,
+                        "num": "51"
+                    },
+                    "outer_alineas": [],
+                    "reference_str": null,
+                    "sections": [
+                        {
+                            "annotations": null,
+                            "applicability": null,
+                            "legifrance_article": null,
+                            "outer_alineas": [],
+                            "reference_str": null,
+                            "sections": [],
+                            "title": {
+                                "links": [],
+                                "table": null,
+                                "text": "1. Eléments de base."
+                            }
+                        },
+                        {
+                            "annotations": null,
+                            "applicability": null,
+                            "legifrance_article": null,
+                            "outer_alineas": [],
+                            "reference_str": null,
+                            "sections": [],
+                            "title": {
+                                "links": [],
+                                "table": null,
+                                "text": "2. Appareillage de mesure."
+                            }
+                        },
+                        {
+                            "annotations": null,
+                            "applicability": null,
+                            "legifrance_article": null,
+                            "outer_alineas": [],
+                            "reference_str": null,
+                            "sections": [],
+                            "title": {
+                                "links": [],
+                                "table": null,
+                                "text": "3. Précautions opératoires."
+                            }
+                        }
+                    ],
+                    "title": {
+                        "links": [],
+                        "table": null,
+                        "text": "Article 51"
+                    }
+                },
+                {
+                    "annotations": null,
+                    "applicability": null,
+                    "legifrance_article": {
+                        "content": "",
+                        "etat": "VIGUEUR",
+                        "id": "LEGIARTI000026700222",
+                        "intOrdre": 6291444,
+                        "num": "52"
+                    },
+                    "outer_alineas": [],
+                    "reference_str": null,
+                    "sections": [
+                        {
+                            "annotations": null,
+                            "applicability": null,
+                            "legifrance_article": null,
+                            "outer_alineas": [],
+                            "reference_str": null,
+                            "sections": [],
+                            "title": {
+                                "links": [],
+                                "table": null,
+                                "text": "1. Pour les établissements existants :"
+                            }
+                        },
+                        {
+                            "annotations": null,
+                            "applicability": null,
+                            "legifrance_article": null,
+                            "outer_alineas": [],
+                            "reference_str": null,
+                            "sections": [],
+                            "title": {
+                                "links": [],
+                                "table": null,
+                                "text": "2. Pour les nouvelles installations :"
+                            }
+                        },
+                        {
+                            "annotations": null,
+                            "applicability": null,
+                            "legifrance_article": null,
+                            "outer_alineas": [],
+                            "reference_str": null,
+                            "sections": [],
+                            "title": {
+                                "links": [],
+                                "table": null,
+                                "text": "3. Pour les installations fonctionnant sur une période unique d'une durée inférieure ou égale à six  mois et pour lesquelles les distances d'isolement citées à l'article 5 ne sont pas applicables, une campagne de mesures est effectuée le premier mois."
+                            }
+                        }
+                    ],
+                    "title": {
+                        "links": [],
+                        "table": null,
+                        "text": "Article 52"
+                    }
+                }
+            ],
+            "title": {
+                "links": [],
+                "table": null,
+                "text": "Chapitre VI : Bruit et vibrations"
+            }
+        },
+        {
+            "annotations": null,
+            "applicability": null,
+            "legifrance_article": null,
+            "outer_alineas": [],
+            "reference_str": null,
+            "sections": [
+                {
+                    "annotations": null,
+                    "applicability": null,
+                    "legifrance_article": {
+                        "content": "",
+                        "etat": "VIGUEUR",
+                        "id": "LEGIARTI000026700225",
+                        "intOrdre": 524287,
+                        "num": "53"
+                    },
+                    "outer_alineas": [],
+                    "reference_str": null,
+                    "sections": [],
+                    "title": {
+                        "links": [],
+                        "table": null,
+                        "text": "Article 53"
+                    }
+                },
+                {
+                    "annotations": null,
+                    "applicability": null,
+                    "legifrance_article": {
+                        "content": "",
+                        "etat": "VIGUEUR",
+                        "id": "LEGIARTI000026700227",
+                        "intOrdre": 1048574,
+                        "num": "54"
+                    },
+                    "outer_alineas": [],
+                    "reference_str": null,
+                    "sections": [],
+                    "title": {
+                        "links": [],
+                        "table": null,
+                        "text": "Article 54"
+                    }
+                },
+                {
+                    "annotations": null,
+                    "applicability": null,
+                    "legifrance_article": {
+                        "content": "",
+                        "etat": "VIGUEUR",
+                        "id": "LEGIARTI000037532768",
+                        "intOrdre": 1572861,
+                        "num": "55"
+                    },
+                    "outer_alineas": [],
+                    "reference_str": null,
+                    "sections": [],
+                    "title": {
+                        "links": [],
+                        "table": null,
+                        "text": "Article 55"
+                    }
+                }
+            ],
+            "title": {
+                "links": [],
+                "table": null,
+                "text": "Chapitre VII : Déchets"
+            }
+        },
+        {
+            "annotations": null,
+            "applicability": null,
+            "legifrance_article": null,
+            "outer_alineas": [],
+            "reference_str": null,
+            "sections": [
+                {
+                    "annotations": null,
+                    "applicability": null,
+                    "legifrance_article": null,
+                    "outer_alineas": [],
+                    "reference_str": null,
+                    "sections": [
+                        {
+                            "annotations": null,
+                            "applicability": null,
+                            "legifrance_article": {
+                                "content": "",
+                                "etat": "VIGUEUR",
+                                "id": "LEGIARTI000026700277",
+                                "intOrdre": 524287,
+                                "num": "56"
+                            },
+                            "outer_alineas": [],
+                            "reference_str": null,
+                            "sections": [],
+                            "title": {
+                                "links": [],
+                                "table": null,
+                                "text": "Article 56"
+                            }
+                        }
+                    ],
+                    "title": {
+                        "links": [],
+                        "table": null,
+                        "text": "Section I : Généralités"
+                    }
+                },
+                {
+                    "annotations": null,
+                    "applicability": null,
+                    "legifrance_article": null,
+                    "outer_alineas": [],
+                    "reference_str": null,
+                    "sections": [
+                        {
+                            "annotations": null,
+                            "applicability": null,
+                            "legifrance_article": {
+                                "content": "",
+                                "etat": "VIGUEUR",
+                                "id": "LEGIARTI000026700278",
+                                "intOrdre": 524287,
+                                "num": "57"
+                            },
+                            "outer_alineas": [],
+                            "reference_str": null,
+                            "sections": [],
+                            "title": {
+                                "links": [],
+                                "table": null,
+                                "text": "Article 57"
+                            }
+                        }
+                    ],
+                    "title": {
+                        "links": [],
+                        "table": null,
+                        "text": "Section II : Emissions dans l'air"
+                    }
+                },
+                {
+                    "annotations": null,
+                    "applicability": null,
+                    "legifrance_article": null,
+                    "outer_alineas": [],
+                    "reference_str": null,
+                    "sections": [
+                        {
+                            "annotations": null,
+                            "applicability": null,
+                            "legifrance_article": {
+                                "content": "",
+                                "etat": "VIGUEUR",
+                                "id": "LEGIARTI000037532775",
+                                "intOrdre": 524287,
+                                "num": "58"
+                            },
+                            "outer_alineas": [],
+                            "reference_str": null,
+                            "sections": [],
+                            "title": {
+                                "links": [],
+                                "table": null,
+                                "text": "Article 58"
+                            }
+                        }
+                    ],
+                    "title": {
+                        "links": [],
+                        "table": null,
+                        "text": "Section III : Emissions dans l'eau"
+                    }
+                },
+                {
+                    "annotations": null,
+                    "applicability": null,
+                    "legifrance_article": null,
+                    "outer_alineas": [],
+                    "reference_str": null,
+                    "sections": [
+                        {
+                            "annotations": null,
+                            "applicability": null,
+                            "legifrance_article": {
+                                "content": "",
+                                "etat": "VIGUEUR",
+                                "id": "LEGIARTI000026700193",
+                                "intOrdre": 524287,
+                                "num": "59"
+                            },
+                            "outer_alineas": [],
+                            "reference_str": null,
+                            "sections": [],
+                            "title": {
+                                "links": [],
+                                "table": null,
+                                "text": "Article 59"
+                            }
+                        }
+                    ],
+                    "title": {
+                        "links": [],
+                        "table": null,
+                        "text": "Section VI : Impacts sur les eaux souterraines"
+                    }
+                }
+            ],
+            "title": {
+                "links": [],
+                "table": null,
+                "text": "Chapitre VIII : Surveillance des émissions"
+            }
+        },
+        {
+            "annotations": null,
+            "applicability": null,
+            "legifrance_article": null,
+            "outer_alineas": [],
+            "reference_str": null,
+            "sections": [
+                {
+                    "annotations": null,
+                    "applicability": null,
+                    "legifrance_article": {
+                        "content": "",
+                        "etat": "VIGUEUR",
+                        "id": "LEGIARTI000026700231",
+                        "intOrdre": 524287,
+                        "num": "60"
+                    },
+                    "outer_alineas": [],
+                    "reference_str": null,
+                    "sections": [],
+                    "title": {
+                        "links": [],
+                        "table": null,
+                        "text": "Article 60"
+                    }
+                }
+            ],
+            "title": {
+                "links": [],
+                "table": null,
+                "text": "Chapitre IX : Exécution"
+            }
+        },
+        {
+            "annotations": null,
+            "applicability": null,
+            "legifrance_article": null,
+            "outer_alineas": [],
+            "reference_str": null,
+            "sections": [
+                {
+                    "annotations": null,
+                    "applicability": null,
+                    "legifrance_article": {
+                        "content": "",
+                        "etat": "VIGUEUR",
+                        "id": "LEGIARTI000026700234",
+                        "intOrdre": 524287,
+                        "num": "Annexe I"
+                    },
+                    "outer_alineas": [],
+                    "reference_str": null,
+                    "sections": [
+                        {
+                            "annotations": null,
+                            "applicability": null,
+                            "legifrance_article": null,
+                            "outer_alineas": [],
+                            "reference_str": null,
+                            "sections": [
+                                {
+                                    "annotations": null,
+                                    "applicability": null,
+                                    "legifrance_article": null,
+                                    "outer_alineas": [],
+                                    "reference_str": null,
+                                    "sections": [],
+                                    "title": {
+                                        "links": [],
+                                        "table": null,
+                                        "text": "1.1. Niveau de pression acoustique continu équivalent pondéré A \" court \", LAeq, t."
+                                    }
+                                },
+                                {
+                                    "annotations": null,
+                                    "applicability": null,
+                                    "legifrance_article": null,
+                                    "outer_alineas": [],
+                                    "reference_str": null,
+                                    "sections": [],
+                                    "title": {
+                                        "links": [],
+                                        "table": null,
+                                        "text": "1.2. Niveau acoustique fractile, LAN, t."
+                                    }
+                                },
+                                {
+                                    "annotations": null,
+                                    "applicability": null,
+                                    "legifrance_article": null,
+                                    "outer_alineas": [],
+                                    "reference_str": null,
+                                    "sections": [],
+                                    "title": {
+                                        "links": [],
+                                        "table": null,
+                                        "text": "1.3. Intervalle de mesurage."
+                                    }
+                                },
+                                {
+                                    "annotations": null,
+                                    "applicability": null,
+                                    "legifrance_article": null,
+                                    "outer_alineas": [],
+                                    "reference_str": null,
+                                    "sections": [],
+                                    "title": {
+                                        "links": [],
+                                        "table": null,
+                                        "text": "1.4. Intervalle d'observation."
+                                    }
+                                },
+                                {
+                                    "annotations": null,
+                                    "applicability": null,
+                                    "legifrance_article": null,
+                                    "outer_alineas": [],
+                                    "reference_str": null,
+                                    "sections": [],
+                                    "title": {
+                                        "links": [],
+                                        "table": null,
+                                        "text": "1.5. Intervalle de référence."
+                                    }
+                                },
+                                {
+                                    "annotations": null,
+                                    "applicability": null,
+                                    "legifrance_article": null,
+                                    "outer_alineas": [],
+                                    "reference_str": null,
+                                    "sections": [],
+                                    "title": {
+                                        "links": [],
+                                        "table": null,
+                                        "text": "1.6. Bruit ambiant."
+                                    }
+                                },
+                                {
+                                    "annotations": null,
+                                    "applicability": null,
+                                    "legifrance_article": null,
+                                    "outer_alineas": [],
+                                    "reference_str": null,
+                                    "sections": [],
+                                    "title": {
+                                        "links": [],
+                                        "table": null,
+                                        "text": "1.7. Bruit particulier (1)."
+                                    }
+                                },
+                                {
+                                    "annotations": null,
+                                    "applicability": null,
+                                    "legifrance_article": null,
+                                    "outer_alineas": [],
+                                    "reference_str": null,
+                                    "sections": [],
+                                    "title": {
+                                        "links": [],
+                                        "table": null,
+                                        "text": "1.8. Bruit résiduel."
+                                    }
+                                },
+                                {
+                                    "annotations": null,
+                                    "applicability": null,
+                                    "legifrance_article": null,
+                                    "outer_alineas": [],
+                                    "reference_str": null,
+                                    "sections": [],
+                                    "title": {
+                                        "links": [],
+                                        "table": null,
+                                        "text": "1.9. Tonalité marquée."
+                                    }
+                                }
+                            ],
+                            "title": {
+                                "links": [],
+                                "table": null,
+                                "text": "1. Définitions."
+                            }
+                        },
+                        {
+                            "annotations": null,
+                            "applicability": null,
+                            "legifrance_article": null,
+                            "outer_alineas": [],
+                            "reference_str": null,
+                            "sections": [
+                                {
+                                    "annotations": null,
+                                    "applicability": null,
+                                    "legifrance_article": null,
+                                    "outer_alineas": [],
+                                    "reference_str": null,
+                                    "sections": [],
+                                    "title": {
+                                        "links": [],
+                                        "table": null,
+                                        "text": "2.1. Appareillage de mesure (point 6.1 de la norme)."
+                                    }
+                                },
+                                {
+                                    "annotations": null,
+                                    "applicability": null,
+                                    "legifrance_article": null,
+                                    "outer_alineas": [],
+                                    "reference_str": null,
+                                    "sections": [],
+                                    "title": {
+                                        "links": [],
+                                        "table": null,
+                                        "text": "2.2. Conditions de mesurage (point 6.2 de la norme)."
+                                    }
+                                },
+                                {
+                                    "annotations": null,
+                                    "applicability": null,
+                                    "legifrance_article": null,
+                                    "outer_alineas": [],
+                                    "reference_str": null,
+                                    "sections": [],
+                                    "title": {
+                                        "links": [],
+                                        "table": null,
+                                        "text": "2.3. Gamme de fréquence (point 6.3 de la norme)."
+                                    }
+                                },
+                                {
+                                    "annotations": null,
+                                    "applicability": null,
+                                    "legifrance_article": null,
+                                    "outer_alineas": [],
+                                    "reference_str": null,
+                                    "sections": [],
+                                    "title": {
+                                        "links": [],
+                                        "table": null,
+                                        "text": "2.4. Conditions météorologiques (point 6.4 de la norme)."
+                                    }
+                                },
+                                {
+                                    "annotations": null,
+                                    "applicability": null,
+                                    "legifrance_article": null,
+                                    "outer_alineas": [],
+                                    "reference_str": null,
+                                    "sections": [
+                                        {
+                                            "annotations": null,
+                                            "applicability": null,
+                                            "legifrance_article": null,
+                                            "outer_alineas": [],
+                                            "reference_str": null,
+                                            "sections": [],
+                                            "title": {
+                                                "links": [],
+                                                "table": null,
+                                                "text": "a) Contrôle des niveaux de bruit admissibles en limites de propriété."
+                                            }
+                                        },
+                                        {
+                                            "annotations": null,
+                                            "applicability": null,
+                                            "legifrance_article": null,
+                                            "outer_alineas": [],
+                                            "reference_str": null,
+                                            "sections": [],
+                                            "title": {
+                                                "links": [],
+                                                "table": null,
+                                                "text": "b) Contrôle de l'émergence."
+                                            }
+                                        }
+                                    ],
+                                    "title": {
+                                        "links": [],
+                                        "table": null,
+                                        "text": "2.5. Indicateurs (point 6.5 de la norme)."
+                                    }
+                                },
+                                {
+                                    "annotations": null,
+                                    "applicability": null,
+                                    "legifrance_article": null,
+                                    "outer_alineas": [],
+                                    "reference_str": null,
+                                    "sections": [],
+                                    "title": {
+                                        "links": [],
+                                        "table": null,
+                                        "text": "2.6. Acquisitions des données, choix et durée des intervalles d'observations (point 6.6 de la norme)"
+                                    }
+                                }
+                            ],
+                            "title": {
+                                "links": [],
+                                "table": null,
+                                "text": "2. Méthode d'expertise (point 6 de la norme)."
+                            }
+                        },
+                        {
+                            "annotations": null,
+                            "applicability": null,
+                            "legifrance_article": null,
+                            "outer_alineas": [],
+                            "reference_str": null,
+                            "sections": [],
+                            "title": {
+                                "links": [],
+                                "table": null,
+                                "text": "3. Méthode de contrôle (point 5 de la norme)."
+                            }
+                        },
+                        {
+                            "annotations": null,
+                            "applicability": null,
+                            "legifrance_article": null,
+                            "outer_alineas": [],
+                            "reference_str": null,
+                            "sections": [],
+                            "title": {
+                                "links": [],
+                                "table": null,
+                                "text": "4. Rapport de mesurage (point 7 de la norme)."
+                            }
+                        }
+                    ],
+                    "title": {
+                        "links": [],
+                        "table": null,
+                        "text": "Article Annexe I"
+                    }
+                },
+                {
+                    "annotations": null,
+                    "applicability": null,
+                    "legifrance_article": {
+                        "content": "",
+                        "etat": "VIGUEUR",
+                        "id": "LEGIARTI000037532777",
+                        "intOrdre": 1074003967,
+                        "num": "Annexe II"
+                    },
+                    "outer_alineas": [],
+                    "reference_str": null,
+                    "sections": [],
+                    "title": {
+                        "links": [],
+                        "table": null,
+                        "text": "Article Annexe II"
+                    }
+                }
+            ],
+            "title": {
+                "links": [],
+                "table": null,
+                "text": "Annexes"
+            }
+        }
+    ],
+    "short_title": "",
+    "title": {
+        "links": [],
+        "table": null,
+        "text": "Arrêté du 26 novembre 2012 relatif aux prescriptions générales applicables aux installations de broyage, concassage, criblage, etc., relevant du régime de l'enregistrement au titre de la rubrique n° 2515 de la nomenclature des installations classées, y compris lorsqu'elles relèvent également de l'une ou plusieurs des rubriques n° 2516 ou 2517 pour la protection de l'environnement"
+    },
+    "visa": []
+}
