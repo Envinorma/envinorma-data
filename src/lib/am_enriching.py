@@ -3,7 +3,7 @@ from copy import copy
 from dataclasses import replace
 from typing import Dict, List, Optional, Set, Tuple
 
-from lib.data import Annotations, ArreteMinisteriel, EnrichedString, StructuredText, Topic
+from lib.data import Annotations, Applicability, ArreteMinisteriel, EnrichedString, StructuredText, Topic
 from lib.parametric_am import Ints
 from lib.structure_detection import NUMBERING_PATTERNS, NumberingPattern, ROMAN_PATTERN, detect_longest_matched_string
 
@@ -179,3 +179,18 @@ def _minify_section(text: StructuredText) -> StructuredText:
 def _minify_am(am: ArreteMinisteriel) -> ArreteMinisteriel:
     return ArreteMinisteriel(am.title, [_minify_section(sec) for sec in am.sections], [], '', None, None)
 
+
+def remove_null_applicabilities_in_section(paragraph: StructuredText) -> StructuredText:
+    new_paragraph = copy(paragraph)
+    del paragraph
+    new_paragraph.applicability = new_paragraph.applicability or Applicability(True)
+    new_paragraph.sections = [remove_null_applicabilities_in_section(section) for section in new_paragraph.sections]
+    return new_paragraph
+
+
+def remove_null_applicabilities(am: ArreteMinisteriel) -> ArreteMinisteriel:
+    new_am = copy(am)
+    del am
+    new_am.applicability = new_am.applicability or Applicability(True)
+    new_am.sections = [remove_null_applicabilities_in_section(section) for section in new_am.sections]
+    return new_am

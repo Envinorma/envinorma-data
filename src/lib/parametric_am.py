@@ -535,6 +535,8 @@ def _apply_parameter_values_in_text(
     if application_conditions:
         applicabilities = [_compute_applicability(condition, parameter_values) for condition in application_conditions]
         new_text.applicability = _merge_applicabilities(applicabilities)
+    else:
+        new_text.applicability = Applicability(True)
     return new_text
 
 

@@ -1,6 +1,6 @@
 import json
 from datetime import datetime
-from lib.am_enriching import add_references, add_topics, remove_prescriptive_power
+from lib.am_enriching import add_references, add_topics, remove_null_applicabilities, remove_prescriptive_power
 from typing import Callable, List, Dict, Set, Tuple
 
 from lib.data import ArreteMinisteriel, EnrichedString, StructuredText, load_arrete_ministeriel, Topic
@@ -353,7 +353,7 @@ def enrich_ATEP9760292A(am: ArreteMinisteriel) -> ArreteMinisteriel:
         (4, 1),
     }
     with_topics = add_topics(am, topics)
-    return remove_prescriptive_power(with_topics, non_prescriptive)
+    return remove_null_applicabilities(remove_prescriptive_power(with_topics, non_prescriptive))
 
 
 # _handle_nor('ATEP9760292A', _build_ATEP9760292A_parametrization(), enrich_ATEP9760292A)
