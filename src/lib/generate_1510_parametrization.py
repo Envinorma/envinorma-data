@@ -1,20 +1,27 @@
 from datetime import datetime
-from typing import List
+from typing import Dict, List, Optional, Tuple
 from lib.am_enriching import add_references, add_topics, remove_prescriptive_power
 
 from lib.data import ArreteMinisteriel, EnrichedString, StructuredText, load_arrete_ministeriel, Topic
 from lib.compute_properties import AMMetadata, Regime, handle_am, load_data, get_legifrance_client, write_json
 from lib.parametric_am import (
+    AlternativeSection,
     AndCondition,
+    ApplicationCondition,
+    ConditionSource,
+    EntityReference,
     Equal,
     Littler,
     OrCondition,
+    Condition,
     Parameter,
     ParameterEnum,
     ParameterType,
     Parametrization,
     Range,
+    SectionReference,
     build_simple_parametrization,
+    Combinations,
 )
 
 
@@ -386,20 +393,36 @@ def _7_replace_13() -> StructuredText:
 
 
 def _build_parametrization() -> Parametrization:
+    application_conditions = []
+    alternative_texts = []
+
     regime = Parameter('regime', ParameterType.REGIME)
-    is_autorisation = Equal(regime, Regime.A)
-    is_enregistrement = Equal(regime, Regime.E)
-    is_declaration = Equal(regime, Regime.D)
+    is_autorisation = Equal(regime, Regime.A.value)
+    is_enregistrement = Equal(regime, Regime.E.value)
+    is_declaration = Equal(regime, Regime.D.value)
     date = ParameterEnum.DATE_INSTALLATION.value
     is_before_2003 = Littler(date, datetime(2003, 7, 1), True)
     is_before_2009 = Littler(date, datetime(2009, 4, 30), True)
     is_between_2003_and_2017 = Range(date, datetime(2003, 7, 1), datetime(2017, 7, 1), False, True)
     is_between_2003_and_2010 = Range(date, datetime(2003, 7, 1), datetime(2010, 4, 16), False, True)
-    is_between_2010_2017 = Range(date, datetime(2010, 4, 16), datetime(20017, 7, 1), False, True)
-    is_between_2009_2017 = Range(date, datetime(2009, 4, 30), datetime(20017, 7, 1), False, True)
+    is_between_2010_2017 = Range(date, datetime(2010, 4, 16), datetime(2017, 7, 1), False, True)
+    is_between_2009_2017 = Range(date, datetime(2009, 4, 30), datetime(2017, 7, 1), False, True)
 
-    condition = AndCondition([is_autorisation, is_before_2003])
-    not_applicable = [
+    Ints = Tuple[int, ...]
+    _NotApplicable = List[Tuple[Tuple[int, ...], Optional[List[int]]]]
+    tuples_: List[Tuple[Condition, ConditionSource, _NotApplicable, Dict[Ints, StructuredText]]] = []
+    all_warnings: List[Dict[Ints, str]] = []
+    condition_1 = AndCondition([is_autorisation, is_before_2003])
+    condition_source_A = ConditionSource(
+        'Annexe IV décrivant les cas d\'application', EntityReference(SectionReference(tuple([8, 3])), None)
+    )
+    condition_source_E = ConditionSource(
+        'Annexe V décrivant les cas d\'application', EntityReference(SectionReference(tuple([8, 4])), None)
+    )
+    condition_source_D = ConditionSource(
+        'Annexe VI décrivant les cas d\'application', EntityReference(SectionReference(tuple([8, 5])), None)
+    )
+    not_applicable_1 = [
         ((8, 1, 1), None),
         ((8, 1, 2), None),
         ((8, 1, 2, 1), None),
@@ -418,11 +441,11 @@ def _build_parametrization() -> Parametrization:
         ((8, 1, 16), None),
         ((8, 1, 17), None),
     ]
-
-    new_articles = {
+    new_articles_1 = {
         tuple((8, 1, 11)): _build_alternative_12_for_autorisation(),
         tuple((8, 1, 12)): _build_alternative_13_for_autorisation(),
     }
+    tuples_.append((condition_1, condition_source_A, not_applicable_1, new_articles_1))
 
     condition_2 = AndCondition([is_autorisation, is_between_2003_and_2017])
     not_applicable_2 = [((8, 1, 2, 2), None), ((8, 1, 2, 3), None)]
@@ -441,6 +464,8 @@ def _build_parametrization() -> Parametrization:
             (8, 1, 5)
         ): "Le deuxième alinéa n'est pas applicable aux installations existantes ; le franchissement du seuil mentionné par cet alinéa est soumis à l'application de l'article R. 181-46 du code de l'environnement."
     }
+    all_warnings.append(warnings_2)
+    tuples_.append((condition_2, condition_source_A, not_applicable_2, new_articles_2))
 
     condition_3 = AndCondition([is_enregistrement, is_before_2003])
     not_applicable_3 = [
@@ -466,6 +491,7 @@ def _build_parametrization() -> Parametrization:
         tuple((8, 1, 11)): _build_alternative_12_for_autorisation(),
         tuple((8, 1, 12)): _build_alternative_13_for_autorisation(),
     }
+    tuples_.append((condition_3, condition_source_E, not_applicable_3, new_articles_3))
 
     condition_4 = AndCondition([is_enregistrement, is_between_2003_and_2010])
     new_articles_4 = {
@@ -478,9 +504,10 @@ def _build_parametrization() -> Parametrization:
         tuple((8, 1, 11)): _build_alternative_12_for_autorisation(),
         tuple((8, 1, 12)): _build_alternative_13_for_autorisation(),
     }
+    tuples_.append((condition_4, condition_source_E, [], new_articles_4))
 
     condition_5 = AndCondition([is_enregistrement, is_between_2010_2017])
-    not_applicable_5 = [((8, 1, 5), None)]
+    not_applicable_5: List[Tuple[Ints, Optional[List[int]]]] = [((8, 1, 5), None)]
     new_articles_5 = {
         tuple((8, 1, 2, 1)): _build_alternative_3_2_for_enr_after_2010(),
         tuple((8, 1, 2, 2)): _build_alternative_3_3_for_enr_after_2010(),
@@ -488,8 +515,9 @@ def _build_parametrization() -> Parametrization:
         tuple((8, 1, 4)): _build_alternative_5_for_enr_after_2010(),
         tuple((8, 1, 6)): _build_alternative_7_for_enr_after_2010(),
     }
+    tuples_.append((condition_5, condition_source_E, not_applicable_5, new_articles_5))
 
-    condition_6 = AndCondition([is_declaration, is_before_2003])
+    condition_6 = AndCondition([is_declaration, is_before_2009])
     not_applicable_6 = [
         ((8, 1, 1), None),
         ((8, 1, 2, 1), None),
@@ -541,6 +569,8 @@ def _build_parametrization() -> Parametrization:
             (8, 1, 0)
         ): "Applicable à l’exception des points 1.1. et 1.2. pour les installations bénéficiant des droits acquis."
     }
+    tuples_.append((condition_6, condition_source_D, not_applicable_6, new_articles_6))
+    all_warnings.append(warnings_6)
 
     condition_7 = AndCondition([is_declaration, is_between_2009_2017])
     not_applicable_7 = [(tuple([8, 1, 5]), None), ((8, 1, 13), [0, 1, 2]), ((8, 1, 14), [1]), ((8, 1, 16), None)]
@@ -556,9 +586,58 @@ def _build_parametrization() -> Parametrization:
         tuple([8, 1, 12]): _7_replace_13(),
     }
     warnings_7 = {tuple((8, 1, 11)): "L'article 12 est applicable à compter du 1er janvier 2021."}
+    tuples_.append((condition_7, condition_source_D, not_applicable_7, new_articles_7))
+    all_warnings.append(warnings_7)
+
+    for condition, condition_source, not_applicable, new_articles in tuples_:
+        alternative_texts.extend(
+            [
+                AlternativeSection(SectionReference(sec), new_text, condition, condition_source)
+                for sec, new_text in new_articles.items()
+            ]
+        )
+        application_conditions.extend(
+            [
+                ApplicationCondition(EntityReference(SectionReference(section), alineas), condition, condition_source)
+                for section, alineas in not_applicable
+            ]
+        )
 
     condition_8 = OrCondition([is_enregistrement, is_autorisation])
     not_applicable_8 = [(tuple([8, 1, 0, 7]), None), (tuple([8, 1, 1, 1]), None)]
+    for na_sec, na_als in not_applicable_8:
+        _ref = EntityReference(SectionReference(na_sec), na_als)
+        application_conditions.append(
+            ApplicationCondition(_ref, condition_8, ConditionSource('Mentionné dans l\'article.', _ref))
+        )
 
     condition_9 = is_declaration
     not_applicable_9 = [(tuple([8, 1, 11]), [3]), (tuple([8, 1, 23, 2]), None), (tuple([8, 1, 1, 0]), None)]
+    for na_sec, na_als in not_applicable_9:
+        _ref = EntityReference(SectionReference(na_sec), na_als)
+        application_conditions.append(
+            ApplicationCondition(_ref, condition_9, ConditionSource('Mentionné dans l\'article.', _ref))
+        )
+
+    return Parametrization(application_conditions, alternative_texts)
+
+
+def _generate_options_dicts() -> Combinations:
+    regime = ParameterEnum.REGIME.value
+    date = ParameterEnum.DATE_INSTALLATION.value
+    return {
+        ('reg_A', 'date_before_2003'): {regime: Regime.A.value, date: datetime(2000, 1, 1)},
+        ('reg_A', 'date_between_2003_and_2017'): {regime: Regime.A.value, date: datetime(2010, 1, 1)},
+        ('reg_A', 'date_after_2017'): {regime: Regime.A.value, date: datetime(2020, 1, 1)},
+        ('reg_E', 'date_before_2003'): {regime: Regime.E.value, date: datetime(2000, 1, 1)},
+        ('reg_E', 'date_between_2003_and_2010'): {regime: Regime.E.value, date: datetime(2006, 1, 1)},
+        ('reg_E', 'date_between_2010_and_2017'): {regime: Regime.E.value, date: datetime(2015, 1, 1)},
+        ('reg_E', 'date_after_2017'): {regime: Regime.E.value, date: datetime(2020, 1, 1)},
+        ('reg_D', 'date_before_2009'): {regime: Regime.D.value, date: datetime(2000, 1, 1)},
+        ('reg_D', 'date_between_2009_and_2017'): {regime: Regime.D.value, date: datetime(2010, 1, 1)},
+        ('reg_D', 'date_after_2017'): {regime: Regime.D.value, date: datetime(2020, 1, 1)},
+    }
+
+
+_param = _build_parametrization()
+_handle_nor('DEVP1706393A', _param, lambda x: x, _generate_options_dicts())

@@ -1,3 +1,4 @@
+from lib.compute_properties import Regime
 import random
 from copy import copy
 from datetime import datetime, timedelta
@@ -7,12 +8,14 @@ from typing import List
 from lib.data import ArreteMinisteriel, EnrichedString, StructuredText
 from lib.parametric_am import (
     AlternativeSection,
+    AndCondition,
     ApplicationCondition,
     ConditionSource,
     EntityReference,
     Equal,
     Greater,
     Littler,
+    OrCondition,
     ParameterEnum,
     ParameterType,
     Parametrization,
@@ -22,10 +25,12 @@ from lib.parametric_am import (
     Condition,
     generate_all_am_versions,
     _mean,
+    _is_satisfied,
     _extract_interval_midpoints,
     _generate_options_dict,
     _extract_sorted_targets,
     _generate_combinations,
+    _generate_equal_option_dicts,
     _change_value,
     _apply_parameter_values_to_am,
     _extract_parameters_from_parametrization,
@@ -42,6 +47,32 @@ def test_extract_interval_midpoints():
     assert _extract_interval_midpoints([0, 1, 2, 3]) == [-1, 0.5, 1.5, 2.5, 4]
     res = [datetime(2019, 12, 31), datetime(2020, 1, 2), datetime(2020, 1, 4)]
     assert _extract_interval_midpoints([datetime(2020, 1, 1), datetime(2020, 1, 3)]) == res
+
+
+def test_generate_equal_option_dicts():
+    parameter = Parameter('test', ParameterType.BOOLEAN)
+    conditions: List[Condition] = [Equal(parameter, True), Equal(parameter, True)]
+    res = _generate_equal_option_dicts(conditions)
+    assert len(res) == 2
+    assert 'test == True' in res
+    assert 'test != True' in res
+    assert res['test == True'] == (parameter, True)
+    assert res['test != True'] == (parameter, False)
+
+
+def test_generate_equal_option_dicts_2():
+    parameter = Parameter('regime', ParameterType.REGIME)
+    conditions: List[Condition] = [Equal(parameter, Regime.A), Equal(parameter, Regime.NC)]
+    res = _generate_equal_option_dicts(conditions)
+    assert len(res) == 4
+    assert 'regime == A' in res
+    assert 'regime == E' in res
+    assert 'regime == D' in res
+    assert 'regime == NC' in res
+    assert res['regime == A'] == (parameter, Regime.A)
+    assert res['regime == E'] == (parameter, Regime.E)
+    assert res['regime == D'] == (parameter, Regime.D)
+    assert res['regime == NC'] == (parameter, Regime.NC)
 
 
 def test_generate_options_dict():
@@ -74,13 +105,13 @@ def test_generate_options_dict_2():
     ]
     res = _generate_options_dict(conditions)
     assert len(res) == 3
-    str_dt_20 = '2020-01-01 00:00:00'
-    str_dt_21 = '2021-01-01 00:00:00'
+    str_dt_20 = '2020-01-01'
+    str_dt_21 = '2021-01-01'
     assert f'test < {str_dt_20}' in res
-    assert f'test < {str_dt_21}' in res
+    assert f'{str_dt_20} <= test < {str_dt_21}' in res
     assert f'test >= {str_dt_21}' in res
     assert res[f'test < {str_dt_20}'] == (parameter, datetime(2019, 12, 31))
-    assert res[f'test < {str_dt_21}'] == (parameter, datetime(2020, 7, 2, 1, 0))
+    assert res[f'{str_dt_20} <= test < {str_dt_21}'] == (parameter, datetime(2020, 7, 2, 1, 0))
     assert res[f'test >= {str_dt_21}'] == (parameter, datetime(2021, 1, 2))
 
 
@@ -155,7 +186,7 @@ def test_apply_parameter_values_to_am():
             EnrichedString('Conditions d\'application', []),
             [
                 EnrichedString('L\'article 1 ne s\'applique qu\'aux nouvelles installations'),
-                EnrichedString('Pour les installations existantes, l\'article 2 est remplacé par "version modifiée"'),
+                EnrichedString('Pour les installations nouvelles, l\'article 2 est remplacé par "version modifiée"'),
             ],
             [],
             None,
@@ -175,12 +206,12 @@ def test_apply_parameter_values_to_am():
 
     new_am_1 = _apply_parameter_values_to_am(am, parametrization, {parameter: False})
     assert not new_am_1.sections[0].applicability.active
-    assert new_am_1.sections[1].applicability.modified
-    assert new_am_1.sections[1].outer_alineas[0].text == 'version modifiée'
+    assert not new_am_1.sections[1].applicability.modified
 
     new_am_2 = _apply_parameter_values_to_am(am, parametrization, {parameter: True})
     assert new_am_2.sections[0].applicability.active
-    assert not new_am_2.sections[1].applicability.modified
+    assert new_am_2.sections[1].applicability.modified
+    assert new_am_2.sections[1].outer_alineas[0].text == 'version modifiée'
 
     new_am_3 = _apply_parameter_values_to_am(am, parametrization, {})
     assert len(new_am_3.sections[0].applicability.warnings) == 1
@@ -279,3 +310,20 @@ def test_extract_installation_date_criterion():
     assert youngest
     assert youngest.left_date == '2019-01-01'
     assert youngest.right_date is None
+
+
+def test_is_satisfied():
+    param_1 = Parameter('regime', ParameterType.REGIME)
+    param_2 = Parameter('date', ParameterType.DATE)
+    condition_1 = Equal(param_1, Regime.A)
+    condition_2 = Equal(param_1, Regime.E)
+    condition_3 = Littler(param_2, 1, True)
+    assert not _is_satisfied(AndCondition([condition_1]), {})
+    assert _is_satisfied(AndCondition([condition_1]), {param_1: Regime.A})
+    assert _is_satisfied(OrCondition([condition_1, condition_2]), {param_1: Regime.A})
+    assert _is_satisfied(OrCondition([condition_1, condition_3]), {param_1: Regime.A})
+    assert not _is_satisfied(AndCondition([condition_1, condition_2]), {param_1: Regime.A})
+    assert _is_satisfied(AndCondition([condition_1, condition_3]), {param_1: Regime.A, param_2: 0.5})
+    assert _is_satisfied(OrCondition([condition_2, condition_3]), {param_1: Regime.E, param_2: 0.5})
+    assert not _is_satisfied(OrCondition([condition_1, condition_3]), {param_1: Regime.E, param_2: 5})
+

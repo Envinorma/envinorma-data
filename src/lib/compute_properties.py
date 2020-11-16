@@ -26,6 +26,7 @@ class Regime(Enum):
     E = 'E'
     D = 'D'
     DC = 'DC'
+    NC = 'NC'
 
 
 class ClassementState(Enum):

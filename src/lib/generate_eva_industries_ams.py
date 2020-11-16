@@ -1,7 +1,7 @@
 import json
 from datetime import datetime
 from lib.am_enriching import add_references, add_topics, remove_null_applicabilities, remove_prescriptive_power
-from typing import Callable, List, Dict, Set, Tuple
+from typing import Callable, List, Dict, Set, Tuple, Optional
 
 from lib.data import ArreteMinisteriel, EnrichedString, StructuredText, load_arrete_ministeriel, Topic
 from lib.compute_properties import AMMetadata, handle_am, load_data, get_legifrance_client, write_json
@@ -18,6 +18,7 @@ from lib.parametric_am import (
     Ints,
     build_simple_parametrization,
     generate_all_am_versions,
+    Combinations,
 )
 
 
@@ -41,12 +42,17 @@ def _generate_filename(version_descriptor: Tuple[str, ...]) -> str:
     return '_AND_'.join(version_descriptor).replace(' ', '_')
 
 
-def _handle_nor(nor: str, parametrization: Parametrization, enricher: Callable[[ArreteMinisteriel], ArreteMinisteriel]):
+def _handle_nor(
+    nor: str,
+    parametrization: Parametrization,
+    enricher: Callable[[ArreteMinisteriel], ArreteMinisteriel],
+    combinations: Optional[Combinations],
+):
     am = _generate_structured_am(nor)
     enriched_am = add_references(enricher(am))
     write_json(enriched_am.as_dict(), f'data/AM/enriched_texts/{nor}.json')
     write_json(parametrization.to_dict(), f'data/AM/parametrizations/{nor}.json')
-    all_versions = generate_all_am_versions(enriched_am, parametrization)
+    all_versions = generate_all_am_versions(enriched_am, parametrization, combinations)
 
     for version_desc, version in all_versions.items():
         filename = f'data/AM/parametric_texts/{nor}/' + _generate_filename(version_desc) + '.json'
@@ -57,7 +63,7 @@ def _handle_nor(nor: str, parametrization: Parametrization, enricher: Callable[[
 def _build_TREP1900331A_parametrization() -> Parametrization:
     new_articles = {
         tuple([3, 3, 1]): StructuredText(
-            title=EnrichedString(''),
+            title=EnrichedString('Article 4.10.'),
             outer_alineas=[
                 EnrichedString('Rétention et isolement.'),
                 EnrichedString(
