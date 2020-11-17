@@ -1,9 +1,8 @@
 from datetime import datetime
 from typing import Dict, List, Optional, Tuple
-from lib.am_enriching import add_references, add_topics, remove_prescriptive_power
 
-from lib.data import ArreteMinisteriel, EnrichedString, StructuredText, load_arrete_ministeriel, Topic
-from lib.compute_properties import AMMetadata, Regime, handle_am, load_data, get_legifrance_client, write_json
+from lib.data import EnrichedString, StructuredText
+from lib.compute_properties import Regime
 from lib.parametric_am import (
     AlternativeSection,
     AndCondition,
@@ -20,7 +19,6 @@ from lib.parametric_am import (
     Parametrization,
     Range,
     SectionReference,
-    build_simple_parametrization,
     Combinations,
 )
 
@@ -392,7 +390,7 @@ def _7_replace_13() -> StructuredText:
     )
 
 
-def _build_parametrization() -> Parametrization:
+def build_1510_parametrization() -> Parametrization:
     application_conditions = []
     alternative_texts = []
 
@@ -622,7 +620,7 @@ def _build_parametrization() -> Parametrization:
     return Parametrization(application_conditions, alternative_texts)
 
 
-def _generate_options_dicts() -> Combinations:
+def generate_1510_combinations() -> Combinations:
     regime = ParameterEnum.REGIME.value
     date = ParameterEnum.DATE_INSTALLATION.value
     return {
@@ -637,7 +635,3 @@ def _generate_options_dicts() -> Combinations:
         ('reg_D', 'date_between_2009_and_2017'): {regime: Regime.D, date: datetime(2010, 1, 1)},
         ('reg_D', 'date_after_2017'): {regime: Regime.D, date: datetime(2020, 1, 1)},
     }
-
-
-_param = _build_parametrization()
-_handle_nor('DEVP1706393A', _param, lambda x: x, _generate_options_dicts())

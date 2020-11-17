@@ -1,5 +1,6 @@
 import json
 from datetime import datetime
+from lib.generate_1510_parametrization import build_1510_parametrization, generate_1510_combinations
 from lib.am_enriching import add_references, add_topics, remove_null_applicabilities, remove_prescriptive_power
 from typing import Callable, List, Dict, Set, Tuple, Optional
 
@@ -46,7 +47,7 @@ def _handle_nor(
     nor: str,
     parametrization: Parametrization,
     enricher: Callable[[ArreteMinisteriel], ArreteMinisteriel],
-    combinations: Optional[Combinations],
+    combinations: Optional[Combinations] = None,
 ):
     am = _generate_structured_am(nor)
     enriched_am = add_references(enricher(am))
@@ -363,3 +364,5 @@ def enrich_ATEP9760292A(am: ArreteMinisteriel) -> ArreteMinisteriel:
 
 
 # _handle_nor('ATEP9760292A', _build_ATEP9760292A_parametrization(), enrich_ATEP9760292A)
+
+# _handle_nor('DEVP1706393A', build_1510_parametrization(), lambda x: x, generate_1510_combinations())

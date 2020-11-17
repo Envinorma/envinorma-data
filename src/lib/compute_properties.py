@@ -1,6 +1,7 @@
 import json
 import os
 import traceback
+from copy import copy
 from dataclasses import dataclass, asdict
 from datetime import datetime
 from enum import Enum
@@ -190,6 +191,27 @@ def _structure_am(legifrance_text: LegifranceText) -> Tuple[Optional[ArreteMinis
         return None, StructurationError(str(exc), traceback.format_exc())
 
 
+_LEGIFRANCE_LODA_BASE_URL = 'https://www.legifrance.gouv.fr/loda/id/'
+
+
+def _build_legifrance_url(cid: str) -> str:
+    return _LEGIFRANCE_LODA_BASE_URL + cid
+
+
+_AIDA_BASE_URL = 'https://aida.ineris.fr/consultation_document/'
+
+
+def _build_aida_url(page: str) -> str:
+    return _AIDA_BASE_URL + page
+
+
+def _add_metadata(am: ArreteMinisteriel, metadata: AMMetadata) -> ArreteMinisteriel:
+    am = copy(am)
+    am.legifrance_url = _build_legifrance_url(metadata.cid)
+    am.aida_url = _build_aida_url(metadata.aida_page)
+    return am
+
+
 def handle_am(
     metadata: AMMetadata, client: OAuth2Session, dump_am: bool = False
 ) -> Tuple[Optional[ArreteMinisteriel], AMStructurationLog]:
@@ -202,6 +224,8 @@ def handle_am(
         return None, AMStructurationLog(api_result, lf_format_error)
     legifrance_text = load_legifrance_text(legifrance_text_json)
     am, structuration_error = _structure_am(legifrance_text)
+    if am:
+        am = _add_metadata(am, metadata)
     if dump_am and am:
         write_json(am.as_dict(), _get_structured_am_filename(metadata))
     properties = compute_properties(legifrance_text, am)

@@ -171,6 +171,13 @@ class DateCriterion:
     left_date: Optional[str]
     right_date: Optional[str]
 
+    @classmethod
+    def from_dict(cls, dict_: Dict[str, Any]) -> 'DateCriterion':
+        dict_ = dict_.copy()
+        dict_['left_date'] = dict_.get('left_date')
+        dict_['right_date'] = dict_.get('right_date')
+        return DateCriterion(**dict_)
+
 
 @dataclass
 class ArreteMinisteriel:
@@ -180,12 +187,25 @@ class ArreteMinisteriel:
     short_title: str
     applicability: Optional[Applicability]
     installation_date_criterion: Optional[DateCriterion] = None
+    aida_url: Optional[str] = None
+    legifrance_url: Optional[str] = None
 
     def as_dict(self) -> Dict[str, Any]:
         res = asdict(self)
         res['sections'] = [section.as_dict() for section in self.sections]
         res['applicability'] = self.applicability.as_dict() if self.applicability else None
         return res
+
+    @classmethod
+    def from_dict(cls, dict_: Dict[str, Any]) -> 'ArreteMinisteriel':
+        dict_ = dict_.copy()
+        dict_['title'] = load_enriched_string(dict_['title'])
+        dict_['sections'] = [load_structured_text(sec) for sec in dict_['sections']]
+        dict_['visa'] = [load_enriched_string(vu) for vu in dict_['visa']]
+        dict_['applicability'] = Applicability.from_dict(dict_['applicability']) if dict_.get('applicability') else None
+        dt_key = 'installation_date_criterion'
+        dict_[dt_key] = DateCriterion.from_dict(dict_[dt_key]) if dict_.get(dt_key) else None
+        return cls(**dict_)
 
 
 def load_link(dict_: Dict[str, Any]) -> Link:
@@ -226,11 +246,7 @@ def load_structured_text(dict_: Dict[str, Any]) -> StructuredText:
 
 
 def load_arrete_ministeriel(dict_: Dict[str, Any]) -> ArreteMinisteriel:
-    title = load_enriched_string(dict_['title'])
-    sections = [load_structured_text(sec) for sec in dict_['sections']]
-    visa = [load_enriched_string(vu) for vu in dict_['visa']]
-    applicability = Applicability.from_dict(dict_['applicability']) if dict_.get('applicability') else None
-    return ArreteMinisteriel(title, sections, visa, dict_['short_title'], applicability)
+    return ArreteMinisteriel.from_dict(dict_)
 
 
 @dataclass
