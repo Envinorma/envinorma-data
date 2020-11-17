@@ -1,3 +1,4 @@
+from lib.data import load_arrete_ministeriel
 import pytest
 import json
 from lib.am_structure_extraction import Link, EnrichedString, transform_arrete_ministeriel, load_legifrance_text
@@ -35,23 +36,15 @@ def test_link_addition():
     assert sum([link.target == 'example.com/pipa' for link in new_str.links]) == 1
 
 
-_SAMPLE_AM_NOR = ['DEVP1706393A', 'TREP1815737A', 'ATEP9870263A', 'DEVP1519168A', 'DEVP1430916A', 'DEVP1001990A']
+_SAMPLE_AM_NOR = ['DEVP1706393A', 'ATEP9760292A', 'DEVP1235896A', 'DEVP1329353A', 'TREP1900331A', 'TREP2013116A']
 
 
 @pytest.mark.filterwarnings('ignore')
 def test_no_fail_in_aida_links_addition():
-    page_id_to_links = json.load(open('data/aida/hyperlinks/page_id_to_links.json'))
-    arretes_ministeriels = json.load(open('data/AM/arretes_ministeriels.json'))
-    nor_to_page_id = {
-        doc['nor']: doc['aida_page'] for doc in arretes_ministeriels if 'nor' in doc and 'aida_page' in doc
-    }
     for nor in _SAMPLE_AM_NOR:
-        aida_page = nor_to_page_id[nor]
-        links = [Hyperlink(**link_doc) for link_doc in page_id_to_links[aida_page]]
-        add_links_to_am(
-            transform_arrete_ministeriel(load_legifrance_text(json.load(open(f'data/AM/legifrance_texts/{nor}.json')))),
-            links,
-        )
+        links_json = json.load(open(f'data/aida/hyperlinks/{nor}.json'))
+        links = [Hyperlink(**link_doc) for link_doc in links_json]
+        add_links_to_am(load_arrete_ministeriel(json.load(open(f'data/AM/structured_texts/{nor}.json'))), links)
 
 
 def test_extract_anchors():
