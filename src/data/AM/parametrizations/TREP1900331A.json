@@ -10,6 +10,7 @@
                 "target": 1554760800,
                 "type": "GREATER"
             },
+            "description": "Le paragraphe ne s'applique qu'aux sites dont la date d'installation est postérieure au 09-04-2019.",
             "new_text": {
                 "annotations": null,
                 "applicability": null,
@@ -82,6 +83,7 @@
                 "target": 1554760800,
                 "type": "GREATER"
             },
+            "description": "Le paragraphe ne s'applique qu'aux sites dont la date d'installation est postérieure au 09-04-2019.",
             "source": {
                 "explanation": "Paragraphe décrivant ce qui s'applique aux installations existantes",
                 "reference": {
@@ -116,6 +118,7 @@
                 "target": 1554760800,
                 "type": "GREATER"
             },
+            "description": "Le paragraphe ne s'applique qu'aux sites dont la date d'installation est postérieure au 09-04-2019.",
             "source": {
                 "explanation": "Paragraphe décrivant ce qui s'applique aux installations existantes",
                 "reference": {
@@ -151,6 +154,7 @@
                 "target": 1554760800,
                 "type": "GREATER"
             },
+            "description": "Le paragraphe ne s'applique qu'aux sites dont la date d'installation est postérieure au 09-04-2019.",
             "source": {
                 "explanation": "Paragraphe décrivant ce qui s'applique aux installations existantes",
                 "reference": {
@@ -186,6 +190,7 @@
                 "target": 1554760800,
                 "type": "GREATER"
             },
+            "description": "Le paragraphe ne s'applique qu'aux sites dont la date d'installation est postérieure au 09-04-2019.",
             "source": {
                 "explanation": "Paragraphe décrivant ce qui s'applique aux installations existantes",
                 "reference": {
@@ -221,6 +226,7 @@
                 "target": 1554760800,
                 "type": "GREATER"
             },
+            "description": "Le paragraphe ne s'applique qu'aux sites dont la date d'installation est postérieure au 09-04-2019.",
             "source": {
                 "explanation": "Paragraphe décrivant ce qui s'applique aux installations existantes",
                 "reference": {

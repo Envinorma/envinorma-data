@@ -248,12 +248,14 @@ class ApplicationCondition:
     targeted_entity: EntityReference
     condition: Condition
     source: ConditionSource
+    description: Optional[str] = None
 
     def to_dict(self) -> Dict[str, Any]:
         return {
             'targeted_entity': self.targeted_entity.to_dict(),
             'condition': self.condition.to_dict(),
             'source': self.source.to_dict(),
+            'description': self.description,
         }
 
     @classmethod
@@ -262,6 +264,7 @@ class ApplicationCondition:
             EntityReference.from_dict(dict_['targeted_entity']),
             load_condition(dict_['condition']),
             ConditionSource.from_dict(dict_['source']),
+            dict_.get('description'),
         )
 
 
@@ -271,6 +274,7 @@ class AlternativeSection:
     new_text: StructuredText
     condition: Condition
     source: ConditionSource
+    description: Optional[str] = None
 
     def to_dict(self) -> Dict[str, Any]:
         return {
@@ -278,6 +282,7 @@ class AlternativeSection:
             'new_text': self.new_text.as_dict(),
             'condition': self.condition.to_dict(),
             'source': self.source.to_dict(),
+            'description': self.description,
         }
 
     @classmethod
@@ -287,6 +292,7 @@ class AlternativeSection:
             load_structured_text(dict_['new_text']),
             load_condition(dict_['condition']),
             ConditionSource.from_dict(dict_['source']),
+            dict_.get('description'),
         )
 
 
@@ -524,15 +530,24 @@ def _compute_applicability(condition: ApplicationCondition, parameter_values: Di
     else:
         if not _is_satisfied(condition.condition, parameter_values):
             result.active = False
-            result.reason_inactive = _generate_reason_inactive(condition.condition, parameter_values)
+            result.reason_inactive = condition.description or _generate_reason_inactive(
+                condition.condition, parameter_values
+            )
     return result
 
 
+def lower_first_letter(str_: str) -> str:
+    return str_[0].lower() + str_[1:]
+
+
 def _merge_applicabilities(applicabilities: List[Applicability]) -> Applicability:
-    all_active = all([app.active for app in applicabilities])
-    reason_inactive = '\n'.join([app.reason_inactive for app in applicabilities if app.reason_inactive])
+    for applicability in applicabilities:
+        if not applicability.active:
+            if applicability.reason_inactive is None:
+                raise ValueError('reason_inactive must be defined when inactive.')
+            return Applicability(False, reason_inactive=applicability.reason_inactive)
     warnings = [warn for app in applicabilities for warn in app.warnings]
-    return Applicability(all_active, reason_inactive, False, warnings=warnings)
+    return Applicability(True, None, False, warnings=warnings)
 
 
 def _build_alternative_text(
@@ -543,15 +558,50 @@ def _build_alternative_text(
     new_text.sections = alternative_section.new_text.sections
     new_text.outer_alineas = alternative_section.new_text.outer_alineas
     new_text.applicability = Applicability(
-        True, None, True, _generate_reason_active(alternative_section.condition, parameter_values)
+        True,
+        None,
+        True,
+        alternative_section.description or _generate_reason_active(alternative_section.condition, parameter_values),
     )
     return new_text
 
 
-def _compute_undefined_parameters_warnings(condition: Condition, parameter_values: Dict[Parameter, Any]) -> List[str]:
+def _compute_undefined_parameters_default_warnings(
+    condition: Condition, parameter_values: Dict[Parameter, Any]
+) -> List[str]:
     all_parameters = _extract_parameters_from_condition(condition)
     undefined_parameters = {parameter for parameter in all_parameters if parameter not in parameter_values}
     return [f'Le paramètre {parameter} n\'est pas défini' for parameter in undefined_parameters]
+
+
+def _compute_sentence_end(parameter: Parameter) -> str:
+    if parameter == ParameterEnum.DATE_INSTALLATION.value:
+        return 'à la valeur de la date d\'installation'
+    if parameter == ParameterEnum.REGIME.value:
+        return 'au régime auquel est soumis l\'installation'
+    return f'à la valeur du paramètre {parameter.id}'
+
+
+def _compute_undefined_parameters_warnings_leaf(
+    condition: LeafCondition, parameter_values: Dict[Parameter, Any], for_applicability: bool
+) -> List[str]:
+    if condition.parameter not in parameter_values:
+        if for_applicability:
+            return [f'L\'applicabilité de ce paragraphe est conditionnée {_compute_sentence_end(condition.parameter)}.']
+
+        return [
+            f'Ce paragraphe peut être modifié. Cette modification est '
+            f'conditionnée {_compute_sentence_end(condition.parameter)}.'
+        ]
+    return []
+
+
+def _compute_undefined_parameters_warnings(
+    condition: Condition, parameter_values: Dict[Parameter, Any], for_applicability: bool
+) -> List[str]:
+    if isinstance(condition, (Range, Equal, Greater, Littler)):
+        return _compute_undefined_parameters_warnings_leaf(condition, parameter_values, for_applicability)
+    return _compute_undefined_parameters_default_warnings(condition, parameter_values)
 
 
 def _keep_unsatisfied_conditions(
@@ -563,7 +613,9 @@ def _keep_unsatisfied_conditions(
         if not _is_satisfied(application_condition.condition, parameter_values):
             unsatisfied.append(application_condition)
         else:
-            warnings.extend(_compute_undefined_parameters_warnings(application_condition.condition, parameter_values))
+            warnings.extend(
+                _compute_undefined_parameters_warnings(application_condition.condition, parameter_values, True)
+            )
     return unsatisfied, warnings
 
 
@@ -576,7 +628,10 @@ def _keep_satisfied_mofications(
         if _is_satisfied(alt.condition, parameter_values):
             satisfied.append(alt)
         else:
-            warnings.extend(_compute_undefined_parameters_warnings(alt.condition, parameter_values))
+            if alt.description:
+                warnings.append(alt.description)
+            else:
+                warnings.extend(_compute_undefined_parameters_warnings(alt.condition, parameter_values, False))
     return satisfied, warnings
 
 
@@ -599,7 +654,7 @@ def _apply_parameter_values_in_text(
         if len(alternative_sections) > 1:
             raise ValueError(
                 f'Cannot handle more than 1 applicable modification on one section. '
-                'Here, {len(alternative_sections)} are applicable.'
+                f'Here, {len(alternative_sections)} are applicable.'
             )
         return _build_alternative_text(text, alternative_sections[0], parameter_values)
 
@@ -648,16 +703,16 @@ def _extract_installation_date_criterion(
 def _apply_parameter_values_to_am(
     am: ArreteMinisteriel, parametrization: Parametrization, parameter_values: Dict[Parameter, Any]
 ) -> ArreteMinisteriel:
-    new_am = copy(am)
-    new_am.installation_date_criterion = _extract_installation_date_criterion(parametrization, parameter_values)
-    new_am.sections = [
+    am = copy(am)
+    am.installation_date_criterion = _extract_installation_date_criterion(parametrization, parameter_values)
+    am.sections = [
         _apply_parameter_values_in_text(section, parametrization, parameter_values, (i,))
         for i, section in enumerate(am.sections)
     ]
-    new_am.applicability = _compute_whole_text_applicability(
+    am.applicability = _compute_whole_text_applicability(
         parametrization.path_to_conditions.get(tuple()) or [], parameter_values
     )
-    return new_am
+    return am
 
 
 def _extract_leaf_conditions(condition: Condition, parameter: Parameter) -> List[Condition]:
@@ -838,12 +893,17 @@ def build_simple_parametrization(
             'reference': {'section': {'path': source_section}, 'outer_alinea_indices': None},
         }
     )
-    condition = Greater(Parameter('date-d-installation', ParameterType.DATE), date, False)
+    date_str = date.strftime('%d-%m-%Y')
+    description = (
+        f'''Le paragraphe ne s'applique qu'aux sites dont la date d'installation est postérieure au {date_str}.'''
+    )
+    condition = Greater(ParameterEnum.DATE_INSTALLATION.value, date, False)
     application_conditions = [
-        ApplicationCondition(EntityReference(SectionReference(tuple(ref)), None), condition, source)
+        ApplicationCondition(EntityReference(SectionReference(tuple(ref)), None), condition, source, description)
         for ref in non_applicable_section_references
     ]
     alternative_sections = [
-        AlternativeSection(SectionReference(ref), value, condition, source) for ref, value in modified_articles.items()
+        AlternativeSection(SectionReference(ref), value, condition, source, description)
+        for ref, value in modified_articles.items()
     ]
     return Parametrization(application_conditions, alternative_sections)

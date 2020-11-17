@@ -13,6 +13,7 @@ from lib.parametric_am import (
     EntityReference,
     Greater,
     Parameter,
+    ParameterEnum,
     ParameterType,
     Parametrization,
     SectionReference,
@@ -150,9 +151,10 @@ def _build_DEVP1329353A_parametrization() -> Parametrization:
         'Paragraphe décrivant ce qui s\'applique aux installations existantes',
         EntityReference(SectionReference((0,)), None),
     )
+    description = f'''L'arrêté ne s'applique qu'aux sites dont la date d'installation est postérieure au 10/12/2013.'''
     condition = Greater(Parameter('date-d-installation', ParameterType.DATE), datetime(2013, 12, 10), False)
     application_conditions = [
-        ApplicationCondition(EntityReference(SectionReference(()), None, True), condition, source)
+        ApplicationCondition(EntityReference(SectionReference(()), None, True), condition, source, description)
     ]
     return Parametrization(application_conditions, [])
 
@@ -205,11 +207,17 @@ def enrich_DEVP1329353A(am: ArreteMinisteriel) -> ArreteMinisteriel:
 
 # _handle_nor('DEVP1329353A', _build_DEVP1329353A_parametrization(), enrich_DEVP1329353A)
 
+
 # DEVP1235896A
 def _build_DEVP1235896A_parametrization() -> Parametrization:
-    condition = Greater(
-        Parameter('date-d-installation', ParameterType.DATE), datetime(2012, 11, 26, 0, 0), False, ConditionType.GREATER
+    description = (
+        f'''Le paragraphe ne s'applique qu'aux sites dont la date d'installation est postérieure au 26/11/2012.'''
     )
+    description_modif_1 = (
+        f'''Pour les sites dont la date d'installation est postérieure au 26/11/2012, '''
+        '''seuls les alineas concernant le dossier d'exploitation s'appliquent'''
+    )
+    condition = Greater(ParameterEnum.DATE_INSTALLATION.value, datetime(2012, 11, 26, 0, 0), False)
     source = ConditionSource(
         "Paragraphe décrivant ce qui s'applique aux installations existantes",
         EntityReference(section=SectionReference(path=(11, 1)), outer_alinea_indices=None, whole_arrete=False),
@@ -225,11 +233,20 @@ def _build_DEVP1235896A_parametrization() -> Parametrization:
                 ),
                 condition,
                 source,
+                description=description_modif_1,
             ),
-            ApplicationCondition(EntityReference(SectionReference(path=(2, 2)), None, False), condition, source),
-            ApplicationCondition(EntityReference(SectionReference(path=(3, 2, 0)), None, False), condition, source),
-            ApplicationCondition(EntityReference(SectionReference(path=(4, 1, 1)), [0], False), condition, source),
-            ApplicationCondition(EntityReference(SectionReference(path=(4, 3, 1)), [1], False), condition, source),
+            ApplicationCondition(
+                EntityReference(SectionReference(path=(2, 2)), None, False), condition, source, description
+            ),
+            ApplicationCondition(
+                EntityReference(SectionReference(path=(3, 2, 0)), None, False), condition, source, description
+            ),
+            ApplicationCondition(
+                EntityReference(SectionReference(path=(4, 1, 1)), [0], False), condition, source, description
+            ),
+            ApplicationCondition(
+                EntityReference(SectionReference(path=(4, 3, 1)), [1], False), condition, source, description
+            ),
         ],
         alternative_sections=[],
     )
@@ -297,6 +314,7 @@ def enrich_DEVP1235896A(am: ArreteMinisteriel) -> ArreteMinisteriel:
 
 
 # _handle_nor('DEVP1235896A', _build_DEVP1235896A_parametrization(), enrich_DEVP1235896A)
+
 
 # ATEP9760292A
 def _build_ATEP9760292A_parametrization() -> Parametrization:

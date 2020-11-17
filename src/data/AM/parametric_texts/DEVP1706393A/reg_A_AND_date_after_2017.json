@@ -3,7 +3,7 @@
     "applicability": {
         "active": true,
         "modified": false,
-        "reason_inactive": "",
+        "reason_inactive": null,
         "reason_modified": null,
         "warnings": []
     },
@@ -1450,7 +1450,7 @@
                                     "applicability": {
                                         "active": false,
                                         "modified": false,
-                                        "reason_inactive": "Aucune des conditions d'application suivantes ne sont pas respectées: Si regime == E:, Si regime == A:",
+                                        "reason_inactive": "Le paragraphe ne s'applique qu'aux installations soumises à enregistrement ou à autorisation.",
                                         "reason_modified": null,
                                         "warnings": []
                                     },
@@ -1671,7 +1671,7 @@
                             "applicability": {
                                 "active": false,
                                 "modified": false,
-                                "reason_inactive": "Les conditions d'application suivantes ne sont pas respectées: Si regime == A:, Si date-d-installation < 2003-07-01 00:00:00:\nLes conditions d'application suivantes ne sont pas respectées: Si regime == E:, Si date-d-installation < 2003-07-01 00:00:00:\nLes conditions d'application suivantes ne sont pas respectées: Si regime == D:, Si date-d-installation < 2009-04-30 00:00:00:",
+                                "reason_inactive": "Le paragraphe n'est pas applicable pour les sites installés avant le 01-07-2003",
                                 "reason_modified": null,
                                 "warnings": []
                             },
@@ -1684,9 +1684,12 @@
                                     "applicability": {
                                         "active": false,
                                         "modified": false,
-                                        "reason_inactive": "Le paramètre regime n'est pas égal à D",
+                                        "reason_inactive": "Le paragraphe ne s'applique qu'aux installations soumises à déclaration.",
                                         "reason_modified": null,
-                                        "warnings": []
+                                        "warnings": [
+                                            "Le paragraphe est modifié pour les sites installés entre le 01-07-2003 et le 01-07-2017",
+                                            "Le paragraphe est modifié pour les sites installés entre le 01-07-2003 et le 16-04-2010"
+                                        ]
                                     },
                                     "legifrance_article": null,
                                     "outer_alineas": [
@@ -1719,7 +1722,7 @@
                                     "applicability": {
                                         "active": false,
                                         "modified": false,
-                                        "reason_inactive": "Aucune des conditions d'application suivantes ne sont pas respectées: Si regime == E:, Si regime == A:",
+                                        "reason_inactive": "Le paragraphe ne s'applique qu'aux installations soumises à enregistrement ou à autorisation.",
                                         "reason_modified": null,
                                         "warnings": []
                                     },
@@ -1770,7 +1773,7 @@
                             "applicability": {
                                 "active": false,
                                 "modified": false,
-                                "reason_inactive": "Les conditions d'application suivantes ne sont pas respectées: Si regime == A:, Si date-d-installation < 2003-07-01 00:00:00:\nLes conditions d'application suivantes ne sont pas respectées: Si regime == E:, Si date-d-installation < 2003-07-01 00:00:00:",
+                                "reason_inactive": "Le paragraphe n'est pas applicable pour les sites installés avant le 01-07-2003",
                                 "reason_modified": null,
                                 "warnings": []
                             },
@@ -1818,9 +1821,14 @@
                                     "applicability": {
                                         "active": false,
                                         "modified": false,
-                                        "reason_inactive": "Les conditions d'application suivantes ne sont pas respectées: Si regime == A:, Si date-d-installation < 2003-07-01 00:00:00:\nLes conditions d'application suivantes ne sont pas respectées: Si regime == E:, Si date-d-installation < 2003-07-01 00:00:00:\nLes conditions d'application suivantes ne sont pas respectées: Si regime == D:, Si date-d-installation < 2009-04-30 00:00:00:",
+                                        "reason_inactive": "Le paragraphe n'est pas applicable pour les sites installés avant le 01-07-2003",
                                         "reason_modified": null,
-                                        "warnings": []
+                                        "warnings": [
+                                            "Le paragraphe est modifié pour les sites installés entre le 01-07-2003 et le 01-07-2017",
+                                            "Le paragraphe est modifié pour les sites installés entre le 01-07-2003 et le 16-04-2010",
+                                            "Le paragraphe est modifié pour les sites installés entre le 16-04-2010 et le 01-07-2017",
+                                            "Le paragraphe est modifié pour les sites installés entre le 30-04-2009 et le 01-07-2017"
+                                        ]
                                     },
                                     "legifrance_article": null,
                                     "outer_alineas": [
@@ -1913,9 +1921,12 @@
                                     "applicability": {
                                         "active": false,
                                         "modified": false,
-                                        "reason_inactive": "Les conditions d'application suivantes ne sont pas respectées: Si regime == A:, Si date-d-installation < 2003-07-01 00:00:00:\nLes conditions d'application suivantes ne sont pas respectées: Si regime == A:, Si 2003-07-01 00:00:00 <= date-d-installation < True:\nLes conditions d'application suivantes ne sont pas respectées: Si regime == E:, Si date-d-installation < 2003-07-01 00:00:00:\nLes conditions d'application suivantes ne sont pas respectées: Si regime == D:, Si date-d-installation < 2009-04-30 00:00:00:",
+                                        "reason_inactive": "Le paragraphe n'est pas applicable pour les sites installés avant le 01-07-2003",
                                         "reason_modified": null,
-                                        "warnings": []
+                                        "warnings": [
+                                            "Le paragraphe est modifié pour les sites installés entre le 16-04-2010 et le 01-07-2017",
+                                            "Le paragraphe est modifié pour les sites installés entre le 30-04-2009 et le 01-07-2017"
+                                        ]
                                     },
                                     "legifrance_article": null,
                                     "outer_alineas": [],
@@ -2113,9 +2124,12 @@
                                     "applicability": {
                                         "active": false,
                                         "modified": false,
-                                        "reason_inactive": "Les conditions d'application suivantes ne sont pas respectées: Si regime == A:, Si date-d-installation < 2003-07-01 00:00:00:\nLes conditions d'application suivantes ne sont pas respectées: Si regime == A:, Si 2003-07-01 00:00:00 <= date-d-installation < True:\nLes conditions d'application suivantes ne sont pas respectées: Si regime == E:, Si date-d-installation < 2003-07-01 00:00:00:",
+                                        "reason_inactive": "Le paragraphe n'est pas applicable pour les sites installés avant le 01-07-2003",
                                         "reason_modified": null,
-                                        "warnings": []
+                                        "warnings": [
+                                            "Le paragraphe est modifié pour les sites installés avant le 30-04-2009",
+                                            "Le paragraphe est modifié pour les sites installés entre le 30-04-2009 et le 01-07-2017"
+                                        ]
                                     },
                                     "legifrance_article": null,
                                     "outer_alineas": [
@@ -2210,9 +2224,14 @@
                             "applicability": {
                                 "active": false,
                                 "modified": false,
-                                "reason_inactive": "Les conditions d'application suivantes ne sont pas respectées: Si regime == A:, Si date-d-installation < 2003-07-01 00:00:00:\nLes conditions d'application suivantes ne sont pas respectées: Si regime == E:, Si date-d-installation < 2003-07-01 00:00:00:\nLes conditions d'application suivantes ne sont pas respectées: Si regime == D:, Si date-d-installation < 2009-04-30 00:00:00:",
+                                "reason_inactive": "Le paragraphe n'est pas applicable pour les sites installés avant le 01-07-2003",
                                 "reason_modified": null,
-                                "warnings": []
+                                "warnings": [
+                                    "Le paragraphe est modifié pour les sites installés entre le 01-07-2003 et le 01-07-2017",
+                                    "Le paragraphe est modifié pour les sites installés entre le 01-07-2003 et le 16-04-2010",
+                                    "Le paragraphe est modifié pour les sites installés entre le 16-04-2010 et le 01-07-2017",
+                                    "Le paragraphe est modifié pour les sites installés entre le 30-04-2009 et le 01-07-2017"
+                                ]
                             },
                             "legifrance_article": null,
                             "outer_alineas": [
@@ -2305,9 +2324,14 @@
                             "applicability": {
                                 "active": false,
                                 "modified": false,
-                                "reason_inactive": "Les conditions d'application suivantes ne sont pas respectées: Si regime == A:, Si date-d-installation < 2003-07-01 00:00:00:\nLes conditions d'application suivantes ne sont pas respectées: Si regime == E:, Si date-d-installation < 2003-07-01 00:00:00:\nLes conditions d'application suivantes ne sont pas respectées: Si regime == D:, Si date-d-installation < 2009-04-30 00:00:00:",
+                                "reason_inactive": "Le paragraphe n'est pas applicable pour les sites installés avant le 01-07-2003",
                                 "reason_modified": null,
-                                "warnings": []
+                                "warnings": [
+                                    "Le paragraphe est modifié pour les sites installés entre le 01-07-2003 et le 01-07-2017",
+                                    "Le paragraphe est modifié pour les sites installés entre le 01-07-2003 et le 16-04-2010",
+                                    "Le paragraphe est modifié pour les sites installés entre le 16-04-2010 et le 01-07-2017",
+                                    "Le paragraphe est modifié pour les sites installés entre le 30-04-2009 et le 01-07-2017"
+                                ]
                             },
                             "legifrance_article": null,
                             "outer_alineas": [
@@ -2370,7 +2394,7 @@
                             "applicability": {
                                 "active": false,
                                 "modified": false,
-                                "reason_inactive": "Les conditions d'application suivantes ne sont pas respectées: Si regime == A:, Si date-d-installation < 2003-07-01 00:00:00:\nLes conditions d'application suivantes ne sont pas respectées: Si regime == E:, Si date-d-installation < 2003-07-01 00:00:00:\nLes conditions d'application suivantes ne sont pas respectées: Si regime == E:, Si 2010-04-16 00:00:00 <= date-d-installation < True:\nLes conditions d'application suivantes ne sont pas respectées: Si regime == D:, Si date-d-installation < 2009-04-30 00:00:00:\nLes conditions d'application suivantes ne sont pas respectées: Si regime == D:, Si 2009-04-30 00:00:00 <= date-d-installation < True:",
+                                "reason_inactive": "Le paragraphe n'est pas applicable pour les sites installés avant le 01-07-2003",
                                 "reason_modified": null,
                                 "warnings": []
                             },
@@ -2435,9 +2459,14 @@
                             "applicability": {
                                 "active": false,
                                 "modified": false,
-                                "reason_inactive": "Les conditions d'application suivantes ne sont pas respectées: Si regime == A:, Si date-d-installation < 2003-07-01 00:00:00:\nLes conditions d'application suivantes ne sont pas respectées: Si regime == E:, Si date-d-installation < 2003-07-01 00:00:00:\nLes conditions d'application suivantes ne sont pas respectées: Si regime == D:, Si date-d-installation < 2009-04-30 00:00:00:",
+                                "reason_inactive": "Le paragraphe n'est pas applicable pour les sites installés avant le 01-07-2003",
                                 "reason_modified": null,
-                                "warnings": []
+                                "warnings": [
+                                    "Le paragraphe est modifié pour les sites installés entre le 01-07-2003 et le 01-07-2017",
+                                    "Le paragraphe est modifié pour les sites installés entre le 01-07-2003 et le 16-04-2010",
+                                    "Le paragraphe est modifié pour les sites installés entre le 16-04-2010 et le 01-07-2017",
+                                    "Le paragraphe est modifié pour les sites installés entre le 30-04-2009 et le 01-07-2017"
+                                ]
                             },
                             "legifrance_article": null,
                             "outer_alineas": [
@@ -2500,7 +2529,7 @@
                             "applicability": {
                                 "active": false,
                                 "modified": false,
-                                "reason_inactive": "Les conditions d'application suivantes ne sont pas respectées: Si regime == A:, Si date-d-installation < 2003-07-01 00:00:00:",
+                                "reason_inactive": "Le paragraphe n'est pas applicable pour les sites installés avant le 01-07-2003",
                                 "reason_modified": null,
                                 "warnings": []
                             },
@@ -2535,7 +2564,7 @@
                             "applicability": {
                                 "active": false,
                                 "modified": false,
-                                "reason_inactive": "Les conditions d'application suivantes ne sont pas respectées: Si regime == A:, Si date-d-installation < 2003-07-01 00:00:00:\nLes conditions d'application suivantes ne sont pas respectées: Si regime == E:, Si date-d-installation < 2003-07-01 00:00:00:\nLes conditions d'application suivantes ne sont pas respectées: Si regime == D:, Si date-d-installation < 2009-04-30 00:00:00:",
+                                "reason_inactive": "Le paragraphe n'est pas applicable pour les sites installés avant le 01-07-2003",
                                 "reason_modified": null,
                                 "warnings": []
                             },
@@ -2610,9 +2639,11 @@
                             "applicability": {
                                 "active": false,
                                 "modified": false,
-                                "reason_inactive": "Les conditions d'application suivantes ne sont pas respectées: Si regime == A:, Si date-d-installation < 2003-07-01 00:00:00:\nLes conditions d'application suivantes ne sont pas respectées: Si regime == E:, Si date-d-installation < 2003-07-01 00:00:00:",
+                                "reason_inactive": "Le paragraphe n'est pas applicable pour les sites installés avant le 01-07-2003",
                                 "reason_modified": null,
-                                "warnings": []
+                                "warnings": [
+                                    "Le paragraphe est modifié pour les sites installés avant le 30-04-2009"
+                                ]
                             },
                             "legifrance_article": null,
                             "outer_alineas": [
@@ -2660,9 +2691,13 @@
                             "applicability": {
                                 "active": false,
                                 "modified": false,
-                                "reason_inactive": "Les conditions d'application suivantes ne sont pas respectées: Si regime == A:, Si date-d-installation < 2003-07-01 00:00:00:\nLes conditions d'application suivantes ne sont pas respectées: Si regime == E:, Si date-d-installation < 2003-07-01 00:00:00:\nLes conditions d'application suivantes ne sont pas respectées: Si regime == D:, Si date-d-installation < 2009-04-30 00:00:00:",
+                                "reason_inactive": "Le paragraphe n'est pas applicable pour les sites installés avant le 01-07-2003",
                                 "reason_modified": null,
-                                "warnings": []
+                                "warnings": [
+                                    "Le paragraphe est modifié pour les sites installés entre le 01-07-2003 et le 01-07-2017",
+                                    "Le paragraphe est modifié pour les sites installés entre le 01-07-2003 et le 16-04-2010",
+                                    "Le paragraphe est modifié pour les sites installés entre le 30-04-2009 et le 01-07-2017"
+                                ]
                             },
                             "legifrance_article": null,
                             "outer_alineas": [
@@ -2735,9 +2770,16 @@
                             "applicability": {
                                 "active": false,
                                 "modified": false,
-                                "reason_inactive": "Le paramètre regime n'est pas égal à D",
+                                "reason_inactive": "Le paragraphe ne s'applique qu'aux installations soumises à déclaration.",
                                 "reason_modified": null,
-                                "warnings": []
+                                "warnings": [
+                                    "Le paragraphe est modifié pour les sites installés avant le 01-07-2003",
+                                    "Le paragraphe est modifié pour les sites installés entre le 01-07-2003 et le 01-07-2017",
+                                    "Le paragraphe est modifié pour les sites installés avant le 01-07-2003",
+                                    "Le paragraphe est modifié pour les sites installés entre le 01-07-2003 et le 16-04-2010",
+                                    "Le paragraphe est modifié pour les sites installés avant le 30-04-2009",
+                                    "Le paragraphe est modifié pour les sites installés entre le 30-04-2009 et le 01-07-2017"
+                                ]
                             },
                             "legifrance_article": null,
                             "outer_alineas": [
@@ -2777,7 +2819,14 @@
                                 "modified": false,
                                 "reason_inactive": null,
                                 "reason_modified": null,
-                                "warnings": []
+                                "warnings": [
+                                    "Le paragraphe est modifié pour les sites installés avant le 01-07-2003",
+                                    "Le paragraphe est modifié pour les sites installés entre le 01-07-2003 et le 01-07-2017",
+                                    "Le paragraphe est modifié pour les sites installés avant le 01-07-2003",
+                                    "Le paragraphe est modifié pour les sites installés entre le 01-07-2003 et le 16-04-2010",
+                                    "Le paragraphe est modifié pour les sites installés avant le 30-04-2009",
+                                    "Le paragraphe est modifié pour les sites installés entre le 30-04-2009 et le 01-07-2017"
+                                ]
                             },
                             "legifrance_article": null,
                             "outer_alineas": [
@@ -2875,7 +2924,7 @@
                             "applicability": {
                                 "active": false,
                                 "modified": false,
-                                "reason_inactive": "Les conditions d'application suivantes ne sont pas respectées: Si regime == A:, Si date-d-installation < 2003-07-01 00:00:00:\nLes conditions d'application suivantes ne sont pas respectées: Si regime == E:, Si date-d-installation < 2003-07-01 00:00:00:\nLes conditions d'application suivantes ne sont pas respectées: Si regime == D:, Si date-d-installation < 2009-04-30 00:00:00:\nLes conditions d'application suivantes ne sont pas respectées: Si regime == D:, Si 2009-04-30 00:00:00 <= date-d-installation < True:",
+                                "reason_inactive": "Le paragraphe n'est pas applicable pour les sites installés avant le 01-07-2003",
                                 "reason_modified": null,
                                 "warnings": []
                             },
@@ -2915,7 +2964,7 @@
                             "applicability": {
                                 "active": false,
                                 "modified": false,
-                                "reason_inactive": "Les conditions d'application suivantes ne sont pas respectées: Si regime == A:, Si date-d-installation < 2003-07-01 00:00:00:\nLes conditions d'application suivantes ne sont pas respectées: Si regime == E:, Si date-d-installation < 2003-07-01 00:00:00:\nLes conditions d'application suivantes ne sont pas respectées: Si regime == D:, Si date-d-installation < 2009-04-30 00:00:00:\nLes conditions d'application suivantes ne sont pas respectées: Si regime == D:, Si 2009-04-30 00:00:00 <= date-d-installation < True:",
+                                "reason_inactive": "Le paragraphe n'est pas applicable pour les sites installés avant le 01-07-2003",
                                 "reason_modified": null,
                                 "warnings": []
                             },
@@ -3006,7 +3055,7 @@
                             "applicability": {
                                 "active": false,
                                 "modified": false,
-                                "reason_inactive": "Les conditions d'application suivantes ne sont pas respectées: Si regime == A:, Si date-d-installation < 2003-07-01 00:00:00:\nLes conditions d'application suivantes ne sont pas respectées: Si regime == E:, Si date-d-installation < 2003-07-01 00:00:00:\nLes conditions d'application suivantes ne sont pas respectées: Si regime == D:, Si date-d-installation < 2009-04-30 00:00:00:\nLes conditions d'application suivantes ne sont pas respectées: Si regime == D:, Si 2009-04-30 00:00:00 <= date-d-installation < True:",
+                                "reason_inactive": "Le paragraphe n'est pas applicable pour les sites installés avant le 01-07-2003",
                                 "reason_modified": null,
                                 "warnings": []
                             },
@@ -3051,7 +3100,7 @@
                             "applicability": {
                                 "active": false,
                                 "modified": false,
-                                "reason_inactive": "Les conditions d'application suivantes ne sont pas respectées: Si regime == A:, Si date-d-installation < 2003-07-01 00:00:00:\nLes conditions d'application suivantes ne sont pas respectées: Si regime == E:, Si date-d-installation < 2003-07-01 00:00:00:\nLes conditions d'application suivantes ne sont pas respectées: Si regime == D:, Si date-d-installation < 2009-04-30 00:00:00:",
+                                "reason_inactive": "Le paragraphe n'est pas applicable pour les sites installés avant le 01-07-2003",
                                 "reason_modified": null,
                                 "warnings": []
                             },
@@ -3442,7 +3491,7 @@
                             "applicability": {
                                 "active": false,
                                 "modified": false,
-                                "reason_inactive": "Les conditions d'application suivantes ne sont pas respectées: Si regime == E:, Si date-d-installation < 2003-07-01 00:00:00:\nLes conditions d'application suivantes ne sont pas respectées: Si regime == D:, Si date-d-installation < 2009-04-30 00:00:00:",
+                                "reason_inactive": "Le paragraphe n'est pas applicable pour les sites installés avant le 01-07-2003",
                                 "reason_modified": null,
                                 "warnings": []
                             },
@@ -3744,7 +3793,7 @@
                                     "applicability": {
                                         "active": false,
                                         "modified": false,
-                                        "reason_inactive": "Le paramètre regime n'est pas égal à D",
+                                        "reason_inactive": "Le paragraphe ne s'applique qu'aux installations soumises à déclaration.",
                                         "reason_modified": null,
                                         "warnings": []
                                     },

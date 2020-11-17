@@ -11,6 +11,7 @@
                 "target": 1353884400,
                 "type": "GREATER"
             },
+            "description": "Pour les sites dont la date d'installation est postérieure au 26/11/2012, seuls les alineas concernant le dossier d'exploitation s'appliquent",
             "source": {
                 "explanation": "Paragraphe décrivant ce qui s'applique aux installations existantes",
                 "reference": {
@@ -69,6 +70,7 @@
                 "target": 1353884400,
                 "type": "GREATER"
             },
+            "description": "Le paragraphe ne s'applique qu'aux sites dont la date d'installation est postérieure au 26/11/2012.",
             "source": {
                 "explanation": "Paragraphe décrivant ce qui s'applique aux installations existantes",
                 "reference": {
@@ -103,6 +105,7 @@
                 "target": 1353884400,
                 "type": "GREATER"
             },
+            "description": "Le paragraphe ne s'applique qu'aux sites dont la date d'installation est postérieure au 26/11/2012.",
             "source": {
                 "explanation": "Paragraphe décrivant ce qui s'applique aux installations existantes",
                 "reference": {
@@ -138,6 +141,7 @@
                 "target": 1353884400,
                 "type": "GREATER"
             },
+            "description": "Le paragraphe ne s'applique qu'aux sites dont la date d'installation est postérieure au 26/11/2012.",
             "source": {
                 "explanation": "Paragraphe décrivant ce qui s'applique aux installations existantes",
                 "reference": {
@@ -175,6 +179,7 @@
                 "target": 1353884400,
                 "type": "GREATER"
             },
+            "description": "Le paragraphe ne s'applique qu'aux sites dont la date d'installation est postérieure au 26/11/2012.",
             "source": {
                 "explanation": "Paragraphe décrivant ce qui s'applique aux installations existantes",
                 "reference": {

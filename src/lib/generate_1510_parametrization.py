@@ -399,16 +399,24 @@ def build_1510_parametrization() -> Parametrization:
     is_enregistrement = Equal(regime, Regime.E.value)
     is_declaration = Equal(regime, Regime.D.value)
     date = ParameterEnum.DATE_INSTALLATION.value
-    is_before_2003 = Littler(date, datetime(2003, 7, 1), True)
-    is_before_2009 = Littler(date, datetime(2009, 4, 30), True)
-    is_between_2003_and_2017 = Range(date, datetime(2003, 7, 1), datetime(2017, 7, 1), False, True)
-    is_between_2003_and_2010 = Range(date, datetime(2003, 7, 1), datetime(2010, 4, 16), False, True)
-    is_between_2010_2017 = Range(date, datetime(2010, 4, 16), datetime(2017, 7, 1), False, True)
-    is_between_2009_2017 = Range(date, datetime(2009, 4, 30), datetime(2017, 7, 1), False, True)
+    date_2003 = datetime(2003, 7, 1)
+    date_2009 = datetime(2009, 4, 30)
+    date_2010 = datetime(2010, 4, 16)
+    date_2017 = datetime(2017, 7, 1)
+    is_before_2003 = Littler(date, date_2003, True)
+    is_before_2009 = Littler(date, date_2009, True)
+    is_between_2003_and_2017 = Range(date, date_2003, date_2017, False, True)
+    is_between_2003_and_2010 = Range(date, date_2003, date_2010, False, True)
+    is_between_2010_2017 = Range(date, date_2010, date_2017, False, True)
+    is_between_2009_2017 = Range(date, date_2009, date_2017, False, True)
 
     Ints = Tuple[int, ...]
     _NotApplicable = List[Tuple[Tuple[int, ...], Optional[List[int]]]]
-    tuples_: List[Tuple[Condition, ConditionSource, _NotApplicable, Dict[Ints, StructuredText]]] = []
+    tuples_: List[
+        Tuple[
+            Condition, ConditionSource, _NotApplicable, Dict[Ints, StructuredText], Tuple[Optional[datetime], datetime]
+        ]
+    ] = []
     all_warnings: List[Dict[Ints, str]] = []
     condition_1 = AndCondition([is_autorisation, is_before_2003])
     condition_source_A = ConditionSource(
@@ -443,7 +451,8 @@ def build_1510_parametrization() -> Parametrization:
         tuple((8, 1, 11)): _build_alternative_12_for_autorisation(),
         tuple((8, 1, 12)): _build_alternative_13_for_autorisation(),
     }
-    tuples_.append((condition_1, condition_source_A, not_applicable_1, new_articles_1))
+    description_1 = (None, date_2003)
+    tuples_.append((condition_1, condition_source_A, not_applicable_1, new_articles_1, description_1))
 
     condition_2 = AndCondition([is_autorisation, is_between_2003_and_2017])
     not_applicable_2 = [((8, 1, 2, 2), None), ((8, 1, 2, 3), None)]
@@ -463,9 +472,12 @@ def build_1510_parametrization() -> Parametrization:
         ): "Le deuxième alinéa n'est pas applicable aux installations existantes ; le franchissement du seuil mentionné par cet alinéa est soumis à l'application de l'article R. 181-46 du code de l'environnement."
     }
     all_warnings.append(warnings_2)
-    tuples_.append((condition_2, condition_source_A, not_applicable_2, new_articles_2))
+    description_2 = (date_2003, date_2017)
+    tuples_.append((condition_2, condition_source_A, not_applicable_2, new_articles_2, description_2))
 
     condition_3 = AndCondition([is_enregistrement, is_before_2003])
+    description_3 = (None, date_2003)
+
     not_applicable_3 = [
         ((8, 1, 1), None),
         ((8, 1, 2), None),
@@ -489,9 +501,10 @@ def build_1510_parametrization() -> Parametrization:
         tuple((8, 1, 11)): _build_alternative_12_for_autorisation(),
         tuple((8, 1, 12)): _build_alternative_13_for_autorisation(),
     }
-    tuples_.append((condition_3, condition_source_E, not_applicable_3, new_articles_3))
+    tuples_.append((condition_3, condition_source_E, not_applicable_3, new_articles_3, description_3))
 
     condition_4 = AndCondition([is_enregistrement, is_between_2003_and_2010])
+    description_4 = (date_2003, date_2010)
     new_articles_4 = {
         tuple((8, 1, 1, 0)): _build_alternative_2_I_for_autorisation(),
         tuple((8, 1, 2, 1)): _build_alternative_3_2_for_autorisation(),
@@ -502,9 +515,10 @@ def build_1510_parametrization() -> Parametrization:
         tuple((8, 1, 11)): _build_alternative_12_for_autorisation(),
         tuple((8, 1, 12)): _build_alternative_13_for_autorisation(),
     }
-    tuples_.append((condition_4, condition_source_E, [], new_articles_4))
+    tuples_.append((condition_4, condition_source_E, [], new_articles_4, description_4))
 
     condition_5 = AndCondition([is_enregistrement, is_between_2010_2017])
+    description_5 = (date_2010, date_2017)
     not_applicable_5: List[Tuple[Ints, Optional[List[int]]]] = [((8, 1, 5), None)]
     new_articles_5 = {
         tuple((8, 1, 2, 1)): _build_alternative_3_2_for_enr_after_2010(),
@@ -513,9 +527,11 @@ def build_1510_parametrization() -> Parametrization:
         tuple((8, 1, 4)): _build_alternative_5_for_enr_after_2010(),
         tuple((8, 1, 6)): _build_alternative_7_for_enr_after_2010(),
     }
-    tuples_.append((condition_5, condition_source_E, not_applicable_5, new_articles_5))
+    tuples_.append((condition_5, condition_source_E, not_applicable_5, new_articles_5, description_5))
 
     condition_6 = AndCondition([is_declaration, is_before_2009])
+    description_6 = (None, date_2009)
+
     not_applicable_6 = [
         ((8, 1, 1), None),
         ((8, 1, 2, 1), None),
@@ -567,10 +583,11 @@ def build_1510_parametrization() -> Parametrization:
             (8, 1, 0)
         ): "Applicable à l’exception des points 1.1. et 1.2. pour les installations bénéficiant des droits acquis."
     }
-    tuples_.append((condition_6, condition_source_D, not_applicable_6, new_articles_6))
+    tuples_.append((condition_6, condition_source_D, not_applicable_6, new_articles_6, description_6))
     all_warnings.append(warnings_6)
 
     condition_7 = AndCondition([is_declaration, is_between_2009_2017])
+    description_7 = (date_2009, date_2017)
     not_applicable_7 = [(tuple([8, 1, 5]), None), ((8, 1, 13), [0, 1, 2]), ((8, 1, 14), [1]), ((8, 1, 16), None)]
     new_articles_7 = {
         tuple([8, 1, 2, 1]): _7_replace_3_2(),
@@ -584,19 +601,34 @@ def build_1510_parametrization() -> Parametrization:
         tuple([8, 1, 12]): _7_replace_13(),
     }
     warnings_7 = {tuple((8, 1, 11)): "L'article 12 est applicable à compter du 1er janvier 2021."}
-    tuples_.append((condition_7, condition_source_D, not_applicable_7, new_articles_7))
+    tuples_.append((condition_7, condition_source_D, not_applicable_7, new_articles_7, description_7))
     all_warnings.append(warnings_7)
 
-    for condition, condition_source, not_applicable, new_articles in tuples_:
+    for condition, condition_source, not_applicable, new_articles, (dt_l, dt_r) in tuples_:
+        if not dt_l:
+            dt_str_r = dt_r.strftime('%d-%m-%Y')
+            description_modif = f'Le paragraphe est modifié pour les sites installés avant le {dt_str_r}'
+            description_app = f'Le paragraphe n\'est pas applicable pour les sites installés avant le {dt_str_r}'
+        else:
+            dt_str_l = dt_l.strftime('%d-%m-%Y')
+            dt_str_r = dt_r.strftime('%d-%m-%Y')
+            description_modif = (
+                f'Le paragraphe est modifié pour les sites installés entre le {dt_str_l} et le {dt_str_r}'
+            )
+            description_app = (
+                f'Le paragraphe n\'est pas applicable pour les sites installés entre le {dt_str_l} et le {dt_str_r}'
+            )
         alternative_texts.extend(
             [
-                AlternativeSection(SectionReference(sec), new_text, condition, condition_source)
+                AlternativeSection(SectionReference(sec), new_text, condition, condition_source, description_modif)
                 for sec, new_text in new_articles.items()
             ]
         )
         application_conditions.extend(
             [
-                ApplicationCondition(EntityReference(SectionReference(section), alineas), condition, condition_source)
+                ApplicationCondition(
+                    EntityReference(SectionReference(section), alineas), condition, condition_source, description_app
+                )
                 for section, alineas in not_applicable
             ]
         )
@@ -606,7 +638,12 @@ def build_1510_parametrization() -> Parametrization:
     for na_sec, na_als in not_applicable_8:
         _ref = EntityReference(SectionReference(na_sec), na_als)
         application_conditions.append(
-            ApplicationCondition(_ref, condition_8, ConditionSource('Mentionné dans l\'article.', _ref))
+            ApplicationCondition(
+                _ref,
+                condition_8,
+                ConditionSource('Mentionné dans l\'article.', _ref),
+                description='''Le paragraphe ne s\'applique qu'aux installations soumises à enregistrement ou à autorisation.''',
+            )
         )
 
     condition_9 = is_declaration
@@ -614,7 +651,12 @@ def build_1510_parametrization() -> Parametrization:
     for na_sec, na_als in not_applicable_9:
         _ref = EntityReference(SectionReference(na_sec), na_als)
         application_conditions.append(
-            ApplicationCondition(_ref, condition_9, ConditionSource('Mentionné dans l\'article.', _ref))
+            ApplicationCondition(
+                _ref,
+                condition_9,
+                ConditionSource('Mentionné dans l\'article.', _ref),
+                description='''Le paragraphe ne s\'applique qu'aux installations soumises à déclaration.''',
+            )
         )
 
     return Parametrization(application_conditions, alternative_texts)

@@ -3,7 +3,7 @@
     "applicability": {
         "active": true,
         "modified": false,
-        "reason_inactive": "",
+        "reason_inactive": null,
         "reason_modified": null,
         "warnings": []
     },
@@ -274,7 +274,7 @@
                     "applicability": {
                         "active": false,
                         "modified": false,
-                        "reason_inactive": "Le paramètre date-d-installation est inférieur à 2012-11-26 00:00:00",
+                        "reason_inactive": "Pour les sites dont la date d'installation est postérieure au 26/11/2012, seuls les alineas concernant le dossier d'exploitation s'appliquent",
                         "reason_modified": null,
                         "warnings": []
                     },
@@ -485,7 +485,7 @@
                     "applicability": {
                         "active": false,
                         "modified": false,
-                        "reason_inactive": "Le paramètre date-d-installation est inférieur à 2012-11-26 00:00:00",
+                        "reason_inactive": "Le paragraphe ne s'applique qu'aux sites dont la date d'installation est postérieure au 26/11/2012.",
                         "reason_modified": null,
                         "warnings": []
                     },
@@ -994,7 +994,7 @@
                             "applicability": {
                                 "active": false,
                                 "modified": false,
-                                "reason_inactive": "Le paramètre date-d-installation est inférieur à 2012-11-26 00:00:00",
+                                "reason_inactive": "Le paragraphe ne s'applique qu'aux sites dont la date d'installation est postérieure au 26/11/2012.",
                                 "reason_modified": null,
                                 "warnings": []
                             },
@@ -1963,7 +1963,7 @@
                             "applicability": {
                                 "active": false,
                                 "modified": false,
-                                "reason_inactive": "Le paramètre date-d-installation est inférieur à 2012-11-26 00:00:00",
+                                "reason_inactive": "Le paragraphe ne s'applique qu'aux sites dont la date d'installation est postérieure au 26/11/2012.",
                                 "reason_modified": null,
                                 "warnings": []
                             },
@@ -2393,7 +2393,7 @@
                             "applicability": {
                                 "active": false,
                                 "modified": false,
-                                "reason_inactive": "Le paramètre date-d-installation est inférieur à 2012-11-26 00:00:00",
+                                "reason_inactive": "Le paragraphe ne s'applique qu'aux sites dont la date d'installation est postérieure au 26/11/2012.",
                                 "reason_modified": null,
                                 "warnings": []
                             },

@@ -3,7 +3,7 @@
     "applicability": {
         "active": true,
         "modified": false,
-        "reason_inactive": "",
+        "reason_inactive": null,
         "reason_modified": null,
         "warnings": []
     },
@@ -1893,7 +1893,7 @@
                                 "active": true,
                                 "modified": true,
                                 "reason_inactive": null,
-                                "reason_modified": "Le paramètre date-d-installation est supérieur à 2019-04-09 00:00:00",
+                                "reason_modified": "Le paragraphe ne s'applique qu'aux sites dont la date d'installation est postérieure au 09-04-2019.",
                                 "warnings": []
                             },
                             "legifrance_article": {

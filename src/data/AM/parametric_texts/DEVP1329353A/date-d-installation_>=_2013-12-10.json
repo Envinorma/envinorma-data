@@ -3,7 +3,7 @@
     "applicability": {
         "active": true,
         "modified": false,
-        "reason_inactive": "",
+        "reason_inactive": null,
         "reason_modified": null,
         "warnings": []
     },
