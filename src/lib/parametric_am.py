@@ -635,6 +635,12 @@ def _keep_satisfied_mofications(
     return satisfied, warnings
 
 
+def _deactivate_child_section(section: StructuredText) -> StructuredText:
+    section = copy(section)
+    section.sections = [_deactivate_child_section(sec) for sec in section.sections]
+    section.applicability = Applicability(False, None)
+    return section
+
 def _apply_parameter_values_in_text(
     text: StructuredText, parametrization: Parametrization, parameter_values: Dict[Parameter, Any], path: Ints
 ) -> StructuredText:
@@ -658,18 +664,21 @@ def _apply_parameter_values_in_text(
             )
         return _build_alternative_text(text, alternative_sections[0], parameter_values)
 
-    new_text = copy(text)
-    new_text.sections = [
-        _apply_parameter_values_in_text(section, parametrization, parameter_values, path + (i,))
-        for i, section in enumerate(text.sections)
-    ]
+    text = copy(text)
     if application_conditions:
         applicabilities = [_compute_applicability(condition, parameter_values) for condition in application_conditions]
-        new_text.applicability = _merge_applicabilities(applicabilities)
+        text.applicability = _merge_applicabilities(applicabilities)
     else:
-        new_text.applicability = Applicability(True)
-    new_text.applicability.warnings.extend(warnings_1 + warnings_2)
-    return new_text
+        text.applicability = Applicability(True)
+    if text.applicability.active:
+        text.sections = [
+            _apply_parameter_values_in_text(section, parametrization, parameter_values, path + (i,))
+            for i, section in enumerate(text.sections)
+        ]
+    else:
+        text.sections = [_deactivate_child_section(section) for section in text.sections]
+    text.applicability.warnings.extend(warnings_1 + warnings_2)
+    return text
 
 
 def _compute_whole_text_applicability(

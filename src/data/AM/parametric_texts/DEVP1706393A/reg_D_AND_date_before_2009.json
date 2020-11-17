@@ -1473,7 +1473,7 @@
                                         {
                                             "annotations": null,
                                             "applicability": {
-                                                "active": true,
+                                                "active": false,
                                                 "modified": false,
                                                 "reason_inactive": null,
                                                 "reason_modified": null,
@@ -1519,7 +1519,7 @@
                                         {
                                             "annotations": null,
                                             "applicability": {
-                                                "active": true,
+                                                "active": false,
                                                 "modified": false,
                                                 "reason_inactive": null,
                                                 "reason_modified": null,
@@ -1544,7 +1544,7 @@
                                         {
                                             "annotations": null,
                                             "applicability": {
-                                                "active": true,
+                                                "active": false,
                                                 "modified": false,
                                                 "reason_inactive": null,
                                                 "reason_modified": null,
@@ -1569,7 +1569,7 @@
                                         {
                                             "annotations": null,
                                             "applicability": {
-                                                "active": true,
+                                                "active": false,
                                                 "modified": false,
                                                 "reason_inactive": null,
                                                 "reason_modified": null,
@@ -1605,7 +1605,7 @@
                                         {
                                             "annotations": null,
                                             "applicability": {
-                                                "active": true,
+                                                "active": false,
                                                 "modified": false,
                                                 "reason_inactive": null,
                                                 "reason_modified": null,
@@ -1630,7 +1630,7 @@
                                         {
                                             "annotations": null,
                                             "applicability": {
-                                                "active": true,
+                                                "active": false,
                                                 "modified": false,
                                                 "reason_inactive": null,
                                                 "reason_modified": null,
@@ -1684,12 +1684,9 @@
                                     "applicability": {
                                         "active": false,
                                         "modified": false,
-                                        "reason_inactive": "Le paragraphe ne s'applique qu'aux installations soumises à déclaration.",
+                                        "reason_inactive": null,
                                         "reason_modified": null,
-                                        "warnings": [
-                                            "Le paragraphe est modifié pour les sites installés entre le 01-07-2003 et le 01-07-2017",
-                                            "Le paragraphe est modifié pour les sites installés entre le 01-07-2003 et le 16-04-2010"
-                                        ]
+                                        "warnings": []
                                     },
                                     "legifrance_article": null,
                                     "outer_alineas": [
@@ -1722,7 +1719,7 @@
                                     "applicability": {
                                         "active": false,
                                         "modified": false,
-                                        "reason_inactive": "Le paragraphe ne s'applique qu'aux installations soumises à enregistrement ou à autorisation.",
+                                        "reason_inactive": null,
                                         "reason_modified": null,
                                         "warnings": []
                                     },
@@ -1739,7 +1736,7 @@
                                 {
                                     "annotations": null,
                                     "applicability": {
-                                        "active": true,
+                                        "active": false,
                                         "modified": false,
                                         "reason_inactive": null,
                                         "reason_modified": null,
@@ -1784,7 +1781,7 @@
                                 {
                                     "annotations": null,
                                     "applicability": {
-                                        "active": true,
+                                        "active": false,
                                         "modified": false,
                                         "reason_inactive": null,
                                         "reason_modified": null,
@@ -1821,14 +1818,9 @@
                                     "applicability": {
                                         "active": false,
                                         "modified": false,
-                                        "reason_inactive": "Le paragraphe n'est pas applicable pour les sites installés avant le 01-07-2003",
+                                        "reason_inactive": null,
                                         "reason_modified": null,
-                                        "warnings": [
-                                            "Le paragraphe est modifié pour les sites installés entre le 01-07-2003 et le 01-07-2017",
-                                            "Le paragraphe est modifié pour les sites installés entre le 01-07-2003 et le 16-04-2010",
-                                            "Le paragraphe est modifié pour les sites installés entre le 16-04-2010 et le 01-07-2017",
-                                            "Le paragraphe est modifié pour les sites installés entre le 30-04-2009 et le 01-07-2017"
-                                        ]
+                                        "warnings": []
                                     },
                                     "legifrance_article": null,
                                     "outer_alineas": [
@@ -1921,12 +1913,9 @@
                                     "applicability": {
                                         "active": false,
                                         "modified": false,
-                                        "reason_inactive": "Le paragraphe n'est pas applicable pour les sites installés avant le 01-07-2003",
+                                        "reason_inactive": null,
                                         "reason_modified": null,
-                                        "warnings": [
-                                            "Le paragraphe est modifié pour les sites installés entre le 16-04-2010 et le 01-07-2017",
-                                            "Le paragraphe est modifié pour les sites installés entre le 30-04-2009 et le 01-07-2017"
-                                        ]
+                                        "warnings": []
                                     },
                                     "legifrance_article": null,
                                     "outer_alineas": [],
@@ -1935,7 +1924,7 @@
                                         {
                                             "annotations": null,
                                             "applicability": {
-                                                "active": true,
+                                                "active": false,
                                                 "modified": false,
                                                 "reason_inactive": null,
                                                 "reason_modified": null,
@@ -2055,7 +2044,7 @@
                                         {
                                             "annotations": null,
                                             "applicability": {
-                                                "active": true,
+                                                "active": false,
                                                 "modified": false,
                                                 "reason_inactive": null,
                                                 "reason_modified": null,
@@ -2124,12 +2113,9 @@
                                     "applicability": {
                                         "active": false,
                                         "modified": false,
-                                        "reason_inactive": "Le paragraphe n'est pas applicable pour les sites installés avant le 01-07-2003",
+                                        "reason_inactive": null,
                                         "reason_modified": null,
-                                        "warnings": [
-                                            "Le paragraphe est modifié pour les sites installés avant le 30-04-2009",
-                                            "Le paragraphe est modifié pour les sites installés entre le 30-04-2009 et le 01-07-2017"
-                                        ]
+                                        "warnings": []
                                     },
                                     "legifrance_article": null,
                                     "outer_alineas": [
@@ -2175,7 +2161,7 @@
                                 {
                                     "annotations": null,
                                     "applicability": {
-                                        "active": true,
+                                        "active": false,
                                         "modified": false,
                                         "reason_inactive": null,
                                         "reason_modified": null,
@@ -3111,7 +3097,7 @@
                                 {
                                     "annotations": null,
                                     "applicability": {
-                                        "active": true,
+                                        "active": false,
                                         "modified": false,
                                         "reason_inactive": null,
                                         "reason_modified": null,
@@ -3156,7 +3142,7 @@
                                 {
                                     "annotations": null,
                                     "applicability": {
-                                        "active": true,
+                                        "active": false,
                                         "modified": false,
                                         "reason_inactive": null,
                                         "reason_modified": null,

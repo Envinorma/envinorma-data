@@ -1029,7 +1029,7 @@
                                 {
                                     "annotations": null,
                                     "applicability": {
-                                        "active": true,
+                                        "active": false,
                                         "modified": false,
                                         "reason_inactive": null,
                                         "reason_modified": null,
@@ -1064,7 +1064,7 @@
                                 {
                                     "annotations": null,
                                     "applicability": {
-                                        "active": true,
+                                        "active": false,
                                         "modified": false,
                                         "reason_inactive": null,
                                         "reason_modified": null,
@@ -1154,7 +1154,7 @@
                                 {
                                     "annotations": null,
                                     "applicability": {
-                                        "active": true,
+                                        "active": false,
                                         "modified": false,
                                         "reason_inactive": null,
                                         "reason_modified": null,
@@ -1294,7 +1294,7 @@
                                 {
                                     "annotations": null,
                                     "applicability": {
-                                        "active": true,
+                                        "active": false,
                                         "modified": false,
                                         "reason_inactive": null,
                                         "reason_modified": null,
