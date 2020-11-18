@@ -7,9 +7,9 @@
                     "id": "date-d-installation",
                     "type": "DATE"
                 },
-                "strict": false,
+                "strict": true,
                 "target": 1353884400,
-                "type": "GREATER"
+                "type": "LITTLER"
             },
             "description": "Pour les sites dont la date d'installation est postérieure au 26/11/2012, seuls les alineas concernant le dossier d'exploitation s'appliquent",
             "source": {
@@ -66,9 +66,9 @@
                     "id": "date-d-installation",
                     "type": "DATE"
                 },
-                "strict": false,
+                "strict": true,
                 "target": 1353884400,
-                "type": "GREATER"
+                "type": "LITTLER"
             },
             "description": "Le paragraphe ne s'applique qu'aux sites dont la date d'installation est postérieure au 26/11/2012.",
             "source": {
@@ -101,9 +101,9 @@
                     "id": "date-d-installation",
                     "type": "DATE"
                 },
-                "strict": false,
+                "strict": true,
                 "target": 1353884400,
-                "type": "GREATER"
+                "type": "LITTLER"
             },
             "description": "Le paragraphe ne s'applique qu'aux sites dont la date d'installation est postérieure au 26/11/2012.",
             "source": {
@@ -137,9 +137,9 @@
                     "id": "date-d-installation",
                     "type": "DATE"
                 },
-                "strict": false,
+                "strict": true,
                 "target": 1353884400,
-                "type": "GREATER"
+                "type": "LITTLER"
             },
             "description": "Le paragraphe ne s'applique qu'aux sites dont la date d'installation est postérieure au 26/11/2012.",
             "source": {
@@ -175,9 +175,9 @@
                     "id": "date-d-installation",
                     "type": "DATE"
                 },
-                "strict": false,
+                "strict": true,
                 "target": 1353884400,
-                "type": "GREATER"
+                "type": "LITTLER"
             },
             "description": "Le paragraphe ne s'applique qu'aux sites dont la date d'installation est postérieure au 26/11/2012.",
             "source": {

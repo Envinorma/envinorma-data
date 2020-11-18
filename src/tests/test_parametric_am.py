@@ -9,7 +9,7 @@ from lib.data import ArreteMinisteriel, EnrichedString, StructuredText
 from lib.parametric_am import (
     AlternativeSection,
     AndCondition,
-    ApplicationCondition,
+    NonApplicationCondition,
     ConditionSource,
     EntityReference,
     Equal,
@@ -162,10 +162,11 @@ def test_apply_parameter_values_to_am_whole_arrete():
     am = ArreteMinisteriel(_random_enriched_string(), sections, [], '', None)
 
     parameter = Parameter('nouvelle-installation', ParameterType.BOOLEAN)
-    condition = Equal(parameter, True)
+    is_installation_old = Equal(parameter, False)
     source = ConditionSource('', EntityReference(SectionReference((2,)), None, False))
     parametrization = Parametrization(
-        [ApplicationCondition(EntityReference(SectionReference(tuple()), None, True), condition, source)], []
+        [NonApplicationCondition(EntityReference(SectionReference(tuple()), None, True), is_installation_old, source)],
+        [],
     )
 
     new_am_1 = _apply_parameter_values_to_am(am, parametrization, {parameter: False})
@@ -196,12 +197,13 @@ def test_apply_parameter_values_to_am():
     am = ArreteMinisteriel(_random_enriched_string(), sections, [], '', None)
 
     parameter = Parameter('nouvelle-installation', ParameterType.BOOLEAN)
-    condition = Equal(parameter, True)
+    is_installation_old = Equal(parameter, False)
+    is_installation_new = Equal(parameter, True)
     source = ConditionSource('', EntityReference(SectionReference((2,)), None, False))
     new_text = StructuredText(EnrichedString('Art. 2', []), [EnrichedString('version modifiée')], [], None, None)
     parametrization = Parametrization(
-        [ApplicationCondition(EntityReference(SectionReference((0,)), None), condition, source)],
-        [AlternativeSection(SectionReference((1,)), new_text, condition, source)],
+        [NonApplicationCondition(EntityReference(SectionReference((0,)), None), is_installation_old, source)],
+        [AlternativeSection(SectionReference((1,)), new_text, is_installation_new, source)],
     )
 
     new_am_1 = _apply_parameter_values_to_am(am, parametrization, {parameter: False})
@@ -226,7 +228,7 @@ def test_extract_parameters_from_parametrization():
     source = ConditionSource('', EntityReference(SectionReference((2,)), None, False))
     new_text = StructuredText(EnrichedString('Art. 2', []), [EnrichedString('version modifiée')], [], None, None)
     parametrization = Parametrization(
-        [ApplicationCondition(EntityReference(SectionReference((0,)), None), condition_1, source)],
+        [NonApplicationCondition(EntityReference(SectionReference((0,)), None), condition_1, source)],
         [AlternativeSection(SectionReference((1,)), new_text, condition_2, source)],
     )
 
@@ -243,7 +245,7 @@ def test_extract_parameters_from_parametrization_2():
     source = ConditionSource('', EntityReference(SectionReference((2,)), None, False))
     new_text = StructuredText(EnrichedString('Art. 2', []), [EnrichedString('version modifiée')], [], None, None)
     parametrization = Parametrization(
-        [ApplicationCondition(EntityReference(SectionReference((0,)), None), condition_1, source)],
+        [NonApplicationCondition(EntityReference(SectionReference((0,)), None), condition_1, source)],
         [AlternativeSection(SectionReference((1,)), new_text, condition_2, source)],
     )
 
@@ -262,18 +264,18 @@ def test_generate_all_am_versions():
     am = ArreteMinisteriel(_random_enriched_string(), sections, [], '', None)
 
     parameter = Parameter('nouvelle-installation', ParameterType.BOOLEAN)
-    condition = Equal(parameter, True)
+    condition = Equal(parameter, False)
     source = ConditionSource('', EntityReference(SectionReference((2,)), None, False))
     parametrization = Parametrization(
-        [ApplicationCondition(EntityReference(SectionReference((0,)), None), condition, source)], []
+        [NonApplicationCondition(EntityReference(SectionReference((0,)), None), condition, source)], []
     )
 
     res = generate_all_am_versions(am, parametrization)
     assert len(res) == 2
-    assert ('nouvelle-installation == True',) in res
-    assert ('nouvelle-installation != True',) in res
-    assert not res[('nouvelle-installation != True',)].sections[0].applicability.active
-    assert res[('nouvelle-installation == True',)].sections[0].applicability.active
+    assert ('nouvelle-installation != False',) in res
+    assert ('nouvelle-installation == False',) in res
+    assert not res[('nouvelle-installation == False',)].sections[0].applicability.active
+    assert res[('nouvelle-installation != False',)].sections[0].applicability.active
 
     res_2 = generate_all_am_versions(am, Parametrization([], []))
     assert len(res_2) == 1
@@ -285,15 +287,15 @@ def test_extract_installation_date_criterion():
     parameter = ParameterEnum.DATE_INSTALLATION.value
     date_1 = datetime(2018, 1, 1)
     date_2 = datetime(2019, 1, 1)
-    condition_1 = Littler(parameter, date_1, True)
+    condition_1 = Greater(parameter, date_1, False)
     condition_2 = Range(parameter, date_1, date_2, left_strict=False, right_strict=True)
-    condition_3 = Greater(parameter, date_2, False)
+    condition_3 = Littler(parameter, date_2, True)
     source = ConditionSource('', EntityReference(SectionReference((2,)), None, False))
     new_text = StructuredText(EnrichedString('Art. 2', []), [EnrichedString('version modifiée')], [], None, None)
     parametrization = Parametrization(
         [
-            ApplicationCondition(EntityReference(SectionReference((0,)), None), condition_1, source),
-            ApplicationCondition(EntityReference(SectionReference((0,)), None), condition_3, source),
+            NonApplicationCondition(EntityReference(SectionReference((0,)), None), condition_1, source),
+            NonApplicationCondition(EntityReference(SectionReference((0,)), None), condition_3, source),
         ],
         [AlternativeSection(SectionReference((1,)), new_text, condition_2, source)],
     )

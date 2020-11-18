@@ -7,7 +7,8 @@ from typing import Callable, List, Dict, Set, Tuple, Optional
 from lib.data import ArreteMinisteriel, EnrichedString, StructuredText, load_arrete_ministeriel, Topic
 from lib.compute_properties import AMMetadata, handle_am, load_data, get_legifrance_client, write_json
 from lib.parametric_am import (
-    ApplicationCondition,
+    Littler,
+    NonApplicationCondition,
     ConditionSource,
     ConditionType,
     EntityReference,
@@ -152,9 +153,9 @@ def _build_DEVP1329353A_parametrization() -> Parametrization:
         EntityReference(SectionReference((0,)), None),
     )
     description = f'''L'arrêté ne s'applique qu'aux sites dont la date d'installation est postérieure au 10/12/2013.'''
-    condition = Greater(Parameter('date-d-installation', ParameterType.DATE), datetime(2013, 12, 10), False)
+    condition = Littler(Parameter('date-d-installation', ParameterType.DATE), datetime(2013, 12, 10), True)
     application_conditions = [
-        ApplicationCondition(EntityReference(SectionReference(()), None, True), condition, source, description)
+        NonApplicationCondition(EntityReference(SectionReference(()), None, True), condition, source, description)
     ]
     return Parametrization(application_conditions, [])
 
@@ -217,7 +218,8 @@ def _build_DEVP1235896A_parametrization() -> Parametrization:
         f'''Pour les sites dont la date d'installation est postérieure au 26/11/2012, '''
         '''seuls les alineas concernant le dossier d'exploitation s'appliquent'''
     )
-    condition = Greater(ParameterEnum.DATE_INSTALLATION.value, datetime(2012, 11, 26, 0, 0), False)
+    old_installation = Littler(ParameterEnum.DATE_INSTALLATION.value, datetime(2012, 11, 26, 0, 0), True)
+    # new_installation = Greater(ParameterEnum.DATE_INSTALLATION.value, datetime(2012, 11, 26, 0, 0), False)
     source = ConditionSource(
         "Paragraphe décrivant ce qui s'applique aux installations existantes",
         EntityReference(section=SectionReference(path=(11, 1)), outer_alinea_indices=None, whole_arrete=False),
@@ -225,27 +227,27 @@ def _build_DEVP1235896A_parametrization() -> Parametrization:
 
     return Parametrization(
         [
-            ApplicationCondition(
+            NonApplicationCondition(
                 EntityReference(
                     SectionReference(path=(2, 1)),
                     [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22],
                     False,
                 ),
-                condition,
+                old_installation,
                 source,
                 description=description_modif_1,
             ),
-            ApplicationCondition(
-                EntityReference(SectionReference(path=(2, 2)), None, False), condition, source, description
+            NonApplicationCondition(
+                EntityReference(SectionReference(path=(2, 2)), None, False), old_installation, source, description
             ),
-            ApplicationCondition(
-                EntityReference(SectionReference(path=(3, 2, 0)), None, False), condition, source, description
+            NonApplicationCondition(
+                EntityReference(SectionReference(path=(3, 2, 0)), None, False), old_installation, source, description
             ),
-            ApplicationCondition(
-                EntityReference(SectionReference(path=(4, 1, 1)), [0], False), condition, source, description
+            NonApplicationCondition(
+                EntityReference(SectionReference(path=(4, 1, 1)), [0], False), old_installation, source, description
             ),
-            ApplicationCondition(
-                EntityReference(SectionReference(path=(4, 3, 1)), [1], False), condition, source, description
+            NonApplicationCondition(
+                EntityReference(SectionReference(path=(4, 3, 1)), [1], False), old_installation, source, description
             ),
         ],
         alternative_sections=[],

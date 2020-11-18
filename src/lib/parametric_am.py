@@ -2,6 +2,7 @@ from copy import copy, deepcopy
 from dataclasses import dataclass, field, asdict
 from datetime import datetime, timedelta
 from enum import Enum
+import enum
 from lib.compute_properties import Regime
 from typing import Any, Dict, KeysView, List, Optional, Set, Tuple, Union
 from lib.data import Applicability, ArreteMinisteriel, DateCriterion, StructuredText, load_structured_text
@@ -108,7 +109,7 @@ def load_target(json_value: Any, type_: ParameterType) -> Any:
 class Littler:
     parameter: Parameter
     target: Any
-    strict: bool
+    strict: bool = True
     type: ConditionType = ConditionType.LITTLER
 
     def to_dict(self) -> Dict[str, Any]:
@@ -128,7 +129,7 @@ class Littler:
 class Greater:
     parameter: Parameter
     target: Any
-    strict: bool
+    strict: bool = False
     type: ConditionType = ConditionType.GREATER
 
     def to_dict(self) -> Dict[str, Any]:
@@ -168,8 +169,8 @@ class Range:
     parameter: Parameter
     left: Any
     right: Any
-    left_strict: bool
-    right_strict: bool
+    left_strict: bool = False
+    right_strict: bool = True
     type: ConditionType = ConditionType.RANGE
 
     def to_dict(self) -> Dict[str, Any]:
@@ -244,7 +245,7 @@ class ConditionSource:
 
 
 @dataclass
-class ApplicationCondition:
+class NonApplicationCondition:
     targeted_entity: EntityReference
     condition: Condition
     source: ConditionSource
@@ -259,8 +260,8 @@ class ApplicationCondition:
         }
 
     @classmethod
-    def from_dict(cls, dict_: Dict[str, Any]) -> 'ApplicationCondition':
-        return ApplicationCondition(
+    def from_dict(cls, dict_: Dict[str, Any]) -> 'NonApplicationCondition':
+        return NonApplicationCondition(
             EntityReference.from_dict(dict_['targeted_entity']),
             load_condition(dict_['condition']),
             ConditionSource.from_dict(dict_['source']),
@@ -298,9 +299,9 @@ class AlternativeSection:
 
 @dataclass
 class Parametrization:
-    application_conditions: List[ApplicationCondition]
+    application_conditions: List[NonApplicationCondition]
     alternative_sections: List[AlternativeSection]
-    path_to_conditions: Dict[Ints, List[ApplicationCondition]] = field(init=False)
+    path_to_conditions: Dict[Ints, List[NonApplicationCondition]] = field(init=False)
     path_to_alternative_sections: Dict[Ints, List[AlternativeSection]] = field(init=False)
 
     def __post_init__(self):
@@ -327,13 +328,21 @@ class Parametrization:
     @classmethod
     def from_dict(cls, dict_: Dict[str, Any]) -> 'Parametrization':
         return Parametrization(
-            [ApplicationCondition.from_dict(app) for app in dict_['application_conditions']],
+            [NonApplicationCondition.from_dict(app) for app in dict_['application_conditions']],
             [AlternativeSection.from_dict(sec) for sec in dict_['alternative_sections']],
         )
 
 
 def _generate_bool_condition(parameter_str: str) -> Equal:
     return Equal(Parameter(parameter_str, ParameterType.BOOLEAN), True)
+
+
+def _check_application_conditions_are_disjoint(parametrization: Parametrization, raise_errors: bool):
+    raise NotImplementedError()
+
+
+def _check_parametrization_consistency(parametrization: Parametrization, raise_errors: bool) -> None:
+    _check_application_conditions_are_disjoint(parametrization, raise_errors)
 
 
 def _extract_section_titles(am: Union[StructuredText, ArreteMinisteriel], path: List[int]) -> Dict[int, str]:
@@ -523,17 +532,36 @@ def _generate_reason_inactive(condition: Condition, parameter_values: Dict[Param
     return _generate_reason_inactive_leaf(condition)
 
 
-def _compute_applicability(condition: ApplicationCondition, parameter_values: Dict[Parameter, Any]) -> Applicability:
-    result = Applicability(True, '', False)
-    if _any_parameter_is_undefined(condition.condition, parameter_values.keys()):
-        result.warnings.append(_generate_warning_missing_value(condition.condition))
-    else:
-        if not _is_satisfied(condition.condition, parameter_values):
-            result.active = False
-            result.reason_inactive = condition.description or _generate_reason_inactive(
-                condition.condition, parameter_values
-            )
-    return result
+def build_simple_parametrization(
+    non_applicable_section_references: List[Ints],
+    modified_articles: Dict[Ints, StructuredText],
+    source_section: Ints,
+    date: datetime,
+) -> Parametrization:
+    source = ConditionSource(
+        'Paragraphe décrivant ce qui s\'applique aux installations existantes',
+        EntityReference(SectionReference(source_section), None),
+    )
+    date_str = date.strftime('%d-%m-%Y')
+    description = (
+        f'''Le paragraphe ne s'applique qu'aux sites dont la date d'installation est postérieure au {date_str}.'''
+    )
+    is_old_installation = Littler(ParameterEnum.DATE_INSTALLATION.value, date)
+    is_new_installation = Greater(ParameterEnum.DATE_INSTALLATION.value, date)
+    application_conditions = [
+        NonApplicationCondition(
+            EntityReference(SectionReference(tuple(ref)), None), is_old_installation, source, description
+        )
+        for ref in non_applicable_section_references
+    ]
+    description = (
+        f'''Le paragraphe est modifié pour les sites dont la date d'installation est postérieure au {date_str}.'''
+    )
+    alternative_sections = [
+        AlternativeSection(SectionReference(ref), value, is_new_installation, source, description)
+        for ref, value in modified_articles.items()
+    ]
+    return Parametrization(application_conditions, alternative_sections)
 
 
 def lower_first_letter(str_: str) -> str:
@@ -604,19 +632,39 @@ def _compute_undefined_parameters_warnings(
     return _compute_undefined_parameters_default_warnings(condition, parameter_values)
 
 
-def _keep_unsatisfied_conditions(
-    application_conditions: List[ApplicationCondition], parameter_values: Dict[Parameter, Any]
-) -> Tuple[List[ApplicationCondition], List[str]]:
-    unsatisfied: List[ApplicationCondition] = []
+def _has_undefined_parameters(condition: Condition, parameter_values: Dict[Parameter, Any]) -> bool:
+    parameters = _extract_parameters_from_condition(condition)
+    for parameter in parameters:
+        if parameter not in parameter_values:
+            return True
+    return False
+
+
+def _compute_warnings(
+    conditionned_element: Union[AlternativeSection, NonApplicationCondition], parameter_values: Dict[Parameter, Any]
+) -> List[str]:
     warnings: List[str] = []
-    for application_condition in application_conditions:
-        if not _is_satisfied(application_condition.condition, parameter_values):
-            unsatisfied.append(application_condition)
+    if _has_undefined_parameters(conditionned_element.condition, parameter_values):
+        if conditionned_element.description:
+            warnings.append(conditionned_element.description)
         else:
             warnings.extend(
-                _compute_undefined_parameters_warnings(application_condition.condition, parameter_values, True)
+                _compute_undefined_parameters_warnings(conditionned_element.condition, parameter_values, False)
             )
-    return unsatisfied, warnings
+    return warnings
+
+
+def _keep_satisfied_conditions(
+    non_application_conditions: List[NonApplicationCondition], parameter_values: Dict[Parameter, Any]
+) -> Tuple[List[NonApplicationCondition], List[str]]:
+    satisfied: List[NonApplicationCondition] = []
+    warnings: List[str] = []
+    for na_condition in non_application_conditions:
+        if _is_satisfied(na_condition.condition, parameter_values):
+            satisfied.append(na_condition)
+        else:
+            warnings = _compute_warnings(na_condition, parameter_values)
+    return satisfied, warnings
 
 
 def _keep_satisfied_mofications(
@@ -628,10 +676,7 @@ def _keep_satisfied_mofications(
         if _is_satisfied(alt.condition, parameter_values):
             satisfied.append(alt)
         else:
-            if alt.description:
-                warnings.append(alt.description)
-            else:
-                warnings.extend(_compute_undefined_parameters_warnings(alt.condition, parameter_values, False))
+            warnings = _compute_warnings(alt, parameter_values)
     return satisfied, warnings
 
 
@@ -641,21 +686,36 @@ def _deactivate_child_section(section: StructuredText) -> StructuredText:
     section.applicability = Applicability(False, None)
     return section
 
-def _apply_parameter_values_in_text(
-    text: StructuredText, parametrization: Parametrization, parameter_values: Dict[Parameter, Any], path: Ints
-) -> StructuredText:
 
-    application_conditions, warnings_1 = _keep_unsatisfied_conditions(
-        parametrization.path_to_conditions.get(path) or [], parameter_values
+def _build_filtered_text(
+    text: StructuredText, non_applicability_condition: NonApplicationCondition, parameter_values: Dict[Parameter, Any]
+) -> StructuredText:
+    text = copy(text)
+    description = non_applicability_condition.description or _generate_reason_inactive(
+        non_applicability_condition.condition, parameter_values
     )
-    alternative_sections, warnings_2 = _keep_satisfied_mofications(
-        parametrization.path_to_alternative_sections.get(path) or [], parameter_values
-    )
-    if application_conditions and alternative_sections:
+    if non_applicability_condition.targeted_entity.outer_alinea_indices:
+        alineas_to_delete = set(non_applicability_condition.targeted_entity.outer_alinea_indices)
+        text.outer_alineas = [al for i, al in enumerate(text.outer_alineas) if i not in alineas_to_delete]
+        modification_description = f'{description} ({len(alineas_to_delete)} alineas ne s\'appliquent pas.)'
+        text.applicability = Applicability(True, None, True, modification_description)
+        return text
+
+    text.applicability = Applicability(False, description)
+    text.sections = [_deactivate_child_section(section) for section in text.sections]
+    return text
+
+
+def _apply_satisfied_modificators(
+    text: StructuredText,
+    non_applicable_conditions: List[NonApplicationCondition],
+    alternative_sections: List[AlternativeSection],
+    parameter_values: Dict[Parameter, Any],
+) -> StructuredText:
+    if non_applicable_conditions and alternative_sections:
         raise NotImplementedError(
             f'Cannot apply conditions and alternative sections on one section. (Section title: {text.title.text})'
         )
-
     if alternative_sections:
         if len(alternative_sections) > 1:
             raise ValueError(
@@ -663,29 +723,57 @@ def _apply_parameter_values_in_text(
                 f'Here, {len(alternative_sections)} are applicable.'
             )
         return _build_alternative_text(text, alternative_sections[0], parameter_values)
+    if non_applicable_conditions:
+        if len(non_applicable_conditions) > 1:
+            raise ValueError(
+                f'Cannot handle more than 1 non-applicability conditions on one section. '
+                f'Here, {len(non_applicable_conditions)} conditions are applicable.'
+            )
+        return _build_filtered_text(text, non_applicable_conditions[0], parameter_values)
+    return text
 
+
+def _apply_parameter_values_in_text(
+    text: StructuredText, parametrization: Parametrization, parameter_values: Dict[Parameter, Any], path: Ints
+) -> StructuredText:
+
+    na_conditions, warnings_1 = _keep_satisfied_conditions(
+        parametrization.path_to_conditions.get(path) or [], parameter_values
+    )
+    alternative_sections, warnings_2 = _keep_satisfied_mofications(
+        parametrization.path_to_alternative_sections.get(path) or [], parameter_values
+    )
     text = copy(text)
-    if application_conditions:
-        applicabilities = [_compute_applicability(condition, parameter_values) for condition in application_conditions]
-        text.applicability = _merge_applicabilities(applicabilities)
-    else:
-        text.applicability = Applicability(True)
-    if text.applicability.active:
+    if not na_conditions and not alternative_sections:
         text.sections = [
             _apply_parameter_values_in_text(section, parametrization, parameter_values, path + (i,))
             for i, section in enumerate(text.sections)
         ]
+        text.applicability = Applicability(True)
     else:
-        text.sections = [_deactivate_child_section(section) for section in text.sections]
+        text = _apply_satisfied_modificators(text, na_conditions, alternative_sections, parameter_values)
+
     text.applicability.warnings.extend(warnings_1 + warnings_2)
     return text
 
 
 def _compute_whole_text_applicability(
-    application_conditions: List[ApplicationCondition], parameter_values: Dict[Parameter, Any]
+    application_conditions: List[NonApplicationCondition], parameter_values: Dict[Parameter, Any]
 ) -> Applicability:
-    applicabilities = [_compute_applicability(condition, parameter_values) for condition in application_conditions]
-    return _merge_applicabilities(applicabilities)
+    na_conditions, warnings = _keep_satisfied_conditions(application_conditions, parameter_values)
+    if len(na_conditions) > 1:
+        raise ValueError(
+            f'Cannot handle more than 1 non-applicability conditions on one section. '
+            f'Here, {len(na_conditions)} conditions are applicable.'
+        )
+    if not na_conditions:
+        return Applicability(True, warnings=warnings)
+    if application_conditions[0].targeted_entity.outer_alinea_indices:
+        raise ValueError('Can only deactivate the whole AM, not particular alineas.')
+    description = na_conditions[0].description or _generate_reason_inactive(
+        na_conditions[0].condition, parameter_values
+    )
+    return Applicability(False, description)
 
 
 def _date_to_str(date: datetime) -> str:
@@ -888,31 +976,3 @@ def generate_all_am_versions(
         combination_name: _apply_parameter_values_to_am(am, parametrization, parameter_values)
         for combination_name, parameter_values in combinations.items()
     }
-
-
-def build_simple_parametrization(
-    non_applicable_section_references: List[Ints],
-    modified_articles: Dict[Ints, StructuredText],
-    source_section: Ints,
-    date: datetime,
-) -> Parametrization:
-    source = ConditionSource.from_dict(
-        {
-            'explanation': 'Paragraphe décrivant ce qui s\'applique aux installations existantes',
-            'reference': {'section': {'path': source_section}, 'outer_alinea_indices': None},
-        }
-    )
-    date_str = date.strftime('%d-%m-%Y')
-    description = (
-        f'''Le paragraphe ne s'applique qu'aux sites dont la date d'installation est postérieure au {date_str}.'''
-    )
-    condition = Greater(ParameterEnum.DATE_INSTALLATION.value, date, False)
-    application_conditions = [
-        ApplicationCondition(EntityReference(SectionReference(tuple(ref)), None), condition, source, description)
-        for ref in non_applicable_section_references
-    ]
-    alternative_sections = [
-        AlternativeSection(SectionReference(ref), value, condition, source, description)
-        for ref, value in modified_articles.items()
-    ]
-    return Parametrization(application_conditions, alternative_sections)

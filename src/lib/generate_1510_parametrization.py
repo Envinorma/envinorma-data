@@ -6,7 +6,7 @@ from lib.compute_properties import Regime
 from lib.parametric_am import (
     AlternativeSection,
     AndCondition,
-    ApplicationCondition,
+    NonApplicationCondition,
     ConditionSource,
     EntityReference,
     Equal,
@@ -626,7 +626,7 @@ def build_1510_parametrization() -> Parametrization:
         )
         application_conditions.extend(
             [
-                ApplicationCondition(
+                NonApplicationCondition(
                     EntityReference(SectionReference(section), alineas), condition, condition_source, description_app
                 )
                 for section, alineas in not_applicable
@@ -638,7 +638,7 @@ def build_1510_parametrization() -> Parametrization:
     for na_sec, na_als in not_applicable_8:
         _ref = EntityReference(SectionReference(na_sec), na_als)
         application_conditions.append(
-            ApplicationCondition(
+            NonApplicationCondition(
                 _ref,
                 condition_8,
                 ConditionSource('Mentionné dans l\'article.', _ref),
@@ -651,7 +651,7 @@ def build_1510_parametrization() -> Parametrization:
     for na_sec, na_als in not_applicable_9:
         _ref = EntityReference(SectionReference(na_sec), na_als)
         application_conditions.append(
-            ApplicationCondition(
+            NonApplicationCondition(
                 _ref,
                 condition_9,
                 ConditionSource('Mentionné dans l\'article.', _ref),

@@ -315,3 +315,22 @@ def detect_upper_case_first_lines(text: StructuredText, ascendant_titles: List[s
 def detect_upper_case(text: ArreteMinisteriel) -> None:
     for section in text.sections:
         detect_upper_case_first_lines(section, [])
+
+
+def _compare_texts(text_1: str, text_2: str) -> str:
+    import difflib
+
+    lines_1 = text_1.splitlines()
+    lines_2 = text_2.splitlines()
+    diff = difflib.unified_diff(lines_1, lines_2, fromfile='file1', tofile='file2', lineterm='', n=0)
+    lines = list(diff)[2:]
+    return '\n'.join(lines)
+
+
+def compute_am_diffs(am_1: ArreteMinisteriel, am_2: ArreteMinisteriel) -> str:
+    from lib.am_to_markdown import am_to_markdown
+
+    markdown_am_1 = am_to_markdown(am_1)
+    markdown_am_2 = am_to_markdown(am_2)
+    return _compare_texts(markdown_am_1, markdown_am_2)
+
