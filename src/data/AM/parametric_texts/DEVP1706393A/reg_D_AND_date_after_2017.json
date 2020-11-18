@@ -1682,9 +1682,9 @@
                                 {
                                     "annotations": null,
                                     "applicability": {
-                                        "active": true,
+                                        "active": false,
                                         "modified": false,
-                                        "reason_inactive": null,
+                                        "reason_inactive": "Le paragraphe ne s'applique qu'aux installations soumises à enregistrement ou à autorisation.",
                                         "reason_modified": null,
                                         "warnings": []
                                     },
@@ -3742,9 +3742,9 @@
                                 {
                                     "annotations": null,
                                     "applicability": {
-                                        "active": true,
+                                        "active": false,
                                         "modified": false,
-                                        "reason_inactive": null,
+                                        "reason_inactive": "Le paragraphe ne s'applique qu'aux installations soumises à enregistrement ou à autorisation.",
                                         "reason_modified": null,
                                         "warnings": []
                                     },

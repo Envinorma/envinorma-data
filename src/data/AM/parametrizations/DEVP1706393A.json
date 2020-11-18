@@ -6534,7 +6534,7 @@
                 ],
                 "type": "OR"
             },
-            "description": "Le paragraphe ne s'applique qu'aux installations soumises à enregistrement ou à autorisation.",
+            "description": "Le paragraphe ne s'applique qu'aux installations soumises à déclaration.",
             "source": {
                 "explanation": "Mentionné dans l'article.",
                 "reference": {
@@ -6585,7 +6585,7 @@
                 ],
                 "type": "OR"
             },
-            "description": "Le paragraphe ne s'applique qu'aux installations soumises à enregistrement ou à autorisation.",
+            "description": "Le paragraphe ne s'applique qu'aux installations soumises à déclaration.",
             "source": {
                 "explanation": "Mentionné dans l'article.",
                 "reference": {
@@ -6623,47 +6623,7 @@
                 "target": "D",
                 "type": "EQUAL"
             },
-            "description": "Le paragraphe ne s'applique qu'aux installations soumises à déclaration.",
-            "source": {
-                "explanation": "Mentionné dans l'article.",
-                "reference": {
-                    "outer_alinea_indices": [
-                        3
-                    ],
-                    "section": {
-                        "path": [
-                            8,
-                            1,
-                            11
-                        ]
-                    },
-                    "whole_arrete": false
-                }
-            },
-            "targeted_entity": {
-                "outer_alinea_indices": [
-                    3
-                ],
-                "section": {
-                    "path": [
-                        8,
-                        1,
-                        11
-                    ]
-                },
-                "whole_arrete": false
-            }
-        },
-        {
-            "condition": {
-                "parameter": {
-                    "id": "regime",
-                    "type": "REGIME"
-                },
-                "target": "D",
-                "type": "EQUAL"
-            },
-            "description": "Le paragraphe ne s'applique qu'aux installations soumises à déclaration.",
+            "description": "Le paragraphe ne s'applique qu'aux installations soumises à enregistrement ou à autorisation.",
             "source": {
                 "explanation": "Mentionné dans l'article.",
                 "reference": {
@@ -6701,7 +6661,7 @@
                 "target": "D",
                 "type": "EQUAL"
             },
-            "description": "Le paragraphe ne s'applique qu'aux installations soumises à déclaration.",
+            "description": "Le paragraphe ne s'applique qu'aux installations soumises à enregistrement ou à autorisation.",
             "source": {
                 "explanation": "Mentionné dans l'article.",
                 "reference": {

@@ -1682,9 +1682,9 @@
                                 {
                                     "annotations": null,
                                     "applicability": {
-                                        "active": true,
+                                        "active": false,
                                         "modified": false,
-                                        "reason_inactive": null,
+                                        "reason_inactive": "Le paragraphe ne s'applique qu'aux installations soumises à enregistrement ou à autorisation.",
                                         "reason_modified": null,
                                         "warnings": []
                                     },
@@ -1817,9 +1817,9 @@
                                     "annotations": null,
                                     "applicability": {
                                         "active": true,
-                                        "modified": false,
+                                        "modified": true,
                                         "reason_inactive": null,
-                                        "reason_modified": null,
+                                        "reason_modified": "Le paragraphe est modifié pour les sites installés entre le 30-04-2009 et le 01-07-2017",
                                         "warnings": []
                                     },
                                     "legifrance_article": null,
@@ -1827,62 +1827,32 @@
                                         {
                                             "links": [],
                                             "table": null,
-                                            "text": "Une voie engins au moins est maintenue dégagée pour :"
+                                            "text": "Une voie \"engins\" au moins est maintenue dégagée pour la circulation sur le périmètre de l'entrepôt et des bâtiments accolés et est positionnée de façon à ne pouvoir être obstruée par l'effondrement de tout ou partie du stockage."
                                         },
                                         {
                                             "links": [],
                                             "table": null,
-                                            "text": "- la circulation sur la périphérie complète du bâtiment ;"
+                                            "text": "Cette voie engins respecte les caractéristiques suivantes : "
                                         },
                                         {
                                             "links": [],
                                             "table": null,
-                                            "text": "- l'accès au bâtiment ;"
+                                            "text": "- la largeur utile est au minimum de 3 mètres, la hauteur libre au minimum de 3,5 mètres et la pente inférieure à 15 % ; "
                                         },
                                         {
                                             "links": [],
                                             "table": null,
-                                            "text": "- l'accès aux aires de mise en station des moyens aériens ;"
+                                            "text": "- dans les virages de rayon intérieur inférieur à 50 mètres, un rayon intérieur R minimal de 11 mètres est maintenu et une surlargeur de S = 15/R mètres est ajoutée ; "
                                         },
                                         {
                                             "links": [],
                                             "table": null,
-                                            "text": "- l'accès aux aires de stationnement des engins."
+                                            "text": "- la voie résiste à la force portante calculée pour un véhicule de 160 kN, avec un maximum de 90 kN par essieu, ceux-ci étant distants de 3,6 mètres au maximum ; "
                                         },
                                         {
                                             "links": [],
                                             "table": null,
-                                            "text": "Elle est positionnée de façon à ne pouvoir être obstruée par l'effondrement de tout ou partie de ce bâtiment ou occupée par les eaux d'extinction."
-                                        },
-                                        {
-                                            "links": [],
-                                            "table": null,
-                                            "text": "Cette voie engins respecte les caractéristiques suivantes :"
-                                        },
-                                        {
-                                            "links": [],
-                                            "table": null,
-                                            "text": "- la largeur utile est au minimum de 6 mètres, la hauteur libre au minimum de 4,5 mètres et la pente"
-                                        },
-                                        {
-                                            "links": [],
-                                            "table": null,
-                                            "text": "- inférieure à 15 % ;"
-                                        },
-                                        {
-                                            "links": [],
-                                            "table": null,
-                                            "text": "- dans les virages, le rayon intérieur R minimal est de 13 mètres. Une surlargeur de S = 15/R mètres est ajoutée dans les virages de rayon intérieur R compris entre 13 et 50 mètres ;"
-                                        },
-                                        {
-                                            "links": [],
-                                            "table": null,
-                                            "text": "- la voie résiste à la force portante calculée pour un véhicule de 320 kN avec un maximum de 130 kN par essieu, ceux-ci étant distants de 3,6 mètres au minimum ;"
-                                        },
-                                        {
-                                            "links": [],
-                                            "table": null,
-                                            "text": "- chaque point du périmètre du bâtiment est à une distance maximale de 60 mètres de cette voie ;"
+                                            "text": "- chaque point du périmètre du stockage est à une distance maximale de 60 mètres de cette voie ; "
                                         },
                                         {
                                             "links": [],
@@ -1892,12 +1862,22 @@
                                         {
                                             "links": [],
                                             "table": null,
-                                            "text": "En cas d'impossibilité de mise en place d'une voie engins permettant la circulation sur l'intégralité de la périphérie du bâtiment et si tout ou partie de la voie est en impasse, les 40 derniers mètres de la partie de la voie en impasse sont d'une largeur utile minimale de 7 mètres et une aire de retournement comprise dans un cercle de 20 mètres de diamètre est prévue à son extrémité."
+                                            "text": "En cas d'impossibilité de mise en place d'une voie engins permettant la circulation sur l'intégralité du périmètre de l'entrepôt et des bâtiments accolés et si tout ou partie de la voie est en impasse, les 40 derniers mètres de la partie de la voie en impasse sont d'une largeur utile minimale de 7 mètres et une aire de retournement de 10 mètres de diamètre est prévue à son extrémité."
                                         },
                                         {
                                             "links": [],
                                             "table": null,
-                                            "text": "Pour les installations soumises à autorisation ou à enregistrement, le positionnement de la voie engins est proposé par le pétitionnaire dans son dossier de demande."
+                                            "text": "Pour permettre le croisement des engins de secours, tout tronçon de voie engins de plus de 100 mètres linéaires dispose d'au moins deux aires dites de croisement, judicieusement positionnées, dont les caractéristiques sont : "
+                                        },
+                                        {
+                                            "links": [],
+                                            "table": null,
+                                            "text": "- largeur utile minimale de 3 mètres en plus de la voie engins ; "
+                                        },
+                                        {
+                                            "links": [],
+                                            "table": null,
+                                            "text": "- longueur minimale de 10 mètres, présentant a minima les mêmes qualités de pente, de force portante et de hauteur libre que la voie engins."
                                         }
                                     ],
                                     "reference_str": "Annexe II 3.2.",
@@ -1912,196 +1892,71 @@
                                     "annotations": null,
                                     "applicability": {
                                         "active": true,
-                                        "modified": false,
+                                        "modified": true,
                                         "reason_inactive": null,
-                                        "reason_modified": null,
+                                        "reason_modified": "Le paragraphe est modifié pour les sites installés entre le 30-04-2009 et le 01-07-2017",
                                         "warnings": []
                                     },
                                     "legifrance_article": null,
-                                    "outer_alineas": [],
-                                    "reference_str": "Annexe II 3.3.",
-                                    "sections": [
+                                    "outer_alineas": [
                                         {
-                                            "annotations": null,
-                                            "applicability": {
-                                                "active": true,
-                                                "modified": false,
-                                                "reason_inactive": null,
-                                                "reason_modified": null,
-                                                "warnings": []
-                                            },
-                                            "legifrance_article": null,
-                                            "outer_alineas": [
-                                                {
-                                                    "links": [],
-                                                    "table": null,
-                                                    "text": "Les aires de mise en station des moyens aériens permettent aux engins de stationner pour déployer leurs moyens aériens (par exemple les échelles et les bras élévateurs articulés). Elles sont directement accessibles depuis la voie engins définie au 3.2."
-                                                },
-                                                {
-                                                    "links": [],
-                                                    "table": null,
-                                                    "text": "Elles sont positionnées de façon à ne pouvoir être obstruées par l'effondrement de tout ou partie du bâtiment ou occupées par les eaux d'extinction."
-                                                },
-                                                {
-                                                    "links": [],
-                                                    "table": null,
-                                                    "text": "Elles sont entretenues et maintenues dégagées en permanence."
-                                                },
-                                                {
-                                                    "links": [],
-                                                    "table": null,
-                                                    "text": "Pour toute installation, au moins une façade est desservie par au moins une aire de mise en station des moyens aériens. Au moins deux façades sont desservies lorsque la longueur des murs coupe-feu reliant ces façades est supérieure à 50 mètres."
-                                                },
-                                                {
-                                                    "links": [],
-                                                    "table": null,
-                                                    "text": "Les murs coupe-feu séparant une cellule de plus de 6 000 m2 d'autres cellules sont :"
-                                                },
-                                                {
-                                                    "links": [],
-                                                    "table": null,
-                                                    "text": "- soit équipés d'une aire de mise en station des moyens aériens, positionnée au droit du mur coupe-feu à l'une de ses extrémités, ou à ses deux extrémités si la longueur du mur coupe-feu est supérieure à 50 mètres ;"
-                                                },
-                                                {
-                                                    "links": [],
-                                                    "table": null,
-                                                    "text": "- soit équipés de moyens fixes ou semi-fixes permettant d'assurer leur refroidissement. Ces moyens sont indépendants du système d'extinction automatique d'incendie et sont mis en œuvre par l'exploitant."
-                                                },
-                                                {
-                                                    "links": [],
-                                                    "table": null,
-                                                    "text": "Par ailleurs, pour toute installation située dans un bâtiment de plusieurs niveaux possédant au moins un plancher situé à une hauteur supérieure à 8 mètres par rapport au sol intérieur, une aire de mise en station des moyens aériens permet d'accéder à des ouvertures sur au moins deux façades."
-                                                },
-                                                {
-                                                    "links": [],
-                                                    "table": null,
-                                                    "text": "Ces ouvertures permettent au moins un accès par étage pour chacune des façades disposant d'aires de mise en station des moyens aériens et présentent une hauteur minimale de 1,8 mètre et une largeur minimale de 0,9 mètre. Les panneaux d'obturation ou les châssis composant ces accès s'ouvrent et demeurent toujours accessibles de l'extérieur et de l'intérieur. Ils sont aisément repérables de l'extérieur par les services d'incendie et de secours."
-                                                },
-                                                {
-                                                    "links": [],
-                                                    "table": null,
-                                                    "text": "Chaque aire de mise en station des moyens aériens respecte, par ailleurs, les caractéristiques suivantes :"
-                                                },
-                                                {
-                                                    "links": [],
-                                                    "table": null,
-                                                    "text": "- la largeur utile est au minimum de 7 mètres, la longueur au minimum de 10 mètres, la pente au maximum de 10 % ;"
-                                                },
-                                                {
-                                                    "links": [],
-                                                    "table": null,
-                                                    "text": "- elle comporte une matérialisation au sol ;"
-                                                },
-                                                {
-                                                    "links": [],
-                                                    "table": null,
-                                                    "text": "- aucun obstacle aérien ne gêne la manœuvre de ces moyens aériens à la verticale de cette aire ;"
-                                                },
-                                                {
-                                                    "links": [],
-                                                    "table": null,
-                                                    "text": "- la distance par rapport à la façade est de 1 mètre minimum et de 8 mètres maximum ;"
-                                                },
-                                                {
-                                                    "links": [],
-                                                    "table": null,
-                                                    "text": "- elle est maintenue en permanence entretenue, dégagée et accessible aux services d'incendie et de secours. Si les conditions d'exploitation ne permettent pas de maintenir ces aires dégagées en permanence (présence de véhicules liés à l'exploitation), l'exploitant fixe les mesures organisationnelles permettant de libérer ces aires en cas de sinistre avant l'arrivée des services d'incendie et de secours. Ces mesures sont intégrées au plan de défense incendie lorsqu'il existe en application du point 23 de la présente annexe."
-                                                },
-                                                {
-                                                    "links": [],
-                                                    "table": null,
-                                                    "text": "- l'aire résiste à la force portante calculée pour un véhicule de 320 kN avec un maximum de 130 kN par essieu, ceux-ci étant distants de 3,6 mètres au minimum et présente une résistance au poinçonnement minimale de 88 N/cm2."
-                                                },
-                                                {
-                                                    "links": [],
-                                                    "table": null,
-                                                    "text": "Les dispositions du présent point ne sont pas exigées pour les cellules de moins de 2 000 mètres carrés de surface respectant les dispositions suivantes :"
-                                                },
-                                                {
-                                                    "links": [],
-                                                    "table": null,
-                                                    "text": "- au moins un des murs séparatifs se situe à moins de 23 mètres d'une façade accessible ;"
-                                                },
-                                                {
-                                                    "links": [],
-                                                    "table": null,
-                                                    "text": "- la cellule comporte un dispositif d'extinction automatique d'incendie ;"
-                                                },
-                                                {
-                                                    "links": [],
-                                                    "table": null,
-                                                    "text": "- la cellule ne comporte pas de mezzanine."
-                                                }
-                                            ],
-                                            "reference_str": "Annexe II 3.3.1.",
-                                            "sections": [],
-                                            "title": {
-                                                "links": [],
-                                                "table": null,
-                                                "text": "3.3.1. Aires de mise en station des moyens aériens"
-                                            }
+                                            "links": [],
+                                            "table": null,
+                                            "text": "Pour tout stockage en bâtiment de hauteur supérieure à 8 mètres, au moins une façade est desservie par au moins une aire de mise en station des moyens aériens. Chaque aire de mise en station des moyens aériens est directement accessible depuis la voie engins définie au 3.2."
                                         },
                                         {
-                                            "annotations": null,
-                                            "applicability": {
-                                                "active": true,
-                                                "modified": false,
-                                                "reason_inactive": null,
-                                                "reason_modified": null,
-                                                "warnings": []
-                                            },
-                                            "legifrance_article": null,
-                                            "outer_alineas": [
-                                                {
-                                                    "links": [],
-                                                    "table": null,
-                                                    "text": "Les aires de stationnement des engins permettent aux moyens des services d'incendie et de secours de stationner pour se raccorder aux points d'eau incendie. Elles sont directement accessibles depuis la voie engins définie au 3.2. Les aires de stationnement des engins au droit des réserves d'eau alimentant un réseau privé de points d'eau incendie ne sont pas nécessaires."
-                                                },
-                                                {
-                                                    "links": [],
-                                                    "table": null,
-                                                    "text": "Les aires de stationnement des engins sont positionnées de façon à ne pouvoir être obstruées par l'effondrement de tout ou partie de ce bâtiment ou occupées par les eaux d'extinction. Elles sont entretenues et maintenues dégagées en permanence. Si les conditions d'exploitation ne permettent pas de maintenir ces aires dégagées en permanence (présence de véhicules liés à l'exploitation), l'exploitant fixe les mesures organisationnelles permettant de libérer ces aires en cas de sinistre avant l'arrivée des services d'incendie et de secours. Ces mesures sont intégrées au plan de défense incendie lorsqu'il existe en application du point 23 de cette annexe."
-                                                },
-                                                {
-                                                    "links": [],
-                                                    "table": null,
-                                                    "text": "Chaque aire de stationnement des engins respecte, par ailleurs, les caractéristiques suivantes :"
-                                                },
-                                                {
-                                                    "links": [],
-                                                    "table": null,
-                                                    "text": "- la largeur utile est au minimum de 4 mètres, la longueur au minimum de 8 mètres, la pente est comprise entre 2 et 7 % ;"
-                                                },
-                                                {
-                                                    "links": [],
-                                                    "table": null,
-                                                    "text": "- elle comporte une matérialisation au sol ;"
-                                                },
-                                                {
-                                                    "links": [],
-                                                    "table": null,
-                                                    "text": "- elle est située à 5 mètres maximum du point d'eau incendie ;"
-                                                },
-                                                {
-                                                    "links": [],
-                                                    "table": null,
-                                                    "text": "- elle est maintenue en permanence entretenue, dégagée et accessible aux services d'incendie et de secours ; si les conditions d'exploitation ne permettent pas de maintenir ces aires dégagées en permanence (présence de véhicules liés à l'exploitation), l'exploitant fixe les mesures organisationnelles permettant de libérer ces aires en cas de sinistre avant l'arrivée des services d'incendie et de secours. Ces mesures sont intégrées au plan de défense incendie lorsqu'il existe en application du point 23 de la présente annexe."
-                                                },
-                                                {
-                                                    "links": [],
-                                                    "table": null,
-                                                    "text": "- l'aire résiste à la force portante calculée pour un véhicule de 320 kN avec un maximum de 130 kN par essieu, ceux-ci étant distants de 3,6 mètres au minimum."
-                                                }
-                                            ],
-                                            "reference_str": "Annexe II 3.3.2.",
-                                            "sections": [],
-                                            "title": {
-                                                "links": [],
-                                                "table": null,
-                                                "text": "3.3.2. Aires de stationnement des engins"
-                                            }
+                                            "links": [],
+                                            "table": null,
+                                            "text": "Depuis cette aire, un moyen aérien (par exemple une échelle ou un bras élévateur articulé) accédant à au moins toute la hauteur du bâtiment peut être disposé."
+                                        },
+                                        {
+                                            "links": [],
+                                            "table": null,
+                                            "text": "Chaque aire respecte par ailleurs les caractéristiques suivantes : "
+                                        },
+                                        {
+                                            "links": [],
+                                            "table": null,
+                                            "text": "- la largeur utile est au minimum de 4 mètres, la longueur de l'aire de stationnement au minimum de 10 mètres, la pente au maximum de 10 % ; "
+                                        },
+                                        {
+                                            "links": [],
+                                            "table": null,
+                                            "text": "- dans les virages de rayon intérieur inférieur à 50 mètres, un rayon intérieur R minimal de 11 mètres est maintenu et une surlargeur de S = 15/R mètres est ajoutée ; "
+                                        },
+                                        {
+                                            "links": [],
+                                            "table": null,
+                                            "text": "- aucun obstacle aérien ne gêne la manœuvre de ces moyens aériens à la verticale de l'ensemble de la voie ; "
+                                        },
+                                        {
+                                            "links": [],
+                                            "table": null,
+                                            "text": "- la distance par rapport à la façade est de 1 mètre minimum et 8 mètres maximum pour un stationnement parallèle au bâtiment et inférieure à 1 mètre pour un stationnement perpendiculaire au bâtiment ; "
+                                        },
+                                        {
+                                            "links": [],
+                                            "table": null,
+                                            "text": "- la voie résiste à la force portante calculée pour un véhicule de 160 kN avec un maximum de 90 kN par essieu, ceux-ci étant distants de 3,6 mètres au maximum, et présente une résistance au poinçonnement minimale de 80 N/cm2."
+                                        },
+                                        {
+                                            "links": [],
+                                            "table": null,
+                                            "text": "Par ailleurs, pour tout entrepôt de plusieurs niveaux possédant au moins un plancher situé à une hauteur supérieure à 8 mètres par rapport au niveau d'accès des secours, sur au moins deux façades, une aire de mise en station des moyens aériens permet d'accéder à des ouvertures."
+                                        },
+                                        {
+                                            "links": [],
+                                            "table": null,
+                                            "text": "Ces ouvertures permettent au moins un accès par étage pour chacune des façades disposant de voie échelles et présentent une hauteur minimale de 1,8 mètre et une largeur minimale de 0,9 mètre."
+                                        },
+                                        {
+                                            "links": [],
+                                            "table": null,
+                                            "text": "Les panneaux d'obturation ou les châssis composant ces accès s'ouvrent et demeurent toujours accessibles de l'extérieur et de l'intérieur. Ils sont aisément repérables de l'extérieur par les services de secours."
                                         }
                                     ],
+                                    "reference_str": "Annexe II 3.3.",
+                                    "sections": [],
                                     "title": {
                                         "links": [],
                                         "table": null,
@@ -2112,9 +1967,9 @@
                                     "annotations": null,
                                     "applicability": {
                                         "active": true,
-                                        "modified": false,
+                                        "modified": true,
                                         "reason_inactive": null,
-                                        "reason_modified": null,
+                                        "reason_modified": "Le paragraphe est modifié pour les sites installés entre le 30-04-2009 et le 01-07-2017",
                                         "warnings": []
                                     },
                                     "legifrance_article": null,
@@ -2122,32 +1977,7 @@
                                         {
                                             "links": [],
                                             "table": null,
-                                            "text": "A partir de chaque voie engins ou aire de mise en station des moyens aériens est prévu un accès aux issues du bâtiment ou à l'installation par un chemin stabilisé de 1,8 mètre de large au minimum."
-                                        },
-                                        {
-                                            "links": [],
-                                            "table": null,
-                                            "text": "Les accès aux cellules sont d'une largeur de 1,8 mètre pour permettre le passage des dévidoirs."
-                                        },
-                                        {
-                                            "links": [],
-                                            "table": null,
-                                            "text": "Les quais de déchargement sont équipés d'une rampe dévidoir de 1,8 mètre de large et de pente inférieure ou égale à 10 %, permettant l'accès aux cellules sauf s'il existe des accès de plain-pied."
-                                        },
-                                        {
-                                            "links": [],
-                                            "table": null,
-                                            "text": "Dans le cas de bâtiments existants abritant une installation nécessitant le dépôt d'un nouveau dossier, et sous réserve d'impossibilité technique, l'accès aux issues du bâtiment ou à l'installation peut se faire par un chemin stabilisé de 1,40 mètre de large au minimum. Dans ce cas, l'alinéa précédent n'est pas applicable."
-                                        },
-                                        {
-                                            "links": [],
-                                            "table": null,
-                                            "text": "Dans le cas où les issues ne sont pas prévues à proximité du mur séparatif coupe-feu, une ouverture munie d'un dispositif manœuvrable par les services d'incendie et de secours ou par l'exploitant depuis l'extérieur est prévue afin de faciliter la mise en œuvre des moyens hydrauliques de plain-pied."
-                                        },
-                                        {
-                                            "links": [],
-                                            "table": null,
-                                            "text": "Dans le cas où le dispositif est manœuvrable uniquement par l'exploitant, ce dernier fixe les mesures organisationnelles permettant l'accès des services d'incendie et de secours par cette ouverture en cas de sinistre, avant leur arrivée. Ces mesures sont intégrées au plan de défense incendie lorsqu'il existe en application du point 23 de cette annexe."
+                                            "text": "A partir de chaque voie engins ou échelles est prévu un accès à toutes les issues du bâtiment par un chemin stabilisé de 1,40 mètre de large au minimum."
                                         }
                                     ],
                                     "reference_str": "Annexe II 3.4.",
@@ -2209,9 +2039,9 @@
                             "annotations": null,
                             "applicability": {
                                 "active": true,
-                                "modified": false,
+                                "modified": true,
                                 "reason_inactive": null,
-                                "reason_modified": null,
+                                "reason_modified": "Le paragraphe est modifié pour les sites installés entre le 30-04-2009 et le 01-07-2017",
                                 "warnings": []
                             },
                             "legifrance_article": null,
@@ -2219,77 +2049,77 @@
                                 {
                                     "links": [],
                                     "table": null,
-                                    "text": "Les dispositions constructives visent à ce que la cinétique d'incendie soit compatible avec l'évacuation des personnes, l'intervention des services de secours et la protection de l'environnement. Elles visent notamment à ce que la ruine d'un élément de structure (murs, toiture, poteaux, poutres par exemple) suite à un sinistre n'entraîne pas la ruine en chaîne de la structure du bâtiment, notamment les cellules de stockage avoisinantes, ni de leurs dispositifs de recoupement, et ne conduit pas à l'effondrement de la structure vers l'extérieur de la cellule en feu."
+                                    "text": "Les locaux abritant l'installation présentent les caractéristiques de réaction et de résistance au feu minimales suivantes : "
                                 },
                                 {
                                     "links": [],
                                     "table": null,
-                                    "text": "L'ensemble de la structure est a minima R 15."
+                                    "text": "- les parois extérieures sont construites en matériaux A2 s1 d0 ou en matériaux reconnus équivalents par rapport au risque incendie, par la direction générale de la sécurité civile et de la gestion des crises du ministère chargé de l'intérieur ; "
                                 },
                                 {
                                     "links": [],
                                     "table": null,
-                                    "text": "Les murs extérieurs sont construits en matériaux de classe A2 s1 d0, sauf si le bâtiment est doté d'un dispositif d'extinction automatique d'incendie."
+                                    "text": "- l'ensemble de la structure présente les caractéristiques au moins R.15 ; "
                                 },
                                 {
                                     "links": [],
                                     "table": null,
-                                    "text": "Les éléments de support de la toiture sont réalisés en matériaux A2 s1 d0. Cette disposition n'est pas applicable si la structure porteuse est en lamellé-collé, en bois massif ou en matériaux reconnus équivalents par rapport au risque incendie, par la direction générale de la sécurité civile et de la gestion des crises du ministère chargé de l'intérieur."
+                                    "text": "- en ce qui concerne la toiture, les poutres et les pannes sont au minimum R15 ; les autres éléments porteurs sont réalisés au minimum en matériaux A2 s1 d0 et l'isolant thermique (s'il existe) est réalisé en matériaux au minimum B S3 d0 avec pouvoir calorifique supérieur (PCS) inférieur ou égal à 8,4 MJ/kg, ou bien l'isolation thermique est composée de plusieurs couches, dont la première (en contact avec le support de couverture), d'une épaisseur d'au moins 30 millimètres, de masse volumique supérieure à 110 kg/m3 et fixée mécaniquement, a un PCS inférieur ou égal à 8,4 MJ/kg et les couches supérieures sont constituées d'isolants justifiant une en épaisseur de 60 millimètres d'une classe D s3 d2. Ces couches supérieures sont recoupées au droit de chaque écran de cantonnement par un isolant de PCS inférieur ou égal à 8,4 MJ/kg, ou bien il est protégé par un écran thermique disposé sur la ou les faces susceptibles d'être exposées à un feu intérieur au bâtiment. Cet écran doit jouer un rôle protecteur vis-à-vis de l'action du programme thermique normalisé durant au moins une demi-heure. L'ensemble de la toiture hors poutres et pannes satisfait la classe et l'indice BROOF (t3) ; "
                                 },
                                 {
                                     "links": [],
                                     "table": null,
-                                    "text": "Le ou les isolants thermiques utilisés en couverture sont de classe A2 s1 d0. Cette prescription n'est pas exigible lorsque, d'une part, le système support + isolants est de classe B s1 d0, et d'autre part :"
+                                    "text": "- planchers hauts (hors mezzanines) au moins REI 120 ; en outre, la stabilité au feu des structures porteuses des planchers, pour les entrepôts de deux niveaux et plus, est de degré deux heures au moins ; "
                                 },
                                 {
                                     "links": [],
                                     "table": null,
-                                    "text": "- ou bien l'isolant, unique, a un pouvoir calorifique supérieur (PCS) inférieur ou égal à 8,4 MJ/kg ;"
+                                    "text": "- portes et fermetures des murs séparatifs au moins EI 120 (y compris celles comportant des vitrages et des quincailleries). Ces portes et fermetures sont munies d'un ferme-porte, ou d'un dispositif assurant leur fermeture automatique, également au moins EI 120 ; "
                                 },
                                 {
                                     "links": [],
                                     "table": null,
-                                    "text": "- ou bien l'isolation thermique est composée de plusieurs couches, dont la première (en contact avec le support de couverture), d'une épaisseur d'au moins 30 millimètres, de masse volumique supérieure à 110 kg/m3 et fixée mécaniquement, a un PCS inférieur ou égal à 8,4 MJ/kg et les couches supérieures sont constituées d'isolants justifiant en épaisseur de 60 millimètres d'une classe D s3 d2. Ces couches supérieures sont recoupées au droit de chaque écran de cantonnement par un isolant de PCS inférieur ou égal à 8,4 MJ/kg ;"
+                                    "text": "- murs séparatifs au moins REI 120 entre deux cellules ; ces parois sont prolongées latéralement aux murs extérieurs sur une largeur de 1 mètre ou 0,50 mètre en saillie de la façade, dans la continuité de la paroi. Elles doivent être construites de façon à ne pas être entraînées en cas de ruine de la structure ;"
                                 },
                                 {
                                     "links": [],
                                     "table": null,
-                                    "text": "- ou bien il est protégé par un écran thermique disposé sur la ou les faces susceptibles d'être exposées à un feu intérieur au bâtiment. Cet écran doit jouer un rôle protecteur vis-à-vis de l'action du programme thermique normalisé durant au moins une demi-heure."
+                                    "text": " - murs séparatifs au moins REI 120 ou une distance libre de 10 mètres entre une cellule et un local technique (hors chaufferie) ; "
                                 },
                                 {
                                     "links": [],
                                     "table": null,
-                                    "text": "Le système de couverture de toiture satisfait la classe BROOF (t3)."
+                                    "text": "- portes et fermetures des murs séparatifs résistantes au feu (y compris celles comportant des vitrages et des quincailleries) et leurs dispositifs de fermeture au moins EI 120."
                                 },
                                 {
                                     "links": [],
                                     "table": null,
-                                    "text": "Les matériaux utilisés pour l'éclairage naturel satisfont à la classe d0."
+                                    "text": "Les dispositions constructives visent à ce que la ruine d'un élément de structure n'entraîne pas la ruine en chaîne de la structure du bâtiment, notamment les cellules de stockage avoisinantes, ni de leur dispositif de recoupement et ne favorise pas l'effondrement de la structure vers l'extérieur de la première cellule en feu."
                                 },
                                 {
                                     "links": [],
                                     "table": null,
-                                    "text": "Pour les entrepôts de deux niveaux ou plus, les planchers sont au moins EI 120 et les structures porteuses des planchers au moins R120 et la stabilité au feu de la structure est au moins R 60 pour ceux dont le plancher du dernier niveau est situé à plus de 8 mètres du sol intérieur. Pour les entrepôts à simple rez-de-chaussée de plus de 13,70 m de hauteur, la stabilité au feu de la structure est au moins R 60."
+                                    "text": "Les éléments séparatifs entre cellules dépassent d'au moins 1 mètre la couverture du bâtiment au droit du franchissement. La toiture est recouverte d'une bande de protection sur une largeur minimale de 5 mètres de part et d'autre des parois séparatives."
                                 },
                                 {
                                     "links": [],
                                     "table": null,
-                                    "text": "Les escaliers intérieurs reliant des niveaux séparés, dans le cas de planchers situés à plus de 8 mètres du sol intérieur et considérés comme issues de secours, sont encloisonnés par des parois au moins REI 60 et construits en matériaux de classe A2 s1 d0. Ils débouchent soit directement à l'air libre, soit dans un espace protégé. Les blocs-portes intérieurs donnant sur ces escaliers sont au moins E 60 C2."
+                                    "text": "Les ouvertures effectuées dans les éléments séparatifs (passage de gaines et canalisations, de convoyeurs) sont munies de dispositifs assurant un degré coupe-feu équivalent à celui exigé pour ces éléments séparatifs."
                                 },
                                 {
                                     "links": [],
                                     "table": null,
-                                    "text": "Les ateliers d'entretien du matériel sont isolés par une paroi et un plafond au moins REI 120 ou situés dans un local distant d'au moins 10 mètres des cellules de stockage. Les portes d'intercommunication présentent un classement au moins EI2 120 C (classe de durabilité C2 pour les portes battantes)."
+                                    "text": "Le sol des aires et locaux de stockage est incombustible (de classe A1)."
                                 },
                                 {
                                     "links": [],
                                     "table": null,
-                                    "text": "A l'exception des bureaux dits de quais destinés à accueillir le personnel travaillant directement sur les stockages, des zones de préparation ou de réception, des quais eux-mêmes, les bureaux et les locaux sociaux ainsi que les guichets de retrait et dépôt des marchandises sont situés dans un local clos distant d'au moins 10 mètres des cellules de stockage ou isolés par une paroi au moins REI 120. Ils ne peuvent être contigus aux cellules où sont présentes des matières dangereuses. Ils sont également isolés par un plafond au moins REI 120 et des portes d'intercommunication munies d'un ferme-porte présentant un classement au moins EI2 120 C (classe de durabilité C2). Ce plafond n'est pas obligatoire si le mur séparatif au moins REI 120 entre le local bureau et la cellule de stockage dépasse au minimum d'un mètre, conformément au point 6, ou si le mur séparatif au moins REI 120 arrive jusqu'en sous-face de toiture de la cellule de stockage, et que le niveau de la toiture du local bureau est située au moins à 4 mètres au-dessous du niveau de la toiture de la cellule de stockage). De plus, lorsqu'ils sont situés à l'intérieur d'une cellule, le plafond est au moins REI 120, et si les bureaux sont situés en étage le plancher est également au moins REI 120."
+                                    "text": "Les matériaux utilisés pour l'éclairage naturel ne produisent pas, lors d'un incendie, de gouttes enflammées."
                                 },
                                 {
                                     "links": [],
                                     "table": null,
-                                    "text": "Les justificatifs attestant du respect des prescriptions du présent point sont conservés et intégrés au dossier prévu au point 1.2. de la présente annexe."
+                                    "text": "Une étude spécifique visant à évaluer les risques particuliers, notamment pour les personnes, et à déterminer les mesures spécifiques à mettre en place est réalisée pour toute mezzanine de surface supérieure à 50 % (85 % pour les entrepôts de textile) de la surface en cellule située en rez-de-chaussée."
                                 }
                             ],
                             "reference_str": "Annexe II 4.",
@@ -2304,9 +2134,9 @@
                             "annotations": null,
                             "applicability": {
                                 "active": true,
-                                "modified": false,
+                                "modified": true,
                                 "reason_inactive": null,
-                                "reason_modified": null,
+                                "reason_modified": "Le paragraphe est modifié pour les sites installés entre le 30-04-2009 et le 01-07-2017",
                                 "warnings": []
                             },
                             "legifrance_article": null,
@@ -2314,47 +2144,47 @@
                                 {
                                     "links": [],
                                     "table": null,
-                                    "text": "Les cellules de stockage sont divisées en cantons de désenfumage d'une superficie maximale de 1 650 mètres carrés et d'une longueur maximale de 60 mètres. Chaque écran de cantonnement est stable au feu de degré un quart d'heure, et a une hauteur minimale de 1 mètre. La distance entre le point bas de l'écran et le point le plus près du stockage est supérieure ou égale à 0,5 mètre. Elle peut toutefois être réduite pour les zones de stockages automatisés."
+                                    "text": "Les cellules de stockage sont divisées en cantons de désenfumage d’une superficie maximale de 1 650 mètres carrés et d’une longueur maximale de 60 mètres. Les cantons sont délimités par des écrans de cantonnement, réalisés en matériaux A2 s1 d0 (y compris leurs fixations) et stables au feu de degré un quart d'heure, ou par la configuration de la toiture et des structures du bâtiment."
                                 },
                                 {
                                     "links": [],
                                     "table": null,
-                                    "text": "Les cantons de désenfumage sont équipés en partie haute de dispositifs d'évacuation des fumées, gaz de combustion, chaleur et produits imbrûlés."
+                                    "text": "Les cantons de désenfumage sont équipés en partie haute de dispositifs d’évacuation des fumées, gaz de combustion, chaleur et produits imbrûlés."
                                 },
                                 {
                                     "links": [],
                                     "table": null,
-                                    "text": "Des exutoires à commande automatique et manuelle font partie des dispositifs d'évacuation des fumées. La surface utile de l'ensemble de ces exutoires n'est pas inférieure à 2 % de la superficie de chaque canton de désenfumage."
+                                    "text": "Des exutoires à commande automatique et manuelle font partie des dispositifs d’évacuation des fumées. La surface utile de l’ensemble de ces exutoires n’est pas inférieure à 2 % de la superficie de chaque canton de désenfumage."
                                 },
                                 {
                                     "links": [],
                                     "table": null,
-                                    "text": "Le déclenchement du désenfumage n'est pas asservi à la même détection que celle à laquelle est asservi le système d'extinction automatique. Les dispositifs d'ouverture automatique des exutoires sont réglés de telle façon que l'ouverture des organes de désenfumage ne puisse se produire avant le déclenchement de l'extinction automatique."
+                                    "text": "Le déclenchement du désenfumage n’est pas asservi à la même détection que celle à laquelle est asservi le système d’extinction automatique. Les dispositifs d’ouverture automatique des exutoires sont réglés de telle façon que l’ouverture des organes de désenfumage ne puisse se produire avant le déclenchement de l’extinction automatique."
                                 },
                                 {
                                     "links": [],
                                     "table": null,
-                                    "text": "Il faut prévoir au moins quatre exutoires pour 1 000 mètres carrés de superficie de toiture. La surface utile d'un exutoire n'est pas inférieure à 0,5 mètre carré ni supérieure à 6 mètres carrés. Les dispositifs d'évacuation ne sont pas implantés sur la toiture à moins de 7 mètres des murs coupe-feu séparant les cellules de stockage. Cette distance peut être réduite pour les cellules dont une des dimensions est inférieure à 15 m."
+                                    "text": "Il faut prévoir au moins quatre exutoires pour 1 000 mètres carrés de superficie de toiture. La surface utile d’un exutoire n’est pas inférieure à 0,5 mètre carré ni supérieure à 6 mètres carrés. Les dispositifs d’évacuation ne sont pas implantés sur la toiture à moins de 7 mètres des murs coupe-feu séparant les cellules de stockage. Cette distance peut être réduite pour les cellules dont une des dimensions est inférieure à 15 m."
                                 },
                                 {
                                     "links": [],
                                     "table": null,
-                                    "text": "La commande manuelle des exutoires est au minimum installée en deux points opposés de l'entrepôt de sorte que l'actionnement d'une commande empêche la manœuvre inverse par la ou les autres commandes. Ces commandes manuelles sont facilement accessibles aux services d'incendie et de secours depuis les issues du bâtiment ou de chacune des cellules de stockage. Elles doivent être manœuvrables en toutes circonstances."
+                                    "text": "La commande manuelle des exutoires est au minimum installée en deux points opposés de l’entrepôt de sorte que l’actionnement d’une commande empêche la manœuvre inverse par la ou les autres commandes. Ces commandes manuelles sont facilement accessibles aux services d’incendie et de secours depuis les issues du bâtiment ou de chacune des cellules de stockage. Elles doivent être manœuvrables en toutes circonstances."
                                 },
                                 {
                                     "links": [],
                                     "table": null,
-                                    "text": "Des amenées d'air frais d'une superficie au moins égale à la surface utile des exutoires du plus grand canton, cellule par cellule, sont réalisées soit par des ouvrants en façade, soit par des bouches raccordées à des conduits, soit par les portes des cellules à désenfumer donnant sur l'extérieur."
+                                    "text": "Des amenées d’air frais d’une superficie au moins égale à la surface utile des exutoires du plus grand canton, cellule par cellule, sont réalisées soit par des ouvrants en façade, soit par des bouches raccordées à des conduits, soit par les portes des cellules à désenfumer donnant sur l’extérieur."
                                 },
                                 {
                                     "links": [],
                                     "table": null,
-                                    "text": "En cas d'entrepôt à plusieurs niveaux, les niveaux autres que celui sous toiture sont désenfumés par des ouvrants en façade asservis à la détection conformément à la réglementation applicable aux établissements recevant du public."
+                                    "text": "En cas d’entrepôt à plusieurs niveaux, les niveaux autres que celui sous toiture sont désenfumés par des ouvrants en façade asservis à la détection conformément à la réglementation applicable aux établissements recevant du public."
                                 },
                                 {
                                     "links": [],
                                     "table": null,
-                                    "text": "Les dispositions de ce point ne s'appliquent pas pour un stockage couvert ouvert."
+                                    "text": "Les dispositions de ce point ne s’appliquent pas pour un stockage couvert ouvert."
                                 }
                             ],
                             "reference_str": "Annexe II 5.",
@@ -2368,9 +2198,9 @@
                         {
                             "annotations": null,
                             "applicability": {
-                                "active": true,
+                                "active": false,
                                 "modified": false,
-                                "reason_inactive": null,
+                                "reason_inactive": "Le paragraphe n'est pas applicable pour les sites installés entre le 30-04-2009 et le 01-07-2017",
                                 "reason_modified": null,
                                 "warnings": []
                             },
@@ -2434,9 +2264,9 @@
                             "annotations": null,
                             "applicability": {
                                 "active": true,
-                                "modified": false,
+                                "modified": true,
                                 "reason_inactive": null,
-                                "reason_modified": null,
+                                "reason_modified": "Le paragraphe est modifié pour les sites installés entre le 30-04-2009 et le 01-07-2017",
                                 "warnings": []
                             },
                             "legifrance_article": null,
@@ -2444,47 +2274,12 @@
                                 {
                                     "links": [],
                                     "table": null,
-                                    "text": "La surface maximale des cellules est égale à 3 000 mètres carrés en l'absence de système d'extinction automatique d'incendie ou 12 000 mètres carrés en présence de système d'extinction automatique d'incendie. La hauteur maximale des cellules est limitée à 23 mètres."
+                                    "text": "La taille des surfaces des cellules de stockage est limitée de façon à réduire la quantité de matières combustibles en feu et d'éviter la propagation du feu d'une cellule à l'autre."
                                 },
                                 {
                                     "links": [],
                                     "table": null,
-                                    "text": "Toutefois, sous réserve que l'exploitant s'engage, dans son dossier de demande, à maintenir un niveau de sécurité équivalent, le préfet peut également autoriser ou enregistrer l'exploitation de l'entrepôt dans les cas de figure ci-dessous :"
-                                },
-                                {
-                                    "links": [],
-                                    "table": null,
-                                    "text": "1. La surface des cellules peut dépasser 12 000 m2 si leurs hauteurs respectives ne dépassent pas 13,70 m et si le système d'extinction automatique d'incendie permet à lui seul l'extinction de l'incendie, est conçu à cet effet, et est muni d'un pompage redondant ;"
-                                },
-                                {
-                                    "links": [],
-                                    "table": null,
-                                    "text": "2. La hauteur des cellules peut dépasser 23 m si leurs surfaces respectives sont inférieures ou égales à 6 000 m2 et si le système d'extinction automatique d'incendie permet à lui seul l'extinction de l'incendie, est conçu à cet effet, et est muni d'un pompage redondant."
-                                },
-                                {
-                                    "links": [],
-                                    "table": null,
-                                    "text": "A l'appui de cet engagement, l'exploitant fournit une étude spécifique d'ingénierie incendie qui démontre que la cinétique d'incendie est compatible avec la mise en sécurité et l'évacuation des personnes présentes dans l'installation et l'intervention des services de secours aux fins de sauvetage de ces personnes."
-                                },
-                                {
-                                    "links": [],
-                                    "table": null,
-                                    "text": "Il atteste que des dispositions constructives adéquates seront prises pour éviter que la ruine d'un élément suite à un sinistre n'entraîne une ruine en chaîne ou un effondrement de la structure vers l'extérieur."
-                                },
-                                {
-                                    "links": [],
-                                    "table": null,
-                                    "text": "Avant la mise en service de l'installation, l'exploitant intègre au dossier prévu au point 1.2 de la présente annexe, la démonstration que la construction réalisée permet effectivement d'assurer que la ruine d'un élément (murs, toiture, poteaux, poutres, mezzanines) suite à un sinistre n'entraîne pas la ruine en chaîne de la structure du bâtiment, notamment les cellules de stockage avoisinantes, ni de leurs dispositifs de compartimentage, ni l'effondrement de la structure vers l'extérieur de la cellule en feu."
-                                },
-                                {
-                                    "links": [],
-                                    "table": null,
-                                    "text": "Dans ce cas, l'installation doit disposer d'un plan de défense incendie prévu au point 23."
-                                },
-                                {
-                                    "links": [],
-                                    "table": null,
-                                    "text": "Les dispositions du présent 7 s'appliquent sans préjudice de l'application éventuelle des articles 3 à 5 de l'arrêté."
+                                    "text": "La surface maximale des cellules est égale à 3 000 mètres carrés en l'absence de système d'extinction automatique d'incendie, ou 6 000 mètres carrés en présence d'un système d'extinction automatique d'incendie et d'une étude démontrant que les zones d'effets thermiques supérieurs à 5 kW/m2 générés par l'incendie d'une cellule restent à l'intérieur du site. Dans le cas des cellules de surface maximale de 3 000 mètres carrés, la plus grande longueur des cellules est limitée à 75 mètres."
                                 }
                             ],
                             "reference_str": "Annexe II 7.",
@@ -2659,9 +2454,9 @@
                             "annotations": null,
                             "applicability": {
                                 "active": true,
-                                "modified": false,
+                                "modified": true,
                                 "reason_inactive": null,
-                                "reason_modified": null,
+                                "reason_modified": "Le paragraphe est modifié pour les sites installés entre le 30-04-2009 et le 01-07-2017",
                                 "warnings": []
                             },
                             "legifrance_article": null,
@@ -2669,57 +2464,42 @@
                                 {
                                     "links": [],
                                     "table": null,
-                                    "text": "Toutes mesures sont prises pour recueillir l'ensemble des eaux et écoulements susceptibles d'être pollués lors d'un sinistre, y compris les eaux utilisées pour l'extinction d'un incendie et le refroidissement, afin que celles-ci soient récupérées ou traitées afin de prévenir toute pollution des sols, des égouts, des cours d'eau ou du milieu naturel. Ce confinement peut être réalisé par des dispositifs internes ou externes aux cellules de stockage. Les dispositifs internes sont interdits lorsque des matières dangereuses sont stockées."
+                                    "text": "Toutes mesures sont prises pour recueillir l’ensemble des eaux et écoulements susceptibles d’être pollués lors d’un sinistre, y compris les eaux utilisées pour l’extinction d’un incendie et le refroidissement, afin que celles-ci soient récupérées ou traitées afin de prévenir toute pollution des sols, des égouts, des cours d’eau ou du milieu naturel. Ce confinement peut être réalisé par des dispositifs internes ou externes aux cellules de stockage. Les dispositifs internes sont interdits lorsque des matières dangereuses sont stockées."
                                 },
                                 {
                                     "links": [],
                                     "table": null,
-                                    "text": "Dans le cas d'un confinement externe, les matières canalisées sont collectées, de manière gravitaire ou grâce à des systèmes de relevage autonomes, puis convergent vers une rétention extérieure au bâtiment. En cas de recours à des systèmes de relevage autonomes, l'exploitant est en mesure de justifier à tout instant d'un entretien et d'une maintenance rigoureux de ces dispositifs. Des tests réguliers sont par ailleurs menés sur ces équipements."
+                                    "text": "Dans le cas d’un confinement externe, les matières canalisées sont collectées, de manière gravitaire ou grâce à des systèmes de relevage autonomes, puis convergent vers une rétention extérieure au bâtiment. En cas de recours à des systèmes de relevage autonomes, l’exploitant est en mesure de justifier à tout instant d’un entretien et d’une maintenance rigoureux de ces dispositifs. Des tests réguliers sont par ailleurs menés sur ces équipements."
                                 },
                                 {
                                     "links": [],
                                     "table": null,
-                                    "text": "En cas de confinement interne, les orifices d'écoulement sont en position fermée par défaut."
+                                    "text": "En cas de confinement interne, les orifices d’écoulement sont en position fermée par défaut."
                                 },
                                 {
                                     "links": [],
                                     "table": null,
-                                    "text": "En cas de confinement externe, les orifices d'écoulement issus de ces dispositifs sont munis d'un dispositif automatique d'obturation pour assurer ce confinement lorsque des eaux susceptibles d'être polluées y sont portées. Tout moyen est mis en place pour éviter la propagation de l'incendie par ces écoulements."
+                                    "text": "En cas de confinement externe, les orifices d’écoulement issus de ces dispositifs sont munis d’un dispositif automatique d’obturation pour assurer ce confinement lorsque des eaux susceptibles d’être polluées y sont portées. Tout moyen est mis en place pour éviter la propagation de l’incendie par ces écoulements."
                                 },
                                 {
                                     "links": [],
                                     "table": null,
-                                    "text": "Le volume nécessaire à ce confinement est déterminé en calculant pour chaque cellule la somme :"
+                                    "text": "Le volume nécessaire à ce confinement est calculé : "
                                 },
                                 {
                                     "links": [],
                                     "table": null,
-                                    "text": "- du volume d'eau d'extinction nécessaire à la lutte contre l'incendie déterminé selon les dispositions du point 13 ci-dessous, d'une part ;"
+                                    "text": "- sur la base du volume d'eau d'extinction nécessaire à la lutte contre l'incendie, d'une part ; "
                                 },
                                 {
                                     "links": [],
                                     "table": null,
-                                    "text": "- du volume de liquide libéré par cet incendie, d'autre part ;"
+                                    "text": "- sur le volume de produits libéré par cet incendie, d'autre part, ce volume total correspondant à la plus grande valeur obtenue pour un incendie sur la plus grande cellule ou pour un incendie sur la cellule, présentant le plus fort potentiel calorifique.Le volume nécessaire au confinement peut également être déterminé conformément au document technique D9a (guide pratique pour le dimensionnement des rétentions des eaux d’extinction de l’Institut national d’études de la sécurité civile, la Fédération française des sociétés d’assurances et le Centre national de prévention et de protection, édition août 2004)."
                                 },
                                 {
                                     "links": [],
                                     "table": null,
-                                    "text": "- du volume d'eau lié aux intempéries, à raison de 10 litres par mètre carré de surface de drainage vers l'ouvrage de confinement lorsque le confinement est externe."
-                                },
-                                {
-                                    "links": [],
-                                    "table": null,
-                                    "text": "Cette somme est minorée du volume d'eau évaporé."
-                                },
-                                {
-                                    "links": [],
-                                    "table": null,
-                                    "text": "Le volume nécessaire au confinement peut également être déterminé conformément au document technique D9a (guide pratique pour le dimensionnement des rétentions des eaux d'extinction de l'Institut national d'études de la sécurité civile, la Fédération française des sociétés d'assurances et le Centre national de prévention et de protection, édition août 2004)."
-                                },
-                                {
-                                    "links": [],
-                                    "table": null,
-                                    "text": "Les réseaux de collecte des effluents et des eaux pluviales de l'établissement sont équipés de dispositifs d'isolement visant à maintenir toute pollution accidentelle, en cas de sinistre, sur le site. Ces dispositifs sont maintenus en état de marche, signalés et actionnables en toute circonstance localement et à partir d'un poste de commande. Leur entretien et leur mise en fonctionnement sont définis par consigne."
+                                    "text": "Les réseaux de collecte des effluents et des eaux pluviales de l’établissement sont équipés de dispositifs d’isolement visant à maintenir toute pollution accidentelle, en cas de sinistre, sur le site. Ces dispositifs sont maintenus en état de marche, signalés et actionnables en toute circonstance localement et à partir d’un poste de commande. Leur entretien et leur mise en fonctionnement sont définis par consigne."
                                 }
                             ],
                             "reference_str": "Annexe II 11.",
@@ -2727,16 +2507,16 @@
                             "title": {
                                 "links": [],
                                 "table": null,
-                                "text": "11. Eaux d'extinction incendie"
+                                "text": "11. Eaux d’extinction incendie"
                             }
                         },
                         {
                             "annotations": null,
                             "applicability": {
                                 "active": true,
-                                "modified": false,
+                                "modified": true,
                                 "reason_inactive": null,
-                                "reason_modified": null,
+                                "reason_modified": "Le paragraphe est modifié pour les sites installés entre le 30-04-2009 et le 01-07-2017",
                                 "warnings": []
                             },
                             "legifrance_article": null,
@@ -2744,22 +2524,22 @@
                                 {
                                     "links": [],
                                     "table": null,
-                                    "text": "La détection automatique d'incendie avec transmission, en tout temps, de l'alarme à l'exploitant est obligatoire pour les cellules, les locaux techniques et pour les bureaux à proximité des stockages. Cette détection actionne une alarme perceptible en tout point du bâtiment permettant d'assurer l'alerte précoce des personnes présentes sur le site, et déclenche le compartimentage de la ou des cellules sinistrées."
+                                    "text": "La détection automatique d’incendie avec transmission, en tout temps, de l’alarme à l’exploitant est obligatoire pour les cellules, les locaux techniques et pour les bureaux à proximité des stockages. Cette détection actionne une alarme perceptible en tout point du bâtiment permettant d’assurer l’alerte précoce des personnes présentes sur le site."
                                 },
                                 {
                                     "links": [],
                                     "table": null,
-                                    "text": "Le type de détecteur est déterminé en fonction des produits stockés. Cette détection peut être assurée par le système d'extinction automatique s'il est conçu pour cela, à l'exclusion du cas des cellules comportant au moins une mezzanine, pour lesquelles un système de détection dédié et adapté doit être prévu."
+                                    "text": "Le type de détecteur est déterminé en fonction des produits stockés. Cette détection peut être assurée par le système d’extinction automatique s’il est conçu pour cela, à l’exclusion du cas des cellules comportant au moins une mezzanine, pour lesquelles un système de détection dédié et adapté doit être prévu."
                                 },
                                 {
                                     "links": [],
                                     "table": null,
-                                    "text": "Dans tous les cas, l'exploitant s'assure que le système permet une détection de tout départ d'incendie tenant compte de la nature des produits stockés et du mode de stockage."
+                                    "text": "Dans tous les cas, l’exploitant s’assure que le système permet une détection de tout départ d’incendie tenant compte de la nature des produits stockés et du mode de stockage."
                                 },
                                 {
                                     "links": [],
                                     "table": null,
-                                    "text": "Sauf pour les installations soumises à déclaration, l'exploitant inclut dans le dossier prévu au point 1.2 de la présente annexe les documents démontrant la pertinence du dimensionnement retenu pour les dispositifs de détection."
+                                    "text": "Sauf pour les installations soumises à déclaration, l’exploitant inclut dans le dossier prévu au point 1.2 de la présente annexe les documents démontrant la pertinence du dimensionnement retenu pour les dispositifs de détection."
                                 }
                             ],
                             "reference_str": "Annexe II 12.",
@@ -2767,16 +2547,16 @@
                             "title": {
                                 "links": [],
                                 "table": null,
-                                "text": "12. Détection automatique d'incendie"
+                                "text": "12. Détection automatique d’incendie"
                             }
                         },
                         {
                             "annotations": null,
                             "applicability": {
                                 "active": true,
-                                "modified": false,
+                                "modified": true,
                                 "reason_inactive": null,
-                                "reason_modified": null,
+                                "reason_modified": "Le paragraphe est modifié pour les sites installés entre le 30-04-2009 et le 01-07-2017",
                                 "warnings": []
                             },
                             "legifrance_article": null,
@@ -2784,82 +2564,27 @@
                                 {
                                     "links": [],
                                     "table": null,
-                                    "text": "L'installation est dotée de moyens de lutte contre l'incendie appropriés aux risques, notamment :"
+                                    "text": "Le stockage est doté de moyens de lutte contre l'incendie appropriés aux risques et conformes aux normes en vigueur, notamment : "
                                 },
                                 {
                                     "links": [],
                                     "table": null,
-                                    "text": "- d'un ou de plusieurs points d'eau incendie, tels que :"
+                                    "text": "- d'un ou plusieurs appareils d'incendie (prises d'eau, poteaux, par exemple) d'un réseau public ou privé, implantés de telle sorte que, d'une part, tout point de la limite du stockage se trouve à moins de 100 mètres d'un appareil et que, d'autre part, tout point de la limite du stockage se trouve à moins de 200 mètres d'un ou plusieurs appareils permettant de fournir un débit minimal de 60 mètres cubes par heure pendant une durée d'au moins deux heures et dont les prises de raccordement sont conformes aux normes en vigueur pour permettre au service d'incendie et de secours de s'alimenter sur ces appareils. A défaut, une réserve d'eau destinée à l'extinction est accessible en toutes circonstances et à une distance du stockage ayant recueilli l'avis des services départementaux d'incendie et de secours ; "
                                 },
                                 {
                                     "links": [],
                                     "table": null,
-                                    "text": "a. Des prises d'eau, poteaux ou bouches d'incendie normalisés, d'un diamètre nominal adapté au débit à fournir, alimentés par un réseau public ou privé, sous des pressions minimale et maximale permettant la mise en œuvre des pompes des engins de lutte contre l'incendie ;"
+                                    "text": "- d'extincteurs répartis à l'intérieur de l'entrepôt, sur les aires extérieures et dans les lieux présentant des risques spécifiques, à proximité des dégagements, bien visibles et facilement accessibles. Les agents d'extinction sont appropriés aux risques à combattre et compatibles avec les matières stockées ; "
                                 },
                                 {
                                     "links": [],
                                     "table": null,
-                                    "text": "b. Des réserves d'eau, réalimentées ou non, disponibles pour le site et dont les organes de manœuvre sont accessibles en permanence aux services d'incendie et de secours."
+                                    "text": "- de robinets d'incendie armés, répartis dans l'entrepôt en fonction de ses dimensions et situés à proximité des issues. Ils sont disposés de telle sorte qu'un foyer puisse être attaqué simultanément par deux lances sous deux angles différents. Ils sont utilisables en période de gel."
                                 },
                                 {
                                     "links": [],
                                     "table": null,
-                                    "text": "Les prises de raccordement sont conformes aux normes en vigueur pour permettre aux services d'incendie et de secours de s'alimenter sur ces points d'eau incendie."
-                                },
-                                {
-                                    "links": [],
-                                    "table": null,
-                                    "text": "L'accès extérieur de chaque cellule est à moins de 100 mètres d'un point d'eau incendie. Les points d'eau incendie sont distants entre eux de 150 mètres maximum (les distances sont mesurées par les voies praticables aux engins des services d'incendie et de secours) :"
-                                },
-                                {
-                                    "links": [],
-                                    "table": null,
-                                    "text": "- d'extincteurs répartis à l'intérieur de l'entrepôt, sur les aires extérieures et dans les lieux présentant des risques spécifiques, à proximité des dégagements, bien visibles et facilement accessibles. Les agents d'extinction sont appropriés aux risques à combattre et compatibles avec les matières stockées ;"
-                                },
-                                {
-                                    "links": [],
-                                    "table": null,
-                                    "text": "- de robinets d'incendie armés, situés à proximité des issues. Ils sont disposés de telle sorte qu'un foyer puisse être attaqué simultanément par deux lances sous deux angles différents. Ils sont utilisables en période de gel ; ce point n'est pas applicable pour les cellules ou parties de cellules dont le stockage est totalement automatisé ;"
-                                },
-                                {
-                                    "links": [],
-                                    "table": null,
-                                    "text": "- le cas échéant, les colonnes sèches ou les moyens fixes d'aspersion d'eau prévus au point 6 de cette annexe."
-                                },
-                                {
-                                    "links": [],
-                                    "table": null,
-                                    "text": "Les points d'eau incendie sont en mesure de fournir un débit minimum de 60 mètres cubes par heure durant deux heures."
-                                },
-                                {
-                                    "links": [],
-                                    "table": null,
-                                    "text": "Le débit et la quantité d'eau nécessaires sont calculés conformément au document technique D9 (guide pratique pour le dimensionnement des besoins en eau de l'Institut national d'études de la sécurité civile, la Fédération française des sociétés d'assurances et le Centre national de prévention et de protection, édition septembre 2001, sans toutefois dépasser 720 m3/h durant 2 heures."
-                                },
-                                {
-                                    "links": [],
-                                    "table": null,
-                                    "text": "Le débit et la quantité d'eau nécessaires peuvent toutefois être inférieurs à ceux calculés par l'application du document technique D9, sous réserve qu'une étude spécifique démontre leur caractère suffisant au regard des objectifs visés à l'article 1er. La justification pourra prévoir un recyclage d'une partie des eaux d'extinction d'incendie, sous réserve de l'absence de stockage de produits dangereux ou corrosifs dans la zone concernée par l'incendie. A cet effet, des aires de stationnement des engins d'incendie, accessibles en permanence aux services d'incendie et de secours, respectant les dispositions prévues au 3.3.2, sont disposées aux abords immédiats de la capacité de rétention des eaux d'extinction d'incendie."
-                                },
-                                {
-                                    "links": [],
-                                    "table": null,
-                                    "text": "L'exploitant joint au dossier prévu à l'article 1.2 de la présente annexe la justification de la disponibilité effective des débits et le cas échéant des réserves d'eau, au plus tard trois mois après la mise en service de l'installation."
-                                },
-                                {
-                                    "links": [],
-                                    "table": null,
-                                    "text": "En cas d'installation de systèmes d'extinction automatique d'incendie, ceux-ci sont conçus, installés et entretenus régulièrement conformément aux référentiels reconnus. L'efficacité de cette installation est qualifiée et vérifiée par des organismes reconnus compétents dans le domaine de l'extinction automatique ; la qualification précise que l'installation est adaptée aux produits stockés et à leurs conditions de stockage."
-                                },
-                                {
-                                    "links": [],
-                                    "table": null,
-                                    "text": "L'installation est dotée d'un moyen permettant d'alerter les services d'incendie et de secours."
-                                },
-                                {
-                                    "links": [],
-                                    "table": null,
-                                    "text": "Dans le trimestre qui suit le début de l'exploitation de tout entrepôt soumis à enregistrement ou à autorisation, l'exploitant organise un exercice de défense contre l'incendie. Cet exercice est renouvelé au moins tous les trois ans."
+                                    "text": "L'exploitant est en mesure de justifier au préfet la disponibilité effective des débits d'eau ainsi que le dimensionnement de l'éventuelle réserve d'eau prévu au deuxième alinéa du présent point. En cas d'installation de systèmes d'extinction automatique d'incendie, ceux-ci sont conçus, installés et entretenus régulièrement conformément aux référentiels reconnus."
                                 }
                             ],
                             "reference_str": "Annexe II 13.",
@@ -2867,35 +2592,20 @@
                             "title": {
                                 "links": [],
                                 "table": null,
-                                "text": "13. Moyens de lutte contre l'incendie"
+                                "text": "13. Moyens de lutte contre l’incendie"
                             }
                         },
                         {
                             "annotations": null,
                             "applicability": {
                                 "active": true,
-                                "modified": false,
+                                "modified": true,
                                 "reason_inactive": null,
-                                "reason_modified": null,
+                                "reason_modified": "Le paragraphe n'est pas applicable pour les sites installés entre le 30-04-2009 et le 01-07-2017 (3 alineas ne s'appliquent pas.)",
                                 "warnings": []
                             },
                             "legifrance_article": null,
                             "outer_alineas": [
-                                {
-                                    "links": [],
-                                    "table": null,
-                                    "text": "Conformément aux dispositions du code du travail, les parties de l'entrepôt dans lesquelles il peut y avoir présence de personnel comportent des dégagements permettant une évacuation rapide."
-                                },
-                                {
-                                    "links": [],
-                                    "table": null,
-                                    "text": "En outre, le nombre minimal de ces dégagements permet que tout point de l'entrepôt ne soit pas distant de plus de 75 mètres effectifs (parcours d'une personne dans les allées) d'un espace protégé, et 25 mètres dans les parties de l'entrepôt formant cul-de-sac."
-                                },
-                                {
-                                    "links": [],
-                                    "table": null,
-                                    "text": "Deux issues au moins, vers l'extérieur de l'entrepôt ou sur un espace protégé, dans deux directions opposées, sont prévues dans chaque cellule de stockage d'une surface supérieure à 1 000 m2. En présence de personnel, ces issues ne sont pas verrouillées et sont facilement manœuvrables."
-                                },
                                 {
                                     "links": [],
                                     "table": null,
@@ -2914,9 +2624,9 @@
                             "annotations": null,
                             "applicability": {
                                 "active": true,
-                                "modified": false,
+                                "modified": true,
                                 "reason_inactive": null,
-                                "reason_modified": null,
+                                "reason_modified": "Le paragraphe n'est pas applicable pour les sites installés entre le 30-04-2009 et le 01-07-2017 (1 alineas ne s'appliquent pas.)",
                                 "warnings": []
                             },
                             "legifrance_article": null,
@@ -2931,11 +2641,6 @@
                                     ],
                                     "table": null,
                                     "text": "Conformément aux dispositions du code du travail, les installations électriques sont réalisées, entretenues en bon état et vérifiées."
-                                },
-                                {
-                                    "links": [],
-                                    "table": null,
-                                    "text": "A proximité d'au moins une issue, est installé un interrupteur central, bien signalé, permettant de couper l'alimentation électrique générale ou de chaque cellule."
                                 },
                                 {
                                     "links": [],
@@ -3004,9 +2709,9 @@
                         {
                             "annotations": null,
                             "applicability": {
-                                "active": true,
+                                "active": false,
                                 "modified": false,
-                                "reason_inactive": null,
+                                "reason_inactive": "Le paragraphe n'est pas applicable pour les sites installés entre le 30-04-2009 et le 01-07-2017",
                                 "reason_modified": null,
                                 "warnings": []
                             },
@@ -3742,9 +3447,9 @@
                                 {
                                     "annotations": null,
                                     "applicability": {
-                                        "active": true,
+                                        "active": false,
                                         "modified": false,
-                                        "reason_inactive": null,
+                                        "reason_inactive": "Le paragraphe ne s'applique qu'aux installations soumises à enregistrement ou à autorisation.",
                                         "reason_modified": null,
                                         "warnings": []
                                     },

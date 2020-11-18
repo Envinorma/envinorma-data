@@ -1448,9 +1448,9 @@
                                 {
                                     "annotations": null,
                                     "applicability": {
-                                        "active": true,
+                                        "active": false,
                                         "modified": false,
-                                        "reason_inactive": null,
+                                        "reason_inactive": "Le paragraphe ne s'applique qu'aux installations soumises à déclaration.",
                                         "reason_modified": null,
                                         "warnings": []
                                     },
@@ -1473,7 +1473,7 @@
                                         {
                                             "annotations": null,
                                             "applicability": {
-                                                "active": true,
+                                                "active": false,
                                                 "modified": false,
                                                 "reason_inactive": null,
                                                 "reason_modified": null,
@@ -1519,7 +1519,7 @@
                                         {
                                             "annotations": null,
                                             "applicability": {
-                                                "active": true,
+                                                "active": false,
                                                 "modified": false,
                                                 "reason_inactive": null,
                                                 "reason_modified": null,
@@ -1544,7 +1544,7 @@
                                         {
                                             "annotations": null,
                                             "applicability": {
-                                                "active": true,
+                                                "active": false,
                                                 "modified": false,
                                                 "reason_inactive": null,
                                                 "reason_modified": null,
@@ -1569,7 +1569,7 @@
                                         {
                                             "annotations": null,
                                             "applicability": {
-                                                "active": true,
+                                                "active": false,
                                                 "modified": false,
                                                 "reason_inactive": null,
                                                 "reason_modified": null,
@@ -1605,7 +1605,7 @@
                                         {
                                             "annotations": null,
                                             "applicability": {
-                                                "active": true,
+                                                "active": false,
                                                 "modified": false,
                                                 "reason_inactive": null,
                                                 "reason_modified": null,
@@ -1630,7 +1630,7 @@
                                         {
                                             "annotations": null,
                                             "applicability": {
-                                                "active": true,
+                                                "active": false,
                                                 "modified": false,
                                                 "reason_inactive": null,
                                                 "reason_modified": null,
@@ -1717,9 +1717,9 @@
                                 {
                                     "annotations": null,
                                     "applicability": {
-                                        "active": true,
+                                        "active": false,
                                         "modified": false,
-                                        "reason_inactive": null,
+                                        "reason_inactive": "Le paragraphe ne s'applique qu'aux installations soumises à déclaration.",
                                         "reason_modified": null,
                                         "warnings": []
                                     },

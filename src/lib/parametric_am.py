@@ -96,12 +96,16 @@ class OrCondition:
 def parameter_value_to_dict(value: Any, type_: ParameterType) -> Any:
     if type_ == ParameterType.DATE:
         return int(value.timestamp())
+    if type_ == ParameterType.REGIME:
+        return value.value
     return value
 
 
 def load_target(json_value: Any, type_: ParameterType) -> Any:
     if type_ == ParameterType.DATE:
         return datetime.fromtimestamp(json_value)
+    if type_ == ParameterType.REGIME:
+        return Regime(json_value)
     return json_value
 
 
@@ -714,7 +718,9 @@ def _apply_satisfied_modificators(
 ) -> StructuredText:
     if non_applicable_conditions and alternative_sections:
         raise NotImplementedError(
-            f'Cannot apply conditions and alternative sections on one section. (Section title: {text.title.text})'
+            f'Cannot apply conditions and alternative sections on one section. (Section title: {text.title.text})\n'
+            f'Non applicable condition: {non_applicable_conditions[0].condition}\n'
+            f'Modification condition: {alternative_sections[0].condition}\n'
         )
     if alternative_sections:
         if len(alternative_sections) > 1:
@@ -736,7 +742,6 @@ def _apply_satisfied_modificators(
 def _apply_parameter_values_in_text(
     text: StructuredText, parametrization: Parametrization, parameter_values: Dict[Parameter, Any], path: Ints
 ) -> StructuredText:
-
     na_conditions, warnings_1 = _keep_satisfied_conditions(
         parametrization.path_to_conditions.get(path) or [], parameter_values
     )

@@ -395,9 +395,9 @@ def build_1510_parametrization() -> Parametrization:
     alternative_texts = []
 
     regime = Parameter('regime', ParameterType.REGIME)
-    is_autorisation = Equal(regime, Regime.A.value)
-    is_enregistrement = Equal(regime, Regime.E.value)
-    is_declaration = Equal(regime, Regime.D.value)
+    is_autorisation = Equal(regime, Regime.A)
+    is_enregistrement = Equal(regime, Regime.E)
+    is_declaration = Equal(regime, Regime.D)
     date = ParameterEnum.DATE_INSTALLATION.value
     date_2003 = datetime(2003, 7, 1)
     date_2009 = datetime(2009, 4, 30)
@@ -642,12 +642,12 @@ def build_1510_parametrization() -> Parametrization:
                 _ref,
                 condition_8,
                 ConditionSource('Mentionné dans l\'article.', _ref),
-                description='''Le paragraphe ne s\'applique qu'aux installations soumises à enregistrement ou à autorisation.''',
+                description='''Le paragraphe ne s\'applique qu'aux installations soumises à déclaration.''',
             )
         )
 
     condition_9 = is_declaration
-    not_applicable_9 = [(tuple([8, 1, 11]), [3]), (tuple([8, 1, 23, 2]), None), (tuple([8, 1, 1, 0]), None)]
+    not_applicable_9 = [(tuple([8, 1, 23, 2]), None), (tuple([8, 1, 1, 0]), None)]
     for na_sec, na_als in not_applicable_9:
         _ref = EntityReference(SectionReference(na_sec), na_als)
         application_conditions.append(
@@ -655,7 +655,7 @@ def build_1510_parametrization() -> Parametrization:
                 _ref,
                 condition_9,
                 ConditionSource('Mentionné dans l\'article.', _ref),
-                description='''Le paragraphe ne s\'applique qu'aux installations soumises à déclaration.''',
+                description='''Le paragraphe ne s\'applique qu'aux installations soumises à enregistrement ou à autorisation.''',
             )
         )
 
