@@ -144,7 +144,7 @@ def enrich_TREP1900331A(am: ArreteMinisteriel) -> ArreteMinisteriel:
 # _handle_nor('TREP1900331A', _build_TREP1900331A_parametrization(), enrich_TREP1900331A)
 
 
-# DEVP1329353A PAS LE BON AM!
+# DEVP1329353A [Not the right AM]
 
 
 def _build_DEVP1329353A_parametrization() -> Parametrization:
@@ -209,7 +209,7 @@ def enrich_DEVP1329353A(am: ArreteMinisteriel) -> ArreteMinisteriel:
 # _handle_nor('DEVP1329353A', _build_DEVP1329353A_parametrization(), enrich_DEVP1329353A)
 
 
-# DEVP1235896A
+# DEVP1235896A [Not the right AM]
 def _build_DEVP1235896A_parametrization() -> Parametrization:
     description = (
         f'''Le paragraphe ne s'applique qu'aux sites dont la date d'installation est postérieure au 26/11/2012.'''
@@ -384,5 +384,49 @@ def enrich_ATEP9760292A(am: ArreteMinisteriel) -> ArreteMinisteriel:
 
 
 # _handle_nor('ATEP9760292A', _build_ATEP9760292A_parametrization(), enrich_ATEP9760292A)
+
+
+def _build_ATEP9760290A_parametrization() -> Parametrization:
+    return Parametrization([], alternative_sections=[])  # All is applicable
+
+
+def enrich_ATEP9760290A(am: ArreteMinisteriel) -> ArreteMinisteriel:
+    topics: Dict[Ints, Topic] = {
+        (4, 0, 4): Topic.EAU,
+        (4, 0, 4, 0): Topic.EAU,
+        (4, 0, 4, 1): Topic.EAU,
+        (4, 0, 4, 2): Topic.EAU,
+        (4, 0, 4, 3): Topic.EAU,
+        (4, 0, 4, 4): Topic.EAU,
+        (4, 0, 4, 4, 0): Topic.EAU,
+        (4, 0, 4, 4, 1): Topic.EAU,
+        (4, 0, 4, 4, 2): Topic.EAU,
+        (4, 0, 4, 5): Topic.EAU,
+        (4, 0, 4, 6): Topic.EAU,
+        (4, 0, 4, 7): Topic.EAU,
+        (4, 0, 4, 8): Topic.EAU,
+        (4, 0, 5): Topic.EAU,
+        (4, 0, 5, 0): Topic.EAU,
+        (4, 0, 5, 1): Topic.EAU,
+        (4, 0, 5, 2): Topic.EAU,
+        (4, 0, 5, 3): Topic.EAU,
+        (4, 0, 6): Topic.DECHETS,
+        (4, 0, 6, 0): Topic.DECHETS,
+        (4, 0, 6, 1): Topic.DECHETS,
+        (4, 0, 6, 2): Topic.DECHETS,
+        (4, 0, 6, 3): Topic.DECHETS,
+        (4, 0, 6, 4): Topic.DECHETS,
+        (4, 0, 7): Topic.BRUIT,
+        (4, 0, 7, 0): Topic.BRUIT,
+        (4, 0, 7, 1): Topic.BRUIT,
+        (4, 0, 7, 2): Topic.BRUIT,
+        (4, 0, 7, 3): Topic.BRUIT,
+    }
+    non_prescriptive: Set[Ints] = {(0,), (1,), (2,), (3,), (4, 1)}
+    with_topics = add_topics(am, topics)
+    return remove_null_applicabilities(remove_prescriptive_power(with_topics, non_prescriptive))
+
+
+# _handle_nor('ATEP9760290A', _build_ATEP9760290A_parametrization(), enrich_ATEP9760290A)
 
 # _handle_nor('DEVP1706393A', build_1510_parametrization(), lambda x: x, generate_1510_combinations())
