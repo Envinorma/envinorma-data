@@ -1,14 +1,12 @@
 from datetime import datetime
+from lib.parametrization import ConditionSource, EntityReference, SectionReference
 from typing import Dict, List, Optional, Tuple
 
-from lib.data import EnrichedString, StructuredText
-from lib.compute_properties import Regime
+from lib.data import EnrichedString, Regime, StructuredText
 from lib.parametric_am import (
     AlternativeSection,
     AndCondition,
     NonApplicationCondition,
-    ConditionSource,
-    EntityReference,
     Equal,
     Littler,
     OrCondition,
@@ -18,7 +16,6 @@ from lib.parametric_am import (
     ParameterType,
     Parametrization,
     Range,
-    SectionReference,
     Combinations,
 )
 

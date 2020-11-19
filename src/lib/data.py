@@ -313,3 +313,24 @@ class LinkReference:
     reference: str
     target: str
     text: str
+
+
+def check_enriched_string(str_: EnrichedString) -> None:
+    if not isinstance(str_, EnrichedString):
+        raise ValueError(f'Expecting EnrichedString, found {str_}')
+
+
+def check_structured_text(text: StructuredText) -> None:
+    check_enriched_string(text.title)
+    for al in text.outer_alineas:
+        check_enriched_string(al)
+    for section in text.sections:
+        check_structured_text(section)
+
+
+def check_am(am: ArreteMinisteriel):
+    check_enriched_string(am.title)
+    for vu in am.visa:
+        check_enriched_string(vu)
+    for section in am.sections:
+        check_structured_text(section)

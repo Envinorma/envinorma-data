@@ -1,17 +1,15 @@
-from lib.compute_properties import Regime
+from lib.parametrization import ConditionSource, EntityReference, SectionReference
 import random
 from copy import copy
 from datetime import datetime, timedelta
 from string import ascii_letters
 from typing import List
 
-from lib.data import ArreteMinisteriel, EnrichedString, StructuredText
-from lib.parametric_am import (
+from lib.data import ArreteMinisteriel, EnrichedString, Regime, StructuredText
+from lib.parametrization import (
     AlternativeSection,
     AndCondition,
     NonApplicationCondition,
-    ConditionSource,
-    EntityReference,
     Equal,
     Greater,
     Littler,
@@ -21,8 +19,9 @@ from lib.parametric_am import (
     Parametrization,
     Range,
     Parameter,
-    SectionReference,
     Condition,
+)
+from lib.parametric_am import (
     generate_all_am_versions,
     _mean,
     _is_satisfied,

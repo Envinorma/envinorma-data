@@ -159,11 +159,11 @@ def extract_all_anchors_from_aida(document_id: str) -> List[Anchor]:
 
 def add_links_in_section(section: StructuredText, str_to_target: Dict[str, str]) -> StructuredText:
     section_copy = copy(section)
-    section_copy.title = (add_links_in_enriched_string(section.title, str_to_target),)
-    section_copy.outer_alineas = (
-        [add_links_in_enriched_string(alinea, str_to_target) for alinea in section.outer_alineas],
-    )
-    section_copy.sections = ([add_links_in_section(subsection, str_to_target) for subsection in section.sections],)
+    section_copy.title = add_links_in_enriched_string(section.title, str_to_target)
+    section_copy.outer_alineas = [
+        add_links_in_enriched_string(alinea, str_to_target) for alinea in section.outer_alineas
+    ]
+    section_copy.sections = [add_links_in_section(subsection, str_to_target) for subsection in section.sections]
     return section_copy
 
 

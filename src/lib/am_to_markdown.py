@@ -1,7 +1,9 @@
 import json
 from enum import Enum
 from collections import Counter
-from typing import Dict, List, Optional, TypeVar
+from lib.data import check_am
+from lib.parametrization import Parametrization, parametrization_to_markdown
+from typing import Dict, List, Optional, Set, TypeVar
 from tqdm import tqdm
 
 from lib.am_structure_extraction import (
@@ -336,15 +338,18 @@ def properties_to_markdown(properties: TextProperties) -> str:
 '''
 
 
-def generate_header_md(title: str) -> str:
+def generate_header_md(title: str, nor) -> str:
     return f'''
 # {title}
 
+[Versions paramétrées](parametrization/{nor}.md)
 '''
 
 
-def am_and_properties_to_markdown(am: ArreteMinisteriel, properties: Optional[TextProperties]) -> str:
-    header_md = generate_header_md(am.title.text)
+def am_and_properties_to_markdown(
+    am: ArreteMinisteriel, properties: Optional[TextProperties], metadata: AMMetadata
+) -> str:
+    header_md = generate_header_md(am.title.text, metadata.nor)
     props_md = properties_to_markdown(properties) if properties else ''
     am_md = am_to_markdown(am, with_links=True)
     return '\n\n'.join([header_md, props_md, am_md])
@@ -375,13 +380,72 @@ def generate_am_markdown(
     if not am:
         return f"# {metadata.short_title}\n\nError in computation"
     am = add_aida_links_to_am(metadata, am, data)
-    return am_and_properties_to_markdown(am, log.properties)
+    check_am(am)
+    return am_and_properties_to_markdown(am, log.properties, metadata)
 
 
-def generate_all_markdown(output_folder: str = '/Users/remidelbouys/EnviNorma/envinorma.github.io') -> None:
-    data, cid_to_log, cid_to_am = handle_all_am()
-    dump_md(generate_index(data.arretes_ministeriels, cid_to_log), f'{output_folder}/index.md')
-    for metadata in tqdm(data.arretes_ministeriels.metadata, 'Genrating markdown'):
+def _parametrization_section(parametrization: Parametrization) -> str:
+    return f'''
+# Paramétrisation
+
+{parametrization_to_markdown(parametrization)}
+'''
+
+
+def _diff_md(diff: List[str]) -> str:
+    code = '\n'.join(diff) or 'Pas de différences.'
+    return f'```\n{code}\n```'
+
+
+def _diffs_section(diffs: Dict[str, List[str]]) -> str:
+    return '\n\n'.join(
+        [
+            '# Différences par rapport à l\'arrêté d\'origine',
+            *[f'## {title}\n\n{_diff_md(diff)}' for title, diff in diffs.items()],
+        ]
+    )
+
+
+def generate_parametric_am_markdown(
+    am: ArreteMinisteriel, metadata: AMMetadata, parametrization: Parametrization, diffs: Dict[str, List[str]]
+) -> str:
+    header_md = generate_header_md(am.title.text, metadata.nor)
+    parametrization_md = _parametrization_section(parametrization)
+    diffs_md = _diffs_section(diffs)
+    return '\n\n'.join([header_md, parametrization_md, diffs_md])
+
+
+_GITHUB_IO = '/Users/remidelbouys/EnviNorma/envinorma.github.io'
+
+
+def generate_all_markdown(output_folder: str = _GITHUB_IO, am_cids: Optional[Set[str]] = None) -> None:
+    am_cids = am_cids or set()
+    data, cid_to_log, cid_to_am, cid_to_param = handle_all_am(
+        am_cids=am_cids, with_manual_enrichments=len(am_cids) != 0
+    )
+    if not am_cids:  # We just want to generate specific pages
+        dump_md(generate_index(data.arretes_ministeriels, cid_to_log), f'{output_folder}/index.md')
+    for metadata in tqdm(data.arretes_ministeriels.metadata, 'Generating markdown'):
+        if metadata.cid not in am_cids:
+            continue
         id_ = get_text_defined_id(metadata)
         cid = metadata.cid
         dump_md(generate_am_markdown(data, metadata, cid_to_log[cid], cid_to_am.get(cid)), f'{output_folder}/{id_}.md')
+        if cid in cid_to_am and cid in cid_to_param:
+            dump_md(
+                generate_parametric_am_markdown(cid_to_am[cid], metadata, *cid_to_param[cid]),
+                f'{output_folder}/parametrization/{id_}.md',
+            )
+
+
+if __name__ == '__main__':
+    generate_all_markdown(
+        am_cids={
+            'JORFTEXT000026694913',
+            'JORFTEXT000034429274',
+            'JORFTEXT000028379599',
+            'JORFTEXT000038358856',
+            'JORFTEXT000000552021',
+            'JORFTEXT000000369330',
+        }
+    )
