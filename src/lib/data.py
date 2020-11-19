@@ -92,6 +92,13 @@ class Row:
 class Table:
     rows: List[Row]
 
+    def to_dict(self) -> Dict[str, Any]:
+        return asdict(self)
+
+    @classmethod
+    def from_dict(cls, dict_: Dict) -> 'Table':
+        return Table([load_row(row) for row in dict_['rows']])
+
 
 def empty_link_list() -> List[Link]:
     return []
@@ -143,7 +150,7 @@ class Annotations:
     @classmethod
     def from_dict(cls, dict_: Dict) -> 'Annotations':
         new_dict = dict_.copy()
-        new_dict['topic'] = Topic(dict_['topic'])
+        new_dict['topic'] = Topic(dict_['topic']) if dict_['topic'] else None
         return Annotations(**new_dict)
 
 
@@ -164,6 +171,22 @@ class StructuredText:
         res['applicability'] = self.applicability.as_dict() if self.applicability else None
         res['annotations'] = self.annotations.as_dict() if self.annotations else None
         return res
+
+    def to_dict(self) -> Dict[str, Any]:
+        return self.as_dict()
+
+    @classmethod
+    def from_dict(cls, dict_: Dict[str, Any]):
+        dict_ = dict_.copy()
+        dict_['title'] = load_enriched_string(dict_['title'])
+        dict_['outer_alineas'] = [load_enriched_string(al) for al in dict_['outer_alineas']]
+        dict_['sections'] = [load_structured_text(sec) for sec in dict_['sections']]
+        dict_['legifrance_article'] = (
+            load_legifrance_article(dict_['legifrance_article']) if dict_['legifrance_article'] else None
+        )
+        dict_['applicability'] = Applicability.from_dict(dict_['applicability']) if dict_.get('applicability') else None
+        dict_['annotations'] = Annotations.from_dict(dict_['annotations']) if dict_.get('annotations') else None
+        return StructuredText(**dict_)
 
 
 @dataclass
@@ -189,6 +212,9 @@ class ArreteMinisteriel:
     installation_date_criterion: Optional[DateCriterion] = None
     aida_url: Optional[str] = None
     legifrance_url: Optional[str] = None
+
+    def to_dict(self) -> Dict[str, Any]:
+        return self.as_dict()
 
     def as_dict(self) -> Dict[str, Any]:
         res = asdict(self)
@@ -221,7 +247,7 @@ def load_row(dict_: Dict[str, Any]) -> Row:
 
 
 def load_table(dict_: Dict[str, Any]) -> Table:
-    return Table([load_row(row) for row in dict_['rows']])
+    return Table.from_dict(dict_)
 
 
 def load_enriched_string(dict_: Dict[str, Any]) -> EnrichedString:
@@ -237,12 +263,7 @@ def load_legifrance_article(dict_: Dict[str, Any]) -> LegifranceArticle:
 
 
 def load_structured_text(dict_: Dict[str, Any]) -> StructuredText:
-    title = load_enriched_string(dict_['title'])
-    outer_alineas = [load_enriched_string(al) for al in dict_['outer_alineas']]
-    sections = [load_structured_text(sec) for sec in dict_['sections']]
-    legifrance_article = load_legifrance_article(dict_['legifrance_article']) if dict_['legifrance_article'] else None
-    applicability = Applicability.from_dict(dict_['applicability']) if dict_.get('applicability') else None
-    return StructuredText(title, outer_alineas, sections, legifrance_article, applicability)
+    return StructuredText.from_dict(dict_)
 
 
 def load_arrete_ministeriel(dict_: Dict[str, Any]) -> ArreteMinisteriel:
