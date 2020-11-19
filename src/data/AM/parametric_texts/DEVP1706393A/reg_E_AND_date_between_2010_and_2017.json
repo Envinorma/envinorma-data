@@ -19,6 +19,12 @@
             "regime": "E",
             "rubrique": "1510",
             "state": "ACTIVE"
+        },
+        {
+            "alinea": null,
+            "regime": "D",
+            "rubrique": "1510",
+            "state": "ACTIVE"
         }
     ],
     "installation_date_criterion": {
