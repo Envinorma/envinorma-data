@@ -1,6 +1,14 @@
 {
     "aida_url": "https://aida.ineris.fr/consultation_document/22367",
     "applicability": null,
+    "classements": [
+        {
+            "alinea": null,
+            "regime": "E",
+            "rubrique": "2515",
+            "state": "ACTIVE"
+        }
+    ],
     "installation_date_criterion": null,
     "legifrance_url": "https://www.legifrance.gouv.fr/loda/id/JORFTEXT000026694913",
     "sections": [

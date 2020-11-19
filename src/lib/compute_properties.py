@@ -11,6 +11,7 @@ from requests_oauthlib import OAuth2Session
 from tqdm import tqdm
 
 from lib.aida import Hyperlink, Anchor
+from lib.data import Classement, Regime, ClassementState
 from lib.legifrance_API import get_current_loda_via_cid_response, get_legifrance_client
 from lib.texts_properties import LegifranceText, TextProperties, compute_properties
 from lib.am_structure_extraction import (
@@ -20,27 +21,6 @@ from lib.am_structure_extraction import (
     check_legifrance_dict,
     AMStructurationError,
 )
-
-
-class Regime(Enum):
-    A = 'A'
-    E = 'E'
-    D = 'D'
-    DC = 'DC'
-    NC = 'NC'
-
-
-class ClassementState(Enum):
-    ACTIVE = 'ACTIVE'
-    SUPPRIMEE = 'SUPPRIMEE'
-
-
-@dataclass
-class Classement:
-    rubrique: int
-    regime: Regime
-    alinea: Optional[str] = None
-    state: Optional[ClassementState] = None
 
 
 class AMState(Enum):
@@ -79,14 +59,6 @@ class Data:
     arretes_ministeriels: AMData
 
 
-def load_classement(classement: Dict) -> Classement:
-    dict_copy = classement.copy()
-    dict_copy['regime'] = Regime(dict_copy['regime'])
-    dict_copy['alinea'] = dict_copy.get('alinea')
-    dict_copy['state'] = ClassementState(classement['state']) if 'state' in classement else None
-    return Classement(**dict_copy)
-
-
 def parse_aida_title_date(date_str: str) -> int:
     return int(datetime.strptime(date_str, '%d/%m/%y').timestamp())
 
@@ -95,7 +67,7 @@ def load_am_metadata(dict_: Dict) -> AMMetadata:
     dict_copy = dict_.copy()
     dict_copy['aida_page'] = str(dict_copy['aida_page'])
     dict_copy['state'] = AMState(dict_copy['state'])
-    dict_copy['classements'] = [load_classement(classement) for classement in dict_['classements']]
+    dict_copy['classements'] = [Classement.from_dict(classement) for classement in dict_['classements']]
     return AMMetadata(**dict_copy)
 
 
@@ -209,6 +181,7 @@ def _add_metadata(am: ArreteMinisteriel, metadata: AMMetadata) -> ArreteMinister
     am = copy(am)
     am.legifrance_url = _build_legifrance_url(metadata.cid)
     am.aida_url = _build_aida_url(metadata.aida_page)
+    am.classements = metadata.classements
     return am
 
 
@@ -227,7 +200,7 @@ def handle_am(
     if am:
         am = _add_metadata(am, metadata)
     if dump_am and am:
-        write_json(am.as_dict(), _get_structured_am_filename(metadata))
+        write_json(am.to_dict(), _get_structured_am_filename(metadata))
     properties = compute_properties(legifrance_text, am)
     return am, AMStructurationLog(api_result, lf_format_error, structuration_error, properties)
 
@@ -242,13 +215,18 @@ def write_json(obj: Union[Dict, List], filename: str, safe: bool = False) -> Non
             print(traceback.format_exc())
 
 
-def handle_all_am(dump_log: bool = True) -> Tuple[Data, Dict[str, AMStructurationLog], Dict[str, ArreteMinisteriel]]:
+def handle_all_am(
+    dump_log: bool = True, dump_am: bool = False, cid_list: Optional[List[str]] = None
+) -> Tuple[Data, Dict[str, AMStructurationLog], Dict[str, ArreteMinisteriel]]:
     data = load_data()
     cid_to_log: Dict[str, AMStructurationLog] = {}
     cid_to_am: Dict[str, ArreteMinisteriel] = {}
     client = get_legifrance_client()
+    cid_set = set(cid_list) if cid_list else set()
     for metadata in tqdm(data.arretes_ministeriels.metadata, 'Processsing AM...'):
-        am, cid_to_log[metadata.cid] = handle_am(metadata, client)
+        if cid_set and metadata.cid not in cid_set:
+            continue
+        am, cid_to_log[metadata.cid] = handle_am(metadata, client, dump_am)
         if am:
             cid_to_am[metadata.cid] = am
     if dump_log:

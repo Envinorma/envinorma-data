@@ -7,6 +7,14 @@
         "reason_modified": null,
         "warnings": []
     },
+    "classements": [
+        {
+            "alinea": null,
+            "regime": "E",
+            "rubrique": "2521",
+            "state": "ACTIVE"
+        }
+    ],
     "installation_date_criterion": {
         "left_date": "2019-04-09",
         "right_date": null

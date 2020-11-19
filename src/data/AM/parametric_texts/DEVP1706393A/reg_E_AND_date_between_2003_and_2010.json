@@ -7,6 +7,20 @@
         "reason_modified": null,
         "warnings": []
     },
+    "classements": [
+        {
+            "alinea": null,
+            "regime": "A",
+            "rubrique": "1510",
+            "state": "ACTIVE"
+        },
+        {
+            "alinea": null,
+            "regime": "E",
+            "rubrique": "1510",
+            "state": "ACTIVE"
+        }
+    ],
     "installation_date_criterion": {
         "left_date": "2003-07-01",
         "right_date": "2009-04-30"

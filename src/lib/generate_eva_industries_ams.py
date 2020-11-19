@@ -53,13 +53,13 @@ def _handle_nor(
 ):
     am = _generate_structured_am(nor)
     enriched_am = add_references(enricher(am))
-    write_json(enriched_am.as_dict(), f'data/AM/enriched_texts/{nor}.json')
+    write_json(enriched_am.to_dict(), f'data/AM/enriched_texts/{nor}.json')
     write_json(parametrization.to_dict(), f'data/AM/parametrizations/{nor}.json')
     all_versions = generate_all_am_versions(enriched_am, parametrization, combinations)
 
     for version_desc, version in all_versions.items():
         filename = f'data/AM/parametric_texts/{nor}/' + _generate_filename(version_desc) + '.json'
-        write_json(version.as_dict(), filename)
+        write_json(version.to_dict(), filename)
 
 
 # TREP1900331A
@@ -430,3 +430,4 @@ def enrich_ATEP9760290A(am: ArreteMinisteriel) -> ArreteMinisteriel:
 # _handle_nor('ATEP9760290A', _build_ATEP9760290A_parametrization(), enrich_ATEP9760290A)
 
 # _handle_nor('DEVP1706393A', build_1510_parametrization(), lambda x: x, generate_1510_combinations())
+

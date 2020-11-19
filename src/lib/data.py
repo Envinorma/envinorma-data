@@ -25,7 +25,7 @@ class LegifranceArticle:
     num: Optional[str]
     etat: ArticleStatus
 
-    def as_dict(self):
+    def to_dict(self):
         return {
             'id': self.id,
             'content': self.content,
@@ -119,7 +119,7 @@ class Applicability:
     reason_modified: Optional[str] = None
     warnings: List[str] = field(default_factory=list)
 
-    def as_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> Dict[str, Any]:
         return asdict(self)
 
     @classmethod
@@ -141,7 +141,7 @@ class Annotations:
     prescriptive: bool = True
     guide: Optional[str] = None
 
-    def as_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> Dict[str, Any]:
         res = asdict(self)
         if self.topic:
             res['topic'] = self.topic.value
@@ -164,16 +164,13 @@ class StructuredText:
     reference_str: Optional[str] = None
     annotations: Optional[Annotations] = None
 
-    def as_dict(self) -> Dict[str, Any]:
-        res = asdict(self)
-        res['sections'] = [se.as_dict() for se in self.sections]
-        res['legifrance_article'] = self.legifrance_article.as_dict() if self.legifrance_article else None
-        res['applicability'] = self.applicability.as_dict() if self.applicability else None
-        res['annotations'] = self.annotations.as_dict() if self.annotations else None
-        return res
-
     def to_dict(self) -> Dict[str, Any]:
-        return self.as_dict()
+        res = asdict(self)
+        res['sections'] = [se.to_dict() for se in self.sections]
+        res['legifrance_article'] = self.legifrance_article.to_dict() if self.legifrance_article else None
+        res['applicability'] = self.applicability.to_dict() if self.applicability else None
+        res['annotations'] = self.annotations.to_dict() if self.annotations else None
+        return res
 
     @classmethod
     def from_dict(cls, dict_: Dict[str, Any]):
@@ -202,6 +199,41 @@ class DateCriterion:
         return DateCriterion(**dict_)
 
 
+class Regime(Enum):
+    A = 'A'
+    E = 'E'
+    D = 'D'
+    DC = 'DC'
+    NC = 'NC'
+
+
+class ClassementState(Enum):
+    ACTIVE = 'ACTIVE'
+    SUPPRIMEE = 'SUPPRIMEE'
+
+
+@dataclass
+class Classement:
+    rubrique: int
+    regime: Regime
+    alinea: Optional[str] = None
+    state: ClassementState = ClassementState.ACTIVE
+
+    @staticmethod
+    def from_dict(dict_: Dict[str, Any]) -> 'Classement':
+        dict_ = dict_.copy()
+        dict_['regime'] = Regime(dict_['regime'])
+        dict_['alinea'] = dict_.get('alinea')
+        dict_['state'] = ClassementState(dict_.get('state') or ClassementState.ACTIVE.value)
+        return Classement(**dict_)
+
+    def to_dict(self) -> Dict[str, Any]:
+        res = asdict(self)
+        res['regime'] = self.regime.value
+        res['state'] = self.state.value
+        return res
+
+
 @dataclass
 class ArreteMinisteriel:
     title: EnrichedString
@@ -212,25 +244,25 @@ class ArreteMinisteriel:
     installation_date_criterion: Optional[DateCriterion] = None
     aida_url: Optional[str] = None
     legifrance_url: Optional[str] = None
+    classements: List[Classement] = field(default_factory=list)
 
     def to_dict(self) -> Dict[str, Any]:
-        return self.as_dict()
-
-    def as_dict(self) -> Dict[str, Any]:
         res = asdict(self)
-        res['sections'] = [section.as_dict() for section in self.sections]
-        res['applicability'] = self.applicability.as_dict() if self.applicability else None
+        res['sections'] = [section.to_dict() for section in self.sections]
+        res['applicability'] = self.applicability.to_dict() if self.applicability else None
+        res['classements'] = [cl.to_dict() for cl in self.classements]
         return res
 
     @classmethod
     def from_dict(cls, dict_: Dict[str, Any]) -> 'ArreteMinisteriel':
         dict_ = dict_.copy()
         dict_['title'] = load_enriched_string(dict_['title'])
-        dict_['sections'] = [load_structured_text(sec) for sec in dict_['sections']]
+        dict_['sections'] = [StructuredText.from_dict(sec) for sec in dict_['sections']]
         dict_['visa'] = [load_enriched_string(vu) for vu in dict_['visa']]
         dict_['applicability'] = Applicability.from_dict(dict_['applicability']) if dict_.get('applicability') else None
         dt_key = 'installation_date_criterion'
         dict_[dt_key] = DateCriterion.from_dict(dict_[dt_key]) if dict_.get(dt_key) else None
+        dict_['classements'] = [Classement.from_dict(cl) for cl in dict_.get('classements') or []]
         return cls(**dict_)
 
 

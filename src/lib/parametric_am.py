@@ -284,7 +284,7 @@ class AlternativeSection:
     def to_dict(self) -> Dict[str, Any]:
         return {
             'targeted_section': self.targeted_section.to_dict(),
-            'new_text': self.new_text.as_dict(),
+            'new_text': self.new_text.to_dict(),
             'condition': self.condition.to_dict(),
             'source': self.source.to_dict(),
             'description': self.description,
