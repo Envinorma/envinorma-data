@@ -29,7 +29,7 @@
                     "text": "Les installations classées pour la protection de l'environnement soumises à déclaration sous la rubrique n° 2517 (Station de transit de produits minéraux solides, à l'exclusion de ceux visés par d'autres rubriques), la capacité de stockage étant supérieure à 15 000 mètres cubes mais inférieure ou égale à 75 000 mètres cubes, sont soumises aux dispositions de l'annexe I . Les présentes dispositions s'appliquent sans préjudice des autres législations."
                 }
             ],
-            "reference_str": null,
+            "reference_str": "Art. 1",
             "sections": [],
             "title": {
                 "links": [],
@@ -69,7 +69,7 @@
                     "text": "Les prescriptions auxquelles les installations existantes sont déjà soumises demeurent applicables jusqu'à l'entrée en vigueur de ces dispositions."
                 }
             ],
-            "reference_str": null,
+            "reference_str": "Art. 2",
             "sections": [],
             "title": {
                 "links": [],
@@ -94,7 +94,7 @@
                     "text": "Le préfet peut, pour une installation donnée, modifier par arrêté les dispositions des annexes I et II dans les conditions prévues aux articles 11 de la loi n° 76-663 du 19 juillet 1976 et 30 du décret n° 77-1133 du 21 septembre 1977 susvisés."
                 }
             ],
-            "reference_str": null,
+            "reference_str": "Art. 3",
             "sections": [],
             "title": {
                 "links": [],
@@ -119,7 +119,7 @@
                     "text": "Le directeur de la prévention des pollutions et des risques est chargé de l'exécution du présent arrêté, qui sera publié au Journal officiel de la République française."
                 }
             ],
-            "reference_str": null,
+            "reference_str": "Art. 4",
             "sections": [],
             "title": {
                 "links": [],
@@ -145,14 +145,14 @@
                         "num": "Annexe I"
                     },
                     "outer_alineas": [],
-                    "reference_str": null,
+                    "reference_str": "Annexe I",
                     "sections": [
                         {
                             "annotations": null,
                             "applicability": null,
                             "legifrance_article": null,
                             "outer_alineas": [],
-                            "reference_str": null,
+                            "reference_str": "Annexe I 1.",
                             "sections": [
                                 {
                                     "annotations": null,
@@ -165,7 +165,7 @@
                                             "text": "L'installation doit être implantée, réalisée et exploitée conformément aux plans et autres documents joints à la déclaration, sous réserve du respect des prescriptions ci-dessous."
                                         }
                                     ],
-                                    "reference_str": null,
+                                    "reference_str": "Annexe I 1.1.",
                                     "sections": [],
                                     "title": {
                                         "links": [],
@@ -184,7 +184,7 @@
                                             "text": "Toute modification apportée par le déclarant à l'installation, à son mode d'exploitation ou a son voisinage, entraînant un changement notable des éléments du dossier de déclaration initiale, doit être portée, avant sa réalisation, à la connaissance du préfet qui peut exiger une nouvelle déclaration (référence : art. 31 du décret du 21 septembre 1977)."
                                         }
                                     ],
-                                    "reference_str": null,
+                                    "reference_str": "Annexe I 1.2.",
                                     "sections": [],
                                     "title": {
                                         "links": [],
@@ -203,7 +203,7 @@
                                             "text": "La déclaration doit préciser les mesures prises ou prévues par l'exploitant pour respecter les dispositions du présent arrêté (référence : art. 25 du décret du 21 septembre 1977)."
                                         }
                                     ],
-                                    "reference_str": null,
+                                    "reference_str": "Annexe I 1.3.",
                                     "sections": [],
                                     "title": {
                                         "links": [],
@@ -257,7 +257,7 @@
                                             "text": "Ce dossier doit être tenu à la disposition de l'inspection des installations classées."
                                         }
                                     ],
-                                    "reference_str": null,
+                                    "reference_str": "Annexe I 1.4.",
                                     "sections": [],
                                     "title": {
                                         "links": [],
@@ -276,7 +276,7 @@
                                             "text": "L'exploitant d'une installation est tenu de déclarer dans les meilleurs délais à l'inspection des installations classées les accidents ou incidents survenus du fait du fonctionnement de cette installation qui sont de nature à porter atteinte aux intérêts mentionnés à l'article 1er de la loi du 19 juillet 1976 (référence : art. 38 du décret du 21 septembre 1977)."
                                         }
                                     ],
-                                    "reference_str": null,
+                                    "reference_str": "Annexe I 1.5.",
                                     "sections": [],
                                     "title": {
                                         "links": [],
@@ -295,7 +295,7 @@
                                             "text": "Lorsque l'installation change d'exploitant le nouvel exploitant ou son représentant doit en faire la déclaration au préfet dans le mois qui suit la prise en charge de l'exploitation. Cette déclaration doit mentionner, s'il s'agit d'une personne physique, les nom, prénoms et domicile du nouvel exploitant et s'il s'agit, d'une personne morale, sa dénomination ou sa raison sociale, sa forme juridique, l'adresse de son siège social ainsi que la qualité du signataire de la déclaration (référence : art. 34 du décret du 21 septembre 1977)."
                                         }
                                     ],
-                                    "reference_str": null,
+                                    "reference_str": "Annexe I 1.6.",
                                     "sections": [],
                                     "title": {
                                         "links": [],
@@ -314,7 +314,7 @@
                                             "text": "Lorsqu'une installation cesse l'activité au titre de laquelle elle était déclarée, son exploitant doit en informer le préfet au moins un mois avant l'arrêt définitif. La notification de l'exploitant indique les mesures de remise en état prévues ou réalisées (référence : art. 34-1 du décret du 21 septembre 1977)."
                                         }
                                     ],
-                                    "reference_str": null,
+                                    "reference_str": "Annexe I 1.7.",
                                     "sections": [],
                                     "title": {
                                         "links": [],
@@ -327,7 +327,7 @@
                                     "applicability": null,
                                     "legifrance_article": null,
                                     "outer_alineas": [],
-                                    "reference_str": null,
+                                    "reference_str": "Annexe I 1.8.",
                                     "sections": [],
                                     "title": {
                                         "links": [],
@@ -347,14 +347,14 @@
                             "applicability": null,
                             "legifrance_article": null,
                             "outer_alineas": [],
-                            "reference_str": null,
+                            "reference_str": "Annexe I 2.",
                             "sections": [
                                 {
                                     "annotations": null,
                                     "applicability": null,
                                     "legifrance_article": null,
                                     "outer_alineas": [],
-                                    "reference_str": null,
+                                    "reference_str": "Annexe I 2.1.",
                                     "sections": [],
                                     "title": {
                                         "links": [],
@@ -373,7 +373,7 @@
                                             "text": "L'exploitant prend les dispositions nécessaires pour satisfaire à l'esthétique du site. L'ensemble du site doit être maintenu en bon état de propreté (peinture, plantations, engazonnement ...)."
                                         }
                                     ],
-                                    "reference_str": null,
+                                    "reference_str": "Annexe I 2.2.",
                                     "sections": [],
                                     "title": {
                                         "links": [],
@@ -386,7 +386,7 @@
                                     "applicability": null,
                                     "legifrance_article": null,
                                     "outer_alineas": [],
-                                    "reference_str": null,
+                                    "reference_str": "Annexe I 2.3.",
                                     "sections": [],
                                     "title": {
                                         "links": [],
@@ -399,7 +399,7 @@
                                     "applicability": null,
                                     "legifrance_article": null,
                                     "outer_alineas": [],
-                                    "reference_str": null,
+                                    "reference_str": "Annexe I 2.4.",
                                     "sections": [],
                                     "title": {
                                         "links": [],
@@ -418,7 +418,7 @@
                                             "text": "L'installation doit être accessible pour permettre l'intervention des services d'incendie et de secours."
                                         }
                                     ],
-                                    "reference_str": null,
+                                    "reference_str": "Annexe I 2.5.",
                                     "sections": [],
                                     "title": {
                                         "links": [],
@@ -431,7 +431,7 @@
                                     "applicability": null,
                                     "legifrance_article": null,
                                     "outer_alineas": [],
-                                    "reference_str": null,
+                                    "reference_str": "Annexe I 2.6.",
                                     "sections": [],
                                     "title": {
                                         "links": [],
@@ -450,7 +450,7 @@
                                             "text": "Les installations électriques doivent être réalisées conformément au décret n° 88-1056 du 14 novembre 1988 relatif à la réglementation du travail."
                                         }
                                     ],
-                                    "reference_str": null,
+                                    "reference_str": "Annexe I 2.7.",
                                     "sections": [],
                                     "title": {
                                         "links": [],
@@ -469,7 +469,7 @@
                                             "text": "Les équipements métalliques (réservoirs, cuves, canalisations) doivent être mis à la terre conformément aux règlements et aux normes applicables, compte tenu notamment de la nature explosive ou inflammable des produits."
                                         }
                                     ],
-                                    "reference_str": null,
+                                    "reference_str": "Annexe I 2.8.",
                                     "sections": [],
                                     "title": {
                                         "links": [],
@@ -482,7 +482,7 @@
                                     "applicability": null,
                                     "legifrance_article": null,
                                     "outer_alineas": [],
-                                    "reference_str": null,
+                                    "reference_str": "Annexe I 2.9.",
                                     "sections": [],
                                     "title": {
                                         "links": [],
@@ -495,7 +495,7 @@
                                     "applicability": null,
                                     "legifrance_article": null,
                                     "outer_alineas": [],
-                                    "reference_str": null,
+                                    "reference_str": "Annexe I 2.10.",
                                     "sections": [],
                                     "title": {
                                         "links": [],
@@ -515,7 +515,7 @@
                             "applicability": null,
                             "legifrance_article": null,
                             "outer_alineas": [],
-                            "reference_str": null,
+                            "reference_str": "Annexe I 3.",
                             "sections": [
                                 {
                                     "annotations": null,
@@ -528,7 +528,7 @@
                                             "text": "L'exploitation doit se faire sous la surveillance, directe ou indirecte, d'une personne nommément désignée par l'exploitant et ayant une connaissance de la conduite de l'installation et des dangers et inconvénients des produits utilisés ou stockés dans l'installation."
                                         }
                                     ],
-                                    "reference_str": null,
+                                    "reference_str": "Annexe I 3.1.",
                                     "sections": [],
                                     "title": {
                                         "links": [],
@@ -547,7 +547,7 @@
                                             "text": "Les personnes étrangères à l'établissement ne doivent pas avoir un accès libre aux installations."
                                         }
                                     ],
-                                    "reference_str": null,
+                                    "reference_str": "Annexe I 3.2.",
                                     "sections": [],
                                     "title": {
                                         "links": [],
@@ -560,7 +560,7 @@
                                     "applicability": null,
                                     "legifrance_article": null,
                                     "outer_alineas": [],
-                                    "reference_str": null,
+                                    "reference_str": "Annexe I 3.3.",
                                     "sections": [],
                                     "title": {
                                         "links": [],
@@ -579,7 +579,7 @@
                                             "text": "Les locaux doivent être maintenus propres et régulièrement nettoyés notamment de manière à éviter les amas de poussières. Le matériel de nettoyage doit être adapté aux risques présentés par les produits et poussières."
                                         }
                                     ],
-                                    "reference_str": null,
+                                    "reference_str": "Annexe I 3.4.",
                                     "sections": [],
                                     "title": {
                                         "links": [],
@@ -592,7 +592,7 @@
                                     "applicability": null,
                                     "legifrance_article": null,
                                     "outer_alineas": [],
-                                    "reference_str": null,
+                                    "reference_str": "Annexe I 3.5.",
                                     "sections": [],
                                     "title": {
                                         "links": [],
@@ -611,7 +611,7 @@
                                             "text": "Toutes les installations électriques doivent être entretenues en bon état et doivent être contrôlées, après leur installation ou leur modification, par une personne compétente. La périodicité, l'objet et l'étendue des vérifications des installations électriques ainsi que le contenu des rapports relatifs auxdites vérifications sont fixés par l'arrêté du 20 décembre 1988 relatif à la réglementation du travail."
                                         }
                                     ],
-                                    "reference_str": null,
+                                    "reference_str": "Annexe I 3.6.",
                                     "sections": [],
                                     "title": {
                                         "links": [],
@@ -631,7 +631,7 @@
                             "applicability": null,
                             "legifrance_article": null,
                             "outer_alineas": [],
-                            "reference_str": null,
+                            "reference_str": "Annexe I 4.",
                             "sections": [
                                 {
                                     "annotations": null,
@@ -644,7 +644,7 @@
                                             "text": "Sans préjudice des dispositions du code du travail, des matériels de protection individuelle, adaptés aux risques présentés par l'installation et permettant l'intervention en cas de sinistre, doivent être conservés à proximité du dépôt et du lieu d'utilisation. Ces matériels doivent être entretenus en bon état et vérifiés périodiquement. Le personnel doit être formé à l'emploi de ces matériels."
                                         }
                                     ],
-                                    "reference_str": null,
+                                    "reference_str": "Annexe I 4.1.",
                                     "sections": [],
                                     "title": {
                                         "links": [],
@@ -688,7 +688,7 @@
                                             "text": "Ces matériels doivent être maintenus en bon état et vérifiés au moins une fois par an."
                                         }
                                     ],
-                                    "reference_str": null,
+                                    "reference_str": "Annexe I 4.2.",
                                     "sections": [],
                                     "title": {
                                         "links": [],
@@ -701,7 +701,7 @@
                                     "applicability": null,
                                     "legifrance_article": null,
                                     "outer_alineas": [],
-                                    "reference_str": null,
+                                    "reference_str": "Annexe I 4.3.",
                                     "sections": [],
                                     "title": {
                                         "links": [],
@@ -714,7 +714,7 @@
                                     "applicability": null,
                                     "legifrance_article": null,
                                     "outer_alineas": [],
-                                    "reference_str": null,
+                                    "reference_str": "Annexe I 4.4.",
                                     "sections": [],
                                     "title": {
                                         "links": [],
@@ -727,7 +727,7 @@
                                     "applicability": null,
                                     "legifrance_article": null,
                                     "outer_alineas": [],
-                                    "reference_str": null,
+                                    "reference_str": "Annexe I 4.5.",
                                     "sections": [],
                                     "title": {
                                         "links": [],
@@ -740,7 +740,7 @@
                                     "applicability": null,
                                     "legifrance_article": null,
                                     "outer_alineas": [],
-                                    "reference_str": null,
+                                    "reference_str": "Annexe I 4.6.",
                                     "sections": [],
                                     "title": {
                                         "links": [],
@@ -784,7 +784,7 @@
                                             "text": "- la procédure d'alerte avec les numéros de téléphone du responsable d'intervention de l'établissement des services d'incendie et de secours, etc."
                                         }
                                     ],
-                                    "reference_str": null,
+                                    "reference_str": "Annexe I 4.7.",
                                     "sections": [],
                                     "title": {
                                         "links": [],
@@ -797,7 +797,7 @@
                                     "applicability": null,
                                     "legifrance_article": null,
                                     "outer_alineas": [],
-                                    "reference_str": null,
+                                    "reference_str": "Annexe I 4.8.",
                                     "sections": [],
                                     "title": {
                                         "links": [],
@@ -817,14 +817,14 @@
                             "applicability": null,
                             "legifrance_article": null,
                             "outer_alineas": [],
-                            "reference_str": null,
+                            "reference_str": "Annexe I 5.",
                             "sections": [
                                 {
                                     "annotations": null,
                                     "applicability": null,
                                     "legifrance_article": null,
                                     "outer_alineas": [],
-                                    "reference_str": null,
+                                    "reference_str": "Annexe I 5.1.",
                                     "sections": [],
                                     "title": {
                                         "links": [],
@@ -837,7 +837,7 @@
                                     "applicability": null,
                                     "legifrance_article": null,
                                     "outer_alineas": [],
-                                    "reference_str": null,
+                                    "reference_str": "Annexe I 5.2.",
                                     "sections": [],
                                     "title": {
                                         "links": [],
@@ -850,7 +850,7 @@
                                     "applicability": null,
                                     "legifrance_article": null,
                                     "outer_alineas": [],
-                                    "reference_str": null,
+                                    "reference_str": "Annexe I 5.3.",
                                     "sections": [],
                                     "title": {
                                         "links": [],
@@ -863,7 +863,7 @@
                                     "applicability": null,
                                     "legifrance_article": null,
                                     "outer_alineas": [],
-                                    "reference_str": null,
+                                    "reference_str": "Annexe I 5.4.",
                                     "sections": [],
                                     "title": {
                                         "links": [],
@@ -876,7 +876,7 @@
                                     "applicability": null,
                                     "legifrance_article": null,
                                     "outer_alineas": [],
-                                    "reference_str": null,
+                                    "reference_str": "Annexe I 5.5.",
                                     "sections": [],
                                     "title": {
                                         "links": [],
@@ -889,7 +889,7 @@
                                     "applicability": null,
                                     "legifrance_article": null,
                                     "outer_alineas": [],
-                                    "reference_str": null,
+                                    "reference_str": "Annexe I 5.6.",
                                     "sections": [],
                                     "title": {
                                         "links": [],
@@ -902,7 +902,7 @@
                                     "applicability": null,
                                     "legifrance_article": null,
                                     "outer_alineas": [],
-                                    "reference_str": null,
+                                    "reference_str": "Annexe I 5.7.",
                                     "sections": [],
                                     "title": {
                                         "links": [],
@@ -921,7 +921,7 @@
                                             "text": "L'épandage des eaux résiduaires, des boues et des déchets est interdit."
                                         }
                                     ],
-                                    "reference_str": null,
+                                    "reference_str": "Annexe I 5.8.",
                                     "sections": [],
                                     "title": {
                                         "links": [],
@@ -934,7 +934,7 @@
                                     "applicability": null,
                                     "legifrance_article": null,
                                     "outer_alineas": [],
-                                    "reference_str": null,
+                                    "reference_str": "Annexe I 5.9.",
                                     "sections": [],
                                     "title": {
                                         "links": [],
@@ -954,7 +954,7 @@
                             "applicability": null,
                             "legifrance_article": null,
                             "outer_alineas": [],
-                            "reference_str": null,
+                            "reference_str": "Annexe I 6.",
                             "sections": [
                                 {
                                     "annotations": null,
@@ -967,7 +967,7 @@
                                             "text": "Les installations de manipulation, transvasement transport de produits minéraux sont munies de dispositif de capotage et d'aspiration permettant, de réduire autant que possible les envols de poussières. En cas échéant, les dispositifs d'aspiration sont raccordés à une installation de dépoussiérage."
                                         }
                                     ],
-                                    "reference_str": null,
+                                    "reference_str": "Annexe I 6.1.",
                                     "sections": [],
                                     "title": {
                                         "links": [],
@@ -980,7 +980,7 @@
                                     "applicability": null,
                                     "legifrance_article": null,
                                     "outer_alineas": [],
-                                    "reference_str": null,
+                                    "reference_str": "Annexe I 6.2.",
                                     "sections": [],
                                     "title": {
                                         "links": [],
@@ -993,7 +993,7 @@
                                     "applicability": null,
                                     "legifrance_article": null,
                                     "outer_alineas": [],
-                                    "reference_str": null,
+                                    "reference_str": "Annexe I 6.3.",
                                     "sections": [],
                                     "title": {
                                         "links": [],
@@ -1017,7 +1017,7 @@
                                             "text": "Les fillers (éléments fins inférieurs à 80 `m) doivent être confinés (sachets, récipients, silos, bâtiments fermés). Le cas échéant les silos doivent être munis de dispositifs de contrôle de niveau de manière à éviter les débordements. L'air s'échappant de ces silos doit être dépoussiéré."
                                         }
                                     ],
-                                    "reference_str": null,
+                                    "reference_str": "Annexe I 6.4.",
                                     "sections": [],
                                     "title": {
                                         "links": [],
@@ -1041,7 +1041,7 @@
                                             "text": "Les véhicules sortant de l'installation n'entraînant pas de dépôt de poussière ou de boue sur les voies de circulation. Pour cela, des dispositions telles que le lavage des roues de véhicules sont prévues en cas de besoin."
                                         }
                                     ],
-                                    "reference_str": null,
+                                    "reference_str": "Annexe I 6.5.",
                                     "sections": [],
                                     "title": {
                                         "links": [],
@@ -1060,7 +1060,7 @@
                                             "text": "Les surfaces libres doivent être engazonnées et arborées"
                                         }
                                     ],
-                                    "reference_str": null,
+                                    "reference_str": "Annexe I 6.6.",
                                     "sections": [],
                                     "title": {
                                         "links": [],
@@ -1080,7 +1080,7 @@
                             "applicability": null,
                             "legifrance_article": null,
                             "outer_alineas": [],
-                            "reference_str": null,
+                            "reference_str": "Annexe I 7.",
                             "sections": [
                                 {
                                     "annotations": null,
@@ -1093,7 +1093,7 @@
                                             "text": "Toutes dispositions doivent être prises pour limiter les quantités de déchets produits, notamment en effectuant toutes les opérations de valorisation possibles. Les diverses catégories de déchets doivent être collectées séparément puis valorisées ou éliminées dans des installations appropriés"
                                         }
                                     ],
-                                    "reference_str": null,
+                                    "reference_str": "Annexe I 7.1.",
                                     "sections": [],
                                     "title": {
                                         "links": [],
@@ -1117,7 +1117,7 @@
                                             "text": "La quantité de déchets stockés sur le site ne doit pas dépasser la capacité mensuelle produite ou un lot normal d'expédition vers l'installation d'élimination."
                                         }
                                     ],
-                                    "reference_str": null,
+                                    "reference_str": "Annexe I 7.2.",
                                     "sections": [],
                                     "title": {
                                         "links": [],
@@ -1146,7 +1146,7 @@
                                             "text": "Cette disposition n'est pas applicable au détenteurs de déchets d'emballage qui en produisent un volume hebdomadaire inférieur à 1.100 litres et qui les remettent au service de collecte et de traitement des communes (décret n° 94-609 du 13 juillet 1994)."
                                         }
                                     ],
-                                    "reference_str": null,
+                                    "reference_str": "Annexe I 7.3.",
                                     "sections": [],
                                     "title": {
                                         "links": [],
@@ -1165,7 +1165,7 @@
                                             "text": "Les déchets industriels spéciaux doivent être éliminés dans des installations autorisées à recevoir ces déchets. L'exploitant doit être en mesure d'en justifier l'élimination ; les documents justificatifs doivent être conservés trois ans."
                                         }
                                     ],
-                                    "reference_str": null,
+                                    "reference_str": "Annexe I 7.4.",
                                     "sections": [],
                                     "title": {
                                         "links": [],
@@ -1184,7 +1184,7 @@
                                             "text": "Le brûlage des déchets à l'air libre est interdit"
                                         }
                                     ],
-                                    "reference_str": null,
+                                    "reference_str": "Annexe I 7.5.",
                                     "sections": [],
                                     "title": {
                                         "links": [],
@@ -1204,7 +1204,7 @@
                             "applicability": null,
                             "legifrance_article": null,
                             "outer_alineas": [],
-                            "reference_str": null,
+                            "reference_str": "Annexe I 8.",
                             "sections": [
                                 {
                                     "annotations": null,
@@ -1272,7 +1272,7 @@
                                             "text": "Lorsque plusieurs installations classées, soumises à déclaration au titre de rubriques différentes, sont situées au sein d'un même établissement, le niveau de bruit global émis par ces installations devra respecter les valeurs limites ci-dessus."
                                         }
                                     ],
-                                    "reference_str": null,
+                                    "reference_str": "Annexe I 8.1.",
                                     "sections": [],
                                     "title": {
                                         "links": [],
@@ -1296,7 +1296,7 @@
                                             "text": "L'usage de tous appareils de communication par voie acoustique (sirènes, avertisseurs, haut-parleurs, etc.), gênant pour le voisinage, est interdit, sauf si leur emploi est exceptionnel et réservé à la prévention et au signalement d'incidents graves ou d'accidents."
                                         }
                                     ],
-                                    "reference_str": null,
+                                    "reference_str": "Annexe I 8.2.",
                                     "sections": [],
                                     "title": {
                                         "links": [],
@@ -1315,7 +1315,7 @@
                                             "text": "Les règles techniques annexées à la circulaire n° 86-23 du 23 juillet 1986 (J.O. du 22 octobre 1986) sont applicables."
                                         }
                                     ],
-                                    "reference_str": null,
+                                    "reference_str": "Annexe I 8.3.",
                                     "sections": [],
                                     "title": {
                                         "links": [],
@@ -1344,7 +1344,7 @@
                                             "text": "Une mesure du niveau de bruit et de l'émergence doit être effectuée au moins tous les trois ans par une personne ou un organisme qualifié."
                                         }
                                     ],
-                                    "reference_str": null,
+                                    "reference_str": "Annexe I 8.4.",
                                     "sections": [],
                                     "title": {
                                         "links": [],
@@ -1364,7 +1364,7 @@
                             "applicability": null,
                             "legifrance_article": null,
                             "outer_alineas": [],
-                            "reference_str": null,
+                            "reference_str": "Annexe I 9.",
                             "sections": [
                                 {
                                     "annotations": null,
@@ -1377,7 +1377,7 @@
                                             "text": "En fin d'exploitation, tous les produits dangereux ainsi que tous les déchets doivent être valorisés ou évacués vers des installations dûment autorisées."
                                         }
                                     ],
-                                    "reference_str": null,
+                                    "reference_str": "Annexe I 9.1.",
                                     "sections": [],
                                     "title": {
                                         "links": [],
@@ -1401,7 +1401,7 @@
                                             "text": "(1) Un modèle a été constitué pour la rédaction des arrêtés de prescriptions générales applicables aux installations soumises à déclaration. Certaines dispositions de ce modèle, qui ne se justifient pas pour les installations visées par la rubrique n° 2517, ont été supprimées. Néanmoins, la numérotation a été conservée pour permettre une homogénéité entre les arrêtés de prescriptions générales de toutes les rubriques de la nomenclature."
                                         }
                                     ],
-                                    "reference_str": null,
+                                    "reference_str": "Annexe I 9.2.",
                                     "sections": [],
                                     "title": {
                                         "links": [],
@@ -1510,7 +1510,7 @@
                             "text": "8.4. Bruit - mesure périodique"
                         }
                     ],
-                    "reference_str": null,
+                    "reference_str": "Annexe II",
                     "sections": [],
                     "title": {
                         "links": [],

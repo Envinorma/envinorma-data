@@ -226,7 +226,7 @@ def _handle_manual_enrichments(
         write_json(enriched_am.to_dict(), _get_enriched_am_filename(metadata))
     parametrization = get_manual_parametrization(id_)
     if dump_am:
-        write_json(enriched_am.to_dict(), _get_parametrization_filename(metadata))
+        write_json(parametrization.to_dict(), _get_parametrization_filename(metadata))
     all_versions = generate_all_am_versions(enriched_am, parametrization, get_manual_combinations(id_))
     if dump_am:
         for version_desc, version in all_versions.items():

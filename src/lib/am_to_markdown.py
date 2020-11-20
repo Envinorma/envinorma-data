@@ -1,6 +1,7 @@
 import json
 from enum import Enum
 from collections import Counter
+from lib.git_diffs_generator import AMCommits, compute_and_dump_am_git_diffs
 from lib.data import check_am
 from lib.parametrization import Parametrization, parametrization_to_markdown
 from typing import Dict, List, Optional, Set, TypeVar
@@ -412,13 +413,30 @@ def _diffs_section(diffs: Dict[str, List[str]]) -> str:
     )
 
 
+def _generate_diff_url(main_commit_id: str, commit_id: str) -> str:
+    return f'https://github.com/Envinorma/arretes_ministeriels/compare/{commit_id}...{main_commit_id}'
+
+
+def generate_commits_md(am_commits: AMCommits) -> str:
+    commit_lines = [
+        f'[{version_name}]({_generate_diff_url(am_commits.main_commit_id, commit_id)})'
+        for version_name, commit_id in am_commits.version_commit_ids.items()
+    ]
+    return '\n\n'.join(['## Differences'] + commit_lines)
+
+
 def generate_parametric_am_markdown(
-    am: ArreteMinisteriel, metadata: AMMetadata, parametrization: Parametrization, diffs: Dict[str, List[str]]
+    am: ArreteMinisteriel,
+    metadata: AMMetadata,
+    parametrization: Parametrization,
+    diffs: Dict[str, List[str]],
+    am_commits: AMCommits,
 ) -> str:
     header_md = generate_header_md(am.title.text, metadata.nor or metadata.cid, True)
+    commits = generate_commits_md(am_commits)
     parametrization_md = _parametrization_section(parametrization)
     diffs_md = _diffs_section(diffs)
-    return '\n\n'.join([header_md, parametrization_md, diffs_md])
+    return '\n\n'.join([header_md, commits, parametrization_md, diffs_md])
 
 
 _GITHUB_IO = '/Users/remidelbouys/EnviNorma/envinorma.github.io'
@@ -427,7 +445,7 @@ _GITHUB_IO = '/Users/remidelbouys/EnviNorma/envinorma.github.io'
 def generate_all_markdown(output_folder: str = _GITHUB_IO, am_cids: Optional[Set[str]] = None) -> None:
     am_cids = am_cids or set()
     data, cid_to_log, cid_to_am, cid_to_param = handle_all_am(
-        am_cids=am_cids, with_manual_enrichments=len(am_cids) != 0
+        am_cids=am_cids, dump_am=len(am_cids) != 0, with_manual_enrichments=len(am_cids) != 0
     )
     if not am_cids:  # We just want to generate specific pages
         dump_md(generate_index(data.arretes_ministeriels, cid_to_log), f'{output_folder}/index.md')
@@ -438,8 +456,11 @@ def generate_all_markdown(output_folder: str = _GITHUB_IO, am_cids: Optional[Set
         cid = metadata.cid
         dump_md(generate_am_markdown(data, metadata, cid_to_log[cid], cid_to_am.get(cid)), f'{output_folder}/{id_}.md')
         if cid in cid_to_am and cid in cid_to_param:
+            am_commits = compute_and_dump_am_git_diffs(id_, am_to_markdown)
             dump_md(
-                generate_parametric_am_markdown(cid_to_am[cid], metadata, *cid_to_param[cid]),
+                generate_parametric_am_markdown(
+                    cid_to_am[cid], metadata, cid_to_param[cid][0], cid_to_param[cid][1], am_commits
+                ),
                 f'{output_folder}/parametrization/{id_}.md',
             )
 

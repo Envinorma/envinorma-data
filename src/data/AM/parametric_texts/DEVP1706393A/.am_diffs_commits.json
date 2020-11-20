@@ -1,0 +1,15 @@
+{
+    "main_commit_id": "54fb4088f59bf5edfb5bfee4f02ebb1c9f6ffd95",
+    "version_commit_ids": {
+        "reg_A_AND_date_after_2017.json": "8ec0e346e724165373f4b00a416fe19e3eb42fe6",
+        "reg_A_AND_date_before_2003.json": "4a57ac257edbc75282bbb0d44072d34a44a9613f",
+        "reg_A_AND_date_between_2003_and_2017.json": "2a4e721a0733df5b861432cd9d5407c60635d97e",
+        "reg_D_AND_date_after_2017.json": "9ba6a2424003dc114d314fc1f0e67d6262b26c76",
+        "reg_D_AND_date_before_2009.json": "f68881e8ca5509c8755b431a1039bbfa18eb6ea1",
+        "reg_D_AND_date_between_2009_and_2017.json": "45e1a73d7a9994c60c82d1676c3436c0f5ca97ac",
+        "reg_E_AND_date_after_2017.json": "c3f8cfd077cab9a4f279e0e3ff2176ed4be30f67",
+        "reg_E_AND_date_before_2003.json": "ccabf46cc58382cc61252403bfb91488f4c9c16a",
+        "reg_E_AND_date_between_2003_and_2010.json": "cd469e308d276e0f38a915a99eafe89f140348bf",
+        "reg_E_AND_date_between_2010_and_2017.json": "e101618f8da921888d1407694be89ff646be484e"
+    }
+}

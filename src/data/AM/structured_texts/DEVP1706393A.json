@@ -56,7 +56,7 @@
                     "text": "Les installations soumises à la rubrique 1510, qui relèvent par ailleurs également de l'une ou plusieurs des rubriques 1530, 1532, 2662 ou 2663 de la nomenclature des installations classées, sont entièrement régies par le présent arrêté. Les arrêtés relatifs à ces autres rubriques ne leur sont alors pas applicables."
                 }
             ],
-            "reference_str": null,
+            "reference_str": "Art. 1",
             "sections": [],
             "title": {
                 "links": [],
@@ -122,7 +122,7 @@
                     "text": "Les points de contrôles applicables aux installations soumises à déclaration sont définis dans l'annexe III du présent arrêté."
                 }
             ],
-            "reference_str": null,
+            "reference_str": "Art. 2",
             "sections": [],
             "title": {
                 "links": [],
@@ -153,7 +153,7 @@
                     "text": "Le préfet peut, dans les conditions prévues à l'article R. 512-52 du code de l'environnement (installations soumises à déclaration), au vu des justificatifs techniques appropriés relatifs au respect des objectifs de l'article 1er ci-dessus, des circonstances locales et en fonction des caractéristiques de l'installation et de la sensibilité du milieu, adapter par arrêté préfectoral les prescriptions du présent arrêté, après avis du conseil départemental de l'environnement et des risques sanitaires et technologiques."
                 }
             ],
-            "reference_str": null,
+            "reference_str": "Art. 3",
             "sections": [],
             "title": {
                 "links": [],
@@ -200,7 +200,7 @@
                     "text": "En cas d'application de cet article, le préfet sollicite l'avis du conseil départemental de l'environnement et des risques sanitaires et technologiques sur le projet d'arrêté d'enregistrement."
                 }
             ],
-            "reference_str": null,
+            "reference_str": "Art. 4",
             "sections": [],
             "title": {
                 "links": [],
@@ -262,7 +262,7 @@
                     "text": "- il sollicite en tout état de cause l'avis du conseil départemental de l'environnement et des risques sanitaires et technologiques sur le projet d'arrêté d'autorisation."
                 }
             ],
-            "reference_str": null,
+            "reference_str": "Art. 5",
             "sections": [],
             "title": {
                 "links": [],
@@ -578,7 +578,7 @@
                     "text": "Les arrêtés ministériels du 17 août 2016 relatif à la prévention des sinistres dans les entrepôts couverts soumis à autorisation sous la rubrique 1510, du 15 avril 2010 relatif aux prescriptions générales applicables aux entrepôts couverts relevant du régime de l'enregistrement au titre de la rubrique n° 1510 de la nomenclature des installations classées pour la protection de l'environnement et du 23 décembre 2008 relatif aux prescriptions générales applicables aux entrepôts couverts relevant du régime de la déclaration au titre de la rubrique n° 1510 de la nomenclature des installations classées pour la protection de l'environnement sont abrogés à la date d'entrée en vigueur du présent arrêté. Les installations qui ne sont pas soumises à la rubrique 1510, mais qui relèvent de l'une ou plusieurs des rubriques 1530,1532,2662 ou 2663 de la nomenclature des installations classées, demeurent exclusivement régies par les arrêtés relatifs à ces rubriques."
                 }
             ],
-            "reference_str": null,
+            "reference_str": "Art. 6",
             "sections": [],
             "title": {
                 "links": [],
@@ -603,7 +603,7 @@
                     "text": "Le présent arrêté entre en vigueur le lendemain de sa publication."
                 }
             ],
-            "reference_str": null,
+            "reference_str": "Art. 7",
             "sections": [],
             "title": {
                 "links": [],
@@ -628,7 +628,7 @@
                     "text": "Le directeur général de la prévention des risques est chargé de l'exécution du présent arrêté, qui sera publié au Journal officiel de la République française."
                 }
             ],
-            "reference_str": null,
+            "reference_str": "Art. 8",
             "sections": [],
             "title": {
                 "links": [],
@@ -785,7 +785,7 @@
                             "text": "Zones de réception : emplacements destinés à entreposer, de manière temporaire, des produits devant être stockés dans l'entrepôt abritant cette cellule ; elles peuvent se situer dans les cellules de stockage."
                         }
                     ],
-                    "reference_str": null,
+                    "reference_str": "Annexe I",
                     "sections": [],
                     "title": {
                         "links": [],
@@ -810,14 +810,14 @@
                             "text": "PRESCRIPTIONS GÉNÉRALES APPLICABLES AUX INSTALLATIONS CLASSÉES POUR LA PROTECTION DE L'ENVIRONNEMENT SOUMISES À LA RUBRIQUE 1510, Y COMPRIS LORSQU'ELLES RELÈVENT ÉGALEMENT DE L'UNE OU PLUSIEURS DES RUBRIQUES 1530, 1532, 2662 OU 2663 DE LA NOMENCLATURE DES INSTALLATIONS CLASSÉES POUR LA PROTECTION DE L'ENVIRONNEMENT"
                         }
                     ],
-                    "reference_str": null,
+                    "reference_str": "Annexe II",
                     "sections": [
                         {
                             "annotations": null,
                             "applicability": null,
                             "legifrance_article": null,
                             "outer_alineas": [],
-                            "reference_str": null,
+                            "reference_str": "Annexe II 1.",
                             "sections": [
                                 {
                                     "annotations": null,
@@ -830,7 +830,7 @@
                                             "text": "L'installation est implantée, réalisée et exploitée conformément aux plans et documents joints au dossier de déclaration, d'enregistrement ou d'autorisation."
                                         }
                                     ],
-                                    "reference_str": null,
+                                    "reference_str": "Annexe II 1.1.",
                                     "sections": [],
                                     "title": {
                                         "links": [],
@@ -879,7 +879,7 @@
                                             "text": "Ce dossier est tenu à la disposition de l'inspection des installations classées et, pour les installations soumises à déclaration, de l'organisme chargé du contrôle périodique."
                                         }
                                     ],
-                                    "reference_str": null,
+                                    "reference_str": "Annexe II 1.2.",
                                     "sections": [],
                                     "title": {
                                         "links": [],
@@ -908,7 +908,7 @@
                                             "text": "Pour l'entretien des surfaces extérieures de son site (parkings, espaces verts, voies de circulation…), l'exploitant met en œuvre des bonnes pratiques, notamment en ce qui concerne le désherbage."
                                         }
                                     ],
-                                    "reference_str": null,
+                                    "reference_str": "Annexe II 1.3.",
                                     "sections": [],
                                     "title": {
                                         "links": [],
@@ -937,7 +937,7 @@
                                             "text": "Ces documents sont tenus en permanence, de manière facilement accessible, à la disposition des services d'incendie et de secours et de l'inspection des installations classées."
                                         }
                                     ],
-                                    "reference_str": null,
+                                    "reference_str": "Annexe II 1.4.",
                                     "sections": [],
                                     "title": {
                                         "links": [],
@@ -956,7 +956,7 @@
                                             "text": "En cas de sinistre, l'exploitant réalise un diagnostic de l'impact environnemental et sanitaire de celui-ci en application des guides établis par le ministère chargé de l'environnement dans le domaine de la gestion du post-accidentelle. Il réalise notamment des prélèvements dans l'air, dans les sols et le cas échéant les points d'eau environnants, afin d'estimer les conséquences de l'incendie en termes de pollution. Le préfet peut prescrire, d'urgence, tout complément utile aux prélèvements réalisés par l'exploitant."
                                         }
                                     ],
-                                    "reference_str": null,
+                                    "reference_str": "Annexe II 1.5.",
                                     "sections": [],
                                     "title": {
                                         "links": [],
@@ -969,7 +969,7 @@
                                     "applicability": null,
                                     "legifrance_article": null,
                                     "outer_alineas": [],
-                                    "reference_str": null,
+                                    "reference_str": "Annexe II 1.6.",
                                     "sections": [
                                         {
                                             "annotations": null,
@@ -1017,7 +1017,7 @@
                                                     "text": "- les ouvrages d'épuration interne avec leurs points de contrôle et les points de rejet de toute nature (interne ou au milieu)."
                                                 }
                                             ],
-                                            "reference_str": null,
+                                            "reference_str": "Annexe II 1.6.1.",
                                             "sections": [],
                                             "title": {
                                                 "links": [],
@@ -1046,7 +1046,7 @@
                                                     "text": "Le bon fonctionnement de ces équipements fait l'objet de vérifications au moins annuelles."
                                                 }
                                             ],
-                                            "reference_str": null,
+                                            "reference_str": "Annexe II 1.6.2.",
                                             "sections": [],
                                             "title": {
                                                 "links": [],
@@ -1080,7 +1080,7 @@
                                                     "text": "- de tout produit susceptible de nuire à la conservation des ouvrages, ainsi que des matières décomposables ou précipitables qui, directement ou indirectement, sont susceptibles d'entraver le bon fonctionnement des ouvrages."
                                                 }
                                             ],
-                                            "reference_str": null,
+                                            "reference_str": "Annexe II 1.6.3.",
                                             "sections": [],
                                             "title": {
                                                 "links": [],
@@ -1154,7 +1154,7 @@
                                                     "text": "En cas de rejet dans un ouvrage collectif de collecte, le débit maximal et les valeurs limites de rejet sont fixés par convention entre l'exploitant et le gestionnaire de l'ouvrage de collecte."
                                                 }
                                             ],
-                                            "reference_str": null,
+                                            "reference_str": "Annexe II 1.6.4.",
                                             "sections": [],
                                             "title": {
                                                 "links": [],
@@ -1178,7 +1178,7 @@
                                                     "text": "Elles sont traitées et évacuées conformément aux règlements en vigueur sur la commune d'implantation du site."
                                                 }
                                             ],
-                                            "reference_str": null,
+                                            "reference_str": "Annexe II 1.6.5.",
                                             "sections": [],
                                             "title": {
                                                 "links": [],
@@ -1198,7 +1198,7 @@
                                     "applicability": null,
                                     "legifrance_article": null,
                                     "outer_alineas": [],
-                                    "reference_str": null,
+                                    "reference_str": "Annexe II 1.7.",
                                     "sections": [
                                         {
                                             "annotations": null,
@@ -1231,7 +1231,7 @@
                                                     "text": "- s'assurer, pour les déchets ultimes dont le volume doit être strictement limité, d'un stockage dans les meilleures conditions possibles."
                                                 }
                                             ],
-                                            "reference_str": null,
+                                            "reference_str": "Annexe II 1.7.1.",
                                             "sections": [],
                                             "title": {
                                                 "links": [],
@@ -1255,7 +1255,7 @@
                                                     "text": "Les stockages temporaires, avant gestion des déchets spéciaux, sont réalisés sur des cuvettes de rétention étanches et si possible protégés des eaux météoriques."
                                                 }
                                             ],
-                                            "reference_str": null,
+                                            "reference_str": "Annexe II 1.7.2.",
                                             "sections": [],
                                             "title": {
                                                 "links": [],
@@ -1279,7 +1279,7 @@
                                                     "text": "Tout brûlage à l'air libre est interdit."
                                                 }
                                             ],
-                                            "reference_str": null,
+                                            "reference_str": "Annexe II 1.7.3.",
                                             "sections": [],
                                             "title": {
                                                 "links": [],
@@ -1311,7 +1311,7 @@
                                             "text": "Sans préjudice des dispositions du code de l'environnement, les installations soumises à déclaration respectent les dispositions suivantes :"
                                         }
                                     ],
-                                    "reference_str": null,
+                                    "reference_str": "Annexe II 1.8.",
                                     "sections": [
                                         {
                                             "annotations": null,
@@ -1345,7 +1345,7 @@
                                                     "text": "L'exploitant conserve le rapport de visite que l'organisme agréé lui adresse dans le dossier installations classées prévu au présent point 1.2. Si le rapport fait apparaître des non-conformités aux dispositions faisant l'objet du contrôle, l'exploitant met en œuvre les actions correctives nécessaires pour y remédier. Ces actions ainsi que leurs dates de mise en œuvre sont formalisées et conservées dans le dossier susmentionné."
                                                 }
                                             ],
-                                            "reference_str": null,
+                                            "reference_str": "Annexe II 1.8.1.",
                                             "sections": [],
                                             "title": {
                                                 "links": [],
@@ -1364,7 +1364,7 @@
                                                     "text": "Toute modification apportée par le déclarant à l'installation, à son mode d'exploitation ou à son voisinage, entraînant un changement notable des éléments du dossier de déclaration initiale, est portée, avant sa réalisation, à la connaissance du préfet, qui peut exiger une nouvelle déclaration en application de l'article R. 512-54."
                                                 }
                                             ],
-                                            "reference_str": null,
+                                            "reference_str": "Annexe II 1.8.2.",
                                             "sections": [],
                                             "title": {
                                                 "links": [],
@@ -1383,7 +1383,7 @@
                                                     "text": "La déclaration précise les mesures prises relatives aux conditions d'utilisation, d'épuration et d'évacuation des eaux résiduaires et des émanations de toutes natures ainsi que d'élimination des déchets et résidus en vue de respecter les dispositions du présent arrêté."
                                                 }
                                             ],
-                                            "reference_str": null,
+                                            "reference_str": "Annexe II 1.8.3.",
                                             "sections": [],
                                             "title": {
                                                 "links": [],
@@ -1413,7 +1413,7 @@
                                                     "text": "Un registre rassemblant l'ensemble des déclarations faites au titre du présent article est tenu à jour et mis, sur demande, à la disposition de l'inspecteur des installations classées."
                                                 }
                                             ],
-                                            "reference_str": null,
+                                            "reference_str": "Annexe II 1.8.4.",
                                             "sections": [],
                                             "title": {
                                                 "links": [],
@@ -1432,7 +1432,7 @@
                                                     "text": "Lorsque l'installation change d'exploitant, le nouvel exploitant ou son représentant en fait la déclaration au préfet dans le mois qui suit la prise en charge de l'exploitation. Cette déclaration mentionne, s'il s'agit d'une personne physique, les noms, prénoms et domicile du nouvel exploitant et, s'il s'agit d'une personne morale, sa dénomination ou sa raison sociale, sa forme juridique, l'adresse de son siège social ainsi que la qualité du signataire de la déclaration."
                                                 }
                                             ],
-                                            "reference_str": null,
+                                            "reference_str": "Annexe II 1.8.5.",
                                             "sections": [],
                                             "title": {
                                                 "links": [],
@@ -1451,7 +1451,7 @@
                                                     "text": "Lorsqu'une installation classée est mise à l'arrêt définitif, l'exploitant notifie au préfet la date de cet arrêt au moins un mois avant celui-ci. La notification de l'exploitant indique notamment les mesures de mise en sécurité du site et de remise en état prévues ou réalisées."
                                                 }
                                             ],
-                                            "reference_str": null,
+                                            "reference_str": "Annexe II 1.8.6.",
                                             "sections": [],
                                             "title": {
                                                 "links": [],
@@ -1478,7 +1478,7 @@
                             "applicability": null,
                             "legifrance_article": null,
                             "outer_alineas": [],
-                            "reference_str": null,
+                            "reference_str": "Annexe II 2.",
                             "sections": [
                                 {
                                     "annotations": null,
@@ -1501,7 +1501,7 @@
                                             "text": "Les distances sont au minimum soit celles calculées pour chaque cellule en feu prise individuellement par la méthode FLUMILOG (référencée dans le document de l'INERIS Description de la méthode de calcul des effets thermiques produits par un feu d'entrepôt , partie A, réf. DRA-09-90 977-14553A) si les dimensions du bâtiment sont dans son domaine de validité, soit celles calculées par des études spécifiques dans le cas contraire. Les parois extérieures de l'entrepôt ou les éléments de structure dans le cas d'un entrepôt ouvert, sont implantées à une distance au moins égale à 20 mètres de l'enceinte de l'établissement, à moins que l'exploitant justifie que les effets létaux (seuil des effets thermiques de 5 kW/m2) restent à l'intérieur du site au moyen, si nécessaire, de la mise en place d'un dispositif séparatif E120."
                                         }
                                     ],
-                                    "reference_str": null,
+                                    "reference_str": "Annexe II 2. I.",
                                     "sections": [],
                                     "title": {
                                         "links": [],
@@ -1514,7 +1514,7 @@
                                     "applicability": null,
                                     "legifrance_article": null,
                                     "outer_alineas": [],
-                                    "reference_str": null,
+                                    "reference_str": "Annexe II 2. II.",
                                     "sections": [],
                                     "title": {
                                         "links": [],
@@ -1533,7 +1533,7 @@
                                             "text": "A l'exception du logement éventuel pour le gardien de l'entrepôt, l'affectation même partielle à l'habitation est exclue dans les bâtiments visés par le présent arrêté."
                                         }
                                     ],
-                                    "reference_str": null,
+                                    "reference_str": "Annexe II 2. III.",
                                     "sections": [],
                                     "title": {
                                         "links": [],
@@ -1553,7 +1553,7 @@
                             "applicability": null,
                             "legifrance_article": null,
                             "outer_alineas": [],
-                            "reference_str": null,
+                            "reference_str": "Annexe II 3.",
                             "sections": [
                                 {
                                     "annotations": null,
@@ -1576,7 +1576,7 @@
                                             "text": "L'accès au site est conçu pour pouvoir être ouvert immédiatement sur demande des services d'incendie et de secours ou directement par ces derniers."
                                         }
                                     ],
-                                    "reference_str": null,
+                                    "reference_str": "Annexe II 3.1.",
                                     "sections": [],
                                     "title": {
                                         "links": [],
@@ -1665,7 +1665,7 @@
                                             "text": "Pour les installations soumises à autorisation ou à enregistrement, le positionnement de la voie engins est proposé par le pétitionnaire dans son dossier de demande."
                                         }
                                     ],
-                                    "reference_str": null,
+                                    "reference_str": "Annexe II 3.2.",
                                     "sections": [],
                                     "title": {
                                         "links": [],
@@ -1678,7 +1678,7 @@
                                     "applicability": null,
                                     "legifrance_article": null,
                                     "outer_alineas": [],
-                                    "reference_str": null,
+                                    "reference_str": "Annexe II 3.3.",
                                     "sections": [
                                         {
                                             "annotations": null,
@@ -1786,7 +1786,7 @@
                                                     "text": "- la cellule ne comporte pas de mezzanine."
                                                 }
                                             ],
-                                            "reference_str": null,
+                                            "reference_str": "Annexe II 3.3.1.",
                                             "sections": [],
                                             "title": {
                                                 "links": [],
@@ -1840,7 +1840,7 @@
                                                     "text": "- l'aire résiste à la force portante calculée pour un véhicule de 320 kN avec un maximum de 130 kN par essieu, ceux-ci étant distants de 3,6 mètres au minimum."
                                                 }
                                             ],
-                                            "reference_str": null,
+                                            "reference_str": "Annexe II 3.3.2.",
                                             "sections": [],
                                             "title": {
                                                 "links": [],
@@ -1891,7 +1891,7 @@
                                             "text": "Dans le cas où le dispositif est manœuvrable uniquement par l'exploitant, ce dernier fixe les mesures organisationnelles permettant l'accès des services d'incendie et de secours par cette ouverture en cas de sinistre, avant leur arrivée. Ces mesures sont intégrées au plan de défense incendie lorsqu'il existe en application du point 23 de cette annexe."
                                         }
                                     ],
-                                    "reference_str": null,
+                                    "reference_str": "Annexe II 3.4.",
                                     "sections": [],
                                     "title": {
                                         "links": [],
@@ -1925,7 +1925,7 @@
                                             "text": "Ces documents sont annexés au plan de défense incendie lorsqu'il existe en application du point 23 de cette annexe."
                                         }
                                     ],
-                                    "reference_str": null,
+                                    "reference_str": "Annexe II 3.5.",
                                     "sections": [],
                                     "title": {
                                         "links": [],
@@ -2021,7 +2021,7 @@
                                     "text": "Les justificatifs attestant du respect des prescriptions du présent point sont conservés et intégrés au dossier prévu au point 1.2. de la présente annexe."
                                 }
                             ],
-                            "reference_str": null,
+                            "reference_str": "Annexe II 4.",
                             "sections": [],
                             "title": {
                                 "links": [],
@@ -2080,7 +2080,7 @@
                                     "text": "Les dispositions de ce point ne s'appliquent pas pour un stockage couvert ouvert."
                                 }
                             ],
-                            "reference_str": null,
+                            "reference_str": "Annexe II 5.",
                             "sections": [],
                             "title": {
                                 "links": [],
@@ -2139,7 +2139,7 @@
                                     "text": "- les parois séparatives dépassent d'au moins 1 mètre la couverture au droit du franchissement. Cette disposition n'est pas applicable si un dispositif équivalent, empêchant la propagation de l'incendie d'une cellule vers une autre par la toiture, est mis en place."
                                 }
                             ],
-                            "reference_str": null,
+                            "reference_str": "Annexe II 6.",
                             "sections": [],
                             "title": {
                                 "links": [],
@@ -2198,7 +2198,7 @@
                                     "text": "Les dispositions du présent 7 s'appliquent sans préjudice de l'application éventuelle des articles 3 à 5 de l'arrêté."
                                 }
                             ],
-                            "reference_str": null,
+                            "reference_str": "Annexe II 7.",
                             "sections": [],
                             "title": {
                                 "links": [],
@@ -2227,7 +2227,7 @@
                                     "text": "Ces dispositions ne sont pas applicables dans les zones de préparation des commandes ou dans les zones de réception."
                                 }
                             ],
-                            "reference_str": null,
+                            "reference_str": "Annexe II 8.",
                             "sections": [],
                             "title": {
                                 "links": [],
@@ -2296,7 +2296,7 @@
                                     "text": "Le stockage en mezzanine de tout produit relevant de l'une au moins des rubriques 2662 ou 2663, au-delà d'un volume correspondant au seuil de la déclaration de ces rubriques, est interdit. Cette disposition n'est pas applicable pour les installations soumises à déclaration, ou en présence d'un système d'extinction automatique adapté."
                                 }
                             ],
-                            "reference_str": null,
+                            "reference_str": "Annexe II 9.",
                             "sections": [],
                             "title": {
                                 "links": [],
@@ -2340,7 +2340,7 @@
                                     "text": "Des réservoirs ou récipients contenant des matières susceptibles de réagir dangereusement ensemble ne sont pas associés à la même cuvette de rétention."
                                 }
                             ],
-                            "reference_str": null,
+                            "reference_str": "Annexe II 10.",
                             "sections": [],
                             "title": {
                                 "links": [],
@@ -2409,7 +2409,7 @@
                                     "text": "Les réseaux de collecte des effluents et des eaux pluviales de l'établissement sont équipés de dispositifs d'isolement visant à maintenir toute pollution accidentelle, en cas de sinistre, sur le site. Ces dispositifs sont maintenus en état de marche, signalés et actionnables en toute circonstance localement et à partir d'un poste de commande. Leur entretien et leur mise en fonctionnement sont définis par consigne."
                                 }
                             ],
-                            "reference_str": null,
+                            "reference_str": "Annexe II 11.",
                             "sections": [],
                             "title": {
                                 "links": [],
@@ -2443,7 +2443,7 @@
                                     "text": "Sauf pour les installations soumises à déclaration, l'exploitant inclut dans le dossier prévu au point 1.2 de la présente annexe les documents démontrant la pertinence du dimensionnement retenu pour les dispositifs de détection."
                                 }
                             ],
-                            "reference_str": null,
+                            "reference_str": "Annexe II 12.",
                             "sections": [],
                             "title": {
                                 "links": [],
@@ -2537,7 +2537,7 @@
                                     "text": "Dans le trimestre qui suit le début de l'exploitation de tout entrepôt soumis à enregistrement ou à autorisation, l'exploitant organise un exercice de défense contre l'incendie. Cet exercice est renouvelé au moins tous les trois ans."
                                 }
                             ],
-                            "reference_str": null,
+                            "reference_str": "Annexe II 13.",
                             "sections": [],
                             "title": {
                                 "links": [],
@@ -2571,7 +2571,7 @@
                                     "text": "Dans le trimestre qui suit le début de l'exploitation de tout entrepôt, l'exploitant organise un exercice d'évacuation. Il est renouvelé au moins tous les six mois sans préjudice des autres réglementations applicables."
                                 }
                             ],
-                            "reference_str": null,
+                            "reference_str": "Annexe II 14.",
                             "sections": [],
                             "title": {
                                 "links": [],
@@ -2616,7 +2616,7 @@
                                     "text": "L'entrepôt est équipé d'une installation de protection contre la foudre respectant les dispositions de la section III de l'arrêté du 4 octobre 2010 susvisé."
                                 }
                             ],
-                            "reference_str": null,
+                            "reference_str": "Annexe II 15.",
                             "sections": [],
                             "title": {
                                 "links": [],
@@ -2650,7 +2650,7 @@
                                     "text": "Si l'éclairage met en œuvre des lampes à vapeur de sodium ou de mercure, l'exploitant prend toute disposition pour qu'en cas d'éclatement de l'ampoule tous les éléments soient confinés dans l'appareil."
                                 }
                             ],
-                            "reference_str": null,
+                            "reference_str": "Annexe II 16.",
                             "sections": [],
                             "title": {
                                 "links": [],
@@ -2689,7 +2689,7 @@
                                     "text": "S'il existe un local de recharge de batteries des chariots automoteurs, il est exclusivement réservé à cet effet et est, soit extérieur à l'entrepôt, soit séparé des cellules de stockage par des parois et des portes munies d'un ferme-porte, respectivement de degré au moins REI 120 et EI2 120 C (Classe de durabilité C2 pour les portes battantes)."
                                 }
                             ],
-                            "reference_str": null,
+                            "reference_str": "Annexe II 17.",
                             "sections": [],
                             "title": {
                                 "links": [],
@@ -2702,7 +2702,7 @@
                             "applicability": null,
                             "legifrance_article": null,
                             "outer_alineas": [],
-                            "reference_str": null,
+                            "reference_str": "Annexe II 18.",
                             "sections": [
                                 {
                                     "annotations": null,
@@ -2735,7 +2735,7 @@
                                             "text": "- un dispositif sonore d'avertissement, en cas de mauvais fonctionnement des brûleurs, ou un autre système d'alerte d'efficacité équivalente."
                                         }
                                     ],
-                                    "reference_str": null,
+                                    "reference_str": "Annexe II 18.1.",
                                     "sections": [],
                                     "title": {
                                         "links": [],
@@ -2824,7 +2824,7 @@
                                             "text": "Les moyens de chauffage des bureaux de quais, s'ils existent, présentent les mêmes garanties de sécurité que celles prévues pour les locaux dans lesquels ils sont situés."
                                         }
                                     ],
-                                    "reference_str": null,
+                                    "reference_str": "Annexe II 18.2.",
                                     "sections": [],
                                     "title": {
                                         "links": [],
@@ -2850,7 +2850,7 @@
                                     "text": "Les locaux sont maintenus propres et régulièrement nettoyés, notamment de manière à éviter les amas de matières dangereuses ou polluantes et de poussières. Le matériel de nettoyage est adapté aux risques présentés par les produits et poussières."
                                 }
                             ],
-                            "reference_str": null,
+                            "reference_str": "Annexe II 19.",
                             "sections": [],
                             "title": {
                                 "links": [],
@@ -2920,7 +2920,7 @@
                                     "text": "Une vérification de la bonne réalisation des travaux est effectuée par l'exploitant ou son représentant avant la reprise de l'activité. Elle fait l'objet d'un enregistrement et est tenue à la disposition de l'inspection des installations classées."
                                 }
                             ],
-                            "reference_str": null,
+                            "reference_str": "Annexe II 20.",
                             "sections": [],
                             "title": {
                                 "links": [],
@@ -2999,7 +2999,7 @@
                                     "text": "- la procédure d'alerte avec les numéros de téléphone du responsable d'intervention de l'établissement, des services d'incendie et de secours."
                                 }
                             ],
-                            "reference_str": null,
+                            "reference_str": "Annexe II 21.",
                             "sections": [],
                             "title": {
                                 "links": [],
@@ -3038,7 +3038,7 @@
                                     "text": "L'exploitant s'assure d'une bonne maintenance des matériels de sécurité et de lutte contre l'incendie (exutoires, systèmes de détection et d'extinction, portes coupe-feu, clapets coupe-feu, colonne sèche notamment) ainsi que des installations électriques et de chauffage. Les vérifications périodiques de ces matériels sont inscrites sur un registre."
                                 }
                             ],
-                            "reference_str": null,
+                            "reference_str": "Annexe II 22.",
                             "sections": [],
                             "title": {
                                 "links": [],
@@ -3122,7 +3122,7 @@
                                     "text": "Ce plan de défense incendie est inclus dans le plan opérationnel interne s'il existe. Il est tenu à jour."
                                 }
                             ],
-                            "reference_str": null,
+                            "reference_str": "Annexe II 23.",
                             "sections": [],
                             "title": {
                                 "links": [],
@@ -3135,7 +3135,7 @@
                             "applicability": null,
                             "legifrance_article": null,
                             "outer_alineas": [],
-                            "reference_str": null,
+                            "reference_str": "Annexe II 24.",
                             "sections": [
                                 {
                                     "annotations": null,
@@ -3292,7 +3292,7 @@
                                             "text": "Dans le cas où le bruit particulier de l'établissement est à tonalité marquée au sens du point 1.9 de l'annexe de l'arrêté du 23 janvier 1997 susvisé, de manière établie ou cyclique, sa durée d'apparition n'excède pas 30 % de la durée de fonctionnement de l'établissement dans chacune des périodes diurne ou nocturne définies dans le tableau ci-dessus."
                                         }
                                     ],
-                                    "reference_str": null,
+                                    "reference_str": "Annexe II 24.1.",
                                     "sections": [],
                                     "title": {
                                         "links": [],
@@ -3316,7 +3316,7 @@
                                             "text": "L'usage de tous appareils de communication par voie acoustique (sirènes, avertisseurs, haut-parleurs, etc.), gênant pour le voisinage, est interdit, sauf si leur emploi est exceptionnel et réservé à la prévention et au signalement d'incidents graves ou d'accidents."
                                         }
                                     ],
-                                    "reference_str": null,
+                                    "reference_str": "Annexe II 24.2.",
                                     "sections": [],
                                     "title": {
                                         "links": [],
@@ -3345,7 +3345,7 @@
                                             "text": "Cette disposition n'est pas applicable pour les installations soumises à déclaration."
                                         }
                                     ],
-                                    "reference_str": null,
+                                    "reference_str": "Annexe II 24.3.",
                                     "sections": [],
                                     "title": {
                                         "links": [],
@@ -3371,7 +3371,7 @@
                                     "text": "En dehors des heures d'exploitation et d'ouverture de l'entrepôt, une surveillance de l'entrepôt, par gardiennage ou télésurveillance, est mise en place en permanence afin de permettre notamment l'alerte des services d'incendie et de secours et, le cas échéant, de l'équipe d'intervention, ainsi que l'accès des services de secours en cas d'incendie, d'assurer leur accueil sur place et de leur permettre l'accès à tous les lieux."
                                 }
                             ],
-                            "reference_str": null,
+                            "reference_str": "Annexe II 25.",
                             "sections": [],
                             "title": {
                                 "links": [],
@@ -3400,7 +3400,7 @@
                                     "text": "- les cuves et les canalisations ayant contenu des produits susceptibles de polluer les eaux ou de provoquer un incendie ou une explosion sont vidées, nettoyées, dégazées et, le cas échéant, décontaminées. Elles sont, si possible, enlevées, sinon elles sont neutralisées par remplissage avec un solide inerte. Le produit utilisé pour la neutralisation recouvre toute la surface de la paroi interne et possède une résistance à terme suffisante pour empêcher l'affaissement du sol en surface."
                                 }
                             ],
-                            "reference_str": null,
+                            "reference_str": "Annexe II 26.",
                             "sections": [],
                             "title": {
                                 "links": [],
@@ -3432,14 +3432,14 @@
                             "text": "POINTS DE CONTRÔLES DES INSTALLATIONS SOUMISES À DÉCLARATION"
                         }
                     ],
-                    "reference_str": null,
+                    "reference_str": "Annexe III",
                     "sections": [
                         {
                             "annotations": null,
                             "applicability": null,
                             "legifrance_article": null,
                             "outer_alineas": [],
-                            "reference_str": null,
+                            "reference_str": "Annexe III 1.",
                             "sections": [
                                 {
                                     "annotations": null,
@@ -3452,7 +3452,7 @@
                                             "text": "Pas de point de contrôle."
                                         }
                                     ],
-                                    "reference_str": null,
+                                    "reference_str": "Annexe III 1.1.",
                                     "sections": [],
                                     "title": {
                                         "links": [],
@@ -3512,7 +3512,7 @@
                                             "text": "Pas de point de contrôle."
                                         }
                                     ],
-                                    "reference_str": null,
+                                    "reference_str": "Annexe III 1.2.",
                                     "sections": [],
                                     "title": {
                                         "links": [],
@@ -3548,7 +3548,7 @@
                                     "text": "Présentation, le cas échéant, de la justification que les zones d'effets létaux générés par l'incendie de cellule restent à l'intérieur du site."
                                 }
                             ],
-                            "reference_str": null,
+                            "reference_str": "Annexe III 2.",
                             "sections": [],
                             "title": {
                                 "links": [],
@@ -3567,7 +3567,7 @@
                                     "text": "Pas de point de contrôle."
                                 }
                             ],
-                            "reference_str": null,
+                            "reference_str": "Annexe III 3.",
                             "sections": [],
                             "title": {
                                 "links": [],
@@ -3586,7 +3586,7 @@
                                     "text": "Pas de point de contrôle."
                                 }
                             ],
-                            "reference_str": null,
+                            "reference_str": "Annexe III 4.",
                             "sections": [],
                             "title": {
                                 "links": [],
@@ -3605,7 +3605,7 @@
                                     "text": "Présence des commandes manuelles, des trappes de désenfumage en partie haute et le cas échéant des ouvrants en façade (le non-respect de ce point relève d'une non-conformité majeure)."
                                 }
                             ],
-                            "reference_str": null,
+                            "reference_str": "Annexe III 5.",
                             "sections": [],
                             "title": {
                                 "links": [],
@@ -3624,7 +3624,7 @@
                                     "text": "Pas de point de contrôle."
                                 }
                             ],
-                            "reference_str": null,
+                            "reference_str": "Annexe III 6.",
                             "sections": [],
                             "title": {
                                 "links": [],
@@ -3643,7 +3643,7 @@
                                     "text": "Vérification de la taille des cellules (le non-respect de ce point relève d'une non-conformité majeure)."
                                 }
                             ],
-                            "reference_str": null,
+                            "reference_str": "Annexe III 7.",
                             "sections": [],
                             "title": {
                                 "links": [],
@@ -3662,7 +3662,7 @@
                                     "text": "Vérification de l'existence de séparations physiques entre matières dangereuses chimiquement incompatibles."
                                 }
                             ],
-                            "reference_str": null,
+                            "reference_str": "Annexe III 8.",
                             "sections": [],
                             "title": {
                                 "links": [],
@@ -3681,7 +3681,7 @@
                                     "text": "Vérification que les matières stockées en vrac sont séparées des autres matières par un espace minimum de 3 mètres sur le ou les côtés ouverts et qu'une distance minimale de 1 mètre est respectée par rapport aux parois, aux éléments de structure et à la base de la toiture ou du plafond ou de tout système de chauffage."
                                 }
                             ],
-                            "reference_str": null,
+                            "reference_str": "Annexe III 9.",
                             "sections": [],
                             "title": {
                                 "links": [],
@@ -3700,7 +3700,7 @@
                                     "text": "Présence de la capacité de rétention définie à l'alinéa 2 du point 10."
                                 }
                             ],
-                            "reference_str": null,
+                            "reference_str": "Annexe III 10.",
                             "sections": [],
                             "title": {
                                 "links": [],
@@ -3724,7 +3724,7 @@
                                     "text": "- présence de dispositif d'obturation automatique, en cas de confinement externe (le non-respect de ce point relève d'une non-conformité majeure)."
                                 }
                             ],
-                            "reference_str": null,
+                            "reference_str": "Annexe III 11.",
                             "sections": [],
                             "title": {
                                 "links": [],
@@ -3758,7 +3758,7 @@
                                     "text": "- présentation du compte rendu des vérifications de maintenance et des tests des dispositifs de détection d'incendie datant de moins d'un an (le non-respect de ce point relève d'une non-conformité majeure)."
                                 }
                             ],
-                            "reference_str": null,
+                            "reference_str": "Annexe III 12.",
                             "sections": [],
                             "title": {
                                 "links": [],
@@ -3787,7 +3787,7 @@
                                     "text": "- le cas échéant, présentation des derniers rapports d'entretien et de vérification des systèmes d'extinction automatique d'incendie (le non-respect de ce point relève d'une non-conformité majeure)."
                                 }
                             ],
-                            "reference_str": null,
+                            "reference_str": "Annexe III 13.",
                             "sections": [],
                             "title": {
                                 "links": [],
@@ -3806,7 +3806,7 @@
                                     "text": "Présence des deux issues dans deux directions opposées pour chaque cellule de stockage d'une surface supérieure à 1 000 m2, non verrouillées et facilement manœuvrables en présence de personnel (le non-respect de ce point relève d'une non-conformité majeure)."
                                 }
                             ],
-                            "reference_str": null,
+                            "reference_str": "Annexe III 14.",
                             "sections": [],
                             "title": {
                                 "links": [],
@@ -3830,7 +3830,7 @@
                                     "text": "- présence, lorsqu'il est requis, d'un interrupteur central."
                                 }
                             ],
-                            "reference_str": null,
+                            "reference_str": "Annexe III 15.",
                             "sections": [],
                             "title": {
                                 "links": [],
@@ -3854,7 +3854,7 @@
                                     "text": "- vérification qu'en cas de mise en œuvre de lampes à vapeur de sodium ou de mercure et d'éclatement de l'ampoule les dispositions sont prises pour que les éléments soient confinés dans l'appareil."
                                 }
                             ],
-                            "reference_str": null,
+                            "reference_str": "Annexe III 16.",
                             "sections": [],
                             "title": {
                                 "links": [],
@@ -3873,7 +3873,7 @@
                                     "text": "Pas de point de contrôle."
                                 }
                             ],
-                            "reference_str": null,
+                            "reference_str": "Annexe III 17.",
                             "sections": [],
                             "title": {
                                 "links": [],
@@ -3912,7 +3912,7 @@
                                     "text": "- en cas de présence d'aérothermes à gaz, vérification de la présence d'un dispositif de protection contre les chocs."
                                 }
                             ],
-                            "reference_str": null,
+                            "reference_str": "Annexe III 18.",
                             "sections": [],
                             "title": {
                                 "links": [],
@@ -3931,7 +3931,7 @@
                                     "text": "Pas de point de contrôle."
                                 }
                             ],
-                            "reference_str": null,
+                            "reference_str": "Annexe III 19.",
                             "sections": [],
                             "title": {
                                 "links": [],
@@ -3950,7 +3950,7 @@
                                     "text": "Pas de point de contrôle."
                                 }
                             ],
-                            "reference_str": null,
+                            "reference_str": "Annexe III 20.",
                             "sections": [],
                             "title": {
                                 "links": [],
@@ -3969,7 +3969,7 @@
                                     "text": "Présence et affichage de chacune des consignes."
                                 }
                             ],
-                            "reference_str": null,
+                            "reference_str": "Annexe III 21.",
                             "sections": [],
                             "title": {
                                 "links": [],
@@ -3988,7 +3988,7 @@
                                     "text": "Présentation du registre."
                                 }
                             ],
-                            "reference_str": null,
+                            "reference_str": "Annexe III 22.",
                             "sections": [],
                             "title": {
                                 "links": [],
@@ -4007,7 +4007,7 @@
                                     "text": "Sans objet."
                                 }
                             ],
-                            "reference_str": null,
+                            "reference_str": "Annexe III 23.",
                             "sections": [],
                             "title": {
                                 "links": [],
@@ -4026,7 +4026,7 @@
                                     "text": "Pas de point de contrôle."
                                 }
                             ],
-                            "reference_str": null,
+                            "reference_str": "Annexe III 24.",
                             "sections": [],
                             "title": {
                                 "links": [],
@@ -4045,7 +4045,7 @@
                                     "text": "Pas de point de contrôle."
                                 }
                             ],
-                            "reference_str": null,
+                            "reference_str": "Annexe III 25.",
                             "sections": [],
                             "title": {
                                 "links": [],
@@ -4064,7 +4064,7 @@
                                     "text": "Pas de point de contrôle."
                                 }
                             ],
-                            "reference_str": null,
+                            "reference_str": "Annexe III 26.",
                             "sections": [],
                             "title": {
                                 "links": [],
@@ -4383,7 +4383,7 @@
                             "text": ""
                         }
                     ],
-                    "reference_str": null,
+                    "reference_str": "Annexe IV",
                     "sections": [],
                     "title": {
                         "links": [],
@@ -4817,7 +4817,7 @@
                             "text": ""
                         }
                     ],
-                    "reference_str": null,
+                    "reference_str": "Annexe V",
                     "sections": [],
                     "title": {
                         "links": [],
@@ -5222,7 +5222,7 @@
                             "text": ""
                         }
                     ],
-                    "reference_str": null,
+                    "reference_str": "Annexe VI",
                     "sections": [],
                     "title": {
                         "links": [],
