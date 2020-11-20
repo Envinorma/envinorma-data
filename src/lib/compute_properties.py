@@ -206,7 +206,7 @@ def _add_metadata(am: ArreteMinisteriel, metadata: AMMetadata) -> ArreteMinister
 
 def _generate_parametric_descriptor(version_descriptor: Tuple[str, ...]) -> str:
     if not version_descriptor:
-        return 'unique_version'
+        return 'no_date_version'
     return '_AND_'.join(version_descriptor).replace(' ', '_')
 
 

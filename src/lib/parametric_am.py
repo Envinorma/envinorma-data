@@ -429,7 +429,7 @@ def _extract_installation_date_criterion(
     targets = _extract_sorted_targets(
         _extract_conditions_from_parametrization(ParameterEnum.DATE_INSTALLATION.value, parametrization), True
     )
-    if not targets:
+    if not targets or ParameterEnum.DATE_INSTALLATION.value not in parameter_values:
         return None
     value = parameter_values[ParameterEnum.DATE_INSTALLATION.value]
     if value < targets[0]:
@@ -605,6 +605,8 @@ def _generate_exhaustive_combinations(parametrization: Parametrization) -> Combi
     if not options_dicts:
         return {}
     combinations = _generate_combinations(options_dicts)
+    if () not in combinations:  # for undefined parameters warnings
+        combinations[()] = {}
     return combinations
 
 

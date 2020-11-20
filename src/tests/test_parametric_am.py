@@ -270,16 +270,19 @@ def test_generate_all_am_versions():
     )
 
     res = generate_all_am_versions(am, parametrization)
-    assert len(res) == 2
+    assert len(res) == 3
     assert ('nouvelle-installation != False',) in res
     assert ('nouvelle-installation == False',) in res
+    assert () in res
     assert not res[('nouvelle-installation == False',)].sections[0].applicability.active
     assert res[('nouvelle-installation != False',)].sections[0].applicability.active
+    assert res[()].sections[0].applicability.active
+    assert len(res[()].sections[0].applicability.warnings) == 1
 
     res_2 = generate_all_am_versions(am, Parametrization([], []))
     assert len(res_2) == 1
     assert tuple() in res_2
-    assert res_2[tuple()].sections[0].applicability is None
+    assert res_2[()].sections[0].applicability is None
 
 
 def test_extract_installation_date_criterion():
@@ -311,6 +314,9 @@ def test_extract_installation_date_criterion():
     assert youngest
     assert youngest.left_date == '2019-01-01'
     assert youngest.right_date is None
+
+    assert _extract_installation_date_criterion(parametrization, {}) is None
+    assert _extract_installation_date_criterion(Parametrization([], []), {}) is None
 
 
 def test_is_satisfied():
