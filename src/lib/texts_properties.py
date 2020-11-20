@@ -261,7 +261,7 @@ def _compute_am_properties(am: ArreteMinisteriel) -> AMProperties:
     )
 
 
-def compute_properties(text: LegifranceText, am: Optional[ArreteMinisteriel]) -> TextProperties:
+def compute_texts_properties(text: LegifranceText, am: Optional[ArreteMinisteriel]) -> TextProperties:
     return TextProperties(_compute_lf_properties(text), _compute_am_properties(am) if am else None)
 
 

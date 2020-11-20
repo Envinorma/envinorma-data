@@ -30,7 +30,7 @@ from lib.manual_enrichments import get_manual_combinations, get_manual_enricher,
 from lib.parametric_am import generate_all_am_versions
 from lib.am_enriching import add_references, remove_null_applicabilities
 from lib.legifrance_API import get_current_loda_via_cid_response, get_legifrance_client
-from lib.texts_properties import LegifranceText, compute_am_diffs, compute_properties
+from lib.texts_properties import LegifranceText, compute_am_diffs, compute_texts_properties
 from lib.am_structure_extraction import (
     ArreteMinisteriel,
     transform_arrete_ministeriel,
@@ -204,7 +204,7 @@ def handle_am(
         check_am(am)
     if dump_am and am:
         write_json(am.to_dict(), _get_structured_am_filename(metadata))
-    properties = compute_properties(legifrance_text, am)
+    properties = compute_texts_properties(legifrance_text, am)
     parametric_am = None
     if am and with_manual_enrichments:
         am, parametric_am = _handle_manual_enrichments(am, metadata, dump_am)
