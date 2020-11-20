@@ -382,67 +382,63 @@ def _text_to_raw_text_markdown(text: StructuredText) -> str:
 
 
 def _condition_source_to_markdown(source: ConditionSource) -> str:
-    lines: List[str] = []
-    lines.append(f'    - Section: {list(source.reference.section.path)}')
-    lines.append(f'    - Alineas: {source.reference.outer_alinea_indices or "tous"}')
-    lines.append(f'    - Explication: {source.explanation}')
-    return '\n\n'.join(lines)
+    elts: List[str] = []
+    elts.append(f'{source.reference.section.path} {tuple(source.reference.outer_alinea_indices or [])}')
+    elts.append(f' ({source.explanation})')
+    return ''.join(elts)
 
 
-def alternative_section_to_markdown(section: AlternativeSection) -> str:
-    markdown: List[str] = []
-    markdown.append(f'- **Description** : {section.description}')
-    markdown.append(f'- **Condition de modification** : `{condition_to_str(section.condition)}`')
-    markdown.append('- **Nouveau texte** :')
-    markdown.append(_text_to_raw_text_markdown(section.new_text))
-    markdown.append('- **Source** :')
-    markdown.append(_condition_source_to_markdown(section.source))
-    return '\n\n'.join(markdown)
+def _count_alineas(section: StructuredText) -> int:
+    return 1 + len(section.outer_alineas) + sum([_count_alineas(sec) for sec in section.sections])
 
 
-def non_application_condition_to_markdown(condition: NonApplicationCondition) -> str:
-    markdown: List[str] = []
-    markdown.append(f'- **Description** : {condition.description}')
-    markdown.append(f'- **Non applicable si** :  `{condition_to_str(condition.condition)}`')
-    markdown.append('- **Alinéas abrogés** : ' + str(condition.targeted_entity.outer_alinea_indices or 'tous'))
-    markdown.append('- **Source** :')
-    markdown.append(_condition_source_to_markdown(condition.source))
-    return '\n\n'.join(markdown)
+def alternative_section_to_row(section: AlternativeSection) -> str:
+    cells: List[str] = []
+    cells.append(str(section.targeted_section.path))
+    cells.append('AS')
+    cells.append('-')
+    cells.append(f'`{condition_to_str(section.condition)}`')
+    cells.append(f'{section.description}')
+    cells.append(_condition_source_to_markdown(section.source))
+    cells.append(f'{_count_alineas(section.new_text)} alineas')
+
+    return '|'.join(cells)
 
 
-def sections_and_conditions_to_markdown(
-    path: Ints,
-    alternative_sections: List[AlternativeSection],
-    non_application_conditions: List[NonApplicationCondition],
-) -> str:
-    lines: List[str] = []
-    lines.append(f'## Section {list(path)}')
-    lines.append('### Sections alternatives')
-    lines.extend(
-        [f'#### #{i}\n\n' + alternative_section_to_markdown(alt) for i, alt in enumerate(alternative_sections)]
-    )
-    lines.append('### Applications conditionnées')
-    lines.extend(
-        [
-            f'#### #{i}\n\n' + non_application_condition_to_markdown(na)
-            for i, na in enumerate(non_application_conditions)
-        ]
-    )
-    return '\n\n'.join(lines)
+def non_application_condition_to_row(condition: NonApplicationCondition) -> str:
+    cells: List[str] = []
+    cells.append(str(condition.targeted_entity.section.path))
+    cells.append('NAC')
+    cells.append(str(tuple(condition.targeted_entity.outer_alinea_indices or ())))
+    cells.append(f'`{condition_to_str(condition.condition)}`')
+    cells.append(f'{condition.description}')
+    cells.append(_condition_source_to_markdown(condition.source))
+    cells.append('-')
+    return '|'.join(cells)
+
+
+def sections_and_conditions_to_rows(
+    alternative_sections: List[AlternativeSection], non_application_conditions: List[NonApplicationCondition]
+) -> List[str]:
+    return [alternative_section_to_row(alt) for alt in alternative_sections] + [
+        non_application_condition_to_row(na) for na in non_application_conditions
+    ]
 
 
 def parametrization_to_markdown(parametrization: Parametrization) -> str:
     all_paths = list(parametrization.path_to_alternative_sections) + list(parametrization.path_to_conditions)
-    markdown_lines: List[str] = []
+    table_rows = [
+        'Section | Type | Alineas | Condition | Description | Source | Alternative text',
+        '---|---|---|---|---|---|---',
+    ]
     for path in sorted(all_paths):
-        markdown_lines.append(
-            sections_and_conditions_to_markdown(
-                path,
+        table_rows.extend(
+            sections_and_conditions_to_rows(
                 parametrization.path_to_alternative_sections.get(path, []),
                 parametrization.path_to_conditions.get(path, []),
             )
         )
-    return '\n\n'.join(markdown_lines)
+    return '\n'.join(table_rows)
 
 
 def build_simple_parametrization(
