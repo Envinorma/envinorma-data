@@ -2,17 +2,15 @@ import json
 import re
 from copy import deepcopy, copy
 from collections import defaultdict
-from dataclasses import dataclass, asdict
 from typing import Any, DefaultDict, Dict, List, Set, Optional, Tuple
 
 import requests
 from bs4 import BeautifulSoup, Tag
 from tqdm import tqdm
 
-from lib.am_structure_extraction import EnrichedString, Link, ArreteMinisteriel, StructuredText
+from lib.data import EnrichedString, Link, ArreteMinisteriel, StructuredText, Hyperlink, Anchor
+from lib.config import AIDA_URL
 
-_AIDA_BASE_URL = 'https://aida.ineris.fr/consultation_document/'
-_AIDA_URL = _AIDA_BASE_URL + '{}'
 _NOR_REGEXP = r'[A-Z]{4}[0-9]{7}[A-Z]'
 
 
@@ -32,7 +30,7 @@ def extract_nor_from_html(html: str) -> str:
 
 
 def download_html(document_id: str) -> str:
-    response = requests.get(_AIDA_URL.format(document_id))
+    response = requests.get(AIDA_URL + document_id)
     if response.status_code != 200:
         raise ValueError(f'Request failed with status code {response.status_code}')
     return response.content.decode()
@@ -49,12 +47,6 @@ def extract_page_title(html: str) -> str:
 
 def scrap_title(document_id: str) -> str:
     return extract_page_title(download_html(document_id))
-
-
-@dataclass
-class Hyperlink:
-    content: str
-    href: str
 
 
 def get_aida_content_area(soup: BeautifulSoup) -> Tag:
@@ -86,7 +78,8 @@ def cleanup_aida_href(str_: str, document_id: str) -> str:
     tmp_str = str_
     for prefix in _AIDA_PREFIXES_TO_REMOVE:
         tmp_str = tmp_str.replace(prefix, '')
-    return _AIDA_URL.format(f'{document_id}{tmp_str}' if starts_with_hash(tmp_str) else tmp_str)
+    url = AIDA_URL + '{}'
+    return url.format(f'{document_id}{tmp_str}' if starts_with_hash(tmp_str) else tmp_str)
 
 
 def cleanup_aida_link(link: Hyperlink, document_id: str) -> Hyperlink:
@@ -107,12 +100,6 @@ def extract_all_urls_from_content_page(document_id: str) -> List[Hyperlink]:
     html = download_html(document_id)
     raw_links = extract_hyperlinks(html)
     return keep_solid_aida_links([cleanup_aida_link(link, document_id) for link in raw_links])
-
-
-@dataclass
-class Anchor:
-    name: str
-    anchored_text: str
 
 
 def extract_anchor_if_present_in_tag(tag: Tag) -> Optional[Anchor]:
@@ -210,7 +197,7 @@ def make_github_anchor(str_: str) -> str:
 
 
 def extract_page_and_anchor_from_aida_href(href: str) -> Optional[Tuple[str, Optional[str]]]:
-    clean_href = href.replace(_AIDA_BASE_URL, '')
+    clean_href = href.replace(AIDA_URL, '')
     nb_hash = clean_href.count('#')
     if nb_hash == 0:
         return clean_href, None
@@ -274,7 +261,7 @@ def scrap_all_anchors() -> None:
     page_id_to_anchors_json: Dict[str, List[Dict[str, Any]]] = {}
     for page_id in tqdm(page_ids):
         try:
-            page_id_to_anchors_json[page_id] = [asdict(anchor) for anchor in extract_all_anchors_from_aida(page_id)]
+            page_id_to_anchors_json[page_id] = [anchor.to_dict() for anchor in extract_all_anchors_from_aida(page_id)]
         except Exception as exc:  # pylint: disable=broad-except
             print(exc)
     json.dump(page_id_to_anchors_json, open('data/aida/hyperlinks/page_id_to_anchors.json', 'w'), ensure_ascii=False)

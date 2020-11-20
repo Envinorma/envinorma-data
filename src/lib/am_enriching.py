@@ -3,9 +3,10 @@ from copy import copy
 from dataclasses import replace
 from typing import Dict, List, Optional, Set, Tuple
 
-from lib.data import Annotations, Applicability, ArreteMinisteriel, EnrichedString, StructuredText, Topic
-from lib.parametric_am import Ints
+from lib.data import Annotations, Applicability, ArreteMinisteriel, StructuredText, Topic
 from lib.structure_detection import NUMBERING_PATTERNS, NumberingPattern, ROMAN_PATTERN, detect_longest_matched_string
+
+Ints = Tuple[int, ...]
 
 
 def _add_topic_in_text(text: StructuredText, topics: Dict[Ints, Topic], path: Ints) -> StructuredText:

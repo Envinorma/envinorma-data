@@ -3,7 +3,7 @@ from lib.parametrization import ConditionSource, EntityReference, SectionReferen
 from typing import Dict, List, Optional, Tuple
 
 from lib.data import EnrichedString, Regime, StructuredText
-from lib.parametric_am import (
+from lib.parametrization import (
     AlternativeSection,
     AndCondition,
     NonApplicationCondition,

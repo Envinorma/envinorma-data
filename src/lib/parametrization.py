@@ -365,6 +365,9 @@ class Parametrization:
         )
 
 
+Combinations = Dict[Tuple[str, ...], Dict[Parameter, Any]]
+
+
 def _extract_text(text: StructuredText, depth: int) -> List[str]:
     lines: List[str] = []
     lines.append('#' * depth + f' {text.title.text}')
@@ -471,4 +474,3 @@ def build_simple_parametrization(
         for ref, value in modified_articles.items()
     ]
     return Parametrization(application_conditions, alternative_sections)
-

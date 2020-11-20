@@ -1,10 +1,11 @@
 import re
 from dataclasses import dataclass
-from typing import Optional, Tuple, Union, List
+from typing import Callable, Optional, Tuple, Union, List
 
 from bs4 import BeautifulSoup
 
-from lib.am_structure_extraction import (
+from lib.data import AMProperties, LegifranceTextProperties, TextProperties, TitleInconsistency
+from lib.data import (
     ArreteMinisteriel,
     ArticleStatus,
     EnrichedString,
@@ -12,9 +13,8 @@ from lib.am_structure_extraction import (
     LegifranceText,
     LegifranceSection,
     LegifranceArticle,
-    split_in_non_empty_html_line,
-    keep_visa_string,
 )
+from lib.am_structure_extraction import split_in_non_empty_html_line, keep_visa_string
 from lib.structure_detection import (
     NUMBERING_PATTERNS,
     get_first_match,
@@ -23,14 +23,6 @@ from lib.structure_detection import (
     prefixes_are_increasing,
     prefixes_are_continuous,
 )
-
-
-@dataclass
-class LegifranceTextProperties:
-    structure: str
-    nb_articles: int
-    nb_non_numbered_articles: int
-    nb_lost_vu_lines: int
 
 
 def _count_articles(text: Union[LegifranceText, LegifranceSection]) -> int:
@@ -116,23 +108,6 @@ def _get_consecutive_with_one_none(articles: List[LegifranceArticle]) -> List[Tu
                 pairs.append((_html_to_str(articles[i - 1].content), _html_to_str(article.content)))
             previous_is_not_none = False
     return pairs
-
-
-@dataclass
-class TitleInconsistency:
-    titles: List[str]
-    parent_section_title: str
-    inconsistency: str
-
-
-@dataclass
-class AMProperties:
-    structure: str
-    nb_sections: int
-    nb_articles: int
-    nb_tables: int
-    nb_empty_articles: int
-    title_inconsistencies: List[TitleInconsistency]
 
 
 _TREE_DEPTH_PREFIX = '|--'
@@ -286,12 +261,6 @@ def _compute_am_properties(am: ArreteMinisteriel) -> AMProperties:
     )
 
 
-@dataclass
-class TextProperties:
-    legifrance: LegifranceTextProperties
-    am: Optional[AMProperties]
-
-
 def compute_properties(text: LegifranceText, am: Optional[ArreteMinisteriel]) -> TextProperties:
     return TextProperties(_compute_lf_properties(text), _compute_am_properties(am) if am else None)
 
@@ -327,10 +296,9 @@ def _compare_texts(text_1: str, text_2: str) -> List[str]:
     return lines
 
 
-def compute_am_diffs(am_1: ArreteMinisteriel, am_2: ArreteMinisteriel) -> List[str]:
-    from lib.am_to_markdown import am_to_markdown
-
-    markdown_am_1 = am_to_markdown(am_1)
-    markdown_am_2 = am_to_markdown(am_2)
+def compute_am_diffs(
+    am_1: ArreteMinisteriel, am_2: ArreteMinisteriel, stringifier: Callable[[ArreteMinisteriel], str]
+) -> List[str]:
+    markdown_am_1 = stringifier(am_1)
+    markdown_am_2 = stringifier(am_2)
     return _compare_texts(markdown_am_1, markdown_am_2)
-

@@ -227,13 +227,14 @@ def _split_alineas_in_sections(alineas: List[TP], matches: List[bool]) -> Tuple[
         if match:
             break
     if first_match == -1:
-        return alineas, []
+        sections: List[List[TP]] = []
+        return alineas, sections
     outer_alineas = alineas[:first_match]
     other_matches = [first_match + 1 + idx for idx, match in enumerate(matches[first_match + 1 :]) if match]
-    return (
-        outer_alineas,
-        [alineas[a:b] for a, b in zip([first_match] + other_matches, other_matches + [len(matches)])],
-    )
+    sections: List[List[TP]] = [
+        alineas[a:b] for a, b in zip([first_match] + other_matches, other_matches + [len(matches)])
+    ]
+    return (outer_alineas, sections)
 
 
 def remove_empty_enriched_str(strs: List[EnrichedString]) -> List[EnrichedString]:

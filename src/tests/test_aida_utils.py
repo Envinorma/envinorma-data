@@ -1,7 +1,9 @@
-from lib.data import load_arrete_ministeriel
 import pytest
 import json
-from lib.am_structure_extraction import Link, EnrichedString, transform_arrete_ministeriel, load_legifrance_text
+from dataclasses import asdict
+
+from lib.data import load_arrete_ministeriel
+from lib.am_structure_extraction import Link, EnrichedString
 from lib.aida import (
     extract_hyperlinks,
     _GITHUB_BASE_LOC,
@@ -10,9 +12,8 @@ from lib.aida import (
     add_links_to_am,
     extract_anchors,
     aida_link_to_github_link,
-    _AIDA_BASE_URL,
+    AIDA_URL,
 )
-from dataclasses import asdict
 
 
 def test_hyperlinks_extraction():
@@ -68,26 +69,26 @@ def test_extract_anchors():
 def test_aida_link_to_github_link():
     pairs = [
         (
-            aida_link_to_github_link(Hyperlink('Bonjour', _AIDA_BASE_URL + '1234'), {}, 'NOR2', {'1234': 'NOR1'}),
+            aida_link_to_github_link(Hyperlink('Bonjour', AIDA_URL + '1234'), {}, 'NOR2', {'1234': 'NOR1'}),
             asdict(Hyperlink(content='Bonjour', href=f'{_GITHUB_BASE_LOC}/NOR1.md')),
         ),
-        (aida_link_to_github_link(Hyperlink('Bonjour', _AIDA_BASE_URL + '1234'), {}, 'NOR1', {'1234': 'NOR1'}), None),
-        (aida_link_to_github_link(Hyperlink('Bonjour', _AIDA_BASE_URL + '1234#1'), {}, 'NOR1', {'1234': 'NOR1'}), None),
+        (aida_link_to_github_link(Hyperlink('Bonjour', AIDA_URL + '1234'), {}, 'NOR1', {'1234': 'NOR1'}), None),
+        (aida_link_to_github_link(Hyperlink('Bonjour', AIDA_URL + '1234#1'), {}, 'NOR1', {'1234': 'NOR1'}), None),
         (
             aida_link_to_github_link(
-                Hyperlink('Bonjour', _AIDA_BASE_URL + '1234#1'), {'1': 'annexe-1'}, 'NOR1', {'1234': 'NOR1'}
+                Hyperlink('Bonjour', AIDA_URL + '1234#1'), {'1': 'annexe-1'}, 'NOR1', {'1234': 'NOR1'}
             ),
             asdict(Hyperlink(content='Bonjour', href='#annexe-1')),
         ),
         (
             aida_link_to_github_link(
-                Hyperlink('Bonjour', _AIDA_BASE_URL + '1234#1'), {'1': 'annexe-1'}, 'NOR2', {'1234': 'NOR1'}
+                Hyperlink('Bonjour', AIDA_URL + '1234#1'), {'1': 'annexe-1'}, 'NOR2', {'1234': 'NOR1'}
             ),
             asdict(Hyperlink(content='Bonjour', href=f'{_GITHUB_BASE_LOC}/NOR1.md#annexe-1')),
         ),
         (
             aida_link_to_github_link(
-                Hyperlink('Bonjour', _AIDA_BASE_URL + '1234#2'), {'1': 'annexe-1'}, 'NOR2', {'1234': 'NOR1'}
+                Hyperlink('Bonjour', AIDA_URL + '1234#2'), {'1': 'annexe-1'}, 'NOR2', {'1234': 'NOR1'}
             ),
             None,
         ),

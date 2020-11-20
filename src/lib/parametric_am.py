@@ -1,6 +1,7 @@
 from copy import copy, deepcopy
 from datetime import datetime, timedelta
 from typing import Any, Dict, KeysView, List, Optional, Set, Tuple, Union
+
 from lib.data import Applicability, ArreteMinisteriel, DateCriterion, Regime, StructuredText
 from lib.parametrization import (
     Equal,
@@ -19,6 +20,7 @@ from lib.parametrization import (
     Condition,
     Ints,
     LeafCondition,
+    Combinations,
     condition_to_str,
 )
 
@@ -595,9 +597,6 @@ def _generate_options_dicts(parametrization: Parametrization) -> List[OptionsDic
         conditions = _extract_conditions_from_parametrization(parameter, parametrization)
         options_dicts.append(_generate_options_dict(conditions))
     return options_dicts
-
-
-Combinations = Dict[Tuple[str, ...], Dict[Parameter, Any]]
 
 
 def _generate_exhaustive_combinations(parametrization: Parametrization) -> Combinations:

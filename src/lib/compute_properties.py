@@ -1,23 +1,36 @@
 import json
-from lib.parametrization import Parametrization
-from lib.manual_enrichments import get_manual_combinations, get_manual_enricher, get_manual_parametrization
-from lib.parametric_am import generate_all_am_versions
-from lib.am_enriching import add_references, remove_null_applicabilities
 import os
 import traceback
 from copy import copy
-from dataclasses import dataclass, asdict
 from datetime import datetime
-from enum import Enum
 from typing import List, Dict, Optional, Set, Tuple, Union
 
 from requests_oauthlib import OAuth2Session
 from tqdm import tqdm
 
-from lib.aida import Hyperlink, Anchor
-from lib.data import Classement, check_am
+from lib.data import (
+    Hyperlink,
+    Anchor,
+    Classement,
+    AMMetadata,
+    AidaData,
+    AMData,
+    AMState,
+    Data,
+    get_text_defined_id,
+    check_am,
+    LegifranceAPIError,
+    LegifranceTextFormatError,
+    StructurationError,
+    AMStructurationLog,
+)
+from lib.am_to_markdown import am_to_markdown
+from lib.parametrization import Parametrization
+from lib.manual_enrichments import get_manual_combinations, get_manual_enricher, get_manual_parametrization
+from lib.parametric_am import generate_all_am_versions
+from lib.am_enriching import add_references, remove_null_applicabilities
 from lib.legifrance_API import get_current_loda_via_cid_response, get_legifrance_client
-from lib.texts_properties import LegifranceText, TextProperties, compute_am_diffs, compute_properties
+from lib.texts_properties import LegifranceText, compute_am_diffs, compute_properties
 from lib.am_structure_extraction import (
     ArreteMinisteriel,
     transform_arrete_ministeriel,
@@ -25,42 +38,6 @@ from lib.am_structure_extraction import (
     check_legifrance_dict,
     AMStructurationError,
 )
-
-
-class AMState(Enum):
-    VIGUEUR = 'VIGUEUR'
-    ABROGE = 'ABROGE'
-
-
-@dataclass
-class AMMetadata:
-    cid: str
-    aida_page: str
-    page_name: str
-    short_title: str
-    classements: List[Classement]
-    state: AMState
-    publication_date: int
-    nor: Optional[str] = None
-
-
-@dataclass
-class AMData:
-    metadata: List[AMMetadata]
-    nor_to_aida: Dict[str, str]
-    aida_to_nor: Dict[str, str]
-
-
-@dataclass
-class AidaData:
-    page_id_to_links: Dict[str, List[Hyperlink]]
-    page_id_to_anchors: Dict[str, List[Anchor]]
-
-
-@dataclass
-class Data:
-    aida: AidaData
-    arretes_ministeriels: AMData
 
 
 def parse_aida_title_date(date_str: str) -> int:
@@ -98,36 +75,6 @@ def load_aida_data() -> AidaData:
 
 def load_data() -> Data:
     return Data(load_aida_data(), load_am_data())
-
-
-@dataclass
-class LegifranceAPIError:
-    status_code: int
-    content: str
-
-
-@dataclass
-class LegifranceTextFormatError:
-    message: str
-    stacktrace: str
-
-
-@dataclass
-class StructurationError:
-    message: str
-    stacktrace: str
-
-
-@dataclass
-class AMStructurationLog:
-    legifrance_api_error: Optional[LegifranceAPIError] = None
-    legifrance_text_format_error: Optional[LegifranceTextFormatError] = None
-    structuration_error: Optional[StructurationError] = None
-    properties: Optional[TextProperties] = None
-
-
-def get_text_defined_id(text: AMMetadata) -> str:
-    return text.nor or text.cid
 
 
 def _get_legifrance_filename(metadata: AMMetadata) -> str:
@@ -233,7 +180,7 @@ def _handle_manual_enrichments(
             filename = _generate_parametric_filename(metadata, version_desc)
             write_json(version.to_dict(), filename)
     diffs = {
-        _generate_parametric_descriptor(desc): compute_am_diffs(am, modified_version)
+        _generate_parametric_descriptor(desc): compute_am_diffs(am, modified_version, am_to_markdown)
         for desc, modified_version in all_versions.items()
     }
     return am, (parametrization, diffs)
@@ -301,5 +248,5 @@ def handle_all_am(
         if param_am:
             cid_to_param[metadata.cid] = param_am
     if dump_log and not am_cids:
-        write_json({cid: asdict(log) for cid, log in cid_to_log.items()}, 'data/AM/structuration_log.json', safe=True)
+        write_json({cid: log.to_dict() for cid, log in cid_to_log.items()}, 'data/AM/structuration_log.json', safe=True)
     return data, cid_to_log, cid_to_am, cid_to_param
