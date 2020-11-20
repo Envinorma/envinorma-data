@@ -200,19 +200,28 @@ LeafCondition = Union[Equal, Range, Greater, Littler]
 Condition = Union[LeafCondition, AndCondition, OrCondition]
 
 
+def parameter_value_to_str(value: Any) -> str:
+    if isinstance(value, datetime):
+        return value.strftime('%Y-%m-%d')
+    return str(value)
+
+
 def condition_to_str(condition: Condition) -> str:
     if isinstance(condition, Equal):
-        return f'{condition.parameter.id} == {condition.target}'
+        return f'{condition.parameter.id} == {parameter_value_to_str(condition.target)}'
     if isinstance(condition, Littler):
         comp = '<' if condition.strict else '<='
-        return f'{condition.parameter.id} {comp} {condition.target}'
+        return f'{condition.parameter.id} {comp} {parameter_value_to_str(condition.target)}'
     if isinstance(condition, Greater):
         comp = '>' if condition.strict else '>='
-        return f'{condition.parameter.id} {comp} {condition.target}'
+        return f'{condition.parameter.id} {comp} {parameter_value_to_str(condition.target)}'
     if isinstance(condition, Range):
         left_comp = '<' if condition.left_strict else '<='
         right_comp = '<' if condition.right_strict else '<='
-        return f'{condition.left} {left_comp} {condition.parameter.id} {right_comp} {condition.right_strict}'
+        return (
+            f'{parameter_value_to_str(condition.left)} {left_comp} {condition.parameter.id} '
+            f'{right_comp} {parameter_value_to_str(condition.right)}'
+        )
     if isinstance(condition, AndCondition):
         return '(' + ') and ('.join([condition_to_str(cd) for cd in condition.conditions]) + ')'
     if isinstance(condition, OrCondition):
@@ -374,31 +383,29 @@ def _text_to_raw_text_markdown(text: StructuredText) -> str:
 
 def _condition_source_to_markdown(source: ConditionSource) -> str:
     lines: List[str] = []
-    lines.append(f'\tSection: {list(source.reference.section.path)}')
-    lines.append(f'\tAlineas: {source.reference.outer_alinea_indices or "tous"}')
-    lines.append(f'\tExplication: {source.explanation}')
+    lines.append(f'    - Section: {list(source.reference.section.path)}')
+    lines.append(f'    - Alineas: {source.reference.outer_alinea_indices or "tous"}')
+    lines.append(f'    - Explication: {source.explanation}')
     return '\n\n'.join(lines)
 
 
 def alternative_section_to_markdown(section: AlternativeSection) -> str:
     markdown: List[str] = []
-    markdown.append(f'Description : {section.description}')
-    markdown.append('Condition de modification :')
-    markdown.append(f'\t {condition_to_str(section.condition)}')
-    markdown.append('Nouveau texte :')
+    markdown.append(f'- **Description** : {section.description}')
+    markdown.append(f'- **Condition de modification** : `{condition_to_str(section.condition)}`')
+    markdown.append('- **Nouveau texte** :')
     markdown.append(_text_to_raw_text_markdown(section.new_text))
-    markdown.append('Source :')
+    markdown.append('- **Source** :')
     markdown.append(_condition_source_to_markdown(section.source))
     return '\n\n'.join(markdown)
 
 
 def non_application_condition_to_markdown(condition: NonApplicationCondition) -> str:
     markdown: List[str] = []
-    markdown.append(f'Description : {condition.description}')
-    markdown.append('Non applicable si :')
-    markdown.append(f'\t {condition_to_str(condition.condition)}')
-    markdown.append('Alinéas abrogés :' + ('tous' if condition.targeted_entity.outer_alinea_indices else ''))
-    markdown.append('Source :')
+    markdown.append(f'- **Description** : {condition.description}')
+    markdown.append(f'- **Non applicable si** :  `{condition_to_str(condition.condition)}`')
+    markdown.append('- **Alinéas abrogés** : ' + str(condition.targeted_entity.outer_alinea_indices or 'tous'))
+    markdown.append('- **Source** :')
     markdown.append(_condition_source_to_markdown(condition.source))
     return '\n\n'.join(markdown)
 
@@ -411,10 +418,15 @@ def sections_and_conditions_to_markdown(
     lines: List[str] = []
     lines.append(f'## Section {list(path)}')
     lines.append('### Sections alternatives')
-    lines.extend([f'#### {i}' + alternative_section_to_markdown(alt) for i, alt in enumerate(alternative_sections)])
+    lines.extend(
+        [f'#### #{i}\n\n' + alternative_section_to_markdown(alt) for i, alt in enumerate(alternative_sections)]
+    )
     lines.append('### Applications conditionnées')
     lines.extend(
-        [f'#### {i}\n\n' + non_application_condition_to_markdown(na) for i, na in enumerate(non_application_conditions)]
+        [
+            f'#### #{i}\n\n' + non_application_condition_to_markdown(na)
+            for i, na in enumerate(non_application_conditions)
+        ]
     )
     return '\n\n'.join(lines)
 

@@ -338,18 +338,24 @@ def properties_to_markdown(properties: TextProperties) -> str:
 '''
 
 
-def generate_header_md(title: str, nor) -> str:
-    return f'''
+def generate_header_md(title: str, nor: str, is_param: bool = False) -> str:
+    if not is_param:
+        return f'''
 # {title}
 
 [Versions paramétrées](parametrization/{nor}.md)
+'''
+    return f'''
+# {title}
+
+[Retour à l'arrêté]({nor}.md)
 '''
 
 
 def am_and_properties_to_markdown(
     am: ArreteMinisteriel, properties: Optional[TextProperties], metadata: AMMetadata
 ) -> str:
-    header_md = generate_header_md(am.title.text, metadata.nor)
+    header_md = generate_header_md(am.title.text, metadata.nor or metadata.cid)
     props_md = properties_to_markdown(properties) if properties else ''
     am_md = am_to_markdown(am, with_links=True)
     return '\n\n'.join([header_md, props_md, am_md])
@@ -409,7 +415,7 @@ def _diffs_section(diffs: Dict[str, List[str]]) -> str:
 def generate_parametric_am_markdown(
     am: ArreteMinisteriel, metadata: AMMetadata, parametrization: Parametrization, diffs: Dict[str, List[str]]
 ) -> str:
-    header_md = generate_header_md(am.title.text, metadata.nor)
+    header_md = generate_header_md(am.title.text, metadata.nor or metadata.cid, True)
     parametrization_md = _parametrization_section(parametrization)
     diffs_md = _diffs_section(diffs)
     return '\n\n'.join([header_md, parametrization_md, diffs_md])
