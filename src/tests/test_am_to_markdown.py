@@ -169,7 +169,7 @@ def test_existing_installations():
     expected_res = [
         [
             "# A. First title",
-            "## Article Annexe 0",
+            "## Annexe 0",
             "### 1. Dispositions générales.",
             "#### 1.1. Conformité de l'installation.",
             "#### 1.2. Modifications.",
@@ -180,7 +180,7 @@ def test_existing_installations():
         ],
         [
             "# B. Dispositions applicables aux installations existantes.",
-            "## Article Annexe 1",
+            "## Annexe 1",
             "1. Dispositions générales.",
             "1.1. Conformité de l'installation.",
             "1.2. Modifications.",
@@ -192,5 +192,7 @@ def test_existing_installations():
     ]
 
     for true, expected in zip(res, expected_res):
-        assert true == expected
+        assert len(true) == len(expected)
+        for true_elt, expected_elt in zip(true, expected):
+            assert true_elt == expected_elt
 

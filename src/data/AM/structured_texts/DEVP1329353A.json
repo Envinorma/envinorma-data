@@ -3311,11 +3311,6 @@
                         {
                             "links": [],
                             "table": null,
-                            "text": "MÉTHODE DE MESURE DES ÉMISSIONS SONORES"
-                        },
-                        {
-                            "links": [],
-                            "table": null,
                             "text": "La présente méthode de mesure des émissions sonores d'une installation classée est applicable pour la mesure des niveaux de bruit en limites de propriété de l'établissement et pour la mesure de l'émergence dans les zones où celle-ci est limitée."
                         },
                         {
@@ -3329,14 +3324,14 @@
                             "text": "Cette norme fixe deux méthodes de mesure se différenciant par les moyens à mettre en œuvre et par la précision des résultats. La méthode de mesure à utiliser est la méthode dite d' expertise  définie au point 6 de la norme. Cependant, un simple contrôle du respect des prescriptions peut être effectué selon la méthode dite de  contrôle  définie au point 5 de la norme. Dans ce cas, une conclusion quant à la conformité des émissions sonores de l'établissement ne pourra être tirée que si le résultat de la mesure diffère de la valeur limite considérée (émergence ou niveau admissible) de plus de 2 dB(A)."
                         }
                     ],
-                    "reference_str": "Art. ?",
+                    "reference_str": "Art. -",
                     "sections": [
                         {
                             "annotations": null,
                             "applicability": null,
                             "legifrance_article": null,
                             "outer_alineas": [],
-                            "reference_str": "Art. ? 1.",
+                            "reference_str": "Art. - 1.",
                             "sections": [
                                 {
                                     "annotations": null,
@@ -3349,7 +3344,7 @@
                                             "text": "Niveau de pression acoustique continu équivalent pondéré A obtenu sur un intervalle de temps  court . Cet intervalle de temps, appelé durée d'intégration, a pour symbole t. Le LAeq court est utilisé pour obtenir une répartition fine de l'évolution temporelle des événements acoustiques pendant l'intervalle de mesurage. La durée d'intégration retenue dépend de la durée des phénomènes que l'on veut mettre en évidence. Elle est généralement de durée inférieure ou égale à 10 s."
                                         }
                                     ],
-                                    "reference_str": "Art. ? 1.1.",
+                                    "reference_str": "Art. - 1.1.",
                                     "sections": [],
                                     "title": {
                                         "links": [],
@@ -3368,7 +3363,7 @@
                                             "text": "Par analyse statistique de LAeq courts, on peut déterminer le niveau de pression acoustique pondéré A qui est dépassé pendant N % de l'intervalle de temps considéré, dénommé  niveau acoustique fractile . Son symbole est LAN,t : par exemple, LA90,1s est le niveau de pression acoustique continu équivalent pondéré A dépassé pendant 90 % de l'intervalle de mesurage, avec une durée d'intégration égale à 1 seconde."
                                         }
                                     ],
-                                    "reference_str": "Art. ? 1.2.",
+                                    "reference_str": "Art. - 1.2.",
                                     "sections": [],
                                     "title": {
                                         "links": [],
@@ -3387,7 +3382,7 @@
                                             "text": "Intervalle de temps au cours duquel la pression acoustique quadratique pondérée A est intégrée et moyennée."
                                         }
                                     ],
-                                    "reference_str": "Art. ? 1.3.",
+                                    "reference_str": "Art. - 1.3.",
                                     "sections": [],
                                     "title": {
                                         "links": [],
@@ -3406,7 +3401,7 @@
                                             "text": "Intervalle de temps au cours duquel tous les mesurages nécessaires à la caractérisation de la situation sonore sont effectués soit en continu, soit par intermittence."
                                         }
                                     ],
-                                    "reference_str": "Art. ? 1.4.",
+                                    "reference_str": "Art. - 1.4.",
                                     "sections": [],
                                     "title": {
                                         "links": [],
@@ -3425,7 +3420,7 @@
                                             "text": "Intervalle de temps retenu pour caractériser une situation acoustique et pour déterminer de façon représentative l'exposition au bruit des personnes."
                                         }
                                     ],
-                                    "reference_str": "Art. ? 1.5.",
+                                    "reference_str": "Art. - 1.5.",
                                     "sections": [],
                                     "title": {
                                         "links": [],
@@ -3444,7 +3439,7 @@
                                             "text": "Bruit total existant dans une situation donnée pendant un intervalle de temps donné. Il est composé de l'ensemble des bruits émis par toutes les sources proches et éloignées."
                                         }
                                     ],
-                                    "reference_str": "Art. ? 1.6.",
+                                    "reference_str": "Art. - 1.6.",
                                     "sections": [],
                                     "title": {
                                         "links": [],
@@ -3468,7 +3463,7 @@
                                             "text": "Au sens du présent arrêté, le bruit particulier est constitué de l'ensemble des bruits émis par l'établissement considéré."
                                         }
                                     ],
-                                    "reference_str": "Art. ? 1.7.",
+                                    "reference_str": "Art. - 1.7.",
                                     "sections": [],
                                     "title": {
                                         "links": [],
@@ -3487,7 +3482,7 @@
                                             "text": "Bruit ambiant, en l'absence du (des) bruits(s) particulier(s), objet(s) de la requête considérée."
                                         }
                                     ],
-                                    "reference_str": "Art. ? 1.8.",
+                                    "reference_str": "Art. - 1.8.",
                                     "sections": [],
                                     "title": {
                                         "links": [],
@@ -3602,7 +3597,7 @@
                                             "text": "Les bandes sont définies par fréquence centrale de tiers d'octave."
                                         }
                                     ],
-                                    "reference_str": "Art. ? 1.9.",
+                                    "reference_str": "Art. - 1.9.",
                                     "sections": [],
                                     "title": {
                                         "links": [],
@@ -3622,7 +3617,7 @@
                             "applicability": null,
                             "legifrance_article": null,
                             "outer_alineas": [],
-                            "reference_str": "Art. ? 2.",
+                            "reference_str": "Art. - 2.",
                             "sections": [
                                 {
                                     "annotations": null,
@@ -3645,7 +3640,7 @@
                                             "text": "Avant chaque série de mesurage, le sonomètre est calibré."
                                         }
                                     ],
-                                    "reference_str": "Art. ? 2.1.",
+                                    "reference_str": "Art. - 2.1.",
                                     "sections": [],
                                     "title": {
                                         "links": [],
@@ -3669,7 +3664,7 @@
                                             "text": "Le contrôle de l'émergence est effectué aux emplacements jugés les plus représentatifs des zones à émergence réglementée. Dans le cas du traitement d'une plainte, on privilégiera les emplacements où la gêne est ressentie, en tenant compte de l'utilisation normale ou habituelle des lieux."
                                         }
                                     ],
-                                    "reference_str": "Art. ? 2.2.",
+                                    "reference_str": "Art. - 2.2.",
                                     "sections": [],
                                     "title": {
                                         "links": [],
@@ -3688,7 +3683,7 @@
                                             "text": "Les dispositions de la norme sont applicables."
                                         }
                                     ],
-                                    "reference_str": "Art. ? 2.3.",
+                                    "reference_str": "Art. - 2.3.",
                                     "sections": [],
                                     "title": {
                                         "links": [],
@@ -3707,7 +3702,7 @@
                                             "text": "Les dispositions de la norme sont applicables."
                                         }
                                     ],
-                                    "reference_str": "Art. ? 2.4.",
+                                    "reference_str": "Art. - 2.4.",
                                     "sections": [],
                                     "title": {
                                         "links": [],
@@ -3726,7 +3721,7 @@
                                             "text": "Les indicateurs acoustiques sont destinés à fournir une description synthétique d'une situation sonore complexe."
                                         }
                                     ],
-                                    "reference_str": "Art. ? 2.5.",
+                                    "reference_str": "Art. - 2.5.",
                                     "sections": [
                                         {
                                             "annotations": null,
@@ -3780,7 +3775,7 @@
                                                     "text": "ti est la durée de la période représentée par l'intervalle de mesurage i (avec ∑ti = T)."
                                                 }
                                             ],
-                                            "reference_str": "Art. ? 2.5. a)",
+                                            "reference_str": "Art. - 2.5. a)",
                                             "sections": [],
                                             "title": {
                                                 "links": [],
@@ -3819,7 +3814,7 @@
                                                     "text": "Le point 6.5.2 de la norme n'est pas applicable, sauf en ce qui concerne la disposition relative à la tonalité marquée."
                                                 }
                                             ],
-                                            "reference_str": "Art. ? 2.5. b)",
+                                            "reference_str": "Art. - 2.5. b)",
                                             "sections": [],
                                             "title": {
                                                 "links": [],
@@ -3930,7 +3925,7 @@
                                             "text": "Si les valeurs mesurées sont proches des valeurs limites (niveaux admissibles et/ou émergence), un soin particulier sera pris dans le choix, la durée et le nombre des intervalles de mesurage."
                                         }
                                     ],
-                                    "reference_str": "Art. ? 2.6.",
+                                    "reference_str": "Art. - 2.6.",
                                     "sections": [],
                                     "title": {
                                         "links": [],
@@ -3971,7 +3966,7 @@
                                     "text": "― elle ne peut être mise en œuvre en cas de présence de bruit à tonalité marquée ainsi que dans les situations nécessitant l'utilisation d'un indice fractile et décrites au point 2.5 ci-dessus."
                                 }
                             ],
-                            "reference_str": "Art. ? 3.",
+                            "reference_str": "Art. - 3.",
                             "sections": [],
                             "title": {
                                 "links": [],
@@ -3990,7 +3985,7 @@
                                     "text": "Le rapport de mesurage établi par la personne ou l'organisme qualifié qui effectue des mesures de contrôle en application des dispositions réglementaires applicables contient les éléments mentionnés au point 7.1 de la norme, à l'exception de la référence à cette dernière, qui est remplacée par la référence au présent arrêté."
                                 }
                             ],
-                            "reference_str": "Art. ? 4.",
+                            "reference_str": "Art. - 4.",
                             "sections": [],
                             "title": {
                                 "links": [],
@@ -4002,7 +3997,7 @@
                     "title": {
                         "links": [],
                         "table": null,
-                        "text": "Article None"
+                        "text": "Article - MÉTHODE DE MESURE DES ÉMISSIONS SONORES"
                     }
                 }
             ],

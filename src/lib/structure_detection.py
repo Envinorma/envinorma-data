@@ -239,3 +239,30 @@ def get_first_match(title: str, prefixes: List[str]) -> int:
 
 def get_matched_strs(strs: List[str], pattern: NumberingPattern) -> List[bool]:
     return [_smart_detect_pattern(str_) == pattern for str_ in strs]
+
+
+def _first_word(sentence: str) -> str:
+    return sentence.split(' ')[0].split('\'')[0]
+
+
+_NON_TITLE_WORDS = {'le', 'la', 'les', 'l', 'un', 'une', 'pour', 'sur', 'sans'}
+
+
+def is_mainly_upper(sentence: str) -> bool:
+    letters = [x for x in sentence if x.isalpha()]
+    nb_upper = len([0 for letter in letters if letter.isupper()])
+    if nb_upper / (len(letters) or 1) >= 0.97:
+        return True
+    return False
+
+
+def is_probably_title(candidate: str) -> bool:
+    if is_mainly_upper(candidate):
+        return True
+    if _first_word(candidate).lower() in _NON_TITLE_WORDS:
+        return False
+    if candidate[-1] == ':':
+        return False
+    if len(candidate.split(' ')) >= 15:
+        return False
+    return True

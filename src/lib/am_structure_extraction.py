@@ -29,7 +29,7 @@ from lib.data import (
     ArticleStatus,
     load_legifrance_text,
 )
-from lib.structure_detection import NumberingPattern, detect_patterns_if_exists
+from lib.structure_detection import NumberingPattern, detect_patterns_if_exists, is_mainly_upper, is_probably_title
 
 
 class AMStructurationError(Exception):
@@ -451,8 +451,35 @@ def _extract_links(text: str, add_legifrance_prefix: bool = True) -> EnrichedStr
     return EnrichedString(final_text, links)
 
 
-def _generate_article_title(article: LegifranceArticle) -> EnrichedString:
-    return EnrichedString(f'Article {article.num}')
+def _move_first_2_upper_alineas_to_title_in_annexe(alineas: List[EnrichedString]) -> Tuple[str, List[EnrichedString]]:
+    first_lines = []
+    for i in [0, 1]:
+        if len(alineas) > i and is_mainly_upper(alineas[i].text):
+            first_lines.append(alineas[i].text)
+        else:
+            break
+    return ' '.join(first_lines), alineas[len(first_lines) :]
+
+
+def _move_first_2_upper_alineas_to_title_in_article(alineas: List[EnrichedString]) -> Tuple[str, List[EnrichedString]]:
+    if not alineas:
+        return '', []
+    if is_probably_title(alineas[0].text):
+        return alineas[0].text, alineas[1:]
+    return '', alineas
+
+
+def _generate_article_title(
+    article: LegifranceArticle, outer_alineas: List[EnrichedString]
+) -> Tuple[EnrichedString, List[EnrichedString]]:
+    if article.num and 'annexe' in article.num.lower():
+        title, new_outer_alineas = _move_first_2_upper_alineas_to_title_in_annexe(outer_alineas)
+        final_title = f'{article.num} - {title}' if title else article.num
+        return EnrichedString(final_title), new_outer_alineas
+    title, new_outer_alineas = _move_first_2_upper_alineas_to_title_in_article(outer_alineas)
+    title_beginning = f'Article {article.num}' if article.num is not None else 'Article'
+    title_end = f' - {title}' if title else ''
+    return EnrichedString(title_beginning + title_end), new_outer_alineas
 
 
 _EXISTING_INSTALLATIONS_PATTERN = 'dispositions applicables aux installations existantes'
@@ -480,9 +507,8 @@ def _extract_structured_text_from_legifrance_article(
     )
     if structured_text.title.text:
         raise ValueError(f'Should not happen. Article should not have titles. Article id : {article.id}')
-    return StructuredText(
-        _generate_article_title(article), structured_text.outer_alineas, structured_text.sections, article, None
-    )
+    title, outer_alineas = _generate_article_title(article, structured_text.outer_alineas)
+    return StructuredText(title, outer_alineas, structured_text.sections, article, None)
 
 
 def _extract_structured_text_from_legifrance_section(

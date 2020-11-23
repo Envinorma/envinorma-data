@@ -25,6 +25,7 @@ from lib.am_structure_extraction import (
     _delete_or_merge_articles,
     _structure_text,
     _remove_links,
+    _generate_article_title,
 )
 from lib.texts_properties import count_sections, count_tables, count_articles_in_am, _extract_section_inconsistencies
 
@@ -157,10 +158,14 @@ def test_group_articles_to_merge():
 
     groups = _group_articles_to_merge([article_0, article_1, article_2, article_3])
     assert len(groups) == 3
-    assert isinstance(groups[0], LegifranceArticle) and groups[0].id == article_0.id
-    assert isinstance(groups[1], LegifranceArticle) and groups[1].id == article_1.id
-    assert isinstance(groups[2], tuple) and groups[2][0].id == article_2.id
-    assert isinstance(groups[2], tuple) and groups[2][1].id == article_3.id
+    first_elt = groups[0]
+    assert isinstance(first_elt, LegifranceArticle) and first_elt.id == article_0.id
+    second_elt = groups[1]
+    assert isinstance(second_elt, LegifranceArticle) and second_elt.id == article_1.id
+    third_group = groups[2]
+    assert isinstance(third_group, tuple)
+    assert third_group[0].id == article_2.id
+    assert third_group[1].id == article_3.id
 
 
 def test_delete_or_merge_articles():
@@ -290,3 +295,41 @@ Au sens du présent arrêté, on entend par :
     alineas = remove_empty(alineas_str.split('\n'))
     filtered_alineas = remove_summaries(alineas)
     assert filtered_alineas == alineas[:1] + alineas[-4:]
+
+
+def test_generate_article_title():
+    article_1 = LegifranceArticle('', '', 0, 'Annexe I', ArticleStatus.VIGUEUR)
+    outer_alineas_1 = [
+        EnrichedString('DISPOSITIONS GENERALES'),
+        EnrichedString('APPLICABLES AUX INSTALLATIONS EXISTANTES'),
+        EnrichedString('Cf ci-dessous'),
+    ]
+    expected = 'Annexe I - DISPOSITIONS GENERALES APPLICABLES AUX INSTALLATIONS EXISTANTES'
+    assert _generate_article_title(article_1, outer_alineas_1)[0].text == expected
+    assert _generate_article_title(article_1, outer_alineas_1)[1][0].text == 'Cf ci-dessous'
+    assert _generate_article_title(article_1, outer_alineas_1[:1])[0].text == 'Annexe I - DISPOSITIONS GENERALES'
+    assert _generate_article_title(article_1, [])[0].text == 'Annexe I'
+
+    article_2 = LegifranceArticle('', '', 0, 'Annexes', ArticleStatus.VIGUEUR)
+    outer_alineas_2 = [
+        EnrichedString('Dispositions generales applicables aux installations existantes:'),
+        EnrichedString('Cf ci-dessous'),
+    ]
+    assert _generate_article_title(article_2, outer_alineas_2)[0].text == 'Annexes'
+    assert _generate_article_title(article_2, outer_alineas_2)[1][0] == outer_alineas_2[0]
+    assert _generate_article_title(article_2, outer_alineas_2)[1][1] == outer_alineas_2[1]
+
+    article_3 = LegifranceArticle('', '', 0, '1', ArticleStatus.VIGUEUR)
+    outer_alineas_3 = [EnrichedString('Valeurs limites d\'émission.'), EnrichedString('Cf ci-dessous')]
+    assert _generate_article_title(article_3, outer_alineas_3)[0].text == 'Article 1 - Valeurs limites d\'émission.'
+    assert _generate_article_title(article_3, outer_alineas_3)[1][0] == outer_alineas_3[1]
+
+    article_4 = LegifranceArticle('', '', 0, '1', ArticleStatus.VIGUEUR)
+    outer_alineas_4 = [
+        EnrichedString('L\'exploitant doit respecter les valeurs limites d\'émission suivantes:'),
+        EnrichedString('CO2: 403'),
+    ]
+    assert _generate_article_title(article_4, outer_alineas_4)[0].text == 'Article 1'
+    assert _generate_article_title(article_4, outer_alineas_4)[1][0] == outer_alineas_4[0]
+    assert _generate_article_title(article_4, outer_alineas_4)[1][1] == outer_alineas_4[1]
+

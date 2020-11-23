@@ -76,9 +76,8 @@ def get_manual_combinations(id_: str) -> Optional[Combinations]:
 def _build_TREP1900331A_parametrization() -> Parametrization:
     new_articles = {
         tuple([3, 3, 1]): StructuredText(
-            title=EnrichedString('Article 4.10.'),
+            title=EnrichedString('Article 4.10. - Rétention et isolement.'),
             outer_alineas=[
-                EnrichedString('Rétention et isolement.'),
                 EnrichedString(
                     'Toutes mesures sont prises pour recueillir l’ensemble des eaux et écoulements'
                     ' susceptibles d’être pollués lors d’un sinistre, y compris les eaux utilisées'

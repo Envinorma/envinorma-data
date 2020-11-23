@@ -130,11 +130,6 @@
                         {
                             "links": [],
                             "table": null,
-                            "text": "Définitions."
-                        },
-                        {
-                            "links": [],
-                            "table": null,
                             "text": "Définitions : au sens du présent arrêté, on entend par :"
                         },
                         {
@@ -188,7 +183,7 @@
                     "title": {
                         "links": [],
                         "table": null,
-                        "text": "Article 1.2"
+                        "text": "Article 1.2 - Définitions."
                     }
                 },
                 {
@@ -215,11 +210,6 @@
                         {
                             "links": [],
                             "table": null,
-                            "text": "Conformité de l'installation."
-                        },
-                        {
-                            "links": [],
-                            "table": null,
                             "text": "L'installation est implantée, réalisée et exploitée conformément aux plans et autres documents joints à la demande d'enregistrement."
                         }
                     ],
@@ -228,7 +218,7 @@
                     "title": {
                         "links": [],
                         "table": null,
-                        "text": "Article 1.3"
+                        "text": "Article 1.3 - Conformité de l'installation."
                     }
                 },
                 {
@@ -252,11 +242,6 @@
                         "num": "1.4"
                     },
                     "outer_alineas": [
-                        {
-                            "links": [],
-                            "table": null,
-                            "text": "Dossier installation classée."
-                        },
                         {
                             "links": [],
                             "table": null,
@@ -378,7 +363,7 @@
                     "title": {
                         "links": [],
                         "table": null,
-                        "text": "Article 1.4"
+                        "text": "Article 1.4 - Dossier installation classée."
                     }
                 },
                 {
@@ -405,11 +390,6 @@
                         {
                             "links": [],
                             "table": null,
-                            "text": "Contrôle au frais de l'exploitant."
-                        },
-                        {
-                            "links": [],
-                            "table": null,
                             "text": "L'Inspection des installations classées peut, à tout moment, réaliser ou faire réaliser des prélèvements d'effluents liquides ou gazeux, de déchets ou de sol, ou des mesures de niveaux sonores. Les frais de prélèvement et d'analyses sont à la charge de l'exploitant."
                         }
                     ],
@@ -418,7 +398,7 @@
                     "title": {
                         "links": [],
                         "table": null,
-                        "text": "Article 1.5"
+                        "text": "Article 1.5 - Contrôle au frais de l'exploitant."
                     }
                 }
             ],
@@ -461,11 +441,6 @@
                         {
                             "links": [],
                             "table": null,
-                            "text": "Règles d'implantation."
-                        },
-                        {
-                            "links": [],
-                            "table": null,
                             "text": "Les limites de l'installation sont au moins à 100 mètres des habitations ou des établissements recevant du public et au moins à 50 mètres pour les autres tiers."
                         },
                         {
@@ -479,7 +454,7 @@
                     "title": {
                         "links": [],
                         "table": null,
-                        "text": "Article 2.1"
+                        "text": "Article 2.1 - Règles d'implantation."
                     }
                 },
                 {
@@ -502,11 +477,6 @@
                         {
                             "links": [],
                             "table": null,
-                            "text": "Intégration dans le paysage."
-                        },
-                        {
-                            "links": [],
-                            "table": null,
                             "text": "L'exploitant prend les dispositions nécessaires pour maintenir le site en bon état de propreté (peinture, plantations, engazonnement, etc.)."
                         }
                     ],
@@ -515,7 +485,7 @@
                     "title": {
                         "links": [],
                         "table": null,
-                        "text": "Article 2.2"
+                        "text": "Article 2.2 - Intégration dans le paysage."
                     }
                 },
                 {
@@ -538,11 +508,6 @@
                         {
                             "links": [],
                             "table": null,
-                            "text": "Interdiction de locaux habités ou occupés par des tiers au-dessus et au-dessous de l'installation."
-                        },
-                        {
-                            "links": [],
-                            "table": null,
                             "text": "L'installation n'est pas surmontée ni ne surmonte de locaux habités ou occupés par des tiers."
                         }
                     ],
@@ -551,7 +516,7 @@
                     "title": {
                         "links": [],
                         "table": null,
-                        "text": "Article 2.3"
+                        "text": "Article 2.3 - Interdiction de locaux habités ou occupés par des tiers au-dessus et au-dessous de l'installation."
                     }
                 },
                 {
@@ -571,11 +536,6 @@
                         "num": "2.4"
                     },
                     "outer_alineas": [
-                        {
-                            "links": [],
-                            "table": null,
-                            "text": "Envol de poussières."
-                        },
                         {
                             "links": [],
                             "table": null,
@@ -607,7 +567,7 @@
                     "title": {
                         "links": [],
                         "table": null,
-                        "text": "Article 2.4"
+                        "text": "Article 2.4 - Envol de poussières."
                     }
                 }
             ],
@@ -650,11 +610,6 @@
                         {
                             "links": [],
                             "table": null,
-                            "text": "Surveillance de l'installation."
-                        },
-                        {
-                            "links": [],
-                            "table": null,
                             "text": "L'exploitation se fait sous la surveillance, directe ou indirecte, d'une personne nommément désignée par l'exploitant et ayant une connaissance de la conduite de l'installation et des dangers et inconvénients des produits utilisés ou stockés dans l'installation."
                         }
                     ],
@@ -663,7 +618,7 @@
                     "title": {
                         "links": [],
                         "table": null,
-                        "text": "Article 3.1"
+                        "text": "Article 3.1 - Surveillance de l'installation."
                     }
                 },
                 {
@@ -686,11 +641,6 @@
                         {
                             "links": [],
                             "table": null,
-                            "text": "Contrôle de l'accès."
-                        },
-                        {
-                            "links": [],
-                            "table": null,
                             "text": "Les personnes étrangères à l'établissement n'ont pas un accès libre aux installations."
                         },
                         {
@@ -704,7 +654,7 @@
                     "title": {
                         "links": [],
                         "table": null,
-                        "text": "Article 3.2"
+                        "text": "Article 3.2 - Contrôle de l'accès."
                     }
                 },
                 {
@@ -727,11 +677,6 @@
                         {
                             "links": [],
                             "table": null,
-                            "text": "Gestion des produits."
-                        },
-                        {
-                            "links": [],
-                            "table": null,
                             "text": "L'exploitant dispose des documents lui permettant de connaître la nature et les risques des produits dangereux présents dans l'installation, en particulier les fiches de données de sécurité. Il prend les dispositions nécessaires pour respecter les préconisations desdites fiches (compatibilité des produits, stockage, emploi, lutte contre l'incendie)."
                         },
                         {
@@ -750,7 +695,7 @@
                     "title": {
                         "links": [],
                         "table": null,
-                        "text": "Article 3.3"
+                        "text": "Article 3.3 - Gestion des produits."
                     }
                 },
                 {
@@ -773,11 +718,6 @@
                         {
                             "links": [],
                             "table": null,
-                            "text": "Propreté de l'installation."
-                        },
-                        {
-                            "links": [],
-                            "table": null,
                             "text": "Les locaux sont maintenus propres et régulièrement nettoyés notamment de manière à éviter les amas de matières dangereuses ou polluantes, de poussières ou de déchets. Le matériel de nettoyage est adapté aux risques présentés par les produits et poussières."
                         },
                         {
@@ -796,7 +736,7 @@
                     "title": {
                         "links": [],
                         "table": null,
-                        "text": "Article 3.4"
+                        "text": "Article 3.4 - Propreté de l'installation."
                     }
                 }
             ],
@@ -852,11 +792,6 @@
                                 {
                                     "links": [],
                                     "table": null,
-                                    "text": "Localisation des risques."
-                                },
-                                {
-                                    "links": [],
-                                    "table": null,
                                     "text": "L'exploitant recense, sous sa responsabilité, les parties de l'installation qui, en raison des caractéristiques qualitatives et quantitatives des matières mises en œuvre, stockées, utilisées ou produites, des procédés ou des activités réalisées, sont susceptibles d'être à l'origine d'un sinistre pouvant avoir des conséquences directes ou indirectes sur l'environnement, la sécurité publique ou le maintien en sécurité de l'installation."
                                 },
                                 {
@@ -880,7 +815,7 @@
                             "title": {
                                 "links": [],
                                 "table": null,
-                                "text": "Article 4.1"
+                                "text": "Article 4.1 - Localisation des risques."
                             }
                         }
                     ],
@@ -920,11 +855,6 @@
                                 "num": "4.2"
                             },
                             "outer_alineas": [
-                                {
-                                    "links": [],
-                                    "table": null,
-                                    "text": "Comportement au feu."
-                                },
                                 {
                                     "links": [],
                                     "table": null,
@@ -1006,7 +936,7 @@
                             "title": {
                                 "links": [],
                                 "table": null,
-                                "text": "Article 4.2"
+                                "text": "Article 4.2 - Comportement au feu."
                             }
                         },
                         {
@@ -1025,13 +955,7 @@
                                 "intOrdre": 1048574,
                                 "num": "4.3"
                             },
-                            "outer_alineas": [
-                                {
-                                    "links": [],
-                                    "table": null,
-                                    "text": "Accessibilité."
-                                }
-                            ],
+                            "outer_alineas": [],
                             "reference_str": "Art. 4.3",
                             "sections": [
                                 {
@@ -1338,7 +1262,7 @@
                             "title": {
                                 "links": [],
                                 "table": null,
-                                "text": "Article 4.3"
+                                "text": "Article 4.3 - Accessibilité."
                             }
                         },
                         {
@@ -1358,11 +1282,6 @@
                                 "num": "4.4"
                             },
                             "outer_alineas": [
-                                {
-                                    "links": [],
-                                    "table": null,
-                                    "text": "Désenfumage."
-                                },
                                 {
                                     "links": [],
                                     "table": null,
@@ -1419,7 +1338,7 @@
                             "title": {
                                 "links": [],
                                 "table": null,
-                                "text": "Article 4.4"
+                                "text": "Article 4.4 - Désenfumage."
                             }
                         },
                         {
@@ -1439,11 +1358,6 @@
                                 "num": "4.5"
                             },
                             "outer_alineas": [
-                                {
-                                    "links": [],
-                                    "table": null,
-                                    "text": "Moyens de lutte contre l'incendie."
-                                },
                                 {
                                     "links": [],
                                     "table": null,
@@ -1545,7 +1459,7 @@
                             "title": {
                                 "links": [],
                                 "table": null,
-                                "text": "Article 4.5"
+                                "text": "Article 4.5 - Moyens de lutte contre l'incendie."
                             }
                         },
                         {
@@ -1568,11 +1482,6 @@
                                 {
                                     "links": [],
                                     "table": null,
-                                    "text": "Tuyauteries et canalisations."
-                                },
-                                {
-                                    "links": [],
-                                    "table": null,
                                     "text": "Les tuyauteries transportant des fluides dangereux ou insalubres et de collecte d'effluents pollués ou susceptibles de l'être sont étanches et résistent à l'action physique et chimique des produits qu'elles sont susceptibles de contenir. Elles sont convenablement entretenues et font l'objet d'examens périodiques appropriés permettant de s'assurer de leur bon état."
                                 }
                             ],
@@ -1581,7 +1490,7 @@
                             "title": {
                                 "links": [],
                                 "table": null,
-                                "text": "Article 4.6"
+                                "text": "Article 4.6 - Tuyauteries et canalisations."
                             }
                         }
                     ],
@@ -1624,11 +1533,6 @@
                                 {
                                     "links": [],
                                     "table": null,
-                                    "text": "Installations électriques, éclairage et chauffage."
-                                },
-                                {
-                                    "links": [],
-                                    "table": null,
                                     "text": "L'exploitant tient à la disposition de l'inspection des installations classées les éléments justifiant que ses installations électriques sont réalisées conformément aux règles en vigueur, entretenues en bon état et vérifiées."
                                 },
                                 {
@@ -1647,7 +1551,7 @@
                             "title": {
                                 "links": [],
                                 "table": null,
-                                "text": "Article 4.7"
+                                "text": "Article 4.7 - Installations électriques, éclairage et chauffage."
                             }
                         },
                         {
@@ -1670,11 +1574,6 @@
                                 {
                                     "links": [],
                                     "table": null,
-                                    "text": "Ventilation des locaux."
-                                },
-                                {
-                                    "links": [],
-                                    "table": null,
                                     "text": "Les locaux sont convenablement ventilés. Le débouché à l'atmosphère de la ventilation est placé aussi loin que possible des immeubles habités ou occupés par des tiers et des bouches d'aspiration d'air extérieur, et à une hauteur suffisante compte tenu de la hauteur des bâtiments environnants afin de favoriser la dispersion des gaz rejetés et au minimum à 1 mètre au-dessus du faîtage."
                                 },
                                 {
@@ -1688,7 +1587,7 @@
                             "title": {
                                 "links": [],
                                 "table": null,
-                                "text": "Article 4.8"
+                                "text": "Article 4.8 - Ventilation des locaux."
                             }
                         }
                     ],
@@ -1727,13 +1626,7 @@
                                 "intOrdre": 524287,
                                 "num": "4.9"
                             },
-                            "outer_alineas": [
-                                {
-                                    "links": [],
-                                    "table": null,
-                                    "text": "Capacité de rétention."
-                                }
-                            ],
+                            "outer_alineas": [],
                             "reference_str": "Art. 4.9",
                             "sections": [
                                 {
@@ -1892,7 +1785,7 @@
                             "title": {
                                 "links": [],
                                 "table": null,
-                                "text": "Article 4.9"
+                                "text": "Article 4.9 - Capacité de rétention."
                             }
                         },
                         {
@@ -1912,11 +1805,6 @@
                                 "num": "4.10"
                             },
                             "outer_alineas": [
-                                {
-                                    "links": [],
-                                    "table": null,
-                                    "text": "Rétention et isolement."
-                                },
                                 {
                                     "links": [],
                                     "table": null,
@@ -1963,7 +1851,7 @@
                             "title": {
                                 "links": [],
                                 "table": null,
-                                "text": "Article 4.10"
+                                "text": "Article 4.10 - Rétention et isolement."
                             }
                         }
                     ],
@@ -2003,11 +1891,6 @@
                                 "num": "4.11"
                             },
                             "outer_alineas": [
-                                {
-                                    "links": [],
-                                    "table": null,
-                                    "text": "Travaux."
-                                },
                                 {
                                     "links": [],
                                     "table": null,
@@ -2065,7 +1948,7 @@
                             "title": {
                                 "links": [],
                                 "table": null,
-                                "text": "Article 4.11"
+                                "text": "Article 4.11 - Travaux."
                             }
                         },
                         {
@@ -2084,13 +1967,7 @@
                                 "intOrdre": 1048574,
                                 "num": "4.12"
                             },
-                            "outer_alineas": [
-                                {
-                                    "links": [],
-                                    "table": null,
-                                    "text": "Vérifications périodiques et maintenance des équipements."
-                                }
-                            ],
+                            "outer_alineas": [],
                             "reference_str": "Art. 4.12",
                             "sections": [
                                 {
@@ -2182,7 +2059,7 @@
                             "title": {
                                 "links": [],
                                 "table": null,
-                                "text": "Article 4.12"
+                                "text": "Article 4.12 - Vérifications périodiques et maintenance des équipements."
                             }
                         },
                         {
@@ -2201,13 +2078,7 @@
                                 "intOrdre": 1572861,
                                 "num": "4.13"
                             },
-                            "outer_alineas": [
-                                {
-                                    "links": [],
-                                    "table": null,
-                                    "text": "Dispositions relatives à la prévention des risques dans le cadre de l'exploitation."
-                                }
-                            ],
+                            "outer_alineas": [],
                             "reference_str": "Art. 4.13",
                             "sections": [
                                 {
@@ -2304,7 +2175,7 @@
                             "title": {
                                 "links": [],
                                 "table": null,
-                                "text": "Article 4.13"
+                                "text": "Article 4.13 - Dispositions relatives à la prévention des risques dans le cadre de l'exploitation."
                             }
                         }
                     ],
@@ -2371,11 +2242,6 @@
                                 {
                                     "links": [],
                                     "table": null,
-                                    "text": "Prélèvement d'eau."
-                                },
-                                {
-                                    "links": [],
-                                    "table": null,
                                     "text": "Le prélèvement maximum journalier effectué dans le réseau public est limité à la valeur mentionnée par l'exploitant dans son dossier de demande d'enregistrement."
                                 },
                                 {
@@ -2394,7 +2260,7 @@
                             "title": {
                                 "links": [],
                                 "table": null,
-                                "text": "Article 5.1"
+                                "text": "Article 5.1 - Prélèvement d'eau."
                             }
                         },
                         {
@@ -2421,11 +2287,6 @@
                                 {
                                     "links": [],
                                     "table": null,
-                                    "text": "Ouvrages de prélèvements."
-                                },
-                                {
-                                    "links": [],
-                                    "table": null,
                                     "text": "Les installations de prélèvement d'eau sont munies d'un dispositif de mesure totalisateur. Ce dispositif est relevé quotidiennement si le débit prélevé est susceptible de dépasser 100 m3/j, hebdomadairement si ce débit est inférieur. Ces résultats sont portés sur un registre éventuellement informatisé et conservés dans le dossier de l'installation."
                                 },
                                 {
@@ -2439,7 +2300,7 @@
                             "title": {
                                 "links": [],
                                 "table": null,
-                                "text": "Article 5.2"
+                                "text": "Article 5.2 - Ouvrages de prélèvements."
                             }
                         }
                     ],
@@ -2486,11 +2347,6 @@
                                 {
                                     "links": [],
                                     "table": null,
-                                    "text": "Collecte des effluents."
-                                },
-                                {
-                                    "links": [],
-                                    "table": null,
                                     "text": "Il est interdit d'établir des liaisons directes entre les réseaux de collecte des effluents devant subir un traitement ou être détruits et le milieu récepteur, sauf si, en cas d'accident, la sécurité des personnes ou des installations est compromise."
                                 },
                                 {
@@ -2509,7 +2365,7 @@
                             "title": {
                                 "links": [],
                                 "table": null,
-                                "text": "Article 5.3"
+                                "text": "Article 5.3 - Collecte des effluents."
                             }
                         },
                         {
@@ -2536,11 +2392,6 @@
                                 {
                                     "links": [],
                                     "table": null,
-                                    "text": "Points de rejets."
-                                },
-                                {
-                                    "links": [],
-                                    "table": null,
                                     "text": "Les points de rejet dans le milieu naturel sont en nombre aussi réduit que possible."
                                 },
                                 {
@@ -2554,7 +2405,7 @@
                             "title": {
                                 "links": [],
                                 "table": null,
-                                "text": "Article 5.4"
+                                "text": "Article 5.4 - Points de rejets."
                             }
                         },
                         {
@@ -2581,11 +2432,6 @@
                                 {
                                     "links": [],
                                     "table": null,
-                                    "text": "Rejet des eaux pluviales."
-                                },
-                                {
-                                    "links": [],
-                                    "table": null,
                                     "text": "En matière de dispositif de gestion des eaux pluviales, les dispositions de l'article 43 du 2 février 1998 modifié susvisé s'appliquent."
                                 },
                                 {
@@ -2604,7 +2450,7 @@
                             "title": {
                                 "links": [],
                                 "table": null,
-                                "text": "Article 5.5"
+                                "text": "Article 5.5 - Rejet des eaux pluviales."
                             }
                         },
                         {
@@ -2631,11 +2477,6 @@
                                 {
                                     "links": [],
                                     "table": null,
-                                    "text": "Eaux souterraines."
-                                },
-                                {
-                                    "links": [],
-                                    "table": null,
                                     "text": "Les rejets directs ou indirects d'effluents vers les eaux souterraines sont interdits."
                                 }
                             ],
@@ -2644,7 +2485,7 @@
                             "title": {
                                 "links": [],
                                 "table": null,
-                                "text": "Article 5.6"
+                                "text": "Article 5.6 - Eaux souterraines."
                             }
                         }
                     ],
@@ -2691,11 +2532,6 @@
                                 {
                                     "links": [],
                                     "table": null,
-                                    "text": "Généralités."
-                                },
-                                {
-                                    "links": [],
-                                    "table": null,
                                     "text": "Tous les effluents aqueux sont canalisés. La dilution des effluents est interdite."
                                 }
                             ],
@@ -2704,7 +2540,7 @@
                             "title": {
                                 "links": [],
                                 "table": null,
-                                "text": "Article 5.7"
+                                "text": "Article 5.7 - Généralités."
                             }
                         },
                         {
@@ -2728,11 +2564,6 @@
                                 "num": "5.8"
                             },
                             "outer_alineas": [
-                                {
-                                    "links": [],
-                                    "table": null,
-                                    "text": "Conditions de rejets dans l'eau."
-                                },
                                 {
                                     "links": [],
                                     "table": null,
@@ -2784,7 +2615,7 @@
                             "title": {
                                 "links": [],
                                 "table": null,
-                                "text": "Article 5.8"
+                                "text": "Article 5.8 - Conditions de rejets dans l'eau."
                             }
                         },
                         {
@@ -2808,11 +2639,6 @@
                                 "num": "5.9"
                             },
                             "outer_alineas": [
-                                {
-                                    "links": [],
-                                    "table": null,
-                                    "text": "VLE pour rejet dans le milieu naturel."
-                                },
                                 {
                                     "links": [],
                                     "table": null,
@@ -2907,7 +2733,7 @@
                             "title": {
                                 "links": [],
                                 "table": null,
-                                "text": "Article 5.9"
+                                "text": "Article 5.9 - VLE pour rejet dans le milieu naturel."
                             }
                         },
                         {
@@ -2934,11 +2760,6 @@
                                 {
                                     "links": [],
                                     "table": null,
-                                    "text": "Raccordement à une station d'épuration."
-                                },
-                                {
-                                    "links": [],
-                                    "table": null,
                                     "text": "En matière de traitement externe des effluents par une station d'épuration, les dispositions de l'article 34 de l'arrêté du 2 février 1998 susvisé s'appliquent."
                                 }
                             ],
@@ -2947,7 +2768,7 @@
                             "title": {
                                 "links": [],
                                 "table": null,
-                                "text": "Article 5.10"
+                                "text": "Article 5.10 - Raccordement à une station d'épuration."
                             }
                         }
                     ],
@@ -2994,11 +2815,6 @@
                                 {
                                     "links": [],
                                     "table": null,
-                                    "text": "Installations de traitement."
-                                },
-                                {
-                                    "links": [],
-                                    "table": null,
                                     "text": "Les installations de traitement en cas de rejet direct dans le milieu naturel et les installations de pré-traitement en cas de raccordement à une station d'épuration, urbaine ou industrielle, lorsqu'elles sont nécessaires au respect des valeurs limites imposées au rejet, sont conçues et exploitées de manière à faire face aux variations de débit, de température ou de composition des effluents à traiter en particulier à l'occasion du démarrage ou de l'arrêt des installations."
                                 },
                                 {
@@ -3017,7 +2833,7 @@
                             "title": {
                                 "links": [],
                                 "table": null,
-                                "text": "Article 5.11"
+                                "text": "Article 5.11 - Installations de traitement."
                             }
                         }
                     ],
@@ -3154,11 +2970,6 @@
                                 {
                                     "links": [],
                                     "table": null,
-                                    "text": "Points de rejet."
-                                },
-                                {
-                                    "links": [],
-                                    "table": null,
                                     "text": "Les points de rejet dans le milieu naturel sont en nombre aussi réduit que possible. Si plusieurs points de rejet sont nécessaires, l'exploitant le justifie."
                                 },
                                 {
@@ -3172,7 +2983,7 @@
                             "title": {
                                 "links": [],
                                 "table": null,
-                                "text": "Article 6.2"
+                                "text": "Article 6.2 - Points de rejet."
                             }
                         },
                         {
@@ -3199,11 +3010,6 @@
                                 {
                                     "links": [],
                                     "table": null,
-                                    "text": "Points de mesure."
-                                },
-                                {
-                                    "links": [],
-                                    "table": null,
                                     "text": "Les points de mesure et les points de prélèvement d'échantillons sont aménagés conformément aux règles en vigueur et équipés des appareils nécessaires pour effectuer les mesures prévues par le présent arrêté dans des conditions représentatives."
                                 }
                             ],
@@ -3212,7 +3018,7 @@
                             "title": {
                                 "links": [],
                                 "table": null,
-                                "text": "Article 6.3"
+                                "text": "Article 6.3 - Points de mesure."
                             }
                         },
                         {
@@ -3239,11 +3045,6 @@
                                 {
                                     "links": [],
                                     "table": null,
-                                    "text": "Hauteur de cheminée."
-                                },
-                                {
-                                    "links": [],
-                                    "table": null,
                                     "text": "La hauteur de la cheminée (différence entre l'altitude du débouché à l'air libre et l'altitude moyenne du sol à l'endroit considéré) exprimée en mètres est déterminée, d'une part, en fonction du niveau des émissions de polluants à l'atmosphère, d'autre part, en fonction de l'existence d'obstacles susceptibles de gêner la dispersion des gaz."
                                 },
                                 {
@@ -3267,7 +3068,7 @@
                             "title": {
                                 "links": [],
                                 "table": null,
-                                "text": "Article 6.4"
+                                "text": "Article 6.4 - Hauteur de cheminée."
                             }
                         }
                     ],
@@ -3314,11 +3115,6 @@
                                 {
                                     "links": [],
                                     "table": null,
-                                    "text": "Généralités."
-                                },
-                                {
-                                    "links": [],
-                                    "table": null,
                                     "text": "Pour la détermination des flux, les émissions canalisées et les émissions diffuses sont prises en compte."
                                 },
                                 {
@@ -3337,7 +3133,7 @@
                             "title": {
                                 "links": [],
                                 "table": null,
-                                "text": "Article 6.5"
+                                "text": "Article 6.5 - Généralités."
                             }
                         },
                         {
@@ -3364,11 +3160,6 @@
                                 {
                                     "links": [],
                                     "table": null,
-                                    "text": "Débit et mesures."
-                                },
-                                {
-                                    "links": [],
-                                    "table": null,
                                     "text": "Le débit des effluents gazeux est exprimé en mètres cubes par heure rapporté à des conditions normalisées de température (273 K) et de pression (101,3 kPa) sur gaz humides à la teneur en oxygène de référence de 17 pourcents. L'exploitant doit pouvoir justifier la teneur réelle en oxygène mesurée."
                                 },
                                 {
@@ -3382,7 +3173,7 @@
                             "title": {
                                 "links": [],
                                 "table": null,
-                                "text": "Article 6.6"
+                                "text": "Article 6.6 - Débit et mesures."
                             }
                         },
                         {
@@ -3405,13 +3196,7 @@
                                 "intOrdre": 1572861,
                                 "num": "6.7"
                             },
-                            "outer_alineas": [
-                                {
-                                    "links": [],
-                                    "table": null,
-                                    "text": "Valeurs limites d'émission."
-                                }
-                            ],
+                            "outer_alineas": [],
                             "reference_str": "Art. 6.7",
                             "sections": [
                                 {
@@ -3910,7 +3695,7 @@
                             "title": {
                                 "links": [],
                                 "table": null,
-                                "text": "Article 6.7"
+                                "text": "Article 6.7 - Valeurs limites d'émission."
                             }
                         },
                         {
@@ -3934,11 +3719,6 @@
                                 "num": "6.8"
                             },
                             "outer_alineas": [
-                                {
-                                    "links": [],
-                                    "table": null,
-                                    "text": "Odeurs."
-                                },
                                 {
                                     "links": [],
                                     "table": null,
@@ -4175,7 +3955,7 @@
                             "title": {
                                 "links": [],
                                 "table": null,
-                                "text": "Article 6.8"
+                                "text": "Article 6.8 - Odeurs."
                             }
                         }
                     ],
@@ -4225,13 +4005,7 @@
                         "intOrdre": 524287,
                         "num": "7.1"
                     },
-                    "outer_alineas": [
-                        {
-                            "links": [],
-                            "table": null,
-                            "text": "Bruit et vibration."
-                        }
-                    ],
+                    "outer_alineas": [],
                     "reference_str": "Art. 7.1",
                     "sections": [
                         {
@@ -4432,7 +4206,7 @@
                     "title": {
                         "links": [],
                         "table": null,
-                        "text": "Article 7.1"
+                        "text": "Article 7.1 - Bruit et vibration."
                     }
                 },
                 {
@@ -4456,11 +4230,6 @@
                         "num": "7.2"
                     },
                     "outer_alineas": [
-                        {
-                            "links": [],
-                            "table": null,
-                            "text": "Emissions lumineuses."
-                        },
                         {
                             "links": [],
                             "table": null,
@@ -4492,7 +4261,7 @@
                     "title": {
                         "links": [],
                         "table": null,
-                        "text": "Article 7.2"
+                        "text": "Article 7.2 - Emissions lumineuses."
                     }
                 }
             ],
@@ -4536,11 +4305,6 @@
                         "num": "8.1"
                     },
                     "outer_alineas": [
-                        {
-                            "links": [],
-                            "table": null,
-                            "text": "Généralités."
-                        },
                         {
                             "links": [],
                             "table": null,
@@ -4589,7 +4353,7 @@
                     "title": {
                         "links": [],
                         "table": null,
-                        "text": "Article 8.1"
+                        "text": "Article 8.1 - Généralités."
                     }
                 },
                 {
@@ -4616,11 +4380,6 @@
                         {
                             "links": [],
                             "table": null,
-                            "text": "Epandage."
-                        },
-                        {
-                            "links": [],
-                            "table": null,
                             "text": "L'épandage des déchets, effluents et sous-produits est interdit."
                         }
                     ],
@@ -4629,7 +4388,7 @@
                     "title": {
                         "links": [],
                         "table": null,
-                        "text": "Article 8.2"
+                        "text": "Article 8.2 - Epandage."
                     }
                 },
                 {
@@ -4656,11 +4415,6 @@
                         {
                             "links": [],
                             "table": null,
-                            "text": "Brûlage."
-                        },
-                        {
-                            "links": [],
-                            "table": null,
                             "text": "Le brûlage des déchets liquides, solides et gazeux est interdit sur le site."
                         }
                     ],
@@ -4669,7 +4423,7 @@
                     "title": {
                         "links": [],
                         "table": null,
-                        "text": "Article 8.3"
+                        "text": "Article 8.3 - Brûlage."
                     }
                 }
             ],
@@ -4725,11 +4479,6 @@
                                 {
                                     "links": [],
                                     "table": null,
-                                    "text": "Généralités."
-                                },
-                                {
-                                    "links": [],
-                                    "table": null,
                                     "text": "L'exploitant met en place un programme de surveillance de ses émissions dans les conditions fixées aux articles du présent chapitre."
                                 },
                                 {
@@ -4748,7 +4497,7 @@
                             "title": {
                                 "links": [],
                                 "table": null,
-                                "text": "Article 9.1"
+                                "text": "Article 9.1 - Généralités."
                             }
                         },
                         {
@@ -4768,11 +4517,6 @@
                                 "num": "9.2"
                             },
                             "outer_alineas": [
-                                {
-                                    "links": [],
-                                    "table": null,
-                                    "text": "Surveillance des émissions dans l'air."
-                                },
                                 {
                                     "links": [],
                                     "table": null,
@@ -5418,7 +5162,7 @@
                             "title": {
                                 "links": [],
                                 "table": null,
-                                "text": "Article 9.2"
+                                "text": "Article 9.2 - Surveillance des émissions dans l'air."
                             }
                         },
                         {
@@ -5438,11 +5182,6 @@
                                 "num": "9.3"
                             },
                             "outer_alineas": [
-                                {
-                                    "links": [],
-                                    "table": null,
-                                    "text": "Surveillance des émissions de gaz à effet de serre."
-                                },
                                 {
                                     "links": [],
                                     "table": null,
@@ -5469,7 +5208,7 @@
                             "title": {
                                 "links": [],
                                 "table": null,
-                                "text": "Article 9.3"
+                                "text": "Article 9.3 - Surveillance des émissions de gaz à effet de serre."
                             }
                         },
                         {
@@ -5489,11 +5228,6 @@
                                 "num": "9.4"
                             },
                             "outer_alineas": [
-                                {
-                                    "links": [],
-                                    "table": null,
-                                    "text": "Surveillance des émissions dans l'eau."
-                                },
                                 {
                                     "links": [],
                                     "table": null,
@@ -5762,7 +5496,7 @@
                             "title": {
                                 "links": [],
                                 "table": null,
-                                "text": "Article 9.4"
+                                "text": "Article 9.4 - Surveillance des émissions dans l'eau."
                             }
                         },
                         {
@@ -5782,11 +5516,6 @@
                                 "num": "9.5"
                             },
                             "outer_alineas": [
-                                {
-                                    "links": [],
-                                    "table": null,
-                                    "text": "Surveillance des émissions sonores."
-                                },
                                 {
                                     "links": [],
                                     "table": null,
@@ -5848,7 +5577,7 @@
                             "title": {
                                 "links": [],
                                 "table": null,
-                                "text": "Article 9.5"
+                                "text": "Article 9.5 - Surveillance des émissions sonores."
                             }
                         },
                         {
@@ -5871,11 +5600,6 @@
                                 {
                                     "links": [],
                                     "table": null,
-                                    "text": "Impact sur les eaux de surface."
-                                },
-                                {
-                                    "links": [],
-                                    "table": null,
                                     "text": "Lorsque le rejet s'effectue dans un cours d'eau et qu'il dépasse l'une des valeurs de l'article 64 de l'arrêté ministériel du 2 février 1998 susvisé, l'exploitant réalise ou fait réaliser des prélèvements en aval de son rejet, dans les conditions fixées par l'article susmentionné."
                                 }
                             ],
@@ -5884,7 +5608,7 @@
                             "title": {
                                 "links": [],
                                 "table": null,
-                                "text": "Article 9.6"
+                                "text": "Article 9.6 - Impact sur les eaux de surface."
                             }
                         },
                         {
@@ -5907,11 +5631,6 @@
                                 {
                                     "links": [],
                                     "table": null,
-                                    "text": "Impact sur les eaux souterraines."
-                                },
-                                {
-                                    "links": [],
-                                    "table": null,
                                     "text": "Dans le cas où l'exploitation de l'installation entraînerait l'émission directe ou indirecte de polluants figurant aux annexes de l'arrêté du 17 juillet 2009 susvisé et pour les rubriques visées par l'article 65 de l'arrêté ministériel du 2 février 1998 susvisé, une surveillance est mise en place afin de vérifier que l'installation n'entraine pas de dégradation ou de tendances à la hausse significative et durables des concentrations des polluants dans les eaux souterraines."
                                 }
                             ],
@@ -5920,7 +5639,7 @@
                             "title": {
                                 "links": [],
                                 "table": null,
-                                "text": "Article 9.7"
+                                "text": "Article 9.7 - Impact sur les eaux souterraines."
                             }
                         }
                     ],
@@ -6029,11 +5748,6 @@
                         {
                             "links": [],
                             "table": null,
-                            "text": "DISPOSITIONS APPLICABLES AUX INSTALLATIONS EXISTANTES"
-                        },
-                        {
-                            "links": [],
-                            "table": null,
                             "text": "Les dispositions figurant aux articles 2.1, 4.2, 4.3, 4.4, 6.4 et aux alinéas relatifs au calcul du volume nécessaire au confinement de l'article 4.10 ne sont pas applicables aux installations existantes."
                         }
                     ],
@@ -6042,7 +5756,7 @@
                     "title": {
                         "links": [],
                         "table": null,
-                        "text": "Article Annexe I"
+                        "text": "Annexe I - DISPOSITIONS APPLICABLES AUX INSTALLATIONS EXISTANTES"
                     }
                 }
             ],

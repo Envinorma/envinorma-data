@@ -726,11 +726,6 @@
                         {
                             "links": [],
                             "table": null,
-                            "text": "DÉFINITIONS"
-                        },
-                        {
-                            "links": [],
-                            "table": null,
                             "text": "On entend par :"
                         },
                         {
@@ -859,7 +854,7 @@
                     "title": {
                         "links": [],
                         "table": null,
-                        "text": "Article Annexe I"
+                        "text": "Annexe I - DÉFINITIONS"
                     }
                 },
                 {
@@ -878,13 +873,7 @@
                         "intOrdre": 1074003967,
                         "num": "Annexe II"
                     },
-                    "outer_alineas": [
-                        {
-                            "links": [],
-                            "table": null,
-                            "text": "PRESCRIPTIONS GÉNÉRALES APPLICABLES AUX INSTALLATIONS CLASSÉES POUR LA PROTECTION DE L'ENVIRONNEMENT SOUMISES À LA RUBRIQUE 1510, Y COMPRIS LORSQU'ELLES RELÈVENT ÉGALEMENT DE L'UNE OU PLUSIEURS DES RUBRIQUES 1530, 1532, 2662 OU 2663 DE LA NOMENCLATURE DES INSTALLATIONS CLASSÉES POUR LA PROTECTION DE L'ENVIRONNEMENT"
-                        }
-                    ],
+                    "outer_alineas": [],
                     "reference_str": "Annexe II",
                     "sections": [
                         {
@@ -3745,7 +3734,7 @@
                     "title": {
                         "links": [],
                         "table": null,
-                        "text": "Article Annexe II"
+                        "text": "Annexe II - PRESCRIPTIONS GÉNÉRALES APPLICABLES AUX INSTALLATIONS CLASSÉES POUR LA PROTECTION DE L'ENVIRONNEMENT SOUMISES À LA RUBRIQUE 1510, Y COMPRIS LORSQU'ELLES RELÈVENT ÉGALEMENT DE L'UNE OU PLUSIEURS DES RUBRIQUES 1530, 1532, 2662 OU 2663 DE LA NOMENCLATURE DES INSTALLATIONS CLASSÉES POUR LA PROTECTION DE L'ENVIRONNEMENT"
                     }
                 },
                 {
@@ -3764,13 +3753,7 @@
                         "intOrdre": 1610743807,
                         "num": "Annexe III"
                     },
-                    "outer_alineas": [
-                        {
-                            "links": [],
-                            "table": null,
-                            "text": "POINTS DE CONTRÔLES DES INSTALLATIONS SOUMISES À DÉCLARATION"
-                        }
-                    ],
+                    "outer_alineas": [],
                     "reference_str": "Annexe III",
                     "sections": [
                         {
@@ -4583,7 +4566,7 @@
                     "title": {
                         "links": [],
                         "table": null,
-                        "text": "Article Annexe III"
+                        "text": "Annexe III - POINTS DE CONTRÔLES DES INSTALLATIONS SOUMISES À DÉCLARATION"
                     }
                 },
                 {
@@ -4603,11 +4586,6 @@
                         "num": "Annexe IV"
                     },
                     "outer_alineas": [
-                        {
-                            "links": [],
-                            "table": null,
-                            "text": "DISPOSITIONS APPLICABLES AUX INSTALLATIONS EXISTANTES SOUMISES À AUTORISATION"
-                        },
                         {
                             "links": [],
                             "table": null,
@@ -4901,7 +4879,7 @@
                     "title": {
                         "links": [],
                         "table": null,
-                        "text": "Article Annexe IV"
+                        "text": "Annexe IV - DISPOSITIONS APPLICABLES AUX INSTALLATIONS EXISTANTES SOUMISES À AUTORISATION"
                     }
                 },
                 {
@@ -4921,11 +4899,6 @@
                         "num": "Annexe V"
                     },
                     "outer_alineas": [
-                        {
-                            "links": [],
-                            "table": null,
-                            "text": "DISPOSITIONS APPLICABLES AUX INSTALLATIONS EXISTANTES SOUMISES À ENREGISTREMENT"
-                        },
                         {
                             "links": [],
                             "table": null,
@@ -5341,7 +5314,7 @@
                     "title": {
                         "links": [],
                         "table": null,
-                        "text": "Article Annexe V"
+                        "text": "Annexe V - DISPOSITIONS APPLICABLES AUX INSTALLATIONS EXISTANTES SOUMISES À ENREGISTREMENT"
                     }
                 },
                 {
@@ -5361,11 +5334,6 @@
                         "num": "Annexe VI"
                     },
                     "outer_alineas": [
-                        {
-                            "links": [],
-                            "table": null,
-                            "text": "DISPOSITIONS APPLICABLES AUX INSTALLATIONS EXISTANTES SOUMISES À DÉCLARATION"
-                        },
                         {
                             "links": [],
                             "table": null,
@@ -5752,7 +5720,7 @@
                     "title": {
                         "links": [],
                         "table": null,
-                        "text": "Article Annexe VI"
+                        "text": "Annexe VI - DISPOSITIONS APPLICABLES AUX INSTALLATIONS EXISTANTES SOUMISES À DÉCLARATION"
                     }
                 }
             ],

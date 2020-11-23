@@ -17,6 +17,7 @@ from lib.data import (
 from lib.am_structure_extraction import split_in_non_empty_html_line, keep_visa_string
 from lib.structure_detection import (
     NUMBERING_PATTERNS,
+    is_mainly_upper,
     get_first_match,
     detect_first_pattern,
     PATTERN_NAME_TO_LIST,
@@ -313,5 +314,20 @@ def get_first_lines_of_articles(text: _AMOrSection) -> List[Tuple[str, str]]:
         res.append((text.title.text, text.outer_alineas[0].text))
     for section in text.sections:
         res.extend(get_first_lines_of_articles(section))
+    return res
+
+
+def get_first_upper_lines_of_articles(text: _AMOrSection) -> List[Tuple[str, List[str]]]:
+    res = []
+    if isinstance(text, StructuredText) and text.legifrance_article and text.outer_alineas:
+        first_lines = []
+        for i in [0, 1]:
+            if len(text.outer_alineas) > i and is_mainly_upper(text.outer_alineas[i].text):
+                first_lines.append(text.outer_alineas[i].text)
+            else:
+                break
+        res.append((text.title.text, first_lines))
+    for section in text.sections:
+        res.extend(get_first_upper_lines_of_articles(section))
     return res
 

@@ -5043,11 +5043,6 @@
                         {
                             "links": [],
                             "table": null,
-                            "text": "MÉTHODE DE MESURE DES ÉMISSIONS SONORES"
-                        },
-                        {
-                            "links": [],
-                            "table": null,
                             "text": "La présente méthode de mesure des émissions sonores d'une installation classée est applicable pour la mesure des niveaux de bruit en limites de propriété de l'établissement et pour la mesure de l'émergence dans les zones où celle-ci est limitée."
                         },
                         {
@@ -5860,7 +5855,7 @@
                     "title": {
                         "links": [],
                         "table": null,
-                        "text": "Article Annexe I"
+                        "text": "Annexe I - MÉTHODE DE MESURE DES ÉMISSIONS SONORES"
                     }
                 },
                 {
@@ -5884,11 +5879,6 @@
                         "num": "Annexe II"
                     },
                     "outer_alineas": [
-                        {
-                            "links": [],
-                            "table": null,
-                            "text": "DISPOSITIONS APPLICABLES AUX INSTALLATIONS EXISTANTES"
-                        },
                         {
                             "links": [],
                             "table": null,
@@ -6160,7 +6150,7 @@
                     "title": {
                         "links": [],
                         "table": null,
-                        "text": "Article Annexe II"
+                        "text": "Annexe II - DISPOSITIONS APPLICABLES AUX INSTALLATIONS EXISTANTES"
                     }
                 }
             ],
