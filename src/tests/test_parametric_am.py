@@ -34,6 +34,7 @@ from lib.parametric_am import (
     _apply_parameter_values_to_am,
     _extract_parameters_from_parametrization,
     _extract_installation_date_criterion,
+    _date_not_in_parametrization,
 )
 
 
@@ -334,3 +335,12 @@ def test_is_satisfied():
     assert _is_satisfied(OrCondition([condition_2, condition_3]), {param_1: Regime.E, param_2: 0.5})
     assert not _is_satisfied(OrCondition([condition_1, condition_3]), {param_1: Regime.E, param_2: 5})
 
+
+def test_date_not_in_parametrization():
+    assert _date_not_in_parametrization(Parametrization([], []))
+    nac = NonApplicationCondition(
+        EntityReference(SectionReference((1,)), None),
+        Equal(ParameterEnum.DATE_INSTALLATION.value, True),
+        ConditionSource('', EntityReference(SectionReference((1,)), None)),
+    )
+    assert not _date_not_in_parametrization(Parametrization([nac], []))

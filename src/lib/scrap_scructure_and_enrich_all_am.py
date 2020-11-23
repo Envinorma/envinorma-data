@@ -38,6 +38,7 @@ from lib.am_structure_extraction import (
     check_legifrance_dict,
     AMStructurationError,
 )
+from lib.utils import write_json
 
 
 def parse_aida_title_date(date_str: str) -> int:
@@ -117,6 +118,7 @@ def _extract_legifrance_format_error(legifrance_text_json: Dict) -> Optional[Leg
     try:
         check_legifrance_dict(legifrance_text_json)
     except AMStructurationError as exc:
+        print(exc)
         return LegifranceTextFormatError(str(exc), traceback.format_exc())
     return None
 
@@ -126,6 +128,7 @@ def _structure_am(legifrance_text: LegifranceText) -> Tuple[Optional[ArreteMinis
         am = transform_arrete_ministeriel(legifrance_text)
         return am, None
     except Exception as exc:  # pylint: disable=broad-except
+        print(exc)
         return None, StructurationError(str(exc), traceback.format_exc())
 
 
@@ -210,16 +213,6 @@ def handle_am(
         am, parametric_am = _handle_manual_enrichments(am, metadata, dump_am)
         check_am(am)
     return am, AMStructurationLog(api_result, lf_format_error, structuration_error, properties), parametric_am
-
-
-def write_json(obj: Union[Dict, List], filename: str, safe: bool = False) -> None:
-    if not safe:
-        json.dump(obj, open(filename, 'w'), indent=4, sort_keys=True, ensure_ascii=False)
-    else:
-        try:
-            json.dump(obj, open(filename, 'w'), indent=4, sort_keys=True, ensure_ascii=False)
-        except Exception:  # pylint: disable=broad-except
-            print(traceback.format_exc())
 
 
 _ParametricAMs = Dict[str, _ParametricAM]

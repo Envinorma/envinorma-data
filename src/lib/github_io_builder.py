@@ -18,7 +18,7 @@ from lib.data import (
     TitleInconsistency,
 )
 from lib.am_to_markdown import am_to_markdown, generate_text_md
-from lib.compute_properties import handle_all_am
+from lib.scrap_scructure_and_enrich_all_am import handle_all_am
 from lib.git_diffs_generator import AMCommits, compute_and_dump_am_git_diffs
 from lib.parametrization import Parametrization, parametrization_to_markdown
 

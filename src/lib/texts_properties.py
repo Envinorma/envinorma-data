@@ -1,6 +1,6 @@
 import re
 from dataclasses import dataclass
-from typing import Callable, Optional, Tuple, Union, List
+from typing import Any, Callable, Dict, Optional, Tuple, Union, List
 
 from bs4 import BeautifulSoup
 
@@ -302,3 +302,16 @@ def compute_am_diffs(
     markdown_am_1 = stringifier(am_1)
     markdown_am_2 = stringifier(am_2)
     return _compare_texts(markdown_am_1, markdown_am_2)
+
+
+_AMOrSection = Union[ArreteMinisteriel, StructuredText]
+
+
+def get_first_lines_of_articles(text: _AMOrSection) -> List[Tuple[str, str]]:
+    res = []
+    if isinstance(text, StructuredText) and text.legifrance_article and text.outer_alineas:
+        res.append((text.title.text, text.outer_alineas[0].text))
+    for section in text.sections:
+        res.extend(get_first_lines_of_articles(section))
+    return res
+

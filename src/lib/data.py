@@ -245,6 +245,7 @@ class ArreteMinisteriel:
     aida_url: Optional[str] = None
     legifrance_url: Optional[str] = None
     classements: List[Classement] = field(default_factory=list)
+    unique_version: bool = False
 
     def to_dict(self) -> Dict[str, Any]:
         res = asdict(self)

@@ -1,4 +1,5 @@
 from copy import copy, deepcopy
+from dataclasses import replace
 from datetime import datetime, timedelta
 from typing import Any, Dict, KeysView, List, Optional, Set, Tuple, Union
 
@@ -442,10 +443,15 @@ def _extract_installation_date_criterion(
     return DateCriterion(_date_to_str(targets[-1]), None)
 
 
+def _date_not_in_parametrization(parametrization: Parametrization) -> bool:
+    return len(_extract_conditions_from_parametrization(ParameterEnum.DATE_INSTALLATION.value, parametrization)) == 0
+
+
 def _apply_parameter_values_to_am(
     am: ArreteMinisteriel, parametrization: Parametrization, parameter_values: Dict[Parameter, Any]
 ) -> ArreteMinisteriel:
     am = copy(am)
+    am.unique_version = _date_not_in_parametrization(parametrization)
     am.installation_date_criterion = _extract_installation_date_criterion(parametrization, parameter_values)
     am.sections = [
         _apply_parameter_values_in_text(section, parametrization, parameter_values, (i,))
@@ -615,7 +621,7 @@ def generate_all_am_versions(
     if combinations is None:
         combinations = _generate_exhaustive_combinations(parametrization)
     if not combinations:
-        return {tuple(): am}
+        return {tuple(): replace(am, unique_version=True)}
     return {
         combination_name: _apply_parameter_values_to_am(am, parametrization, parameter_values)
         for combination_name, parameter_values in combinations.items()

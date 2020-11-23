@@ -5,8 +5,8 @@ from typing import Any, Callable, Dict, List
 from git import Repo
 from git.objects.commit import Commit
 
-from lib.compute_properties import write_json
 from lib.data import ArreteMinisteriel
+from lib.utils import write_json
 
 _AM_DIFF_REPO_PATH = '/Users/remidelbouys/EnviNorma/arretes_ministeriels'
 
