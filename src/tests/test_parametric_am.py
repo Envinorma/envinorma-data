@@ -1,13 +1,16 @@
-from lib.parametrization import ConditionSource, EntityReference, SectionReference
 import random
 from copy import copy
+from dataclasses import replace
 from datetime import datetime, timedelta
 from string import ascii_letters
-from typing import List
+from typing import List, Optional
 
-from lib.data import ArreteMinisteriel, EnrichedString, Regime, StructuredText
+from lib.data import ArreteMinisteriel, EnrichedString, Regime, StructuredText, StructuredTextSignature
 from lib.parametrization import (
     AlternativeSection,
+    ConditionSource,
+    EntityReference,
+    SectionReference,
     AndCondition,
     NonApplicationCondition,
     Equal,
@@ -35,6 +38,8 @@ from lib.parametric_am import (
     _extract_parameters_from_parametrization,
     _extract_installation_date_criterion,
     _date_not_in_parametrization,
+    _extract_warning,
+    _extract_warnings,
 )
 
 
@@ -344,3 +349,28 @@ def test_date_not_in_parametrization():
         ConditionSource('', EntityReference(SectionReference((1,)), None)),
     )
     assert not _date_not_in_parametrization(Parametrization([nac], []))
+
+
+def test_extract_warning():
+    ref = (0,)
+    base_text = StructuredTextSignature(ref, 'title', ['al1', 'al2'], 2, 2, 4)
+    assert _extract_warning(ref, base_text, base_text) is None
+    assert _extract_warning(ref, base_text, None) is not None
+    assert _extract_warning(ref, base_text, replace(base_text, title='title2')) is not None
+    assert _extract_warning(ref, base_text, replace(base_text, outer_alineas_text=['al3', 'al4', 'al5'])) is not None
+    assert _extract_warning(ref, base_text, replace(base_text, depth_in_am=10)) is not None
+    assert _extract_warning(ref, base_text, replace(base_text, rank_in_section_list=10)) is not None
+    assert _extract_warning(ref, base_text, replace(base_text, section_list_size=10)) is not None
+
+
+def test_extract_warnings():
+    ref = (0,)
+    base_text = StructuredTextSignature(ref, 'title', ['al1', 'al2'], 2, 2, 4)
+    assert len(_extract_warnings([ref], {ref: base_text}, {ref: base_text})) == 0
+    assert len(_extract_warnings([ref], {ref: base_text}, {})) == 1
+    assert len(_extract_warnings([ref], {ref: base_text}, {ref: replace(base_text, title='title2')})) == 1
+    assert len(_extract_warnings([ref], {ref: base_text}, {ref: replace(base_text, outer_alineas_text=['al3'])})) == 1
+    assert len(_extract_warnings([ref], {ref: base_text}, {ref: replace(base_text, depth_in_am=10)})) == 1
+    assert len(_extract_warnings([ref], {ref: base_text}, {ref: replace(base_text, rank_in_section_list=10)})) == 1
+    assert len(_extract_warnings([ref], {ref: base_text}, {ref: replace(base_text, section_list_size=10)})) == 1
+

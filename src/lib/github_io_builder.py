@@ -1,3 +1,4 @@
+import json
 from collections import Counter
 from typing import Dict, List, Optional, Set
 from tqdm import tqdm
@@ -19,7 +20,7 @@ from lib.data import (
 )
 from lib.am_to_markdown import am_to_markdown, generate_text_md
 from lib.scrap_scructure_and_enrich_all_am import handle_all_am
-from lib.git_diffs_generator import AMCommits, compute_and_dump_am_git_diffs
+from lib.git_diffs_generator import AMCommits, compute_and_dump_am_git_diffs, get_am_commits_filename
 from lib.parametrization import Parametrization, parametrization_to_markdown
 
 
@@ -232,7 +233,7 @@ def _generate_diff_url(main_commit_id: str, commit_id: str) -> str:
 def generate_commits_md(am_commits: AMCommits) -> str:
     commit_lines = [
         f'[{version_name}]({_generate_diff_url(am_commits.main_commit_id, commit_id)})'
-        for version_name, commit_id in am_commits.version_commit_ids.items()
+        for version_name, commit_id in sorted(am_commits.version_commit_ids.items())
     ]
     return '\n\n'.join(['## Differences'] + commit_lines)
 
@@ -254,7 +255,13 @@ def generate_parametric_am_markdown(
 _GITHUB_IO = '/Users/remidelbouys/EnviNorma/envinorma.github.io'
 
 
-def generate_all_markdown(output_folder: str = _GITHUB_IO, am_cids: Optional[Set[str]] = None) -> None:
+def load_am_commits(nor_or_cid: str) -> AMCommits:
+    return AMCommits.from_dict(json.load(open(get_am_commits_filename(nor_or_cid))))
+
+
+def generate_all_markdown(
+    output_folder: str = _GITHUB_IO, am_cids: Optional[Set[str]] = None, regenerate_diff_commits: bool = False
+) -> None:
     am_cids = am_cids or set()
     data, cid_to_log, cid_to_am, cid_to_param = handle_all_am(
         am_cids=am_cids, dump_am=len(am_cids) != 0, with_manual_enrichments=len(am_cids) != 0
@@ -268,7 +275,10 @@ def generate_all_markdown(output_folder: str = _GITHUB_IO, am_cids: Optional[Set
         cid = metadata.cid
         dump_md(generate_am_markdown(data, metadata, cid_to_log[cid], cid_to_am.get(cid)), f'{output_folder}/{id_}.md')
         if cid in cid_to_am and cid in cid_to_param:
-            am_commits = compute_and_dump_am_git_diffs(id_, am_to_markdown)
+            if regenerate_diff_commits:
+                am_commits = compute_and_dump_am_git_diffs(id_, am_to_markdown)
+            else:
+                am_commits = load_am_commits(metadata.nor or metadata.cid)
             dump_md(
                 generate_parametric_am_markdown(
                     cid_to_am[cid], metadata, cid_to_param[cid][0], cid_to_param[cid][1], am_commits
@@ -286,5 +296,7 @@ if __name__ == '__main__':
             'JORFTEXT000038358856',
             'JORFTEXT000000552021',
             'JORFTEXT000000369330',
-        }
+        },
+        regenerate_diff_commits=False,
     )
+

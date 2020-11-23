@@ -1,6 +1,6 @@
 from dataclasses import dataclass, asdict, field
 from enum import Enum
-from typing import List, Dict, Optional, Any
+from typing import List, Dict, Optional, Any, Tuple
 
 
 class ArticleStatus(Enum):
@@ -450,3 +450,27 @@ class Data:
 
 def get_text_defined_id(text: AMMetadata) -> str:
     return text.nor or text.cid
+
+
+Ints = Tuple[int, ...]
+
+
+@dataclass
+class StructuredTextSignature:
+    section_reference: Ints
+    title: str
+    outer_alineas_text: List[str]
+    depth_in_am: int
+    rank_in_section_list: int
+    section_list_size: int
+
+    @classmethod
+    def from_dict(cls, dict_: Dict[str, Any]) -> 'StructuredTextSignature':
+        dict_ = dict_.copy()
+        dict_['section_reference'] = tuple(dict_['section_reference'])
+        return StructuredTextSignature(**dict_)
+
+    def to_dict(self) -> Dict[str, Any]:
+        res = asdict(self)
+        res['section_reference'] = list(self.section_reference)
+        return res

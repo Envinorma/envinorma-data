@@ -4,7 +4,7 @@ from typing import Any, Callable, Dict, Optional, Tuple, Union, List
 
 from bs4 import BeautifulSoup
 
-from lib.data import AMProperties, LegifranceTextProperties, TextProperties, TitleInconsistency
+from lib.data import AMProperties, LegifranceTextProperties, StructuredTextSignature, TextProperties, TitleInconsistency
 from lib.data import (
     ArreteMinisteriel,
     ArticleStatus,
@@ -331,3 +331,28 @@ def get_first_upper_lines_of_articles(text: _AMOrSection) -> List[Tuple[str, Lis
         res.extend(get_first_upper_lines_of_articles(section))
     return res
 
+
+Ints = Tuple[int, ...]
+
+
+def compute_signatures(
+    text: StructuredText, path: Ints, rank_in_section_list: int, section_list_size: int
+) -> Dict[Ints, StructuredTextSignature]:
+    res = {
+        key: value
+        for i, section in enumerate(text.sections)
+        for key, value in compute_signatures(section, path + (i,), i, len(text.sections)).items()
+    }
+    outer_alineas = [al.text for al in text.outer_alineas]
+    res[path] = StructuredTextSignature(
+        path, text.title.text, outer_alineas, len(path), rank_in_section_list, section_list_size
+    )
+    return res
+
+
+def compute_am_signatures(text: ArreteMinisteriel) -> Dict[Ints, StructuredTextSignature]:
+    return {
+        key: value
+        for i, section in enumerate(text.sections)
+        for key, value in compute_signatures(section, (i,), i, len(text.sections)).items()
+    }

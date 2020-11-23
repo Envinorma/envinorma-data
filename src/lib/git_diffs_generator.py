@@ -36,6 +36,10 @@ class AMCommits:
     def to_dict(self) -> Dict[str, Any]:
         return asdict(self)
 
+    @staticmethod
+    def from_dict(dict_: Dict[str, Any]) -> 'AMCommits':
+        return AMCommits(**dict_)
+
 
 def write_file(content: str, path: str):
     open(path, 'w').write(content)
@@ -87,9 +91,12 @@ def _load_versions(nor: str) -> Dict[str, ArreteMinisteriel]:
     }
 
 
+def get_am_commits_filename(nor: str) -> str:
+    return os.path.join(_get_parametric_ams_folder(nor), '.am_diffs_commits.json')
+
+
 def _dump_am_commits(nor: str, am_commits: AMCommits) -> None:
-    folder = _get_parametric_ams_folder(nor)
-    write_json(am_commits.to_dict(), os.path.join(folder, '.am_diffs_commits.json'))
+    write_json(am_commits.to_dict(), get_am_commits_filename(nor))
 
 
 def compute_and_dump_am_git_diffs(nor: str, am_stringifier: Callable[[ArreteMinisteriel], str]) -> AMCommits:

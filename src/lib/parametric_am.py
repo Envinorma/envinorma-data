@@ -1,9 +1,10 @@
 from copy import copy, deepcopy
-from dataclasses import replace
+from dataclasses import dataclass, replace
 from datetime import datetime, timedelta
+from lib.texts_properties import compute_am_signatures
 from typing import Any, Dict, KeysView, List, Optional, Set, Tuple, Union
 
-from lib.data import Applicability, ArreteMinisteriel, DateCriterion, Regime, StructuredText
+from lib.data import Applicability, ArreteMinisteriel, DateCriterion, Regime, StructuredText, StructuredTextSignature
 from lib.parametrization import (
     Equal,
     Greater,
@@ -626,3 +627,64 @@ def generate_all_am_versions(
         combination_name: _apply_parameter_values_to_am(am, parametrization, parameter_values)
         for combination_name, parameter_values in combinations.items()
     }
+
+
+def _extract_sources_section_paths(parametrization: Parametrization) -> List[Ints]:
+    sources_in_non_applicability = [na.source.reference.section.path for na in parametrization.application_conditions]
+    sources_in_alternative_texts = [at.source.reference.section.path for at in parametrization.alternative_sections]
+    return list(set(sources_in_non_applicability + sources_in_alternative_texts))
+
+
+def _extract_warning(
+    path: Ints, old_signature: Optional[StructuredTextSignature], new_signature: Optional[StructuredTextSignature]
+) -> Optional[str]:
+    if not old_signature:
+        raise ValueError(
+            f'Signature for path {path} not found in old signature, which means there was an '
+            f'inconsistency between signatures and parametrization. This should not happen.'
+        )
+    if not new_signature:
+        return f'Signature for path {path} not found in new signature, this should be corrected.'
+    names_and_fields = [
+        ('Title', 'title'),
+        ('Depth', 'depth_in_am'),
+        ('Alineas', 'outer_alineas_text'),
+        ('Rank in section list', 'rank_in_section_list'),
+        ('Section list size', 'section_list_size'),
+    ]
+    for name, field in names_and_fields:
+        if getattr(old_signature, field) != getattr(new_signature, field):
+            return (
+                f'{name} of section with path {path} have changed '
+                f'(before: {getattr(old_signature, field)}, after: {getattr(new_signature, field)}'
+            )
+    return None
+
+
+def _extract_warnings(
+    paths: List[Ints],
+    old_signatures: Dict[Ints, StructuredTextSignature],
+    new_signatures: Dict[Ints, StructuredTextSignature],
+) -> List[str]:
+    warnings = [_extract_warning(path, old_signatures.get(path), new_signatures.get(path)) for path in paths if path]
+    return [warning for warning in warnings if warning]
+
+
+def check_parametrization_is_still_valid(
+    parametrization: Parametrization, new_am: ArreteMinisteriel
+) -> Tuple[bool, List[str]]:
+    if not parametrization.signatures:
+        raise ValueError('Parametrization must have signatures to check validity.')
+    new_signatures = compute_am_signatures(new_am)
+    old_signatures = parametrization.signatures
+
+    source_paths = _extract_sources_section_paths(parametrization)
+    alternative_texts_paths = list(parametrization.path_to_conditions.keys())
+    non_applicability_paths = list(parametrization.path_to_alternative_sections.keys())
+
+    source_warnings = _extract_warnings(source_paths, old_signatures, new_signatures)
+    alternative_texts_warnings = _extract_warnings(alternative_texts_paths, old_signatures, new_signatures)
+    non_applicability_warnings = _extract_warnings(non_applicability_paths, old_signatures, new_signatures)
+
+    all_warnings = source_warnings + alternative_texts_warnings + non_applicability_warnings
+    return len(all_warnings) == 0, all_warnings

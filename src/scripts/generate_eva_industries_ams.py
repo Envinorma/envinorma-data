@@ -2,7 +2,7 @@ import json
 from typing import List
 
 from lib.data import ArreteMinisteriel, load_arrete_ministeriel
-from lib.compute_properties import AMMetadata, handle_am, load_data, get_legifrance_client
+from lib.scrap_scructure_and_enrich_all_am import AMMetadata, handle_am, load_data, get_legifrance_client
 
 
 def _find_metadata_with_nor(metadata: List[AMMetadata], nor: str) -> AMMetadata:

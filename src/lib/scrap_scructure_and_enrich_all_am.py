@@ -4,6 +4,7 @@ import traceback
 from copy import copy
 from datetime import datetime
 from typing import List, Dict, Optional, Set, Tuple, Union
+from warnings import warn
 
 from requests_oauthlib import OAuth2Session
 from tqdm import tqdm
@@ -25,12 +26,12 @@ from lib.data import (
     AMStructurationLog,
 )
 from lib.am_to_markdown import am_to_markdown
-from lib.parametrization import Parametrization
+from lib.parametrization import Parametrization, add_am_signatures
 from lib.manual_enrichments import get_manual_combinations, get_manual_enricher, get_manual_parametrization
-from lib.parametric_am import generate_all_am_versions
+from lib.parametric_am import check_parametrization_is_still_valid, generate_all_am_versions
 from lib.am_enriching import add_references, remove_null_applicabilities
 from lib.legifrance_API import get_current_loda_via_cid_response, get_legifrance_client
-from lib.texts_properties import LegifranceText, compute_am_diffs, compute_texts_properties
+from lib.texts_properties import LegifranceText, compute_am_diffs, compute_am_signatures, compute_texts_properties
 from lib.am_structure_extraction import (
     ArreteMinisteriel,
     transform_arrete_ministeriel,
@@ -167,6 +168,19 @@ def _generate_parametric_filename(metadata: AMMetadata, version_descriptor: Tupl
 _ParametricAM = Tuple[Parametrization, Dict[str, List[str]]]
 
 
+def _check_parametrization_not_deprecated(am: ArreteMinisteriel, metadata: AMMetadata) -> None:
+    filename = _get_parametrization_filename(metadata)
+    if not os.path.exists(filename):
+        return
+    previous_parametrization = Parametrization.from_dict(json.load(open(filename)))
+    if not previous_parametrization.signatures:
+        warn(f'Parametrization of AM with nor {metadata.nor} has no signatures, this should happen only once!')
+        return
+    is_valid, warnings = check_parametrization_is_still_valid(previous_parametrization, am)
+    if not is_valid:
+        raise ValueError(f'Parametrization of AM with nor {metadata.nor} is not valid. Change log: {warnings}')
+
+
 def _handle_manual_enrichments(
     am: ArreteMinisteriel, metadata: AMMetadata, dump_am: bool
 ) -> Tuple[ArreteMinisteriel, _ParametricAM]:
@@ -175,7 +189,9 @@ def _handle_manual_enrichments(
     if dump_am:
         write_json(enriched_am.to_dict(), _get_enriched_am_filename(metadata))
     parametrization = get_manual_parametrization(id_)
+    _check_parametrization_not_deprecated(am, metadata)
     if dump_am:
+        parametrization = add_am_signatures(parametrization, compute_am_signatures(am))
         write_json(parametrization.to_dict(), _get_parametrization_filename(metadata))
     all_versions = generate_all_am_versions(enriched_am, parametrization, get_manual_combinations(id_))
     if dump_am:

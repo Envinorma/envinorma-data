@@ -1,9 +1,9 @@
-from dataclasses import dataclass, asdict, field
+from dataclasses import dataclass, asdict, field, replace
 from datetime import datetime
 from enum import Enum
 from typing import Dict, Any, List, Union, Tuple, Optional
 
-from lib.data import Regime, StructuredText
+from lib.data import Regime, StructuredText, StructuredTextSignature
 
 
 class ParameterType(Enum):
@@ -333,6 +333,7 @@ class AlternativeSection:
 class Parametrization:
     application_conditions: List[NonApplicationCondition]
     alternative_sections: List[AlternativeSection]
+    signatures: Optional[Dict[Ints, StructuredTextSignature]] = None
     path_to_conditions: Dict[Ints, List[NonApplicationCondition]] = field(init=False)
     path_to_alternative_sections: Dict[Ints, List[AlternativeSection]] = field(init=False)
 
@@ -352,16 +353,26 @@ class Parametrization:
             self.path_to_alternative_sections[path].append(sec)
 
     def to_dict(self) -> Dict[str, Any]:
-        return {
-            'application_conditions': [app.to_dict() for app in self.application_conditions],
-            'alternative_sections': [sec.to_dict() for sec in self.alternative_sections],
-        }
+        res = asdict(self)
+        del res['path_to_conditions']
+        del res['path_to_alternative_sections']
+        res['application_conditions'] = [app.to_dict() for app in self.application_conditions]
+        res['alternative_sections'] = [sec.to_dict() for sec in self.alternative_sections]
+        if self.signatures:
+            res['signatures'] = [[path, signature.to_dict()] for path, signature in self.signatures.items()]
+        return res
 
     @classmethod
     def from_dict(cls, dict_: Dict[str, Any]) -> 'Parametrization':
+        signatures: Optional[Dict[Ints, StructuredTextSignature]]
+        if dict_.get('signatures'):
+            signatures = {tuple(key): StructuredTextSignature.from_dict(value) for key, value in dict_['signatures']}
+        else:
+            signatures = None
         return Parametrization(
             [NonApplicationCondition.from_dict(app) for app in dict_['application_conditions']],
             [AlternativeSection.from_dict(sec) for sec in dict_['alternative_sections']],
+            signatures,
         )
 
 
@@ -474,3 +485,9 @@ def build_simple_parametrization(
         for ref, value in modified_articles.items()
     ]
     return Parametrization(application_conditions, alternative_sections)
+
+
+def add_am_signatures(
+    parametrization: Parametrization, signatures: Dict[Ints, StructuredTextSignature]
+) -> Parametrization:
+    return replace(parametrization, signatures=signatures)
