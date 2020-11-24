@@ -4,7 +4,14 @@ from typing import Any, Callable, Dict, Optional, Tuple, Union, List
 
 from bs4 import BeautifulSoup
 
-from lib.data import AMProperties, LegifranceTextProperties, StructuredTextSignature, TextProperties, TitleInconsistency
+from lib.data import (
+    AMProperties,
+    LegifranceTextProperties,
+    StructuredTextSignature,
+    Table,
+    TextProperties,
+    TitleInconsistency,
+)
 from lib.data import (
     ArreteMinisteriel,
     ArticleStatus,
@@ -356,3 +363,53 @@ def compute_am_signatures(text: ArreteMinisteriel) -> Dict[Ints, StructuredTextS
         for i, section in enumerate(text.sections)
         for key, value in compute_signatures(section, (i,), i, len(text.sections)).items()
     }
+
+
+def extract_leaves_with_successive_titles(
+    text: _AMOrSection, titles: List[str]
+) -> List[Tuple[List[str], List[EnrichedString]]]:
+    in_sections = [
+        elt
+        for section in text.sections
+        for elt in extract_leaves_with_successive_titles(section, titles + [section.title.text])
+    ]
+    if isinstance(text, ArreteMinisteriel) or len(text.sections) != 0:
+        return in_sections
+    return in_sections + [(titles, text.outer_alineas)]
+
+
+def pretty_print_titles_and_alineas(titles: List[str], alineas: List[EnrichedString]) -> None:
+    for title in titles:
+        print(title)
+    for alinea in alineas:
+        if alinea.text:
+            print(alinea.text)
+        elif alinea.table:
+            print(alinea.table)
+
+
+def am_has_vle(am: ArreteMinisteriel) -> bool:
+    str_ = str(am.to_dict()).lower()
+    patterns = [
+        'valeurs limites d\'émission',
+        'valeur limite d\'émission',
+        'valeurs limite d\'émission',
+        'valeur limites d\'émission',
+        'valeurs limites d\'émissions',
+        'valeur limite d\'émissions',
+    ]
+    for pattern in patterns:
+        if pattern in str_:
+            return True
+    return False
+
+
+def extract_tables(text: _AMOrSection) -> List[Table]:
+    res = [table for section in text.sections for table in extract_tables(section)]
+    if isinstance(text, ArreteMinisteriel):
+        return res
+    return res + [al.table for al in text.outer_alineas if al.table]
+
+
+def table_to_list_of_list(table: Table) -> List[List[str]]:
+    return [[cell.content.text for cell in row.cells] for row in table.rows]
