@@ -1,14 +1,20 @@
 import json
+
+import pytest
 from lib.data import (
     ArreteMinisteriel,
     ArticleStatus,
     EnrichedString,
+    Hyperlink,
     LegifranceArticle,
+    Link,
     StructuredText,
     Topic,
     load_arrete_ministeriel,
 )
 from lib.am_enriching import (
+    add_links_in_enriched_string,
+    add_links_to_am,
     extract_titles_and_reference_pairs,
     remove_prescriptive_power,
     add_topics,
@@ -243,3 +249,27 @@ def test_add_references_2():
     for exp, computed in zip(expected, res):
         assert exp[0][:10] == computed[0][:10]
         assert exp[1][:10] == computed[1][:10]
+
+
+def test_link_addition():
+    input_str = EnrichedString('This cat is called Pipa. Yes this cat.', [Link('example.com', 0, 4)])
+    new_str = add_links_in_enriched_string(input_str, {'cat': 'example.com/cat', 'Pipa.': 'example.com/pipa'})
+    assert len(new_str.links) == 4
+    assert sum([link.content_size == 3 for link in new_str.links]) == 2
+    assert sum([link.content_size == 4 for link in new_str.links]) == 1
+    assert sum([link.content_size == 5 for link in new_str.links]) == 1
+    assert sum([link.target == 'example.com' for link in new_str.links]) == 1
+    assert sum([link.target == 'example.com/cat' for link in new_str.links]) == 2
+    assert sum([link.target == 'example.com/pipa' for link in new_str.links]) == 1
+
+
+_SAMPLE_AM_NOR = ['DEVP1706393A', 'ATEP9760292A', 'DEVP1235896A', 'DEVP1329353A', 'TREP1900331A', 'TREP2013116A']
+
+
+@pytest.mark.filterwarnings('ignore')
+def test_no_fail_in_aida_links_addition():
+    for nor in _SAMPLE_AM_NOR:
+        links_json = json.load(open(f'data/aida/hyperlinks/{nor}.json'))
+        links = [Hyperlink(**link_doc) for link_doc in links_json]
+        add_links_to_am(load_arrete_ministeriel(json.load(open(f'data/AM/structured_texts/{nor}.json'))), links)
+

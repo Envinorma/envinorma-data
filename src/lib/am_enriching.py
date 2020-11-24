@@ -3,7 +3,16 @@ from copy import copy
 from dataclasses import replace
 from typing import Dict, List, Optional, Set, Tuple
 
-from lib.data import Annotations, Applicability, ArreteMinisteriel, StructuredText, Topic
+from lib.data import (
+    Annotations,
+    Applicability,
+    ArreteMinisteriel,
+    EnrichedString,
+    Hyperlink,
+    Link,
+    StructuredText,
+    Topic,
+)
 from lib.structure_detection import NUMBERING_PATTERNS, NumberingPattern, ROMAN_PATTERN, detect_longest_matched_string
 
 Ints = Tuple[int, ...]
@@ -195,3 +204,40 @@ def remove_null_applicabilities(am: ArreteMinisteriel) -> ArreteMinisteriel:
     new_am.applicability = new_am.applicability or Applicability(True)
     new_am.sections = [remove_null_applicabilities_in_section(section) for section in new_am.sections]
     return new_am
+
+
+def generate_re_pattern_not_followed_by_alphanumeric(str_: str) -> str:
+    return re.escape(str_) + r'(?![a-zA-Z0-9])'
+
+
+def generate_found_links(str_to_parse: str, str_to_target: Dict[str, str]) -> List[Link]:
+    return [
+        (Link(target=target, position=match.span()[0], content_size=len(str_)))
+        for str_, target in str_to_target.items()
+        for match in re.finditer(generate_re_pattern_not_followed_by_alphanumeric(str_), str_to_parse)
+    ]
+
+
+def add_links_in_enriched_string(enriched_str: EnrichedString, str_to_target: Dict[str, str]) -> EnrichedString:
+    enriched_str = copy(enriched_str)
+    enriched_str.links = enriched_str.links + generate_found_links(enriched_str.text, str_to_target)
+    return enriched_str
+
+
+def add_links_in_section(section: StructuredText, str_to_target: Dict[str, str]) -> StructuredText:
+    section_copy = copy(section)
+    section_copy.title = add_links_in_enriched_string(section.title, str_to_target)
+    section_copy.outer_alineas = [
+        add_links_in_enriched_string(alinea, str_to_target) for alinea in section.outer_alineas
+    ]
+    section_copy.sections = [add_links_in_section(subsection, str_to_target) for subsection in section.sections]
+    return section_copy
+
+
+def add_links_to_am(text: ArreteMinisteriel, new_hyperlinks: List[Hyperlink]) -> ArreteMinisteriel:
+    str_to_target = {link.content: link.href for link in new_hyperlinks}
+    output_text = copy(text)
+    output_text.sections = [add_links_in_section(section, str_to_target) for section in text.sections]
+    output_text.visa = [add_links_in_enriched_string(str_, str_to_target) for str_ in text.visa]
+    return output_text
+

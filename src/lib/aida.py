@@ -8,7 +8,7 @@ import requests
 from bs4 import BeautifulSoup, Tag
 from tqdm import tqdm
 
-from lib.data import EnrichedString, Link, ArreteMinisteriel, StructuredText, Hyperlink, Anchor
+from lib.data import Hyperlink, Anchor
 from lib.config import AIDA_URL
 
 _NOR_REGEXP = r'[A-Z]{4}[0-9]{7}[A-Z]'
@@ -142,42 +142,6 @@ def extract_all_anchors_from_aida(document_id: str) -> List[Anchor]:
     html = download_html(document_id)
     raw_anchors = extract_anchors(html)
     return keep_non_ambiguous_anchors(raw_anchors)
-
-
-def add_links_in_section(section: StructuredText, str_to_target: Dict[str, str]) -> StructuredText:
-    section_copy = copy(section)
-    section_copy.title = add_links_in_enriched_string(section.title, str_to_target)
-    section_copy.outer_alineas = [
-        add_links_in_enriched_string(alinea, str_to_target) for alinea in section.outer_alineas
-    ]
-    section_copy.sections = [add_links_in_section(subsection, str_to_target) for subsection in section.sections]
-    return section_copy
-
-
-def generate_re_pattern_not_followed_by_alphanumeric(str_: str) -> str:
-    return re.escape(str_) + r'(?![a-zA-Z0-9])'
-
-
-def generate_found_links(str_to_parse: str, str_to_target: Dict[str, str]) -> List[Link]:
-    return [
-        (Link(target=target, position=match.span()[0], content_size=len(str_)))
-        for str_, target in str_to_target.items()
-        for match in re.finditer(generate_re_pattern_not_followed_by_alphanumeric(str_), str_to_parse)
-    ]
-
-
-def add_links_in_enriched_string(enriched_str: EnrichedString, str_to_target: Dict[str, str]) -> EnrichedString:
-    new_enriched_str = deepcopy(enriched_str)
-    new_enriched_str.links.extend(generate_found_links(enriched_str.text, str_to_target))
-    return new_enriched_str
-
-
-def add_links_to_am(text: ArreteMinisteriel, new_hyperlinks: List[Hyperlink]) -> ArreteMinisteriel:
-    str_to_target = {link.content: link.href for link in new_hyperlinks}
-    output_text = copy(text)
-    output_text.sections = [add_links_in_section(section, str_to_target) for section in text.sections]
-    output_text.visa = [add_links_in_enriched_string(str_, str_to_target) for str_ in text.visa]
-    return output_text
 
 
 def extract_number_in_the_beginning(str_: str) -> Optional[str]:
