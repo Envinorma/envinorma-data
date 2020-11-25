@@ -1,4 +1,5 @@
-import string, random
+import random
+import string
 from dataclasses import dataclass, asdict, field
 from enum import Enum
 from typing import List, Dict, Optional, Any, Tuple
@@ -265,6 +266,7 @@ class ArreteMinisteriel:
     classements: List[Classement] = field(default_factory=list)
     unique_version: bool = False
     summary: Optional[Summary] = None
+    id: Optional[str] = field(default_factory=random_id)
 
     def to_dict(self) -> Dict[str, Any]:
         res = asdict(self)

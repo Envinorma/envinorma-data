@@ -1,4 +1,5 @@
 import json
+import random
 from collections import Counter
 from typing import Dict, List, Optional, Set
 from tqdm import tqdm
@@ -289,6 +290,7 @@ def generate_all_markdown(
 
 
 if __name__ == '__main__':
+    random.seed(0)  # to avoid havind different ids
     generate_all_markdown(
         am_cids={
             'JORFTEXT000026694913',

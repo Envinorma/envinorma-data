@@ -9,13 +9,14 @@
             "state": "ACTIVE"
         }
     ],
+    "id": "001cCAcEAEB5",
     "installation_date_criterion": null,
     "legifrance_url": "https://www.legifrance.gouv.fr/loda/id/JORFTEXT000028379599",
     "sections": [
         {
             "annotations": null,
             "applicability": null,
-            "id": "fD3F22bE0dF2",
+            "id": "dCFE94EE68DC",
             "legifrance_article": {
                 "content": "<p>Le présent arrêté fixe les prescriptions applicables aux installations classées soumises à enregistrement sous la rubrique n° 2517 de la nomenclature des installations classées.<br/>\nIl ne s'applique pas aux installations existantes déjà autorisées ou déclarées au titre de la rubrique n° 2517.</p><p>Il ne s'applique pas non plus aux installations soumises à la rubrique n° 2517 et qui relèvent également du régime de l'enregistrement au titre de la rubrique n° 2515 de la nomenclature des installations classées.<br/>\nCes dispositions s'appliquent sans préjudice :<br/>\n– de prescriptions particulières dont peut être assorti l'arrêté d'enregistrement dans les conditions fixées par les articles <a href='/affichCodeArticle.do?cidTexte=LEGITEXT000006074220&idArticle=LEGIARTI000020730667&dateTexte=&categorieLien=cid'>L. 512-7-3</a> et <a href='/affichCodeArticle.do?cidTexte=LEGITEXT000006074220&idArticle=LEGIARTI000020730671&dateTexte=&categorieLien=cid'>L. 512-7-5</a> du code de l'environnement ;<br/>\n– des autres législations ainsi que des schémas, plans et autres documents d'orientation et de planification approuvés.</p>",
                 "etat": "VIGUEUR",
@@ -77,7 +78,7 @@
         {
             "annotations": null,
             "applicability": null,
-            "id": "4ECFc1768FDb",
+            "id": "d88B9FaC900b",
             "legifrance_article": {
                 "content": "<p><br/>Au sens du présent arrêté, on entend par :<br/> « Débit moyen interannuel » ou module : moyenne des débits moyens annuels d'un cours d'eau sur une période de référence de trente ans de mesures consécutives.<br/> « Eaux pluviales non polluées (EPnp) » : eaux météoriques n'étant pas en contact avec des secteurs imperméabilisés susceptibles d'être pollués ou avec des fumées industrielles. Sauf configuration spéciale, les eaux de toitures peuvent être considérées comme eaux pluviales non polluées.<br/> « Eaux pluviales polluées (EPp) » : eaux météoriques ruisselant sur des secteurs imperméabilisés susceptibles d'être pollués ou eaux météoriques susceptibles de se charger en polluants au contact de fumées industrielles.<br/> Eaux usées (EU) : effluents liquides provenant des différents usages domestiques de l'eau du personnel (toilettes, cuisines, etc.), essentiellement porteuses de pollution organique.<br/> « Eaux industrielles (EI) » : effluents liquides résultant du fonctionnement ou du nettoyage des installations. L'eau d'arrosage des pistes revêtues en fait partie.<br/> « Eaux résiduaires » : effluents liquides susceptibles d'être pollués (EPp, EU et EI) rejetés du site vers un exutoire extérieur au site.<br/> « Emergence » : la différence entre les niveaux de pression continus équivalents pondérés A du bruit ambiant (installation en fonctionnement) et du bruit résiduel (en l'absence du bruit généré par l'installation).<br/> « Emissaire de rejet » : extrémité d'un réseau canalisé prévu pour rejeter les effluents d'un site.<br/> « Local à risque incendie » : enceinte fermée contenant des matières combustibles ou inflammables et occupée, de façon périodique ou ponctuelle, par du personnel.<br/> « Permis de feu » : permis permettant la réalisation de travaux de réparation ou d'aménagement conduisant à une augmentation des risques par emploi d'une flamme ou d'une source chaude.<br/> « Permis de travail » : permis permettant la réalisation de travaux de réparation ou d'aménagement, sans emploi d'une flamme ni d'une source chaude, lorsque ceux-ci conduisent à une augmentation des risques.<br/> « Produit pulvérulent » : produit solide constitué de fines particules, peu ou pas liées entre elles, qui, dans certaines conditions, a le comportement d'un liquide. Un produit pulvérulent est caractérisé par sa granulométrie (taille et pourcentage des particules dans chacune des classes de dimension).<br/> « Superficie de l'aire de transit » : surface correspondant au cumul des aires destinées à l'entreposage de produits minéraux ou de déchets non dangereux inertes.<br/> « QMNA » : le débit (Q) mensuel (M) minimal (N) de chaque année civile (A). Il s'agit du débit d'étiage d'un cours d'eau.<br/> « QMNA5 » : la valeur du QMNA telle qu'elle ne se produit qu'une année sur cinq.<br/> « Zones à émergence réglementée » :<br/> ― l'intérieur des immeubles habités ou occupés par des tiers existant à la date du dépôt de dossier de demande d'enregistrement, et leurs parties extérieures éventuelles les plus proches (cour, jardin, terrasse), à l'exclusion de celles des immeubles implantés dans les zones destinées à recevoir des activités artisanales ou industrielles ;<br/> ― les zones constructibles définies par des documents d'urbanisme opposables aux tiers et publiés à la date du dépôt de dossier de demande d'enregistrement ;<br/> ― l'intérieur des immeubles habités ou occupés par des tiers qui ont été implantés après la date du dépôt de dossier de demande d'enregistrement dans les zones constructibles définies ci-dessus et leurs parties extérieures éventuelles les plus proches (cour, jardin, terrasse), à l'exclusion de celles des immeubles implantés dans les zones destinées à recevoir des activités artisanales ou industrielles.<br/> « Zone de mélange » : zone adjacente au point de rejet des eaux où les concentrations d'un ou de plusieurs polluants peuvent dépasser les normes de qualité environnementale. Cette zone est proportionnée et limitée à la proximité du point de rejet et ne compromet pas le respect des normes de qualité environnementale sur le reste de la masse d'eau.<br/> « Zones destinées à l'habitation » : zones destinées à l'habitation définies par des documents d'urbanisme opposables aux tiers.</p>",
                 "etat": "VIGUEUR",
@@ -208,7 +209,7 @@
         {
             "annotations": null,
             "applicability": null,
-            "id": "a3bfA0EFCfFA",
+            "id": "0086ACB5cDfC",
             "legifrance_article": null,
             "outer_alineas": [],
             "reference_str": null,
@@ -216,7 +217,7 @@
                 {
                     "annotations": null,
                     "applicability": null,
-                    "id": "e3E5Fe18Ca7e",
+                    "id": "Ef86cd1d1c2e",
                     "legifrance_article": {
                         "content": "<p><br/>L'installation est implantée, réalisée et exploitée conformément aux plans et autres documents joints à la demande d'enregistrement.<br/> L'exploitant énumère et justifie en tant que de besoin toutes les dispositions prises pour la conception, la construction et l'exploitation des installations afin de respecter les prescriptions du présent arrêté.</p>",
                         "etat": "VIGUEUR",
@@ -247,7 +248,7 @@
                 {
                     "annotations": null,
                     "applicability": null,
-                    "id": "cA98f4bECBEe",
+                    "id": "907fE57bE11E",
                     "legifrance_article": {
                         "content": "<p>L'exploitant établit et tient à jour un dossier comportant les documents suivants :<br/>\n– une copie de la demande d'enregistrement et du dossier qui l'accompagne ;<br/>\n– le dossier d'enregistrement tenu à jour et daté en fonction des modifications apportées à l'installation ;<br/>\n– l'arrêté d'enregistrement délivré par le préfet ainsi que tout arrêté préfectoral relatif à l'installation ;<br/>\n– les résultats des mesures sur les effluents et le bruit des cinq dernières années ;<br/>\n– le registre rassemblant l'ensemble des déclarations d'accidents ou d'incidents faites à l'inspection des installations classées ;<br/>\n– les différents documents prévus par le présent arrêté, à savoir :<br/>\n– le plan général des stockages de produits ou déchets non dangereux inertes (art. 3) ;<br/>\n– la notice récapitulant les mesures mises en œuvre pour réduire l'impact sur l'environnement des opérations de transport ou de manipulation de produits ou de déchets (art. 5, 6 et 39) ;<br/>\n– la description des caractéristiques et modalités d'approvisionnement et de livraison des produits ou des déchets et les moyens mis en œuvre (art. 6) ;<br/>\n– les dispositions permettant l'intégration paysagère de l'installation (art. 7) ;<br/>\n– le plan de localisation des risques (art. 10) ;<br/>\n– le registre indiquant la nature et la quantité des produits dangereux détenus (art. 11) ;<br/>\n– le plan général des stockages de produits dangereux (art. 11) ;<br/>\n– les fiches de données de sécurité des produits dangereux présents dans l'installation (art. 12) ;<br/>\n– les rapports de vérifications périodiques (art. 13 et 22) ;<br/>\n– les justificatifs attestant des propriétés de résistance au feu des locaux à risque incendie (art. 14) ;<br/>\n– les éléments justifiant de l'entretien et de la vérification des installations (art. 16 et 18) ;<br/>\n– les moyens de lutte contre l'incendie et l'avis écrit des services d'incendie et de secours, s'il existe, et les justificatifs relatifs aux capacités de lutte contre l'incendie (art. 19) ;<br/>\n– les consignes d'exploitation (art. 21) ;<br/>\n– la description des dispositions mises en œuvre pour l'implantation, l'exploitation, le suivi, l'entretien, la surveillance et la mise à l'arrêt des ouvrages de prélèvement (art. 26) ;<br/>\n– le registre des résultats de mesures de prélèvement d'eau (art. 26) ;<br/>\n– le plan des réseaux de collecte des effluents liquides (art. 28) ;<br/>\n– les justificatifs attestant de la conformité des rejets liquides (art. 34 et 35) ;<br/>\n– le registre des résultats des mesures des principaux paramètres permettant de s'assurer de la bonne marche de l'installation de traitement des effluents (si elle existe) au sein de l'installation (art. 37) ;<br/>\n– les documents ayant trait à la gestion des rejets atmosphériques (art. 39) ;<br/>\n– la justification du nombre de points de rejet atmosphérique (art. 40) ;<br/>\n– le nombre de points de mesure de retombées de poussières, les conditions dans lesquelles les appareils de mesure sont installés et exploités (art. 41) ;<br/>\n– les mesures de prévention mises en place pour réduire les nuisances acoustiques (art. 42) ;<br/>\n– les registres des déchets (art. 47 et 48) ;<br/>\n– le programme de surveillance des émissions (art. 49) ;<br/>\n– le type de réseau de surveillance, le nombre de relevés par point de mesure, la durée d'exposition et les périodes de l'année au cours desquelles les points de mesures sont relevés (art. 50).<br/>\nCe dossier est tenu à la disposition de l'inspection des installations classées, le cas échéant, en tout ou partie, sous format informatique.</p>",
                         "etat": "VIGUEUR",
@@ -433,7 +434,7 @@
                 {
                     "annotations": null,
                     "applicability": null,
-                    "id": "4D82BC11F9De",
+                    "id": "eC7728cfcF59",
                     "legifrance_article": {
                         "content": "<p><br/>Sans préjudice des règlements d'urbanisme, l'exploitant adopte les dispositions suivantes, nécessaires pour prévenir les envols de poussières et matières diverses :<br/> ― les voies de circulation et aires de stationnement des véhicules sont aménagées (formes de pente, revêtement, modalités d'arrosage, etc.) et convenablement nettoyées ;<br/> ― les véhicules sortant de l'installation n'entraînent pas de dépôt de poussières ou de boue sur les voies de circulation. Pour cela des dispositions telles que le lavage des roues des véhicules sont prévues en cas de besoin ;<br/> ― les surfaces où cela est possible sont engazonnées ou végétalisées ;<br/> ― des écrans de végétation sont mis en place, si cela est possible.<br/> Les zones de stockage sont, à la date de délivrance de l'arrêté préfectoral, implantées à une distance d'éloignement de 20 mètres des constructions à usage d'habitation ou des établissements destinés à recevoir des personnes sensibles (hôpital, clinique, maison de retraite, école, collège, lycée et crèche).<br/> Toutefois, pour les installations situées en bord de voie d'eau ou de voie ferrée, lorsque celles-ci sont utilisées pour l'acheminement de produits ou de déchets, cette distance d'éloignement est réduite à 10 mètres et ne concerne alors que les limites autres que celles contiguës à ces voies.<br/> Ces distances d'éloignement ne s'appliquent pas aux installations fonctionnant sur une période unique d'une durée inférieure ou égale à six mois.</p>",
                         "etat": "VIGUEUR",
@@ -494,7 +495,7 @@
                 {
                     "annotations": null,
                     "applicability": null,
-                    "id": "ACFbc8efF0d2",
+                    "id": "2bED88deeddd",
                     "legifrance_article": {
                         "content": "<p><br/>Les produits ou les déchets en transit sont préférentiellement acheminés par voie d'eau ou par voie ferrée, dès lors que ces voies de transport sont voisines et aménagées à cet effet.<br/> L'exploitant récapitule dans une notice les mesures mises en œuvre pour réduire l'impact sur l'environnement des opérations de transport, entreposage, manipulation ou transvasement de produits ou de déchets (circulation, envol de poussières, bruit, etc.). Y sont également précisés :<br/> ― les modalités d'approvisionnement et d'expédition (itinéraires, horaires, matériels de transport utilisés, limitation des vitesses sur le site en fonction des conditions météorologiques, etc.), ainsi que les techniques d'exploitation et aménagements prévus par l'exploitant ;<br/> ― la liste des pistes revêtues ;<br/> ― les dispositions prises en matière d'arrosage des pistes ;<br/> ― les éléments technico-économiques justifiant l'impossibilité d'utiliser les voies de transport mentionnées ci-dessus.<br/> Pour les produits de granulométrie 0/D, en fonction de l'humidité des produits ou des déchets, les camions entrant ou sortant du site sont bâchés si nécessaire.</p>",
                         "etat": "VIGUEUR",
@@ -550,7 +551,7 @@
                 {
                     "annotations": null,
                     "applicability": null,
-                    "id": "99b49A5924DB",
+                    "id": "d3f4dD0b5Cfa",
                     "legifrance_article": {
                         "content": "<p><br/>L'exploitant prend les dispositions appropriées qui permettent d'intégrer l'installation dans le paysage, notamment pour améliorer l'intégration paysagère des équipements ou des stocks de grande hauteur. Il les précise dans son dossier de demande d'enregistrement.<br/> L'ensemble des installations est maintenu propre et entretenu en permanence.<br/> Les abords immédiats et accessibles de l'installation sont maintenus en bon état de propreté. Les émissaires de rejet et leur périphérie font l'objet d'un soin particulier.<br/> Les points d'accumulation de poussières, tels que les superstructures ou les contreventements, sont nettoyés régulièrement. Les opérations de nettoyage doivent être conduites en limitant au maximum l'envol des poussières.</p>",
                         "etat": "VIGUEUR",
@@ -598,7 +599,7 @@
         {
             "annotations": null,
             "applicability": null,
-            "id": "6eC3879DCf7e",
+            "id": "cfB9FEf6da0f",
             "legifrance_article": null,
             "outer_alineas": [],
             "reference_str": null,
@@ -606,7 +607,7 @@
                 {
                     "annotations": null,
                     "applicability": null,
-                    "id": "cd108DFc3aCc",
+                    "id": "23F6E6ebBabF",
                     "legifrance_article": null,
                     "outer_alineas": [],
                     "reference_str": null,
@@ -614,7 +615,7 @@
                         {
                             "annotations": null,
                             "applicability": null,
-                            "id": "d16Ed9CF0D1a",
+                            "id": "f7bBaECD117e",
                             "legifrance_article": {
                                 "content": "<p><br/>L'exploitation se fait sous la surveillance, directe ou indirecte, d'une personne nommément désignée par l'exploitant, ayant une connaissance de la conduite de l'installation, des dangers et inconvénients que l'exploitation induit, des produits utilisés ou stockés dans l'installation et des dispositions à mettre en œuvre en cas d'incident ou d'accident.<br/> Les personnes étrangères à l'établissement n'ont pas l'accès libre aux installations.</p>",
                                 "etat": "VIGUEUR",
@@ -645,7 +646,7 @@
                         {
                             "annotations": null,
                             "applicability": null,
-                            "id": "FA3FB07FaBe3",
+                            "id": "FCE75cAC983c",
                             "legifrance_article": {
                                 "content": "<p><br/>Les locaux sont maintenus propres et régulièrement nettoyés, notamment de manière à éviter les amas de poussières.<br/> L'utilisation de dispositifs soufflant de l'air comprimé à des fins de nettoyage est interdite, à l'exclusion de ceux spécialement conçus à cet effet (cabine de dépoussiérage des vêtements de travail, par exemple).</p>",
                                 "etat": "VIGUEUR",
@@ -676,7 +677,7 @@
                         {
                             "annotations": null,
                             "applicability": null,
-                            "id": "Db9eC5D65df3",
+                            "id": "65a5D09dd16B",
                             "legifrance_article": {
                                 "content": "<p><br/>L'exploitant recense, sous sa responsabilité, les parties de l'installation qui, en raison des caractéristiques, sont susceptibles d'être à l'origine d'un accident pouvant avoir des conséquences directes ou indirectes sur les intérêts mentionnés à l'<a href='/affichCodeArticle.do?cidTexte=LEGITEXT000006074220&idArticle=LEGIARTI000006834227&dateTexte=&categorieLien=cid' title='Code de l'environnement - art. L511-1 (M)'>article L. 511-1 du code de l'environnement</a>.<br/> Le cas échéant, l'exploitant détermine pour chacune de ces parties de l'installation la nature du risque et précise leur localisation par une signalisation adaptée et compréhensible.<br/> L'exploitant dispose d'un plan général du site sur lequel sont reportées les différentes zones de danger correspondant à ces risques.<br/> Les silos et réservoirs doivent être conçus pour pouvoir résister aux charges auxquelles ils pourraient être soumis (vent, neige, etc.).</p>",
                                 "etat": "VIGUEUR",
@@ -723,7 +724,7 @@
                         {
                             "annotations": null,
                             "applicability": null,
-                            "id": "D9EF4bA45a5e",
+                            "id": "D5F82EFda9Ea",
                             "legifrance_article": {
                                 "content": "<p><br/>L'exploitant identifie, dans son dossier de demande d'enregistrement, les produits dangereux détenus sur le site.<br/> La présence dans l'installation de matières dangereuses ou combustibles est limitée aux nécessités de l'exploitation.<br/> En cas de présence de telles matières, l'exploitant tient à jour un registre indiquant la nature et la quantité maximale des produits dangereux détenus, auquel est annexé un plan général des stockages. Ce registre est tenu à la disposition des services d'incendie et de secours et de l'inspection des installations classées.</p>",
                                 "etat": "VIGUEUR",
@@ -759,7 +760,7 @@
                         {
                             "annotations": null,
                             "applicability": null,
-                            "id": "E26DA5AdAc2A",
+                            "id": "B4f32C1d6770",
                             "legifrance_article": {
                                 "content": "<p><br/>Sans préjudice des dispositions du code du travail, l'exploitant dispose des documents lui permettant de connaître la nature et les risques des produits dangereux susceptibles d'être présents dans l'installation, en particulier les fiches de données de sécurité.<br/> Les récipients portent en caractères lisibles le nom des produits et, s'il y a lieu, les symboles de danger conformément à la législation relative à l'étiquetage des substances, préparations et mélanges dangereux.</p>",
                                 "etat": "VIGUEUR",
@@ -797,7 +798,7 @@
                 {
                     "annotations": null,
                     "applicability": null,
-                    "id": "2a89D4E878A6",
+                    "id": "D7905C9baAaC",
                     "legifrance_article": null,
                     "outer_alineas": [],
                     "reference_str": null,
@@ -805,7 +806,7 @@
                         {
                             "annotations": null,
                             "applicability": null,
-                            "id": "Ee7a3aaFBF2d",
+                            "id": "aa56C7c3cCBE",
                             "legifrance_article": {
                                 "content": "<p><br/>Les tuyauteries transportant des fluides dangereux ou insalubres et de collecte d'effluents pollués ou susceptibles de l'être sont étanches et résistent à l'action physique et chimique des produits qu'elles sont susceptibles de contenir. Elles sont convenablement repérées, entretenues et contrôlées.<br/> Les flexibles utilisés lors des transferts doivent être entretenus et contrôlés. En cas de mise à l'air libre, l'opération de transvasement doit s'arrêter automatiquement.</p>",
                                 "etat": "VIGUEUR",
@@ -843,7 +844,7 @@
                 {
                     "annotations": null,
                     "applicability": null,
-                    "id": "0D0bEeBff194",
+                    "id": "8AfE87B096b6",
                     "legifrance_article": null,
                     "outer_alineas": [],
                     "reference_str": null,
@@ -851,7 +852,7 @@
                         {
                             "annotations": null,
                             "applicability": null,
-                            "id": "8347c8B8B7Ac",
+                            "id": "D14Ba324C5b4",
                             "legifrance_article": {
                                 "content": "<p><br/>Les locaux à risque incendie, identifiés à l'article 10, présentent les caractéristiques de réaction et de résistance au feu minimales suivantes :<br/> ― murs extérieurs REI 60 ;<br/> ― murs séparatifs E 30 ;<br/> ― planchers/sol REI 30 ;<br/> ― portes et fermetures EI 30 ;<br/> ― toitures et couvertures de toiture R 30.<br/> Les ouvertures effectuées dans les éléments séparatifs (passage de gaines, de canalisations ou de convoyeurs, etc.) sont munies de dispositifs assurant un degré coupe-feu équivalent à celui exigé pour ces éléments séparatifs.<br/> Les justificatifs attestant des propriétés de résistance au feu sont conservés et tenus à la disposition de l'inspection des installations classées.<br/> Les dispositions du présent article ne s'appliquent pas aux installations fonctionnant sur une période unique d'une durée inférieure ou égale à six mois.</p>",
                                 "etat": "VIGUEUR",
@@ -924,7 +925,7 @@
                 {
                     "annotations": null,
                     "applicability": null,
-                    "id": "4aEB8e463431",
+                    "id": "aA499C0415B8",
                     "legifrance_article": null,
                     "outer_alineas": [],
                     "reference_str": null,
@@ -932,7 +933,7 @@
                         {
                             "annotations": null,
                             "applicability": null,
-                            "id": "7464f2792dD4",
+                            "id": "dd4EFDAE3Dde",
                             "legifrance_article": {
                                 "content": "<p><br/>L'installation dispose en permanence d'au moins un accès à l'installation pour permettre l'intervention des services d'incendie et de secours.<br/> Au sens du présent arrêté, on entend par « accès à l'installation » une ouverture reliant la voie de desserte ou publique et l'intérieur du site suffisamment dimensionnée pour permettre l'entrée des engins de secours et leur mise en œuvre.<br/> Les véhicules stationnent sur le site sans occasionner de gêne pour l'accessibilité des engins des services de secours depuis les voies de circulation externes à l'installation, même en dehors des heures d'exploitation et d'ouverture de l'installation.</p>",
                                 "etat": "VIGUEUR",
@@ -968,7 +969,7 @@
                         {
                             "annotations": null,
                             "applicability": null,
-                            "id": "98860a4DeE8A",
+                            "id": "9dBfC09d0627",
                             "legifrance_article": {
                                 "content": "<p><br/>Les installations sont maintenues constamment en bon état d'entretien et nettoyées aussi souvent qu'il est nécessaire.<br/> Toutes les précautions sont prises pour éviter un échauffement dangereux ou une surpression des installations. Des appareils d'extinction appropriés ainsi que des dispositifs d'arrêt d'urgence sont entretenus constamment en bon état et vérifiés par des tests périodiques.</p>",
                                 "etat": "VIGUEUR",
@@ -999,7 +1000,7 @@
                         {
                             "annotations": null,
                             "applicability": null,
-                            "id": "0B5b0de3329F",
+                            "id": "6f54a8F048E2",
                             "legifrance_article": {
                                 "content": "<p>Dans les parties de l'installation mentionnées à l'article 10 et recensées \"atmosphères explosibles\", les installations électriques, mécaniques, hydrauliques et pneumatiques sont conformes aux dispositions du   décret n° 2015-799 du 1er juillet 2015 relatif aux produits et équipements à risques  ou, le cas échéant, aux dispositions réglementaires en vigueur. Elles sont réduites à ce qui est strictement nécessaire aux besoins de l'exploitation et sont entièrement constituées de matériels utilisables dans les atmosphères explosives.</p>",
                                 "etat": "VIGUEUR",
@@ -1025,7 +1026,7 @@
                         {
                             "annotations": null,
                             "applicability": null,
-                            "id": "BBD9E4Da2b51",
+                            "id": "9A3B4adE541a",
                             "legifrance_article": {
                                 "content": "<p><br/>L'exploitant tient à la disposition de l'inspection des installations classées les éléments justifiant que ses installations électriques sont réalisées conformément aux règles en vigueur, entretenues en bon état et vérifiées.<br/> Les équipements métalliques sont mis à la terre conformément aux règlements et aux normes applicables.<br/> Les matériaux utilisés pour l'éclairage naturel ne produisent pas, lors d'un incendie, de gouttes enflammées.</p>",
                                 "etat": "VIGUEUR",
@@ -1061,7 +1062,7 @@
                         {
                             "annotations": null,
                             "applicability": null,
-                            "id": "D2eaCd1cb0Df",
+                            "id": "E22b2ccd6af1",
                             "legifrance_article": {
                                 "content": "<p><br/>L'installation est dotée de moyens de lutte contre l'incendie appropriés aux risques, notamment :<br/> ― d'un moyen permettant d'alerter les services d'incendie et de secours ;<br/> ― de plans des locaux facilitant l'intervention des services d'incendie et de secours, avec une description des dangers pour chaque local, comme prévu à l'article 10 ;<br/> ― d'appareils de lutte contre l'incendie (prises d'eau, poteaux, par exemple) en nombre suffisant.<br/> Le détail des moyens de lutte contre l'incendie figure dans le dossier de demande d'enregistrement. Il est transmis aux services d'incendie et de secours. Les observations qui pourraient être faites par ce service sont prises en compte par l'exploitant.<br/> Les moyens de lutte contre l'incendie sont capables de fonctionner efficacement quelle que soit la température et notamment en période de gel. L'exploitant s'assure de la vérification périodique et de la maintenance des matériels de sécurité et de lutte contre l'incendie conformément aux référentiels en vigueur.</p>",
                                 "etat": "VIGUEUR",
@@ -1119,7 +1120,7 @@
                 {
                     "annotations": null,
                     "applicability": null,
-                    "id": "eB549C827daF",
+                    "id": "F5a7A1bcd072",
                     "legifrance_article": null,
                     "outer_alineas": [],
                     "reference_str": null,
@@ -1127,7 +1128,7 @@
                         {
                             "annotations": null,
                             "applicability": null,
-                            "id": "c1B9c03ceEED",
+                            "id": "FEF45c56dDA1",
                             "legifrance_article": {
                                 "content": "<p><br/>Dans les parties de l'installation recensées à risque en application de l'article 10, les travaux de réparation ou d'aménagement conduisant à une augmentation des risques ne peuvent être effectués qu'après délivrance d'un « permis de travail » et éventuellement d'un « permis de feu » et en respectant une consigne particulière. Ces permis sont délivrés après analyse des risques liés aux travaux et définition des mesures appropriées.<br/> Le « permis de travail » et éventuellement le « permis de feu » et la consigne particulière sont établis et visés par l'exploitant ou par une personne qu'il aura nommément désignée. Lorsque les travaux sont effectués par une entreprise extérieure, le « permis de travail » et éventuellement le « permis de feu » et la consigne particulière relative à la sécurité de l'installation sont signés par l'exploitant et l'entreprise extérieure ou les personnes qu'ils auront nommément désignées.<br/> Après la fin des travaux et avant la reprise de l'activité en configuration standard d'exploitation, une vérification des installations est effectuée par l'exploitant ou son représentant ou le représentant de l'éventuelle entreprise extérieure.<br/> Dans les parties de l'installation présentant des risques d'incendie ou d'explosion, il est interdit d'apporter du feu sous une forme quelconque, sauf pour la réalisation de travaux ayant fait l'objet d'un « permis de feu ». Cette interdiction est affichée en caractères apparents.</p>",
                                 "etat": "VIGUEUR",
@@ -1168,7 +1169,7 @@
                         {
                             "annotations": null,
                             "applicability": null,
-                            "id": "5eDBbA8D1DA1",
+                            "id": "CeCCe7C3BB1D",
                             "legifrance_article": {
                                 "content": "<p><br/>Des consignes sont établies, tenues à jour et affichées dans les lieux fréquentés par le personnel.<br/> Ces consignes indiquent notamment :<br/> ― l'interdiction d'apporter du feu sous une forme quelconque, notamment l'interdiction de fumer dans les zones présentant des risques d'incendie ;<br/> ― la vérification du bon fonctionnement des circuits avant toute opération de dépotage ;<br/> ― l'interdiction de tout brûlage à l'air libre ;<br/> ― l'obligation du « permis travail » pour les parties concernées de l'installation ; <br/> ― les conditions de stockage des produits ou des déchets non dangereux inertes, telles que les précautions à prendre pour éviter leurs chutes ou éboulements afin, notamment, de maintenir la largeur des voies de circulation à leur valeur requise et ne pas gêner au-delà des limites de propriété ;<br/> ― les procédures d'arrêt d'urgence et de mise en sécurité des installations et des convoyeurs ;<br/> ― les mesures à prendre en cas de fuite d'un récipient ou d'une tuyauterie contenant des produits pulvérulents ;<br/> ― les modalités de mise en œuvre des dispositifs d'isolement du réseau de collecte, prévues à l'article 23-IV du présent arrêté ;<br/> ― les moyens d'extinction à utiliser en cas d'incendie ;<br/> ― la procédure d'alerte avec les numéros de téléphone du responsable d'intervention de l'établissement et des services d'incendie et de secours ;<br/> ― les modes opératoires ;<br/> ― la fréquence de vérification des dispositifs de sécurité et de limitation ou de traitement des pollutions et nuisances générées ;<br/> ― les instructions de maintenance et de nettoyage, y compris celles des éventuelles structures supportant les stockages ;<br/> ― l'obligation d'informer l'inspection des installations classées en cas d'accident.<br/> Le personnel connaît les risques présentés par les installations en fonctionnement normal ou dégradé.<br/> Les préposés à la surveillance et à l'entretien des installations sont formés à la conduite à tenir en cas d'incident ou d'accident et familiarisés avec l'emploi des moyens de lutte contre l'incendie.</p>",
                                 "etat": "VIGUEUR",
@@ -1279,7 +1280,7 @@
                         {
                             "annotations": null,
                             "applicability": null,
-                            "id": "9BF08659C6fa",
+                            "id": "cec3c91874cC",
                             "legifrance_article": {
                                 "content": "<p><br/>L'exploitant assure ou fait effectuer la vérification périodique et la maintenance des matériels de sécurité et de lutte contre l'incendie ainsi que des dispositifs permettant de prévenir les surpressions.<br/> Les vérifications périodiques de ces matériels sont portées dans un registre dans lequel sont également mentionnées les suites données à ces vérifications.</p>",
                                 "etat": "VIGUEUR",
@@ -1317,7 +1318,7 @@
                 {
                     "annotations": null,
                     "applicability": null,
-                    "id": "BfEb155effaD",
+                    "id": "EDa4e3FDBe4e",
                     "legifrance_article": null,
                     "outer_alineas": [],
                     "reference_str": null,
@@ -1325,7 +1326,7 @@
                         {
                             "annotations": null,
                             "applicability": null,
-                            "id": "DBBc83bEA497",
+                            "id": "4EFbbd0b2CCb",
                             "legifrance_article": {
                                 "content": "<p><br/>I. ― Tout stockage d'un liquide susceptible de créer une pollution des eaux ou des sols est associé à une capacité de rétention dont le volume est au moins égal à la plus grande des deux valeurs suivantes :<br/>  100 % de la capacité du plus grand réservoir ;<br/>  50 % de la capacité totale des réservoirs associés.<br/> Cette disposition n'est pas applicable aux bassins de traitement des eaux résiduaires.<br/> Pour les stockages de récipients de capacité unitaire inférieure ou égale à 250 litres, la capacité de rétention est au moins égale à :<br/> ― dans le cas de liquides inflammables, 50 % de la capacité totale des fûts ;<br/> ― dans les autres cas, 20 % de la capacité totale des fûts ;<br/> ― dans tous les cas 800 litres minimum ou égale à la capacité totale lorsque celle-là est inférieure à 800 litres.<br/> II. ― La capacité de rétention est étanche aux produits qu'elle pourrait contenir et résiste à l'action physique et chimique des fluides. Il en est de même pour son dispositif d'obturation, qui est maintenu fermé.<br/> L'étanchéité du (ou des) réservoir(s) associé(s) peut être contrôlée à tout moment.<br/> Le stockage des liquides inflammables ainsi que des autres produits toxiques, corrosifs ou dangereux pour l'environnement n'est permis sous le niveau du sol que dans des réservoirs en fosse maçonnée, ou assimilés et, pour les liquides inflammables, dans les conditions énoncées aux paragraphes I et II du présent article. Tout nouveau réservoir installé sous le niveau du sol est à double enveloppe.<br/> III. ― Rétention et confinement.<br/> Le sol des aires et des locaux de stockage ou de manipulation des matières dangereuses ou susceptibles de créer une pollution de l'eau ou du sol est étanche et équipé de façon à pouvoir recueillir les eaux de lavage et les matières répandues accidentellement, de façon à ce que le liquide ne puisse s'écouler hors de l'aire ou du local.<br/> Les matières recueillies sont de préférence récupérées et recyclées ou, en cas d'impossibilité, traitées conformément aux dispositions du présent arrêté.<br/> Toutes mesures sont prises pour recueillir l'ensemble des eaux et des écoulements susceptibles d'être pollués lors d'un sinistre, y compris les eaux utilisées lors d'un incendie, afin que celles-ci soient récupérées ou traitées afin de prévenir toute pollution des sols, des égouts, des cours d'eau ou du milieu naturel.<br/> Le volume nécessaire à ce confinement est déterminé de la façon suivante. L'exploitant calcule la somme :<br/> ― du volume des matières stockées ;<br/> ― du volume d'eau d'extinction nécessaire à la lutte contre l'incendie, d'une part ;<br/> ― du volume de produit libéré par cet incendie, d'autre part ;<br/> ― du volume d'eau lié aux intempéries, à raison de 10 litres par mètre carré de surface de drainage vers l'ouvrage de confinement lorsque le confinement est externe.<br/> Les eaux d'extinction collectées sont éliminées vers les filières de traitement appropriées. En l'absence de pollution préalablement caractérisée, elles pourront être évacuées vers le milieu récepteur dans les limites autorisées ci-dessous, sous réserve de la compatibilité des rejets présentant les niveaux de pollution définis ci-dessous avec les objectifs de qualité et de quantité des eaux visés au <a href='/affichCodeArticle.do?cidTexte=LEGITEXT000006074220&idArticle=LEGIARTI000006833004&dateTexte=&categorieLien=cid' title='Code de l'environnement - art. L212-1 (M)'>IV de l'article L. 212-1 du code de l'environnement</a> :<div align='center'><center><table border='1'><tr><td align='center'><br/>Matières en suspension totales</td><td align='center'><br/>35 mg/l</td></tr><tr><td align='center'><br/>DCO (sur effluent non décanté)</td><td align='center'><br/>125 mg/l</td></tr><tr><td align='center'><br/>Hydrocarbures totaux</td><td align='center'><br/>10 mg/l</td></tr></table></center></div><br/><br/> IV. ― Isolement des réseaux d'eau.<br/> Le circuit nécessaire à la réutilisation des eaux industrielles telle que prévue au dernier alinéa de l'article 25 est conçu de telle manière qu'il ne puisse donner lieu à des pollutions accidentelles. Un dispositif d'arrêt d'alimentation en eau de procédé de l'installation, en cas de rejet accidentel des eaux réutilisées, est prévu.</p>",
                                 "etat": "VIGUEUR",
@@ -1339,7 +1340,7 @@
                                 {
                                     "annotations": null,
                                     "applicability": null,
-                                    "id": "E5D059BDeCE1",
+                                    "id": "8BDFfc8BacF2",
                                     "legifrance_article": null,
                                     "outer_alineas": [
                                         {
@@ -1389,7 +1390,7 @@
                                 {
                                     "annotations": null,
                                     "applicability": null,
-                                    "id": "bE2F6E9dD1F6",
+                                    "id": "C3f24ab2d8c5",
                                     "legifrance_article": null,
                                     "outer_alineas": [
                                         {
@@ -1414,7 +1415,7 @@
                                 {
                                     "annotations": null,
                                     "applicability": null,
-                                    "id": "710aFEEd3dE1",
+                                    "id": "9A9C1A9A4f6d",
                                     "legifrance_article": null,
                                     "outer_alineas": [
                                         {
@@ -1557,7 +1558,7 @@
                                 {
                                     "annotations": null,
                                     "applicability": null,
-                                    "id": "F6A514Afe5B4",
+                                    "id": "EF169C82ECe5",
                                     "legifrance_article": null,
                                     "outer_alineas": [
                                         {
@@ -1598,7 +1599,7 @@
         {
             "annotations": null,
             "applicability": null,
-            "id": "FF0727ab8B46",
+            "id": "d78547537981",
             "legifrance_article": null,
             "outer_alineas": [],
             "reference_str": null,
@@ -1606,7 +1607,7 @@
                 {
                     "annotations": null,
                     "applicability": null,
-                    "id": "d21F06D9cf99",
+                    "id": "3D5e763e50FD",
                     "legifrance_article": null,
                     "outer_alineas": [],
                     "reference_str": null,
@@ -1614,7 +1615,7 @@
                         {
                             "annotations": null,
                             "applicability": null,
-                            "id": "4dC4dcf3BEaE",
+                            "id": "c5bcDC3Bda8a",
                             "legifrance_article": {
                                 "content": "<p><br/>Le fonctionnement de l'installation est compatible avec les objectifs de qualité et de quantité des eaux visés au <a href='/affichCodeArticle.do?cidTexte=LEGITEXT000006074220&idArticle=LEGIARTI000006833004&dateTexte=&categorieLien=cid' title='Code de l'environnement - art. L212-1 (M)'>IV de l'article L. 212-1 du code de l'environnement</a>.<br/> Les valeurs limites d'émissions prescrites sont celles fixées dans le présent arrêté ou celles revues à la baisse et présentées par l'exploitant dans son dossier afin d'intégrer les objectifs présentés à l'alinéa ci-dessus.<br/> Pour chaque polluant, le flux rejeté est inférieur à 10 % du flux admissible par le milieu.<br/> La conception et l'exploitation des installations permettent de limiter les débits d'eau et les flux polluants.</p>",
                                 "etat": "VIGUEUR",
@@ -1668,7 +1669,7 @@
                 {
                     "annotations": null,
                     "applicability": null,
-                    "id": "bBDBfbd8BeEe",
+                    "id": "3b7DEB7c6Ec3",
                     "legifrance_article": null,
                     "outer_alineas": [],
                     "reference_str": null,
@@ -1676,7 +1677,7 @@
                         {
                             "annotations": null,
                             "applicability": null,
-                            "id": "0ecA4CD8b1dE",
+                            "id": "0A0025EbefB3",
                             "legifrance_article": {
                                 "content": "<p><br/>Le prélèvement ne se situe pas dans une zone où des mesures permanentes de répartition quantitative ont été instituées au titre de l'<a href='/affichCodeArticle.do?cidTexte=LEGITEXT000006074220&idArticle=LEGIARTI000006832984&dateTexte=&categorieLien=cid' title='Code de l'environnement - art. L211-2 (V)'>article L. 211-2 du code de l'environnement</a>.<br/> Le prélèvement maximal effectué dans le réseau public et/ou le milieu naturel est déterminé par l'exploitant dans son dossier de demande d'enregistrement, sans toutefois dépasser 75 m³/heure ni 75 000m³/an.<br/> L'utilisation des eaux pluviales non polluées est privilégiée dans les procédés de nettoyage des installations, d'arrosage des pistes et des stocks de produits ou de déchets non dangereux inertes, etc. Afin de limiter et de réduire le plus possible la consommation d'eau, des dispositifs de brumisation d'eau ou équivalents sont privilégiés chaque fois que possible.<br/> Les eaux d'arrosage des pistes non revêtues et les eaux d'arrosage des stockages sont réutilisées chaque fois que possible.</p>",
                                 "etat": "VIGUEUR",
@@ -1723,7 +1724,7 @@
                         {
                             "annotations": null,
                             "applicability": null,
-                            "id": "AaEf2A87c3Da",
+                            "id": "D31635e0fdB4",
                             "legifrance_article": {
                                 "content": "<p><br/>L'exploitant indique, dans son dossier d'enregistrement, les dispositions prises pour l'implantation, l'exploitation, le suivi, l'entretien, la surveillance et la mise à l'arrêt des ouvrages de prélèvement d'eau.<br/> Les installations de prélèvement d'eau sont munies d'un dispositif de mesure totalisateur. Ce dispositif est relevé mensuellement. Ces relevés sont enregistrés et conservés dans le dossier de l'installation.<br/> En cas de raccordement sur un réseau public ou sur un forage en nappe, l'ouvrage est équipé d'un dispositif de disconnexion.<br/> Les ouvrages de prélèvement dans les cours d'eau ne gênent pas l'écoulement normal des eaux et n'entravent pas les continuités écologiques.</p>",
                                 "etat": "VIGUEUR",
@@ -1764,7 +1765,7 @@
                         {
                             "annotations": null,
                             "applicability": null,
-                            "id": "d09f4Aaaf304",
+                            "id": "Ff94F860f9f0",
                             "legifrance_article": {
                                 "content": "<p><br/>Toute réalisation de forage est conforme avec les dispositions de <a href='/affichCodeArticle.do?cidTexte=LEGITEXT000023501962&idArticle=LEGIARTI000023505812&dateTexte=&categorieLien=cid' title='Code minier (nouveau) - art. L411-1 (V)'>l'article L. 411-1</a> du code minier et à l'arrêté du 11 septembre 2003 fixant les prescriptions générales applicables aux sondage, forage, création de puits ou d'ouvrage souterrain soumis à déclaration en application des <a href='/affichCodeArticle.do?cidTexte=LEGITEXT000006074220&idArticle=LEGIARTI000006833119&dateTexte=&categorieLien=cid' title='Code de l'environnement - art. L214-1 (M)'>articles L. 214-1 à L. 214-3 du code de l'environnement </a>et relevant de la rubrique 1.1.1.0 de la nomenclature fixée dans l'<a href='/affichCodeArticle.do?cidTexte=LEGITEXT000006074220&idArticle=LEGIARTI000006835452&dateTexte=&categorieLien=cid' title='Code de l'environnement - art. R214-1 (M)'>article R. 214-1 du code de l'environnement</a>. <br/>Lors de la réalisation de forages, toutes dispositions sont prises pour ne pas mettre en communication des nappes d'eau distinctes et pour prévenir toute introduction de pollution de surface. <br/>En cas de cessation d'utilisation d'un forage, l'exploitant prend les mesures appropriées pour l'obturation ou le comblement de cet ouvrage afin d'éviter la pollution des nappes d'eau souterraines. <br/>La réalisation de tout nouveau forage ou la mise hors service d'un forage est portée à la connaissance du préfet avec tous les éléments d'appréciation de l'impact hydrogéologique.</p>",
                                 "etat": "VIGUEUR",
@@ -1828,7 +1829,7 @@
                 {
                     "annotations": null,
                     "applicability": null,
-                    "id": "ab7a1ddc1184",
+                    "id": "f6D668d8BB78",
                     "legifrance_article": null,
                     "outer_alineas": [],
                     "reference_str": null,
@@ -1836,7 +1837,7 @@
                         {
                             "annotations": null,
                             "applicability": null,
-                            "id": "bc57B0eE7c4C",
+                            "id": "f2DC41D3c709",
                             "legifrance_article": {
                                 "content": "<p><br/>La collecte des effluents s'effectue par deux types d'ouvrages indépendants : les fossés de drainage pour les eaux non polluées et les réseaux étanches (tuyauteries) pour les autres effluents.<br/> Il est interdit d'établir des liaisons directes entre les réseaux de collecte des effluents devant subir un traitement ou être détruits et le milieu récepteur, à l'exception des cas accidentels où la sécurité des personnes ou des installations serait compromise.<br/> Les eaux résiduaires rejetées par les installations ne sont pas susceptibles de dégrader les réseaux équipés de tuyauteries de l'installation ou de dégager des produits toxiques ou inflammables dans ces réseaux, éventuellement par mélange avec d'autres effluents. Ces effluents ne contiennent pas de substances de nature à gêner le bon fonctionnement des ouvrages de traitement du site.<br/> Le plan des ouvrages de collecte des effluents fait apparaître les types d'ouvrages (fossés ou tuyauteries), les secteurs collectés, le sens d'écoulement, les points de branchement, regards, avaloirs, postes de relevage, postes de mesure, vannes manuelles et automatiques, etc. Il est conservé dans le dossier de demande d'enregistrement, daté et mis à jour en tant que de besoin.</p>",
                                 "etat": "VIGUEUR",
@@ -1877,7 +1878,7 @@
                         {
                             "annotations": null,
                             "applicability": null,
-                            "id": "2d2Cd1bab665",
+                            "id": "DED06d6E28A3",
                             "legifrance_article": {
                                 "content": "<p><br/>Les points de rejet dans le milieu naturel sont en nombre aussi réduit que possible.<br/> Les ouvrages de rejet permettent une bonne diffusion des effluents dans le milieu récepteur et une minimisation de la zone de mélange.<br/> Les dispositifs de rejet des eaux résiduaires sont aménagés de manière à réduire autant que possible la perturbation apportée au milieu récepteur aux abords du point de rejet, en fonction de l'utilisation de l'eau à proximité immédiate et à l'aval de celui-ci, et à ne pas gêner la navigation.</p>",
                                 "etat": "VIGUEUR",
@@ -1913,7 +1914,7 @@
                         {
                             "annotations": null,
                             "applicability": null,
-                            "id": "9e122E839e04",
+                            "id": "3fD2FcEfD135",
                             "legifrance_article": {
                                 "content": "<p><br/>Sur chaque tuyauterie de rejet d'effluents sont prévus un point de prélèvement d'échantillons et des points de mesure (débit, température, concentration en polluant, etc.).<br/> Les points de mesure sont implantés dans une section dont les caractéristiques (rectitude de la conduite à l'amont, qualité des parois, régime d'écoulement, etc.) permettent de réaliser des mesures représentatives de manière que la vitesse n'y soit pas sensiblement ralentie par des seuils ou des obstacles situés à l'aval et que l'effluent soit suffisamment homogène.<br/> Ces points sont aménagés de manière à être aisément accessibles et permettre des interventions en toute sécurité. Toutes dispositions sont également prises pour faciliter l'intervention d'organismes extérieurs à la demande de l'inspection des installations classées.</p>",
                                 "etat": "VIGUEUR",
@@ -1949,7 +1950,7 @@
                         {
                             "annotations": null,
                             "applicability": null,
-                            "id": "D55768cB114f",
+                            "id": "Fc2DE2A2D91c",
                             "legifrance_article": {
                                 "content": "<p>Les eaux pluviales non polluées sont drainées par des fossés. La circulation des engins ne pollue pas les eaux de ces fossés.<br/>\nCes eaux pluviales non polluées peuvent être infiltrées dans le sol.<br/>\nLes eaux pluviales entrant en contact avec les zones d'alimentation en carburant et d'entretien des véhicules sont considérées comme des eaux pluviales polluées.<br/>\nLes eaux pluviales polluées suite à un ruissellement sur les voies de circulation revêtues, aires de stationnement, de chargement et de déchargement ou autres surfaces imperméables sont collectées spécifiquement et traitées par un ou plusieurs dispositifs adaptés aux polluants en présence.<br/>\nLorsque le ruissellement sur l'ensemble des surfaces imperméables du site (voiries, aires de parking, par exemple), en cas de pluie correspondant au maximal décennal de précipitations, est susceptible de générer un débit à la sortie des ouvrages de traitement de ces eaux supérieur à 10 % du QMNA5 du milieu récepteur, l'exploitant met en place un ouvrage de collecte afin de respecter, en cas de précipitations décennales, un débit inférieur à 10 % de ce QMNA5.<br/>\nEn cas de rejet dans un ouvrage collectif de collecte, l'autorisation de déversement prévue à l'<a href='/affichCodeArticle.do?cidTexte=LEGITEXT000006072665&idArticle=LEGIARTI000006686518&dateTexte=&categorieLien=cid'>article L. 1331-10 du code de la santé publique</a> fixe notamment le débit maximal.<br/>\nLes eaux pluviales polluées (EPp) ne peuvent être rejetées au milieu naturel que sous réserve de respecter les objectifs de qualité et les valeurs limites d'émission fixés par le présent arrêté (article 34 à 36). Leur rejet est étalé dans le temps en tant que de besoin en vue de respecter les valeurs limites fixées par le présent arrêté, sous réserve de la compatibilité des rejets présentant les niveaux de pollution définis ci-dessous avec les objectifs de qualité et de quantité des eaux visés au <a href='/affichCodeArticle.do?cidTexte=LEGITEXT000006074220&idArticle=LEGIARTI000006833004&dateTexte=&categorieLien=cid'>IV de l'article L. 212-1 du code de l'environnement</a>.</p>",
                                 "etat": "VIGUEUR",
@@ -2017,7 +2018,7 @@
                         {
                             "annotations": null,
                             "applicability": null,
-                            "id": "4a4FFaB6DCC6",
+                            "id": "D334E97eCF66",
                             "legifrance_article": {
                                 "content": "<p><br/>Les rejets directs ou indirects d'eau résiduaires vers les eaux souterraines sont interdits.</p>",
                                 "etat": "VIGUEUR",
@@ -2050,7 +2051,7 @@
                 {
                     "annotations": null,
                     "applicability": null,
-                    "id": "cab3f2d677B2",
+                    "id": "cDE4A9bDdAd8",
                     "legifrance_article": null,
                     "outer_alineas": [],
                     "reference_str": null,
@@ -2058,7 +2059,7 @@
                         {
                             "annotations": null,
                             "applicability": null,
-                            "id": "E991dCE2Dfe3",
+                            "id": "cEbAf21f736A",
                             "legifrance_article": {
                                 "content": "<p><br/>La dilution des effluents est interdite.</p>",
                                 "etat": "VIGUEUR",
@@ -2084,7 +2085,7 @@
                         {
                             "annotations": null,
                             "applicability": null,
-                            "id": "bCb9cf621B5E",
+                            "id": "cAC6Cadea8cf",
                             "legifrance_article": {
                                 "content": "<p><br/>Les prescriptions du présent article s'appliquent uniquement aux rejets directs au milieu naturel.<br/> L'exploitant justifie, dans son dossier d'enregistrement, que le débit maximal journalier ne dépasse pas 1/10e du débit moyen interannuel du cours d'eau.<br/> La température des effluents rejetés est inférieure à 30 °C et leur pH est compris entre 5,5 et 8,5.<br/> La modification de couleur du milieu récepteur (cours d'eau, lac, étang, canal), mesurée en un point représentatif de la zone de mélange, ne dépasse pas 100 mg Pt/l.<br/> Pour les eaux réceptrices, les rejets n'induisent pas, en dehors de la zone de mélange :<br/> ― une élévation de température supérieure à 1,5 °C pour les eaux salmonicoles, à 3 °C pour les eaux cyprinicoles et 2 °C pour les eaux conchylicoles ;<br/> ― une température supérieure à 21,5 °C pour les eaux salmonicoles, à 28 °C pour les eaux cyprinicoles et à 25 °C pour les eaux destinées à la production d'eau alimentaire ;<br/> ― un pH en dehors des plages de valeurs suivantes : 6-9 pour les eaux salmonicoles, cyprinicoles et pour les eaux de baignade ; 6,5-8,5 pour les eaux destinées à la production alimentaire et 7-9 pour les eaux conchylicoles ;<br/> ― un accroissement supérieur à 30 % des matières en suspension et une variation supérieure à 10 % de la salinité pour les eaux conchylicoles.<br/> Les dispositions de l'alinéa précédent ne s'appliquent pas aux eaux marines des départements d'outre-mer.</p>",
                                 "etat": "VIGUEUR",
@@ -2155,7 +2156,7 @@
                         {
                             "annotations": null,
                             "applicability": null,
-                            "id": "Dc7Ebdbc10a7",
+                            "id": "a8Cb5cF0C431",
                             "legifrance_article": {
                                 "content": "<p><br/>Les eaux pluviales polluées (EPp) rejetées au milieu naturel respectent les valeurs limites de concentration suivantes :<br/> ― MEST : 35 mg/l ;<br/> ― DCO (sur effluent non décanté) : 125 mg/l ;<br/> ― hydrocarbures totaux : 10 mg/l.<br/> Pour chacun de ces polluants, le flux maximal journalier est précisé dans le dossier de demande d'enregistrement.<br/> Dans le cas de prélèvements instantanés, aucun résultat de mesure ne dépasse le double de la valeur limite prescrite.</p>",
                                 "etat": "VIGUEUR",
@@ -2206,7 +2207,7 @@
                         {
                             "annotations": null,
                             "applicability": null,
-                            "id": "aB72bDFDedA6",
+                            "id": "c1eFC9c356Bb",
                             "legifrance_article": {
                                 "content": "<p><br/>Le raccordement à une station d'épuration collective, urbaine ou industrielle, n'est autorisé que si l'infrastructure collective d'assainissement (réseau et station d'épuration) est apte à acheminer et à traiter l'effluent ainsi que les boues résultant de ce traitement dans de bonnes conditions. Une autorisation de déversement est établie par le(s) gestionnaire(s) du réseau d'assainissement et du réseau de collecte.<br/> Sous réserve de l'autorisation de raccordement à la station d'épuration, les valeurs limites de concentration imposées à l'effluent à la sortie du site ne dépassent pas :<br/> ― MEST : 600 mg/l ;<br/> ― DCO : 2 000 mg/l ;<br/> ― hydrocarbures totaux : 10 mg/l.<br/> Pour la température, le débit et le pH, l'autorisation de déversement dans le réseau public fixe la valeur à respecter.<br/> Sauf dispositions contraires, les valeurs limites ci-dessus s'appliquent à des prélèvements, mesures ou analyses moyens réalisés sur vingt-quatre heures.<br/> Dans le cas de prélèvements instantanés, aucun résultat de mesure ne dépasse le double de la valeur limite prescrite.</p>",
                                 "etat": "VIGUEUR",
@@ -2274,7 +2275,7 @@
                 {
                     "annotations": null,
                     "applicability": null,
-                    "id": "bA816BC0Fd66",
+                    "id": "C86ba92dB2AE",
                     "legifrance_article": null,
                     "outer_alineas": [],
                     "reference_str": null,
@@ -2282,7 +2283,7 @@
                         {
                             "annotations": null,
                             "applicability": null,
-                            "id": "B7CFD9bF979a",
+                            "id": "9Bcdb304b3F2",
                             "legifrance_article": {
                                 "content": "<p><br/>Les installations de traitement des effluents sont conçues et exploitées de manière à faire face aux variations de débit, de température ou de composition des effluents à traiter.<br/> Les principaux paramètres permettant de s'assurer de leur bonne marche sont mesurés périodiquement. Les résultats de ces mesures sont portés sur un registre éventuellement informatisé et conservés dans le dossier d'exploitation pendant cinq années.<br/> Si une indisponibilité ou un dysfonctionnement des installations de traitement est susceptible de conduire à un dépassement des valeurs limites imposées par le présent arrêté, l'exploitant prend les dispositions nécessaires pour y remédier dans les meilleurs délais et pour réduire la pollution émise en limitant ou en arrêtant si besoin l'activité concernée.<br/> Les dispositifs de traitement sont correctement entretenus. Ils sont vidangés et curés régulièrement, à une fréquence permettant d'assurer leur bon fonctionnement. En tout état de cause, le report de ces opérations de vidange et de curage ne pourra pas excéder deux ans.<br/> Un dispositif permettant l'obturation du réseau d'évacuation des eaux pluviales polluées est implanté de sorte à maintenir sur le site les eaux en cas de dysfonctionnement de l'installation de traitement.<br/> Lors de la vidange, une vérification du bon fonctionnement du dispositif d'obturation est également réalisée. Les fiches de suivi du nettoyage du dispositif de traitement ainsi que les bordereaux de traitement des déchets détruits ou retraités sont tenus à la disposition de l'inspection des installations classées.</p>",
                                 "etat": "VIGUEUR",
@@ -2333,7 +2334,7 @@
                         {
                             "annotations": null,
                             "applicability": null,
-                            "id": "d8DeAe4Ed69c",
+                            "id": "7fddaA4f42EA",
                             "legifrance_article": {
                                 "content": "<p><br/>L'épandage des boues, déchets, effluents ou sous-produits est interdit.</p>",
                                 "etat": "VIGUEUR",
@@ -2373,7 +2374,7 @@
         {
             "annotations": null,
             "applicability": null,
-            "id": "82aFDa71c7E3",
+            "id": "00ED288dCfa4",
             "legifrance_article": null,
             "outer_alineas": [],
             "reference_str": null,
@@ -2381,7 +2382,7 @@
                 {
                     "annotations": null,
                     "applicability": null,
-                    "id": "39cf3DE6Aecd",
+                    "id": "57F0ffBFEbbA",
                     "legifrance_article": null,
                     "outer_alineas": [],
                     "reference_str": null,
@@ -2389,7 +2390,7 @@
                         {
                             "annotations": null,
                             "applicability": null,
-                            "id": "2A7EA15Dd2Ec",
+                            "id": "ECaB785f0d3E",
                             "legifrance_article": {
                                 "content": "<p><br/>Toutes les dispositions nécessaires sont prises pour que l'établissement ne soit pas à l'origine d'émission de poussières susceptibles d'incommoder le voisinage et de nuire à la santé et à la sécurité publiques, et ce même en période d'inactivité. A ce titre, l'exploitant décrit les différentes sources d'émission de poussières, aussi bien diffuses que canalisées, et définit toutes les dispositions utiles mises en œuvre pour éviter ou limiter l'émission et la propagation des poussières.<br/> Des dispositions particulières, tant au niveau de la conception et de la construction (implantation en fonction du vent, des bâtiments alentour, des rideaux d'arbres, etc.) que de l'exploitation de l'installation, sont mises en œuvre de manière à limiter l'émission de poussières.<br/> En fonction de la granulométrie et de l'humidité des produits ou des déchets non dangereux inertes, les opérations de chargement ou de déchargement nécessitent des dispositifs empêchant l'émission de poussières, tels que :<br/> ― capotage et aspiration raccordée à une installation de traitement des effluents ;<br/> ― brumisation ;<br/> ― système adaptant la hauteur de la chute libre lors des déversements.<br/> Lorsque les stockages des produits ou des déchets non dangereux inertes se font à l'air libre, les stockages sont humidifiés pour empêcher les envols de poussières par temps sec et lorsque la vitesse du vent le nécessite.<br/> Les fillers (éléments fins inférieurs à 80 µm) doivent être confinés (sachets, récipients, silos, bâtiments fermés). Le cas échéant, les silos doivent être munis de dispositifs de contrôle de niveau de manière à éviter les débordements. L'air s'échappant de ces silos doit être dépoussiéré.</p>",
                                 "etat": "VIGUEUR",
@@ -2457,7 +2458,7 @@
                 {
                     "annotations": null,
                     "applicability": null,
-                    "id": "fdd6D1DfD1E4",
+                    "id": "8F49eeDf90f3",
                     "legifrance_article": null,
                     "outer_alineas": [],
                     "reference_str": null,
@@ -2465,7 +2466,7 @@
                         {
                             "annotations": null,
                             "applicability": null,
-                            "id": "D62E3d687b9b",
+                            "id": "d1A9CF8CF0C4",
                             "legifrance_article": {
                                 "content": "<p><br/>L'exploitant assure une surveillance de la qualité de l'air par la mesure des retombées de poussières.<br/> Le nombre de points de mesure les conditions dans lesquelles les appareils de mesure sont installés et exploités sont décrits dans le dossier de demande d'enregistrement. Un point permettant de déterminer le niveau d'empoussièrement ambiant (« bruit de fond ») est prévu.<br/> Les exploitants qui participent à un réseau de mesure de la qualité de l'air qui comporte des mesures de retombées de poussières peuvent être dispensés de cette obligation si le réseau existant permet de surveiller correctement les effets de leurs rejets.<br/> La vitesse et la direction du vent sont mesurées et enregistrées en continu. A défaut d'une station météorologique utilisée par l'exploitant, les données de la station météorologique la plus proche sont récupérées. Les données enregistrées ou récupérées sont maintenues à la disposition de l'inspection des installations classées.<br/> Les dispositions du présent article ne s'appliquent pas aux installations fonctionnant sur une période unique d'une durée inférieure ou égale à six mois.</p>",
                                 "etat": "VIGUEUR",
@@ -2518,7 +2519,7 @@
                 {
                     "annotations": null,
                     "applicability": null,
-                    "id": "Be7502468C88",
+                    "id": "4ba6068434b3",
                     "legifrance_article": null,
                     "outer_alineas": [],
                     "reference_str": null,
@@ -2526,7 +2527,7 @@
                         {
                             "annotations": null,
                             "applicability": null,
-                            "id": "Afa4eaDFC2B1",
+                            "id": "CfbDd116A3B1",
                             "legifrance_article": {
                                 "content": "<p><br/>Les méthodes de mesures, de prélèvements et d'analyse de référence en vigueur sont fixées par l'arrêté du 7 juillet 2009 susvisé.<br/> Le débit des effluents gazeux est exprimé en mètres cubes par heure rapporté à des conditions normalisées de température (273 kelvins) et de pression (101,3 kilopascals) après déduction de la vapeur d'eau (gaz secs).<br/> La concentration en poussières totales des émissions canalisées est inférieure à :<br/>  30 mg/Nm3 ;<br/>  1 kg/heure par point de rejet.<br/> Les valeurs limites s'imposent à des mesures, prélèvements et analyses moyens réalisés sur une durée d'une demi-heure.<br/> L'exploitant met en place un réseau permettant de mesurer le suivi des retombées de poussières dans l'environnement. Ce suivi se fera soit par la méthode des plaquettes de dépôt, soit, préférentiellement, par la méthode des jauges de retombées.<br/> Les mesures de retombées de poussières par la méthode des plaquettes de dépôt sont réalisées conformément aux dispositions de la norme NF X 43-007, version décembre 2008.<br/> Les mesures de retombées de poussières par la méthode des jauges de retombées sont réalisées conformément aux dispositions de la norme NF X 43-014, version novembre 2003.</p>",
                                 "etat": "VIGUEUR",
@@ -2606,7 +2607,7 @@
         {
             "annotations": null,
             "applicability": null,
-            "id": "690145EbD985",
+            "id": "1BC05Af99BBf",
             "legifrance_article": null,
             "outer_alineas": [],
             "reference_str": null,
@@ -2614,7 +2615,7 @@
                 {
                     "annotations": null,
                     "applicability": null,
-                    "id": "DFCA6aE7Ebd4",
+                    "id": "2d3BE1bd733B",
                     "legifrance_article": {
                         "content": "<p><br/>Les bruits émis par les installations sont réduits au maximum.<br/> La livraison des matières premières et l'expédition des produits se font préférentiellement en période diurne.</p>",
                         "etat": "VIGUEUR",
@@ -2645,7 +2646,7 @@
                 {
                     "annotations": null,
                     "applicability": null,
-                    "id": "aC7CcF5d0ab6",
+                    "id": "9D6672E8EB02",
                     "legifrance_article": {
                         "content": "<p></p><p>Les mesures d'émissions sonores sont effectuées selon la méthode définie en annexe I du présent arrêté.</p><p>Sous réserve de dispositions plus contraignantes définies dans les documents d'urbanisme ou de plans de prévention du bruit, les émissions sonores de l'installation ne sont pas à l'origine, dans les zones à émergence réglementée, d'une émergence supérieure aux valeurs admissibles définies dans le tableau 1 suivant :</p><p></p><p></p><p>Tableau 1. - Niveaux d'émergence</p><center><table border='1'><tbody><tr><td align='center'> NIVEAU DE BRUIT AMBIANT EXISTANT<p>dans les zones à émergence réglementée</p>(incluant le bruit de l'installation)</td><td align='center'> ÉMERGENCE ADMISSIBLE POUR LA PÉRIODE<p>allant de 7 heures à 22 heures,</p>sauf dimanches et jours fériés</td><td align='center'> ÉMERGENCE ADMISSIBLE POUR LA PÉRIODE<p>allant de 22 heures à 7 heures</p>ainsi que les dimanches et jours fériés</td></tr><tr><td align='center'><br/><div align='left'>Supérieur à 35 et inférieur ou égal à 45 dB(A)<br/></div></td><td align='center'><br/>6 dB(A) <br/></td><td align='center'><br/>4 dB(A)<br/></td></tr><tr><td align='center'><br/><div align='left'>Supérieur à 45 dB(A)<br/></div></td><td align='center'><br/>5 dB(A) <br/></td><td align='center'><br/>3 dB(A)<br/></td></tr></tbody></table></center><p><br/>De plus, le niveau de bruit en limite de propriété de l'installation ne dépasse pas, lorsqu'elle est en fonctionnement, 70 dB(A) pour la période de jour et 60 dB(A) pour la période de nuit, sauf si le bruit résiduel pour la période considérée est supérieur à cette limite.</p><p>Dans le cas où le bruit particulier de l'établissement est à tonalité marquée, de manière établie ou cyclique, sa durée d'apparition n'excède pas 30 % de la durée de fonctionnement de l'établissement dans chacune des périodes diurne ou nocturne définies au point 1.9 de l'annexe I du présent arrêté.<br/></p><p></p>",
                         "etat": "VIGUEUR",
@@ -2795,7 +2796,7 @@
                 {
                     "annotations": null,
                     "applicability": null,
-                    "id": "Fd59eeee3a27",
+                    "id": "88c6C0f4Fc8E",
                     "legifrance_article": {
                         "content": "<p><br/>Les véhicules de transport, les matériels de manutention et les engins de chantier utilisés sont conformes aux dispositions en vigueur en matière de limitation de leurs émissions sonores.<br/> L'usage de tous appareils de communication par voie acoustique (sirènes, avertisseurs, haut-parleurs, etc.), gênant pour le voisinage, est interdit, sauf si leur emploi est réservé à la prévention et au signalement d'incidents graves ou d'accidents.</p>",
                         "etat": "VIGUEUR",
@@ -2826,7 +2827,7 @@
                 {
                     "annotations": null,
                     "applicability": null,
-                    "id": "4FBeCe7E4Fac",
+                    "id": "E4f0Ec56DA2c",
                     "legifrance_article": {
                         "content": "<p><br/>L'installation est construite, équipée et exploitée afin que son fonctionnement ne soit pas à l'origine de vibrations dans les constructions avoisinantes susceptibles de compromettre la santé ou la sécurité du voisinage ou de constituer une nuisance pour celui-ci.</p>",
                         "etat": "VIGUEUR",
@@ -2859,7 +2860,7 @@
         {
             "annotations": null,
             "applicability": null,
-            "id": "a00Aa3A27fbd",
+            "id": "20eDFbF3F93F",
             "legifrance_article": null,
             "outer_alineas": [],
             "reference_str": null,
@@ -2867,7 +2868,7 @@
                 {
                     "annotations": null,
                     "applicability": null,
-                    "id": "a7a3D5226559",
+                    "id": "dA262A528c6A",
                     "legifrance_article": {
                         "content": "<p><br/>A l'exception de l'article 48, les dispositions du présent chapitre ne s'appliquent pas aux déchets non dangereux inertes reçus par l'installation.<br/> L'exploitant prend toutes les dispositions nécessaires dans la conception et l'exploitation de ses installations pour assurer une bonne gestion des déchets de son entreprise, notamment :<br/> ― limiter à la source la quantité et la toxicité de ses déchets ;<br/> ― trier, recycler, valoriser ses sous-produits de fabrication ;<br/> ― s'assurer du traitement ou du prétraitement de ses déchets,  ;<br/> ― s'assurer, pour les déchets ultimes, dont le volume est strictement limité, d'un stockage dans les meilleures conditions possibles.<br/> De façon générale, l'exploitant organise la gestion des déchets dans des conditions propres à garantir la préservation des intérêts visés à l'article <a href='/affichCodeArticle.do?cidTexte=LEGITEXT000006074220&idArticle=LEGIARTI000006834227&dateTexte=&categorieLien=cid' title='Code de l'environnement - art. L511-1 (M)'>L. 511-1</a> et <a href='/affichCodeArticle.do?cidTexte=LEGITEXT000006074220&idArticle=LEGIARTI000006834443&dateTexte=&categorieLien=cid' title='Code de l'environnement - art. L541-1 (M)'>L. 541-1</a> du code de l'environnement. Il s'assure que les installations de destination et que les intermédiaires disposent des autorisation, enregistrement ou déclaration et agrément nécessaires.</p>",
                         "etat": "VIGUEUR",
@@ -2934,7 +2935,7 @@
                 {
                     "annotations": null,
                     "applicability": null,
-                    "id": "e46e6FCA90Db",
+                    "id": "e3585Ebe971e",
                     "legifrance_article": {
                         "content": "<p><br/>L'exploitant effectue à l'intérieur de son établissement la séparation des déchets de façon à faciliter leur traitement ou leur élimination dans des filières spécifiques.<br/> Les déchets et résidus produits sont stockés, avant leur revalorisation ou leur élimination, dans des conditions ne présentant pas de risques de pollution (prévention d'un lessivage par les eaux météoriques, d'une pollution des eaux superficielles et souterraines, des envols et des odeurs) pour les populations avoisinantes et l'environnement.<br/> La quantité de déchets entreposés sur le site ne dépasse pas la capacité mensuelle produite ou, en cas de traitement externe, un lot normal d'expédition vers l'installation de valorisation ou d'élimination.<br/> L'exploitant tient à jour un registre caractérisant et quantifiant tous les déchets dangereux générés par ses activités (nature, tonnage, filière d'élimination, etc.). Il émet un bordereau de suivi dès qu'il remet ses déchets à un tiers.</p>",
                         "etat": "VIGUEUR",
@@ -2975,7 +2976,7 @@
                 {
                     "annotations": null,
                     "applicability": null,
-                    "id": "8913dC3bdea7",
+                    "id": "AaBaDdCc7e12",
                     "legifrance_article": {
                         "content": "<p>Les seuls déchets pouvant être réceptionnés sur l'emprise de l'installation sont des déchets non dangereux inertes tels que définis par l'arrêté du 12 décembre 2014 relatif aux conditions d'admission des déchets inertes dans les installations relevant des rubriques 2515, 2516 et 2517 et dans les installations de stockage de déchets inertes relevant de la rubrique 2760 de la nomenclature des installations classées.<br/>\nL'exploitant assure la traçabilité des déchets sortant de l'installation selon les dispositions de l'arrêté du 29 février 2012 susvisé.</p>",
                         "etat": "VIGUEUR",
@@ -3013,7 +3014,7 @@
         {
             "annotations": null,
             "applicability": null,
-            "id": "E4b3Ad2a5EEE",
+            "id": "083fdDCaADF6",
             "legifrance_article": null,
             "outer_alineas": [],
             "reference_str": null,
@@ -3021,7 +3022,7 @@
                 {
                     "annotations": null,
                     "applicability": null,
-                    "id": "AdbF09Bb07a6",
+                    "id": "5fFEE43abd62",
                     "legifrance_article": null,
                     "outer_alineas": [],
                     "reference_str": null,
@@ -3029,7 +3030,7 @@
                         {
                             "annotations": null,
                             "applicability": null,
-                            "id": "f3bCFC576D74",
+                            "id": "8ED9B974501e",
                             "legifrance_article": {
                                 "content": "<p><br/>L'exploitant met en place un programme de surveillance de ses émissions dans les conditions fixées aux articles 50 à 53. Les mesures sont effectuées sous la responsabilité de l'exploitant et à ses frais.<br/> Les méthodes de mesure, de prélèvement et d'analyse de référence en vigueur sont fixées par l'arrêté du 7 juillet 2009 susvisé ou, le cas échéant, selon les normes réglementaires en vigueur.<br/> Au moins une fois par an, les mesures portant sur les rejets liquides sont effectuées par un organisme agréé par le ministre en charge des installations classées.<br/> L'inspection des installations classées peut prescrire tout prélèvement ou contrôle qu'elle pourrait juger nécessaire pour la protection de l'environnement. Les frais y afférents sont alors à la charge de l'exploitant.</p>",
                                 "etat": "VIGUEUR",
@@ -3077,7 +3078,7 @@
                 {
                     "annotations": null,
                     "applicability": null,
-                    "id": "3531C319DA65",
+                    "id": "f5D7A02EBDBd",
                     "legifrance_article": null,
                     "outer_alineas": [],
                     "reference_str": null,
@@ -3085,7 +3086,7 @@
                         {
                             "annotations": null,
                             "applicability": null,
-                            "id": "eB5FfdCc1591",
+                            "id": "DBfdfCE57f13",
                             "legifrance_article": {
                                 "content": "<p><br/>L'exploitant adresse tous les ans à l'inspection des installations classées un bilan des résultats de mesures de retombées de poussières, avec ses commentaires, qui tiennent notamment compte des conditions météorologiques, des évolutions significatives des valeurs mesurées, des niveaux de production et des superficies susceptibles d'émettre des poussières.<br/> La fréquence des mesures de retombées de poussières est au minimum trimestrielle. Cette périodicité peut être aménagée en fonction des conditions climatiques locales (vitesse moyenne et directions des vents dominants saisonniers, pluviométrie, ensoleillement).<br/> L'exploitant indique dans son dossier de demande d'enregistrement le type de réseau de surveillance, le nombre de relevés, la durée d'exposition et les mois de l'année au cours desquels sont effectués les relevés.<br/> Au cours de la première année de fonctionnement, l'exploitant fait réaliser, dans des conditions représentatives de l'activité, une mesure de chacun des points de rejet canalisé. Par la suite, la fréquence des mesures est trisannuelle. Ces contrôles sont réalisés par un organisme agréé par le ministre en charge des installations classées.<br/> Les dispositions du présent article ne s'appliquent pas aux installations fonctionnant sur une période unique d'une durée inférieure ou égale à six mois.</p>",
                                 "etat": "VIGUEUR",
@@ -3131,7 +3132,7 @@
                         {
                             "annotations": null,
                             "applicability": null,
-                            "id": "fcE24F1E4a3E",
+                            "id": "6Aa90FDd69aD",
                             "legifrance_article": {
                                 "content": "<p><br/>L'exploitant met en place une surveillance des émissions sonores de l'installation permettant d'estimer la valeur de l'émergence générée dans les zones à émergence réglementée. Les mesures sont effectuées selon la méthode définie à l'annexe du présent arrêté ou, le cas échéant, selon les normes réglementaires en vigueur. Ces mesures sont effectuées dans des conditions représentatives du fonctionnement de l'installation sur une durée d'une demi-heure au moins.<br/> Une mesure du niveau de bruit et de l'émergence est effectuée au moins tous les trois ans par une personne ou un organisme qualifié en limite de propriété et de zone à émergence réglementée.</p>",
                                 "etat": "VIGUEUR",
@@ -3169,7 +3170,7 @@
                 {
                     "annotations": null,
                     "applicability": null,
-                    "id": "fc4dB2e5059a",
+                    "id": "Ce058fA8A6bD",
                     "legifrance_article": null,
                     "outer_alineas": [],
                     "reference_str": null,
@@ -3177,7 +3178,7 @@
                         {
                             "annotations": null,
                             "applicability": null,
-                            "id": "27aEc4038e97",
+                            "id": "50cA1DE03f5C",
                             "legifrance_article": {
                                 "content": "<p> \t\t\t\t\tLa mesure des eaux pluviales polluées (EPp) est réalisée selon la fréquence indiquée dans le tableau ci-dessous pour les polluants énumérés ci-après, à partir d'un échantillon prélevé sur une durée de vingt-quatre heures proportionnellement au débit.<br/><br/></p><div align='center'><center><table border='1'><tbody><tr><td align='center'> POLLUANTS</td><td align='center'> FRÉQUENCE</td></tr><tr><td rowspan='3' align='left'><div> \t\t\t\t\t\t\t\t\t\tDCO (sur effluent non décanté)<br/></div><div> \t\t\t\t\t\t\t\t\t\tMatières en suspension totales<br/></div><div> \t\t\t\t\t\t\t\t\t\tHydrocarbures totaux<br/></div><br/><br/></td><td rowspan='3' align='left'><div align='center'> \t\t\t\t\t\t\t\t\t\tPour les EPp déversées dans une station d'épuration<br/></div> \t\t\t\t\t\t\t\t\t\tLa fréquence des prélèvements et analyses est au minimum annuelle. Le premier contrôle est réalisé dans les six premiers mois de fonctionnement de l'installation.<br/><div align='center'> \t\t\t\t\t\t\t\t\t \t\t\t\t\t\t\t\t\t\tPour les EPp déversées dans le milieu naturel<br/></div> \t\t\t\t\t\t\t\t\t \t\t\t\t\t\t\t\t\t\tLa fréquence des prélèvements et analyses est au minimum semestrielle.<br/> \t\t\t\t\t\t\t\t\t\tSi, pendant une période d'au moins douze mois continus, les résultats des analyses semestrielles sont inférieurs aux valeurs prévues à l'article 35, la fréquence des prélèvements et analyses pourra être au minimum annuelle.<br/> \t\t\t\t\t\t\t\t\t\tSi un résultat d'une analyse est supérieur à un des paramètres visés à l'article 35, la fréquence des prélèvements et analyses devra être de nouveau au minimum semestrielle pendant douze mois continus.<br/></td></tr><tr></tr><tr></tr></tbody></table></center></div><br/> \t\t\t\t\t Les résultats des mesures sont tenus à la disposition de l'inspection des installations classées.<br/> \t\t\t\t\t Les dispositions du présent article ne s'appliquent pas aux installations fonctionnant sur une période unique d'une durée inférieure ou égale à six mois.<br/><p></p>",
                                 "etat": "VIGUEUR",
@@ -3282,7 +3283,7 @@
                 {
                     "annotations": null,
                     "applicability": null,
-                    "id": "1856b7cB785e",
+                    "id": "BCA9D626864B",
                     "legifrance_article": null,
                     "outer_alineas": [],
                     "reference_str": null,
@@ -3290,7 +3291,7 @@
                         {
                             "annotations": null,
                             "applicability": null,
-                            "id": "D506d0bcAe68",
+                            "id": "aA540f570a6f",
                             "legifrance_article": {
                                 "content": "<p><br/>Dans le cas où l'exploitation de l'installation entraînerait l'émission directe ou indirecte de polluants figurant aux annexes de <a href='/affichTexte.do?cidTexte=JORFTEXT000020985401&categorieLien=cid' title='Arrêté du 17 juillet 2009 (V)'>l'arrêté du 17 juillet 2009</a> susvisé, une surveillance est mise en place afin de vérifier que l'introduction de ces polluants dans les eaux souterraines n'entraîne pas de dégradation ou de tendances à la hausse significatives et durables des concentrations de polluants dans les eaux souterraines.</p>",
                                 "etat": "VIGUEUR",
@@ -3336,7 +3337,7 @@
         {
             "annotations": null,
             "applicability": null,
-            "id": "64D2d057d408",
+            "id": "7f1dF1aA1bF3",
             "legifrance_article": null,
             "outer_alineas": [],
             "reference_str": null,
@@ -3344,7 +3345,7 @@
                 {
                     "annotations": null,
                     "applicability": null,
-                    "id": "CF0BA50E4fD6",
+                    "id": "C34b5bEC7cF7",
                     "legifrance_article": {
                         "content": "<p><br/>La directrice générale de la prévention des risques est chargée de l'exécution du présent arrêté, qui sera publié au Journal officiel de la République française.</p>",
                         "etat": "VIGUEUR",
@@ -3377,7 +3378,7 @@
         {
             "annotations": null,
             "applicability": null,
-            "id": "85C651B1f8e5",
+            "id": "C4Da6cbdbEba",
             "legifrance_article": null,
             "outer_alineas": [],
             "reference_str": null,
@@ -3385,7 +3386,7 @@
                 {
                     "annotations": null,
                     "applicability": null,
-                    "id": "041ACca8a3Ed",
+                    "id": "06aaF7Beaa54",
                     "legifrance_article": {
                         "content": "<p></p><p align='center'>MÉTHODE DE MESURE DES ÉMISSIONS SONORES</p><p>La présente méthode de mesure des émissions sonores d'une installation classée est applicable pour la mesure des niveaux de bruit en limites de propriété de l'établissement et pour la mesure de l'émergence dans les zones où celle-ci est limitée.</p><p>Les mesures sont effectuées selon les dispositions de la norme AFNOR NF S 31-010  Caractérisation et mesurage des bruits de l'environnement. ― Méthodes particulières de mesurage  (décembre 1996), complétées par les dispositions ci-après.</p><p>Cette norme fixe deux méthodes de mesure se différenciant par les moyens à mettre en œuvre et par la précision des résultats. La méthode de mesure à utiliser est la méthode dite d' expertise  définie au point 6 de la norme. Cependant, un simple contrôle du respect des prescriptions peut être effectué selon la méthode dite de  contrôle  définie au point 5 de la norme. Dans ce cas, une conclusion quant à la conformité des émissions sonores de l'établissement ne pourra être tirée que si le résultat de la mesure diffère de la valeur limite considérée (émergence ou niveau admissible) de plus de 2 dB(A).</p><p>1. Définitions</p><p>1.1. Niveau de pression acoustique continu équivalent pondéré A \" court \", LAeq,t</p><p>Niveau de pression acoustique continu équivalent pondéré A obtenu sur un intervalle de temps  court . Cet intervalle de temps, appelé durée d'intégration, a pour symbole t. Le LAeq court est utilisé pour obtenir une répartition fine de l'évolution temporelle des événements acoustiques pendant l'intervalle de mesurage. La durée d'intégration retenue dépend de la durée des phénomènes que l'on veut mettre en évidence. Elle est généralement de durée inférieure ou égale à 10 s.</p><p>1.2. Niveau acoustique fractile, LAN,t</p><p>Par analyse statistique de LAeq courts, on peut déterminer le niveau de pression acoustique pondéré A qui est dépassé pendant N % de l'intervalle de temps considéré, dénommé  niveau acoustique fractile . Son symbole est LAN,t : par exemple, LA90,1s est le niveau de pression acoustique continu équivalent pondéré A dépassé pendant 90 % de l'intervalle de mesurage, avec une durée d'intégration égale à 1 seconde.</p><p>1.3. Intervalle de mesurage</p><p>Intervalle de temps au cours duquel la pression acoustique quadratique pondérée A est intégrée et moyennée.</p><p>1.4. Intervalle d'observation</p><p>Intervalle de temps au cours duquel tous les mesurages nécessaires à la caractérisation de la situation sonore sont effectués soit en continu, soit par intermittence.</p><p>1.5. Intervalle de référence</p><p>Intervalle de temps retenu pour caractériser une situation acoustique et pour déterminer de façon représentative l'exposition au bruit des personnes.</p><p>1.6. Bruit ambiant</p><p>Bruit total existant dans une situation donnée pendant un intervalle de temps donné. Il est composé de l'ensemble des bruits émis par toutes les sources proches et éloignées.</p><p>1.7. Bruit particulier (1)</p><p>Composante du bruit ambiant qui peut être identifiée spécifiquement et que l'on désire distinguer du bruit ambiant, notamment parce qu'il est l'objet d'une requête.<br clear='none'/>Au sens du présent arrêté, le bruit particulier est constitué de l'ensemble des bruits émis par l'établissement considéré.</p><p>1.8. Bruit résiduel</p><p>Bruit ambiant, en l'absence du (des) bruits(s) particulier(s), objet(s) de la requête considérée.</p><p>1.9. Tonalité marquée</p><p>La tonalité marquée est détectée dans un spectre non pondéré de tiers d'octave quand la différence de niveau entre la bande de tiers d'octave et les quatre bandes de tiers d'octave les plus proches (les deux bandes immédiatement inférieures et les deux bandes immédiatement supérieures) atteint ou dépasse les niveaux indiqués dans le tableau 1 ci-après pour la bande considérée :</p><p>Tonalité marquée</p><div align='center'><center><table border='1'><tbody><tr align='center'><td colspan='3'> DONNÉES ÉTABLIES SUR LA BASE<br clear='none'/>d'une acquisition minimale de 10 s</td></tr><tr><td align='center'> 50 Hz à 315 Hz</td><td align='center'> 400 Hz à 1 250 Hz</td><td align='center'> 1 600 Hz à 8 000 Hz</td></tr><tr><td align='center'> 10 dB</td><td align='center'> 5 dB</td><td align='center'> 5 dB</td></tr></tbody></table></center></div><br clear='none'/>Les bandes sont définies par fréquence centrale de tiers d'octave.<br clear='none'/><p>2. Méthode d'expertise (point 6 de la norme)</p><p>2.1. Appareillage de mesure (point 6.1 de la norme)</p><p>Les mesures de simple contrôle de conformité peuvent être effectuées avec un appareillage de mesure de classe 2, répondant aux spécifications du point 6.1.1 de la norme et permettant d'utiliser la technique des niveaux équivalents courts. Cet appareillage est, en outre, conforme aux dispositions légales en matière de métrologie légale applicables aux sonomètres. L'appareil porte la marque de vérification périodique attestant sa conformité.</p><p>Si les mesures sont utilisées en vue de la constatation d'une infraction, le sonomètre utilisé est de classe 1.<br clear='none'/>Avant chaque série de mesurage, le sonomètre est calibré.</p><p>2.2. Conditions de mesurage (point 6.2 de la norme)</p><p>Le contrôle des niveaux de bruit admissibles en limites de propriété de l'établissement, fixés par l'arrêté d'autorisation, est effectué aux emplacements désignés par cet arrêté. A défaut, les emplacements de mesures sont déterminés en fonction des positions respectives de l'installation et des zones à émergence réglementée, de manière à avoir une représentativité satisfaisante de l'effet potentiel des émissions sonores de l'installation sur les zones habitées.</p><p>Le contrôle de l'émergence est effectué aux emplacements jugés les plus représentatifs des zones à émergence réglementée. Dans le cas du traitement d'une plainte, on privilégiera les emplacements où la gêne est ressentie, en tenant compte de l'utilisation normale ou habituelle des lieux.</p><p>2.3. Gamme de fréquence (point 6.3 de la norme)</p><p>Les dispositions de la norme sont applicables.</p><p>2.4. Conditions météorologiques (point 6.4 de la norme)</p><p>Les dispositions de la norme sont applicables.</p><p>2.5. Indicateurs (point 6.5 de la norme)</p><p>Les indicateurs acoustiques sont destinés à fournir une description synthétique d'une situation sonore complexe.</p><p>a) Contrôle des niveaux de bruit admissibles en limites de propriété</p><p>Le niveau équivalent, déterminé dans les conditions fixées au point 2.6 ci-après, est utilisé.<br clear='none'/>Lorsque le mesurage est effectué sur plusieurs intervalles, le niveau de bruit équivalent global est obtenu par la moyenne pondérée énergétique des valeurs mesurées sur chaque intervalle, en tenant compte de la durée de la période représentée par l'intervalle de mesurage selon la formule suivante :</p><p>Vous pouvez consulter la formule à l'adresse suivante : </p><p><a shape='rect' href='http://www.legifrance.gouv.fr/jopdf/common/jo_pdf.jsp?numJO=0&dateJO=20131226&numTexte=31&pageDebut=21358&pageFin=21367' target='_blank'>http://www.legifrance.gouv.fr/jopdf/common/jo_pdf.jsp?numJO=0&dateJO=20131226&numTexte=31&pageDebut=21358&pageFin=21367</a></p><p></p><p></p><p></p><p></p><p>Dans laquelle :</p><p>T est la durée de l'intervalle de référence ;<br clear='none'/>LAeq,ti est le niveau équivalent mesuré pendant l'intervalle d'observation i ;<br clear='none'/>ti est la durée de la période représentée par l'intervalle de mesurage i (avec ∑ti = T).</p><p>b) Contrôle de l'émergence</p><p>Des indicateurs différents sont utilisés suivant les situations.<br clear='none'/>Dans le cas général, l'indicateur est la différence entre les niveaux de pression continus équivalents pondérés du bruit ambiant et du bruit résiduel, déterminée selon le point 6.5.1 de la norme.<br clear='none'/>Dans certaines situations particulières, cet indicateur n'est pas suffisamment adapté. Ces situations se caractérisent par la présence de bruits intermittents, porteurs de beaucoup d'énergie mais qui ont une durée d'apparition suffisamment faible pour ne pas présenter, à l'oreille, d'effet de  masque  du bruit de l'installation. Une telle situation se rencontre notamment lorsqu'il existe un trafic très discontinu.<br clear='none'/>Dans le cas où la différence LAeq ― L50 est supérieure à 5 dB(A), on utilise comme indicateur d'émergence la différence entre les indices fractiles L50 calculés sur le bruit ambiant et le bruit résiduel.<br clear='none'/>Le point 6.5.2 de la norme n'est pas applicable, sauf en ce qui concerne la disposition relative à la tonalité marquée.</p><p>2.6. Acquisitions des données, choix et durée des intervalles d'observation (point 6.6 de la norme)</p><p>Les mesurages sont organisés de façon à donner une valeur représentative du niveau de bruit qui existe sur l'ensemble de la période de fonctionnement de l'activité.</p><p>On entend par période de fonctionnement la période où l'activité est exercée dans des conditions normales. En règle générale, cela correspond à la période de production. En dehors de cette période, des opérations de nature différente (maintenance, mise en veille de machines, etc.) mais générant peu ou pas de bruit peuvent avoir lieu. Elles ne sont pas incluses dans l'intervalle de référence afin d'éviter une  dilution  du bruit correspondant au fonctionnement normal par allongement de la durée d'intégration. Toutefois, si ces opérations sont à l'origine de niveaux de bruit comparables à ceux de l'établissement en fonctionnement normal, elles sont intégrées dans l'intervalle de référence.</p><p>Si le fonctionnement se déroule sur tout ou partie de chacune des périodes diurne ou nocturne, le niveau équivalent est mesuré séparément pour chacune des parties de la période de fonctionnement (que l'on retiendra comme intervalle de référence) se situant dans les tranches horaires 7 heures-22 heures ou 22 heures-7 heures.</p><p>De la même façon, la valeur représentative du bruit résiduel est déterminée pour chaque intervalle de référence.</p><p>Exemple 1 : activité fonctionnant de 7 heures à 17 h 30 :</p><p>L'intervalle de référence est 7 heures-17 h 30. L'arrêté d'autorisation fixe, pour un emplacement donné, un seul niveau de bruit admissible.</p><p>Exemple 2 : activité fonctionnant de 4 heures à 23 heures :</p><p>Les trois intervalles de référence sont : 4 heures-7 heures, 7 heures-22 heures et 22 heures-23 heures. L'arrêté d'autorisation fixe, pour un emplacement donné, trois niveaux de bruit admissibles (un pour chaque intervalle de référence).</p><p>Exemple 3 : activité fonctionnant 24 heures sur 24 :</p><p>Les deux intervalles de référence sont 7 heures-22 heures et 22 heures-7 heures. L'arrêté d'autorisation fixe, pour un emplacement donné, deux niveaux de bruit admissibles pour chacune des périodes diurne et nocturne.</p><p>Les valeurs des niveaux de bruit ambiant et résiduel sont déterminées par mesure, soit sur la totalité de l'intervalle de référence, soit sur plusieurs  échantillons , dont la représentativité est essentielle pour permettre une conclusion correcte quant à la conformité de l'installation.</p><p>Toutes les garanties sont prises pour assurer à chaque emplacement de mesure cette représentativité :</p><p>― les mesurages sont de préférence effectués sur plusieurs intervalles de mesurage distincts, de manière à caractériser correctement le ou les intervalles de référence retenus ;<br clear='none'/>― la durée des mesurages prend en compte toutes les phases de l'évolution du bruit pendant la totalité de la période de fonctionnement, particulièrement dans le cas de bruits fluctuants ;<br clear='none'/>― le fonctionnement de l'installation pendant le ou les mesurages correspond aux activités normales ; l'intervalle d'observation englobe tous les cycles de variations caractéristiques de l'activité ;<br clear='none'/>― la mesure du bruit résiduel prend en compte les variations se produisant pendant le ou les intervalles de référence.</p><p>Pour la détermination de chacun des niveaux de bruit ambiant ou résiduel, la durée cumulée des mesurages à chaque emplacement est d'une demi-heure au moins, sauf dans le cas d'un bruit très stable ou intermittent stable.</p><p>Si les valeurs mesurées sont proches des valeurs limites (niveaux admissibles et/ou émergence), un soin particulier sera pris dans le choix, la durée et le nombre des intervalles de mesurage.</p><p>3. Méthode de contrôle (point 5 de la norme)</p><p>La méthode de contrôle est moins exigeante que la méthode d'expertise quant aux moyens à mettre en œuvre et à l'appareillage de mesure à utiliser. Elle n'est applicable qu'à des situations sonores relativement simples, permettant une durée d'observation plus faible. Elle ne fait pas appel à la technique des niveaux équivalents courts.</p><p>Les dispositions du point 2 ci-dessus sont également applicables à la méthode de contrôle, sous réserve des modifications suivantes :</p><p>― l'appareillage de mesure est un sonomètre de classe 2 au moins, permettant la détermination directe du niveau de pression acoustique continu équivalent ;<br clear='none'/>― elle ne peut être mise en œuvre en cas de présence de bruit à tonalité marquée ainsi que dans les situations nécessitant l'utilisation d'un indice fractile et décrites au point 2.5 ci-dessus.</p><p>4. Rapport de mesurage (point 7 de la norme)</p><p>Le rapport de mesurage établi par la personne ou l'organisme qualifié qui effectue des mesures de contrôle en application des dispositions réglementaires applicables contient les éléments mentionnés au point 7.1 de la norme, à l'exception de la référence à cette dernière, qui est remplacée par la référence au présent arrêté.</p><p></p>",
                         "etat": "VIGUEUR",
@@ -3415,7 +3416,7 @@
                         {
                             "annotations": null,
                             "applicability": null,
-                            "id": "F95aBf1Edb5b",
+                            "id": "f74EE222b212",
                             "legifrance_article": null,
                             "outer_alineas": [],
                             "reference_str": "Art. - 1.",
@@ -3423,7 +3424,7 @@
                                 {
                                     "annotations": null,
                                     "applicability": null,
-                                    "id": "ff3c2780CcCf",
+                                    "id": "01Aa6BFAF4dc",
                                     "legifrance_article": null,
                                     "outer_alineas": [
                                         {
@@ -3443,7 +3444,7 @@
                                 {
                                     "annotations": null,
                                     "applicability": null,
-                                    "id": "BECcae378be6",
+                                    "id": "4cFF94464D6c",
                                     "legifrance_article": null,
                                     "outer_alineas": [
                                         {
@@ -3463,7 +3464,7 @@
                                 {
                                     "annotations": null,
                                     "applicability": null,
-                                    "id": "1BfcACA0d41b",
+                                    "id": "DBA038fdE975",
                                     "legifrance_article": null,
                                     "outer_alineas": [
                                         {
@@ -3483,7 +3484,7 @@
                                 {
                                     "annotations": null,
                                     "applicability": null,
-                                    "id": "D8f3e94FD01E",
+                                    "id": "4EF1bb9820a3",
                                     "legifrance_article": null,
                                     "outer_alineas": [
                                         {
@@ -3503,7 +3504,7 @@
                                 {
                                     "annotations": null,
                                     "applicability": null,
-                                    "id": "f3b5cEEe5aAC",
+                                    "id": "1F1647c28DB4",
                                     "legifrance_article": null,
                                     "outer_alineas": [
                                         {
@@ -3523,7 +3524,7 @@
                                 {
                                     "annotations": null,
                                     "applicability": null,
-                                    "id": "efAFa3bbFfe9",
+                                    "id": "d1A65f04aaFd",
                                     "legifrance_article": null,
                                     "outer_alineas": [
                                         {
@@ -3543,7 +3544,7 @@
                                 {
                                     "annotations": null,
                                     "applicability": null,
-                                    "id": "902Aa2D4Fb3b",
+                                    "id": "aFEeaEaA0BCA",
                                     "legifrance_article": null,
                                     "outer_alineas": [
                                         {
@@ -3568,7 +3569,7 @@
                                 {
                                     "annotations": null,
                                     "applicability": null,
-                                    "id": "18fB639aC891",
+                                    "id": "67c54c11Cc8e",
                                     "legifrance_article": null,
                                     "outer_alineas": [
                                         {
@@ -3588,7 +3589,7 @@
                                 {
                                     "annotations": null,
                                     "applicability": null,
-                                    "id": "4b8E48fe8F74",
+                                    "id": "7F1dde1c6dd0",
                                     "legifrance_article": null,
                                     "outer_alineas": [
                                         {
@@ -3711,7 +3712,7 @@
                         {
                             "annotations": null,
                             "applicability": null,
-                            "id": "F3C7F2E1A6Ba",
+                            "id": "526A6f5B33e4",
                             "legifrance_article": null,
                             "outer_alineas": [],
                             "reference_str": "Art. - 2.",
@@ -3719,7 +3720,7 @@
                                 {
                                     "annotations": null,
                                     "applicability": null,
-                                    "id": "5611beC6daf7",
+                                    "id": "B594f76F7aDF",
                                     "legifrance_article": null,
                                     "outer_alineas": [
                                         {
@@ -3749,7 +3750,7 @@
                                 {
                                     "annotations": null,
                                     "applicability": null,
-                                    "id": "a5bBeCd78177",
+                                    "id": "b28ECAf333c7",
                                     "legifrance_article": null,
                                     "outer_alineas": [
                                         {
@@ -3774,7 +3775,7 @@
                                 {
                                     "annotations": null,
                                     "applicability": null,
-                                    "id": "cb995Aa63dD6",
+                                    "id": "9A58fd6fCFec",
                                     "legifrance_article": null,
                                     "outer_alineas": [
                                         {
@@ -3794,7 +3795,7 @@
                                 {
                                     "annotations": null,
                                     "applicability": null,
-                                    "id": "20ddd77Ae1D2",
+                                    "id": "04bBD837085D",
                                     "legifrance_article": null,
                                     "outer_alineas": [
                                         {
@@ -3814,7 +3815,7 @@
                                 {
                                     "annotations": null,
                                     "applicability": null,
-                                    "id": "3dCFa0C889CD",
+                                    "id": "Cb3B4EABaF71",
                                     "legifrance_article": null,
                                     "outer_alineas": [
                                         {
@@ -3828,7 +3829,7 @@
                                         {
                                             "annotations": null,
                                             "applicability": null,
-                                            "id": "C2f418795A49",
+                                            "id": "C956b912eA10",
                                             "legifrance_article": null,
                                             "outer_alineas": [
                                                 {
@@ -3889,7 +3890,7 @@
                                         {
                                             "annotations": null,
                                             "applicability": null,
-                                            "id": "D01AD7df949d",
+                                            "id": "2B074C0bF503",
                                             "legifrance_article": null,
                                             "outer_alineas": [
                                                 {
@@ -3936,7 +3937,7 @@
                                 {
                                     "annotations": null,
                                     "applicability": null,
-                                    "id": "A1BD25e59d7b",
+                                    "id": "E09ff11dBbdE",
                                     "legifrance_article": null,
                                     "outer_alineas": [
                                         {
@@ -4048,7 +4049,7 @@
                         {
                             "annotations": null,
                             "applicability": null,
-                            "id": "ECd1Bc04D3D6",
+                            "id": "0C46897fCa94",
                             "legifrance_article": null,
                             "outer_alineas": [
                                 {
@@ -4083,7 +4084,7 @@
                         {
                             "annotations": null,
                             "applicability": null,
-                            "id": "EBa7625abbdC",
+                            "id": "2c0Af711Fc2C",
                             "legifrance_article": null,
                             "outer_alineas": [
                                 {
