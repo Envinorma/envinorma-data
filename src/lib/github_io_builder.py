@@ -3,7 +3,8 @@ from collections import Counter
 from typing import Dict, List, Optional, Set
 from tqdm import tqdm
 
-from lib.aida import transform_aida_links_to_github_markdown_links, add_links_to_am
+from lib.aida import transform_aida_links_to_github_markdown_links
+from lib.am_enriching import add_links_to_am
 from lib.data import (
     check_am,
     ArreteMinisteriel,

@@ -1,3 +1,4 @@
+import string, random
 from dataclasses import dataclass, asdict, field
 from enum import Enum
 from typing import List, Dict, Optional, Any, Tuple
@@ -154,6 +155,10 @@ class Annotations:
         return Annotations(**new_dict)
 
 
+def random_id() -> str:
+    return ''.join([random.choice(string.hexdigits) for _ in range(12)])
+
+
 @dataclass
 class StructuredText:
     title: EnrichedString
@@ -163,6 +168,7 @@ class StructuredText:
     applicability: Optional[Applicability]
     reference_str: Optional[str] = None
     annotations: Optional[Annotations] = None
+    id: str = field(default_factory=random_id)
 
     def to_dict(self) -> Dict[str, Any]:
         res = asdict(self)
@@ -235,6 +241,18 @@ class Classement:
 
 
 @dataclass
+class SummaryElement:
+    section_id: str
+    section_title: str
+    depth: int
+
+
+@dataclass
+class Summary:
+    elements: List[SummaryElement]
+
+
+@dataclass
 class ArreteMinisteriel:
     title: EnrichedString
     sections: List[StructuredText]
@@ -246,6 +264,7 @@ class ArreteMinisteriel:
     legifrance_url: Optional[str] = None
     classements: List[Classement] = field(default_factory=list)
     unique_version: bool = False
+    summary: Optional[Summary] = None
 
     def to_dict(self) -> Dict[str, Any]:
         res = asdict(self)

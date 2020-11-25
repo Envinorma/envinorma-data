@@ -29,7 +29,7 @@ from lib.am_to_markdown import am_to_markdown
 from lib.parametrization import Parametrization, add_am_signatures
 from lib.manual_enrichments import get_manual_combinations, get_manual_enricher, get_manual_parametrization
 from lib.parametric_am import check_parametrization_is_still_valid, generate_all_am_versions
-from lib.am_enriching import add_references, remove_null_applicabilities
+from lib.am_enriching import add_references, add_summary, remove_null_applicabilities
 from lib.legifrance_API import get_current_loda_via_cid_response, get_legifrance_client
 from lib.texts_properties import LegifranceText, compute_am_diffs, compute_am_signatures, compute_texts_properties
 from lib.am_structure_extraction import (
@@ -195,7 +195,8 @@ def _handle_manual_enrichments(
         write_json(parametrization.to_dict(), _get_parametrization_filename(metadata))
     all_versions = generate_all_am_versions(enriched_am, parametrization, get_manual_combinations(id_))
     if dump_am:
-        for version_desc, version in all_versions.items():
+        all_versions_with_summary = {name: add_summary(am_) for name, am_ in all_versions.items()}
+        for version_desc, version in all_versions_with_summary.items():
             filename = _generate_parametric_filename(metadata, version_desc)
             write_json(version.to_dict(), filename)
     diffs = {

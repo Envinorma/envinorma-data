@@ -23,6 +23,7 @@ from lib.am_enriching import (
     _is_probably_section_number,
     _is_prefix,
     _merge_prefix_list,
+    _extract_summary_elements,
 )
 
 
@@ -272,4 +273,21 @@ def test_no_fail_in_aida_links_addition():
         links_json = json.load(open(f'data/aida/hyperlinks/{nor}.json'))
         links = [Hyperlink(**link_doc) for link_doc in links_json]
         add_links_to_am(load_arrete_ministeriel(json.load(open(f'data/AM/structured_texts/{nor}.json'))), links)
+
+
+def test_compute_summary():
+    text = StructuredText(EnrichedString('Test_D2', []), [], [], None, None)
+    parent_text = StructuredText(EnrichedString('Test_D1', []), [], [text] * 2, None, None)
+    grand_parent_text = StructuredText(EnrichedString('Test_D0', []), [], [parent_text] * 2, None, None)
+    summary_elements = _extract_summary_elements(grand_parent_text, 0)
+    assert len(summary_elements) == 7
+    assert summary_elements[0].depth == 0
+    assert summary_elements[1].depth == 1
+    assert summary_elements[2].depth == 2
+    assert summary_elements[3].depth == 2
+    assert summary_elements[4].depth == 1
+    assert summary_elements[5].depth == 2
+    assert summary_elements[6].depth == 2
+    assert summary_elements[-1].section_title == 'Test_D2'
+    assert summary_elements[-1].section_id == text.id
 

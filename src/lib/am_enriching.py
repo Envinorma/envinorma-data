@@ -1,7 +1,7 @@
 import re
 from copy import copy
 from dataclasses import replace
-from typing import Dict, List, Optional, Set, Tuple
+from typing import Dict, List, Optional, Set, Tuple, Union
 
 from lib.data import (
     Annotations,
@@ -11,6 +11,8 @@ from lib.data import (
     Hyperlink,
     Link,
     StructuredText,
+    Summary,
+    SummaryElement,
     Topic,
 )
 from lib.structure_detection import NUMBERING_PATTERNS, NumberingPattern, ROMAN_PATTERN, detect_longest_matched_string
@@ -241,3 +243,17 @@ def add_links_to_am(text: ArreteMinisteriel, new_hyperlinks: List[Hyperlink]) ->
     output_text.visa = [add_links_in_enriched_string(str_, str_to_target) for str_ in text.visa]
     return output_text
 
+
+def _extract_summary_elements(text: StructuredText, depth: int) -> List[SummaryElement]:
+    child_elements = [element for section in text.sections for element in _extract_summary_elements(section, depth + 1)]
+    if not text.id:
+        raise ValueError('Cannot generate summary without section ids.')
+    return [SummaryElement(text.id, text.title.text, depth)] + child_elements
+
+
+def _compute_summary(text: ArreteMinisteriel) -> Summary:
+    return Summary([element for section in text.sections for element in _extract_summary_elements(section, 0)])
+
+
+def add_summary(text: ArreteMinisteriel) -> ArreteMinisteriel:
+    return replace(text, summary=_compute_summary(text))
