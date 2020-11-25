@@ -1,89 +1,67 @@
-{
-    'ACCIDENTS_POLLUTIONS': 5,
-    'ACCIDENTS_POLLUTIONS/FEU': 1,
-    'ACCIDENTS_POLLUTIONS/INCENDIE': 1,
-    'ACCIDENTS_POLLUTIONS/PROPRETE': 1,
-    'ACCIDENTS_POLLUTIONS/SECURITE/VENTILATION': 1,
-    'ACCIDENTS_POLLUTIONS/VENTILATION': 1,
-    'AIR_ODEURS': 5,
-    'AIR_ODEURS/BIOGAZ': 1,
-    'AIR_ODEURS/CONDITIONS_REJET': 1,
-    'AIR_ODEURS/COV': 1,
-    'AIR_ODEURS/POUSSIERES': 2,
-    'AIR_ODEURS/VLE': 1,
-    'BILAN_ENVIRONNEMENT': 1,
-    'BRUIT_VIBRATIONS': 3,
-    'BRUIT_VIBRATIONS/MESURE': 1,
-    'BRUIT_VIBRATIONS/METHODO': 1,
-    'BRUIT_VIBRATIONS/REGLES_TECHNIQUES': 1,
-    'BRUIT_VIBRATIONS/SURVEILLANCE': 1,
-    'BRUIT_VIBRATIONS/VL': 4,
-    'COMBUSTIBLES/BIOMASSE': 1,
-    'CONFINEMENT/REJETS_CHLORE': 1,
-    'DECHETS': 9,
-    'DECHETS/BANALS': 1,
-    'DECHETS/BRULAGE': 2,
-    'DECHETS/ENTREPOSAGE': 2,
-    'DECHETS/GESTION': 3,
-    'DECHETS/NON_DANGEREUX': 1,
-    'DECHETS/RECYCLAGE': 1,
-    'DECHETS/REGISTRE': 1,
-    'DECHETS/SPECIAUX': 1,
-    'DEFINITIONS': 5,
-    'DISPOSITIONS_CONSTRUCTIVES_AMENAGEMENT': 11,
-    'DISPOSITIONS_CONSTRUCTIVES_AMENAGEMENT/ELECTRICITE_STATIQUE': 1,
-    'DISPOSITIONS_CONSTRUCTIVES_AMENAGEMENT/ETANCHEITE': 1,
-    'DISPOSITIONS_CONSTRUCTIVES_AMENAGEMENT/FEU': 2,
-    'DISPOSITIONS_CONSTRUCTIVES_AMENAGEMENT/FEU/TOITURE': 1,
-    'DISPOSITIONS_CONSTRUCTIVES_AMENAGEMENT/INCENDIE': 1,
-    'DISPOSITIONS_CONSTRUCTIVES_AMENAGEMENT/INSTALLATIONS_ELECTRIQUES': 1,
-    'DISPOSITIONS_CONSTRUCTIVES_AMENAGEMENT/RETENTION': 1,
-    'DISPOSITIONS_CONSTRUCTIVES_AMENAGEMENT/VENTILATION': 1,
-    'DISPOSITIONS_GENERALES/CHANGEMENT_EXPLOITANT': 3,
-    'DISPOSITIONS_GENERALES/FIN_EXPLOITATION': 3,
-    'DISPOSITIONS_GENERALES/JUSTIFICATIONS': 1,
-    'DISPOSITIONS_GENERALES/MODIFICATIONS': 1,
-    'DISPOSITIONS_GENERALES/PREFET': 3,
-    'DISPOSITIONS_GENERALES/REGISTRE_EXPLOITATION': 1,
-    'DISPOSITIONS_GENERALES/RESERVES': 1,
-    'DISPOSITIONS_GENERALES/SURVEILLANCE_EXPLOITATION': 5,
-    'EAU': 6,
-    'EAU/CONSOMMATION': 3,
-    'EAU/EFFLUENTS': 1,
-    'EAU/EMISSIONS': 5,
-    'EAU/EMISSIONS/VLE': 1,
-    'EAU/EPANDAGE': 8,
-    'EAU/MILIEU_AQUATIQUE': 1,
-    'EAU/REJETS_ACCIDENTELS': 1,
-    'EMISSIONS': 3,
-    'EMISSIONS/DECLARATION': 1,
-    'EMISSIONS_AIR': 1,
-    'EMISSIONS_ATMOSPHERE': 2,
-    'EMISSIONS_ATMOSPHERE/VLE': 3,
-    'EXECUTION': 5,
-    'EXECUTION/ANNEXE_BO': 1,
-    'EXECUTION/CONDITIONS_APPLICATION': 4,
-    'EXECUTION/CONDITIONS_APPLICATION/CALENDRIER_APPLICATION': 1,
-    'EXECUTION/ENTREE_VIGUEUR': 1,
-    'EXECUTION/INFO_REDACTION': 1,
-    'EXPLOITATION': 3,
-    'EXPLOITATION/DOSSIER': 4,
-    'EXPLOITATION/LEGIONELLES': 1,
-    'FARINES_VIANDE_ET_OS': 2,
-    'GESTION_QUALITE': 1,
-    'INSTALLATIONS_ELECTRIQUES': 1,
-    'METHODOLOGIE': 1,
-    'METHODOLOGIE/HAUTEUR_CHEMINEE': 2,
-    'NORME_TRANSFORMATION': 1,
-    'POLLUTIONS_ACCIDENTS': 4,
-    'POLLUTIONS_ACCIDENTS/COV': 1,
-    'RADIOACTIVITES/GESTION_DECHETS_SUBSTANCES': 1,
-    'RISQUES': 9,
-    'RISQUES/CONSIGNES': 1,
-    'RISQUES/INCENDIE': 6,
-    'RISQUES/INDIVIDUELS': 1,
-    'RISQUES/RECENSEMENT': 1,
-    'RISQUES/RISQUE_INDIVIDUEL': 1,
-    'VAPEURS': 5,
-}
+import json
+from lib.data import EnrichedString, StructuredText
+from data.topics.patterns import TopicName, TOPIC_ONTOLOGY, TopicOntology
+from typing import List, Set, Tuple
+from collections import Counter
 
+DATASET_JSON = json.load(open('data/topics/raw_exploration_dataset.json'))
+TOPICS_COUNTER = Counter([topic for _, topics in DATASET_JSON for topic in topics.split('/')])
+UNIQUE_TOPICS = {topic for topics in TOPICS_COUNTER for topic in topics.split('/')}
+
+
+def extract_topic_titles(topic: str, dataset: List[Tuple[Tuple, str]]) -> List[str]:
+    all_matched_titles = [tp[0] for tp, topics in dataset if topic in topics.split('/')]
+    return [' > '.join(titles) for titles in all_matched_titles]
+
+
+def _extract_topics_from_titles_and_content(
+    all_titles: List[str], section_sentences: List[str], ontology: TopicOntology
+) -> Set[TopicName]:
+    title_topics = {topic for title in all_titles for topic in ontology.parse(title, True)}
+    sentence_topics = {topic for sentence in section_sentences for topic in ontology.parse(sentence)}
+    return title_topics.union(sentence_topics)
+
+
+def _extract_topics(text: StructuredText, parent_titles: List[str], ontology: TopicOntology) -> Set[TopicName]:
+    all_titles = parent_titles + [text.title.text]
+    if text.sections:
+        return {topic for section in text.sections for topic in _extract_topics(section, all_titles, ontology)}
+    section_sentences = [al.text for al in text.outer_alineas if al.text]  # TODO: handle tables later
+    return _extract_topics_from_titles_and_content(all_titles, section_sentences, ontology)
+
+
+_Alineas = List[EnrichedString]
+_Titles = List[str]
+_Text = Tuple[_Titles, _Alineas]
+_LabelizedText = Tuple[_Text, Set[TopicName]]
+
+
+def _build_labelized_text(raw_text: Tuple[List, List], labels: str) -> _LabelizedText:
+    text = raw_text[0], [EnrichedString.from_dict(dict_) for dict_ in raw_text[1]]
+    topics = set()
+    for topic in labels.split('/'):
+        try:
+            topics.add(TopicName(topic))
+        except ValueError:
+            print(f'Missing {topic}')
+    return text, topics
+
+
+def _load_dataset(dataset_json: List[Tuple]) -> List[_LabelizedText]:
+    return [_build_labelized_text(*elt) for elt in dataset_json]
+
+
+def compute_detection_performance(dataset: List[_LabelizedText], ontology: TopicOntology):
+    all_labels = [label for _, label in dataset]
+    texts = [
+        (titles, StructuredText(EnrichedString(''), outer_alineas, [], None, None))
+        for (titles, outer_alineas), _ in dataset
+    ]
+
+    predicted_labels = [_extract_topics(text, titles, ontology) for titles, text in texts]
+    print(Counter([exp == pred for exp, pred in zip(all_labels, predicted_labels) if exp]))
+
+
+if __name__ == '__main__':
+    DATASET = _load_dataset(DATASET_JSON)
+    compute_detection_performance(DATASET, TOPIC_ONTOLOGY)

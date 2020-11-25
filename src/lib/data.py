@@ -112,6 +112,12 @@ class EnrichedString:
     links: List[Link] = field(default_factory=empty_link_list)
     table: Optional[Table] = None
 
+    @staticmethod
+    def from_dict(dict_: Dict[str, Any]) -> 'EnrichedString':
+        links = [load_link(link) for link in dict_['links']]
+        table = load_table(dict_['table']) if dict_['table'] else None
+        return EnrichedString(dict_['text'], links, table)
+
 
 @dataclass
 class Applicability:
@@ -305,9 +311,7 @@ def load_table(dict_: Dict[str, Any]) -> Table:
 
 
 def load_enriched_string(dict_: Dict[str, Any]) -> EnrichedString:
-    links = [load_link(link) for link in dict_['links']]
-    table = load_table(dict_['table']) if dict_['table'] else None
-    return EnrichedString(dict_['text'], links, table)
+    return EnrichedString.from_dict(dict_)
 
 
 def load_legifrance_article(dict_: Dict[str, Any]) -> LegifranceArticle:
