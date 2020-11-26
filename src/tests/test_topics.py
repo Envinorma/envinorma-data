@@ -24,6 +24,8 @@ def test_parse():
     ontology = TopicOntology([topic])
     assert parse(ontology, 'il y a de l\'eau') == set()
     assert parse(ontology, 'il y a de l\'eau', True) == {TopicName.EAU}
+    assert parse(ontology, 'beaucoup', True) == {}
+    assert parse(ontology, 'beaucoup d\'eau', True) == {TopicName.EAU}
     assert parse(ontology, 'il y a de l\'eau dans la collecte et rejet des effluents.') == {TopicName.EAU}
 
 
