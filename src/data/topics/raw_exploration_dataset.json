@@ -186,7 +186,7 @@
                 }
             ]
         ],
-        "DISPOSITIONS_GENERALES/RESERVES"
+        "DISPOSITIONS_GENERALES/RESERVES_DE_PRODUIT"
     ],
     [
         [
@@ -297,7 +297,7 @@
             ],
             []
         ],
-        "RADIOACTIVITES/GESTION_DECHETS_SUBSTANCES"
+        "RADIOACTIVITES"
     ],
     [
         [
@@ -1209,7 +1209,7 @@
                 }
             ]
         ],
-        "EMISSIONS_AIR"
+        "AIR_ODEURS"
     ],
     [
         [
@@ -2351,7 +2351,7 @@
                 }
             ]
         ],
-        "EAU/CONSOMMATION"
+        "EAU/CONSOMMATION_D_EAU"
     ],
     [
         [
@@ -2540,7 +2540,7 @@
                 }
             ]
         ],
-        "DECHETS/SPECIAUX"
+        "DECHETS/DECHETS_SPECIAUX"
     ],
     [
         [
@@ -2736,7 +2736,7 @@
                 }
             ]
         ],
-        "BRUIT_VIBRATIONS/VL"
+        "BRUIT_VIBRATIONS/VLE"
     ],
     [
         [
@@ -3714,7 +3714,7 @@
                 }
             ]
         ],
-        "RISQUES/INDIVIDUELS"
+        "RISQUES/RISQUE_INDIVIDUEL"
     ],
     [
         [
@@ -3926,7 +3926,7 @@
                 }
             ]
         ],
-        "DECHETS/GESTION"
+        "DECHETS"
     ],
     [
         [
@@ -4488,7 +4488,7 @@
                 }
             ]
         ],
-        "EAU/CONSOMMATION"
+        "EAU/CONSOMMATION_D_EAU"
     ],
     [
         [
@@ -4515,7 +4515,7 @@
                 }
             ]
         ],
-        "EAU/CONSOMMATION"
+        "EAU/CONSOMMATION_D_EAU"
     ],
     [
         [
@@ -4986,7 +4986,7 @@
                 }
             ]
         ],
-        "BRUIT_VIBRATIONS/VL"
+        "BRUIT_VIBRATIONS/VLE"
     ],
     [
         [
@@ -5074,7 +5074,7 @@
                 }
             ]
         ],
-        "EMISSIONS/DECLARATION"
+        "EMISSIONS/DECLARATION_DES_EMISSIONS"
     ],
     [
         [
@@ -5184,7 +5184,7 @@
                 }
             ]
         ],
-        "BRUIT_VIBRATIONS/REGLES_TECHNIQUES"
+        "BRUIT_VIBRATIONS/MESURE_BRUIT"
     ],
     [
         [
@@ -5525,7 +5525,7 @@
                 }
             ]
         ],
-        "BRUIT_VIBRATIONS/VL"
+        "BRUIT_VIBRATIONS/VLE"
     ],
     [
         [
@@ -6599,7 +6599,7 @@
                 }
             ]
         ],
-        "DECHETS/NON_DANGEREUX"
+        "DECHETS/DECHETS_NON_DANGEREUX"
     ],
     [
         [
@@ -7090,7 +7090,7 @@
                 }
             ]
         ],
-        "DECHETS/BANALS"
+        "DECHETS/DECHETS_BANALS"
     ],
     [
         [
@@ -7506,7 +7506,7 @@
             ],
             []
         ],
-        "DECHETS/GESTION"
+        "DECHETS"
     ],
     [
         [
@@ -8024,7 +8024,7 @@
                 }
             ]
         ],
-        "BRUIT_VIBRATIONS/MESURE"
+        "BRUIT_VIBRATIONS/MESURE_BRUIT"
     ],
     [
         [
@@ -8082,7 +8082,7 @@
                 }
             ]
         ],
-        "DISPOSITIONS_GENERALES/REGISTRE_EXPLOITATION"
+        "DISPOSITIONS_GENERALES/REGISTRE"
     ],
     [
         [
@@ -9244,7 +9244,7 @@
                 }
             ]
         ],
-        "BRUIT_VIBRATIONS/VL"
+        "BRUIT_VIBRATIONS/VLE"
     ],
     [
         [
@@ -9267,7 +9267,7 @@
                 }
             ]
         ],
-        "DECHETS/GESTION"
+        "DECHETS"
     ],
     [
         [
@@ -10057,7 +10057,7 @@
                 }
             ]
         ],
-        "EXPLOITATION/DOSSIER"
+        "EXPLOITATION/REGISTRE"
     ],
     [
         [
