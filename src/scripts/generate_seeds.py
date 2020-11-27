@@ -25,9 +25,11 @@ def _ruby_optional_str(str_: Optional[str]) -> str:
 
 def _handle_filename(filename: str, rubrique: str, installation_id: int) -> str:
     arrete = ArreteMinisteriel.from_dict(json.load(open(_get_input_path(filename))))
+
     copyfile(_get_input_path(filename), _get_output_path(filename))
     left_date = arrete.installation_date_criterion.left_date if arrete.installation_date_criterion else None
     right_date = arrete.installation_date_criterion.right_date if arrete.installation_date_criterion else None
+    summary = json.dumps(arrete.summary.to_dict(), ensure_ascii=False) if arrete.summary else 'nil'
     return f'''
 path = File.join(File.dirname(__FILE__), "./seeds/{filename}")
 arrete_{rubrique} = JSON.parse(File.read(path))
@@ -42,6 +44,7 @@ Arrete.create(
     installation_date_criterion_right: {_ruby_optional_str(right_date)},
     aida_url: {_ruby_optional_str(arrete.aida_url)},
     legifrance_url: {_ruby_optional_str(arrete.legifrance_url)},
+    summary: {summary}
 )
 '''
 

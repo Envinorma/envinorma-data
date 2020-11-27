@@ -253,10 +253,23 @@ class SummaryElement:
     section_title: str
     depth: int
 
+    @staticmethod
+    def from_dict(dict_: Dict[str, Any]) -> 'SummaryElement':
+        return SummaryElement(**dict_)
+
 
 @dataclass
 class Summary:
     elements: List[SummaryElement]
+
+    def to_dict(self) -> Dict[str, Any]:
+        return asdict(self)
+
+    @staticmethod
+    def from_dict(dict_: Dict[str, Any]) -> 'Summary':
+        dict_ = dict_.copy()
+        dict_['elements'] = [SummaryElement.from_dict(se) for se in dict_['elements']]
+        return Summary(**dict_)
 
 
 @dataclass
@@ -292,6 +305,7 @@ class ArreteMinisteriel:
         dict_[dt_key] = DateCriterion.from_dict(dict_[dt_key]) if dict_.get(dt_key) else None
         classements = [Classement.from_dict(cl) for cl in dict_.get('classements') or []]
         dict_['classements'] = list(sorted(classements, key=lambda x: x.regime.value))
+        dict_['summary'] = Summary.from_dict(dict_['summary']) if dict_.get('summary') else None
         return cls(**dict_)
 
 
