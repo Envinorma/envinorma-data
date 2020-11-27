@@ -290,7 +290,8 @@ class ArreteMinisteriel:
         dict_['applicability'] = Applicability.from_dict(dict_['applicability']) if dict_.get('applicability') else None
         dt_key = 'installation_date_criterion'
         dict_[dt_key] = DateCriterion.from_dict(dict_[dt_key]) if dict_.get(dt_key) else None
-        dict_['classements'] = [Classement.from_dict(cl) for cl in dict_.get('classements') or []]
+        classements = [Classement.from_dict(cl) for cl in dict_.get('classements') or []]
+        dict_['classements'] = list(sorted(classements, key=lambda x: x.regime.value))
         return cls(**dict_)
 
 
