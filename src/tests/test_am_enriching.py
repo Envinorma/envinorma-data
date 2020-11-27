@@ -1,4 +1,5 @@
 import json
+from lib.topics.patterns import TopicName
 
 import pytest
 from lib.data import (
@@ -9,7 +10,6 @@ from lib.data import (
     LegifranceArticle,
     Link,
     StructuredText,
-    Topic,
     load_arrete_ministeriel,
 )
 from lib.am_enriching import (
@@ -33,19 +33,21 @@ def test_add_topics():
     section_2 = StructuredText(EnrichedString('Section 2'), [], [], None, None)
     am = ArreteMinisteriel(EnrichedString(''), [section_1, section_2], [], '', None)
 
-    am_with_topics = add_topics(am, {(0,): Topic.INCENDIE, (0, 0): Topic.INCENDIE, (1,): Topic.BRUIT})
-    assert am_with_topics.sections[0].annotations.topic == Topic.INCENDIE
-    assert am_with_topics.sections[0].sections[0].annotations.topic == Topic.INCENDIE
-    assert am_with_topics.sections[1].annotations.topic == Topic.BRUIT
+    am_with_topics = add_topics(
+        am, {(0,): TopicName.INCENDIE, (0, 0): TopicName.INCENDIE, (1,): TopicName.BRUIT_VIBRATIONS}
+    )
+    assert am_with_topics.sections[0].annotations.topic == TopicName.INCENDIE
+    assert am_with_topics.sections[0].sections[0].annotations.topic == TopicName.INCENDIE
+    assert am_with_topics.sections[1].annotations.topic == TopicName.BRUIT_VIBRATIONS
 
     am_with_non_prescriptive = remove_prescriptive_power(am_with_topics, {(1,)})
     assert am_with_non_prescriptive.sections[0].annotations.prescriptive
     assert am_with_non_prescriptive.sections[0].sections[0].annotations.prescriptive
     assert not am_with_non_prescriptive.sections[1].annotations.prescriptive
 
-    assert am_with_non_prescriptive.sections[0].annotations.topic == Topic.INCENDIE
-    assert am_with_non_prescriptive.sections[0].sections[0].annotations.topic == Topic.INCENDIE
-    assert am_with_non_prescriptive.sections[1].annotations.topic == Topic.BRUIT
+    assert am_with_non_prescriptive.sections[0].annotations.topic == TopicName.INCENDIE
+    assert am_with_non_prescriptive.sections[0].sections[0].annotations.topic == TopicName.INCENDIE
+    assert am_with_non_prescriptive.sections[1].annotations.topic == TopicName.BRUIT_VIBRATIONS
 
 
 def test_extract_special_prefix():

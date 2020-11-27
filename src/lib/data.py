@@ -1,3 +1,4 @@
+from lib.topics.patterns import TopicName
 import random
 import string
 from dataclasses import dataclass, asdict, field
@@ -135,17 +136,9 @@ class Applicability:
         return Applicability(**dict_)
 
 
-class Topic(Enum):
-    INCENDIE = 'INCENDIE'
-    BRUIT = 'BRUIT'
-    EAU = 'EAU'
-    AIR = 'AIR'
-    DECHETS = 'DECHETS'
-
-
 @dataclass
 class Annotations:
-    topic: Optional[Topic] = None
+    topic: Optional[TopicName] = None
     prescriptive: bool = True
     guide: Optional[str] = None
 
@@ -158,7 +151,7 @@ class Annotations:
     @classmethod
     def from_dict(cls, dict_: Dict) -> 'Annotations':
         new_dict = dict_.copy()
-        new_dict['topic'] = Topic(dict_['topic']) if dict_['topic'] else None
+        new_dict['topic'] = TopicName(dict_['topic']) if dict_['topic'] else None
         return Annotations(**new_dict)
 
 

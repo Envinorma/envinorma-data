@@ -1,10 +1,11 @@
-from lib.topics.patterns import Topic, TopicName, TopicOntology, normalize, parse, tokenize, detect_matched_patterns
+from lib.topics.patterns import Topic, TopicName, normalize, tokenize
+from lib.topics.topics import TopicOntology, normalize, parse, detect_matched_patterns
 
 
 def test_detect_matched_patterns():
-    topic_eau = Topic.from_raw_patterns(TopicName.EAU, [], ["Eau"], ["Collecte et rejet des effluents"])
+    topic_eau = Topic.from_raw_patterns(TopicName.EAU, TopicName.EAU, [], ["Eau"], ["Collecte et rejet des effluents"])
     topic_dechets = Topic.from_raw_patterns(
-        TopicName.DECHETS, [], ["Déchets", 'DêcheT'], ["Collecte et recyclage des déchets"]
+        TopicName.DECHETS, TopicName.DECHETS, [], ["Déchets", 'DêcheT'], ["Collecte et recyclage des déchets"]
     )
     ontology = TopicOntology([topic_eau, topic_dechets])
     assert detect_matched_patterns(ontology, 'il y a de l\'eau', TopicName.EAU) == set()
@@ -15,7 +16,7 @@ def test_detect_matched_patterns():
 
 
 def test_parse():
-    topic = Topic.from_raw_patterns(TopicName.EAU, [], ["Eau"], ["Collecte et rejet des effluents"])
+    topic = Topic.from_raw_patterns(TopicName.EAU, TopicName.EAU, [], ["Eau"], ["Collecte et rejet des effluents"])
     ontology = TopicOntology([topic])
     assert parse(ontology, 'il y a de l\'eau') == set()
     assert parse(ontology, 'il y a de l\'eau', True) == {TopicName.EAU}
@@ -25,9 +26,9 @@ def test_parse():
 
 
 def test_parse_2():
-    topic_eau = Topic.from_raw_patterns(TopicName.EAU, [], ["Eau"], ["Collecte et rejet des effluents"])
+    topic_eau = Topic.from_raw_patterns(TopicName.EAU, TopicName.EAU, [], ["Eau"], ["Collecte et rejet des effluents"])
     topic_dechets = Topic.from_raw_patterns(
-        TopicName.DECHETS, [], ["Déchets", 'DêcheT'], ["Collecte et recyclage des déchets"]
+        TopicName.DECHETS, TopicName.DECHETS, [], ["Déchets", 'DêcheT'], ["Collecte et recyclage des déchets"]
     )
     ontology = TopicOntology([topic_eau, topic_dechets])
     assert parse(ontology, 'il y a de l\'eau et des déchets.') == set()
@@ -39,17 +40,23 @@ def test_parse_2():
 
 
 def test_parse_3():
-    topic = Topic.from_raw_patterns(TopicName.DECHETS, [], ["Déchets"], [])
-    topic_ = Topic.from_raw_patterns(TopicName.DECHETS_SPECIAUX, [], ["Déchets industriels spéciaux"], [])
+    topic = Topic.from_raw_patterns(TopicName.DECHETS, TopicName.DECHETS, [], ["Déchets"], [])
+    topic_ = Topic.from_raw_patterns(
+        TopicName.DECHETS_SPECIAUX, TopicName.DECHETS_SPECIAUX, [], ["Déchets industriels spéciaux"], []
+    )
     ontology = TopicOntology([topic, topic_])
     assert parse(ontology, '7.4. Déchets industriels spéciaux') == set()
     assert parse(ontology, '7.4. Déchets industriels spéciaux', True) == {TopicName.DECHETS_SPECIAUX}
 
 
 def test_parse_4():
-    topic = Topic.from_raw_patterns(TopicName.DECHETS, [], ["industriels"], [])
+    topic = Topic.from_raw_patterns(TopicName.DECHETS, TopicName.DECHETS, [], ["industriels"], [])
     topic_ = Topic.from_raw_patterns(
-        TopicName.DECHETS_SPECIAUX, [], ["Déchets industriels spéciaux"], ['Déchets industriels très spéciaux']
+        TopicName.DECHETS_SPECIAUX,
+        TopicName.DECHETS_SPECIAUX,
+        [],
+        ["Déchets industriels spéciaux"],
+        ['Déchets industriels très spéciaux'],
     )
     ontology = TopicOntology([topic, topic_])
     assert parse(ontology, '7.4. Déchets industriels spéciaux') == set()

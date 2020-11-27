@@ -12,7 +12,7 @@ from lib.data import (
     Row,
     StructuredText,
     Table,
-    Topic,
+    TopicName,
 )
 
 _TABLE = Table([Row([Cell(EnrichedString('bonjour'), 1, 1)], True)])
@@ -26,7 +26,7 @@ _LEAF_SECTION = StructuredText(
     LegifranceArticle('id', 'content', 0, '0', ArticleStatus.ABROGE),
     Applicability(True, 'ra', False, None, ['beware']),
     'ref',
-    Annotations(Topic.AIR, True, 'guide'),
+    Annotations(TopicName.AIR_ODEURS, True, 'guide'),
 )
 _NODE_SECTION = StructuredText(
     copy(_ENRICHED_STRING_SIMPLE),

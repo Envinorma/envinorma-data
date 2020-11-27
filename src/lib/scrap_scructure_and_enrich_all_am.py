@@ -1,4 +1,5 @@
 import json
+from lib.topics.topics import TOPIC_ONTOLOGY
 import os
 import traceback
 from copy import copy
@@ -29,7 +30,7 @@ from lib.am_to_markdown import am_to_markdown
 from lib.parametrization import Parametrization, add_am_signatures
 from lib.manual_enrichments import get_manual_combinations, get_manual_enricher, get_manual_parametrization
 from lib.parametric_am import check_parametrization_is_still_valid, generate_all_am_versions
-from lib.am_enriching import add_references, add_summary, remove_null_applicabilities
+from lib.am_enriching import add_references, add_summary, detect_and_add_topics, remove_null_applicabilities
 from lib.legifrance_API import get_current_loda_via_cid_response, get_legifrance_client
 from lib.texts_properties import LegifranceText, compute_am_diffs, compute_am_signatures, compute_texts_properties
 from lib.am_structure_extraction import (
@@ -220,7 +221,7 @@ def handle_am(
     am, structuration_error = _structure_am(legifrance_text)
     if am:
         check_am(am)
-        am = add_references(_add_metadata(am, metadata))
+        am = detect_and_add_topics(add_references(_add_metadata(am, metadata)), TOPIC_ONTOLOGY)
         check_am(am)
     if dump_am and am:
         write_json(am.to_dict(), _get_structured_am_filename(metadata))

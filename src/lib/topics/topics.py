@@ -1,122 +1,91 @@
-from typing import List, Set, Tuple
-from collections import Counter, defaultdict
-from data.topics.raw_exploration_dataset import DATASET, _LabelizedText
-from lib.data import EnrichedString, StructuredText
-from lib.topics.patterns import TopicName, TOPIC_ONTOLOGY, TopicOntology, tokenize
+import re
+from dataclasses import dataclass, field
+from typing import Dict, Iterable, List, Optional, Set, Tuple
 
-TOPICS_COUNTER = Counter([topic for _, topics in DATASET for topic in topics])
-UNIQUE_TOPICS = set(TOPICS_COUNTER)
+from lib.topics.patterns import ALL_TOPICS, Topic, TopicName, merge_patterns, normalize
 
 
-def extract_topic_titles(topic: str, dataset: List[Tuple[Tuple, str]]) -> List[str]:
-    all_matched_titles = [tp[0] for tp, topics in dataset if topic in topics.split('/')]
-    return [' > '.join(titles) for titles in all_matched_titles]
+@dataclass
+class TopicOntology:
+    topics: List[Topic]
+    pattern_to_topic: Dict[str, TopicName] = field(init=False)
+    title_compiled_pattern: re.Pattern = field(init=False)
+    general_compiled_pattern: re.Pattern = field(init=False)
+    topic_name_to_topic: Dict[TopicName, Topic] = field(init=False)
+
+    def __post_init__(self):
+        self._check_consistency(self.topics)
+        self.pattern_to_topic = {
+            pattern: desc.topic_name
+            for desc in self.topics
+            for pattern in desc.other_patterns + desc.short_title_patterns
+        }
+        self.topic_name_to_topic = {topic.topic_name: topic for topic in self.topics}
+        if '' in self.pattern_to_topic:
+            raise ValueError('Cannot have void pattern!')
+        other_patterns = [pattern for topic in self.topics for pattern in topic.other_patterns]
+        all_patterns = [pattern for topic in self.topics for pattern in topic.short_title_patterns] + other_patterns
+        self.general_compiled_pattern = re.compile(merge_patterns(other_patterns))
+        self.title_compiled_pattern = re.compile(merge_patterns(all_patterns))
+
+    @staticmethod
+    def _check_consistency(topics: Iterable[Topic]) -> None:
+        pattern_to_topic: Dict[str, TopicName] = {}
+        errors: List[Tuple[str, TopicName, TopicName]] = []
+        for topic in topics:
+            for pattern in topic.short_title_patterns + topic.other_patterns:
+                if pattern in pattern_to_topic:
+                    errors.append((pattern, topic.topic_name, pattern_to_topic[pattern]))
+                else:
+                    pattern_to_topic[pattern] = topic.topic_name
+        if errors:
+            raise ValueError(f'Following patterns are repeated in distinct topics: {errors}')
+
+    def parse(self, text: str, short_title: bool = False) -> Set[TopicName]:
+        return parse(self, text, short_title)
+
+    def detect_matched_patterns(self, text: str, topic: Optional[TopicName], short_title: bool = False) -> Set[str]:
+        return detect_matched_patterns(self, text, topic, short_title)
+
+    def deduce_main_topic(self, topics: Iterable[TopicName]) -> Optional[TopicName]:
+        if not topics:
+            return None
+        return _deduce_main_topic([self.topic_name_to_topic[name] for name in topics])
 
 
-def _is_sentence_short(title: str) -> bool:
-    return len(tokenize(title)) <= 10
+def _deduce_main_topic(topics: List[Topic]) -> TopicName:
+    if not topics:
+        raise ValueError('Need at least one topic.')
+    non_generic_metatopics = [topic.metatopic for topic in topics if topic != TopicName.DISPOSITIONS_GENERALES]
+    if not non_generic_metatopics:
+        return TopicName.DISPOSITIONS_GENERALES
+    return sorted([topic.metatopic for topic in topics], key=lambda x: x.value)[0]
 
 
-def _detect_in_title(title: str, ontology: TopicOntology) -> Set[TopicName]:
-    return ontology.parse(title, _is_sentence_short(title))
+def _extract_substring(text: str, start: int, end: int) -> str:
+    return text[start:end]
 
 
-def _detect_in_titles(titles: List[str], ontology: TopicOntology) -> Set[TopicName]:
-    return {topic for title in titles for topic in _detect_in_title(title, ontology)}
+def detect_matched_patterns(
+    ontology: TopicOntology, text: str, topic: Optional[TopicName], short_title: bool = False
+) -> Set[str]:
+    normalized_text = normalize(text)
+    if topic:
+        pattern = re.compile(
+            ontology.topic_name_to_topic[topic].escaped_short_title_pattern
+            if short_title
+            else ontology.topic_name_to_topic[topic].escaped_pattern
+        )
+    else:
+        pattern = ontology.title_compiled_pattern if short_title else ontology.general_compiled_pattern
+    if not pattern.pattern:
+        return set()
+    matches = re.finditer(pattern, normalized_text)
+    return {_extract_substring(normalized_text, *match.span()) for match in matches}
 
 
-def _extract_topics_from_titles_and_content(
-    all_titles: List[str], section_sentences: List[str], ontology: TopicOntology
-) -> Set[TopicName]:
-    title_topics = _detect_in_titles(all_titles, ontology)
-    sentence_topics = {topic for sentence in section_sentences for topic in ontology.parse(sentence)}
-    return title_topics.union(sentence_topics)
+def parse(ontology: TopicOntology, text: str, short_title: bool = False) -> Set[TopicName]:
+    return {ontology.pattern_to_topic[match] for match in detect_matched_patterns(ontology, text, None, short_title)}
 
 
-def _extract_topics(text: StructuredText, parent_titles: List[str], ontology: TopicOntology) -> Set[TopicName]:
-    all_titles = parent_titles + [text.title.text]
-    if text.sections:
-        return {topic for section in text.sections for topic in _extract_topics(section, all_titles, ontology)}
-    section_sentences = [al.text for al in text.outer_alineas if al.text]
-    return _extract_topics_from_titles_and_content(all_titles, section_sentences, ontology)
-
-
-def _detect_in_normal_texts(strs: List[str], ontology: TopicOntology) -> Set[TopicName]:
-    return {topic for st in strs for topic in ontology.parse(st)}
-
-
-def _detect_title_matched_patterns(title: str, ontology: TopicOntology, topic: TopicName) -> Set[str]:
-    return ontology.detect_matched_patterns(title, topic, _is_sentence_short(title))
-
-
-def _analyze_wrong_detection(
-    labels: Set[TopicName], titles: List[str], text: StructuredText, ontology: TopicOntology
-) -> List:
-    all_titles = titles + [text.title.text]
-    section_sentences = [al.text for al in text.outer_alineas if al.text]
-    detected_topics = _detect_in_titles(all_titles, ontology).union(
-        _detect_in_normal_texts(section_sentences, ontology)
-    )
-    wrong_detections = detected_topics - labels
-    sentence_and_wrong_patterns = []
-    if wrong_detections:
-        for topic in wrong_detections:
-            for title in all_titles:
-                patterns = _detect_title_matched_patterns(title, ontology, topic)
-                if patterns:
-                    sentence_and_wrong_patterns.append((title, patterns, topic))
-            for sentence in section_sentences:
-                patterns = ontology.detect_matched_patterns(sentence, topic)
-                if patterns:
-                    sentence_and_wrong_patterns.append((sentence, patterns, topic))
-    return sentence_and_wrong_patterns
-
-
-def _analyze_missed_topics(
-    labels: Set[TopicName], titles: List[str], text: StructuredText, ontology: TopicOntology
-) -> Set[TopicName]:
-    detected_topics = _extract_topics(text, titles, ontology)
-    missing_topics = labels - detected_topics
-    if missing_topics:
-        return missing_topics
-    return set()
-
-
-def pretty_print(topic: TopicName, texts: List[Tuple[int, List[str], StructuredText]]) -> None:
-    print(topic.value)
-    for rank, titles, text in texts:
-        print(rank)
-        for title in titles:
-            print(f'\t{title}')
-        for al in text.outer_alineas:
-            if al.table:
-                print(f'\t\tTable')
-            else:
-                print(f'\t\t{al.text}')
-        print()
-
-
-def compute_detection_performance(dataset: List[_LabelizedText], ontology: TopicOntology):
-    all_labels = [label for _, label in dataset]
-    texts = [
-        (titles, StructuredText(EnrichedString(''), outer_alineas, [], None, None))
-        for (titles, outer_alineas), _ in dataset
-    ]
-    missing_topics_to_elements = defaultdict(list)
-    for rank, (labels, (titles, text)) in enumerate(zip(all_labels, texts)):
-        wrong_detections = _analyze_wrong_detection(labels, titles, text, ontology)
-        missing_topics = _analyze_missed_topics(labels, titles, text, ontology)
-        if wrong_detections or missing_topics:
-            print(rank)
-            print(wrong_detections)
-            print(f'Missing: {missing_topics}')
-        for topic in missing_topics:
-            missing_topics_to_elements[topic].append((rank, titles, text))
-    for topic, texts_ in missing_topics_to_elements.items():
-        pretty_print(topic, texts_)
-    predicted_labels = [_extract_topics(text, titles, ontology) for titles, text in texts]
-    print(Counter([exp == pred for exp, pred in zip(all_labels, predicted_labels) if exp]))
-
-
-if __name__ == '__main__':
-    compute_detection_performance(DATASET, TOPIC_ONTOLOGY)
+TOPIC_ONTOLOGY = TopicOntology(ALL_TOPICS)
