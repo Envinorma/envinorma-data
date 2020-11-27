@@ -14,7 +14,11 @@
     "legifrance_url": "https://www.legifrance.gouv.fr/loda/id/JORFTEXT000026694913",
     "sections": [
         {
-            "annotations": null,
+            "annotations": {
+                "guide": null,
+                "prescriptive": true,
+                "topic": "DISPOSITIONS_GENERALES"
+            },
             "applicability": null,
             "id": "9cD0B3a0d424",
             "legifrance_article": {
@@ -72,7 +76,11 @@
             }
         },
         {
-            "annotations": null,
+            "annotations": {
+                "guide": null,
+                "prescriptive": true,
+                "topic": "DISPOSITIONS_GENERALES"
+            },
             "applicability": null,
             "id": "1F77f89CbEBa",
             "legifrance_article": {
@@ -203,7 +211,11 @@
             }
         },
         {
-            "annotations": null,
+            "annotations": {
+                "guide": null,
+                "prescriptive": true,
+                "topic": "DISPOSITIONS_GENERALES"
+            },
             "applicability": null,
             "id": "C501B5C4244B",
             "legifrance_article": null,
@@ -211,7 +223,11 @@
             "reference_str": null,
             "sections": [
                 {
-                    "annotations": null,
+                    "annotations": {
+                        "guide": null,
+                        "prescriptive": true,
+                        "topic": "DISPOSITIONS_GENERALES"
+                    },
                     "applicability": null,
                     "id": "FcDA1eCC7c8B",
                     "legifrance_article": {
@@ -242,7 +258,11 @@
                     }
                 },
                 {
-                    "annotations": null,
+                    "annotations": {
+                        "guide": null,
+                        "prescriptive": true,
+                        "topic": "DISPOSITIONS_GENERALES"
+                    },
                     "applicability": null,
                     "id": "f78A986cDef9",
                     "legifrance_article": {
@@ -448,7 +468,11 @@
                     }
                 },
                 {
-                    "annotations": null,
+                    "annotations": {
+                        "guide": null,
+                        "prescriptive": true,
+                        "topic": "DISPOSITIONS_GENERALES"
+                    },
                     "applicability": null,
                     "id": "a8DEa2b0eD5b",
                     "legifrance_article": {
@@ -510,7 +534,11 @@
                     }
                 },
                 {
-                    "annotations": null,
+                    "annotations": {
+                        "guide": null,
+                        "prescriptive": true,
+                        "topic": "DISPOSITIONS_GENERALES"
+                    },
                     "applicability": null,
                     "id": "08dAFC92afCa",
                     "legifrance_article": {
@@ -591,7 +619,11 @@
                     }
                 },
                 {
-                    "annotations": null,
+                    "annotations": {
+                        "guide": null,
+                        "prescriptive": true,
+                        "topic": "DISPOSITIONS_GENERALES"
+                    },
                     "applicability": null,
                     "id": "aE87c01F34Da",
                     "legifrance_article": {
@@ -639,7 +671,11 @@
             }
         },
         {
-            "annotations": null,
+            "annotations": {
+                "guide": null,
+                "prescriptive": true,
+                "topic": "ACCIDENTS_POLLUTIONS"
+            },
             "applicability": null,
             "id": "A9E250BCFBeB",
             "legifrance_article": null,
@@ -647,7 +683,11 @@
             "reference_str": null,
             "sections": [
                 {
-                    "annotations": null,
+                    "annotations": {
+                        "guide": null,
+                        "prescriptive": true,
+                        "topic": "ACCIDENTS_POLLUTIONS"
+                    },
                     "applicability": null,
                     "id": "aACCcB33DB66",
                     "legifrance_article": null,
@@ -655,7 +695,11 @@
                     "reference_str": null,
                     "sections": [
                         {
-                            "annotations": null,
+                            "annotations": {
+                                "guide": null,
+                                "prescriptive": true,
+                                "topic": "ACCIDENTS_POLLUTIONS"
+                            },
                             "applicability": null,
                             "id": "CCBED3D5b8e8",
                             "legifrance_article": {
@@ -686,7 +730,11 @@
                             }
                         },
                         {
-                            "annotations": null,
+                            "annotations": {
+                                "guide": null,
+                                "prescriptive": true,
+                                "topic": "ACCIDENTS_POLLUTIONS"
+                            },
                             "applicability": null,
                             "id": "C31c9D6d0D7c",
                             "legifrance_article": {
@@ -712,7 +760,11 @@
                             }
                         },
                         {
-                            "annotations": null,
+                            "annotations": {
+                                "guide": null,
+                                "prescriptive": true,
+                                "topic": "ACCIDENTS_POLLUTIONS"
+                            },
                             "applicability": null,
                             "id": "Dc48ECB64cCF",
                             "legifrance_article": {
@@ -759,7 +811,11 @@
                             }
                         },
                         {
-                            "annotations": null,
+                            "annotations": {
+                                "guide": null,
+                                "prescriptive": true,
+                                "topic": "ACCIDENTS_POLLUTIONS"
+                            },
                             "applicability": null,
                             "id": "6945b6CC5134",
                             "legifrance_article": {
@@ -795,7 +851,11 @@
                             }
                         },
                         {
-                            "annotations": null,
+                            "annotations": {
+                                "guide": null,
+                                "prescriptive": true,
+                                "topic": "ACCIDENTS_POLLUTIONS"
+                            },
                             "applicability": null,
                             "id": "C8Bb4104cb0b",
                             "legifrance_article": {
@@ -833,7 +893,11 @@
                     }
                 },
                 {
-                    "annotations": null,
+                    "annotations": {
+                        "guide": null,
+                        "prescriptive": true,
+                        "topic": "ACCIDENTS_POLLUTIONS"
+                    },
                     "applicability": null,
                     "id": "1CF38dE313aa",
                     "legifrance_article": null,
@@ -841,7 +905,11 @@
                     "reference_str": null,
                     "sections": [
                         {
-                            "annotations": null,
+                            "annotations": {
+                                "guide": null,
+                                "prescriptive": true,
+                                "topic": "ACCIDENTS_POLLUTIONS"
+                            },
                             "applicability": null,
                             "id": "3DbEa8A7fC6C",
                             "legifrance_article": {
@@ -884,7 +952,11 @@
                     }
                 },
                 {
-                    "annotations": null,
+                    "annotations": {
+                        "guide": null,
+                        "prescriptive": true,
+                        "topic": "ACCIDENTS_POLLUTIONS"
+                    },
                     "applicability": null,
                     "id": "cbd8c54DBf37",
                     "legifrance_article": null,
@@ -892,7 +964,11 @@
                     "reference_str": null,
                     "sections": [
                         {
-                            "annotations": null,
+                            "annotations": {
+                                "guide": null,
+                                "prescriptive": true,
+                                "topic": "ACCIDENTS_POLLUTIONS"
+                            },
                             "applicability": null,
                             "id": "6Ef8f6eF5D6C",
                             "legifrance_article": {
@@ -975,7 +1051,11 @@
                     }
                 },
                 {
-                    "annotations": null,
+                    "annotations": {
+                        "guide": null,
+                        "prescriptive": true,
+                        "topic": "ACCIDENTS_POLLUTIONS"
+                    },
                     "applicability": null,
                     "id": "de78Abc2CfeF",
                     "legifrance_article": null,
@@ -983,7 +1063,11 @@
                     "reference_str": null,
                     "sections": [
                         {
-                            "annotations": null,
+                            "annotations": {
+                                "guide": null,
+                                "prescriptive": true,
+                                "topic": "ACCIDENTS_POLLUTIONS"
+                            },
                             "applicability": null,
                             "id": "81a11bEFF3D0",
                             "legifrance_article": {
@@ -1014,7 +1098,11 @@
                             }
                         },
                         {
-                            "annotations": null,
+                            "annotations": {
+                                "guide": null,
+                                "prescriptive": true,
+                                "topic": "ACCIDENTS_POLLUTIONS"
+                            },
                             "applicability": null,
                             "id": "7734dFfd8D6B",
                             "legifrance_article": {
@@ -1060,7 +1148,11 @@
                             }
                         },
                         {
-                            "annotations": null,
+                            "annotations": {
+                                "guide": null,
+                                "prescriptive": true,
+                                "topic": "ACCIDENTS_POLLUTIONS"
+                            },
                             "applicability": null,
                             "id": "6399637dB5a6",
                             "legifrance_article": {
@@ -1128,7 +1220,11 @@
                     }
                 },
                 {
-                    "annotations": null,
+                    "annotations": {
+                        "guide": null,
+                        "prescriptive": true,
+                        "topic": "ACCIDENTS_POLLUTIONS"
+                    },
                     "applicability": null,
                     "id": "345ad6B8bEb8",
                     "legifrance_article": null,
@@ -1136,7 +1232,11 @@
                     "reference_str": null,
                     "sections": [
                         {
-                            "annotations": null,
+                            "annotations": {
+                                "guide": null,
+                                "prescriptive": true,
+                                "topic": "ACCIDENTS_POLLUTIONS"
+                            },
                             "applicability": null,
                             "id": "4A9f7E284D67",
                             "legifrance_article": {
@@ -1177,7 +1277,11 @@
                             }
                         },
                         {
-                            "annotations": null,
+                            "annotations": {
+                                "guide": null,
+                                "prescriptive": true,
+                                "topic": "ACCIDENTS_POLLUTIONS"
+                            },
                             "applicability": null,
                             "id": "3BA3A6EBca87",
                             "legifrance_article": {
@@ -1283,7 +1387,11 @@
                             }
                         },
                         {
-                            "annotations": null,
+                            "annotations": {
+                                "guide": null,
+                                "prescriptive": true,
+                                "topic": "ACCIDENTS_POLLUTIONS"
+                            },
                             "applicability": null,
                             "id": "D98Aab42EeB3",
                             "legifrance_article": {
@@ -1321,7 +1429,11 @@
                     }
                 },
                 {
-                    "annotations": null,
+                    "annotations": {
+                        "guide": null,
+                        "prescriptive": true,
+                        "topic": "ACCIDENTS_POLLUTIONS"
+                    },
                     "applicability": null,
                     "id": "E4fb28EC6C4F",
                     "legifrance_article": null,
@@ -1329,7 +1441,11 @@
                     "reference_str": null,
                     "sections": [
                         {
-                            "annotations": null,
+                            "annotations": {
+                                "guide": null,
+                                "prescriptive": true,
+                                "topic": "ACCIDENTS_POLLUTIONS"
+                            },
                             "applicability": null,
                             "id": "BbfD2E96debe",
                             "legifrance_article": {
@@ -1343,7 +1459,11 @@
                             "reference_str": "Art. 21",
                             "sections": [
                                 {
-                                    "annotations": null,
+                                    "annotations": {
+                                        "guide": null,
+                                        "prescriptive": true,
+                                        "topic": "ACCIDENTS_POLLUTIONS"
+                                    },
                                     "applicability": null,
                                     "id": "13bFe699302F",
                                     "legifrance_article": null,
@@ -1393,7 +1513,11 @@
                                     }
                                 },
                                 {
-                                    "annotations": null,
+                                    "annotations": {
+                                        "guide": null,
+                                        "prescriptive": true,
+                                        "topic": "ACCIDENTS_POLLUTIONS"
+                                    },
                                     "applicability": null,
                                     "id": "Dd6f6fBFcAf5",
                                     "legifrance_article": null,
@@ -1418,7 +1542,11 @@
                                     }
                                 },
                                 {
-                                    "annotations": null,
+                                    "annotations": {
+                                        "guide": null,
+                                        "prescriptive": true,
+                                        "topic": "ACCIDENTS_POLLUTIONS"
+                                    },
                                     "applicability": null,
                                     "id": "40Ae2dEa52CD",
                                     "legifrance_article": null,
@@ -1561,7 +1689,11 @@
                                     }
                                 },
                                 {
-                                    "annotations": null,
+                                    "annotations": {
+                                        "guide": null,
+                                        "prescriptive": true,
+                                        "topic": "ACCIDENTS_POLLUTIONS"
+                                    },
                                     "applicability": null,
                                     "id": "aeD6fFd1589B",
                                     "legifrance_article": null,
@@ -1602,7 +1734,11 @@
             }
         },
         {
-            "annotations": null,
+            "annotations": {
+                "guide": null,
+                "prescriptive": true,
+                "topic": "DISPOSITIONS_GENERALES"
+            },
             "applicability": null,
             "id": "CCD7a84Ef5aF",
             "legifrance_article": null,
@@ -1610,7 +1746,11 @@
             "reference_str": null,
             "sections": [
                 {
-                    "annotations": null,
+                    "annotations": {
+                        "guide": null,
+                        "prescriptive": true,
+                        "topic": "EAU"
+                    },
                     "applicability": null,
                     "id": "c80f83B42baE",
                     "legifrance_article": null,
@@ -1618,7 +1758,11 @@
                     "reference_str": null,
                     "sections": [
                         {
-                            "annotations": null,
+                            "annotations": {
+                                "guide": null,
+                                "prescriptive": true,
+                                "topic": "EAU"
+                            },
                             "applicability": null,
                             "id": "fa4E21FD11E7",
                             "legifrance_article": {
@@ -1672,7 +1816,11 @@
                     }
                 },
                 {
-                    "annotations": null,
+                    "annotations": {
+                        "guide": null,
+                        "prescriptive": true,
+                        "topic": "DISPOSITIONS_GENERALES"
+                    },
                     "applicability": null,
                     "id": "ad5eF4Fe4dBE",
                     "legifrance_article": null,
@@ -1680,7 +1828,11 @@
                     "reference_str": null,
                     "sections": [
                         {
-                            "annotations": null,
+                            "annotations": {
+                                "guide": null,
+                                "prescriptive": true,
+                                "topic": "EAU"
+                            },
                             "applicability": null,
                             "id": "8e13d788CDF3",
                             "legifrance_article": {
@@ -1737,7 +1889,11 @@
                             }
                         },
                         {
-                            "annotations": null,
+                            "annotations": {
+                                "guide": null,
+                                "prescriptive": true,
+                                "topic": "EAU"
+                            },
                             "applicability": null,
                             "id": "Eb6eCC6eA3e6",
                             "legifrance_article": {
@@ -1778,7 +1934,11 @@
                             }
                         },
                         {
-                            "annotations": null,
+                            "annotations": {
+                                "guide": null,
+                                "prescriptive": true,
+                                "topic": "DISPOSITIONS_GENERALES"
+                            },
                             "applicability": null,
                             "id": "BD1b45beda99",
                             "legifrance_article": {
@@ -1821,7 +1981,11 @@
                     }
                 },
                 {
-                    "annotations": null,
+                    "annotations": {
+                        "guide": null,
+                        "prescriptive": true,
+                        "topic": "DISPOSITIONS_GENERALES"
+                    },
                     "applicability": null,
                     "id": "22B9E9DdaEEe",
                     "legifrance_article": null,
@@ -1829,7 +1993,11 @@
                     "reference_str": null,
                     "sections": [
                         {
-                            "annotations": null,
+                            "annotations": {
+                                "guide": null,
+                                "prescriptive": true,
+                                "topic": "EAU"
+                            },
                             "applicability": null,
                             "id": "8F0aD1b5d2Fd",
                             "legifrance_article": {
@@ -1870,7 +2038,11 @@
                             }
                         },
                         {
-                            "annotations": null,
+                            "annotations": {
+                                "guide": null,
+                                "prescriptive": true,
+                                "topic": "EAU"
+                            },
                             "applicability": null,
                             "id": "5D5e5e60A1Af",
                             "legifrance_article": {
@@ -1906,7 +2078,11 @@
                             }
                         },
                         {
-                            "annotations": null,
+                            "annotations": {
+                                "guide": null,
+                                "prescriptive": true,
+                                "topic": "EAU"
+                            },
                             "applicability": null,
                             "id": "Ca649BB5dD38",
                             "legifrance_article": {
@@ -1942,7 +2118,11 @@
                             }
                         },
                         {
-                            "annotations": null,
+                            "annotations": {
+                                "guide": null,
+                                "prescriptive": true,
+                                "topic": "DISPOSITIONS_GENERALES"
+                            },
                             "applicability": null,
                             "id": "57CdEa957EAf",
                             "legifrance_article": {
@@ -2010,7 +2190,11 @@
                             }
                         },
                         {
-                            "annotations": null,
+                            "annotations": {
+                                "guide": null,
+                                "prescriptive": true,
+                                "topic": "EAU"
+                            },
                             "applicability": null,
                             "id": "1afaE1afbEEe",
                             "legifrance_article": {
@@ -2043,7 +2227,11 @@
                     }
                 },
                 {
-                    "annotations": null,
+                    "annotations": {
+                        "guide": null,
+                        "prescriptive": true,
+                        "topic": "DISPOSITIONS_GENERALES"
+                    },
                     "applicability": null,
                     "id": "5C2F7AF5e13A",
                     "legifrance_article": null,
@@ -2051,7 +2239,11 @@
                     "reference_str": null,
                     "sections": [
                         {
-                            "annotations": null,
+                            "annotations": {
+                                "guide": null,
+                                "prescriptive": true,
+                                "topic": "DISPOSITIONS_GENERALES"
+                            },
                             "applicability": null,
                             "id": "18aa1eF4AC0D",
                             "legifrance_article": {
@@ -2077,7 +2269,11 @@
                             }
                         },
                         {
-                            "annotations": null,
+                            "annotations": {
+                                "guide": null,
+                                "prescriptive": true,
+                                "topic": "DISPOSITIONS_GENERALES"
+                            },
                             "applicability": null,
                             "id": "239601b2e99f",
                             "legifrance_article": {
@@ -2148,7 +2344,11 @@
                             }
                         },
                         {
-                            "annotations": null,
+                            "annotations": {
+                                "guide": null,
+                                "prescriptive": true,
+                                "topic": "DISPOSITIONS_GENERALES"
+                            },
                             "applicability": null,
                             "id": "AbcBb3ACf06B",
                             "legifrance_article": {
@@ -2199,7 +2399,11 @@
                             }
                         },
                         {
-                            "annotations": null,
+                            "annotations": {
+                                "guide": null,
+                                "prescriptive": true,
+                                "topic": "DISPOSITIONS_GENERALES"
+                            },
                             "applicability": null,
                             "id": "B812e5fE9EA4",
                             "legifrance_article": {
@@ -2267,7 +2471,11 @@
                     }
                 },
                 {
-                    "annotations": null,
+                    "annotations": {
+                        "guide": null,
+                        "prescriptive": true,
+                        "topic": "EAU"
+                    },
                     "applicability": null,
                     "id": "D2058eCA49F9",
                     "legifrance_article": null,
@@ -2275,7 +2483,11 @@
                     "reference_str": null,
                     "sections": [
                         {
-                            "annotations": null,
+                            "annotations": {
+                                "guide": null,
+                                "prescriptive": true,
+                                "topic": "EAU"
+                            },
                             "applicability": null,
                             "id": "f7caEB0baCe6",
                             "legifrance_article": {
@@ -2326,7 +2538,11 @@
                             }
                         },
                         {
-                            "annotations": null,
+                            "annotations": {
+                                "guide": null,
+                                "prescriptive": true,
+                                "topic": "EAU"
+                            },
                             "applicability": null,
                             "id": "7Fe1336A33B2",
                             "legifrance_article": {
@@ -2366,7 +2582,11 @@
             }
         },
         {
-            "annotations": null,
+            "annotations": {
+                "guide": null,
+                "prescriptive": true,
+                "topic": "AIR_ODEURS"
+            },
             "applicability": null,
             "id": "6EA1Fc89c82E",
             "legifrance_article": null,
@@ -2374,7 +2594,11 @@
             "reference_str": null,
             "sections": [
                 {
-                    "annotations": null,
+                    "annotations": {
+                        "guide": null,
+                        "prescriptive": true,
+                        "topic": "AIR_ODEURS"
+                    },
                     "applicability": null,
                     "id": "eA08717aA81c",
                     "legifrance_article": null,
@@ -2382,7 +2606,11 @@
                     "reference_str": null,
                     "sections": [
                         {
-                            "annotations": null,
+                            "annotations": {
+                                "guide": null,
+                                "prescriptive": true,
+                                "topic": "AIR_ODEURS"
+                            },
                             "applicability": null,
                             "id": "daD0F13CDfe6",
                             "legifrance_article": {
@@ -2460,7 +2688,11 @@
                     }
                 },
                 {
-                    "annotations": null,
+                    "annotations": {
+                        "guide": null,
+                        "prescriptive": true,
+                        "topic": "AIR_ODEURS"
+                    },
                     "applicability": null,
                     "id": "Ba6a50af2BDc",
                     "legifrance_article": null,
@@ -2468,7 +2700,11 @@
                     "reference_str": null,
                     "sections": [
                         {
-                            "annotations": null,
+                            "annotations": {
+                                "guide": null,
+                                "prescriptive": true,
+                                "topic": "AIR_ODEURS"
+                            },
                             "applicability": null,
                             "id": "9643F7E69813",
                             "legifrance_article": {
@@ -2499,7 +2735,11 @@
                             }
                         },
                         {
-                            "annotations": null,
+                            "annotations": {
+                                "guide": null,
+                                "prescriptive": true,
+                                "topic": "AIR_ODEURS"
+                            },
                             "applicability": null,
                             "id": "6b7DfE1dDFe1",
                             "legifrance_article": {
@@ -2577,7 +2817,11 @@
                     }
                 },
                 {
-                    "annotations": null,
+                    "annotations": {
+                        "guide": null,
+                        "prescriptive": true,
+                        "topic": "AIR_ODEURS"
+                    },
                     "applicability": null,
                     "id": "A3067bB5ba79",
                     "legifrance_article": null,
@@ -2585,7 +2829,11 @@
                     "reference_str": null,
                     "sections": [
                         {
-                            "annotations": null,
+                            "annotations": {
+                                "guide": null,
+                                "prescriptive": true,
+                                "topic": "AIR_ODEURS"
+                            },
                             "applicability": null,
                             "id": "D1EaaDDe0BFD",
                             "legifrance_article": {
@@ -2626,7 +2874,11 @@
                             }
                         },
                         {
-                            "annotations": null,
+                            "annotations": {
+                                "guide": null,
+                                "prescriptive": true,
+                                "topic": "AIR_ODEURS"
+                            },
                             "applicability": null,
                             "id": "EBfbDf4FB7E1",
                             "legifrance_article": {
@@ -2666,7 +2918,11 @@
                             "reference_str": "Art. 41",
                             "sections": [
                                 {
-                                    "annotations": null,
+                                    "annotations": {
+                                        "guide": null,
+                                        "prescriptive": true,
+                                        "topic": "AIR_ODEURS"
+                                    },
                                     "applicability": null,
                                     "id": "AeEeDd6Bea36",
                                     "legifrance_article": null,
@@ -2696,7 +2952,11 @@
                                     }
                                 },
                                 {
-                                    "annotations": null,
+                                    "annotations": {
+                                        "guide": null,
+                                        "prescriptive": true,
+                                        "topic": "AIR_ODEURS"
+                                    },
                                     "applicability": null,
                                     "id": "Df9C3012F7Bd",
                                     "legifrance_article": null,
@@ -2723,7 +2983,11 @@
                             }
                         },
                         {
-                            "annotations": null,
+                            "annotations": {
+                                "guide": null,
+                                "prescriptive": true,
+                                "topic": "AIR_ODEURS"
+                            },
                             "applicability": null,
                             "id": "A9872e3Bfa59",
                             "legifrance_article": {
@@ -2778,7 +3042,11 @@
             }
         },
         {
-            "annotations": null,
+            "annotations": {
+                "guide": null,
+                "prescriptive": true,
+                "topic": "EMISSIONS"
+            },
             "applicability": null,
             "id": "c86bE9eF4dce",
             "legifrance_article": null,
@@ -2786,7 +3054,11 @@
             "reference_str": null,
             "sections": [
                 {
-                    "annotations": null,
+                    "annotations": {
+                        "guide": null,
+                        "prescriptive": true,
+                        "topic": "EMISSIONS"
+                    },
                     "applicability": null,
                     "id": "e96a64ef5A7d",
                     "legifrance_article": {
@@ -2819,7 +3091,11 @@
             }
         },
         {
-            "annotations": null,
+            "annotations": {
+                "guide": null,
+                "prescriptive": true,
+                "topic": "BRUIT_VIBRATIONS"
+            },
             "applicability": null,
             "id": "5F0C950ee3dF",
             "legifrance_article": null,
@@ -2827,7 +3103,11 @@
             "reference_str": null,
             "sections": [
                 {
-                    "annotations": null,
+                    "annotations": {
+                        "guide": null,
+                        "prescriptive": true,
+                        "topic": "BRUIT_VIBRATIONS"
+                    },
                     "applicability": null,
                     "id": "ecaeB4C39eD3",
                     "legifrance_article": {
@@ -2858,7 +3138,11 @@
                     }
                 },
                 {
-                    "annotations": null,
+                    "annotations": {
+                        "guide": null,
+                        "prescriptive": true,
+                        "topic": "BRUIT_VIBRATIONS"
+                    },
                     "applicability": null,
                     "id": "73AedD8a234E",
                     "legifrance_article": {
@@ -3013,7 +3297,11 @@
                     }
                 },
                 {
-                    "annotations": null,
+                    "annotations": {
+                        "guide": null,
+                        "prescriptive": true,
+                        "topic": "BRUIT_VIBRATIONS"
+                    },
                     "applicability": null,
                     "id": "33F04BCb702B",
                     "legifrance_article": {
@@ -3044,7 +3332,11 @@
                     }
                 },
                 {
-                    "annotations": null,
+                    "annotations": {
+                        "guide": null,
+                        "prescriptive": true,
+                        "topic": "BRUIT_VIBRATIONS"
+                    },
                     "applicability": null,
                     "id": "c428caFa9Eda",
                     "legifrance_article": {
@@ -3075,7 +3367,11 @@
                     }
                 },
                 {
-                    "annotations": null,
+                    "annotations": {
+                        "guide": null,
+                        "prescriptive": true,
+                        "topic": "BRUIT_VIBRATIONS"
+                    },
                     "applicability": null,
                     "id": "dDA54F173C07",
                     "legifrance_article": {
@@ -3298,7 +3594,11 @@
                     }
                 },
                 {
-                    "annotations": null,
+                    "annotations": {
+                        "guide": null,
+                        "prescriptive": true,
+                        "topic": "BRUIT_VIBRATIONS"
+                    },
                     "applicability": null,
                     "id": "5fCAeBA5030f",
                     "legifrance_article": {
@@ -3511,7 +3811,11 @@
                     }
                 },
                 {
-                    "annotations": null,
+                    "annotations": {
+                        "guide": null,
+                        "prescriptive": true,
+                        "topic": "BRUIT_VIBRATIONS"
+                    },
                     "applicability": null,
                     "id": "A76A9d9efDCd",
                     "legifrance_article": {
@@ -3587,7 +3891,11 @@
                     }
                 },
                 {
-                    "annotations": null,
+                    "annotations": {
+                        "guide": null,
+                        "prescriptive": true,
+                        "topic": "BRUIT_VIBRATIONS"
+                    },
                     "applicability": null,
                     "id": "eCDcC8DC3E59",
                     "legifrance_article": {
@@ -3601,7 +3909,11 @@
                     "reference_str": "Art. 51",
                     "sections": [
                         {
-                            "annotations": null,
+                            "annotations": {
+                                "guide": null,
+                                "prescriptive": true,
+                                "topic": "BRUIT_VIBRATIONS"
+                            },
                             "applicability": null,
                             "id": "EC7F0AF20db6",
                             "legifrance_article": null,
@@ -3626,7 +3938,11 @@
                             }
                         },
                         {
-                            "annotations": null,
+                            "annotations": {
+                                "guide": null,
+                                "prescriptive": true,
+                                "topic": "BRUIT_VIBRATIONS"
+                            },
                             "applicability": null,
                             "id": "6ad31fd98cD8",
                             "legifrance_article": null,
@@ -3646,7 +3962,11 @@
                             }
                         },
                         {
-                            "annotations": null,
+                            "annotations": {
+                                "guide": null,
+                                "prescriptive": true,
+                                "topic": "BRUIT_VIBRATIONS"
+                            },
                             "applicability": null,
                             "id": "cC4E40251aDb",
                             "legifrance_article": null,
@@ -3673,7 +3993,11 @@
                     }
                 },
                 {
-                    "annotations": null,
+                    "annotations": {
+                        "guide": null,
+                        "prescriptive": true,
+                        "topic": "BRUIT_VIBRATIONS"
+                    },
                     "applicability": null,
                     "id": "8140be9FC9Ea",
                     "legifrance_article": {
@@ -3698,7 +4022,11 @@
                     "reference_str": "Art. 52",
                     "sections": [
                         {
-                            "annotations": null,
+                            "annotations": {
+                                "guide": null,
+                                "prescriptive": true,
+                                "topic": "BRUIT_VIBRATIONS"
+                            },
                             "applicability": null,
                             "id": "238fe9dbCB52",
                             "legifrance_article": null,
@@ -3728,7 +4056,11 @@
                             }
                         },
                         {
-                            "annotations": null,
+                            "annotations": {
+                                "guide": null,
+                                "prescriptive": true,
+                                "topic": "BRUIT_VIBRATIONS"
+                            },
                             "applicability": null,
                             "id": "34c82BC9A5fd",
                             "legifrance_article": null,
@@ -3763,7 +4095,11 @@
                             }
                         },
                         {
-                            "annotations": null,
+                            "annotations": {
+                                "guide": null,
+                                "prescriptive": true,
+                                "topic": "BRUIT_VIBRATIONS"
+                            },
                             "applicability": null,
                             "id": "7b88a58639cc",
                             "legifrance_article": null,
@@ -3791,7 +4127,11 @@
             }
         },
         {
-            "annotations": null,
+            "annotations": {
+                "guide": null,
+                "prescriptive": true,
+                "topic": "DECHETS"
+            },
             "applicability": null,
             "id": "F1f296AbEd57",
             "legifrance_article": null,
@@ -3799,7 +4139,11 @@
             "reference_str": null,
             "sections": [
                 {
-                    "annotations": null,
+                    "annotations": {
+                        "guide": null,
+                        "prescriptive": true,
+                        "topic": "DECHETS"
+                    },
                     "applicability": null,
                     "id": "3b5e34a13998",
                     "legifrance_article": {
@@ -3866,7 +4210,11 @@
                     }
                 },
                 {
-                    "annotations": null,
+                    "annotations": {
+                        "guide": null,
+                        "prescriptive": true,
+                        "topic": "DECHETS"
+                    },
                     "applicability": null,
                     "id": "39e94d8b8ddC",
                     "legifrance_article": {
@@ -3907,7 +4255,11 @@
                     }
                 },
                 {
-                    "annotations": null,
+                    "annotations": {
+                        "guide": null,
+                        "prescriptive": true,
+                        "topic": "DECHETS"
+                    },
                     "applicability": null,
                     "id": "8F67Da511063",
                     "legifrance_article": {
@@ -3950,7 +4302,11 @@
             }
         },
         {
-            "annotations": null,
+            "annotations": {
+                "guide": null,
+                "prescriptive": true,
+                "topic": "AIR_ODEURS"
+            },
             "applicability": null,
             "id": "fDcc50123fD3",
             "legifrance_article": null,
@@ -3958,7 +4314,11 @@
             "reference_str": null,
             "sections": [
                 {
-                    "annotations": null,
+                    "annotations": {
+                        "guide": null,
+                        "prescriptive": true,
+                        "topic": "EMISSIONS"
+                    },
                     "applicability": null,
                     "id": "CfA1aaafEC9C",
                     "legifrance_article": null,
@@ -3966,7 +4326,11 @@
                     "reference_str": null,
                     "sections": [
                         {
-                            "annotations": null,
+                            "annotations": {
+                                "guide": null,
+                                "prescriptive": true,
+                                "topic": "EMISSIONS"
+                            },
                             "applicability": null,
                             "id": "6cdCdA7e20FF",
                             "legifrance_article": {
@@ -4014,7 +4378,11 @@
                     }
                 },
                 {
-                    "annotations": null,
+                    "annotations": {
+                        "guide": null,
+                        "prescriptive": true,
+                        "topic": "AIR_ODEURS"
+                    },
                     "applicability": null,
                     "id": "9fAF1c6deC4c",
                     "legifrance_article": null,
@@ -4022,7 +4390,11 @@
                     "reference_str": null,
                     "sections": [
                         {
-                            "annotations": null,
+                            "annotations": {
+                                "guide": null,
+                                "prescriptive": true,
+                                "topic": "AIR_ODEURS"
+                            },
                             "applicability": null,
                             "id": "2A7Ae5eDb743",
                             "legifrance_article": {
@@ -4060,7 +4432,11 @@
                     }
                 },
                 {
-                    "annotations": null,
+                    "annotations": {
+                        "guide": null,
+                        "prescriptive": true,
+                        "topic": "EAU"
+                    },
                     "applicability": null,
                     "id": "5B6bed7A45Ff",
                     "legifrance_article": null,
@@ -4068,7 +4444,11 @@
                     "reference_str": null,
                     "sections": [
                         {
-                            "annotations": null,
+                            "annotations": {
+                                "guide": null,
+                                "prescriptive": true,
+                                "topic": "EAU"
+                            },
                             "applicability": null,
                             "id": "FaFDF196f4E1",
                             "legifrance_article": {
@@ -4188,7 +4568,11 @@
                     }
                 },
                 {
-                    "annotations": null,
+                    "annotations": {
+                        "guide": null,
+                        "prescriptive": true,
+                        "topic": "EMISSIONS"
+                    },
                     "applicability": null,
                     "id": "f0e60679DA52",
                     "legifrance_article": null,
@@ -4196,7 +4580,11 @@
                     "reference_str": null,
                     "sections": [
                         {
-                            "annotations": null,
+                            "annotations": {
+                                "guide": null,
+                                "prescriptive": true,
+                                "topic": "EMISSIONS"
+                            },
                             "applicability": null,
                             "id": "a7afBcB67c2f",
                             "legifrance_article": {
@@ -4242,7 +4630,11 @@
             }
         },
         {
-            "annotations": null,
+            "annotations": {
+                "guide": null,
+                "prescriptive": true,
+                "topic": "DISPOSITIONS_GENERALES"
+            },
             "applicability": null,
             "id": "F7428efbE046",
             "legifrance_article": null,
@@ -4250,7 +4642,11 @@
             "reference_str": null,
             "sections": [
                 {
-                    "annotations": null,
+                    "annotations": {
+                        "guide": null,
+                        "prescriptive": true,
+                        "topic": "DISPOSITIONS_GENERALES"
+                    },
                     "applicability": null,
                     "id": "DD58Fee46853",
                     "legifrance_article": {
@@ -4283,7 +4679,11 @@
             }
         },
         {
-            "annotations": null,
+            "annotations": {
+                "guide": null,
+                "prescriptive": true,
+                "topic": "BRUIT_VIBRATIONS"
+            },
             "applicability": null,
             "id": "26e0ac3Fc5cD",
             "legifrance_article": null,
@@ -4291,7 +4691,11 @@
             "reference_str": null,
             "sections": [
                 {
-                    "annotations": null,
+                    "annotations": {
+                        "guide": null,
+                        "prescriptive": true,
+                        "topic": "BRUIT_VIBRATIONS"
+                    },
                     "applicability": null,
                     "id": "bee7bCD0FC7B",
                     "legifrance_article": {
@@ -4321,7 +4725,11 @@
                     "reference_str": "Annexe I",
                     "sections": [
                         {
-                            "annotations": null,
+                            "annotations": {
+                                "guide": null,
+                                "prescriptive": true,
+                                "topic": "BRUIT_VIBRATIONS"
+                            },
                             "applicability": null,
                             "id": "2e4835bAfC1B",
                             "legifrance_article": null,
@@ -4329,7 +4737,11 @@
                             "reference_str": "Annexe I 1.",
                             "sections": [
                                 {
-                                    "annotations": null,
+                                    "annotations": {
+                                        "guide": null,
+                                        "prescriptive": true,
+                                        "topic": "BRUIT_VIBRATIONS"
+                                    },
                                     "applicability": null,
                                     "id": "5f1ed8b60b7D",
                                     "legifrance_article": null,
@@ -4349,7 +4761,11 @@
                                     }
                                 },
                                 {
-                                    "annotations": null,
+                                    "annotations": {
+                                        "guide": null,
+                                        "prescriptive": true,
+                                        "topic": "BRUIT_VIBRATIONS"
+                                    },
                                     "applicability": null,
                                     "id": "A36c950dDbDe",
                                     "legifrance_article": null,
@@ -4369,7 +4785,11 @@
                                     }
                                 },
                                 {
-                                    "annotations": null,
+                                    "annotations": {
+                                        "guide": null,
+                                        "prescriptive": true,
+                                        "topic": "BRUIT_VIBRATIONS"
+                                    },
                                     "applicability": null,
                                     "id": "5Cd96BF8bEDa",
                                     "legifrance_article": null,
@@ -4389,7 +4809,11 @@
                                     }
                                 },
                                 {
-                                    "annotations": null,
+                                    "annotations": {
+                                        "guide": null,
+                                        "prescriptive": true,
+                                        "topic": "BRUIT_VIBRATIONS"
+                                    },
                                     "applicability": null,
                                     "id": "cDDCd3c616fF",
                                     "legifrance_article": null,
@@ -4409,7 +4833,11 @@
                                     }
                                 },
                                 {
-                                    "annotations": null,
+                                    "annotations": {
+                                        "guide": null,
+                                        "prescriptive": true,
+                                        "topic": "BRUIT_VIBRATIONS"
+                                    },
                                     "applicability": null,
                                     "id": "aA7B7ff73448",
                                     "legifrance_article": null,
@@ -4429,7 +4857,11 @@
                                     }
                                 },
                                 {
-                                    "annotations": null,
+                                    "annotations": {
+                                        "guide": null,
+                                        "prescriptive": true,
+                                        "topic": "BRUIT_VIBRATIONS"
+                                    },
                                     "applicability": null,
                                     "id": "a41CFCAc5ce1",
                                     "legifrance_article": null,
@@ -4449,7 +4881,11 @@
                                     }
                                 },
                                 {
-                                    "annotations": null,
+                                    "annotations": {
+                                        "guide": null,
+                                        "prescriptive": true,
+                                        "topic": "BRUIT_VIBRATIONS"
+                                    },
                                     "applicability": null,
                                     "id": "8ebE9cDdA2df",
                                     "legifrance_article": null,
@@ -4474,7 +4910,11 @@
                                     }
                                 },
                                 {
-                                    "annotations": null,
+                                    "annotations": {
+                                        "guide": null,
+                                        "prescriptive": true,
+                                        "topic": "BRUIT_VIBRATIONS"
+                                    },
                                     "applicability": null,
                                     "id": "970d9DeCCfcF",
                                     "legifrance_article": null,
@@ -4494,7 +4934,11 @@
                                     }
                                 },
                                 {
-                                    "annotations": null,
+                                    "annotations": {
+                                        "guide": null,
+                                        "prescriptive": true,
+                                        "topic": "BRUIT_VIBRATIONS"
+                                    },
                                     "applicability": null,
                                     "id": "abD4b9Ce4A69",
                                     "legifrance_article": null,
@@ -4617,7 +5061,11 @@
                             }
                         },
                         {
-                            "annotations": null,
+                            "annotations": {
+                                "guide": null,
+                                "prescriptive": true,
+                                "topic": "BRUIT_VIBRATIONS"
+                            },
                             "applicability": null,
                             "id": "d2b9B11b537b",
                             "legifrance_article": null,
@@ -4625,7 +5073,11 @@
                             "reference_str": "Annexe I 2.",
                             "sections": [
                                 {
-                                    "annotations": null,
+                                    "annotations": {
+                                        "guide": null,
+                                        "prescriptive": true,
+                                        "topic": "BRUIT_VIBRATIONS"
+                                    },
                                     "applicability": null,
                                     "id": "D5FdE680ECb0",
                                     "legifrance_article": null,
@@ -4655,7 +5107,11 @@
                                     }
                                 },
                                 {
-                                    "annotations": null,
+                                    "annotations": {
+                                        "guide": null,
+                                        "prescriptive": true,
+                                        "topic": "BRUIT_VIBRATIONS"
+                                    },
                                     "applicability": null,
                                     "id": "FEaa3E62Bc1c",
                                     "legifrance_article": null,
@@ -4680,7 +5136,11 @@
                                     }
                                 },
                                 {
-                                    "annotations": null,
+                                    "annotations": {
+                                        "guide": null,
+                                        "prescriptive": true,
+                                        "topic": "BRUIT_VIBRATIONS"
+                                    },
                                     "applicability": null,
                                     "id": "C974B3bB66EA",
                                     "legifrance_article": null,
@@ -4700,7 +5160,11 @@
                                     }
                                 },
                                 {
-                                    "annotations": null,
+                                    "annotations": {
+                                        "guide": null,
+                                        "prescriptive": true,
+                                        "topic": "BRUIT_VIBRATIONS"
+                                    },
                                     "applicability": null,
                                     "id": "dE5dE08820e9",
                                     "legifrance_article": null,
@@ -4720,7 +5184,11 @@
                                     }
                                 },
                                 {
-                                    "annotations": null,
+                                    "annotations": {
+                                        "guide": null,
+                                        "prescriptive": true,
+                                        "topic": "BRUIT_VIBRATIONS"
+                                    },
                                     "applicability": null,
                                     "id": "E55B7fADD2dC",
                                     "legifrance_article": null,
@@ -4734,7 +5202,11 @@
                                     "reference_str": "Annexe I 2.5.",
                                     "sections": [
                                         {
-                                            "annotations": null,
+                                            "annotations": {
+                                                "guide": null,
+                                                "prescriptive": true,
+                                                "topic": "BRUIT_VIBRATIONS"
+                                            },
                                             "applicability": null,
                                             "id": "8b1d1D16D042",
                                             "legifrance_article": null,
@@ -4795,7 +5267,11 @@
                                             }
                                         },
                                         {
-                                            "annotations": null,
+                                            "annotations": {
+                                                "guide": null,
+                                                "prescriptive": true,
+                                                "topic": "BRUIT_VIBRATIONS"
+                                            },
                                             "applicability": null,
                                             "id": "6AEcda33E7a2",
                                             "legifrance_article": null,
@@ -4842,7 +5318,11 @@
                                     }
                                 },
                                 {
-                                    "annotations": null,
+                                    "annotations": {
+                                        "guide": null,
+                                        "prescriptive": true,
+                                        "topic": "BRUIT_VIBRATIONS"
+                                    },
                                     "applicability": null,
                                     "id": "A7Aa8Ace3C0E",
                                     "legifrance_article": null,
@@ -4954,7 +5434,11 @@
                             }
                         },
                         {
-                            "annotations": null,
+                            "annotations": {
+                                "guide": null,
+                                "prescriptive": true,
+                                "topic": "BRUIT_VIBRATIONS"
+                            },
                             "applicability": null,
                             "id": "A1aB7C7a2F21",
                             "legifrance_article": null,
@@ -4989,7 +5473,11 @@
                             }
                         },
                         {
-                            "annotations": null,
+                            "annotations": {
+                                "guide": null,
+                                "prescriptive": true,
+                                "topic": "BRUIT_VIBRATIONS"
+                            },
                             "applicability": null,
                             "id": "3afcEcfabE14",
                             "legifrance_article": null,
@@ -5016,7 +5504,11 @@
                     }
                 },
                 {
-                    "annotations": null,
+                    "annotations": {
+                        "guide": null,
+                        "prescriptive": true,
+                        "topic": "DISPOSITIONS_GENERALES"
+                    },
                     "applicability": null,
                     "id": "fD0eAc80e5f6",
                     "legifrance_article": {

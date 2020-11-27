@@ -16,13 +16,13 @@
         },
         {
             "alinea": null,
-            "regime": "D",
+            "regime": "E",
             "rubrique": "1510",
             "state": "ACTIVE"
         },
         {
             "alinea": null,
-            "regime": "E",
+            "regime": "D",
             "rubrique": "1510",
             "state": "ACTIVE"
         }
@@ -82,7 +82,11 @@
             }
         },
         {
-            "annotations": null,
+            "annotations": {
+                "guide": null,
+                "prescriptive": true,
+                "topic": "DISPOSITIONS_GENERALES"
+            },
             "applicability": {
                 "active": true,
                 "modified": false,
@@ -155,7 +159,11 @@
             }
         },
         {
-            "annotations": null,
+            "annotations": {
+                "guide": null,
+                "prescriptive": true,
+                "topic": "DISPOSITIONS_GENERALES"
+            },
             "applicability": {
                 "active": true,
                 "modified": false,
@@ -193,7 +201,11 @@
             }
         },
         {
-            "annotations": null,
+            "annotations": {
+                "guide": null,
+                "prescriptive": true,
+                "topic": "DISPOSITIONS_GENERALES"
+            },
             "applicability": {
                 "active": true,
                 "modified": false,
@@ -247,7 +259,11 @@
             }
         },
         {
-            "annotations": null,
+            "annotations": {
+                "guide": null,
+                "prescriptive": true,
+                "topic": "DISPOSITIONS_GENERALES"
+            },
             "applicability": {
                 "active": true,
                 "modified": false,
@@ -316,7 +332,11 @@
             }
         },
         {
-            "annotations": null,
+            "annotations": {
+                "guide": null,
+                "prescriptive": true,
+                "topic": "DISPOSITIONS_GENERALES"
+            },
             "applicability": {
                 "active": true,
                 "modified": false,
@@ -671,7 +691,11 @@
             }
         },
         {
-            "annotations": null,
+            "annotations": {
+                "guide": null,
+                "prescriptive": true,
+                "topic": "DISPOSITIONS_GENERALES"
+            },
             "applicability": {
                 "active": true,
                 "modified": false,
@@ -703,7 +727,11 @@
             }
         },
         {
-            "annotations": null,
+            "annotations": {
+                "guide": null,
+                "prescriptive": true,
+                "topic": "BRUIT_VIBRATIONS"
+            },
             "applicability": {
                 "active": true,
                 "modified": false,
@@ -717,7 +745,11 @@
             "reference_str": null,
             "sections": [
                 {
-                    "annotations": null,
+                    "annotations": {
+                        "guide": null,
+                        "prescriptive": true,
+                        "topic": "DISPOSITIONS_GENERALES"
+                    },
                     "applicability": {
                         "active": true,
                         "modified": false,
@@ -869,7 +901,11 @@
                     }
                 },
                 {
-                    "annotations": null,
+                    "annotations": {
+                        "guide": null,
+                        "prescriptive": true,
+                        "topic": "BRUIT_VIBRATIONS"
+                    },
                     "applicability": {
                         "active": true,
                         "modified": false,
@@ -889,7 +925,11 @@
                     "reference_str": "Annexe II",
                     "sections": [
                         {
-                            "annotations": null,
+                            "annotations": {
+                                "guide": null,
+                                "prescriptive": true,
+                                "topic": "DECHETS"
+                            },
                             "applicability": {
                                 "active": true,
                                 "modified": false,
@@ -903,7 +943,11 @@
                             "reference_str": "Annexe II 1.",
                             "sections": [
                                 {
-                                    "annotations": null,
+                                    "annotations": {
+                                        "guide": null,
+                                        "prescriptive": true,
+                                        "topic": "DISPOSITIONS_GENERALES"
+                                    },
                                     "applicability": {
                                         "active": true,
                                         "modified": false,
@@ -929,7 +973,11 @@
                                     }
                                 },
                                 {
-                                    "annotations": null,
+                                    "annotations": {
+                                        "guide": null,
+                                        "prescriptive": true,
+                                        "topic": "DISPOSITIONS_GENERALES"
+                                    },
                                     "applicability": {
                                         "active": true,
                                         "modified": false,
@@ -985,7 +1033,11 @@
                                     }
                                 },
                                 {
-                                    "annotations": null,
+                                    "annotations": {
+                                        "guide": null,
+                                        "prescriptive": true,
+                                        "topic": "DISPOSITIONS_GENERALES"
+                                    },
                                     "applicability": {
                                         "active": true,
                                         "modified": false,
@@ -1021,7 +1073,11 @@
                                     }
                                 },
                                 {
-                                    "annotations": null,
+                                    "annotations": {
+                                        "guide": null,
+                                        "prescriptive": true,
+                                        "topic": "DISPOSITIONS_GENERALES"
+                                    },
                                     "applicability": {
                                         "active": true,
                                         "modified": false,
@@ -1057,7 +1113,11 @@
                                     }
                                 },
                                 {
-                                    "annotations": null,
+                                    "annotations": {
+                                        "guide": null,
+                                        "prescriptive": true,
+                                        "topic": "DISPOSITIONS_GENERALES"
+                                    },
                                     "applicability": {
                                         "active": true,
                                         "modified": false,
@@ -1083,7 +1143,11 @@
                                     }
                                 },
                                 {
-                                    "annotations": null,
+                                    "annotations": {
+                                        "guide": null,
+                                        "prescriptive": true,
+                                        "topic": "DISPOSITIONS_GENERALES"
+                                    },
                                     "applicability": {
                                         "active": true,
                                         "modified": false,
@@ -1097,7 +1161,11 @@
                                     "reference_str": "Annexe II 1.6.",
                                     "sections": [
                                         {
-                                            "annotations": null,
+                                            "annotations": {
+                                                "guide": null,
+                                                "prescriptive": true,
+                                                "topic": "DISPOSITIONS_GENERALES"
+                                            },
                                             "applicability": {
                                                 "active": true,
                                                 "modified": false,
@@ -1158,7 +1226,11 @@
                                             }
                                         },
                                         {
-                                            "annotations": null,
+                                            "annotations": {
+                                                "guide": null,
+                                                "prescriptive": true,
+                                                "topic": "DISPOSITIONS_GENERALES"
+                                            },
                                             "applicability": {
                                                 "active": true,
                                                 "modified": false,
@@ -1194,7 +1266,11 @@
                                             }
                                         },
                                         {
-                                            "annotations": null,
+                                            "annotations": {
+                                                "guide": null,
+                                                "prescriptive": true,
+                                                "topic": "DISPOSITIONS_GENERALES"
+                                            },
                                             "applicability": {
                                                 "active": true,
                                                 "modified": false,
@@ -1235,7 +1311,11 @@
                                             }
                                         },
                                         {
-                                            "annotations": null,
+                                            "annotations": {
+                                                "guide": null,
+                                                "prescriptive": true,
+                                                "topic": "DISPOSITIONS_GENERALES"
+                                            },
                                             "applicability": {
                                                 "active": true,
                                                 "modified": false,
@@ -1316,7 +1396,11 @@
                                             }
                                         },
                                         {
-                                            "annotations": null,
+                                            "annotations": {
+                                                "guide": null,
+                                                "prescriptive": true,
+                                                "topic": "DISPOSITIONS_GENERALES"
+                                            },
                                             "applicability": {
                                                 "active": true,
                                                 "modified": false,
@@ -1354,7 +1438,11 @@
                                     }
                                 },
                                 {
-                                    "annotations": null,
+                                    "annotations": {
+                                        "guide": null,
+                                        "prescriptive": true,
+                                        "topic": "DECHETS"
+                                    },
                                     "applicability": {
                                         "active": true,
                                         "modified": false,
@@ -1368,7 +1456,11 @@
                                     "reference_str": "Annexe II 1.7.",
                                     "sections": [
                                         {
-                                            "annotations": null,
+                                            "annotations": {
+                                                "guide": null,
+                                                "prescriptive": true,
+                                                "topic": "DECHETS"
+                                            },
                                             "applicability": {
                                                 "active": true,
                                                 "modified": false,
@@ -1414,7 +1506,11 @@
                                             }
                                         },
                                         {
-                                            "annotations": null,
+                                            "annotations": {
+                                                "guide": null,
+                                                "prescriptive": true,
+                                                "topic": "DECHETS"
+                                            },
                                             "applicability": {
                                                 "active": true,
                                                 "modified": false,
@@ -1445,7 +1541,11 @@
                                             }
                                         },
                                         {
-                                            "annotations": null,
+                                            "annotations": {
+                                                "guide": null,
+                                                "prescriptive": true,
+                                                "topic": "DECHETS"
+                                            },
                                             "applicability": {
                                                 "active": true,
                                                 "modified": false,
@@ -1483,7 +1583,11 @@
                                     }
                                 },
                                 {
-                                    "annotations": null,
+                                    "annotations": {
+                                        "guide": null,
+                                        "prescriptive": true,
+                                        "topic": "DISPOSITIONS_GENERALES"
+                                    },
                                     "applicability": {
                                         "active": false,
                                         "modified": false,
@@ -1509,7 +1613,11 @@
                                     "reference_str": "Annexe II 1.8.",
                                     "sections": [
                                         {
-                                            "annotations": null,
+                                            "annotations": {
+                                                "guide": null,
+                                                "prescriptive": true,
+                                                "topic": "DISPOSITIONS_GENERALES"
+                                            },
                                             "applicability": {
                                                 "active": false,
                                                 "modified": false,
@@ -1556,7 +1664,11 @@
                                             }
                                         },
                                         {
-                                            "annotations": null,
+                                            "annotations": {
+                                                "guide": null,
+                                                "prescriptive": true,
+                                                "topic": "DISPOSITIONS_GENERALES"
+                                            },
                                             "applicability": {
                                                 "active": false,
                                                 "modified": false,
@@ -1582,7 +1694,11 @@
                                             }
                                         },
                                         {
-                                            "annotations": null,
+                                            "annotations": {
+                                                "guide": null,
+                                                "prescriptive": true,
+                                                "topic": "DISPOSITIONS_GENERALES"
+                                            },
                                             "applicability": {
                                                 "active": false,
                                                 "modified": false,
@@ -1608,7 +1724,11 @@
                                             }
                                         },
                                         {
-                                            "annotations": null,
+                                            "annotations": {
+                                                "guide": null,
+                                                "prescriptive": true,
+                                                "topic": "DISPOSITIONS_GENERALES"
+                                            },
                                             "applicability": {
                                                 "active": false,
                                                 "modified": false,
@@ -1645,7 +1765,11 @@
                                             }
                                         },
                                         {
-                                            "annotations": null,
+                                            "annotations": {
+                                                "guide": null,
+                                                "prescriptive": true,
+                                                "topic": "DISPOSITIONS_GENERALES"
+                                            },
                                             "applicability": {
                                                 "active": false,
                                                 "modified": false,
@@ -1671,7 +1795,11 @@
                                             }
                                         },
                                         {
-                                            "annotations": null,
+                                            "annotations": {
+                                                "guide": null,
+                                                "prescriptive": true,
+                                                "topic": "DISPOSITIONS_GENERALES"
+                                            },
                                             "applicability": {
                                                 "active": false,
                                                 "modified": false,
@@ -1711,7 +1839,11 @@
                             }
                         },
                         {
-                            "annotations": null,
+                            "annotations": {
+                                "guide": null,
+                                "prescriptive": true,
+                                "topic": "DISPOSITIONS_GENERALES"
+                            },
                             "applicability": {
                                 "active": true,
                                 "modified": false,
@@ -1725,7 +1857,11 @@
                             "reference_str": "Annexe II 2.",
                             "sections": [
                                 {
-                                    "annotations": null,
+                                    "annotations": {
+                                        "guide": null,
+                                        "prescriptive": true,
+                                        "topic": "DISPOSITIONS_GENERALES"
+                                    },
                                     "applicability": {
                                         "active": true,
                                         "modified": false,
@@ -1761,7 +1897,11 @@
                                     }
                                 },
                                 {
-                                    "annotations": null,
+                                    "annotations": {
+                                        "guide": null,
+                                        "prescriptive": true,
+                                        "topic": "DISPOSITIONS_GENERALES"
+                                    },
                                     "applicability": {
                                         "active": false,
                                         "modified": false,
@@ -1781,7 +1921,11 @@
                                     }
                                 },
                                 {
-                                    "annotations": null,
+                                    "annotations": {
+                                        "guide": null,
+                                        "prescriptive": true,
+                                        "topic": "DISPOSITIONS_GENERALES"
+                                    },
                                     "applicability": {
                                         "active": true,
                                         "modified": false,
@@ -1814,7 +1958,11 @@
                             }
                         },
                         {
-                            "annotations": null,
+                            "annotations": {
+                                "guide": null,
+                                "prescriptive": true,
+                                "topic": "DISPOSITIONS_GENERALES"
+                            },
                             "applicability": {
                                 "active": true,
                                 "modified": false,
@@ -1828,7 +1976,11 @@
                             "reference_str": "Annexe II 3.",
                             "sections": [
                                 {
-                                    "annotations": null,
+                                    "annotations": {
+                                        "guide": null,
+                                        "prescriptive": true,
+                                        "topic": "DISPOSITIONS_GENERALES"
+                                    },
                                     "applicability": {
                                         "active": true,
                                         "modified": false,
@@ -1864,7 +2016,11 @@
                                     }
                                 },
                                 {
-                                    "annotations": null,
+                                    "annotations": {
+                                        "guide": null,
+                                        "prescriptive": true,
+                                        "topic": "DISPOSITIONS_GENERALES"
+                                    },
                                     "applicability": {
                                         "active": true,
                                         "modified": true,
@@ -1900,7 +2056,11 @@
                                     }
                                 },
                                 {
-                                    "annotations": null,
+                                    "annotations": {
+                                        "guide": null,
+                                        "prescriptive": true,
+                                        "topic": "DISPOSITIONS_GENERALES"
+                                    },
                                     "applicability": {
                                         "active": true,
                                         "modified": true,
@@ -1986,7 +2146,11 @@
                                     }
                                 },
                                 {
-                                    "annotations": null,
+                                    "annotations": {
+                                        "guide": null,
+                                        "prescriptive": true,
+                                        "topic": "DISPOSITIONS_GENERALES"
+                                    },
                                     "applicability": {
                                         "active": true,
                                         "modified": false,
@@ -2037,7 +2201,11 @@
                                     }
                                 },
                                 {
-                                    "annotations": null,
+                                    "annotations": {
+                                        "guide": null,
+                                        "prescriptive": true,
+                                        "topic": "DISPOSITIONS_GENERALES"
+                                    },
                                     "applicability": {
                                         "active": true,
                                         "modified": false,
@@ -2085,7 +2253,11 @@
                             }
                         },
                         {
-                            "annotations": null,
+                            "annotations": {
+                                "guide": null,
+                                "prescriptive": true,
+                                "topic": "DISPOSITIONS_GENERALES"
+                            },
                             "applicability": {
                                 "active": true,
                                 "modified": true,
@@ -2241,7 +2413,11 @@
                             }
                         },
                         {
-                            "annotations": null,
+                            "annotations": {
+                                "guide": null,
+                                "prescriptive": true,
+                                "topic": "DISPOSITIONS_GENERALES"
+                            },
                             "applicability": {
                                 "active": true,
                                 "modified": true,
@@ -2307,7 +2483,11 @@
                             }
                         },
                         {
-                            "annotations": null,
+                            "annotations": {
+                                "guide": null,
+                                "prescriptive": true,
+                                "topic": "DISPOSITIONS_GENERALES"
+                            },
                             "applicability": {
                                 "active": false,
                                 "modified": false,
@@ -2373,7 +2553,11 @@
                             }
                         },
                         {
-                            "annotations": null,
+                            "annotations": {
+                                "guide": null,
+                                "prescriptive": true,
+                                "topic": "DISPOSITIONS_GENERALES"
+                            },
                             "applicability": {
                                 "active": true,
                                 "modified": true,
@@ -2409,7 +2593,11 @@
                             }
                         },
                         {
-                            "annotations": null,
+                            "annotations": {
+                                "guide": null,
+                                "prescriptive": true,
+                                "topic": "DISPOSITIONS_GENERALES"
+                            },
                             "applicability": {
                                 "active": true,
                                 "modified": false,
@@ -2445,7 +2633,11 @@
                             }
                         },
                         {
-                            "annotations": null,
+                            "annotations": {
+                                "guide": null,
+                                "prescriptive": true,
+                                "topic": "DISPOSITIONS_GENERALES"
+                            },
                             "applicability": {
                                 "active": true,
                                 "modified": false,
@@ -2521,7 +2713,11 @@
                             }
                         },
                         {
-                            "annotations": null,
+                            "annotations": {
+                                "guide": null,
+                                "prescriptive": true,
+                                "topic": "DISPOSITIONS_GENERALES"
+                            },
                             "applicability": {
                                 "active": true,
                                 "modified": false,
@@ -2572,7 +2768,11 @@
                             }
                         },
                         {
-                            "annotations": null,
+                            "annotations": {
+                                "guide": null,
+                                "prescriptive": true,
+                                "topic": "DISPOSITIONS_GENERALES"
+                            },
                             "applicability": {
                                 "active": true,
                                 "modified": false,
@@ -2648,7 +2848,11 @@
                             }
                         },
                         {
-                            "annotations": null,
+                            "annotations": {
+                                "guide": null,
+                                "prescriptive": true,
+                                "topic": "DISPOSITIONS_GENERALES"
+                            },
                             "applicability": {
                                 "active": true,
                                 "modified": false,
@@ -2689,7 +2893,11 @@
                             }
                         },
                         {
-                            "annotations": null,
+                            "annotations": {
+                                "guide": null,
+                                "prescriptive": true,
+                                "topic": "DISPOSITIONS_GENERALES"
+                            },
                             "applicability": {
                                 "active": true,
                                 "modified": false,
@@ -2790,7 +2998,11 @@
                             }
                         },
                         {
-                            "annotations": null,
+                            "annotations": {
+                                "guide": null,
+                                "prescriptive": true,
+                                "topic": "DISPOSITIONS_GENERALES"
+                            },
                             "applicability": {
                                 "active": true,
                                 "modified": false,
@@ -2831,7 +3043,11 @@
                             }
                         },
                         {
-                            "annotations": null,
+                            "annotations": {
+                                "guide": null,
+                                "prescriptive": true,
+                                "topic": "DISPOSITIONS_GENERALES"
+                            },
                             "applicability": {
                                 "active": true,
                                 "modified": false,
@@ -2883,7 +3099,11 @@
                             }
                         },
                         {
-                            "annotations": null,
+                            "annotations": {
+                                "guide": null,
+                                "prescriptive": true,
+                                "topic": "DISPOSITIONS_GENERALES"
+                            },
                             "applicability": {
                                 "active": true,
                                 "modified": false,
@@ -2924,7 +3144,11 @@
                             }
                         },
                         {
-                            "annotations": null,
+                            "annotations": {
+                                "guide": null,
+                                "prescriptive": true,
+                                "topic": "DISPOSITIONS_GENERALES"
+                            },
                             "applicability": {
                                 "active": true,
                                 "modified": false,
@@ -2970,7 +3194,11 @@
                             }
                         },
                         {
-                            "annotations": null,
+                            "annotations": {
+                                "guide": null,
+                                "prescriptive": true,
+                                "topic": "DISPOSITIONS_GENERALES"
+                            },
                             "applicability": {
                                 "active": true,
                                 "modified": false,
@@ -2984,7 +3212,11 @@
                             "reference_str": "Annexe II 18.",
                             "sections": [
                                 {
-                                    "annotations": null,
+                                    "annotations": {
+                                        "guide": null,
+                                        "prescriptive": true,
+                                        "topic": "DISPOSITIONS_GENERALES"
+                                    },
                                     "applicability": {
                                         "active": true,
                                         "modified": false,
@@ -3030,7 +3262,11 @@
                                     }
                                 },
                                 {
-                                    "annotations": null,
+                                    "annotations": {
+                                        "guide": null,
+                                        "prescriptive": true,
+                                        "topic": "DISPOSITIONS_GENERALES"
+                                    },
                                     "applicability": {
                                         "active": true,
                                         "modified": false,
@@ -3133,7 +3369,11 @@
                             }
                         },
                         {
-                            "annotations": null,
+                            "annotations": {
+                                "guide": null,
+                                "prescriptive": true,
+                                "topic": "DISPOSITIONS_GENERALES"
+                            },
                             "applicability": {
                                 "active": true,
                                 "modified": false,
@@ -3159,7 +3399,11 @@
                             }
                         },
                         {
-                            "annotations": null,
+                            "annotations": {
+                                "guide": null,
+                                "prescriptive": true,
+                                "topic": "DISPOSITIONS_GENERALES"
+                            },
                             "applicability": {
                                 "active": true,
                                 "modified": false,
@@ -3236,7 +3480,11 @@
                             }
                         },
                         {
-                            "annotations": null,
+                            "annotations": {
+                                "guide": null,
+                                "prescriptive": true,
+                                "topic": "DISPOSITIONS_GENERALES"
+                            },
                             "applicability": {
                                 "active": true,
                                 "modified": false,
@@ -3322,7 +3570,11 @@
                             }
                         },
                         {
-                            "annotations": null,
+                            "annotations": {
+                                "guide": null,
+                                "prescriptive": true,
+                                "topic": "DISPOSITIONS_GENERALES"
+                            },
                             "applicability": {
                                 "active": true,
                                 "modified": false,
@@ -3368,7 +3620,11 @@
                             }
                         },
                         {
-                            "annotations": null,
+                            "annotations": {
+                                "guide": null,
+                                "prescriptive": true,
+                                "topic": "DISPOSITIONS_GENERALES"
+                            },
                             "applicability": {
                                 "active": true,
                                 "modified": false,
@@ -3459,7 +3715,11 @@
                             }
                         },
                         {
-                            "annotations": null,
+                            "annotations": {
+                                "guide": null,
+                                "prescriptive": true,
+                                "topic": "BRUIT_VIBRATIONS"
+                            },
                             "applicability": {
                                 "active": true,
                                 "modified": false,
@@ -3473,7 +3733,11 @@
                             "reference_str": "Annexe II 24.",
                             "sections": [
                                 {
-                                    "annotations": null,
+                                    "annotations": {
+                                        "guide": null,
+                                        "prescriptive": true,
+                                        "topic": "BRUIT_VIBRATIONS"
+                                    },
                                     "applicability": {
                                         "active": true,
                                         "modified": false,
@@ -3643,7 +3907,11 @@
                                     }
                                 },
                                 {
-                                    "annotations": null,
+                                    "annotations": {
+                                        "guide": null,
+                                        "prescriptive": true,
+                                        "topic": "DISPOSITIONS_GENERALES"
+                                    },
                                     "applicability": {
                                         "active": true,
                                         "modified": false,
@@ -3674,7 +3942,11 @@
                                     }
                                 },
                                 {
-                                    "annotations": null,
+                                    "annotations": {
+                                        "guide": null,
+                                        "prescriptive": true,
+                                        "topic": "BRUIT_VIBRATIONS"
+                                    },
                                     "applicability": {
                                         "active": true,
                                         "modified": false,
@@ -3717,7 +3989,11 @@
                             }
                         },
                         {
-                            "annotations": null,
+                            "annotations": {
+                                "guide": null,
+                                "prescriptive": true,
+                                "topic": "DISPOSITIONS_GENERALES"
+                            },
                             "applicability": {
                                 "active": true,
                                 "modified": false,
@@ -3743,7 +4019,11 @@
                             }
                         },
                         {
-                            "annotations": null,
+                            "annotations": {
+                                "guide": null,
+                                "prescriptive": true,
+                                "topic": "DISPOSITIONS_GENERALES"
+                            },
                             "applicability": {
                                 "active": true,
                                 "modified": false,
@@ -3786,7 +4066,11 @@
                     }
                 },
                 {
-                    "annotations": null,
+                    "annotations": {
+                        "guide": null,
+                        "prescriptive": true,
+                        "topic": "DISPOSITIONS_GENERALES"
+                    },
                     "applicability": {
                         "active": true,
                         "modified": false,
@@ -3806,7 +4090,11 @@
                     "reference_str": "Annexe III",
                     "sections": [
                         {
-                            "annotations": null,
+                            "annotations": {
+                                "guide": null,
+                                "prescriptive": true,
+                                "topic": "DISPOSITIONS_GENERALES"
+                            },
                             "applicability": {
                                 "active": true,
                                 "modified": false,
@@ -3820,7 +4108,11 @@
                             "reference_str": "Annexe III 1.",
                             "sections": [
                                 {
-                                    "annotations": null,
+                                    "annotations": {
+                                        "guide": null,
+                                        "prescriptive": true,
+                                        "topic": "DISPOSITIONS_GENERALES"
+                                    },
                                     "applicability": {
                                         "active": true,
                                         "modified": false,
@@ -3846,7 +4138,11 @@
                                     }
                                 },
                                 {
-                                    "annotations": null,
+                                    "annotations": {
+                                        "guide": null,
+                                        "prescriptive": true,
+                                        "topic": "DISPOSITIONS_GENERALES"
+                                    },
                                     "applicability": {
                                         "active": true,
                                         "modified": false,
@@ -3920,7 +4216,11 @@
                             }
                         },
                         {
-                            "annotations": null,
+                            "annotations": {
+                                "guide": null,
+                                "prescriptive": true,
+                                "topic": "DISPOSITIONS_GENERALES"
+                            },
                             "applicability": {
                                 "active": true,
                                 "modified": false,
@@ -3956,7 +4256,11 @@
                             }
                         },
                         {
-                            "annotations": null,
+                            "annotations": {
+                                "guide": null,
+                                "prescriptive": true,
+                                "topic": "DISPOSITIONS_GENERALES"
+                            },
                             "applicability": {
                                 "active": true,
                                 "modified": false,
@@ -3982,7 +4286,11 @@
                             }
                         },
                         {
-                            "annotations": null,
+                            "annotations": {
+                                "guide": null,
+                                "prescriptive": true,
+                                "topic": "DISPOSITIONS_GENERALES"
+                            },
                             "applicability": {
                                 "active": true,
                                 "modified": false,
@@ -4164,7 +4472,11 @@
                             }
                         },
                         {
-                            "annotations": null,
+                            "annotations": {
+                                "guide": null,
+                                "prescriptive": true,
+                                "topic": "INCENDIE"
+                            },
                             "applicability": {
                                 "active": true,
                                 "modified": false,
@@ -4195,7 +4507,11 @@
                             }
                         },
                         {
-                            "annotations": null,
+                            "annotations": {
+                                "guide": null,
+                                "prescriptive": true,
+                                "topic": "INCENDIE"
+                            },
                             "applicability": {
                                 "active": true,
                                 "modified": false,
@@ -4236,7 +4552,11 @@
                             }
                         },
                         {
-                            "annotations": null,
+                            "annotations": {
+                                "guide": null,
+                                "prescriptive": true,
+                                "topic": "INCENDIE"
+                            },
                             "applicability": {
                                 "active": true,
                                 "modified": false,
@@ -4298,7 +4618,11 @@
                             }
                         },
                         {
-                            "annotations": null,
+                            "annotations": {
+                                "guide": null,
+                                "prescriptive": true,
+                                "topic": "INSTALLATIONS_ELECTRIQUES"
+                            },
                             "applicability": {
                                 "active": true,
                                 "modified": false,
@@ -4360,7 +4684,11 @@
                             }
                         },
                         {
-                            "annotations": null,
+                            "annotations": {
+                                "guide": null,
+                                "prescriptive": true,
+                                "topic": "DISPOSITIONS_GENERALES"
+                            },
                             "applicability": {
                                 "active": true,
                                 "modified": false,
@@ -4458,7 +4786,11 @@
                             }
                         },
                         {
-                            "annotations": null,
+                            "annotations": {
+                                "guide": null,
+                                "prescriptive": true,
+                                "topic": "DISPOSITIONS_GENERALES"
+                            },
                             "applicability": {
                                 "active": true,
                                 "modified": false,
@@ -4484,7 +4816,11 @@
                             }
                         },
                         {
-                            "annotations": null,
+                            "annotations": {
+                                "guide": null,
+                                "prescriptive": true,
+                                "topic": "DISPOSITIONS_GENERALES"
+                            },
                             "applicability": {
                                 "active": true,
                                 "modified": false,
@@ -4536,7 +4872,11 @@
                             }
                         },
                         {
-                            "annotations": null,
+                            "annotations": {
+                                "guide": null,
+                                "prescriptive": true,
+                                "topic": "INCENDIE"
+                            },
                             "applicability": {
                                 "active": true,
                                 "modified": false,
@@ -4588,7 +4928,11 @@
                             }
                         },
                         {
-                            "annotations": null,
+                            "annotations": {
+                                "guide": null,
+                                "prescriptive": true,
+                                "topic": "DISPOSITIONS_GENERALES"
+                            },
                             "applicability": {
                                 "active": true,
                                 "modified": false,
@@ -4614,7 +4958,11 @@
                             }
                         },
                         {
-                            "annotations": null,
+                            "annotations": {
+                                "guide": null,
+                                "prescriptive": true,
+                                "topic": "DISPOSITIONS_GENERALES"
+                            },
                             "applicability": {
                                 "active": true,
                                 "modified": false,
@@ -4647,7 +4995,11 @@
                     }
                 },
                 {
-                    "annotations": null,
+                    "annotations": {
+                        "guide": null,
+                        "prescriptive": true,
+                        "topic": "DISPOSITIONS_GENERALES"
+                    },
                     "applicability": {
                         "active": true,
                         "modified": false,
@@ -4961,7 +5313,11 @@
                     }
                 },
                 {
-                    "annotations": null,
+                    "annotations": {
+                        "guide": null,
+                        "prescriptive": true,
+                        "topic": "DISPOSITIONS_GENERALES"
+                    },
                     "applicability": {
                         "active": true,
                         "modified": false,
@@ -5397,7 +5753,11 @@
                     }
                 },
                 {
-                    "annotations": null,
+                    "annotations": {
+                        "guide": null,
+                        "prescriptive": true,
+                        "topic": "DISPOSITIONS_GENERALES"
+                    },
                     "applicability": {
                         "active": true,
                         "modified": false,

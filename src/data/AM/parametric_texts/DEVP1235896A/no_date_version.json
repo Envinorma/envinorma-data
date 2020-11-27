@@ -23,7 +23,7 @@
             "annotations": {
                 "guide": null,
                 "prescriptive": false,
-                "topic": null
+                "topic": "DISPOSITIONS_GENERALES"
             },
             "applicability": {
                 "active": true,
@@ -91,7 +91,7 @@
             "annotations": {
                 "guide": null,
                 "prescriptive": false,
-                "topic": null
+                "topic": "DISPOSITIONS_GENERALES"
             },
             "applicability": {
                 "active": true,
@@ -229,7 +229,11 @@
             }
         },
         {
-            "annotations": null,
+            "annotations": {
+                "guide": null,
+                "prescriptive": true,
+                "topic": "DISPOSITIONS_GENERALES"
+            },
             "applicability": {
                 "active": true,
                 "modified": false,
@@ -243,7 +247,11 @@
             "reference_str": null,
             "sections": [
                 {
-                    "annotations": null,
+                    "annotations": {
+                        "guide": null,
+                        "prescriptive": true,
+                        "topic": "DISPOSITIONS_GENERALES"
+                    },
                     "applicability": {
                         "active": true,
                         "modified": false,
@@ -280,7 +288,11 @@
                     }
                 },
                 {
-                    "annotations": null,
+                    "annotations": {
+                        "guide": null,
+                        "prescriptive": true,
+                        "topic": "DISPOSITIONS_GENERALES"
+                    },
                     "applicability": {
                         "active": true,
                         "modified": false,
@@ -494,7 +506,11 @@
                     }
                 },
                 {
-                    "annotations": null,
+                    "annotations": {
+                        "guide": null,
+                        "prescriptive": true,
+                        "topic": "DISPOSITIONS_GENERALES"
+                    },
                     "applicability": {
                         "active": true,
                         "modified": false,
@@ -564,7 +580,11 @@
                     }
                 },
                 {
-                    "annotations": null,
+                    "annotations": {
+                        "guide": null,
+                        "prescriptive": true,
+                        "topic": "DISPOSITIONS_GENERALES"
+                    },
                     "applicability": {
                         "active": true,
                         "modified": false,
@@ -651,7 +671,11 @@
                     }
                 },
                 {
-                    "annotations": null,
+                    "annotations": {
+                        "guide": null,
+                        "prescriptive": true,
+                        "topic": "DISPOSITIONS_GENERALES"
+                    },
                     "applicability": {
                         "active": true,
                         "modified": false,
@@ -705,7 +729,11 @@
             }
         },
         {
-            "annotations": null,
+            "annotations": {
+                "guide": null,
+                "prescriptive": true,
+                "topic": "ACCIDENTS_POLLUTIONS"
+            },
             "applicability": {
                 "active": true,
                 "modified": false,
@@ -719,7 +747,11 @@
             "reference_str": null,
             "sections": [
                 {
-                    "annotations": null,
+                    "annotations": {
+                        "guide": null,
+                        "prescriptive": true,
+                        "topic": "ACCIDENTS_POLLUTIONS"
+                    },
                     "applicability": {
                         "active": true,
                         "modified": false,
@@ -733,7 +765,11 @@
                     "reference_str": null,
                     "sections": [
                         {
-                            "annotations": null,
+                            "annotations": {
+                                "guide": null,
+                                "prescriptive": true,
+                                "topic": "ACCIDENTS_POLLUTIONS"
+                            },
                             "applicability": {
                                 "active": true,
                                 "modified": false,
@@ -770,7 +806,11 @@
                             }
                         },
                         {
-                            "annotations": null,
+                            "annotations": {
+                                "guide": null,
+                                "prescriptive": true,
+                                "topic": "ACCIDENTS_POLLUTIONS"
+                            },
                             "applicability": {
                                 "active": true,
                                 "modified": false,
@@ -802,7 +842,11 @@
                             }
                         },
                         {
-                            "annotations": null,
+                            "annotations": {
+                                "guide": null,
+                                "prescriptive": true,
+                                "topic": "ACCIDENTS_POLLUTIONS"
+                            },
                             "applicability": {
                                 "active": true,
                                 "modified": false,
@@ -855,7 +899,11 @@
                             }
                         },
                         {
-                            "annotations": null,
+                            "annotations": {
+                                "guide": null,
+                                "prescriptive": true,
+                                "topic": "ACCIDENTS_POLLUTIONS"
+                            },
                             "applicability": {
                                 "active": true,
                                 "modified": false,
@@ -897,7 +945,11 @@
                             }
                         },
                         {
-                            "annotations": null,
+                            "annotations": {
+                                "guide": null,
+                                "prescriptive": true,
+                                "topic": "ACCIDENTS_POLLUTIONS"
+                            },
                             "applicability": {
                                 "active": true,
                                 "modified": false,
@@ -941,7 +993,11 @@
                     }
                 },
                 {
-                    "annotations": null,
+                    "annotations": {
+                        "guide": null,
+                        "prescriptive": true,
+                        "topic": "ACCIDENTS_POLLUTIONS"
+                    },
                     "applicability": {
                         "active": true,
                         "modified": false,
@@ -955,7 +1011,11 @@
                     "reference_str": null,
                     "sections": [
                         {
-                            "annotations": null,
+                            "annotations": {
+                                "guide": null,
+                                "prescriptive": true,
+                                "topic": "ACCIDENTS_POLLUTIONS"
+                            },
                             "applicability": {
                                 "active": true,
                                 "modified": false,
@@ -1004,7 +1064,11 @@
                     }
                 },
                 {
-                    "annotations": null,
+                    "annotations": {
+                        "guide": null,
+                        "prescriptive": true,
+                        "topic": "ACCIDENTS_POLLUTIONS"
+                    },
                     "applicability": {
                         "active": true,
                         "modified": false,
@@ -1018,7 +1082,11 @@
                     "reference_str": null,
                     "sections": [
                         {
-                            "annotations": null,
+                            "annotations": {
+                                "guide": null,
+                                "prescriptive": true,
+                                "topic": "ACCIDENTS_POLLUTIONS"
+                            },
                             "applicability": {
                                 "active": true,
                                 "modified": false,
@@ -1109,7 +1177,11 @@
                     }
                 },
                 {
-                    "annotations": null,
+                    "annotations": {
+                        "guide": null,
+                        "prescriptive": true,
+                        "topic": "ACCIDENTS_POLLUTIONS"
+                    },
                     "applicability": {
                         "active": true,
                         "modified": false,
@@ -1123,7 +1195,11 @@
                     "reference_str": null,
                     "sections": [
                         {
-                            "annotations": null,
+                            "annotations": {
+                                "guide": null,
+                                "prescriptive": true,
+                                "topic": "ACCIDENTS_POLLUTIONS"
+                            },
                             "applicability": {
                                 "active": true,
                                 "modified": false,
@@ -1160,7 +1236,11 @@
                             }
                         },
                         {
-                            "annotations": null,
+                            "annotations": {
+                                "guide": null,
+                                "prescriptive": true,
+                                "topic": "ACCIDENTS_POLLUTIONS"
+                            },
                             "applicability": {
                                 "active": true,
                                 "modified": false,
@@ -1212,7 +1292,11 @@
                             }
                         },
                         {
-                            "annotations": null,
+                            "annotations": {
+                                "guide": null,
+                                "prescriptive": true,
+                                "topic": "ACCIDENTS_POLLUTIONS"
+                            },
                             "applicability": {
                                 "active": true,
                                 "modified": false,
@@ -1286,7 +1370,11 @@
                     }
                 },
                 {
-                    "annotations": null,
+                    "annotations": {
+                        "guide": null,
+                        "prescriptive": true,
+                        "topic": "ACCIDENTS_POLLUTIONS"
+                    },
                     "applicability": {
                         "active": true,
                         "modified": false,
@@ -1300,7 +1388,11 @@
                     "reference_str": null,
                     "sections": [
                         {
-                            "annotations": null,
+                            "annotations": {
+                                "guide": null,
+                                "prescriptive": true,
+                                "topic": "ACCIDENTS_POLLUTIONS"
+                            },
                             "applicability": {
                                 "active": true,
                                 "modified": false,
@@ -1347,7 +1439,11 @@
                             }
                         },
                         {
-                            "annotations": null,
+                            "annotations": {
+                                "guide": null,
+                                "prescriptive": true,
+                                "topic": "ACCIDENTS_POLLUTIONS"
+                            },
                             "applicability": {
                                 "active": true,
                                 "modified": false,
@@ -1459,7 +1555,11 @@
                             }
                         },
                         {
-                            "annotations": null,
+                            "annotations": {
+                                "guide": null,
+                                "prescriptive": true,
+                                "topic": "ACCIDENTS_POLLUTIONS"
+                            },
                             "applicability": {
                                 "active": true,
                                 "modified": false,
@@ -1503,7 +1603,11 @@
                     }
                 },
                 {
-                    "annotations": null,
+                    "annotations": {
+                        "guide": null,
+                        "prescriptive": true,
+                        "topic": "ACCIDENTS_POLLUTIONS"
+                    },
                     "applicability": {
                         "active": true,
                         "modified": false,
@@ -1517,7 +1621,11 @@
                     "reference_str": null,
                     "sections": [
                         {
-                            "annotations": null,
+                            "annotations": {
+                                "guide": null,
+                                "prescriptive": true,
+                                "topic": "ACCIDENTS_POLLUTIONS"
+                            },
                             "applicability": {
                                 "active": true,
                                 "modified": false,
@@ -1537,7 +1645,11 @@
                             "reference_str": "Art. 21",
                             "sections": [
                                 {
-                                    "annotations": null,
+                                    "annotations": {
+                                        "guide": null,
+                                        "prescriptive": true,
+                                        "topic": "ACCIDENTS_POLLUTIONS"
+                                    },
                                     "applicability": {
                                         "active": true,
                                         "modified": false,
@@ -1593,7 +1705,11 @@
                                     }
                                 },
                                 {
-                                    "annotations": null,
+                                    "annotations": {
+                                        "guide": null,
+                                        "prescriptive": true,
+                                        "topic": "ACCIDENTS_POLLUTIONS"
+                                    },
                                     "applicability": {
                                         "active": true,
                                         "modified": false,
@@ -1624,7 +1740,11 @@
                                     }
                                 },
                                 {
-                                    "annotations": null,
+                                    "annotations": {
+                                        "guide": null,
+                                        "prescriptive": true,
+                                        "topic": "ACCIDENTS_POLLUTIONS"
+                                    },
                                     "applicability": {
                                         "active": true,
                                         "modified": false,
@@ -1773,7 +1893,11 @@
                                     }
                                 },
                                 {
-                                    "annotations": null,
+                                    "annotations": {
+                                        "guide": null,
+                                        "prescriptive": true,
+                                        "topic": "ACCIDENTS_POLLUTIONS"
+                                    },
                                     "applicability": {
                                         "active": true,
                                         "modified": false,
@@ -2801,7 +2925,7 @@
             "annotations": {
                 "guide": null,
                 "prescriptive": true,
-                "topic": "AIR"
+                "topic": "AIR_ODEURS"
             },
             "applicability": {
                 "active": true,
@@ -2819,7 +2943,7 @@
                     "annotations": {
                         "guide": null,
                         "prescriptive": true,
-                        "topic": "AIR"
+                        "topic": "AIR_ODEURS"
                     },
                     "applicability": {
                         "active": true,
@@ -2837,7 +2961,7 @@
                             "annotations": {
                                 "guide": null,
                                 "prescriptive": true,
-                                "topic": "AIR"
+                                "topic": "AIR_ODEURS"
                             },
                             "applicability": {
                                 "active": true,
@@ -2925,7 +3049,7 @@
                     "annotations": {
                         "guide": null,
                         "prescriptive": true,
-                        "topic": "AIR"
+                        "topic": "AIR_ODEURS"
                     },
                     "applicability": {
                         "active": true,
@@ -2943,7 +3067,7 @@
                             "annotations": {
                                 "guide": null,
                                 "prescriptive": true,
-                                "topic": "AIR"
+                                "topic": "AIR_ODEURS"
                             },
                             "applicability": {
                                 "active": true,
@@ -2984,7 +3108,7 @@
                             "annotations": {
                                 "guide": null,
                                 "prescriptive": true,
-                                "topic": "AIR"
+                                "topic": "AIR_ODEURS"
                             },
                             "applicability": {
                                 "active": true,
@@ -3072,7 +3196,7 @@
                     "annotations": {
                         "guide": null,
                         "prescriptive": true,
-                        "topic": "AIR"
+                        "topic": "AIR_ODEURS"
                     },
                     "applicability": {
                         "active": true,
@@ -3090,7 +3214,7 @@
                             "annotations": {
                                 "guide": null,
                                 "prescriptive": true,
-                                "topic": "AIR"
+                                "topic": "AIR_ODEURS"
                             },
                             "applicability": {
                                 "active": true,
@@ -3141,7 +3265,7 @@
                             "annotations": {
                                 "guide": null,
                                 "prescriptive": true,
-                                "topic": "AIR"
+                                "topic": "AIR_ODEURS"
                             },
                             "applicability": {
                                 "active": true,
@@ -3191,7 +3315,7 @@
                                     "annotations": {
                                         "guide": null,
                                         "prescriptive": true,
-                                        "topic": "AIR"
+                                        "topic": "AIR_ODEURS"
                                     },
                                     "applicability": {
                                         "active": true,
@@ -3231,7 +3355,7 @@
                                     "annotations": {
                                         "guide": null,
                                         "prescriptive": true,
-                                        "topic": "AIR"
+                                        "topic": "AIR_ODEURS"
                                     },
                                     "applicability": {
                                         "active": true,
@@ -3268,7 +3392,7 @@
                             "annotations": {
                                 "guide": null,
                                 "prescriptive": true,
-                                "topic": "AIR"
+                                "topic": "AIR_ODEURS"
                             },
                             "applicability": {
                                 "active": true,
@@ -3330,7 +3454,11 @@
             }
         },
         {
-            "annotations": null,
+            "annotations": {
+                "guide": null,
+                "prescriptive": true,
+                "topic": "EMISSIONS"
+            },
             "applicability": {
                 "active": true,
                 "modified": false,
@@ -3344,7 +3472,11 @@
             "reference_str": null,
             "sections": [
                 {
-                    "annotations": null,
+                    "annotations": {
+                        "guide": null,
+                        "prescriptive": true,
+                        "topic": "EMISSIONS"
+                    },
                     "applicability": {
                         "active": true,
                         "modified": false,
@@ -3386,7 +3518,7 @@
             "annotations": {
                 "guide": null,
                 "prescriptive": true,
-                "topic": "BRUIT"
+                "topic": "BRUIT_VIBRATIONS"
             },
             "applicability": {
                 "active": true,
@@ -3404,7 +3536,7 @@
                     "annotations": {
                         "guide": null,
                         "prescriptive": true,
-                        "topic": "BRUIT"
+                        "topic": "BRUIT_VIBRATIONS"
                     },
                     "applicability": {
                         "active": true,
@@ -3445,7 +3577,7 @@
                     "annotations": {
                         "guide": null,
                         "prescriptive": true,
-                        "topic": "BRUIT"
+                        "topic": "BRUIT_VIBRATIONS"
                     },
                     "applicability": {
                         "active": true,
@@ -3610,7 +3742,7 @@
                     "annotations": {
                         "guide": null,
                         "prescriptive": true,
-                        "topic": "BRUIT"
+                        "topic": "BRUIT_VIBRATIONS"
                     },
                     "applicability": {
                         "active": true,
@@ -3651,7 +3783,7 @@
                     "annotations": {
                         "guide": null,
                         "prescriptive": true,
-                        "topic": "BRUIT"
+                        "topic": "BRUIT_VIBRATIONS"
                     },
                     "applicability": {
                         "active": true,
@@ -3692,7 +3824,7 @@
                     "annotations": {
                         "guide": null,
                         "prescriptive": true,
-                        "topic": "BRUIT"
+                        "topic": "BRUIT_VIBRATIONS"
                     },
                     "applicability": {
                         "active": true,
@@ -3925,7 +4057,7 @@
                     "annotations": {
                         "guide": null,
                         "prescriptive": true,
-                        "topic": "BRUIT"
+                        "topic": "BRUIT_VIBRATIONS"
                     },
                     "applicability": {
                         "active": true,
@@ -4148,7 +4280,7 @@
                     "annotations": {
                         "guide": null,
                         "prescriptive": true,
-                        "topic": "BRUIT"
+                        "topic": "BRUIT_VIBRATIONS"
                     },
                     "applicability": {
                         "active": true,
@@ -4234,7 +4366,7 @@
                     "annotations": {
                         "guide": null,
                         "prescriptive": true,
-                        "topic": "BRUIT"
+                        "topic": "BRUIT_VIBRATIONS"
                     },
                     "applicability": {
                         "active": true,
@@ -4258,7 +4390,7 @@
                             "annotations": {
                                 "guide": null,
                                 "prescriptive": true,
-                                "topic": "BRUIT"
+                                "topic": "BRUIT_VIBRATIONS"
                             },
                             "applicability": {
                                 "active": true,
@@ -4293,7 +4425,7 @@
                             "annotations": {
                                 "guide": null,
                                 "prescriptive": true,
-                                "topic": "BRUIT"
+                                "topic": "BRUIT_VIBRATIONS"
                             },
                             "applicability": {
                                 "active": true,
@@ -4323,7 +4455,7 @@
                             "annotations": {
                                 "guide": null,
                                 "prescriptive": true,
-                                "topic": "BRUIT"
+                                "topic": "BRUIT_VIBRATIONS"
                             },
                             "applicability": {
                                 "active": true,
@@ -4360,7 +4492,7 @@
                     "annotations": {
                         "guide": null,
                         "prescriptive": true,
-                        "topic": "BRUIT"
+                        "topic": "BRUIT_VIBRATIONS"
                     },
                     "applicability": {
                         "active": true,
@@ -4395,7 +4527,7 @@
                             "annotations": {
                                 "guide": null,
                                 "prescriptive": true,
-                                "topic": "BRUIT"
+                                "topic": "BRUIT_VIBRATIONS"
                             },
                             "applicability": {
                                 "active": true,
@@ -4435,7 +4567,7 @@
                             "annotations": {
                                 "guide": null,
                                 "prescriptive": true,
-                                "topic": "BRUIT"
+                                "topic": "BRUIT_VIBRATIONS"
                             },
                             "applicability": {
                                 "active": true,
@@ -4480,7 +4612,7 @@
                             "annotations": {
                                 "guide": null,
                                 "prescriptive": true,
-                                "topic": "BRUIT"
+                                "topic": "BRUIT_VIBRATIONS"
                             },
                             "applicability": {
                                 "active": true,
@@ -4714,7 +4846,11 @@
             }
         },
         {
-            "annotations": null,
+            "annotations": {
+                "guide": null,
+                "prescriptive": true,
+                "topic": "AIR_ODEURS"
+            },
             "applicability": {
                 "active": true,
                 "modified": false,
@@ -4728,7 +4864,11 @@
             "reference_str": null,
             "sections": [
                 {
-                    "annotations": null,
+                    "annotations": {
+                        "guide": null,
+                        "prescriptive": true,
+                        "topic": "EMISSIONS"
+                    },
                     "applicability": {
                         "active": true,
                         "modified": false,
@@ -4742,7 +4882,11 @@
                     "reference_str": null,
                     "sections": [
                         {
-                            "annotations": null,
+                            "annotations": {
+                                "guide": null,
+                                "prescriptive": true,
+                                "topic": "EMISSIONS"
+                            },
                             "applicability": {
                                 "active": true,
                                 "modified": false,
@@ -4796,7 +4940,11 @@
                     }
                 },
                 {
-                    "annotations": null,
+                    "annotations": {
+                        "guide": null,
+                        "prescriptive": true,
+                        "topic": "AIR_ODEURS"
+                    },
                     "applicability": {
                         "active": true,
                         "modified": false,
@@ -4810,7 +4958,11 @@
                     "reference_str": null,
                     "sections": [
                         {
-                            "annotations": null,
+                            "annotations": {
+                                "guide": null,
+                                "prescriptive": true,
+                                "topic": "AIR_ODEURS"
+                            },
                             "applicability": {
                                 "active": true,
                                 "modified": false,
@@ -4854,7 +5006,11 @@
                     }
                 },
                 {
-                    "annotations": null,
+                    "annotations": {
+                        "guide": null,
+                        "prescriptive": true,
+                        "topic": "EAU"
+                    },
                     "applicability": {
                         "active": true,
                         "modified": false,
@@ -4868,7 +5024,11 @@
                     "reference_str": null,
                     "sections": [
                         {
-                            "annotations": null,
+                            "annotations": {
+                                "guide": null,
+                                "prescriptive": true,
+                                "topic": "EAU"
+                            },
                             "applicability": {
                                 "active": true,
                                 "modified": false,
@@ -4994,7 +5154,11 @@
                     }
                 },
                 {
-                    "annotations": null,
+                    "annotations": {
+                        "guide": null,
+                        "prescriptive": true,
+                        "topic": "EMISSIONS"
+                    },
                     "applicability": {
                         "active": true,
                         "modified": false,
@@ -5008,7 +5172,11 @@
                     "reference_str": null,
                     "sections": [
                         {
-                            "annotations": null,
+                            "annotations": {
+                                "guide": null,
+                                "prescriptive": true,
+                                "topic": "EMISSIONS"
+                            },
                             "applicability": {
                                 "active": true,
                                 "modified": false,
@@ -5063,7 +5231,7 @@
             "annotations": {
                 "guide": null,
                 "prescriptive": false,
-                "topic": null
+                "topic": "DISPOSITIONS_GENERALES"
             },
             "applicability": {
                 "active": true,
@@ -5078,7 +5246,11 @@
             "reference_str": null,
             "sections": [
                 {
-                    "annotations": null,
+                    "annotations": {
+                        "guide": null,
+                        "prescriptive": true,
+                        "topic": "DISPOSITIONS_GENERALES"
+                    },
                     "applicability": {
                         "active": true,
                         "modified": false,
@@ -5117,7 +5289,11 @@
             }
         },
         {
-            "annotations": null,
+            "annotations": {
+                "guide": null,
+                "prescriptive": true,
+                "topic": "BRUIT_VIBRATIONS"
+            },
             "applicability": {
                 "active": true,
                 "modified": false,
@@ -5134,7 +5310,7 @@
                     "annotations": {
                         "guide": null,
                         "prescriptive": false,
-                        "topic": null
+                        "topic": "BRUIT_VIBRATIONS"
                     },
                     "applicability": {
                         "active": true,
@@ -5171,7 +5347,11 @@
                     "reference_str": "Annexe I",
                     "sections": [
                         {
-                            "annotations": null,
+                            "annotations": {
+                                "guide": null,
+                                "prescriptive": true,
+                                "topic": "BRUIT_VIBRATIONS"
+                            },
                             "applicability": {
                                 "active": true,
                                 "modified": false,
@@ -5185,7 +5365,11 @@
                             "reference_str": "Annexe I 1.",
                             "sections": [
                                 {
-                                    "annotations": null,
+                                    "annotations": {
+                                        "guide": null,
+                                        "prescriptive": true,
+                                        "topic": "BRUIT_VIBRATIONS"
+                                    },
                                     "applicability": {
                                         "active": true,
                                         "modified": false,
@@ -5211,7 +5395,11 @@
                                     }
                                 },
                                 {
-                                    "annotations": null,
+                                    "annotations": {
+                                        "guide": null,
+                                        "prescriptive": true,
+                                        "topic": "BRUIT_VIBRATIONS"
+                                    },
                                     "applicability": {
                                         "active": true,
                                         "modified": false,
@@ -5237,7 +5425,11 @@
                                     }
                                 },
                                 {
-                                    "annotations": null,
+                                    "annotations": {
+                                        "guide": null,
+                                        "prescriptive": true,
+                                        "topic": "BRUIT_VIBRATIONS"
+                                    },
                                     "applicability": {
                                         "active": true,
                                         "modified": false,
@@ -5263,7 +5455,11 @@
                                     }
                                 },
                                 {
-                                    "annotations": null,
+                                    "annotations": {
+                                        "guide": null,
+                                        "prescriptive": true,
+                                        "topic": "BRUIT_VIBRATIONS"
+                                    },
                                     "applicability": {
                                         "active": true,
                                         "modified": false,
@@ -5289,7 +5485,11 @@
                                     }
                                 },
                                 {
-                                    "annotations": null,
+                                    "annotations": {
+                                        "guide": null,
+                                        "prescriptive": true,
+                                        "topic": "BRUIT_VIBRATIONS"
+                                    },
                                     "applicability": {
                                         "active": true,
                                         "modified": false,
@@ -5315,7 +5515,11 @@
                                     }
                                 },
                                 {
-                                    "annotations": null,
+                                    "annotations": {
+                                        "guide": null,
+                                        "prescriptive": true,
+                                        "topic": "BRUIT_VIBRATIONS"
+                                    },
                                     "applicability": {
                                         "active": true,
                                         "modified": false,
@@ -5341,7 +5545,11 @@
                                     }
                                 },
                                 {
-                                    "annotations": null,
+                                    "annotations": {
+                                        "guide": null,
+                                        "prescriptive": true,
+                                        "topic": "BRUIT_VIBRATIONS"
+                                    },
                                     "applicability": {
                                         "active": true,
                                         "modified": false,
@@ -5372,7 +5580,11 @@
                                     }
                                 },
                                 {
-                                    "annotations": null,
+                                    "annotations": {
+                                        "guide": null,
+                                        "prescriptive": true,
+                                        "topic": "BRUIT_VIBRATIONS"
+                                    },
                                     "applicability": {
                                         "active": true,
                                         "modified": false,
@@ -5398,7 +5610,11 @@
                                     }
                                 },
                                 {
-                                    "annotations": null,
+                                    "annotations": {
+                                        "guide": null,
+                                        "prescriptive": true,
+                                        "topic": "BRUIT_VIBRATIONS"
+                                    },
                                     "applicability": {
                                         "active": true,
                                         "modified": false,
@@ -5527,7 +5743,11 @@
                             }
                         },
                         {
-                            "annotations": null,
+                            "annotations": {
+                                "guide": null,
+                                "prescriptive": true,
+                                "topic": "BRUIT_VIBRATIONS"
+                            },
                             "applicability": {
                                 "active": true,
                                 "modified": false,
@@ -5541,7 +5761,11 @@
                             "reference_str": "Annexe I 2.",
                             "sections": [
                                 {
-                                    "annotations": null,
+                                    "annotations": {
+                                        "guide": null,
+                                        "prescriptive": true,
+                                        "topic": "BRUIT_VIBRATIONS"
+                                    },
                                     "applicability": {
                                         "active": true,
                                         "modified": false,
@@ -5577,7 +5801,11 @@
                                     }
                                 },
                                 {
-                                    "annotations": null,
+                                    "annotations": {
+                                        "guide": null,
+                                        "prescriptive": true,
+                                        "topic": "BRUIT_VIBRATIONS"
+                                    },
                                     "applicability": {
                                         "active": true,
                                         "modified": false,
@@ -5608,7 +5836,11 @@
                                     }
                                 },
                                 {
-                                    "annotations": null,
+                                    "annotations": {
+                                        "guide": null,
+                                        "prescriptive": true,
+                                        "topic": "BRUIT_VIBRATIONS"
+                                    },
                                     "applicability": {
                                         "active": true,
                                         "modified": false,
@@ -5634,7 +5866,11 @@
                                     }
                                 },
                                 {
-                                    "annotations": null,
+                                    "annotations": {
+                                        "guide": null,
+                                        "prescriptive": true,
+                                        "topic": "BRUIT_VIBRATIONS"
+                                    },
                                     "applicability": {
                                         "active": true,
                                         "modified": false,
@@ -5660,7 +5896,11 @@
                                     }
                                 },
                                 {
-                                    "annotations": null,
+                                    "annotations": {
+                                        "guide": null,
+                                        "prescriptive": true,
+                                        "topic": "BRUIT_VIBRATIONS"
+                                    },
                                     "applicability": {
                                         "active": true,
                                         "modified": false,
@@ -5680,7 +5920,11 @@
                                     "reference_str": "Annexe I 2.5.",
                                     "sections": [
                                         {
-                                            "annotations": null,
+                                            "annotations": {
+                                                "guide": null,
+                                                "prescriptive": true,
+                                                "topic": "BRUIT_VIBRATIONS"
+                                            },
                                             "applicability": {
                                                 "active": true,
                                                 "modified": false,
@@ -5747,7 +5991,11 @@
                                             }
                                         },
                                         {
-                                            "annotations": null,
+                                            "annotations": {
+                                                "guide": null,
+                                                "prescriptive": true,
+                                                "topic": "BRUIT_VIBRATIONS"
+                                            },
                                             "applicability": {
                                                 "active": true,
                                                 "modified": false,
@@ -5800,7 +6048,11 @@
                                     }
                                 },
                                 {
-                                    "annotations": null,
+                                    "annotations": {
+                                        "guide": null,
+                                        "prescriptive": true,
+                                        "topic": "BRUIT_VIBRATIONS"
+                                    },
                                     "applicability": {
                                         "active": true,
                                         "modified": false,
@@ -5918,7 +6170,11 @@
                             }
                         },
                         {
-                            "annotations": null,
+                            "annotations": {
+                                "guide": null,
+                                "prescriptive": true,
+                                "topic": "BRUIT_VIBRATIONS"
+                            },
                             "applicability": {
                                 "active": true,
                                 "modified": false,
@@ -5959,7 +6215,11 @@
                             }
                         },
                         {
-                            "annotations": null,
+                            "annotations": {
+                                "guide": null,
+                                "prescriptive": true,
+                                "topic": "BRUIT_VIBRATIONS"
+                            },
                             "applicability": {
                                 "active": true,
                                 "modified": false,
@@ -5995,7 +6255,7 @@
                     "annotations": {
                         "guide": null,
                         "prescriptive": false,
-                        "topic": null
+                        "topic": "DISPOSITIONS_GENERALES"
                     },
                     "applicability": {
                         "active": true,
