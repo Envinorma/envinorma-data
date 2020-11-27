@@ -55,16 +55,16 @@ def _extract_topics_from_titles_and_content(
     return title_topics.union(sentence_topics)
 
 
-def _extract_topics(text: StructuredText, parent_titles: List[str], ontology: TopicOntology) -> Set[TopicName]:
+def extract_topics(text: StructuredText, parent_titles: List[str], ontology: TopicOntology) -> Set[TopicName]:
     all_titles = parent_titles + [text.title.text]
     if text.sections:
-        return {topic for section in text.sections for topic in _extract_topics(section, all_titles, ontology)}
+        return {topic for section in text.sections for topic in extract_topics(section, all_titles, ontology)}
     section_sentences = [al.text for al in text.outer_alineas if al.text]
     return _extract_topics_from_titles_and_content(all_titles, section_sentences, ontology)
 
 
 def _detect_main_topic(text: StructuredText, parent_titles: List[str], ontology: TopicOntology) -> Optional[TopicName]:
-    topics = _extract_topics(text, parent_titles, ontology)
+    topics = extract_topics(text, parent_titles, ontology)
     return ontology.deduce_main_topic(topics)
 
 
