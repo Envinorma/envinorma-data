@@ -14,7 +14,7 @@
             "new_text": {
                 "annotations": null,
                 "applicability": null,
-                "id": "7d5b8BCCDC5A",
+                "id": "6cAdA971f4bF",
                 "legifrance_article": null,
                 "outer_alineas": [
                     {
@@ -848,33 +848,15 @@
             [
                 3,
                 1,
-                3,
-                0
+                3
             ],
             {
-                "depth_in_am": 4,
-                "outer_alineas_text": [],
-                "rank_in_section_list": 0,
-                "section_list_size": 2,
-                "section_reference": [
-                    3,
-                    1,
-                    3,
-                    0
-                ],
-                "title": "a) Des prises d'eau, poteaux ou bouches d'incendie normalisés, d'un diamètre nominal adapté au débit à fournir, alimentés par un réseau public ou privé, sous des pressions minimale et maximale permettant la mise en œuvre des pompes des engins de lutte contre l'incendie ;"
-            }
-        ],
-        [
-            [
-                3,
-                1,
-                3,
-                1
-            ],
-            {
-                "depth_in_am": 4,
+                "depth_in_am": 3,
                 "outer_alineas_text": [
+                    "L'installation est dotée de moyens de lutte contre l'incendie appropriés aux risques, notamment :",
+                    "- d'un ou de plusieurs points d'eau incendie, parmi les dispositifs suivants :",
+                    "a) Des prises d'eau, poteaux ou bouches d'incendie normalisés, d'un diamètre nominal adapté au débit à fournir, alimentés par un réseau public ou privé, sous des pressions minimale et maximale permettant la mise en œuvre des pompes des engins de lutte contre l'incendie ;",
+                    "b) Des réserves d'eau, réalimentées ou non, disponibles pour le site et dont les organes de manœuvre sont accessibles en permanence aux services d'incendie et de secours.",
                     "Les réserves d'eau et les poteaux incendie ne sont pas exclusifs l'un de l'autre, et peuvent coexister pour une même installation.",
                     "Les prises de raccordement sont conformes aux normes en vigueur pour permettre aux services d'incendie et de secours de s'alimenter sur ces points d'eau incendie.",
                     "Les points d'eau incendie sont en mesure de fournir un débit minimum de 60 mètres cubes par heure, sous une pression d'un bar, durant deux heures. Au moins un point d'eau est en mesure de fournir, à lui seul, un débit minimum de 60 mètres cubes par heure, sous une pression d'un bar, durant deux heures.",
@@ -884,29 +866,6 @@
                     "L'exploitant dispose de la justification de la disponibilité effective des débits et le cas échéant des réserves d'eau, au plus tard trois mois après la mise en service de l'installation.",
                     "En cas d'installation de systèmes d'extinction automatique d'incendie, ceux-ci sont conçus, installés et entretenus régulièrement conformément aux référentiels reconnus. L'efficacité de cette installation est qualifiée et vérifiée par des organismes reconnus compétents dans le domaine de l'extinction automatique ; la qualification précise que l'installation est adaptée aux produits stockés et à leurs conditions de stockage.",
                     "L'installation est dotée d'un moyen permettant d'alerter les services d'incendie et de secours."
-                ],
-                "rank_in_section_list": 1,
-                "section_list_size": 2,
-                "section_reference": [
-                    3,
-                    1,
-                    3,
-                    1
-                ],
-                "title": "b) Des réserves d'eau, réalimentées ou non, disponibles pour le site et dont les organes de manœuvre sont accessibles en permanence aux services d'incendie et de secours."
-            }
-        ],
-        [
-            [
-                3,
-                1,
-                3
-            ],
-            {
-                "depth_in_am": 3,
-                "outer_alineas_text": [
-                    "L'installation est dotée de moyens de lutte contre l'incendie appropriés aux risques, notamment :",
-                    "- d'un ou de plusieurs points d'eau incendie, parmi les dispositifs suivants :"
                 ],
                 "rank_in_section_list": 3,
                 "section_list_size": 5,
@@ -1022,129 +981,28 @@
             [
                 3,
                 3,
-                0,
                 0
             ],
             {
-                "depth_in_am": 4,
+                "depth_in_am": 3,
                 "outer_alineas_text": [
+                    "I. - Tout stockage d'un liquide susceptible de créer une pollution des eaux ou des sols est associé à une capacité de rétention dont le volume est au moins égal à la plus grande des deux valeurs suivantes :",
                     "- 100 % de la capacité du plus grand réservoir ;",
                     "- 50 % de la capacité totale des réservoirs associés.",
                     "Cette disposition n'est pas applicable aux bassins de traitement des eaux résiduaires.",
                     "Pour les stockages de récipients de capacité unitaire inférieure ou égale à 250 litres, la capacité de rétention est au moins égale à :",
                     "- dans le cas de liquides inflammables, 50 % de la capacité totale des fûts ;",
                     "- dans les autres cas, 20 % de la capacité totale des fûts ;",
-                    "- dans tous les cas 800 litres minimum ou égale à la capacité totale lorsque celle-là est inférieure à 800 l."
-                ],
-                "rank_in_section_list": 0,
-                "section_list_size": 5,
-                "section_reference": [
-                    3,
-                    3,
-                    0,
-                    0
-                ],
-                "title": "I. - Tout stockage d'un liquide susceptible de créer une pollution des eaux ou des sols est associé à une capacité de rétention dont le volume est au moins égal à la plus grande des deux valeurs suivantes :"
-            }
-        ],
-        [
-            [
-                3,
-                3,
-                0,
-                1
-            ],
-            {
-                "depth_in_am": 4,
-                "outer_alineas_text": [
+                    "- dans tous les cas 800 litres minimum ou égale à la capacité totale lorsque celle-là est inférieure à 800 l.",
+                    "II. - La capacité de rétention est étanche aux produits qu'elle pourrait contenir et résiste à l'action physique et chimique des fluides. Il en est de même pour son dispositif d'obturation qui est maintenu fermé.",
                     "L'étanchéité du (ou des) réservoir(s) associé(s) doit pouvoir être contrôlée à tout moment.",
                     "Les produits récupérés en cas d'accident ne peuvent être rejetés que dans des conditions conformes au présent arrêté ou sont éliminés comme les déchets.",
                     "Les réservoirs ou récipients contenant des produits incompatibles ne sont pas associés à une même rétention.",
-                    "Le stockage des liquides inflammables, ainsi que des autres produits toxiques ou dangereux pour l'environnement, n'est permis sous le niveau du sol que dans des réservoirs respectant les dispositions de l'article 10 de l'arrêté du 18 avril 2008 relatif aux réservoirs enterrés de liquides inflammables ou combustibles."
+                    "Le stockage des liquides inflammables, ainsi que des autres produits toxiques ou dangereux pour l'environnement, n'est permis sous le niveau du sol que dans des réservoirs respectant les dispositions de l'article 10 de l'arrêté du 18 avril 2008 relatif aux réservoirs enterrés de liquides inflammables ou combustibles.",
+                    "III. - Lorsque les stockages sont à l'air libre, les rétentions sont vidées dès que possible des eaux pluviales s'y versant.",
+                    "IV. - Le sol des aires et des locaux de stockage ou de manipulation des matières dangereuses pour l'homme ou susceptibles de créer une pollution de l'eau ou du sol est étanche et équipé de façon à pouvoir recueillir les eaux de lavage et les matières répandues accidentellement.",
+                    "V. - Les dispositions des points I à III ne sont pas applicables aux stockages équipés de double enveloppe et de détection de fuite."
                 ],
-                "rank_in_section_list": 1,
-                "section_list_size": 5,
-                "section_reference": [
-                    3,
-                    3,
-                    0,
-                    1
-                ],
-                "title": "II. - La capacité de rétention est étanche aux produits qu'elle pourrait contenir et résiste à l'action physique et chimique des fluides. Il en est de même pour son dispositif d'obturation qui est maintenu fermé."
-            }
-        ],
-        [
-            [
-                3,
-                3,
-                0,
-                2
-            ],
-            {
-                "depth_in_am": 4,
-                "outer_alineas_text": [],
-                "rank_in_section_list": 2,
-                "section_list_size": 5,
-                "section_reference": [
-                    3,
-                    3,
-                    0,
-                    2
-                ],
-                "title": "III. - Lorsque les stockages sont à l'air libre, les rétentions sont vidées dès que possible des eaux pluviales s'y versant."
-            }
-        ],
-        [
-            [
-                3,
-                3,
-                0,
-                3
-            ],
-            {
-                "depth_in_am": 4,
-                "outer_alineas_text": [],
-                "rank_in_section_list": 3,
-                "section_list_size": 5,
-                "section_reference": [
-                    3,
-                    3,
-                    0,
-                    3
-                ],
-                "title": "IV. - Le sol des aires et des locaux de stockage ou de manipulation des matières dangereuses pour l'homme ou susceptibles de créer une pollution de l'eau ou du sol est étanche et équipé de façon à pouvoir recueillir les eaux de lavage et les matières répandues accidentellement."
-            }
-        ],
-        [
-            [
-                3,
-                3,
-                0,
-                4
-            ],
-            {
-                "depth_in_am": 4,
-                "outer_alineas_text": [],
-                "rank_in_section_list": 4,
-                "section_list_size": 5,
-                "section_reference": [
-                    3,
-                    3,
-                    0,
-                    4
-                ],
-                "title": "V. - Les dispositions des points I à III ne sont pas applicables aux stockages équipés de double enveloppe et de détection de fuite."
-            }
-        ],
-        [
-            [
-                3,
-                3,
-                0
-            ],
-            {
-                "depth_in_am": 3,
-                "outer_alineas_text": [],
                 "rank_in_section_list": 0,
                 "section_list_size": 2,
                 "section_reference": [
@@ -1950,59 +1808,19 @@
             [
                 5,
                 2,
-                2,
-                0
-            ],
-            {
-                "depth_in_am": 4,
-                "outer_alineas_text": [
-                    "Les effluents gazeux respectent les valeurs limites figurant dans le tableau ci-après selon le flux horaire. Dans le cas où le même polluant est émis par divers rejets canalisés, les valeurs limites applicables à chaque rejet canalisé sont déterminées le cas échéant en fonction du flux total de l'ensemble des rejets canalisés et diffus.",
-                    "Les valeurs limites s'imposent à des mesures, prélèvements et analyses moyens réalisés sur une durée d'une demi-heure.",
-                    "Dans le cas de prélèvements instantanés, aucun résultat de mesure ne dépasse le double de la valeur limite prescrite.",
-                    "Dans le cas de mesures périodiques, la moyenne de toutes les mesures réalisées lors d'une opération de surveillance ne dépasse pas les valeurs limites d'émission et aucune des moyennes horaires n'est supérieure à 1,5 fois la valeur limite d'émission.",
-                    ""
-                ],
-                "rank_in_section_list": 0,
-                "section_list_size": 2,
-                "section_reference": [
-                    5,
-                    2,
-                    2,
-                    0
-                ],
-                "title": "I. - La vitesse d'éjection des effluents gazeux en marche continue est au moins égale à 8 m/s."
-            }
-        ],
-        [
-            [
-                5,
-                2,
-                2,
-                1
-            ],
-            {
-                "depth_in_am": 4,
-                "outer_alineas_text": [],
-                "rank_in_section_list": 1,
-                "section_list_size": 2,
-                "section_reference": [
-                    5,
-                    2,
-                    2,
-                    1
-                ],
-                "title": "II. - Dans le cas de mesures périodiques, la moyenne de toutes les mesures réalisées lors d'une opération de surveillance ne dépasse pas les valeurs limites d'émission et aucune des moyennes horaires n'est supérieure à 1,5 fois la valeur limite d'émission."
-            }
-        ],
-        [
-            [
-                5,
-                2,
                 2
             ],
             {
                 "depth_in_am": 3,
-                "outer_alineas_text": [],
+                "outer_alineas_text": [
+                    "I. - La vitesse d'éjection des effluents gazeux en marche continue est au moins égale à 8 m/s.",
+                    "Les effluents gazeux respectent les valeurs limites figurant dans le tableau ci-après selon le flux horaire. Dans le cas où le même polluant est émis par divers rejets canalisés, les valeurs limites applicables à chaque rejet canalisé sont déterminées le cas échéant en fonction du flux total de l'ensemble des rejets canalisés et diffus.",
+                    "Les valeurs limites s'imposent à des mesures, prélèvements et analyses moyens réalisés sur une durée d'une demi-heure.",
+                    "Dans le cas de prélèvements instantanés, aucun résultat de mesure ne dépasse le double de la valeur limite prescrite.",
+                    "Dans le cas de mesures périodiques, la moyenne de toutes les mesures réalisées lors d'une opération de surveillance ne dépasse pas les valeurs limites d'émission et aucune des moyennes horaires n'est supérieure à 1,5 fois la valeur limite d'émission.",
+                    "",
+                    "II. - Dans le cas de mesures périodiques, la moyenne de toutes les mesures réalisées lors d'une opération de surveillance ne dépasse pas les valeurs limites d'émission et aucune des moyennes horaires n'est supérieure à 1,5 fois la valeur limite d'émission."
+                ],
                 "rank_in_section_list": 2,
                 "section_list_size": 4,
                 "section_reference": [
