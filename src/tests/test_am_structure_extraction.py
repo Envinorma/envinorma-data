@@ -222,7 +222,7 @@ def test_structuration_2():
 
 def test_structuration_3():
     am_3 = _get_am('test_data/AM/legifrance_texts/fake_am.json')
-    assert count_sections(am_3) == 103
+    assert count_sections(am_3) == 101
     assert count_tables(am_3) == 1
     assert count_articles_in_am(am_3) == 1
     assert len(am_3.sections) == 1

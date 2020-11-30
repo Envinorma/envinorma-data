@@ -294,11 +294,24 @@ def add_links_to_am(text: ArreteMinisteriel, new_hyperlinks: List[Hyperlink]) ->
     return output_text
 
 
+def _remove_last_word(sentence: str) -> str:
+    return ' '.join(sentence.split(' ')[:-1])
+
+
+MAX_TITLE_LEN = 64
+
+
+def _shorten_summary_text(title: str, max_len: int = MAX_TITLE_LEN) -> str:
+    if len(title) > max_len:
+        return _remove_last_word(title[:max_len]) + ' [...]'
+    return title
+
+
 def _extract_summary_elements(text: StructuredText, depth: int) -> List[SummaryElement]:
     child_elements = [element for section in text.sections for element in _extract_summary_elements(section, depth + 1)]
     if not text.id:
         raise ValueError('Cannot generate summary without section ids.')
-    return [SummaryElement(text.id, text.title.text, depth)] + child_elements
+    return [SummaryElement(text.id, _shorten_summary_text(text.title.text), depth)] + child_elements
 
 
 def _compute_summary(text: ArreteMinisteriel) -> Summary:

@@ -24,6 +24,8 @@ from lib.am_enriching import (
     _is_prefix,
     _merge_prefix_list,
     _extract_summary_elements,
+    _remove_last_word,
+    _shorten_summary_text,
 )
 
 
@@ -293,3 +295,16 @@ def test_compute_summary():
     assert summary_elements[-1].section_title == 'Test_D2'
     assert summary_elements[-1].section_id == text.id
 
+
+def test_remove_last_word():
+    assert _remove_last_word('Hello Pipa!') == 'Hello'
+    assert _remove_last_word('Hello Pipa, how are you ?') == 'Hello Pipa, how are you'
+
+
+def test_shorten_summary_text():
+    assert _shorten_summary_text('Pipa is a cat', 8) == 'Pipa is [...]'
+    title = (
+        "c) Dans le cas de rejet dans le milieu naturel (ou "
+        "dans un réseau d'assainissement collectif dépourvu de stati"
+    )
+    assert _shorten_summary_text(title) == 'c) Dans le cas de rejet dans le milieu naturel (ou dans un [...]'
