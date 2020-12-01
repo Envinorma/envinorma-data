@@ -105,6 +105,24 @@ def remove_prescriptive_power(am: ArreteMinisteriel, non_prescriptive_sections: 
     return result
 
 
+def _remove_text_sections(text: StructuredText, to_remove: Set[Ints], path: Ints) -> StructuredText:
+    result = copy(text)
+    result.sections = [
+        _remove_text_sections(sec, to_remove, path + (i,))
+        for i, sec in enumerate(text.sections)
+        if path + (i,) not in to_remove
+    ]
+    return result
+
+
+def remove_sections(am: ArreteMinisteriel, to_remove: Set[Ints]) -> ArreteMinisteriel:
+    result = copy(am)
+    result.sections = [
+        _remove_text_sections(sec, to_remove, (i,)) for i, sec in enumerate(am.sections) if (i,) not in to_remove
+    ]
+    return result
+
+
 def _is_probably_section_number(candidate: str) -> bool:
     if not candidate.isalpha():
         return True

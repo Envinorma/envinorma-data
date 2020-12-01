@@ -2,7 +2,7 @@ from datetime import datetime
 from lib.parametrization import ConditionSource, EntityReference, SectionReference
 from typing import Dict, List, Optional, Tuple
 
-from lib.data import EnrichedString, Regime, StructuredText
+from lib.data import ArreteMinisteriel, EnrichedString, Regime, StructuredText
 from lib.parametrization import (
     AlternativeSection,
     AndCondition,
@@ -18,6 +18,7 @@ from lib.parametrization import (
     Range,
     Combinations,
 )
+from lib.am_enriching import remove_sections
 
 
 def _build_simple_structured_text(title: str, alineas: List[str]) -> StructuredText:
@@ -677,3 +678,7 @@ def generate_1510_combinations() -> Combinations:
         ('reg_D', 'date_between_2009_and_2017'): {regime: Regime.D, date: datetime(2010, 1, 1)},
         ('reg_D', 'date_after_2017'): {regime: Regime.D, date: datetime(2020, 1, 1)},
     }
+
+
+def manual_1510_enricher(raw_am: ArreteMinisteriel) -> ArreteMinisteriel:
+    return remove_sections(raw_am, {(8, 3), (8, 4), (8, 5)})

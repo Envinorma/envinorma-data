@@ -26,6 +26,7 @@ from lib.am_enriching import (
     _extract_summary_elements,
     _remove_last_word,
     _shorten_summary_text,
+    remove_sections,
 )
 
 
@@ -308,3 +309,31 @@ def test_shorten_summary_text():
         "dans un réseau d'assainissement collectif dépourvu de stati"
     )
     assert _shorten_summary_text(title) == 'c) Dans le cas de rejet dans le milieu naturel (ou dans un [...]'
+
+
+def test_remove_sections():
+    sub_sub_sections = [
+        StructuredText(EnrichedString('1.1. azeaze'), [], [], None, None),
+        StructuredText(EnrichedString('1. 2. azeaze'), [], [], None, None),
+    ]
+    sub_sections = [StructuredText(EnrichedString('1. azeaze'), [], sub_sub_sections, None, None)]
+    sections = [
+        StructuredText(EnrichedString('Article 1. efzefz'), [], sub_sections, None, None),
+        StructuredText(EnrichedString('2. zefez'), [], [], None, None),
+        StructuredText(EnrichedString('A. zefze'), [], [], None, None),
+    ]
+    am = ArreteMinisteriel(EnrichedString(''), sections, [], '', None)
+
+    am_1 = remove_sections(am, {(0,)})
+    assert len(am_1.sections) == 2
+    assert len(am_1.sections[0].sections) == 0
+    am_2 = remove_sections(am, {(1,)})
+    assert len(am_2.sections) == 2
+    assert len(am_2.sections[0].sections) == 1
+    am_3 = remove_sections(am, {(0, 0)})
+    assert len(am_3.sections) == 3
+    assert len(am_3.sections[0].sections) == 0
+    am_4 = remove_sections(am, {(0, 0, 1), (0, 0, 0)})
+    assert len(am_4.sections) == 3
+    assert len(am_4.sections[0].sections) == 1
+    assert len(am_4.sections[0].sections[0].sections) == 0

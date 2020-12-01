@@ -1,6 +1,6 @@
 from datetime import datetime
-from lib.am_enriching import add_topics, remove_null_applicabilities, remove_prescriptive_power
 from typing import Callable, Dict, Optional, Set
+from lib.am_enriching import add_topics, remove_prescriptive_power, remove_sections
 from lib.parametric_am import Combinations
 from lib.parametrization import (
     ConditionSource,
@@ -16,7 +16,11 @@ from lib.parametrization import (
     build_simple_parametrization,
 )
 from lib.data import ArreteMinisteriel, StructuredText, EnrichedString, TopicName
-from lib.manual_enrichments.generate_1510_parametrization import build_1510_parametrization, generate_1510_combinations
+from lib.manual_enrichments.generate_1510_parametrization import (
+    build_1510_parametrization,
+    generate_1510_combinations,
+    manual_1510_enricher,
+)
 
 
 def identity(am: ArreteMinisteriel) -> ArreteMinisteriel:
@@ -35,7 +39,7 @@ def get_manual_enricher(id_: str) -> Callable[[ArreteMinisteriel], ArreteMiniste
     if id_ == 'DEVP1235896A':
         return _enrich_DEVP1235896A
     if id_ == 'DEVP1706393A':
-        return identity
+        return manual_1510_enricher
     raise ValueError(f'No manual enricher found for id_ {id_}')
 
 
@@ -146,13 +150,12 @@ def _enrich_TREP1900331A(am: ArreteMinisteriel) -> ArreteMinisteriel:
         (7, 2): TopicName.DECHETS,
     }
     with_topics = add_topics(am, topics)
-    non_prescriptive: Set[Ints] = {(9, 0), (10, 0), (0, 0), (0, 1), (0, 2), (0, 3), (0, 4)}
-    return remove_prescriptive_power(with_topics, non_prescriptive)
+    non_prescriptive: Set[Ints] = {(9, 0), (0, 0), (0, 1), (0, 2), (0, 3), (0, 4)}
+    to_remove: Set[Ints] = {(10,)}
+    return remove_sections(remove_prescriptive_power(with_topics, non_prescriptive), to_remove)
 
 
-# DEVP1329353A
-
-
+# DEVP1329353A [Not the right AM]
 def _build_DEVP1329353A_parametrization() -> Parametrization:
     source = ConditionSource(
         'Paragraphe décrivant ce qui s\'applique aux installations existantes',
@@ -377,10 +380,10 @@ def _enrich_ATEP9760292A(am: ArreteMinisteriel) -> ArreteMinisteriel:
         (4, 0, 4, 8),
         (4, 0, 5, 1),
         (4, 0, 5, 2),
-        (4, 1),
     }
+    to_remove = {(4, 1)}
     with_topics = add_topics(am, topics)
-    return remove_null_applicabilities(remove_prescriptive_power(with_topics, non_prescriptive))
+    return remove_sections(remove_prescriptive_power(with_topics, non_prescriptive), to_remove)
 
 
 # ATEP9760292A
@@ -420,6 +423,7 @@ def _enrich_ATEP9760290A(am: ArreteMinisteriel) -> ArreteMinisteriel:
         (4, 0, 7, 2): TopicName.BRUIT_VIBRATIONS,
         (4, 0, 7, 3): TopicName.BRUIT_VIBRATIONS,
     }
-    non_prescriptive: Set[Ints] = {(0,), (1,), (2,), (3,), (4, 1)}
+    non_prescriptive: Set[Ints] = {(0,), (1,), (2,), (3,)}
+    to_remove = {(4, 1)}
     with_topics = add_topics(am, topics)
-    return remove_null_applicabilities(remove_prescriptive_power(with_topics, non_prescriptive))
+    return remove_sections(remove_prescriptive_power(with_topics, non_prescriptive), to_remove)
