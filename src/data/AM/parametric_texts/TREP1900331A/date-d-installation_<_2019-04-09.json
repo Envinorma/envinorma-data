@@ -5930,67 +5930,6 @@
                 "table": null,
                 "text": "Chapitre X : Exécution"
             }
-        },
-        {
-            "annotations": {
-                "guide": null,
-                "prescriptive": true,
-                "topic": "DISPOSITIONS_GENERALES"
-            },
-            "applicability": {
-                "active": true,
-                "modified": false,
-                "reason_inactive": null,
-                "reason_modified": null,
-                "warnings": []
-            },
-            "id": "B8a6F6dab3eb",
-            "legifrance_article": null,
-            "outer_alineas": [],
-            "reference_str": null,
-            "sections": [
-                {
-                    "annotations": {
-                        "guide": null,
-                        "prescriptive": true,
-                        "topic": "DISPOSITIONS_GENERALES"
-                    },
-                    "applicability": {
-                        "active": true,
-                        "modified": false,
-                        "reason_inactive": null,
-                        "reason_modified": null,
-                        "warnings": []
-                    },
-                    "id": "1CeE51e17ec0",
-                    "legifrance_article": {
-                        "content": "<p align='center'>DISPOSITIONS APPLICABLES AUX INSTALLATIONS EXISTANTES</p><p></p><p>Les dispositions figurant aux articles 2.1, 4.2, 4.3, 4.4, 6.4 et aux alinéas relatifs au calcul du volume nécessaire au confinement de l'article 4.10 ne sont pas applicables aux installations existantes.</p>",
-                        "etat": "VIGUEUR",
-                        "id": "LEGIARTI000038362165",
-                        "intOrdre": 524287,
-                        "num": "Annexe I"
-                    },
-                    "outer_alineas": [
-                        {
-                            "links": [],
-                            "table": null,
-                            "text": "Les dispositions figurant aux articles 2.1, 4.2, 4.3, 4.4, 6.4 et aux alinéas relatifs au calcul du volume nécessaire au confinement de l'article 4.10 ne sont pas applicables aux installations existantes."
-                        }
-                    ],
-                    "reference_str": "Annexe I",
-                    "sections": [],
-                    "title": {
-                        "links": [],
-                        "table": null,
-                        "text": "Annexe I - DISPOSITIONS APPLICABLES AUX INSTALLATIONS EXISTANTES"
-                    }
-                }
-            ],
-            "title": {
-                "links": [],
-                "table": null,
-                "text": "Annexe"
-            }
         }
     ],
     "short_title": "Arrêté du 9 avril 2019",
@@ -6465,16 +6404,6 @@
                 "depth": 1,
                 "section_id": "25E0E09EB6f6",
                 "section_title": "Article 10"
-            },
-            {
-                "depth": 0,
-                "section_id": "B8a6F6dab3eb",
-                "section_title": "Annexe"
-            },
-            {
-                "depth": 1,
-                "section_id": "1CeE51e17ec0",
-                "section_title": "Annexe I - DISPOSITIONS APPLICABLES AUX INSTALLATIONS EXISTANTES"
             }
         ]
     },

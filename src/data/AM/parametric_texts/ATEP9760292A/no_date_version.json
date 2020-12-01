@@ -2232,112 +2232,6 @@
                         "table": null,
                         "text": "Annexe I"
                     }
-                },
-                {
-                    "annotations": {
-                        "guide": null,
-                        "prescriptive": true,
-                        "topic": "DISPOSITIONS_GENERALES"
-                    },
-                    "applicability": {
-                        "active": true,
-                        "modified": false,
-                        "reason_inactive": null,
-                        "reason_modified": null,
-                        "warnings": []
-                    },
-                    "id": "9F9847C3b79D",
-                    "legifrance_article": {
-                        "content": "<p>Dispositions applicables aux installations existantes </p><p>Les dispositions sont applicables aux installations existantes selon le calendrier suivant :</p><p></p><p>AU 1er OCTOBRE 1997</p><p></p><p>1. Dispositions générales</p><p></p><p>3. Exploitation - entretien</p><p></p><p>4. Risques</p><p></p><p>5.8. Epandage</p><p></p><p>7. Déchets</p><p></p><p>9. Remise en état</p><p></p><p>AU 1er OCTOBRE 2000</p><p></p><p>2. Implantation - aménagement</p><p></p><p>6. Air - odeurs</p><p></p><p>8. Bruit et vibrations (sauf 8.4.)</p><p></p><p>AU 1er OCTOBRE 2001</p><p></p><p>8.4. Bruit - mesure périodique</p><p></p>",
-                        "etat": "VIGUEUR",
-                        "id": "LEGIARTI000006870145",
-                        "intOrdre": 28632,
-                        "num": "Annexe II"
-                    },
-                    "outer_alineas": [
-                        {
-                            "links": [],
-                            "table": null,
-                            "text": "Dispositions applicables aux installations existantes"
-                        },
-                        {
-                            "links": [],
-                            "table": null,
-                            "text": "Les dispositions sont applicables aux installations existantes selon le calendrier suivant :"
-                        },
-                        {
-                            "links": [],
-                            "table": null,
-                            "text": "AU 1er OCTOBRE 1997"
-                        },
-                        {
-                            "links": [],
-                            "table": null,
-                            "text": "1. Dispositions générales"
-                        },
-                        {
-                            "links": [],
-                            "table": null,
-                            "text": "3. Exploitation - entretien"
-                        },
-                        {
-                            "links": [],
-                            "table": null,
-                            "text": "4. Risques"
-                        },
-                        {
-                            "links": [],
-                            "table": null,
-                            "text": "5.8. Epandage"
-                        },
-                        {
-                            "links": [],
-                            "table": null,
-                            "text": "7. Déchets"
-                        },
-                        {
-                            "links": [],
-                            "table": null,
-                            "text": "9. Remise en état"
-                        },
-                        {
-                            "links": [],
-                            "table": null,
-                            "text": "AU 1er OCTOBRE 2000"
-                        },
-                        {
-                            "links": [],
-                            "table": null,
-                            "text": "2. Implantation - aménagement"
-                        },
-                        {
-                            "links": [],
-                            "table": null,
-                            "text": "6. Air - odeurs"
-                        },
-                        {
-                            "links": [],
-                            "table": null,
-                            "text": "8. Bruit et vibrations (sauf 8.4.)"
-                        },
-                        {
-                            "links": [],
-                            "table": null,
-                            "text": "AU 1er OCTOBRE 2001"
-                        },
-                        {
-                            "links": [],
-                            "table": null,
-                            "text": "8.4. Bruit - mesure périodique"
-                        }
-                    ],
-                    "reference_str": "Annexe II",
-                    "sections": [],
-                    "title": {
-                        "links": [],
-                        "table": null,
-                        "text": "Annexe II"
-                    }
                 }
             ],
             "title": {
@@ -2714,11 +2608,6 @@
                 "depth": 3,
                 "section_id": "De63bA9DE9E4",
                 "section_title": "9.2. Traitement des cuves"
-            },
-            {
-                "depth": 1,
-                "section_id": "9F9847C3b79D",
-                "section_title": "Annexe II"
             }
         ]
     },
