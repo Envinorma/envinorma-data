@@ -1,6 +1,6 @@
 import json
-from lib.topics.topics import TOPIC_ONTOLOGY
 import os
+import random
 import traceback
 from copy import copy
 from datetime import datetime
@@ -10,6 +10,7 @@ from warnings import warn
 from requests_oauthlib import OAuth2Session
 from tqdm import tqdm
 
+from lib.topics.topics import TOPIC_ONTOLOGY
 from lib.data import (
     Hyperlink,
     Anchor,
@@ -127,6 +128,7 @@ def _extract_legifrance_format_error(legifrance_text_json: Dict) -> Optional[Leg
 
 def _structure_am(legifrance_text: LegifranceText) -> Tuple[Optional[ArreteMinisteriel], Optional[StructurationError]]:
     try:
+        random.seed(legifrance_text.title)  # avoid changing ids
         am = transform_arrete_ministeriel(legifrance_text)
         return am, None
     except Exception as exc:  # pylint: disable=broad-except
