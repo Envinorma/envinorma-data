@@ -2,7 +2,7 @@ import json
 from dataclasses import dataclass
 from datetime import datetime
 from enum import Enum
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List, Optional, Tuple
 
 
 class Seveso(Enum):
@@ -86,11 +86,35 @@ class GRClassement:
         return GRClassement(**dict_)
 
 
-if __name__ == '__main__':
-    icpe_data = json.load(open('icpe_admin_data.json'))
-    classements = [
-        GRClassement.from_georisques_dict(classement)
-        for classements in icpe_data.values()
-        for classement in classements
-        if classement['seveso']
+def load_all_classements() -> Dict[str, List[GRClassement]]:
+    icpe_data = json.load(open('/Users/remidelbouys/EnviNorma/brouillons/data/icpe_admin_data.json'))
+    return {
+        id_: [GRClassement.from_georisques_dict(classement) for classement in classements if classement['seveso']]
+        for id_, classements in icpe_data.items()
+    }
+
+
+@dataclass
+class GeorisquesInstallation:
+    code_s3ic: str
+    num_dep: str
+
+    @staticmethod
+    def from_georisques_dict(dict_: Dict[str, Any]) -> 'GeorisquesInstallation':
+        return GeorisquesInstallation(dict_['code_s3ic'], dict_['num_dep'])
+
+
+def load_all_installations() -> List[GeorisquesInstallation]:
+    data = json.load(open('/Users/remidelbouys/EnviNorma/brouillons/data/icpe.geojson'))
+    return [GeorisquesInstallation.from_georisques_dict(doc['properties']) for doc in data['features']]
+
+
+def build_data(
+    id_to_classements: Dict[str, List[GRClassement]], installations: List[GeorisquesInstallation]
+) -> List[Tuple[Optional[GRRegime], str, Optional[datetime], str]]:
+    return [
+        (classement.regime, classement.code_nomenclature, classement.date_autorisation, installation.num_dep)
+        for installation in installations
+        for classement in id_to_classements[installation.code_s3ic]
     ]
+

@@ -155,11 +155,11 @@ def extract_all_am_main_topics(text: _AMOrText) -> List[Optional[TopicName]]:
     if text.sections:
         return [topic for section in text.sections for topic in extract_all_am_main_topics(section)]
     if isinstance(text, StructuredText):
-        return [text.annotations.topic] if text.annotations else [None]
+        return [text.annotations.topic if text.annotations else None]
     return []
 
 
-def extract_main_paragraph_topics(arretes: List[ArreteMinisteriel]) -> List[Optional[TopicName]]:
+def extract_paragraph_main_topics(arretes: List[ArreteMinisteriel]) -> List[Optional[TopicName]]:
     return [topic for arrete in arretes for topic in extract_all_am_main_topics(arrete)]
 
 
@@ -213,6 +213,10 @@ def nb_installations_per_region() -> Dict[str, int]:
     pass
 
 
+def count_nb_active_classement() -> Dict[str, int]:
+    pass
+
+
 def count_nb_sections(section: _AMOrText) -> int:
     return sum([count_nb_sections(sub) for sub in section.sections]) + len(section.sections)
 
@@ -220,6 +224,8 @@ def count_nb_sections(section: _AMOrText) -> int:
 def load_all_am() -> Dict[str, ArreteMinisteriel]:
     _, _, cid_to_am, _ = handle_all_am(dump_am=False, with_manual_enrichments=False)
     return cid_to_am
+
+
 
 
 # 219 AM
