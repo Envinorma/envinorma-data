@@ -1,4 +1,4 @@
-from typing import List
+import dash_table
 
 import plotly.express as px
 from dash.dash import Dash
@@ -7,63 +7,61 @@ import dash_html_components as html
 from dash.dependencies import Input, Output
 
 from plotly.graph_objects import Figure
-from lib.graphs.rubriques_over_time.data import RubriqueOverTimeDataset
-from lib.graphs.utils import build_data_file_name
+from lib.graphs.rubriques_over_time.data import RubriquesDataset
+from lib.graphs.utils import apply_filter, apply_sort, build_data_file_name, generate_dropdown, random_id
 
 
-dataframe = RubriqueOverTimeDataset.load_csv(build_data_file_name(__file__))
-
-available_rubrique = sorted(list(set(dataframe.rubriques)))
-available_departments = sorted(list(set(dataframe.departments)))
-RUBRIQUE_DROPDOWN = 'rubrique_dropdown'
-DEPARTMENTS_DROPDOWN = 'departments_dropdown'
-DATE_GRAPH = 'date_graph'
-dropdown_rubrique = dcc.Dropdown(
-    id=RUBRIQUE_DROPDOWN,
-    options=[{'label': i, 'value': i} for i in available_rubrique],
-    value=[],
-    multi=True,
-    placeholder='Rubrique',
+_DATAFRAME = RubriquesDataset.load_csv(build_data_file_name(__file__))
+_DATAFRAME = _DATAFRAME.loc[_DATAFRAME.year.apply(lambda x: 1950 <= x <= 2030)]
+_PAGE_SIZE = 20
+_TABLE_ID = random_id('TABLE')
+_TABLE = dash_table.DataTable(
+    id=_TABLE_ID,
+    columns=[{'name': i, 'id': i} for i in sorted(_DATAFRAME.columns)],
+    page_current=0,
+    page_size=_PAGE_SIZE,
+    page_action='custom',
+    filter_action='custom',
+    filter_query='',
+    sort_action='custom',
+    sort_mode='single',
+    sort_by=[],
 )
-dropdown_department = dcc.Dropdown(
-    id=DEPARTMENTS_DROPDOWN,
-    options=[{'label': i, 'value': i} for i in available_departments],
-    value=[],
-    multi=True,
-    placeholder='Département',
-)
+_BAR_CHART = '_BAR_CHART'
+
 component = html.Div(
-    [
+    className='row',
+    children=[
         html.Div(
-            [
-                html.Div([dropdown_rubrique], style={'width': '20%', 'display': 'inline-block'}),
-                html.Div([dropdown_department], style={'width': '20%', 'display': 'inline-block'}),
-            ]
+            _TABLE,
+            style={'height': 750, 'overflowY': 'scroll', 'width': '65%', 'display': 'inline-block', 'margin': 'auto'},
         ),
-        dcc.Graph(id=DATE_GRAPH),
-    ]
+        html.Div(
+            [html.Div(id=_BAR_CHART)],
+            style={'width': '30%', 'display': 'inline-block', 'margin': 'auto', 'float': 'right'},
+        ),
+    ],
 )
 
 
 def add_callback(app: Dash):
-    @app.callback(Output(DATE_GRAPH, 'figure'), Input(RUBRIQUE_DROPDOWN, 'value'), Input(DEPARTMENTS_DROPDOWN, 'value'))
-    def _update_graph(rubriques: List[str], departments: List[str]):
-        if rubriques and departments:
-            filter_ = dataframe['rubriques'].isin(rubriques) & dataframe['departments'].isin(departments)
-        elif rubriques and not departments:
-            filter_ = dataframe['rubriques'].isin(rubriques)
-        elif not rubriques and departments:
-            filter_ = dataframe['departments'].isin(departments)
-        else:
-            filter_ = None
-        filtered_dataframe = dataframe[filter_] if filter_ is not None else dataframe
-        year_agg = filtered_dataframe.groupby('years').sum()
-        year_range = list(range(1970, 2021))
-        year_counter = {year: occ for year, occ in zip(year_agg.index, year_agg.occurrences)}
+    @app.callback(
+        Output(_TABLE_ID, 'data'),
+        Input(_TABLE_ID, 'page_current'),
+        Input(_TABLE_ID, 'page_size'),
+        Input(_TABLE_ID, 'sort_by'),
+        Input(_TABLE_ID, 'filter_query'),
+    )
+    def _update_table(page_current, page_size, sort_by, filter_query):
+        new_dataframe = apply_sort(apply_filter(_DATAFRAME, filter_query), sort_by)
+        return new_dataframe.iloc[page_current * page_size : (page_current + 1) * page_size].to_dict('records')
 
-        fig: Figure = px.bar(x=year_range, y=[year_counter.get(x, 0) for x in year_range])
-        fig.update_layout(margin={'l': 40, 'b': 40, 't': 10, 'r': 0}, hovermode='closest')
-        fig.update_xaxes(title_text='Année de création')
-        fig.update_yaxes(title_text='Nombre d\'occurrences')
+    @app.callback(Output(_BAR_CHART, 'children'), Input(_TABLE_ID, 'filter_query'))
+    def _update_graph(filter_query: str):
+        dataframe = apply_filter(_DATAFRAME, filter_query)
+        year_agg = dataframe.groupby('year').count().reset_index()
+        print(year_agg.head())
 
-        return fig
+        fig: Figure = px.bar(year_agg, x='year', y='department')
+        return html.Div([dcc.Graph(id=random_id('year_distribution'), figure=fig)])
+
