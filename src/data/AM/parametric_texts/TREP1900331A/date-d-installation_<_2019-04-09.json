@@ -2798,7 +2798,8 @@
                                                         "rowspan": 1
                                                     }
                                                 ],
-                                                "is_header": false
+                                                "is_header": false,
+                                                "text_in_inspection_sheet": ""
                                             },
                                             {
                                                 "cells": [
@@ -2812,7 +2813,8 @@
                                                         "rowspan": 1
                                                     }
                                                 ],
-                                                "is_header": false
+                                                "is_header": false,
+                                                "text_in_inspection_sheet": ""
                                             },
                                             {
                                                 "cells": [
@@ -2826,7 +2828,8 @@
                                                         "rowspan": 1
                                                     }
                                                 ],
-                                                "is_header": false
+                                                "is_header": false,
+                                                "text_in_inspection_sheet": ""
                                             },
                                             {
                                                 "cells": [
@@ -2840,7 +2843,8 @@
                                                         "rowspan": 1
                                                     }
                                                 ],
-                                                "is_header": false
+                                                "is_header": false,
+                                                "text_in_inspection_sheet": ""
                                             },
                                             {
                                                 "cells": [
@@ -2854,7 +2858,8 @@
                                                         "rowspan": 1
                                                     }
                                                 ],
-                                                "is_header": false
+                                                "is_header": false,
+                                                "text_in_inspection_sheet": ""
                                             }
                                         ]
                                     },
@@ -3414,7 +3419,8 @@
                                                         "rowspan": 1
                                                     }
                                                 ],
-                                                "is_header": false
+                                                "is_header": false,
+                                                "text_in_inspection_sheet": ""
                                             },
                                             {
                                                 "cells": [
@@ -3437,7 +3443,8 @@
                                                         "rowspan": 1
                                                     }
                                                 ],
-                                                "is_header": false
+                                                "is_header": false,
+                                                "text_in_inspection_sheet": ""
                                             },
                                             {
                                                 "cells": [
@@ -3460,7 +3467,8 @@
                                                         "rowspan": 1
                                                     }
                                                 ],
-                                                "is_header": false
+                                                "is_header": false,
+                                                "text_in_inspection_sheet": ""
                                             },
                                             {
                                                 "cells": [
@@ -3483,7 +3491,8 @@
                                                         "rowspan": 1
                                                     }
                                                 ],
-                                                "is_header": false
+                                                "is_header": false,
+                                                "text_in_inspection_sheet": ""
                                             },
                                             {
                                                 "cells": [
@@ -3506,7 +3515,8 @@
                                                         "rowspan": 1
                                                     }
                                                 ],
-                                                "is_header": false
+                                                "is_header": false,
+                                                "text_in_inspection_sheet": ""
                                             },
                                             {
                                                 "cells": [
@@ -3520,7 +3530,8 @@
                                                         "rowspan": 1
                                                     }
                                                 ],
-                                                "is_header": false
+                                                "is_header": false,
+                                                "text_in_inspection_sheet": ""
                                             },
                                             {
                                                 "cells": [
@@ -3543,7 +3554,8 @@
                                                         "rowspan": 1
                                                     }
                                                 ],
-                                                "is_header": false
+                                                "is_header": false,
+                                                "text_in_inspection_sheet": ""
                                             },
                                             {
                                                 "cells": [
@@ -3557,7 +3569,8 @@
                                                         "rowspan": 1
                                                     }
                                                 ],
-                                                "is_header": false
+                                                "is_header": false,
+                                                "text_in_inspection_sheet": ""
                                             },
                                             {
                                                 "cells": [
@@ -3571,7 +3584,8 @@
                                                         "rowspan": 1
                                                     }
                                                 ],
-                                                "is_header": false
+                                                "is_header": false,
+                                                "text_in_inspection_sheet": ""
                                             },
                                             {
                                                 "cells": [
@@ -3594,7 +3608,8 @@
                                                         "rowspan": 1
                                                     }
                                                 ],
-                                                "is_header": false
+                                                "is_header": false,
+                                                "text_in_inspection_sheet": ""
                                             },
                                             {
                                                 "cells": [
@@ -3608,7 +3623,8 @@
                                                         "rowspan": 1
                                                     }
                                                 ],
-                                                "is_header": false
+                                                "is_header": false,
+                                                "text_in_inspection_sheet": ""
                                             },
                                             {
                                                 "cells": [
@@ -3622,7 +3638,8 @@
                                                         "rowspan": 1
                                                     }
                                                 ],
-                                                "is_header": false
+                                                "is_header": false,
+                                                "text_in_inspection_sheet": ""
                                             },
                                             {
                                                 "cells": [
@@ -3645,7 +3662,8 @@
                                                         "rowspan": 1
                                                     }
                                                 ],
-                                                "is_header": false
+                                                "is_header": false,
+                                                "text_in_inspection_sheet": ""
                                             },
                                             {
                                                 "cells": [
@@ -3659,7 +3677,8 @@
                                                         "rowspan": 1
                                                     }
                                                 ],
-                                                "is_header": false
+                                                "is_header": false,
+                                                "text_in_inspection_sheet": ""
                                             },
                                             {
                                                 "cells": [
@@ -3682,7 +3701,8 @@
                                                         "rowspan": 1
                                                     }
                                                 ],
-                                                "is_header": false
+                                                "is_header": false,
+                                                "text_in_inspection_sheet": ""
                                             },
                                             {
                                                 "cells": [
@@ -3696,7 +3716,8 @@
                                                         "rowspan": 1
                                                     }
                                                 ],
-                                                "is_header": false
+                                                "is_header": false,
+                                                "text_in_inspection_sheet": ""
                                             },
                                             {
                                                 "cells": [
@@ -3719,7 +3740,8 @@
                                                         "rowspan": 1
                                                     }
                                                 ],
-                                                "is_header": false
+                                                "is_header": false,
+                                                "text_in_inspection_sheet": ""
                                             },
                                             {
                                                 "cells": [
@@ -3733,7 +3755,8 @@
                                                         "rowspan": 1
                                                     }
                                                 ],
-                                                "is_header": false
+                                                "is_header": false,
+                                                "text_in_inspection_sheet": ""
                                             },
                                             {
                                                 "cells": [
@@ -3756,7 +3779,8 @@
                                                         "rowspan": 1
                                                     }
                                                 ],
-                                                "is_header": false
+                                                "is_header": false,
+                                                "text_in_inspection_sheet": ""
                                             },
                                             {
                                                 "cells": [
@@ -3770,7 +3794,8 @@
                                                         "rowspan": 1
                                                     }
                                                 ],
-                                                "is_header": false
+                                                "is_header": false,
+                                                "text_in_inspection_sheet": ""
                                             },
                                             {
                                                 "cells": [
@@ -3793,7 +3818,8 @@
                                                         "rowspan": 1
                                                     }
                                                 ],
-                                                "is_header": false
+                                                "is_header": false,
+                                                "text_in_inspection_sheet": ""
                                             },
                                             {
                                                 "cells": [
@@ -3816,7 +3842,8 @@
                                                         "rowspan": 1
                                                     }
                                                 ],
-                                                "is_header": false
+                                                "is_header": false,
+                                                "text_in_inspection_sheet": ""
                                             }
                                         ]
                                     },
@@ -3893,7 +3920,8 @@
                                                         "rowspan": 1
                                                     }
                                                 ],
-                                                "is_header": true
+                                                "is_header": true,
+                                                "text_in_inspection_sheet": null
                                             },
                                             {
                                                 "cells": [
@@ -3916,7 +3944,8 @@
                                                         "rowspan": 1
                                                     }
                                                 ],
-                                                "is_header": false
+                                                "is_header": false,
+                                                "text_in_inspection_sheet": "Hauteur d'émission (en m)\n0\nDébit d'odeur (en uoE /h)\n1 x 106"
                                             },
                                             {
                                                 "cells": [
@@ -3939,7 +3968,8 @@
                                                         "rowspan": 1
                                                     }
                                                 ],
-                                                "is_header": false
+                                                "is_header": false,
+                                                "text_in_inspection_sheet": "Hauteur d'émission (en m)\n5\nDébit d'odeur (en uoE /h)\n3,6 x 106"
                                             },
                                             {
                                                 "cells": [
@@ -3962,7 +3992,8 @@
                                                         "rowspan": 1
                                                     }
                                                 ],
-                                                "is_header": false
+                                                "is_header": false,
+                                                "text_in_inspection_sheet": "Hauteur d'émission (en m)\n10\nDébit d'odeur (en uoE /h)\n21 x 106"
                                             },
                                             {
                                                 "cells": [
@@ -3985,7 +4016,8 @@
                                                         "rowspan": 1
                                                     }
                                                 ],
-                                                "is_header": false
+                                                "is_header": false,
+                                                "text_in_inspection_sheet": "Hauteur d'émission (en m)\n20\nDébit d'odeur (en uoE /h)\n180 x 106"
                                             },
                                             {
                                                 "cells": [
@@ -4008,7 +4040,8 @@
                                                         "rowspan": 1
                                                     }
                                                 ],
-                                                "is_header": false
+                                                "is_header": false,
+                                                "text_in_inspection_sheet": "Hauteur d'émission (en m)\n30\nDébit d'odeur (en uoE /h)\n720 x 106"
                                             },
                                             {
                                                 "cells": [
@@ -4031,7 +4064,8 @@
                                                         "rowspan": 1
                                                     }
                                                 ],
-                                                "is_header": false
+                                                "is_header": false,
+                                                "text_in_inspection_sheet": "Hauteur d'émission (en m)\n50\nDébit d'odeur (en uoE /h)\n3 600 x 106"
                                             },
                                             {
                                                 "cells": [
@@ -4054,7 +4088,8 @@
                                                         "rowspan": 1
                                                     }
                                                 ],
-                                                "is_header": false
+                                                "is_header": false,
+                                                "text_in_inspection_sheet": "Hauteur d'émission (en m)\n80\nDébit d'odeur (en uoE /h)\n18 000 x 106"
                                             },
                                             {
                                                 "cells": [
@@ -4077,7 +4112,8 @@
                                                         "rowspan": 1
                                                     }
                                                 ],
-                                                "is_header": false
+                                                "is_header": false,
+                                                "text_in_inspection_sheet": "Hauteur d'émission (en m)\n100\nDébit d'odeur (en uoE /h)\n36 000 x 106"
                                             }
                                         ]
                                     },
@@ -4208,7 +4244,8 @@
                                                         "rowspan": 1
                                                     }
                                                 ],
-                                                "is_header": true
+                                                "is_header": true,
+                                                "text_in_inspection_sheet": null
                                             },
                                             {
                                                 "cells": [
@@ -4240,7 +4277,8 @@
                                                         "rowspan": 1
                                                     }
                                                 ],
-                                                "is_header": false
+                                                "is_header": false,
+                                                "text_in_inspection_sheet": "\nNiveau de bruit ambiant\nexistant dans les zones à émergence réglementée\n(incluant le bruit de l'installation)\n\nsupérieur à 35 et inférieur\nou égal à 45 dB (A)\n\nEmergence admissible\npour la période allant de 7 h à 22 h,\nsauf dimanches et jours fériés\n\n6 dB (A)\n\nEmergence admissible\npour la période allant de 22 h à 7 h,\nainsi que les dimanches et jours fériés\n\n4 dB (A)"
                                             },
                                             {
                                                 "cells": [
@@ -4272,7 +4310,8 @@
                                                         "rowspan": 1
                                                     }
                                                 ],
-                                                "is_header": false
+                                                "is_header": false,
+                                                "text_in_inspection_sheet": "\nNiveau de bruit ambiant\nexistant dans les zones à émergence réglementée\n(incluant le bruit de l'installation)\n\nsupérieur à\n45 dB (A)\n\nEmergence admissible\npour la période allant de 7 h à 22 h,\nsauf dimanches et jours fériés\n\n5 dB (A)\n\nEmergence admissible\npour la période allant de 22 h à 7 h,\nainsi que les dimanches et jours fériés\n\n3 dB (A)"
                                             }
                                         ]
                                     },
@@ -4732,7 +4771,8 @@
                                                         "rowspan": 1
                                                     }
                                                 ],
-                                                "is_header": false
+                                                "is_header": false,
+                                                "text_in_inspection_sheet": ""
                                             },
                                             {
                                                 "cells": [
@@ -4755,7 +4795,8 @@
                                                         "rowspan": 1
                                                     }
                                                 ],
-                                                "is_header": false
+                                                "is_header": false,
+                                                "text_in_inspection_sheet": ""
                                             },
                                             {
                                                 "cells": [
@@ -4778,7 +4819,8 @@
                                                         "rowspan": 1
                                                     }
                                                 ],
-                                                "is_header": false
+                                                "is_header": false,
+                                                "text_in_inspection_sheet": ""
                                             },
                                             {
                                                 "cells": [
@@ -4801,7 +4843,8 @@
                                                         "rowspan": 1
                                                     }
                                                 ],
-                                                "is_header": false
+                                                "is_header": false,
+                                                "text_in_inspection_sheet": ""
                                             },
                                             {
                                                 "cells": [
@@ -4815,7 +4858,8 @@
                                                         "rowspan": 1
                                                     }
                                                 ],
-                                                "is_header": false
+                                                "is_header": false,
+                                                "text_in_inspection_sheet": ""
                                             },
                                             {
                                                 "cells": [
@@ -4838,7 +4882,8 @@
                                                         "rowspan": 1
                                                     }
                                                 ],
-                                                "is_header": false
+                                                "is_header": false,
+                                                "text_in_inspection_sheet": ""
                                             },
                                             {
                                                 "cells": [
@@ -4861,7 +4906,8 @@
                                                         "rowspan": 1
                                                     }
                                                 ],
-                                                "is_header": false
+                                                "is_header": false,
+                                                "text_in_inspection_sheet": ""
                                             },
                                             {
                                                 "cells": [
@@ -4875,7 +4921,8 @@
                                                         "rowspan": 1
                                                     }
                                                 ],
-                                                "is_header": false
+                                                "is_header": false,
+                                                "text_in_inspection_sheet": ""
                                             },
                                             {
                                                 "cells": [
@@ -4898,7 +4945,8 @@
                                                         "rowspan": 1
                                                     }
                                                 ],
-                                                "is_header": false
+                                                "is_header": false,
+                                                "text_in_inspection_sheet": ""
                                             },
                                             {
                                                 "cells": [
@@ -4921,7 +4969,8 @@
                                                         "rowspan": 1
                                                     }
                                                 ],
-                                                "is_header": false
+                                                "is_header": false,
+                                                "text_in_inspection_sheet": ""
                                             },
                                             {
                                                 "cells": [
@@ -4935,7 +4984,8 @@
                                                         "rowspan": 1
                                                     }
                                                 ],
-                                                "is_header": false
+                                                "is_header": false,
+                                                "text_in_inspection_sheet": ""
                                             },
                                             {
                                                 "cells": [
@@ -4958,7 +5008,8 @@
                                                         "rowspan": 1
                                                     }
                                                 ],
-                                                "is_header": false
+                                                "is_header": false,
+                                                "text_in_inspection_sheet": ""
                                             },
                                             {
                                                 "cells": [
@@ -4981,7 +5032,8 @@
                                                         "rowspan": 1
                                                     }
                                                 ],
-                                                "is_header": false
+                                                "is_header": false,
+                                                "text_in_inspection_sheet": ""
                                             },
                                             {
                                                 "cells": [
@@ -4995,7 +5047,8 @@
                                                         "rowspan": 1
                                                     }
                                                 ],
-                                                "is_header": false
+                                                "is_header": false,
+                                                "text_in_inspection_sheet": ""
                                             },
                                             {
                                                 "cells": [
@@ -5009,7 +5062,8 @@
                                                         "rowspan": 1
                                                     }
                                                 ],
-                                                "is_header": false
+                                                "is_header": false,
+                                                "text_in_inspection_sheet": ""
                                             },
                                             {
                                                 "cells": [
@@ -5032,7 +5086,8 @@
                                                         "rowspan": 1
                                                     }
                                                 ],
-                                                "is_header": false
+                                                "is_header": false,
+                                                "text_in_inspection_sheet": ""
                                             },
                                             {
                                                 "cells": [
@@ -5055,7 +5110,8 @@
                                                         "rowspan": 1
                                                     }
                                                 ],
-                                                "is_header": false
+                                                "is_header": false,
+                                                "text_in_inspection_sheet": ""
                                             },
                                             {
                                                 "cells": [
@@ -5069,7 +5125,8 @@
                                                         "rowspan": 1
                                                     }
                                                 ],
-                                                "is_header": false
+                                                "is_header": false,
+                                                "text_in_inspection_sheet": ""
                                             },
                                             {
                                                 "cells": [
@@ -5092,7 +5149,8 @@
                                                         "rowspan": 1
                                                     }
                                                 ],
-                                                "is_header": false
+                                                "is_header": false,
+                                                "text_in_inspection_sheet": ""
                                             },
                                             {
                                                 "cells": [
@@ -5106,7 +5164,8 @@
                                                         "rowspan": 1
                                                     }
                                                 ],
-                                                "is_header": false
+                                                "is_header": false,
+                                                "text_in_inspection_sheet": ""
                                             },
                                             {
                                                 "cells": [
@@ -5120,7 +5179,8 @@
                                                         "rowspan": 1
                                                     }
                                                 ],
-                                                "is_header": false
+                                                "is_header": false,
+                                                "text_in_inspection_sheet": ""
                                             },
                                             {
                                                 "cells": [
@@ -5134,7 +5194,8 @@
                                                         "rowspan": 1
                                                     }
                                                 ],
-                                                "is_header": false
+                                                "is_header": false,
+                                                "text_in_inspection_sheet": ""
                                             },
                                             {
                                                 "cells": [
@@ -5148,7 +5209,8 @@
                                                         "rowspan": 1
                                                     }
                                                 ],
-                                                "is_header": false
+                                                "is_header": false,
+                                                "text_in_inspection_sheet": ""
                                             },
                                             {
                                                 "cells": [
@@ -5171,7 +5233,8 @@
                                                         "rowspan": 1
                                                     }
                                                 ],
-                                                "is_header": false
+                                                "is_header": false,
+                                                "text_in_inspection_sheet": ""
                                             },
                                             {
                                                 "cells": [
@@ -5185,7 +5248,8 @@
                                                         "rowspan": 1
                                                     }
                                                 ],
-                                                "is_header": false
+                                                "is_header": false,
+                                                "text_in_inspection_sheet": ""
                                             },
                                             {
                                                 "cells": [
@@ -5208,7 +5272,8 @@
                                                         "rowspan": 1
                                                     }
                                                 ],
-                                                "is_header": false
+                                                "is_header": false,
+                                                "text_in_inspection_sheet": ""
                                             },
                                             {
                                                 "cells": [
@@ -5222,7 +5287,8 @@
                                                         "rowspan": 1
                                                     }
                                                 ],
-                                                "is_header": false
+                                                "is_header": false,
+                                                "text_in_inspection_sheet": ""
                                             },
                                             {
                                                 "cells": [
@@ -5245,7 +5311,8 @@
                                                         "rowspan": 1
                                                     }
                                                 ],
-                                                "is_header": false
+                                                "is_header": false,
+                                                "text_in_inspection_sheet": ""
                                             },
                                             {
                                                 "cells": [
@@ -5259,7 +5326,8 @@
                                                         "rowspan": 1
                                                     }
                                                 ],
-                                                "is_header": false
+                                                "is_header": false,
+                                                "text_in_inspection_sheet": ""
                                             },
                                             {
                                                 "cells": [
@@ -5282,7 +5350,8 @@
                                                         "rowspan": 1
                                                     }
                                                 ],
-                                                "is_header": false
+                                                "is_header": false,
+                                                "text_in_inspection_sheet": ""
                                             },
                                             {
                                                 "cells": [
@@ -5296,7 +5365,8 @@
                                                         "rowspan": 1
                                                     }
                                                 ],
-                                                "is_header": false
+                                                "is_header": false,
+                                                "text_in_inspection_sheet": ""
                                             },
                                             {
                                                 "cells": [
@@ -5319,7 +5389,8 @@
                                                         "rowspan": 1
                                                     }
                                                 ],
-                                                "is_header": false
+                                                "is_header": false,
+                                                "text_in_inspection_sheet": ""
                                             }
                                         ]
                                     },
@@ -5466,7 +5537,8 @@
                                                         "rowspan": 1
                                                     }
                                                 ],
-                                                "is_header": false
+                                                "is_header": false,
+                                                "text_in_inspection_sheet": ""
                                             },
                                             {
                                                 "cells": [
@@ -5498,7 +5570,8 @@
                                                         "rowspan": 1
                                                     }
                                                 ],
-                                                "is_header": false
+                                                "is_header": false,
+                                                "text_in_inspection_sheet": ""
                                             },
                                             {
                                                 "cells": [
@@ -5530,7 +5603,8 @@
                                                         "rowspan": 1
                                                     }
                                                 ],
-                                                "is_header": false
+                                                "is_header": false,
+                                                "text_in_inspection_sheet": ""
                                             },
                                             {
                                                 "cells": [
@@ -5562,7 +5636,8 @@
                                                         "rowspan": 1
                                                     }
                                                 ],
-                                                "is_header": false
+                                                "is_header": false,
+                                                "text_in_inspection_sheet": ""
                                             },
                                             {
                                                 "cells": [
@@ -5594,7 +5669,8 @@
                                                         "rowspan": 1
                                                     }
                                                 ],
-                                                "is_header": false
+                                                "is_header": false,
+                                                "text_in_inspection_sheet": ""
                                             },
                                             {
                                                 "cells": [
@@ -5626,7 +5702,8 @@
                                                         "rowspan": 1
                                                     }
                                                 ],
-                                                "is_header": false
+                                                "is_header": false,
+                                                "text_in_inspection_sheet": ""
                                             },
                                             {
                                                 "cells": [
@@ -5658,7 +5735,8 @@
                                                         "rowspan": 1
                                                     }
                                                 ],
-                                                "is_header": false
+                                                "is_header": false,
+                                                "text_in_inspection_sheet": ""
                                             }
                                         ]
                                     },

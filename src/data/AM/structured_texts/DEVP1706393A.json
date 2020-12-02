@@ -3543,7 +3543,8 @@
                                                                 "rowspan": 1
                                                             }
                                                         ],
-                                                        "is_header": true
+                                                        "is_header": true,
+                                                        "text_in_inspection_sheet": null
                                                     },
                                                     {
                                                         "cells": [
@@ -3575,7 +3576,8 @@
                                                                 "rowspan": 1
                                                             }
                                                         ],
-                                                        "is_header": false
+                                                        "is_header": false,
+                                                        "text_in_inspection_sheet": "NIVEAU DE BRUIT AMBIANT EXISTANT\ndans les zones à émergence réglementée\n(incluant le bruit de l'installation)\nSupérieur à 35 et inférieur ou égal à 45 dB (A)\nÉMERGENCE ADMISSIBLE POUR LA PÉRIODE\nallant de 7 heures à 22 heures\nsauf dimanches et jours fériés\n6 dB (A)\nÉMERGENCE ADMISSIBLE POUR LA PÉRIODE\nallant de 22 heures à 7 heures\nainsi que les dimanches et jours fériés\n4 dB (A)"
                                                     },
                                                     {
                                                         "cells": [
@@ -3607,7 +3609,8 @@
                                                                 "rowspan": 1
                                                             }
                                                         ],
-                                                        "is_header": false
+                                                        "is_header": false,
+                                                        "text_in_inspection_sheet": "NIVEAU DE BRUIT AMBIANT EXISTANT\ndans les zones à émergence réglementée\n(incluant le bruit de l'installation)\nSupérieur à 45 dB (A)\nÉMERGENCE ADMISSIBLE POUR LA PÉRIODE\nallant de 7 heures à 22 heures\nsauf dimanches et jours fériés\n5 dB (A)\nÉMERGENCE ADMISSIBLE POUR LA PÉRIODE\nallant de 22 heures à 7 heures\nainsi que les dimanches et jours fériés\n3 dB (A)"
                                                     }
                                                 ]
                                             },
@@ -4583,7 +4586,8 @@
                                                 "rowspan": 1
                                             }
                                         ],
-                                        "is_header": true
+                                        "is_header": true,
+                                        "text_in_inspection_sheet": null
                                     },
                                     {
                                         "cells": [
@@ -4606,7 +4610,8 @@
                                                 "rowspan": 1
                                             }
                                         ],
-                                        "is_header": false
+                                        "is_header": false,
+                                        "text_in_inspection_sheet": "POINT CONCERNÉ\nde l'annexe II\n2\nMODALITÉS PARTICULIÈRES D'APPLICATION DE CERTAINES DISPOSITIONS\nA l'alinéa Ces distances sont au minimum soit celles calculées par la méthode FLUMILOG (référencée dans le document de l'INERIS Description de la méthode de calcul des effets thermiques produits par un feu d'entrepôt , partie A, réf. DRA-09-90 977-14553A) si les dimensions du bâtiment sont dans son domaine de validité, soit celles calculées par des études spécifiques dans le cas contraire se substitue l'alinéa Ces distances résultent de l'instruction de la demande d'autorisation et de l'examen de l'étude des dangers ."
                                     },
                                     {
                                         "cells": [
@@ -4629,7 +4634,8 @@
                                                 "rowspan": 1
                                             }
                                         ],
-                                        "is_header": false
+                                        "is_header": false,
+                                        "text_in_inspection_sheet": "POINT CONCERNÉ\nde l'annexe II\n3\nMODALITÉS PARTICULIÈRES D'APPLICATION DE CERTAINES DISPOSITIONS\nAux dispositions des points 3.2 à 3.4 de l'annexe II se substituent les dispositions suivantes :\nL'entrepôt est en permanence accessible pour permettre l'intervention des services d'incendie et de secours. Une voie au moins est maintenue dégagée pour la circulation sur le périmètre de l'entrepôt. Cette voie permet l'accès des engins de secours des sapeurs-pompiers et les croisements de ces engins.\nA partir de cette voie, les sapeurs-pompiers peuvent accéder à toutes les issues de l'entrepôt par un chemin stabilisé de 1,40 mètres de large au minimum.\nPour tout bâtiment de hauteur supérieure à 15 mètres, des aires de mise en station des moyens aériens sont prévus pour chaque façade. Cette disposition est également applicable aux entrepôts de plusieurs niveaux possédant au moins un plancher situé à une hauteur supérieure à 8 mètres par rapport au niveau d'accès des secours.\nLes véhicules dont la présence est liée à l'exploitation de l'entrepôt peuvent stationner sans occasionner de gêne sur les voies de circulation externe à l'entrepôt tout en laissant dégagés les accès nécessaires aux secours, même en dehors des heures d'exploitation et d'ouverture de l'entrepôt. "
                                     },
                                     {
                                         "cells": [
@@ -4652,7 +4658,8 @@
                                                 "rowspan": 1
                                             }
                                         ],
-                                        "is_header": false
+                                        "is_header": false,
+                                        "text_in_inspection_sheet": "POINT CONCERNÉ\nde l'annexe II\n4\nMODALITÉS PARTICULIÈRES D'APPLICATION DE CERTAINES DISPOSITIONS\nL'alinéa L'ensemble de la structure est a minima R 15 n'est pas applicable.\nAux alinéas Les isolants thermiques (ou l'isolant thermique s'il n'y a en qu'un) sont de classe A2 s1 d0.\nA défaut, le système support + isolants est de classe B s1 d0 et respecte l'une des conditions ci-après :\n- l'isolant, unique, a un pouvoir calorifique supérieur (pcs) inférieur ou égal à 8,4 mj/kg ;\n- l'isolation thermique est composée de plusieurs couches, dont la première (en contact avec le support de couverture), d'une épaisseur d'au moins 30 millimètres, de masse volumique supérieure à 110 kg/m3 et fixée mécaniquement, a un pcs inférieur ou égal à 8,4 mj/kg et les couches supérieures sont constituées d'isolants justifiant en épaisseur de 60 millimètres d'une classe D s3 d2. Ces couches supérieures sont recoupées au droit de chaque écran de cantonnement par un isolant de pcs inférieur ou égal à 8,4 mj/kg. se substitue l'alinéa En ce qui concerne la toiture, ses éléments de support sont réalisés en matériaux A2 s1 d0 et l'isolant thermique (s'il existe) est réalisé en matériaux A2 s1 d0 ou B s1 d0 de pouvoir calorifique supérieur (pcs) inférieur ou égal à 8,4 mj/kg. cette disposition n'est pas applicable si la structure porteuse est en lamellé-collé, en bois massif ou en matériaux reconnus équivalents par rapport au risque incendie, par la direction générale de la sécurité civile et de la gestion des crises du ministère chargé de l'intérieur. "
                                     },
                                     {
                                         "cells": [
@@ -4675,7 +4682,8 @@
                                                 "rowspan": 1
                                             }
                                         ],
-                                        "is_header": false
+                                        "is_header": false,
+                                        "text_in_inspection_sheet": "POINT CONCERNÉ\nde l'annexe II\n5\nMODALITÉS PARTICULIÈRES D'APPLICATION DE CERTAINES DISPOSITIONS\nA la phrase : Chaque écran de cantonnement est stable au feu de degré un quart-d'heure, et a une hauteur minimale de 1 mètre. La distance entre le point bas de l'écran et le point le plus près du stockage est supérieure ou égale à 0,5 mètre. Elle peut toutefois être réduite pour les zones de stockages automatisés. , se substitue la phrase : Les cantons sont délimités par des écrans de cantonnement, réalisés en matériaux A2 s1 d0 (y compris leurs fixations) et stables au feu de degré un quart d'heure, ou par la configuration de la toiture et des structures du bâtiment. "
                                     },
                                     {
                                         "cells": [
@@ -4704,7 +4712,8 @@
                                                 "rowspan": 1
                                             }
                                         ],
-                                        "is_header": false
+                                        "is_header": false,
+                                        "text_in_inspection_sheet": "POINT CONCERNÉ\nde l'annexe II\n6\nMODALITÉS PARTICULIÈRES D'APPLICATION DE CERTAINES DISPOSITIONS\nLe deuxième alinéa n'est pas applicable aux installations existantes ; le franchissement du seuil mentionné par cet alinéa est soumis à l'application de l'article R. 181-46 du code de l'environnement."
                                     },
                                     {
                                         "cells": [
@@ -4727,7 +4736,8 @@
                                                 "rowspan": 1
                                             }
                                         ],
-                                        "is_header": false
+                                        "is_header": false,
+                                        "text_in_inspection_sheet": "POINT CONCERNÉ\nde l'annexe II\n7\nMODALITÉS PARTICULIÈRES D'APPLICATION DE CERTAINES DISPOSITIONS\nAux dispositions du point 7 se substituent les dispositions suivantes : La surface des cellules de stockage est limitée de façon à réduire la quantité de matières combustibles en feu et d'éviter la propagation du feu d'une cellule à l'autre.\nLa surface maximale des cellules est égale à 3 000 mètres carrés en l'absence de système d'extinction automatique d'incendie ou 6 000 mètres carrés en présence de système d'extinction automatique d'incendie."
                                     },
                                     {
                                         "cells": [
@@ -4750,7 +4760,8 @@
                                                 "rowspan": 1
                                             }
                                         ],
-                                        "is_header": false
+                                        "is_header": false,
+                                        "text_in_inspection_sheet": "POINT CONCERNÉ\nde l'annexe II\n11\nMODALITÉS PARTICULIÈRES D'APPLICATION DE CERTAINES DISPOSITIONS\nAux alinéas Le volume nécessaire à ce confinement est déterminé en calculant pour chaque cellule la somme :\n- du volume d'eau d'extinction nécessaire à la lutte contre l'incendie, d'une part ;\n- du volume de liquide libéré par cet incendie, d'autre part ;\n- du volume d'eau lié aux intempéries, à raison de 10 litres par mètre carré de surface de drainage vers l'ouvrage de confinement lorsque le confinement est externe.\nCette somme est minorée du volume d'eau évaporé.\nLe volume nécessaire au confinement peut alternativement être déterminé conformément au document technique D9a (guide pratique pour le dimensionnement des rétentions des eaux d'extinction de l'Institut national d'études de la sécurité civile, la Fédération française des sociétés d'assurances et le Centre national de prévention et de protection, édition août 2004).\nse substitue l'alinéa Le volume nécessaire à ce confinement est déterminé notamment au vu de l'étude de dangers en fonction de la rapidité d'intervention et des moyens d'intervention ainsi que de la nature des matières stockées, et mentionné dans l'arrêté préfectoral. "
                                     },
                                     {
                                         "cells": [
@@ -4773,7 +4784,8 @@
                                                 "rowspan": 1
                                             }
                                         ],
-                                        "is_header": false
+                                        "is_header": false,
+                                        "text_in_inspection_sheet": "POINT CONCERNÉ\nde l'annexe II\n12\nMODALITÉS PARTICULIÈRES D'APPLICATION DE CERTAINES DISPOSITIONS\nLes mots : , et déclenche le compartimentage de la ou des cellules sinistrées ne sont pas applicables."
                                     },
                                     {
                                         "cells": [
@@ -4796,7 +4808,8 @@
                                                 "rowspan": 1
                                             }
                                         ],
-                                        "is_header": false
+                                        "is_header": false,
+                                        "text_in_inspection_sheet": "POINT CONCERNÉ\nde l'annexe II\n13\nMODALITÉS PARTICULIÈRES D'APPLICATION DE CERTAINES DISPOSITIONS\nLes mots : Les points d'eau incendie sont distants entre eux de 150 mètres maximum (les distances sont mesurées par les voies praticables aux engins des services d'incendie et de secours). ne sont pas applicables."
                                     },
                                     {
                                         "cells": [
@@ -4819,7 +4832,8 @@
                                                 "rowspan": 1
                                             }
                                         ],
-                                        "is_header": false
+                                        "is_header": false,
+                                        "text_in_inspection_sheet": "POINT CONCERNÉ\nde l'annexe II\n23\nMODALITÉS PARTICULIÈRES D'APPLICATION DE CERTAINES DISPOSITIONS\nLes dispositions du point 23 de l'annexe II sont applicables aux installations existantes au 1er janvier 2020."
                                     }
                                 ]
                             },
@@ -4895,7 +4909,8 @@
                                                 "rowspan": 1
                                             }
                                         ],
-                                        "is_header": true
+                                        "is_header": true,
+                                        "text_in_inspection_sheet": null
                                     },
                                     {
                                         "cells": [
@@ -4918,7 +4933,8 @@
                                                 "rowspan": 1
                                             }
                                         ],
-                                        "is_header": false
+                                        "is_header": false,
+                                        "text_in_inspection_sheet": "POINT CONCERNÉ\nde l'annexe II\n2\nMODALITÉS PARTICULIÈRES D'APPLICATION DE CERTAINES DISPOSITIONS\nA l'alinéa Ces distances sont au minimum soit celles calculées par la méthode FLUMILOG (référencée dans le document de l'INERIS Description de la méthode de calcul des effets thermiques produits par un feu d'entrepôt , partie A, réf. DRA-09-90 977-14553A) si les dimensions du bâtiment sont dans son domaine de validité, soit celles calculées par des études spécifiques dans le cas contraire se substitue l'alinéa Ces distances résultent de l'instruction de la demande d'autorisation et de l'examen de l'étude des dangers ."
                                     },
                                     {
                                         "cells": [
@@ -4941,7 +4957,8 @@
                                                 "rowspan": 1
                                             }
                                         ],
-                                        "is_header": false
+                                        "is_header": false,
+                                        "text_in_inspection_sheet": "POINT CONCERNÉ\nde l'annexe II\n3\nMODALITÉS PARTICULIÈRES D'APPLICATION DE CERTAINES DISPOSITIONS\nAux dispositions des points 3.2 à 3.4 de l'annexe II se substituent les dispositions suivantes :\nL'entrepôt est en permanence accessible pour permettre l'intervention des services d'incendie et de secours. Une voie au moins est maintenue dégagée pour la circulation sur le périmètre de l'entrepôt. Cette voie permet l'accès des engins de secours des sapeurs-pompiers et les croisements de ces engins.\nA partir de cette voie, les sapeurs-pompiers peuvent accéder à toutes les issues de l'entrepôt par un chemin stabilisé de 1,40 mètres de large au minimum.\nPour tout bâtiment de hauteur supérieure à 15 mètres, des aires de mise en station des moyens aériens sont prévus pour chaque façade. Cette disposition est également applicable aux entrepôts de plusieurs niveaux possédant au moins un plancher situé à une hauteur supérieure à 8 mètres par rapport au niveau d'accès des secours.\nLes véhicules dont la présence est liée à l'exploitation de l'entrepôt peuvent stationner sans occasionner de gêne sur les voies de circulation externe à l'entrepôt tout en laissant dégagés les accès nécessaires aux secours, même en dehors des heures d'exploitation et d'ouverture de l'entrepôt. "
                                     },
                                     {
                                         "cells": [
@@ -4964,7 +4981,8 @@
                                                 "rowspan": 1
                                             }
                                         ],
-                                        "is_header": false
+                                        "is_header": false,
+                                        "text_in_inspection_sheet": "POINT CONCERNÉ\nde l'annexe II\n4\nMODALITÉS PARTICULIÈRES D'APPLICATION DE CERTAINES DISPOSITIONS\nL'alinéa L'ensemble de la structure est a minima r 15 n'est pas applicable.\nAux alinéas Les isolants thermiques (ou l'isolant thermique s'il n'y a en qu'un) sont de classe A2 s1 d0. à défaut, le système support + isolants est de classe B s1 d0 et respecte l'une des conditions ci-après :\n- l'isolant, unique, a un pouvoir calorifique supérieur (pcs) inférieur ou égal à 8,4 mj/kg ;\n- l'isolation thermique est composée de plusieurs couches, dont la première (en contact avec le support de couverture), d'une épaisseur d'au moins 30 millimètres, de masse volumique supérieure à 110 kg/m3 et fixée mécaniquement, a un pcs inférieur ou égal à 8,4 mj/kg et les couches supérieures sont constituées d'isolants justifiant en épaisseur de 60 millimètres d'une classe D s3 d2. ces couches supérieures sont recoupées au droit de chaque écran de cantonnement par un isolant de pcs inférieur ou égal à 8,4 mj/kg. se substitue l'alinéa en ce qui concerne la toiture, ses éléments de support sont réalisés en matériaux A2 s1 d0 et l'isolant thermique (s'il existe) est réalisé en matériaux A2 s1 d0 ou B s1 d0 de pouvoir calorifique supérieur (pcs) inférieur ou égal à 8,4 mj/kg. cette disposition n'est pas applicable si la structure porteuse est en lamellé-collé, en bois massif ou en matériaux reconnus équivalents par rapport au risque incendie, par la direction générale de la sécurité civile et de la gestion des crises du ministère chargé de l'intérieur. "
                                     },
                                     {
                                         "cells": [
@@ -4987,7 +5005,8 @@
                                                 "rowspan": 1
                                             }
                                         ],
-                                        "is_header": false
+                                        "is_header": false,
+                                        "text_in_inspection_sheet": "POINT CONCERNÉ\nde l'annexe II\n5\nMODALITÉS PARTICULIÈRES D'APPLICATION DE CERTAINES DISPOSITIONS\nA la phrase : Chaque écran de cantonnement est stable au feu de degré un quart d'heure, et a une hauteur minimale de 1 mètre. La distance entre le point bas de l'écran et le point le plus près du stockage est supérieure ou égale à 0,5 mètre. Elle peut toutefois être réduite pour les zones de stockages automatisés. , se substitue la phrase : Les cantons sont délimités par des écrans de cantonnement, réalisés en matériaux A2 s1 d0 (y compris leurs fixations) et stables au feu de degré un quart d'heure, ou par la configuration de la toiture et des structures du bâtiment. "
                                     },
                                     {
                                         "cells": [
@@ -5010,7 +5029,8 @@
                                                 "rowspan": 1
                                             }
                                         ],
-                                        "is_header": false
+                                        "is_header": false,
+                                        "text_in_inspection_sheet": "POINT CONCERNÉ\nde l'annexe II\n7\nMODALITÉS PARTICULIÈRES D'APPLICATION DE CERTAINES DISPOSITIONS\nAux dispositions du point 7 se substituent les dispositions suivantes : La surface maximale des cellules est égale à 3 000 mètres carrés en l'absence de système d'extinction automatique d'incendie et à 6 000 mètres carrés en présence d'un système d'extinction automatique d'incendie adapté à la nature des produits stockés.\nLa surface d'une mezzanine occupe au maximum 50 % de la surface du niveau inférieur de la cellule. Dans le cas où, dans une cellule, un niveau comporte plusieurs mezzanines, l'exploitant démontre, par une étude, que ces mezzanines n'engendrent pas de risque supplémentaire, et notamment qu'elles ne gênent pas le désenfumage en cas d'incendie.\nPour les entrepôts textile, la surface peut être portée à 85 % sous réserve que l'exploitant démontre, par une étude, que cette mezzanine n'engendre pas de risque supplémentaire, et notamment qu'elle ne gêne pas le désenfumage en cas d'incendie. "
                                     },
                                     {
                                         "cells": [
@@ -5033,7 +5053,8 @@
                                                 "rowspan": 1
                                             }
                                         ],
-                                        "is_header": false
+                                        "is_header": false,
+                                        "text_in_inspection_sheet": "POINT CONCERNÉ\nde l'annexe II\n11\nMODALITÉS PARTICULIÈRES D'APPLICATION DE CERTAINES DISPOSITIONS\nAux alinéas Le volume nécessaire à ce confinement est déterminé en calculant pour chaque cellule la somme :\n- du volume d'eau d'extinction nécessaire à la lutte contre l'incendie déterminé selon les dispositions du point 13 ci-dessous d'une part ;\n- du volume de liquide libéré par cet incendie d'autre part ;\n- du volume d'eau lié aux intempéries, à raison de 10 litres par mètre carré de surface de drainage vers l'ouvrage de confinement lorsque le confinement est externe.\nCette somme est minorée du volume d'eau évaporé.\nLe volume nécessaire au confinement peut alternativement être déterminé conformément au document technique D9a (guide pratique pour le dimensionnement des rétentions des eaux d'extinction de l'Institut national d'études de la sécurité civile, la Fédération française des sociétés d'assurances et le Centre national de prévention et de protection, édition Août 2004).\nse substitue l'alinéa Le volume nécessaire à ce confinement est déterminé notamment au vu de l'étude de dangers en fonction de la rapidité d'intervention et des moyens d'intervention ainsi que de la nature des matières stockées, et mentionné dans l'arrêté préfectoral. "
                                     },
                                     {
                                         "cells": [
@@ -5056,7 +5077,8 @@
                                                 "rowspan": 1
                                             }
                                         ],
-                                        "is_header": false
+                                        "is_header": false,
+                                        "text_in_inspection_sheet": "POINT CONCERNÉ\nde l'annexe II\n12\nMODALITÉS PARTICULIÈRES D'APPLICATION DE CERTAINES DISPOSITIONS\nLes mots : , et déclenche le compartimentage de la ou des cellules sinistrées ne sont pas applicables. La deuxième phrase est applicable au 1er janvier 2018."
                                     },
                                     {
                                         "cells": [
@@ -5079,7 +5101,8 @@
                                                 "rowspan": 1
                                             }
                                         ],
-                                        "is_header": false
+                                        "is_header": false,
+                                        "text_in_inspection_sheet": "POINT CONCERNÉ\nde l'annexe II\n13\nMODALITÉS PARTICULIÈRES D'APPLICATION DE CERTAINES DISPOSITIONS\nLes mots : Les points d'eau incendie sont distants entre eux de 150 mètres maximum (les distances sont mesurées par les voies praticables aux engins des services d'incendie et de secours). ne sont pas applicables."
                                     }
                                 ]
                             },
@@ -5115,7 +5138,8 @@
                                                 "rowspan": 1
                                             }
                                         ],
-                                        "is_header": true
+                                        "is_header": true,
+                                        "text_in_inspection_sheet": null
                                     },
                                     {
                                         "cells": [
@@ -5138,7 +5162,8 @@
                                                 "rowspan": 1
                                             }
                                         ],
-                                        "is_header": false
+                                        "is_header": false,
+                                        "text_in_inspection_sheet": "POINT CONCERNÉ\nde l'annexe II\n3.2\nMODALITÉS PARTICULIÈRES D'APPLICATION DE CERTAINES DISPOSITIONS\nAux dispositions du point 3.2 de l'annexe II se substituent les dispositions suivantes :\nUne voie \"engins\", dans l'enceinte de l'établissement, au moins est maintenue dégagée pour la circulation et le croisement sur le périmètre de l'installation et est positionnée de façon à ne pas être obstruée par l'effondrement de cette installation et par les eaux d'extinction.\nCette voie \"engins\" respecte les caractéristiques suivantes :\n- la largeur utile est au minimum de 6 mètres, la hauteur libre au minimum de 4,5 mètres et la pente inférieure à 15 % ;\n- dans les virages de rayon intérieur inférieur à 50 mètres, un rayon intérieur R minimal de 13 mètres est maintenu et une sur largeur de S = 15/R mètres est ajoutée ;\n- la voie résiste à la force portante calculée pour un véhicule de 320 kN avec un maximum de 130 kN par essieu, ceux-ci étant distants de 3,6 mètres au minimum ;\n- chaque point du périmètre de l'installation est à une distance maximale de 60 mètres de cette voie ;\n- aucun obstacle n'est disposé entre la voie engins et les accès à l'installation ou aux aires de mise en station des moyens aériens.\nEn cas d'impossibilité de mise en place d'une voie engin permettant la circulation sur l'intégralité du périmètre de l'installation et si tout ou partie de la voie est en impasse, les quarante derniers mètres de la partie de la voie en impasse sont d'une largeur utile minimale de 7 mètres et une aire de retournement comprise dans un cercle de 20 mètres de diamètre est prévue à son extrémité. "
                                     },
                                     {
                                         "cells": [
@@ -5161,7 +5186,8 @@
                                                 "rowspan": 1
                                             }
                                         ],
-                                        "is_header": false
+                                        "is_header": false,
+                                        "text_in_inspection_sheet": "POINT CONCERNÉ\nde l'annexe II\n3.3\nMODALITÉS PARTICULIÈRES D'APPLICATION DE CERTAINES DISPOSITIONS\nAux dispositions du point 3.3 de l'annexe II se substituent les dispositions suivantes :\nChaque cellule a au moins une façade accessible desservie par une voie permettant la circulation et la mise en station des échelles et bras élévateurs articulés. Cette aire de mise en station des moyens aériens est directement accessible depuis la voie engin définie au 3.2.\nDepuis cette aire, une un moyen aérien (par exemple une échelle ou un bras élévateur articulé) peut être mis en station pour accéder à au moins toute la hauteur du bâtiment et défendre chaque mur séparatif coupe-feu. L'aire respecte par ailleurs les caractéristiques suivantes :\n- la largeur utile est au minimum de 4 mètres, la longueur de l'aire de stationnement au minimum de 15 mètres, la pente au maximum de 10 % ;\n- dans les virages de rayon intérieur inférieur à 50 mètres, un rayon intérieur R minimal de 13 mètres est maintenu et une sur largeur de S = 15/R mètres est ajoutée ;\n- aucun obstacle aérien ne gêne la manœuvre de ces moyens aériens à la verticale de cette aire ;\n- la distance par rapport à la façade est de 1 mètre minimum et 8 mètres maximum pour un stationnement parallèle au bâtiment et inférieure à 1 mètre pour un stationnement perpendiculaire au bâtiment ;\n- la voie résiste à la force portante calculée pour un véhicule de 320 kN avec un maximum de 130 kN par essieu, ceux-ci étant distants de 3,6 mètres au minimum, et présente une résistance minimale au poinçonnement de 88 N/cm2.\nPar ailleurs, pour tout bâtiment de plusieurs niveaux possédant au moins un plancher situé à une hauteur supérieure à 8 mètres par rapport au niveau d'accès des secours, sur au moins deux façades, cette aire de mise en station des moyens aériens permet d'accéder à des ouvertures.\nCes ouvertures qui demeurent accessibles de l'extérieur et de l'intérieur permettent au moins deux accès par étage pour chacune des façades disposant d'aires de mise en station des moyens aériens et présentent une hauteur minimale de 1,8 mètre et une largeur minimale de 0,9 mètre. Elles sont aisément repérables de l'extérieur par les services de secours.\nLes dispositions du présent point ne sont pas exigées si la cellule a une surface de moins de 2 000 mètres carrés respectant les dispositions suivantes :\n- au moins un de ses murs séparatifs se situe à moins de 23 mètres d'une façade accessible ;\n- la cellule comporte un dispositif d'extinction automatique d'incendie ;\n- la cellule ne comporte pas de mezzanine. "
                                     },
                                     {
                                         "cells": [
@@ -5184,7 +5210,8 @@
                                                 "rowspan": 1
                                             }
                                         ],
-                                        "is_header": false
+                                        "is_header": false,
+                                        "text_in_inspection_sheet": "POINT CONCERNÉ\nde l'annexe II\n4\nMODALITÉS PARTICULIÈRES D'APPLICATION DE CERTAINES DISPOSITIONS\nAux dispositions du point 4 de l'annexe II se substituent les dispositions suivantes :\nL'exploitant réalise une étude technique démontrant que les dispositions constructives visent à ce que la ruine d'un élément (murs, toiture, poteaux, poutres, mezzanines) suite à un sinistre n'entraîne pas la ruine en chaîne de la structure du bâtiment, notamment les cellules de stockage avoisinantes, ni de leurs dispositifs de compartimentage, ni l'effondrement de la structure vers l'extérieur de la cellule en feu. Cette étude est réalisée avec la construction de l'entrepôt et est tenue à disposition de l'inspection des installations classées.\nLes locaux abritant l'installation présentent les caractéristiques de réaction et de résistance au feu minimales suivantes :\n- les parois extérieures des bâtiments sont construites en matériaux A2 s1 d0 ;\n- l'ensemble de la structure est a minima R 15 ;\n- pour les entrepôts à simple rez-de-chaussée de plus de 12,50 mètres de hauteur, la structure est R 60, sauf si le bâtiment est doté d'un dispositif d'extinction automatique d'incendie ;\n- pour les entrepôts de deux niveaux ou plus, les planchers (hors mezzanines) sont au moins EI 120 et les structures porteuses des planchers R 120 au moins ;\n- les murs séparatifs entre deux cellules sont au moins REI 120 ; ces parois sont prolongées latéralement le long du mur extérieur sur une largeur de 1 mètre ou sont prolongées perpendiculairement au mur extérieur de 0,50 mètre en saillie de la façade ;\n- les éléments séparatifs entre cellules dépassent d'au moins 1 mètre la couverture du bâtiment au droit du franchissement. La toiture est recouverte d'une bande de protection sur une largeur minimale de 5 mètres de part et d'autre des parois séparatives. Cette bande est en matériaux A2 s1 d0 ou comporte en surface une feuille métallique A2 s1 d0 ;\n- les murs séparatifs entre une cellule et un local technique (hors chaufferie) sont au moins REI 120 jusqu'en sous-face de toiture ou une distance libre de 10 mètres est respectée entre la cellule et le local technique ;\n- les bureaux et les locaux sociaux, à l'exception des bureaux dits de quais destinés à accueillir le personnel travaillant directement sur les stockages et les quais, sont situés dans un local clos distant d'au moins 10 mètres des cellules de stockage.\nCette distance peut être inférieure à 10 mètres si les bureaux et locaux sociaux sont :\n- isolés par une paroi jusqu'en sous-face de toiture et des portes d'intercommunication munies d'un ferme-porte, qui sont tous au moins REI 120 ;\n- sans être contigus avec les cellules où sont présentes des matières dangereuses.\nDe plus, lorsque les bureaux sont situés à l'intérieur d'une cellule :\n- le plafond est au moins REI 120 ;\n- le plancher est également au moins REI 120 si les bureaux sont situés en étage ;\n- les escaliers intérieurs reliant des niveaux séparés, dans le cas de planchers situés à plus de 8 mètres du sol intérieur, sont encloisonnés par des parois REI 60 et construits en matériaux A2 s1 d0. Ils débouchent directement à l'air libre, sinon sur des circulations encloisonnées de même degré coupe-feu y conduisant. Les blocs-portes intérieurs donnant sur ces escaliers sont E 60 C2 ;\n- le sol des aires et locaux de stockage est de classe A1fl ;\n- les ouvertures effectuées dans les parois séparatives (baies, convoyeurs, passages de gaines, câbles électriques et canalisations, portes, etc.) sont munies de dispositifs de fermeture ou de calfeutrement assurant un degré de résistance au feu équivalent à celui exigé pour ces parois. Les fermetures sont associées à un dispositif asservi à la détection automatique d'incendie assurant leur fermeture automatique, mais ce dispositif est aussi manœuvrable à la main, que l'incendie soit d'un côté ou de l'autre de la paroi. Ainsi les portes situées dans un mur au moins REI 120 présentent un classement EI2 120 C et les portes satisfont une classe de durabilité C2 ;\n- les éléments de support de couverture de toiture, hors isolant, sont réalisés en matériaux A2 s1 d0 ;\n- en ce qui concerne les isolants thermiques (ou l'isolant s'il n'y en a qu'un) :\n- soit ils sont de classe A2 s1 d0 ;\n- soit le système support + isolants est de classe B s1 d0 et respecte l'une des conditions ci-après :\n- l'isolant, unique, a un PCS inférieur ou égal à 8,4 MJ/kg ;\n- l'isolation thermique est composée de plusieurs couches dont la première (en contact avec le support de couverture), d'une épaisseur d'au moins 30 mm, de masse volumique supérieure à 110 kg/m3 et fixée mécaniquement, a un PCS inférieur ou égal à 8,4 MJ/kg et les couches supérieures sont constituées d'isolants, justifiant en épaisseur de 60 millimètres d'une classe D s3 d2. Ces couches supérieures sont recoupées au droit de chaque écran de cantonnement par un isolant de PCS inférieur ou égal à 8,4 MJ/kg ;\n- le système de couverture de toiture satisfait la classe et l'indice BROOF (t3) ;\n- les matériaux utilisés pour l'éclairage naturel satisfont à la classe d0. "
                                     },
                                     {
                                         "cells": [
@@ -5207,7 +5234,8 @@
                                                 "rowspan": 1
                                             }
                                         ],
-                                        "is_header": false
+                                        "is_header": false,
+                                        "text_in_inspection_sheet": "POINT CONCERNÉ\nde l'annexe II\n5\nMODALITÉS PARTICULIÈRES D'APPLICATION DE CERTAINES DISPOSITIONS\nA la phrase : Chaque écran de cantonnement est stable au feu de degré un quart d'heure, et a une hauteur minimale de 1 mètre. La distance entre le point bas de l'écran et le point le plus près du stockage est supérieure ou égale à 0,5 mètre. Elle peut toutefois être réduite pour les zones de stockages automatisés. se substitue la phrase : Les cantons sont délimités par des écrans de cantonnement, réalisés en matériaux A2 s1 d0 (y compris leurs fixations) et stables au feu de degré un quart d'heure. Leur hauteur est calculée conformément à la réglementation applicable aux établissements recevant du public. "
                                     },
                                     {
                                         "cells": [
@@ -5230,7 +5258,8 @@
                                                 "rowspan": 1
                                             }
                                         ],
-                                        "is_header": false
+                                        "is_header": false,
+                                        "text_in_inspection_sheet": "POINT CONCERNÉ\nde l'annexe II\n6\nMODALITÉS PARTICULIÈRES D'APPLICATION DE CERTAINES DISPOSITIONS\nCe point n'est pas applicable."
                                     },
                                     {
                                         "cells": [
@@ -5253,7 +5282,8 @@
                                                 "rowspan": 1
                                             }
                                         ],
-                                        "is_header": false
+                                        "is_header": false,
+                                        "text_in_inspection_sheet": "POINT CONCERNÉ\nde l'annexe II\n7\nMODALITÉS PARTICULIÈRES D'APPLICATION DE CERTAINES DISPOSITIONS\nAux dispositions du point 7 de l'annexe II se substituent les dispositions suivantes :\nLa surface maximale des cellules est égale à 3 000 mètres carrés en l'absence de système d'extinction automatique d'incendie et à 6 000 mètres carrés en présence d'un système d'extinction automatique d'incendie adapté à la nature des produits stockés.\nLa surface d'une mezzanine occupe au maximum 50 % de la surface du niveau inférieur de la cellule. Dans le cas où, dans une cellule, un niveau comporte plusieurs mezzanines, l'exploitant démontre, par une étude, que ces mezzanines n'engendrent pas de risque supplémentaire, et notamment qu'elles ne gênent pas le désenfumage en cas d'incendie.\nPour les entrepôts textile, la surface peut être portée à 85 % sous réserve que l'exploitant démontre, par une étude, que cette mezzanine n'engendre pas de risque supplémentaire, et notamment qu'elle ne gêne pas le désenfumage en cas d'incendie. "
                                     }
                                 ]
                             },
@@ -5359,7 +5389,8 @@
                                                 "rowspan": 1
                                             }
                                         ],
-                                        "is_header": true
+                                        "is_header": true,
+                                        "text_in_inspection_sheet": null
                                     },
                                     {
                                         "cells": [
@@ -5382,7 +5413,8 @@
                                                 "rowspan": 1
                                             }
                                         ],
-                                        "is_header": false
+                                        "is_header": false,
+                                        "text_in_inspection_sheet": "POINT CONCERNÉ\nde l'annexe II\n3.2\nMODALITÉS PARTICULIÈRES D'APPLICATION DE CERTAINES DISPOSITIONS\nCe point est remplacé par les dispositions suivantes :\nUne voie “engins” au moins est maintenue dégagée pour la circulation sur le périmètre de l'entrepôt et des bâtiments accolés et est positionnée de façon à ne pouvoir être obstruée par l'effondrement de tout ou partie du stockage.\nCette voie engins respecte les caractéristiques suivantes :\n- la largeur utile est au minimum de 3 mètres, la hauteur libre au minimum de 3,5 mètres et la pente inférieure à 15 % ;\n- dans les virages de rayon intérieur inférieur à 50 mètres, un rayon intérieur R minimal de 11 mètres est maintenu et une surlargeur de S = 15/R mètres est ajoutée ;\n- la voie résiste à la force portante calculée pour un véhicule de 160 kN, avec un maximum de 90 kN par essieu, ceux-ci étant distants de 3,6 mètres au maximum ;\n- chaque point du périmètre du stockage est à une distance maximale de 60 mètres de cette voie ;\n- aucun obstacle n'est disposé entre la voie engins et les accès au bâtiment, les aires de mise en station des moyens aériens et les aires de stationnement des engins.\nEn cas d'impossibilité de mise en place d'une voie engins permettant la circulation sur l'intégralité du périmètre de l'entrepôt et des bâtiments accolés et si tout ou partie de la voie est en impasse, les 40 derniers mètres de la partie de la voie en impasse sont d'une largeur utile minimale de 7 mètres et une aire de retournement de 10 mètres de diamètre est prévue à son extrémité.\nPour permettre le croisement des engins de secours, tout tronçon de voie engins de plus de 100 mètres linéaires dispose d'au moins deux aires dites de croisement, judicieusement positionnées, dont les caractéristiques sont :\n- largeur utile minimale de 3 mètres en plus de la voie engins ;\n- longueur minimale de 10 mètres, présentant a minima les mêmes qualités de pente, de force portante et de hauteur libre que la voie engins. "
                                     },
                                     {
                                         "cells": [
@@ -5405,7 +5437,8 @@
                                                 "rowspan": 1
                                             }
                                         ],
-                                        "is_header": false
+                                        "is_header": false,
+                                        "text_in_inspection_sheet": "POINT CONCERNÉ\nde l'annexe II\n3.3\nMODALITÉS PARTICULIÈRES D'APPLICATION DE CERTAINES DISPOSITIONS\nCe point est remplacé par les dispositions suivantes :\nPour tout stockage en bâtiment de hauteur supérieure à 8 mètres, au moins une façade est desservie par au moins une aire de mise en station des moyens aériens. Chaque aire de mise en station des moyens aériens est directement accessible depuis la voie engins définie au 3.2.\nDepuis cette aire, un moyen aérien (par exemple une échelle ou un bras élévateur articulé) accédant à au moins toute la hauteur du bâtiment peut être disposé.\nChaque aire respecte par ailleurs les caractéristiques suivantes :\n- la largeur utile est au minimum de 4 mètres, la longueur de l'aire de stationnement au minimum de 10 mètres, la pente au maximum de 10 % ;\n- dans les virages de rayon intérieur inférieur à 50 mètres, un rayon intérieur R minimal de 11 mètres est maintenu et une surlargeur de S = 15/R mètres est ajoutée ;\n- aucun obstacle aérien ne gêne la manœuvre de ces moyens aériens à la verticale de l'ensemble de la voie ;\n- la distance par rapport à la façade est de 1 mètre minimum et 8 mètres maximum pour un stationnement parallèle au bâtiment et inférieure à 1 mètre pour un stationnement perpendiculaire au bâtiment ;\n- la voie résiste à la force portante calculée pour un véhicule de 160 kN avec un maximum de 90 kN par essieu, ceux-ci étant distants de 3,6 mètres au maximum, et présente une résistance au poinçonnement minimale de 80 N/cm2.\nPar ailleurs, pour tout entrepôt de plusieurs niveaux possédant au moins un plancher situé à une hauteur supérieure à 8 mètres par rapport au niveau d'accès des secours, sur au moins deux façades, une aire de mise en station des moyens aériens permet d'accéder à des ouvertures.\nCes ouvertures permettent au moins un accès par étage pour chacune des façades disposant de voie échelles et présentent une hauteur minimale de 1,8 mètre et une largeur minimale de 0,9 mètre.\nLes panneaux d'obturation ou les châssis composant ces accès s'ouvrent et demeurent toujours accessibles de l'extérieur et de l'intérieur. Ils sont aisément repérables de l'extérieur par les services de secours. "
                                     },
                                     {
                                         "cells": [
@@ -5428,7 +5461,8 @@
                                                 "rowspan": 1
                                             }
                                         ],
-                                        "is_header": false
+                                        "is_header": false,
+                                        "text_in_inspection_sheet": "POINT CONCERNÉ\nde l'annexe II\n3.4\nMODALITÉS PARTICULIÈRES D'APPLICATION DE CERTAINES DISPOSITIONS\nLe point 3.4 est remplacé par la disposition suivante : A partir de chaque voie engins ou échelles est prévu un accès à toutes les issues du bâtiment par un chemin stabilisé de 1,40 mètre de large au minimum."
                                     },
                                     {
                                         "cells": [
@@ -5451,7 +5485,8 @@
                                                 "rowspan": 1
                                             }
                                         ],
-                                        "is_header": false
+                                        "is_header": false,
+                                        "text_in_inspection_sheet": "POINT CONCERNÉ\nde l'annexe II\n4\nMODALITÉS PARTICULIÈRES D'APPLICATION DE CERTAINES DISPOSITIONS\nLe point 4 est remplacé par les dispositions suivantes : Les locaux abritant l'installation présentent les caractéristiques de réaction et de résistance au feu minimales suivantes :\n- les parois extérieures sont construites en matériaux A2 s1 d0 ou en matériaux reconnus équivalents par rapport au risque incendie, par la direction générale de la sécurité civile et de la gestion des crises du ministère chargé de l'intérieur ;\n- l'ensemble de la structure présente les caractéristiques au moins R.15 ;\n- en ce qui concerne la toiture, les poutres et les pannes sont au minimum R15 ; les autres éléments porteurs sont réalisés au minimum en matériaux A2 s1 d0 et l'isolant thermique (s'il existe) est réalisé en matériaux au minimum B S3 d0 avec pouvoir calorifique supérieur (PCS) inférieur ou égal à 8,4 MJ/kg, ou bien l'isolation thermique est composée de plusieurs couches, dont la première (en contact avec le support de couverture), d'une épaisseur d'au moins 30 millimètres, de masse volumique supérieure à 110 kg/m3 et fixée mécaniquement, a un PCS inférieur ou égal à 8,4 MJ/kg et les couches supérieures sont constituées d'isolants justifiant une en épaisseur de 60 millimètres d'une classe D s3 d2. Ces couches supérieures sont recoupées au droit de chaque écran de cantonnement par un isolant de PCS inférieur ou égal à 8,4 MJ/kg, ou bien il est protégé par un écran thermique disposé sur la ou les faces susceptibles d'être exposées à un feu intérieur au bâtiment. Cet écran doit jouer un rôle protecteur vis-à-vis de l'action du programme thermique normalisé durant au moins une demi-heure. L'ensemble de la toiture hors poutres et pannes satisfait la classe et l'indice BROOF (t3) ;\n- planchers hauts (hors mezzanines) au moins REI 120 ; en outre, la stabilité au feu des structures porteuses des planchers, pour les entrepôts de deux niveaux et plus, est de degré deux heures au moins ;\n- portes et fermetures des murs séparatifs au moins EI 120 (y compris celles comportant des vitrages et des quincailleries). Ces portes et fermetures sont munies d'un ferme-porte, ou d'un dispositif assurant leur fermeture automatique, également au moins EI 120 ;\n- murs séparatifs au moins REI 120 entre deux cellules ; ces parois sont prolongées latéralement aux murs extérieurs sur une largeur de 1 mètre ou 0,50 mètre en saillie de la façade, dans la continuité de la paroi. Elles doivent être construites de façon à ne pas être entraînées en cas de ruine de la structure ;\n- murs séparatifs au moins REI 120 ou une distance libre de 10 mètres entre une cellule et un local technique (hors chaufferie) ;\n- portes et fermetures des murs séparatifs résistantes au feu (y compris celles comportant des vitrages et des quincailleries) et leurs dispositifs de fermeture au moins EI 120.\nLes dispositions constructives visent à ce que la ruine d'un élément de structure n'entraîne pas la ruine en chaîne de la structure du bâtiment, notamment les cellules de stockage avoisinantes, ni de leur dispositif de recoupement et ne favorise pas l'effondrement de la structure vers l'extérieur de la première cellule en feu.\nLes éléments séparatifs entre cellules dépassent d'au moins 1 mètre la couverture du bâtiment au droit du franchissement. La toiture est recouverte d'une bande de protection sur une largeur minimale de 5 mètres de part et d'autre des parois séparatives.\nLes ouvertures effectuées dans les éléments séparatifs (passage de gaines et canalisations, de convoyeurs) sont munies de dispositifs assurant un degré coupe-feu équivalent à celui exigé pour ces éléments séparatifs.\nLe sol des aires et locaux de stockage est incombustible (de classe A1).\nLes matériaux utilisés pour l'éclairage naturel ne produisent pas, lors d'un incendie, de gouttes enflammées.\nUne étude spécifique visant à évaluer les risques particuliers, notamment pour les personnes, et à déterminer les mesures spécifiques à mettre en place est réalisée pour toute mezzanine de surface supérieure à 50 % (85 % pour les entrepôts de textile) de la surface en cellule située en rez-de-chaussée."
                                     },
                                     {
                                         "cells": [
@@ -5474,7 +5509,8 @@
                                                 "rowspan": 1
                                             }
                                         ],
-                                        "is_header": false
+                                        "is_header": false,
+                                        "text_in_inspection_sheet": "POINT CONCERNÉ\nde l'annexe II\n5\nMODALITÉS PARTICULIÈRES D'APPLICATION DE CERTAINES DISPOSITIONS\nA la phrase : Chaque écran de cantonnement est stable au feu de degré un quart d'heure, et a une hauteur minimale de 1 mètre. La distance entre le point bas de l'écran et le point le plus près du stockage est supérieure ou égale à 0,5 mètre. Elle peut toutefois être réduite pour les zones de stockages automatisés. , se substitue la phrase Les cantons sont délimités par des écrans de cantonnement, réalisés en matériaux A2 s1 d0 (y compris leurs fixations) et stables au feu de degré un quart d'heure, ou par la configuration de la toiture et des structures du bâtiment. "
                                     },
                                     {
                                         "cells": [
@@ -5497,7 +5533,8 @@
                                                 "rowspan": 1
                                             }
                                         ],
-                                        "is_header": false
+                                        "is_header": false,
+                                        "text_in_inspection_sheet": "POINT CONCERNÉ\nde l'annexe II\n6\nMODALITÉS PARTICULIÈRES D'APPLICATION DE CERTAINES DISPOSITIONS\nLe point 6 n'est pas applicable aux installations existantes."
                                     },
                                     {
                                         "cells": [
@@ -5520,7 +5557,8 @@
                                                 "rowspan": 1
                                             }
                                         ],
-                                        "is_header": false
+                                        "is_header": false,
+                                        "text_in_inspection_sheet": "POINT CONCERNÉ\nde l'annexe II\n7\nMODALITÉS PARTICULIÈRES D'APPLICATION DE CERTAINES DISPOSITIONS\nAux dispositions du point 7 se substituent les dispositions suivantes : La taille des surfaces des cellules de stockage est limitée de façon à réduire la quantité de matières combustibles en feu et d'éviter la propagation du feu d'une cellule à l'autre.\nLa surface maximale des cellules est égale à 3 000 mètres carrés en l'absence de système d'extinction automatique d'incendie, ou 6 000 mètres carrés en présence d'un système d'extinction automatique d'incendie et d'une étude démontrant que les zones d'effets thermiques supérieurs à 5 kW/m2 générés par l'incendie d'une cellule restent à l'intérieur du site. Dans le cas des cellules de surface maximale de 3 000 mètres carrés, la plus grande longueur des cellules est limitée à 75 mètres. "
                                     },
                                     {
                                         "cells": [
@@ -5543,7 +5581,8 @@
                                                 "rowspan": 1
                                             }
                                         ],
-                                        "is_header": false
+                                        "is_header": false,
+                                        "text_in_inspection_sheet": "POINT CONCERNÉ\nde l'annexe II\n11\nMODALITÉS PARTICULIÈRES D'APPLICATION DE CERTAINES DISPOSITIONS\nAux alinéas : Le volume nécessaire à ce confinement est déterminé en calculant pour chaque cellule la somme :\n- du volume d'eau d'extinction nécessaire à la lutte contre l'incendie déterminé selon les dispositions du point 13 ci-dessous d'une part ;\n- du volume de liquide libéré par cet incendie d'autre part ;\n- du volume d'eau lié aux intempéries, à raison de 10 litres par mètre carré de surface de drainage vers l'ouvrage de confinement lorsque le confinement est externe.\nCette somme est minorée du volume d'eau évaporé.\nse substituent les alinéas : Le volume nécessaire à ce confinement est calculé :\n- sur la base du volume d'eau d'extinction nécessaire à la lutte contre l'incendie, d'une part ;\n- sur le volume de produits libéré par cet incendie, d'autre part, ce volume total correspondant à la plus grande valeur obtenue pour un incendie sur la plus grande cellule ou pour un incendie sur la cellule, présentant le plus fort potentiel calorifique. "
                                     },
                                     {
                                         "cells": [
@@ -5566,7 +5605,8 @@
                                                 "rowspan": 1
                                             }
                                         ],
-                                        "is_header": false
+                                        "is_header": false,
+                                        "text_in_inspection_sheet": "POINT CONCERNÉ\nde l'annexe II\n12\nMODALITÉS PARTICULIÈRES D'APPLICATION DE CERTAINES DISPOSITIONS\nL'article 12 est applicable à compter du 1er janvier 2021, à l'exception des mots : , et déclenche le compartimentage de la ou des cellules sinistrées qui ne sont pas applicables."
                                     },
                                     {
                                         "cells": [
@@ -5589,7 +5629,8 @@
                                                 "rowspan": 1
                                             }
                                         ],
-                                        "is_header": false
+                                        "is_header": false,
+                                        "text_in_inspection_sheet": "POINT CONCERNÉ\nde l'annexe II\n13\nMODALITÉS PARTICULIÈRES D'APPLICATION DE CERTAINES DISPOSITIONS\nLe point 13 est remplacé par les dispositions suivantes : Le stockage est doté de moyens de lutte contre l'incendie appropriés aux risques et conformes aux normes en vigueur, notamment :\n- d'un ou plusieurs appareils d'incendie (prises d'eau, poteaux, par exemple) d'un réseau public ou privé, implantés de telle sorte que, d'une part, tout point de la limite du stockage se trouve à moins de 100 mètres d'un appareil et que, d'autre part, tout point de la limite du stockage se trouve à moins de 200 mètres d'un ou plusieurs appareils permettant de fournir un débit minimal de 60 mètres cubes par heure pendant une durée d'au moins deux heures et dont les prises de raccordement sont conformes aux normes en vigueur pour permettre au service d'incendie et de secours de s'alimenter sur ces appareils. A défaut, une réserve d'eau destinée à l'extinction est accessible en toutes circonstances et à une distance du stockage ayant recueilli l'avis des services départementaux d'incendie et de secours ;\n- d'extincteurs répartis à l'intérieur de l'entrepôt, sur les aires extérieures et dans les lieux présentant des risques spécifiques, à proximité des dégagements, bien visibles et facilement accessibles. Les agents d'extinction sont appropriés aux risques à combattre et compatibles avec les matières stockées ;\n- de robinets d'incendie armés, répartis dans l'entrepôt en fonction de ses dimensions et situés à proximité des issues. Ils sont disposés de telle sorte qu'un foyer puisse être attaqué simultanément par deux lances sous deux angles différents. Ils sont utilisables en période de gel.\nL'exploitant est en mesure de justifier au préfet la disponibilité effective des débits d'eau ainsi que le dimensionnement de l'éventuelle réserve d'eau prévu au deuxième alinéa du présent point. En cas d'installation de systèmes d'extinction automatique d'incendie, ceux-ci sont conçus, installés et entretenus régulièrement conformément aux référentiels reconnus.\nPour les installations déclarées avant le 30 avril 2009, les points autres que celui relatif aux extincteurs au deuxième tiret ci-dessus ne sont applicables qu'à compter du 1er juillet 2020."
                                     },
                                     {
                                         "cells": [
@@ -5612,7 +5653,8 @@
                                                 "rowspan": 1
                                             }
                                         ],
-                                        "is_header": false
+                                        "is_header": false,
+                                        "text_in_inspection_sheet": "POINT CONCERNÉ\nde l'annexe II\n14\nMODALITÉS PARTICULIÈRES D'APPLICATION DE CERTAINES DISPOSITIONS\nSeul le quatrième alinéa est applicable."
                                     },
                                     {
                                         "cells": [
@@ -5635,7 +5677,8 @@
                                                 "rowspan": 1
                                             }
                                         ],
-                                        "is_header": false
+                                        "is_header": false,
+                                        "text_in_inspection_sheet": "POINT CONCERNÉ\nde l'annexe II\n15\nMODALITÉS PARTICULIÈRES D'APPLICATION DE CERTAINES DISPOSITIONS\nL'alinéa 2 n'est pas applicable aux installations existantes."
                                     },
                                     {
                                         "cells": [
@@ -5658,7 +5701,8 @@
                                                 "rowspan": 1
                                             }
                                         ],
-                                        "is_header": false
+                                        "is_header": false,
+                                        "text_in_inspection_sheet": "POINT CONCERNÉ\nde l'annexe II\n17\nMODALITÉS PARTICULIÈRES D'APPLICATION DE CERTAINES DISPOSITIONS\nCe point n'est pas applicable aux installations existantes."
                                     }
                                 ]
                             },
