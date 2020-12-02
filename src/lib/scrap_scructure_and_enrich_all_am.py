@@ -132,10 +132,13 @@ def _extract_legifrance_format_error(legifrance_text_json: Dict) -> Optional[Leg
     return None
 
 
-def _structure_am(legifrance_text: LegifranceText) -> Tuple[Optional[ArreteMinisteriel], Optional[StructurationError]]:
+def _structure_am(
+    cid: str, legifrance_text: LegifranceText
+) -> Tuple[Optional[ArreteMinisteriel], Optional[StructurationError]]:
     try:
         random.seed(legifrance_text.title)  # avoid changing ids
         am = transform_arrete_ministeriel(legifrance_text)
+        am.id = cid
         return am, None
     except Exception as exc:  # pylint: disable=broad-except
         print(exc)
@@ -232,7 +235,7 @@ def handle_am(
     if lf_format_error:
         return None, AMStructurationLog(api_result, lf_format_error), None
     legifrance_text = load_legifrance_text(legifrance_text_json)
-    am, structuration_error = _structure_am(legifrance_text)
+    am, structuration_error = _structure_am(metadata.cid, legifrance_text)
     if am:
         check_am(am)
         am = _enrich_am(am, metadata)
