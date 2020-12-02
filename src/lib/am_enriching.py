@@ -10,6 +10,7 @@ from lib.data import (
     EnrichedString,
     Hyperlink,
     Link,
+    Row,
     StructuredText,
     Summary,
     SummaryElement,
@@ -338,3 +339,44 @@ def _compute_summary(text: ArreteMinisteriel) -> Summary:
 
 def add_summary(text: ArreteMinisteriel) -> ArreteMinisteriel:
     return replace(text, summary=_compute_summary(text))
+
+
+def _extract_headers(rows: List[Row]) -> List[str]:
+    if not rows or not rows[0].is_header:
+        return []
+    return [cell.content.text for cell in rows[0].cells for _ in range(cell.colspan)]
+
+
+def _build_text_for_inspection_sheet(headers: List[str], row: Row) -> str:
+    lines = []
+    for header, cell in zip(headers, row.cells):
+        lines.append(header)
+        lines.append(cell.content.text)
+    return '\n'.join(lines)
+
+
+def add_inspection_sheet_in_table_rows(string: EnrichedString) -> EnrichedString:
+    if not string.table:
+        return string
+    string = copy(string)
+    headers = _extract_headers(string.table.rows)
+    string.table.rows = [
+        replace(row, text_in_inspection_sheet=_build_text_for_inspection_sheet(headers, row))
+        if not row.is_header
+        else row
+        for row in string.table.rows
+    ]
+    return string
+
+
+def add_table_inspection_sheet_data_in_section(section: StructuredText) -> StructuredText:
+    section = copy(section)
+    section.outer_alineas = [add_inspection_sheet_in_table_rows(alinea) for alinea in section.outer_alineas]
+    section.sections = [add_table_inspection_sheet_data_in_section(subsection) for subsection in section.sections]
+    return section
+
+
+def add_table_inspection_sheet_data(am: ArreteMinisteriel) -> ArreteMinisteriel:
+    am = copy(am)
+    am.sections = [add_table_inspection_sheet_data_in_section(subsection) for subsection in am.sections]
+    return am

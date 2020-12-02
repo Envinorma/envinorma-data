@@ -5,14 +5,18 @@ import pytest
 from lib.data import (
     ArreteMinisteriel,
     ArticleStatus,
+    Cell,
     EnrichedString,
     Hyperlink,
     LegifranceArticle,
     Link,
+    Row,
     StructuredText,
+    Table,
     load_arrete_ministeriel,
 )
 from lib.am_enriching import (
+    add_inspection_sheet_in_table_rows,
     add_links_in_enriched_string,
     add_links_to_am,
     extract_titles_and_reference_pairs,
@@ -337,3 +341,28 @@ def test_remove_sections():
     assert len(am_4.sections) == 3
     assert len(am_4.sections[0].sections) == 1
     assert len(am_4.sections[0].sections[0].sections) == 0
+
+
+def test_add_inspection_sheet_in_table_rows():
+    string = EnrichedString('Hello')
+    assert not add_inspection_sheet_in_table_rows(string).table
+    assert add_inspection_sheet_in_table_rows(string).text == string.text
+
+    header_cells = [Cell(EnrichedString('Header 1'), 1, 1), Cell(EnrichedString('Header 2'), 1, 1)]
+    content_cells = [Cell(EnrichedString('content 1'), 1, 1), Cell(EnrichedString('content 2'), 1, 1)]
+    string = EnrichedString('', table=Table([Row(header_cells, True), Row(content_cells, False)]))
+    transformed_string = add_inspection_sheet_in_table_rows(string)
+    assert transformed_string.table.rows[0].text_in_inspection_sheet is None
+    assert transformed_string.table.rows[1].text_in_inspection_sheet == 'Header 1\ncontent 1\nHeader 2\ncontent 2'
+
+    header_cells = [Cell(EnrichedString('Header 1'), 2, 1), Cell(EnrichedString('Header 2'), 1, 1)]
+    content_cells = [
+        Cell(EnrichedString('content 1'), 1, 1),
+        Cell(EnrichedString('content 2'), 1, 1),
+        Cell(EnrichedString('content 3'), 1, 1),
+    ]
+    string = EnrichedString('', table=Table([Row(header_cells, True), Row(content_cells, False)]))
+    transformed_string = add_inspection_sheet_in_table_rows(string)
+    assert transformed_string.table.rows[0].text_in_inspection_sheet is None
+    expected = 'Header 1\ncontent 1\nHeader 1\ncontent 2\nHeader 2\ncontent 3'
+    assert transformed_string.table.rows[1].text_in_inspection_sheet == expected

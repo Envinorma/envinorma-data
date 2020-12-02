@@ -89,6 +89,7 @@ class Cell:
 class Row:
     cells: List[Cell]
     is_header: bool
+    text_in_inspection_sheet: Optional[str] = None
 
 
 @dataclass
