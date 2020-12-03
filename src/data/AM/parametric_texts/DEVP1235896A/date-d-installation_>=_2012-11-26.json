@@ -15,7 +15,7 @@
             "state": "ACTIVE"
         }
     ],
-    "id": "2ECC4b6aEead",
+    "id": "JORFTEXT000026694913",
     "installation_date_criterion": {
         "left_date": "2012-11-26",
         "right_date": null
@@ -1829,7 +1829,7 @@
                                                             }
                                                         ],
                                                         "is_header": false,
-                                                        "text_in_inspection_sheet": ""
+                                                        "text_in_inspection_sheet": "Matières en suspension totales\n35 mg/ l"
                                                     },
                                                     {
                                                         "cells": [
@@ -1853,7 +1853,7 @@
                                                             }
                                                         ],
                                                         "is_header": false,
-                                                        "text_in_inspection_sheet": ""
+                                                        "text_in_inspection_sheet": "DCO (sur effluent non décanté)\n125 mg/ l"
                                                     },
                                                     {
                                                         "cells": [
@@ -1877,7 +1877,7 @@
                                                             }
                                                         ],
                                                         "is_header": false,
-                                                        "text_in_inspection_sheet": ""
+                                                        "text_in_inspection_sheet": "Hydrocarbures totaux\n10 mg/ l"
                                                     }
                                                 ]
                                             },
@@ -3641,7 +3641,7 @@
                                             }
                                         ],
                                         "is_header": false,
-                                        "text_in_inspection_sheet": ""
+                                        "text_in_inspection_sheet": " NIVEAU DE BRUIT AMBIANT EXISTANT dans les zones à émergence réglementée(incluant le bruit de l'installation)\n ÉMERGENCE ADMISSIBLE POUR LA PÉRIODE allant de 7 heures à 22 heures,sauf dimanches et jours fériés\n ÉMERGENCE ADMISSIBLE POUR LA PÉRIODE allant de 22 heures à 7 heures,ainsi que les dimanches et jours fériés"
                                     },
                                     {
                                         "cells": [
@@ -3674,7 +3674,7 @@
                                             }
                                         ],
                                         "is_header": false,
-                                        "text_in_inspection_sheet": ""
+                                        "text_in_inspection_sheet": "Supérieur à 35 et inférieur ou égal à 45 dB(A)\n6 dB(A)\n4 dB(A)"
                                     },
                                     {
                                         "cells": [
@@ -3707,7 +3707,7 @@
                                             }
                                         ],
                                         "is_header": false,
-                                        "text_in_inspection_sheet": ""
+                                        "text_in_inspection_sheet": "Supérieur à 45 dB(A)\n5 dB(A)\n3 dB(A)"
                                     }
                                 ]
                             },
@@ -3957,7 +3957,7 @@
                                             }
                                         ],
                                         "is_header": false,
-                                        "text_in_inspection_sheet": "\nFRÉQUENCES\n\n\nConstructions résistantes\n\n\n4 Hz - 8 Hz\n\n\n5 mm/s\n\n\n8 Hz - 30 Hz\n\n\n6 mm/s\n\n\n30 Hz - 100 Hz\n\n\n8 mm/s\n"
+                                        "text_in_inspection_sheet": "FRÉQUENCES\nConstructions résistantes\n4 Hz - 8 Hz\n5 mm/s\n8 Hz - 30 Hz\n6 mm/s\n30 Hz - 100 Hz\n8 mm/s"
                                     },
                                     {
                                         "cells": [
@@ -3999,7 +3999,7 @@
                                             }
                                         ],
                                         "is_header": false,
-                                        "text_in_inspection_sheet": "\nFRÉQUENCES\n\n\nConstructions sensibles\n\n\n4 Hz - 8 Hz\n\n\n3 mm/s\n\n\n8 Hz - 30 Hz\n\n\n5 mm/s\n\n\n30 Hz - 100 Hz\n\n\n6 mm/s\n"
+                                        "text_in_inspection_sheet": "FRÉQUENCES\nConstructions sensibles\n4 Hz - 8 Hz\n3 mm/s\n8 Hz - 30 Hz\n5 mm/s\n30 Hz - 100 Hz\n6 mm/s"
                                     },
                                     {
                                         "cells": [
@@ -4041,7 +4041,7 @@
                                             }
                                         ],
                                         "is_header": false,
-                                        "text_in_inspection_sheet": "\nFRÉQUENCES\n\n\nConstructions très sensibles\n\n\n4 Hz - 8 Hz\n\n\n2 mm/s\n\n\n8 Hz - 30 Hz\n\n\n3 mm/s\n\n\n30 Hz - 100 Hz\n\n\n4 mm/s\n"
+                                        "text_in_inspection_sheet": "FRÉQUENCES\nConstructions très sensibles\n4 Hz - 8 Hz\n2 mm/s\n8 Hz - 30 Hz\n3 mm/s\n30 Hz - 100 Hz\n4 mm/s"
                                     }
                                 ]
                             },
@@ -4179,7 +4179,7 @@
                                             }
                                         ],
                                         "is_header": false,
-                                        "text_in_inspection_sheet": "\nFRÉQUENCES\n\n\nConstructions résistantes\n\n\n4 Hz - 8 Hz\n\n\n8 mm/s\n\n\n8 Hz - 30 Hz\n\n\n12 mm/s\n\n\n30 Hz - 100 Hz\n\n\n15 mm/s\n"
+                                        "text_in_inspection_sheet": "FRÉQUENCES\nConstructions résistantes\n4 Hz - 8 Hz\n8 mm/s\n8 Hz - 30 Hz\n12 mm/s\n30 Hz - 100 Hz\n15 mm/s"
                                     },
                                     {
                                         "cells": [
@@ -4221,7 +4221,7 @@
                                             }
                                         ],
                                         "is_header": false,
-                                        "text_in_inspection_sheet": "\nFRÉQUENCES\n\n\nConstructions sensibles\n\n\n4 Hz - 8 Hz\n\n\n6 mm/s\n\n\n8 Hz - 30 Hz\n\n\n9 mm/s\n\n\n30 Hz - 100 Hz\n\n\n12 mm/s\n"
+                                        "text_in_inspection_sheet": "FRÉQUENCES\nConstructions sensibles\n4 Hz - 8 Hz\n6 mm/s\n8 Hz - 30 Hz\n9 mm/s\n30 Hz - 100 Hz\n12 mm/s"
                                     },
                                     {
                                         "cells": [
@@ -4263,7 +4263,7 @@
                                             }
                                         ],
                                         "is_header": false,
-                                        "text_in_inspection_sheet": "\nFRÉQUENCES\n\n\nConstructions très sensibles\n\n\n4 Hz - 8 Hz\n\n\n4 mm/s\n\n\n8 Hz - 30 Hz\n\n\n6 mm/s\n\n\n30 Hz - 100 Hz\n\n\n9 mm/s\n"
+                                        "text_in_inspection_sheet": "FRÉQUENCES\nConstructions très sensibles\n4 Hz - 8 Hz\n4 mm/s\n8 Hz - 30 Hz\n6 mm/s\n30 Hz - 100 Hz\n9 mm/s"
                                     }
                                 ]
                             },
@@ -5107,7 +5107,7 @@
                                                     }
                                                 ],
                                                 "is_header": false,
-                                                "text_in_inspection_sheet": "Polluants\n\nDCO (sur effluent non décanté).\nMatières en suspension totales.\nHydrocarbures totaux.\n\nFréquence\n\nPour les EPp déversées dans une station d'épuration :\n– la fréquence des prélèvements et analyses est au minimum annuelle. Le premier contrôle est réalisé dans les six premiers mois de fonctionnement de l'installation."
+                                                "text_in_inspection_sheet": "Polluants\nDCO (sur effluent non décanté).\nMatières en suspension totales.\nHydrocarbures totaux.\nFréquence\nPour les EPp déversées dans une station d'épuration :\n– la fréquence des prélèvements et analyses est au minimum annuelle. Le premier contrôle est réalisé dans les six premiers mois de fonctionnement de l'installation."
                                             },
                                             {
                                                 "cells": [
@@ -5131,7 +5131,7 @@
                                                     }
                                                 ],
                                                 "is_header": false,
-                                                "text_in_inspection_sheet": "Polluants\n\n\nFréquence\n\nPour les EPp déversées dans le milieu naturel :\n– la fréquence des prélèvements et analyses est au minimum semestrielle ;\n– si pendant une période d'au moins douze mois continus, les résultats des analyses semestrielles sont inférieurs aux valeurs prévues à l'article 34, la fréquence des prélèvements et analyses pourra être au minimum annuelle ;\n– si un résultat d'une analyse est supérieur à un des paramètres visés à l'article 34, la fréquence des prélèvements et analyses devra être de nouveau au minimum semestrielle pendant douze mois continus."
+                                                "text_in_inspection_sheet": "Polluants\nFréquence\nPour les EPp déversées dans le milieu naturel :\n– la fréquence des prélèvements et analyses est au minimum semestrielle ;\n– si pendant une période d'au moins douze mois continus, les résultats des analyses semestrielles sont inférieurs aux valeurs prévues à l'article 34, la fréquence des prélèvements et analyses pourra être au minimum annuelle ;\n– si un résultat d'une analyse est supérieur à un des paramètres visés à l'article 34, la fréquence des prélèvements et analyses devra être de nouveau au minimum semestrielle pendant douze mois continus."
                                             }
                                         ]
                                     },
@@ -5662,7 +5662,7 @@
                                                             }
                                                         ],
                                                         "is_header": false,
-                                                        "text_in_inspection_sheet": ""
+                                                        "text_in_inspection_sheet": "DONNÉES ÉTABLIES SUR LA BASEd'une acquisition minimale de 10 s"
                                                     },
                                                     {
                                                         "cells": [
@@ -5695,7 +5695,7 @@
                                                             }
                                                         ],
                                                         "is_header": false,
-                                                        "text_in_inspection_sheet": ""
+                                                        "text_in_inspection_sheet": "50 Hz à 315 Hz\n400 Hz à 1 250 Hz\n1 600 Hz à 8 000 Hz"
                                                     },
                                                     {
                                                         "cells": [
@@ -5728,7 +5728,7 @@
                                                             }
                                                         ],
                                                         "is_header": false,
-                                                        "text_in_inspection_sheet": ""
+                                                        "text_in_inspection_sheet": "10 dB\n5 dB\n5 dB"
                                                     }
                                                 ]
                                             },
@@ -6383,7 +6383,7 @@
                                             }
                                         ],
                                         "is_header": false,
-                                        "text_in_inspection_sheet": "\n\nArticles 1er à 3, 8, 9, 11, 12, 18, 20\nArticle 21, paragraphes I et II\nArticles 22, 25, 30, 31\nArticle 32, alinéa 1, alinéas 3 et suivants\nArticles 36, 43, 53, 54, 55, 56 et 59\n\nDélai d'application\n\n1er janvier 2013\n\nDélai d'application\n\n1 mois à compter de la publication du décret qui soumet l'installation au présent arrêté"
+                                        "text_in_inspection_sheet": "Articles 1er à 3, 8, 9, 11, 12, 18, 20\nArticle 21, paragraphes I et II\nArticles 22, 25, 30, 31\nArticle 32, alinéa 1, alinéas 3 et suivants\nArticles 36, 43, 53, 54, 55, 56 et 59\nDélai d'application\n1er janvier 2013\nDélai d'application\n1 mois à compter de la publication du décret qui soumet l'installation au présent arrêté"
                                     },
                                     {
                                         "cells": [
@@ -6416,7 +6416,7 @@
                                             }
                                         ],
                                         "is_header": false,
-                                        "text_in_inspection_sheet": "\n\nArticles 13, 15, 26 et 27\n\nDélai d'application\n\n1er janvier 2013\n\nDélai d'application\n\n6 mois à compter de la publication du décret qui soumet l'installation au présent arrêté"
+                                        "text_in_inspection_sheet": "Articles 13, 15, 26 et 27\nDélai d'application\n1er janvier 2013\nDélai d'application\n6 mois à compter de la publication du décret qui soumet l'installation au présent arrêté"
                                     },
                                     {
                                         "cells": [
@@ -6449,7 +6449,7 @@
                                             }
                                         ],
                                         "is_header": false,
-                                        "text_in_inspection_sheet": "\n\nArticles 37,38,39,40,41 et 42\n\nDélai d'application\n\n1er juillet 2013\n\nDélai d'application\n\n1 mois à compter de la publication du décret qui soumet l'installation au présent arrêté lorsque l'installation est déjà soumise à un plan de surveillance, 6 mois sinon"
+                                        "text_in_inspection_sheet": "Articles 37,38,39,40,41 et 42\nDélai d'application\n1er juillet 2013\nDélai d'application\n1 mois à compter de la publication du décret qui soumet l'installation au présent arrêté lorsque l'installation est déjà soumise à un plan de surveillance, 6 mois sinon"
                                     },
                                     {
                                         "cells": [
@@ -6482,7 +6482,7 @@
                                             }
                                         ],
                                         "is_header": false,
-                                        "text_in_inspection_sheet": "\n\nArticle 4 (dossier d'exploitation)\nArticles 6, 7, 10, 16, 19\nArticle 23, alinéas 1 et 2\nArticle 24, alinéas 2 à 4\nArticles 28, 33, 34 et 35\nArticles 44 à 52, 57 et 58\n\nDélai d'application\n\n1er juillet 2013\n\nDélai d'application\n\n6 mois à compter de la publication du décret qui soumet l'installation au présent arrêté"
+                                        "text_in_inspection_sheet": "Article 4 (dossier d'exploitation)\nArticles 6, 7, 10, 16, 19\nArticle 23, alinéas 1 et 2\nArticle 24, alinéas 2 à 4\nArticles 28, 33, 34 et 35\nArticles 44 à 52, 57 et 58\nDélai d'application\n1er juillet 2013\nDélai d'application\n6 mois à compter de la publication du décret qui soumet l'installation au présent arrêté"
                                     },
                                     {
                                         "cells": [
@@ -6515,7 +6515,7 @@
                                             }
                                         ],
                                         "is_header": false,
-                                        "text_in_inspection_sheet": "\n\nArticle 29 \n\nDélai d'application\n\n1er juillet 2013\n\nDélai d'application\n\n12 mois à compter de la publication du décret qui soumet l'installation au présent arrêté"
+                                        "text_in_inspection_sheet": "Article 29 \nDélai d'application\n1er juillet 2013\nDélai d'application\n12 mois à compter de la publication du décret qui soumet l'installation au présent arrêté"
                                     },
                                     {
                                         "cells": [
@@ -6548,7 +6548,7 @@
                                             }
                                         ],
                                         "is_header": false,
-                                        "text_in_inspection_sheet": "\n\nArticle 21, paragraphes III et IV\nArticle 23, alinéas 3 et 4\nArticle 17 \n\nDélai d'application\n\n1er janvier 2014\n\nDélai d'application\n\n12 mois à compter de la publication du décret qui soumet l'installation au présent arrêté"
+                                        "text_in_inspection_sheet": "Article 21, paragraphes III et IV\nArticle 23, alinéas 3 et 4\nArticle 17 \nDélai d'application\n1er janvier 2014\nDélai d'application\n12 mois à compter de la publication du décret qui soumet l'installation au présent arrêté"
                                     }
                                 ]
                             },

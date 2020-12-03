@@ -15,7 +15,7 @@
             "state": "ACTIVE"
         }
     ],
-    "id": "aAaFde67eF4e",
+    "id": "JORFTEXT000038358856",
     "installation_date_criterion": {
         "left_date": "2019-04-09",
         "right_date": null
@@ -2779,7 +2779,7 @@
                                                     }
                                                 ],
                                                 "is_header": false,
-                                                "text_in_inspection_sheet": ""
+                                                "text_in_inspection_sheet": "Matières en suspension (Code SANDRE : 1305)\n100 mg/l si flux journalier maximal inférieur ou égal à 15 kg/j\n35 mg/l au-delà"
                                             },
                                             {
                                                 "cells": [
@@ -2794,7 +2794,7 @@
                                                     }
                                                 ],
                                                 "is_header": false,
-                                                "text_in_inspection_sheet": ""
+                                                "text_in_inspection_sheet": "DBO5 (sur effluent non décanté) (Code SANDRE : 1313)\n100 mg/l si flux journalier maximal inférieur ou égal à 15 kg/j\n30 mg/l au-delà"
                                             },
                                             {
                                                 "cells": [
@@ -2809,7 +2809,7 @@
                                                     }
                                                 ],
                                                 "is_header": false,
-                                                "text_in_inspection_sheet": ""
+                                                "text_in_inspection_sheet": "DCO (sur effluent non décanté) (Code SANDRE : 1314)\n300 mg/l si flux journalier maximal inférieur ou égal à 50 kg/j\n125 mg/l au-delà"
                                             },
                                             {
                                                 "cells": [
@@ -2824,7 +2824,7 @@
                                                     }
                                                 ],
                                                 "is_header": false,
-                                                "text_in_inspection_sheet": ""
+                                                "text_in_inspection_sheet": "Toutefois, des valeurs limites de concentration différentes peuvent être proposées par l'exploitant dans son dossier d'enregistrement lorsque la station d'épuration de l'installation a un rendement au moins égal à 95 % pour la DCO, la DBO5 et les MES."
                                             },
                                             {
                                                 "cells": [
@@ -2839,7 +2839,7 @@
                                                     }
                                                 ],
                                                 "is_header": false,
-                                                "text_in_inspection_sheet": ""
+                                                "text_in_inspection_sheet": "Hydrocarbures totaux (code SANDRE : 7009) : 10 mg/l"
                                             }
                                         ]
                                     },
@@ -3400,7 +3400,7 @@
                                                     }
                                                 ],
                                                 "is_header": false,
-                                                "text_in_inspection_sheet": ""
+                                                "text_in_inspection_sheet": "1° Poussières totales\n50 mg/m3"
                                             },
                                             {
                                                 "cells": [
@@ -3424,7 +3424,7 @@
                                                     }
                                                 ],
                                                 "is_header": false,
-                                                "text_in_inspection_sheet": ""
+                                                "text_in_inspection_sheet": "2° Monoxyde de carbone (CO)\n500 mg/m3"
                                             },
                                             {
                                                 "cells": [
@@ -3448,7 +3448,7 @@
                                                     }
                                                 ],
                                                 "is_header": false,
-                                                "text_in_inspection_sheet": ""
+                                                "text_in_inspection_sheet": "3° Oxyde de soufre (SO2)\n300 mg/m3"
                                             },
                                             {
                                                 "cells": [
@@ -3472,7 +3472,7 @@
                                                     }
                                                 ],
                                                 "is_header": false,
-                                                "text_in_inspection_sheet": ""
+                                                "text_in_inspection_sheet": "4° Oxyde d'azote (NOx)\n350 mg/m3"
                                             },
                                             {
                                                 "cells": [
@@ -3496,7 +3496,7 @@
                                                     }
                                                 ],
                                                 "is_header": false,
-                                                "text_in_inspection_sheet": ""
+                                                "text_in_inspection_sheet": "5° Composés organiques volatils (1) :"
                                             },
                                             {
                                                 "cells": [
@@ -3511,7 +3511,7 @@
                                                     }
                                                 ],
                                                 "is_header": false,
-                                                "text_in_inspection_sheet": ""
+                                                "text_in_inspection_sheet": "a) Cas général :"
                                             },
                                             {
                                                 "cells": [
@@ -3535,7 +3535,7 @@
                                                     }
                                                 ],
                                                 "is_header": false,
-                                                "text_in_inspection_sheet": ""
+                                                "text_in_inspection_sheet": "Rejet total de composés organiques volatils à l'exclusion du méthane :\nflux horaire total dépasse 2 kg/h.\n110 mg/m³ (exprimée en carbone total de la concentration globale de l'ensemble des composés)"
                                             },
                                             {
                                                 "cells": [
@@ -3550,7 +3550,7 @@
                                                     }
                                                 ],
                                                 "is_header": false,
-                                                "text_in_inspection_sheet": ""
+                                                "text_in_inspection_sheet": "b) Composés organiques volatils spécifiques :\nSi le flux horaire total des composés organiques visés à l'annexe III de l'arrêté ministériel du 2 février 1998 susvisé dépasse 0,1 kg/h, la valeur limite d'émission de la concentration globale de l'ensemble de ces composés est de 20 mg / Nm3"
                                             },
                                             {
                                                 "cells": [
@@ -3565,7 +3565,7 @@
                                                     }
                                                 ],
                                                 "is_header": false,
-                                                "text_in_inspection_sheet": ""
+                                                "text_in_inspection_sheet": "c) Substances auxquelles sont attribuées les mentions de danger H340, H350, H350i, H360D ou H360F\n(substances dites CMR), dont benzène et 1-3 butadiène, et les substances halogénées de mentions de dangers H341 ou H351"
                                             },
                                             {
                                                 "cells": [
@@ -3589,7 +3589,7 @@
                                                     }
                                                 ],
                                                 "is_header": false,
-                                                "text_in_inspection_sheet": ""
+                                                "text_in_inspection_sheet": "flux horaire maximal de l'ensemble de l'installation supérieur ou égal à 10 g/h.\n2 mg/m3 en COV (la valeur se rapporte à la somme massique des différents composés)."
                                             },
                                             {
                                                 "cells": [
@@ -3604,7 +3604,7 @@
                                                     }
                                                 ],
                                                 "is_header": false,
-                                                "text_in_inspection_sheet": ""
+                                                "text_in_inspection_sheet": "6° Métaux et composés de métaux (gazeux et particulaires) :"
                                             },
                                             {
                                                 "cells": [
@@ -3619,7 +3619,7 @@
                                                     }
                                                 ],
                                                 "is_header": false,
-                                                "text_in_inspection_sheet": ""
+                                                "text_in_inspection_sheet": "a) Rejets de cadmium, mercure et thallium, et de leurs composés :"
                                             },
                                             {
                                                 "cells": [
@@ -3643,7 +3643,7 @@
                                                     }
                                                 ],
                                                 "is_header": false,
-                                                "text_in_inspection_sheet": ""
+                                                "text_in_inspection_sheet": "flux horaire total de cadmium, mercure et thallium, et de leurs composés dépasse 1g/h,\n0,05 mg/m3 par métal\n0,1 mg/m3 pour la somme des métaux (exprimés en Cd + Hg + Tl) ;"
                                             },
                                             {
                                                 "cells": [
@@ -3658,7 +3658,7 @@
                                                     }
                                                 ],
                                                 "is_header": false,
-                                                "text_in_inspection_sheet": ""
+                                                "text_in_inspection_sheet": "b) Rejets d'arsenic, sélénium et tellure, et de leurs composés :"
                                             },
                                             {
                                                 "cells": [
@@ -3682,7 +3682,7 @@
                                                     }
                                                 ],
                                                 "is_header": false,
-                                                "text_in_inspection_sheet": ""
+                                                "text_in_inspection_sheet": "flux horaire total d'arsenic, sélénium et tellure, et de leurs composés, dépasse 5 g/h,\n1 mg/m3 (exprimée en As + Se + Te) ;"
                                             },
                                             {
                                                 "cells": [
@@ -3697,7 +3697,7 @@
                                                     }
                                                 ],
                                                 "is_header": false,
-                                                "text_in_inspection_sheet": ""
+                                                "text_in_inspection_sheet": "c) Rejets de plomb et de ses composés :"
                                             },
                                             {
                                                 "cells": [
@@ -3721,7 +3721,7 @@
                                                     }
                                                 ],
                                                 "is_header": false,
-                                                "text_in_inspection_sheet": ""
+                                                "text_in_inspection_sheet": "flux horaire total de plomb et de ses composés dépasse 10 g/h,\n1 mg/m3 (exprimée en Pb) ;"
                                             },
                                             {
                                                 "cells": [
@@ -3736,7 +3736,7 @@
                                                     }
                                                 ],
                                                 "is_header": false,
-                                                "text_in_inspection_sheet": ""
+                                                "text_in_inspection_sheet": "d) Rejets d'antimoine, chrome, cobalt, cuivre, étain, manganèse, nickel, vanadium et zinc, et de leurs composés :"
                                             },
                                             {
                                                 "cells": [
@@ -3760,7 +3760,7 @@
                                                     }
                                                 ],
                                                 "is_header": false,
-                                                "text_in_inspection_sheet": ""
+                                                "text_in_inspection_sheet": "flux horaire total d'antimoine, chrome, cobalt, cuivre, étain, manganèse (*), nickel, vanadium, zinc (*) et de leurs composés dépasse 25 g/h,\n5 mg/m3 (exprimée en Sb + Cr + Co + Cu + Sn + Mn + Ni + V + Zn)."
                                             },
                                             {
                                                 "cells": [
@@ -3775,7 +3775,7 @@
                                                     }
                                                 ],
                                                 "is_header": false,
-                                                "text_in_inspection_sheet": ""
+                                                "text_in_inspection_sheet": "7° Hydrocarbures Aromatiques Polycycliques"
                                             },
                                             {
                                                 "cells": [
@@ -3799,7 +3799,7 @@
                                                     }
                                                 ],
                                                 "is_header": false,
-                                                "text_in_inspection_sheet": ""
+                                                "text_in_inspection_sheet": "benzo (a) pyrène ; naphtalène\n0,2 mg/Nm³ (la valeur se rapporte à la somme massique des 2 substances)"
                                             },
                                             {
                                                 "cells": [
@@ -3823,7 +3823,7 @@
                                                     }
                                                 ],
                                                 "is_header": false,
-                                                "text_in_inspection_sheet": ""
+                                                "text_in_inspection_sheet": "(1) les prescriptions du c) n'affranchissent pas du respect du a) et du b)"
                                             }
                                         ]
                                     },
@@ -4258,7 +4258,7 @@
                                                     }
                                                 ],
                                                 "is_header": false,
-                                                "text_in_inspection_sheet": "\nNiveau de bruit ambiant\nexistant dans les zones à émergence réglementée\n(incluant le bruit de l'installation)\n\nsupérieur à 35 et inférieur\nou égal à 45 dB (A)\n\nEmergence admissible\npour la période allant de 7 h à 22 h,\nsauf dimanches et jours fériés\n\n6 dB (A)\n\nEmergence admissible\npour la période allant de 22 h à 7 h,\nainsi que les dimanches et jours fériés\n\n4 dB (A)"
+                                                "text_in_inspection_sheet": "Niveau de bruit ambiant\nexistant dans les zones à émergence réglementée\n(incluant le bruit de l'installation)\nsupérieur à 35 et inférieur\nou égal à 45 dB (A)\nEmergence admissible\npour la période allant de 7 h à 22 h,\nsauf dimanches et jours fériés\n6 dB (A)\nEmergence admissible\npour la période allant de 22 h à 7 h,\nainsi que les dimanches et jours fériés\n4 dB (A)"
                                             },
                                             {
                                                 "cells": [
@@ -4291,7 +4291,7 @@
                                                     }
                                                 ],
                                                 "is_header": false,
-                                                "text_in_inspection_sheet": "\nNiveau de bruit ambiant\nexistant dans les zones à émergence réglementée\n(incluant le bruit de l'installation)\n\nsupérieur à\n45 dB (A)\n\nEmergence admissible\npour la période allant de 7 h à 22 h,\nsauf dimanches et jours fériés\n\n5 dB (A)\n\nEmergence admissible\npour la période allant de 22 h à 7 h,\nainsi que les dimanches et jours fériés\n\n3 dB (A)"
+                                                "text_in_inspection_sheet": "Niveau de bruit ambiant\nexistant dans les zones à émergence réglementée\n(incluant le bruit de l'installation)\nsupérieur à\n45 dB (A)\nEmergence admissible\npour la période allant de 7 h à 22 h,\nsauf dimanches et jours fériés\n5 dB (A)\nEmergence admissible\npour la période allant de 22 h à 7 h,\nainsi que les dimanches et jours fériés\n3 dB (A)"
                                             }
                                         ]
                                     },
@@ -4752,7 +4752,7 @@
                                                     }
                                                 ],
                                                 "is_header": false,
-                                                "text_in_inspection_sheet": ""
+                                                "text_in_inspection_sheet": "1° Poussières totales"
                                             },
                                             {
                                                 "cells": [
@@ -4776,7 +4776,7 @@
                                                     }
                                                 ],
                                                 "is_header": false,
-                                                "text_in_inspection_sheet": ""
+                                                "text_in_inspection_sheet": "flux horaire inférieur ou égal à 5 kg/h\nMesure annuelle"
                                             },
                                             {
                                                 "cells": [
@@ -4800,7 +4800,7 @@
                                                     }
                                                 ],
                                                 "is_header": false,
-                                                "text_in_inspection_sheet": ""
+                                                "text_in_inspection_sheet": "flux horaire supérieur à 5 kg/h, mais inférieur ou égal à 50 kg/h\névaluation en permanence de la teneur en poussières des rejets à l'aide par exemple d'un opacimètre"
                                             },
                                             {
                                                 "cells": [
@@ -4824,7 +4824,7 @@
                                                     }
                                                 ],
                                                 "is_header": false,
-                                                "text_in_inspection_sheet": ""
+                                                "text_in_inspection_sheet": "flux horaire supérieur à 50 kg/h\nmesure en permanence par une méthode gravimétrique"
                                             },
                                             {
                                                 "cells": [
@@ -4839,7 +4839,7 @@
                                                     }
                                                 ],
                                                 "is_header": false,
-                                                "text_in_inspection_sheet": ""
+                                                "text_in_inspection_sheet": "2° Monoxyde de carbone"
                                             },
                                             {
                                                 "cells": [
@@ -4863,7 +4863,7 @@
                                                     }
                                                 ],
                                                 "is_header": false,
-                                                "text_in_inspection_sheet": ""
+                                                "text_in_inspection_sheet": "flux horaire inférieur ou égal à 50 kg/h\nMesure annuelle"
                                             },
                                             {
                                                 "cells": [
@@ -4887,7 +4887,7 @@
                                                     }
                                                 ],
                                                 "is_header": false,
-                                                "text_in_inspection_sheet": ""
+                                                "text_in_inspection_sheet": "flux horaire supérieur à 50 kg/h\nmesure en permanence"
                                             },
                                             {
                                                 "cells": [
@@ -4902,7 +4902,7 @@
                                                     }
                                                 ],
                                                 "is_header": false,
-                                                "text_in_inspection_sheet": ""
+                                                "text_in_inspection_sheet": "3° Oxydes de soufre"
                                             },
                                             {
                                                 "cells": [
@@ -4926,7 +4926,7 @@
                                                     }
                                                 ],
                                                 "is_header": false,
-                                                "text_in_inspection_sheet": ""
+                                                "text_in_inspection_sheet": "flux horaire inférieur ou égal à 150 kg/h\nMesure annuelle"
                                             },
                                             {
                                                 "cells": [
@@ -4950,7 +4950,7 @@
                                                     }
                                                 ],
                                                 "is_header": false,
-                                                "text_in_inspection_sheet": ""
+                                                "text_in_inspection_sheet": "flux horaire supérieur à 150 kg/h\nmesure en permanence"
                                             },
                                             {
                                                 "cells": [
@@ -4965,7 +4965,7 @@
                                                     }
                                                 ],
                                                 "is_header": false,
-                                                "text_in_inspection_sheet": ""
+                                                "text_in_inspection_sheet": "4° Oxydes d'azote"
                                             },
                                             {
                                                 "cells": [
@@ -4989,7 +4989,7 @@
                                                     }
                                                 ],
                                                 "is_header": false,
-                                                "text_in_inspection_sheet": ""
+                                                "text_in_inspection_sheet": "flux horaire inférieur ou égal à 150 kg/h\nMesure annuelle"
                                             },
                                             {
                                                 "cells": [
@@ -5013,7 +5013,7 @@
                                                     }
                                                 ],
                                                 "is_header": false,
-                                                "text_in_inspection_sheet": ""
+                                                "text_in_inspection_sheet": "flux horaire supérieur à 150 kg/h\nmesure en permanence"
                                             },
                                             {
                                                 "cells": [
@@ -5028,7 +5028,7 @@
                                                     }
                                                 ],
                                                 "is_header": false,
-                                                "text_in_inspection_sheet": ""
+                                                "text_in_inspection_sheet": "5° Composés organiques volatils :"
                                             },
                                             {
                                                 "cells": [
@@ -5043,7 +5043,7 @@
                                                     }
                                                 ],
                                                 "is_header": false,
-                                                "text_in_inspection_sheet": ""
+                                                "text_in_inspection_sheet": "a) cas général :"
                                             },
                                             {
                                                 "cells": [
@@ -5067,7 +5067,7 @@
                                                     }
                                                 ],
                                                 "is_header": false,
-                                                "text_in_inspection_sheet": ""
+                                                "text_in_inspection_sheet": "sur l'ensemble de l'installation, flux horaire maximal de COV (à l'exclusion du méthane exprimé en carbone total) inférieur ou égal à 15 kg/h\nMesure annuelle"
                                             },
                                             {
                                                 "cells": [
@@ -5091,7 +5091,7 @@
                                                     }
                                                 ],
                                                 "is_header": false,
-                                                "text_in_inspection_sheet": ""
+                                                "text_in_inspection_sheet": "sur l'ensemble de l'installation, flux horaire maximal de COV (à l'exclusion du méthane exprimé en carbone total) supérieur à 15 kg/h\nsurveillance en permanence (ensemble des COV, à l'exclusion du méthane)"
                                             },
                                             {
                                                 "cells": [
@@ -5106,7 +5106,7 @@
                                                     }
                                                 ],
                                                 "is_header": false,
-                                                "text_in_inspection_sheet": ""
+                                                "text_in_inspection_sheet": "b) cas des COV (à l'exclusion du méthane) présentant les mentions de danger H340, H350, H350i, H360D ou H360F (substances dites CMR), dont benzène et 1-3 butadiène et les composés halogénés présentant les mentions de danger H341 ou H351 :"
                                             },
                                             {
                                                 "cells": [
@@ -5130,7 +5130,7 @@
                                                     }
                                                 ],
                                                 "is_header": false,
-                                                "text_in_inspection_sheet": ""
+                                                "text_in_inspection_sheet": "sur l'ensemble de l'installation, flux horaire maximal, supérieur à 2 kg/h (exprimé en somme des composés)\nsurveillance en permanence (ensemble des COV, à l'exclusion du méthane)\nmesures périodiques de chacun des COV (corrélation entre la mesure de l'ensemble des COV non méthaniques et les espèces effectivement présentes)"
                                             },
                                             {
                                                 "cells": [
@@ -5145,7 +5145,7 @@
                                                     }
                                                 ],
                                                 "is_header": false,
-                                                "text_in_inspection_sheet": ""
+                                                "text_in_inspection_sheet": "c) les autres cas :"
                                             },
                                             {
                                                 "cells": [
@@ -5160,7 +5160,7 @@
                                                     }
                                                 ],
                                                 "is_header": false,
-                                                "text_in_inspection_sheet": ""
+                                                "text_in_inspection_sheet": "prélèvements instantanés réalisés"
                                             },
                                             {
                                                 "cells": [
@@ -5175,7 +5175,7 @@
                                                     }
                                                 ],
                                                 "is_header": false,
-                                                "text_in_inspection_sheet": ""
+                                                "text_in_inspection_sheet": "6° Métaux, métalloïdes et composés divers (particulaires et gazeux)"
                                             },
                                             {
                                                 "cells": [
@@ -5190,7 +5190,7 @@
                                                     }
                                                 ],
                                                 "is_header": false,
-                                                "text_in_inspection_sheet": ""
+                                                "text_in_inspection_sheet": "a) Cadmium et mercure, et leurs composés :"
                                             },
                                             {
                                                 "cells": [
@@ -5214,7 +5214,7 @@
                                                     }
                                                 ],
                                                 "is_header": false,
-                                                "text_in_inspection_sheet": ""
+                                                "text_in_inspection_sheet": "flux horaire supérieur à 10 g/h\nmesure journalière sur un prélèvement représentatif effectué en continu"
                                             },
                                             {
                                                 "cells": [
@@ -5229,7 +5229,7 @@
                                                     }
                                                 ],
                                                 "is_header": false,
-                                                "text_in_inspection_sheet": ""
+                                                "text_in_inspection_sheet": "b) Arsenic, sélénium et tellure, et leurs composés :"
                                             },
                                             {
                                                 "cells": [
@@ -5253,7 +5253,7 @@
                                                     }
                                                 ],
                                                 "is_header": false,
-                                                "text_in_inspection_sheet": ""
+                                                "text_in_inspection_sheet": "si le flux horaire, supérieur à 50 g/h\nmesure journalière sur un prélèvement représentatif effectué en continu ;"
                                             },
                                             {
                                                 "cells": [
@@ -5268,7 +5268,7 @@
                                                     }
                                                 ],
                                                 "is_header": false,
-                                                "text_in_inspection_sheet": ""
+                                                "text_in_inspection_sheet": "c) Plomb et ses composés :"
                                             },
                                             {
                                                 "cells": [
@@ -5292,7 +5292,7 @@
                                                     }
                                                 ],
                                                 "is_header": false,
-                                                "text_in_inspection_sheet": ""
+                                                "text_in_inspection_sheet": "si le flux horaire supérieur à 100 g/h\nmesure journalière sur un prélèvement représentatif effectué en continu ;"
                                             },
                                             {
                                                 "cells": [
@@ -5307,7 +5307,7 @@
                                                     }
                                                 ],
                                                 "is_header": false,
-                                                "text_in_inspection_sheet": ""
+                                                "text_in_inspection_sheet": "d) Antimoine, chrome, cobalt, cuivre, étain, manganèse, nickel, vanadium et zinc, et leurs composés :"
                                             },
                                             {
                                                 "cells": [
@@ -5331,7 +5331,7 @@
                                                     }
                                                 ],
                                                 "is_header": false,
-                                                "text_in_inspection_sheet": ""
+                                                "text_in_inspection_sheet": "si le flux horaire supérieur à 500 g/h\nmesure journalière sur un prélèvement représentatif effectué en continu."
                                             },
                                             {
                                                 "cells": [
@@ -5346,7 +5346,7 @@
                                                     }
                                                 ],
                                                 "is_header": false,
-                                                "text_in_inspection_sheet": ""
+                                                "text_in_inspection_sheet": "7° Hydrocarbures Aromatiques Polycycliques"
                                             },
                                             {
                                                 "cells": [
@@ -5370,7 +5370,7 @@
                                                     }
                                                 ],
                                                 "is_header": false,
-                                                "text_in_inspection_sheet": ""
+                                                "text_in_inspection_sheet": "benzo (a) pyrène ; naphtalène\nsi le flux horaire (de la somme massique des 2 substances) supérieur à 0,2 kg/h\nmesure journalière sur un prélèvement représentatif effectué en continu."
                                             }
                                         ]
                                     },
@@ -5518,7 +5518,7 @@
                                                     }
                                                 ],
                                                 "is_header": false,
-                                                "text_in_inspection_sheet": ""
+                                                "text_in_inspection_sheet": "Débit\n- Semestrielle pour les effluents raccordés\n- Trimestrielle pour les rejets dans le milieu naturel"
                                             },
                                             {
                                                 "cells": [
@@ -5551,7 +5551,7 @@
                                                     }
                                                 ],
                                                 "is_header": false,
-                                                "text_in_inspection_sheet": ""
+                                                "text_in_inspection_sheet": "Température\n- Semestrielle pour les effluents raccordés - Trimestrielle pour les rejets dans le milieu naturel"
                                             },
                                             {
                                                 "cells": [
@@ -5584,7 +5584,7 @@
                                                     }
                                                 ],
                                                 "is_header": false,
-                                                "text_in_inspection_sheet": ""
+                                                "text_in_inspection_sheet": "pH\n- Semestrielle pour les effluents raccordés - Trimestrielle pour les rejets dans le milieu naturel"
                                             },
                                             {
                                                 "cells": [
@@ -5617,7 +5617,7 @@
                                                     }
                                                 ],
                                                 "is_header": false,
-                                                "text_in_inspection_sheet": ""
+                                                "text_in_inspection_sheet": "DCO (sur effluent non décanté)\n- Semestrielle pour les effluents raccordés\n- Trimestrielle pour les rejets dans le milieu naturel"
                                             },
                                             {
                                                 "cells": [
@@ -5650,7 +5650,7 @@
                                                     }
                                                 ],
                                                 "is_header": false,
-                                                "text_in_inspection_sheet": ""
+                                                "text_in_inspection_sheet": "Matières en suspension totales\n- Semestrielle pour les effluents raccordés\n- Mensuelle pour les rejets dans le milieu naturel"
                                             },
                                             {
                                                 "cells": [
@@ -5683,7 +5683,7 @@
                                                     }
                                                 ],
                                                 "is_header": false,
-                                                "text_in_inspection_sheet": ""
+                                                "text_in_inspection_sheet": "DBO5 (*) (sur effluent non décanté)\n- Semestrielle pour les effluents raccordés\n- Mensuelle pour les rejets dans le milieu naturel"
                                             },
                                             {
                                                 "cells": [
@@ -5716,7 +5716,7 @@
                                                     }
                                                 ],
                                                 "is_header": false,
-                                                "text_in_inspection_sheet": ""
+                                                "text_in_inspection_sheet": "Hydrocarbure totaux\n- Semestrielle pour les effluents raccordés\n- Mensuelle pour les rejets dans le milieu naturel"
                                             }
                                         ]
                                     },
