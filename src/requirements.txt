@@ -1,0 +1,6 @@
+beautifulsoup4==4.8.2
+dash==1.17.0
+GitPython==2.1.11
+pandas==1.1.4
+tqdm==4.30.0
+Unidecode==1.0.23
