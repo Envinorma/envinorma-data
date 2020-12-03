@@ -366,3 +366,21 @@ def test_add_inspection_sheet_in_table_rows():
     assert transformed_string.table.rows[0].text_in_inspection_sheet is None
     expected = 'Header 1\ncontent 1\nHeader 1\ncontent 2\nHeader 2\ncontent 3'
     assert transformed_string.table.rows[1].text_in_inspection_sheet == expected
+
+    content_cells = [
+        Cell(EnrichedString('content 1'), 1, 1),
+        Cell(EnrichedString('content 2'), 1, 1),
+        Cell(EnrichedString('content 3'), 1, 1),
+    ]
+    string = EnrichedString('', table=Table([Row(content_cells, False)]))
+    transformed_string = add_inspection_sheet_in_table_rows(string)
+    assert transformed_string.table.rows[0].text_in_inspection_sheet == 'content 1\ncontent 2\ncontent 3'
+
+    content_cells = [
+        Cell(EnrichedString('\n\n\ncontent\n\n 1'), 1, 1),
+        Cell(EnrichedString('content\n\n 2'), 1, 1),
+        Cell(EnrichedString('content 3\n\n'), 1, 1),
+    ]
+    string = EnrichedString('', table=Table([Row(content_cells, False)]))
+    transformed_string = add_inspection_sheet_in_table_rows(string)
+    assert transformed_string.table.rows[0].text_in_inspection_sheet == 'content\n 1\ncontent\n 2\ncontent 3'

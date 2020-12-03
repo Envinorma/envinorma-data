@@ -347,12 +347,20 @@ def _extract_headers(rows: List[Row]) -> List[str]:
     return [cell.content.text for cell in rows[0].cells for _ in range(cell.colspan)]
 
 
+def _remove_unnecessary_line_breaks(string: str) -> str:
+    pieces = string.split('\n')
+    return '\n'.join([x for x in pieces if x])
+
+
 def _build_text_for_inspection_sheet(headers: List[str], row: Row) -> str:
+    cell_texts = [cell.content.text for cell in row.cells]
+    if not headers:
+        return _remove_unnecessary_line_breaks('\n'.join(cell_texts))
     lines = []
-    for header, cell in zip(headers, row.cells):
+    for header, cell in zip(headers, cell_texts):
         lines.append(header)
-        lines.append(cell.content.text)
-    return '\n'.join(lines)
+        lines.append(cell)
+    return _remove_unnecessary_line_breaks('\n'.join(lines))
 
 
 def add_inspection_sheet_in_table_rows(string: EnrichedString) -> EnrichedString:
