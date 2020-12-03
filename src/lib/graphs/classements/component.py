@@ -29,7 +29,7 @@ _TABLE = dash_table.DataTable(
     sort_mode='single',
     sort_by=[],
 )
-_BAR_CHART = '_BAR_CHART'
+_BAR_CHART = random_id('_BAR_CHART')
 _ICPE_MAP_GRAPH = random_id('map_graph')
 
 component = html.Div(

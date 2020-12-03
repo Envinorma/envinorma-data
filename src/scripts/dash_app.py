@@ -12,10 +12,10 @@ app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
 app.layout = html.Div(
     [
         html.Div([html.H1(['Envinorma'])]),
+        html.Div([html.H2(['ICPE.'])]),
+        component_icpe.component,
         html.Div([html.H2(['Distribution des classements par année et par département.'])]),
         component_classements.component,
-        html.Div([html.H2(['Distribution des rubriques dans les départements de France métropolitaine et Corse.'])]),
-        component_icpe.component,
         html.Div([html.H2(['Statistiques sur les tableaux extraits des AM.'])]),
         component_am_tables.component,
     ],

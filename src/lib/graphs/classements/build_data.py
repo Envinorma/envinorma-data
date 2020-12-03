@@ -7,7 +7,7 @@ def _build_stat(classement: GRClassement, installation: GeorisquesInstallation) 
     return RubriqueStat(
         rubrique=classement.code_nomenclature,
         year=classement.date_autorisation.year,
-        s3ic_base=installation.code_s3ic.split('.')[0],
+        s3ic_base=installation.s3ic_id.split('.')[0],
         department=installation.num_dep,
         active=classement.etat_activite.value if classement.etat_activite else 'not-specified',
         famille_nomenclature=classement.famille_nomenclature.value
@@ -22,7 +22,7 @@ def build():
     rows = [
         _build_stat(classement, installation)
         for installation in all_installations
-        for classement in all_classements[installation.code_s3ic]
+        for classement in all_classements[installation.s3ic_id]
         if classement.date_autorisation
     ]
     RubriquesDataset(rows).to_csv(build_data_file_name(__file__))

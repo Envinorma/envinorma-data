@@ -45,6 +45,7 @@ Arrete.create(
     legifrance_url: {_ruby_optional_str(arrete.legifrance_url)},
     summary: {summary}
 )
+
 '''
 
 
@@ -61,5 +62,6 @@ if __name__ == '__main__':
         ('DEVP1706393A/reg_E_AND_date_between_2010_and_2017.json', '1510', 2),
         ('DEVP1706393A/reg_E_no_date.json', '1510', 2),
     ]
+    file_ = open('tmp.txt', 'w')
     for args in all_args:
-        print(_handle_filename(*args))
+        file_.write(_handle_filename(*args))
