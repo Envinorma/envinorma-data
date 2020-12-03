@@ -1,5 +1,5 @@
 from collections import Counter
-from lib.graphs.icpe_map.data import RubriquePerDepartments
+from lib.graphs.icpe.data import RubriquePerDepartments
 from lib.graphs.utils import build_data_file_name
 from lib.georisques_data import load_all_classements, load_all_installations
 

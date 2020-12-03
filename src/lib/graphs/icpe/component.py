@@ -8,7 +8,7 @@ import dash_html_components as html
 from dash.dependencies import Input, Output
 
 from plotly.graph_objects import Figure
-from lib.graphs.icpe_map.data import RubriquePerDepartments
+from lib.graphs.icpe.data import RubriquePerDepartments
 from lib.graphs.utils import build_data_file_name, random_id
 
 

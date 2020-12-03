@@ -1,5 +1,5 @@
 from lib.graphs.utils import build_data_file_name
-from lib.graphs.rubriques_over_time.data import RubriquesDataset, RubriqueStat
+from lib.graphs.classements.data import RubriquesDataset, RubriqueStat
 from lib.georisques_data import GRClassement, GeorisquesInstallation, load_all_classements, load_all_installations
 
 

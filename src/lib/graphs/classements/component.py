@@ -8,7 +8,7 @@ import dash_html_components as html
 from dash.dependencies import Input, Output
 
 from plotly.graph_objects import Figure
-from lib.graphs.rubriques_over_time.data import RubriquesDataset
+from lib.graphs.classements.data import RubriquesDataset
 from lib.graphs.utils import apply_filter, apply_sort, build_data_file_name, random_id
 
 
