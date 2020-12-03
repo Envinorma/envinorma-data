@@ -64,6 +64,8 @@ def apply_filter(dataframe: DataFrame, filter_query: str) -> DataFrame:
         if operator in ('eq', 'ne', 'lt', 'le', 'gt', 'ge'):
             dataframe = dataframe.loc[getattr(dataframe[col_name], operator)(filter_value)]
         elif operator == 'contains':
+            if isinstance(filter_value, float):
+                filter_value = str(int(filter_value))
             dataframe = dataframe.loc[dataframe[col_name].str.contains(filter_value)]
         elif operator == 'datestartswith':
             dataframe = dataframe.loc[dataframe[col_name].str.startswith(filter_value)]

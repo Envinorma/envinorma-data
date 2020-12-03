@@ -36,7 +36,6 @@ arrete_{rubrique} = JSON.parse(File.read(path))
 Arrete.create(
     name: "AM - {rubrique}",
     data: arrete_{rubrique},
-    installation_id: {installation_id},
     short_title: "{arrete.short_title}",
     title: "{arrete.title.text}",
     unique_version: {_ruby_bool(arrete.unique_version)},
