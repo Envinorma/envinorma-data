@@ -8,7 +8,6 @@ from lib.graphs.tables_in_am import component as component_am_tables
 external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
 
-
 app.layout = html.Div(
     [
         html.Div([html.H1(['Envinorma'])]),
@@ -25,6 +24,6 @@ component_classements.add_callback(app)
 component_icpe.add_callback(app)
 component_am_tables.add_callback(app)
 
-
+APP = app.server  # for gunicorn deployment
 if __name__ == '__main__':
     app.run_server(debug=True)

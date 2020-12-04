@@ -1,3 +1,4 @@
+import os
 import json
 from typing import Dict, Optional
 import dash_table
@@ -13,8 +14,9 @@ from lib.graphs.icpe.data import ICPEDataset
 from lib.graphs.utils import apply_filter, apply_sort, build_data_file_name, generate_dropdown, random_id
 
 
+_DATA_FOLDER = os.environ.get('DATA_FOLDER', 'data')
 _DATAFRAME = ICPEDataset.load_csv(build_data_file_name(__file__))
-_FRENCH_DEPARTMENTS = json.load(open('data/maps/french_departments.geojson'))
+_FRENCH_DEPARTMENTS = json.load(open(_DATA_FOLDER + '/maps/french_departments.geojson'))
 _PAGE_SIZE = 25
 _TABLE_ID = random_id('TABLE')
 _TABLE = dash_table.DataTable(
@@ -125,4 +127,3 @@ def add_callback(app: Dash):
         )
         fig.update_geos(fitbounds='locations', visible=False)
         return fig
-

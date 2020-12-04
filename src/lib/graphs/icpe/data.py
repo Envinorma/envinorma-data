@@ -77,30 +77,3 @@ class ICPEDataset:
     @staticmethod
     def from_dict(dict_: Dict[str, Any]) -> 'ICPEDataset':
         return ICPEDataset(**dict_)
-
-
-# import json
-# import requests
-# from tqdm import tqdm
-
-# data = json.load(open('/Users/remidelbouys/EnviNorma/brouillons/data/icpe.geojson'))
-# ids = [doc['properties']['code_s3ic'].replace('.', '-') for doc in data['features']]
-# res = json.load(open('/Users/remidelbouys/EnviNorma/brouillons/data/georisques_documents.json'))
-# for i, id_ in enumerate(tqdm(ids, bar_format='{l_bar}{r_bar}')):
-#     if id_ in res:
-#         continue
-#     if i in {100, 500, 1000, 10000, 30000}:
-#         json.dump(
-#             res,
-#             open('/Users/remidelbouys/EnviNorma/brouillons/data/georisques_documents.json', 'w'),
-#             ensure_ascii=False,
-#         )
-#     try:
-#         response = requests.get(
-#             f'https://www.georisques.gouv.fr/webappReport/ws/installations/etablissement/{id_}/texte'
-#         )
-#         res[id_] = response.json()
-#     except Exception as e:
-#         print(id_, response.content.decode())
-
-# json.dump(res, open('/Users/remidelbouys/EnviNorma/brouillons/data/georisques_documents.json', 'w'), ensure_ascii=False)

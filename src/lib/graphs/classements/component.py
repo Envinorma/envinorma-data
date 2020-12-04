@@ -1,3 +1,4 @@
+import os
 import json
 import dash_table
 
@@ -11,10 +12,10 @@ from plotly.graph_objects import Figure
 from lib.graphs.classements.data import RubriquesDataset
 from lib.graphs.utils import apply_filter, apply_sort, build_data_file_name, random_id
 
-
+_DATA_FOLDER = os.environ.get('DATA_FOLDER', 'data')
 _DATAFRAME = RubriquesDataset.load_csv(build_data_file_name(__file__))
 _DATAFRAME = _DATAFRAME.loc[_DATAFRAME.year.apply(lambda x: 1950 <= x <= 2030)]
-_FRENCH_DEPARTMENTS = json.load(open('data/maps/french_departments.geojson'))
+_FRENCH_DEPARTMENTS = json.load(open(_DATA_FOLDER + '/maps/french_departments.geojson'))
 _PAGE_SIZE = 32
 _TABLE_ID = random_id('TABLE')
 _TABLE = dash_table.DataTable(
@@ -84,4 +85,3 @@ def add_callback(app: Dash):
         )
         fig.update_geos(fitbounds='locations', visible=False)
         return fig
-
