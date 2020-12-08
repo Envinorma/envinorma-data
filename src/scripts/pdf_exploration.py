@@ -93,3 +93,13 @@ def _extract_lines(filename: str) -> List[str]:
 res = _extract_lines(
     '/Users/remidelbouys/EnviNorma/brouillons/data/icpe_ap_odt/D_f_ab53da82a80548e4843f3827f16deeef.odt'
 )
+
+# filename = (
+#     '/Users/remidelbouys/EnviNorma/brouillons/data/icpe_ap_odt/2020-06-11-AUTO 2001-AP AUTORISATION-Projet_AP_VF.odt'
+# )
+# html = odf2xhtml.load(filename).toXml()
+
+# filename_test = (
+#     '/Users/remidelbouys/EnviNorma/brouillons/data/icpe_ap_odt/test_tableaux.odt'
+# )
+# html_test = odf2xhtml.load(filename_test).toXml()
