@@ -26,6 +26,7 @@ from lib.am_structure_extraction import (
     _structure_text,
     _remove_links,
     _generate_article_title,
+    split_alineas_in_sections,
 )
 from lib.texts_properties import count_sections, count_tables, count_articles_in_am, _extract_section_inconsistencies
 
@@ -333,3 +334,30 @@ def test_generate_article_title():
     assert _generate_article_title(article_4, outer_alineas_4)[1][0] == outer_alineas_4[0]
     assert _generate_article_title(article_4, outer_alineas_4)[1][1] == outer_alineas_4[1]
 
+
+def test_split_alineas_in_sections():
+    lines = list('abcdefghijklmnopqrst')
+    matches = [False] * len(lines)
+    alineas, sections = split_alineas_in_sections(lines, matches)
+    assert len(sections) == 0
+    assert len(alineas) == len(lines)
+
+    lines = list('abcdefghijklmnopqrst')
+    matches = [False] * len(lines)
+    matches[1] = True
+    alineas, sections = split_alineas_in_sections(lines, matches)
+    assert alineas == ['a']
+    assert len(sections) == 1
+    assert sections[0] == lines[1:]
+
+    lines = list('abcdefghijklmnopqrst')
+    matches = [False] * len(lines)
+    matches[1] = True
+    matches[3] = True
+    matches[4] = True
+    alineas, sections = split_alineas_in_sections(lines, matches)
+    assert alineas == ['a']
+    assert len(sections) == 3
+    assert sections[0] == lines[1:3]
+    assert sections[1] == [lines[3]]
+    assert sections[2] == lines[4:]

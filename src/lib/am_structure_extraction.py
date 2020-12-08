@@ -221,19 +221,19 @@ def _remove_links(text: str) -> Tuple[str, List[LinkReference]]:
 TP = TypeVar('TP')
 
 
-def _split_alineas_in_sections(alineas: List[TP], matches: List[bool]) -> Tuple[List[TP], List[List[TP]]]:
-    first_match = -1
+def split_alineas_in_sections(alineas: List[TP], matches: List[bool]) -> Tuple[List[TP], List[List[TP]]]:
+    found_any_match = False
+    first_match = 0
     for first_match, match in enumerate(matches):
         if match:
+            found_any_match = True
             break
-    if first_match == -1:
+    if not found_any_match:
         sections: List[List[TP]] = []
         return alineas, sections
     outer_alineas = alineas[:first_match]
     other_matches = [first_match + 1 + idx for idx, match in enumerate(matches[first_match + 1 :]) if match]
-    sections: List[List[TP]] = [
-        alineas[a:b] for a, b in zip([first_match] + other_matches, other_matches + [len(matches)])
-    ]
+    sections = [alineas[a:b] for a, b in zip([first_match] + other_matches, other_matches + [len(matches)])]
     return (outer_alineas, sections)
 
 
@@ -268,8 +268,8 @@ def _build_structured_text(
         grouped_pattern_names: List[List[Optional[NumberingPattern]]] = []
     else:
         selected_alineas_for_section = select_alineas_for_splitting(alineas, pattern_names)
-        outer_alineas, grouped_alineas = _split_alineas_in_sections(alineas, selected_alineas_for_section)
-        _, grouped_pattern_names = _split_alineas_in_sections(pattern_names, selected_alineas_for_section)
+        outer_alineas, grouped_alineas = split_alineas_in_sections(alineas, selected_alineas_for_section)
+        _, grouped_pattern_names = split_alineas_in_sections(pattern_names, selected_alineas_for_section)
     return StructuredText(
         _extract_links(title),
         remove_empty_enriched_str([_extract_links(al) for al in outer_alineas]),
