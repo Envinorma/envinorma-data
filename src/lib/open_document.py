@@ -41,6 +41,8 @@ class ODFXMLTagNames(Enum):
     TEXT_TRACKED_CHANGES = 'text:tracked-changes'
     TEXT_SEQUENCE_DECLS = 'text:sequence-decls'
     TEXT_TOC = 'text:table-of-content'
+    TEXT_BOOKMARK_START = 'text:bookmark-start'
+    TEXT_BOOKMARK_END = 'text:bookmark-end'
     OFFICE_ANNOTATION = 'office:annotation'
 
 
@@ -178,6 +180,8 @@ def _merge_children(all_elements: List[List[_Element]], can_be_merged_list: List
             if not isinstance(elt, str):  # to alleviate pylance type inference.
                 raise ValueError()
             current_built_string.append(elt)
+        elif can_be_merged and not elements:
+            continue
         else:
             if current_built_string:
                 final_elements.append(sep.join(current_built_string))
@@ -188,19 +192,21 @@ def _merge_children(all_elements: List[List[_Element]], can_be_merged_list: List
     return final_elements
 
 
-def _extract_flattened_elements(tag: Any) -> List[_Element]:
+def _extract_flattened_elements(tag: Any, group_children: bool = False) -> List[_Element]:
     if isinstance(tag, bs4.NavigableString):
         return [tag]
     if not isinstance(tag, bs4.Tag):
         raise ValueError(f'Expecting tag as input, received element of type {type(tag)}')
-    tags_to_skip = (
+    tags_to_skip_with_line_break = (
         ODFXMLTagNames.TEXT_TRACKED_CHANGES.value,
         ODFXMLTagNames.TEXT_SEQUENCE_DECLS.value,
         ODFXMLTagNames.TEXT_TOC.value,
-        ODFXMLTagNames.OFFICE_ANNOTATION.value,
     )
-    if _descriptor(tag) in tags_to_skip:
+    if _descriptor(tag) in tags_to_skip_with_line_break:
         return [Linebreak()]
+    tags_to_skip = (ODFXMLTagNames.OFFICE_ANNOTATION.value,)
+    if _descriptor(tag) in tags_to_skip:
+        return []
     if _descriptor(tag) == ODFXMLTagNames.TABLE_TABLE.value:
         return [_extract_table(tag)]
     if _descriptor(tag) == ODFXMLTagNames.TEXT_LIST.value:
@@ -208,11 +214,13 @@ def _extract_flattened_elements(tag: Any) -> List[_Element]:
     if _descriptor(tag) == ODFXMLTagNames.TEXT_H.value:
         return [_extract_title(tag)]
     if _descriptor(tag) == ODFXMLTagNames.TEXT_P.value:
-        children = list(tag.children)
-        children_elements = [_extract_flattened_elements(child) for child in children]
+        group_children = True
+    children = list(tag.children)
+    children_elements = [_extract_flattened_elements(child, group_children) for child in children]
+    if group_children:
         can_be_merged = [not _is_independent_element(child) for child in children]
         return _merge_children(children_elements, can_be_merged)
-    return [elt for child in tag.children for elt in _extract_flattened_elements(child)]
+    return [elt for elts in children_elements for elt in elts]
 
 
 def _build_enriched_alineas(alineas: List[_Element]) -> List[EnrichedString]:

@@ -255,6 +255,14 @@ def test_extract_flattened_elements_3():
     )
 
 
+def test_extract_flattened_elements_4():
+    xml = '''<text:p><text:span text:style-name="T284">subi les opérations de dépollution figurant en </text:span><text:bookmark-start text:name="a"/><text:span text:style-name="T284">annexe II</text:span><text:bookmark-end text:name="a"/><text:span text:style-name="T284"> du présent arrêté</text:span></text:p>'''
+    elements = _extract_flattened_elements(_get_soup(xml))
+    assert len(elements) == 1
+    assert isinstance(elements[0], str)
+    assert elements[0] == 'subi les opérations de dépollution figurant en annexe II du présent arrêté'
+
+
 def test_build_enriched_alineas():
     assert _build_enriched_alineas(['Hello'])[0].text == 'Hello'
     assert _build_enriched_alineas([Table([])])[0].table.rows == []
