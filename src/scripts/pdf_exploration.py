@@ -106,11 +106,11 @@ def _extract_lines(filename: str) -> List[str]:
 from lib.open_document import _load_and_transform
 from lib.am_to_markdown import extract_markdown_text
 
-filename = (
-    '/Users/remidelbouys/EnviNorma/brouillons/data/icpe_ap_odt/2020-06-11-AUTO 2001-AP AUTORISATION-Projet_AP_VF.odt'
-)
+doc_name = 'AP_DDAE_12_2014vcorrigee_cle84ed7d'  # '2020-06-11-AUTO 2001-AP AUTORISATION-Projet_AP_VF'
+
+filename = f'/Users/remidelbouys/EnviNorma/brouillons/data/icpe_ap_odt/{doc_name}.odt'
 text = _load_and_transform(filename)
-open('/Users/remidelbouys/EnviNorma/envinorma.github.io/FirstAP.md', 'w').write(
+open(f'/Users/remidelbouys/EnviNorma/envinorma.github.io/{doc_name}.md', 'w').write(
     '\n\n'.join(extract_markdown_text(text, 1))
 )
 
@@ -121,3 +121,26 @@ open('/Users/remidelbouys/EnviNorma/envinorma.github.io/FirstAP.md', 'w').write(
 # from zipfile import ZipFile
 
 # open('tmp_raw.txt', 'w').write(ZipFile(filename).read('content.xml').decode())
+from pdf2docx import parse
+from bs4 import BeautifulSoup
+import bs4
+
+filename = (
+    '/Users/remidelbouys/EnviNorma/brouillons/data/icpe_documents/L_c_e1707b709fed43bda17568f632b8d3bc.pdf'[:-3]
+    + 'docx'
+)
+parse(filename, filename[:-3] + 'docx')
+from docx import Document
+
+doc = Document(filename)
+
+xml = doc.part.element.xml
+soup = BeautifulSoup(str(xml), 'lxml-xml')
+for x in list(list(list(soup.children)[0].children)[1].children)[:10]:
+    if isinstance(x, bs4.NavigableString):
+        if not str(x).strip():
+            continue
+        print(str(x).strip())
+    else:
+        print('tag')
+        print(x.text.strip()[:100], type(x))
