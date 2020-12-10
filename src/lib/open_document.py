@@ -2,7 +2,7 @@ import bs4
 from copy import copy
 from dataclasses import dataclass
 from enum import Enum
-from typing import Any, List, Optional, Union
+from typing import Any, List, Optional, Tuple, Union
 from bs4 import BeautifulSoup
 
 from lib.am_structure_extraction import split_alineas_in_sections
@@ -223,7 +223,17 @@ def _extract_flattened_elements(tag: Any, group_children: bool = False) -> List[
     return [elt for elts in children_elements for elt in elts]
 
 
-def _build_enriched_alineas(alineas: List[_Element]) -> List[EnrichedString]:
+def _has_a_title(alineas: List[_Element]) -> bool:
+    for alinea in alineas:
+        if isinstance(alinea, ODFTitle):
+            return True
+    return False
+
+
+def _build_enriched_alineas(alineas: List[_Element]) -> Tuple[List[EnrichedString], List[StructuredText]]:
+    if _has_a_title(alineas):
+        structured_text = _build_structured_text(None, alineas)
+        return structured_text.outer_alineas, structured_text.sections
     result: List[EnrichedString] = []
     for alinea in alineas:
         if isinstance(alinea, Table):
@@ -233,8 +243,10 @@ def _build_enriched_alineas(alineas: List[_Element]) -> List[EnrichedString]:
         elif isinstance(alinea, Linebreak):
             continue
         else:
+            if isinstance(alinea, ODFTitle):
+                print(alinea.text)
             raise ValueError(f'Unexpected element type {type(alinea)} here.')
-    return result
+    return result, []
 
 
 def _extract_highest_title_level(elements: List[_Element]) -> int:
@@ -249,7 +261,9 @@ def _build_structured_text(title: Optional[_Element], elements: List[_Element]) 
     highest_level = _extract_highest_title_level(elements)
     matches = [bool(isinstance(elt, ODFTitle) and elt.level == highest_level) for elt in elements]
     outer, subsections = split_alineas_in_sections(elements, matches)
-    outer_alineas = _build_enriched_alineas(outer)
+    outer_alineas, previous_sections = _build_enriched_alineas(
+        outer
+    )  # There can be a lower level title in previous alineas
     built_subsections = [
         _build_structured_text(
             alinea_group[0],
@@ -260,7 +274,7 @@ def _build_structured_text(title: Optional[_Element], elements: List[_Element]) 
     return StructuredText(
         built_title,
         outer_alineas,
-        built_subsections,
+        previous_sections + built_subsections,
         None,
         None,
     )
