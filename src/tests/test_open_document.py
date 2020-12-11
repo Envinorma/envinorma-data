@@ -264,8 +264,8 @@ def test_extract_flattened_elements_4():
 
 
 def test_build_enriched_alineas():
-    assert _build_enriched_alineas(['Hello'])[0].text == 'Hello'
-    assert _build_enriched_alineas([Table([])])[0].table.rows == []
+    assert _build_enriched_alineas(['Hello'])[0][0].text == 'Hello'
+    assert _build_enriched_alineas([Table([])])[0][0].table.rows == []
 
 
 def test_extract_highest_title_level():

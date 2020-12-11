@@ -121,22 +121,236 @@ open(f'/Users/remidelbouys/EnviNorma/envinorma.github.io/{doc_name}.md', 'w').wr
 # from zipfile import ZipFile
 
 # open('tmp_raw.txt', 'w').write(ZipFile(filename).read('content.xml').decode())
-from pdf2docx import parse
 from bs4 import BeautifulSoup
 import bs4
 
+# from pdf2docx import parse
+# parse(filename, filename[:-3] + 'docx')
 filename = (
-    '/Users/remidelbouys/EnviNorma/brouillons/data/icpe_documents/L_c_e1707b709fed43bda17568f632b8d3bc.pdf'[:-3]
-    + 'docx'
+    '/Users/remidelbouys/EnviNorma/brouillons/data/icpe_documents/L_c_e1707b709fed43bda17568f632b8d3bc.pdf'.replace(
+        '.pdf', '.docx'
+    )
 )
-parse(filename, filename[:-3] + 'docx')
 from docx import Document
 
 doc = Document(filename)
 
-xml = doc.part.element.xml
-soup = BeautifulSoup(str(xml), 'lxml-xml')
-for x in list(list(list(soup.children)[0].children)[1].children)[:10]:
+XML = doc.part.element.xml
+SOUP = BeautifulSoup(str(XML), 'lxml-xml')
+
+
+def extract_all_xml_tags_from_tag(tag: bs4.Tag) -> List[str]:
+    return [tag.prefix + ':' + tag.name] + [
+        name for child in tag.children if isinstance(child, bs4.Tag) for name in extract_all_xml_tags_from_tag(child)
+    ]
+
+
+def extract_all_xml_tags(soup: BeautifulSoup) -> List[str]:
+    return [
+        name for child in soup.children if isinstance(child, bs4.Tag) for name in extract_all_xml_tags_from_tag(child)
+    ]
+
+
+tags_occurrences = [
+    ('w:r', 4443),
+    ('w:rPr', 2558),
+    ('w:rFonts', 2558),
+    ('w:b', 2558),
+    ('w:i', 2558),
+    ('w:color', 2558),
+    ('w:sz', 2558),
+    ('w:t', 2558),
+    ('w:br', 1471),
+    ('w:tab', 585),
+    ('w:p', 402),
+    ('w:pPr', 393),
+    ('w:autoSpaceDN', 366),
+    ('w:autoSpaceDE', 366),
+    ('w:widowControl', 366),
+    ('w:spacing', 366),
+    ('w:ind', 366),
+    ('w:start', 356),
+    ('w:end', 356),
+    ('w:jc', 327),
+    ('w:tcMar', 207),
+    ('w:tc', 201),
+    ('w:tcPr', 201),
+    ('w:tcW', 201),
+    ('w:tcBorders', 201),
+    ('w:top', 149),
+    ('w:bottom', 149),
+    ('w:tabs', 116),
+    ('w:gridCol', 87),
+    ('w:tr', 82),
+    ('w:trPr', 82),
+    ('w:trHeight', 82),
+    ('w:tbl', 41),
+    ('w:tblPr', 41),
+    ('w:tblW', 41),
+    ('w:tblLayout', 41),
+    ('w:tblLook', 41),
+    ('w:tblInd', 41),
+    ('w:tblGrid', 41),
+    ('w:sectPr', 28),
+    ('w:pgSz', 28),
+    ('w:pgMar', 28),
+    ('w:cols', 28),
+    ('w:docGrid', 28),
+    ('w:gridSpan', 6),
+    ('w:vMerge', 6),
+    ('w:u', 5),
+    ('w:drawing', 4),
+    ('wp:inline', 4),
+    ('wp:extent', 4),
+    ('wp:docPr', 4),
+    ('wp:cNvGraphicFramePr', 4),
+    ('a:graphicFrameLocks', 4),
+    ('a:graphic', 4),
+    ('a:graphicData', 4),
+    ('pic:pic', 4),
+    ('pic:nvPicPr', 4),
+    ('pic:cNvPr', 4),
+    ('pic:cNvPicPr', 4),
+    ('pic:blipFill', 4),
+    ('a:blip', 4),
+    ('a:stretch', 4),
+    ('a:fillRect', 4),
+    ('pic:spPr', 4),
+    ('a:xfrm', 4),
+    ('a:off', 4),
+    ('a:ext', 4),
+    ('a:prstGeom', 4),
+    ('w:document', 1),
+    ('w:body', 1),
+]
+TABLE_TAG = 'tbl'
+
+
+def extract_random_table(soup: BeautifulSoup) -> bs4.Tag:
+    import random
+
+    return random.choice(list(soup.find_all(TABLE_TAG)))
+
+
+from typing import Optional
+
+
+def find_table_containing_text(soup: BeautifulSoup, text: str) -> Optional[bs4.Tag]:
+    for table in soup.find_all(TABLE_TAG):
+        if text in table.text:
+            return table
+
+
+def write_xml(tag: bs4.Tag, filename: str) -> None:
+    to_write = tag.prettify()
+    if isinstance(to_write, bytes):
+        raise ValueError('Expecting str')
+    open(filename, 'w').write(to_write)
+
+
+from dataclasses import dataclass
+
+
+@dataclass(frozen=True, eq=True)
+class Style:
+    bold: bool
+    italic: bool
+    size: int
+    font_name: str
+    color: str
+
+
+def _extract_property_value(properties: bs4.Tag, tag_name: str, attribute_name: str = 'w:val') -> Optional[str]:
+    tag = properties.find(tag_name)
+    if not tag:
+        return None
+    if not isinstance(tag, bs4.Tag):
+        raise ValueError(f'Expected type bs4.Tag, received {type(tag)}')
+    return tag.attrs.get(attribute_name)
+
+
+def _extract_bool_property_value(properties: bs4.Tag, tag_name: str) -> bool:
+    value = _extract_property_value(properties, tag_name)
+    if not value:
+        return True
+    return value != '0'
+
+
+def _extract_bold(properties: bs4.Tag) -> bool:
+    return _extract_bool_property_value(properties, 'b')
+
+
+def _extract_italic(properties: bs4.Tag) -> bool:
+    return _extract_bool_property_value(properties, 'i')
+
+
+def _extract_size(properties: bs4.Tag) -> int:
+    value = _extract_property_value(properties, 'sz')
+    if not value or not value.isdigit():
+        raise ValueError(f'Expecting digit string, got {value}.')
+    return int(value)
+
+
+def _extract_font_name(properties: bs4.Tag) -> str:
+    value = _extract_property_value(properties, 'rFonts', 'w:ascii')
+    if not value:
+        raise ValueError(f'Expecting non empty string.')
+    return value
+
+
+def _extract_color(properties: bs4.Tag) -> str:
+    value = _extract_property_value(properties, 'color')
+    if not value or len(value) != 6:
+        raise ValueError(f'Expecting 6-digit string. Got {value}.')
+    return value
+
+
+def extract_w_tag_style(tag: bs4.Tag) -> Optional[Style]:
+    properties = tag.find('rPr')
+    if not properties:
+        return None
+    if not isinstance(properties, bs4.Tag):
+        raise ValueError(f'Expecting type bs4.Tag, received type {type(properties)}')
+    return Style(
+        _extract_bold(properties),
+        _extract_italic(properties),
+        _extract_size(properties),
+        _extract_font_name(properties),
+        _extract_color(properties),
+    )
+
+
+from typing import Tuple
+
+
+def extract_all_word_styles(soup: BeautifulSoup) -> List[Tuple[Style, int]]:
+    res: List[Tuple[Style, int]] = []
+    for tag in soup.find_all('r'):
+        style = extract_w_tag_style(tag)
+        if style:
+            res.append((style, len(tag.text)))
+    return res
+
+
+def remove_empty(strs: List[str]) -> List[str]:
+    return [str_ for str_ in strs if str_]
+
+
+def remove_duplicate_line_break(str_: str) -> str:
+    return '\n'.join(remove_empty(str_.split('\n')))
+
+
+def print_table_properties(tag: bs4.Tag, verbose: bool = False) -> None:
+    for i, row in enumerate(tag.find_all('w:tr')):
+        if not isinstance(row, bs4.Tag):
+            raise ValueError()
+        for j, cell in enumerate(row.find_all('w:tc')):
+            print(f'Row {i}, cell {j}')
+            if verbose:
+                print(remove_duplicate_line_break(cell.text))
+
+
+for x in list(list(list(SOUP.children)[0].children)[1].children)[:10]:
     if isinstance(x, bs4.NavigableString):
         if not str(x).strip():
             continue
@@ -144,3 +358,77 @@ for x in list(list(list(soup.children)[0].children)[1].children)[:10]:
     else:
         print('tag')
         print(x.text.strip()[:100], type(x))
+
+
+tags_occurrences = [
+    ('w:r', 4443),
+    ('w:rPr', 2558),
+    ('w:rFonts', 2558),
+    ('w:b', 2558),
+    ('w:i', 2558),
+    ('w:color', 2558),
+    ('w:sz', 2558),
+    ('w:t', 2558),
+    ('w:br', 1471),
+    ('w:tab', 585),
+    ('w:p', 402),
+    ('w:pPr', 393),
+    ('w:autoSpaceDN', 366),
+    ('w:autoSpaceDE', 366),
+    ('w:widowControl', 366),
+    ('w:spacing', 366),
+    ('w:ind', 366),
+    ('w:start', 356),
+    ('w:end', 356),
+    ('w:jc', 327),
+    ('w:tcMar', 207),
+    ('w:tc', 201),
+    ('w:tcPr', 201),
+    ('w:tcW', 201),
+    ('w:tcBorders', 201),
+    ('w:top', 149),
+    ('w:bottom', 149),
+    ('w:tabs', 116),
+    ('w:gridCol', 87),
+    ('w:tr', 82),
+    ('w:trPr', 82),
+    ('w:trHeight', 82),
+    ('w:tbl', 41),
+    ('w:tblPr', 41),
+    ('w:tblW', 41),
+    ('w:tblLayout', 41),
+    ('w:tblLook', 41),
+    ('w:tblInd', 41),
+    ('w:tblGrid', 41),
+    ('w:sectPr', 28),
+    ('w:pgSz', 28),
+    ('w:pgMar', 28),
+    ('w:cols', 28),
+    ('w:docGrid', 28),
+    ('w:gridSpan', 6),
+    ('w:vMerge', 6),
+    ('w:u', 5),
+    ('w:drawing', 4),
+    ('wp:inline', 4),
+    ('wp:extent', 4),
+    ('wp:docPr', 4),
+    ('wp:cNvGraphicFramePr', 4),
+    ('a:graphicFrameLocks', 4),
+    ('a:graphic', 4),
+    ('a:graphicData', 4),
+    ('pic:pic', 4),
+    ('pic:nvPicPr', 4),
+    ('pic:cNvPr', 4),
+    ('pic:cNvPicPr', 4),
+    ('pic:blipFill', 4),
+    ('a:blip', 4),
+    ('a:stretch', 4),
+    ('a:fillRect', 4),
+    ('pic:spPr', 4),
+    ('a:xfrm', 4),
+    ('a:off', 4),
+    ('a:ext', 4),
+    ('a:prstGeom', 4),
+    ('w:document', 1),
+    ('w:body', 1),
+]
