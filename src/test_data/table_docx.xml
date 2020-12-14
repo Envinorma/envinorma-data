@@ -1,0 +1,331 @@
+<?xml version="1.0" encoding="utf-8"?>
+<w:document mc:Ignorable="w14 wp14" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main" xmlns:w10="urn:schemas-microsoft-com:office:word" xmlns:w14="http://schemas.microsoft.com/office/word/2010/wordml" xmlns:wp="http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing" xmlns:wp14="http://schemas.microsoft.com/office/word/2010/wordprocessingDrawing" xmlns:wpg="http://schemas.microsoft.com/office/word/2010/wordprocessingGroup" xmlns:wps="http://schemas.microsoft.com/office/word/2010/wordprocessingShape">
+ <w:body>
+  <w:p>
+   <w:pPr>
+    <w:pStyle w:val="Normal"/>
+    <w:bidi w:val="0"/>
+    <w:jc w:val="left"/>
+    <w:rPr/>
+   </w:pPr>
+   <w:r>
+    <w:rPr/>
+   </w:r>
+  </w:p>
+  <w:tbl>
+   <w:tblPr>
+    <w:tblW w:type="dxa" w:w="9638"/>
+    <w:jc w:val="left"/>
+    <w:tblInd w:type="dxa" w:w="0"/>
+    <w:tblLayout w:type="fixed"/>
+    <w:tblCellMar>
+     <w:top w:type="dxa" w:w="55"/>
+     <w:left w:type="dxa" w:w="55"/>
+     <w:bottom w:type="dxa" w:w="55"/>
+     <w:right w:type="dxa" w:w="55"/>
+    </w:tblCellMar>
+   </w:tblPr>
+   <w:tblGrid>
+    <w:gridCol w:w="3212"/>
+    <w:gridCol w:w="3213"/>
+    <w:gridCol w:w="3213"/>
+   </w:tblGrid>
+   <w:tr>
+    <w:trPr/>
+    <w:tc>
+     <w:tcPr>
+      <w:tcW w:type="dxa" w:w="3212"/>
+      <w:tcBorders>
+       <w:top w:color="000000" w:space="0" w:sz="2" w:val="single"/>
+       <w:left w:color="000000" w:space="0" w:sz="2" w:val="single"/>
+       <w:bottom w:color="000000" w:space="0" w:sz="2" w:val="single"/>
+      </w:tcBorders>
+     </w:tcPr>
+     <w:p>
+      <w:pPr>
+       <w:pStyle w:val="TableHeading"/>
+       <w:suppressLineNumbers/>
+       <w:bidi w:val="0"/>
+       <w:jc w:val="center"/>
+       <w:rPr/>
+      </w:pPr>
+      <w:r>
+       <w:rPr/>
+       <w:t>
+        AA
+       </w:t>
+      </w:r>
+     </w:p>
+    </w:tc>
+    <w:tc>
+     <w:tcPr>
+      <w:tcW w:type="dxa" w:w="3213"/>
+      <w:tcBorders>
+       <w:top w:color="000000" w:space="0" w:sz="2" w:val="single"/>
+       <w:left w:color="000000" w:space="0" w:sz="2" w:val="single"/>
+       <w:bottom w:color="000000" w:space="0" w:sz="2" w:val="single"/>
+      </w:tcBorders>
+     </w:tcPr>
+     <w:p>
+      <w:pPr>
+       <w:pStyle w:val="TableHeading"/>
+       <w:suppressLineNumbers/>
+       <w:bidi w:val="0"/>
+       <w:jc w:val="center"/>
+       <w:rPr/>
+      </w:pPr>
+      <w:r>
+       <w:rPr/>
+       <w:t>
+        BB
+       </w:t>
+      </w:r>
+     </w:p>
+    </w:tc>
+    <w:tc>
+     <w:tcPr>
+      <w:tcW w:type="dxa" w:w="3213"/>
+      <w:tcBorders>
+       <w:top w:color="000000" w:space="0" w:sz="2" w:val="single"/>
+       <w:left w:color="000000" w:space="0" w:sz="2" w:val="single"/>
+       <w:bottom w:color="000000" w:space="0" w:sz="2" w:val="single"/>
+       <w:right w:color="000000" w:space="0" w:sz="2" w:val="single"/>
+      </w:tcBorders>
+     </w:tcPr>
+     <w:p>
+      <w:pPr>
+       <w:pStyle w:val="TableHeading"/>
+       <w:suppressLineNumbers/>
+       <w:bidi w:val="0"/>
+       <w:jc w:val="center"/>
+       <w:rPr/>
+      </w:pPr>
+      <w:r>
+       <w:rPr/>
+       <w:t>
+        CC
+       </w:t>
+      </w:r>
+     </w:p>
+    </w:tc>
+   </w:tr>
+   <w:tr>
+    <w:trPr/>
+    <w:tc>
+     <w:tcPr>
+      <w:tcW w:type="dxa" w:w="3212"/>
+      <w:tcBorders>
+       <w:left w:color="000000" w:space="0" w:sz="2" w:val="single"/>
+       <w:bottom w:color="000000" w:space="0" w:sz="2" w:val="single"/>
+      </w:tcBorders>
+     </w:tcPr>
+     <w:p>
+      <w:pPr>
+       <w:pStyle w:val="TableContents"/>
+       <w:suppressLineNumbers/>
+       <w:bidi w:val="0"/>
+       <w:jc w:val="left"/>
+       <w:rPr/>
+      </w:pPr>
+      <w:r>
+       <w:rPr/>
+       <w:t>
+        DD
+       </w:t>
+      </w:r>
+     </w:p>
+    </w:tc>
+    <w:tc>
+     <w:tcPr>
+      <w:tcW w:type="dxa" w:w="6426"/>
+      <w:gridSpan w:val="2"/>
+      <w:tcBorders>
+       <w:left w:color="000000" w:space="0" w:sz="2" w:val="single"/>
+       <w:bottom w:color="000000" w:space="0" w:sz="2" w:val="single"/>
+       <w:right w:color="000000" w:space="0" w:sz="2" w:val="single"/>
+      </w:tcBorders>
+     </w:tcPr>
+     <w:p>
+      <w:pPr>
+       <w:pStyle w:val="TableContents"/>
+       <w:suppressLineNumbers/>
+       <w:bidi w:val="0"/>
+       <w:jc w:val="left"/>
+       <w:rPr/>
+      </w:pPr>
+      <w:r>
+       <w:rPr/>
+       <w:t>
+        EE
+       </w:t>
+      </w:r>
+     </w:p>
+    </w:tc>
+   </w:tr>
+   <w:tr>
+    <w:trPr/>
+    <w:tc>
+     <w:tcPr>
+      <w:tcW w:type="dxa" w:w="3212"/>
+      <w:vMerge w:val="restart"/>
+      <w:tcBorders>
+       <w:left w:color="000000" w:space="0" w:sz="2" w:val="single"/>
+       <w:bottom w:color="000000" w:space="0" w:sz="2" w:val="single"/>
+      </w:tcBorders>
+     </w:tcPr>
+     <w:p>
+      <w:pPr>
+       <w:pStyle w:val="TableContents"/>
+       <w:bidi w:val="0"/>
+       <w:jc w:val="left"/>
+       <w:rPr/>
+      </w:pPr>
+      <w:r>
+       <w:rPr/>
+       <w:t>
+        FF
+       </w:t>
+      </w:r>
+     </w:p>
+    </w:tc>
+    <w:tc>
+     <w:tcPr>
+      <w:tcW w:type="dxa" w:w="3213"/>
+      <w:tcBorders>
+       <w:left w:color="000000" w:space="0" w:sz="2" w:val="single"/>
+       <w:bottom w:color="000000" w:space="0" w:sz="2" w:val="single"/>
+      </w:tcBorders>
+     </w:tcPr>
+     <w:p>
+      <w:pPr>
+       <w:pStyle w:val="TableContents"/>
+       <w:bidi w:val="0"/>
+       <w:jc w:val="left"/>
+       <w:rPr/>
+      </w:pPr>
+      <w:r>
+       <w:rPr/>
+       <w:t>
+        GG
+       </w:t>
+      </w:r>
+     </w:p>
+    </w:tc>
+    <w:tc>
+     <w:tcPr>
+      <w:tcW w:type="dxa" w:w="3213"/>
+      <w:tcBorders>
+       <w:left w:color="000000" w:space="0" w:sz="2" w:val="single"/>
+       <w:bottom w:color="000000" w:space="0" w:sz="2" w:val="single"/>
+       <w:right w:color="000000" w:space="0" w:sz="2" w:val="single"/>
+      </w:tcBorders>
+     </w:tcPr>
+     <w:p>
+      <w:pPr>
+       <w:pStyle w:val="TableContents"/>
+       <w:bidi w:val="0"/>
+       <w:jc w:val="left"/>
+       <w:rPr/>
+      </w:pPr>
+      <w:r>
+       <w:rPr/>
+       <w:t>
+        HH
+       </w:t>
+      </w:r>
+     </w:p>
+    </w:tc>
+   </w:tr>
+   <w:tr>
+    <w:trPr/>
+    <w:tc>
+     <w:tcPr>
+      <w:tcW w:type="dxa" w:w="3212"/>
+      <w:vMerge w:val="continue"/>
+      <w:tcBorders>
+       <w:left w:color="000000" w:space="0" w:sz="2" w:val="single"/>
+       <w:bottom w:color="000000" w:space="0" w:sz="2" w:val="single"/>
+      </w:tcBorders>
+     </w:tcPr>
+     <w:p>
+      <w:pPr>
+       <w:pStyle w:val="TableContents"/>
+       <w:bidi w:val="0"/>
+       <w:jc w:val="left"/>
+       <w:rPr/>
+      </w:pPr>
+      <w:r>
+       <w:rPr/>
+      </w:r>
+     </w:p>
+    </w:tc>
+    <w:tc>
+     <w:tcPr>
+      <w:tcW w:type="dxa" w:w="3213"/>
+      <w:tcBorders>
+       <w:left w:color="000000" w:space="0" w:sz="2" w:val="single"/>
+       <w:bottom w:color="000000" w:space="0" w:sz="2" w:val="single"/>
+      </w:tcBorders>
+     </w:tcPr>
+     <w:p>
+      <w:pPr>
+       <w:pStyle w:val="TableContents"/>
+       <w:bidi w:val="0"/>
+       <w:jc w:val="left"/>
+       <w:rPr/>
+      </w:pPr>
+      <w:r>
+       <w:rPr/>
+       <w:t>
+        II
+       </w:t>
+      </w:r>
+     </w:p>
+    </w:tc>
+    <w:tc>
+     <w:tcPr>
+      <w:tcW w:type="dxa" w:w="3213"/>
+      <w:tcBorders>
+       <w:left w:color="000000" w:space="0" w:sz="2" w:val="single"/>
+       <w:bottom w:color="000000" w:space="0" w:sz="2" w:val="single"/>
+       <w:right w:color="000000" w:space="0" w:sz="2" w:val="single"/>
+      </w:tcBorders>
+     </w:tcPr>
+     <w:p>
+      <w:pPr>
+       <w:pStyle w:val="TableContents"/>
+       <w:bidi w:val="0"/>
+       <w:jc w:val="left"/>
+       <w:rPr/>
+      </w:pPr>
+      <w:r>
+       <w:rPr/>
+       <w:t>
+        JJ
+       </w:t>
+      </w:r>
+     </w:p>
+    </w:tc>
+   </w:tr>
+  </w:tbl>
+  <w:p>
+   <w:pPr>
+    <w:pStyle w:val="Normal"/>
+    <w:bidi w:val="0"/>
+    <w:jc w:val="left"/>
+    <w:rPr/>
+   </w:pPr>
+   <w:r>
+    <w:rPr/>
+   </w:r>
+  </w:p>
+  <w:sectPr>
+   <w:type w:val="nextPage"/>
+   <w:pgSz w:h="16838" w:w="11906"/>
+   <w:pgMar w:bottom="1134" w:footer="0" w:gutter="0" w:header="0" w:left="1134" w:right="1134" w:top="1134"/>
+   <w:pgNumType w:fmt="decimal"/>
+   <w:formProt w:val="false"/>
+   <w:textDirection w:val="lrTb"/>
+  </w:sectPr>
+ </w:body>
+</w:document>
