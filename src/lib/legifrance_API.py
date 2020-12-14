@@ -2,10 +2,11 @@ import json
 import os
 from datetime import datetime
 from typing import Dict, Optional
-
 import requests
 from requests_oauthlib import OAuth2Session
 from tqdm import tqdm
+
+from lib import config
 
 _API_HOST = 'https://api.aife.economie.gouv.fr/dila/legifrance-beta/lf-engine-app'
 _TOKEN_URL = 'https://oauth.aife.economie.gouv.fr/api/oauth/token'
@@ -13,10 +14,13 @@ _NOR_URL = f'{_API_HOST}/consult/getJoWithNor'
 
 
 def get_legifrance_client() -> OAuth2Session:
+    secret = os.environ.get('CLIENT_SECRET', config.LEGIFRANCE_CLIENT_SECRET)
+    if not secret:
+        raise ValueError('Provide CLIENT_SECRET in environment variables')
     data = {
         'grant_type': 'client_credentials',
         'client_id': 'a5b0a4be-9406-4481-925d-e1bfb784f691',
-        'client_secret': os.environ['CLIENT_SECRET'],
+        'client_secret': secret,
         'scope': 'openid',
     }
     response = requests.post(_TOKEN_URL, data=data)
