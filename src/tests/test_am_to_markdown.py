@@ -12,7 +12,7 @@ from lib.am_to_markdown import (
 )
 from lib.am_structure_extraction import (
     ArticleStatus,
-    _extract_table,
+    extract_table,
     transform_arrete_ministeriel,
     load_legifrance_text,
     _structure_text,
@@ -36,7 +36,7 @@ def test_markdown_to_html():
             </tr>
         </div>
     '''
-    table = _extract_table(table_html)
+    table = extract_table(table_html)
     generated_html_table = table_to_markdown(table)
     assert generated_html_table == (
         '<table><tr><th colspan="1" rowspan="1">A</th>'
@@ -66,7 +66,7 @@ def test_markdown_to_html_with_rowspan():
             </tr>
         </div>
     '''
-    table = _extract_table(table_html)
+    table = extract_table(table_html)
     generated_html_table = table_to_markdown(table)
     assert generated_html_table == (
         '<table><tr><th colspan="1" rowspan="1">A</th><th colspan="1" rowspan="1">B</th>'
@@ -195,4 +195,3 @@ def test_existing_installations():
         assert len(true) == len(expected)
         for true_elt, expected_elt in zip(true, expected):
             assert true_elt == expected_elt
-

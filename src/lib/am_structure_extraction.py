@@ -169,11 +169,15 @@ def _extract_row_data(row: bs4.Tag) -> Row:
     return Row(res, _is_header(row))
 
 
-def _extract_table(html: str) -> Table:
-    soup = BeautifulSoup(html, 'html.parser')
+def extract_table_from_soup(soup: BeautifulSoup) -> Table:
     row_iterator = soup.find_all('tr')
     table_data = [_extract_row_data(row) for row in row_iterator]
     return Table(table_data)
+
+
+def extract_table(html: str) -> Table:
+    soup = BeautifulSoup(html, 'html.parser')
+    return extract_table_from_soup(soup)
 
 
 def _extract_placeholder_positions(text: str, placeholder: str) -> Tuple[str, List[int]]:
@@ -199,7 +203,7 @@ def _remove_tables(text: str) -> Tuple[str, List[TableReference]]:
     references: List[str] = []
     for div in soup.find_all('table'):
         reference = _generate_reference()
-        tables.append(_extract_table(str(div)))
+        tables.append(extract_table(str(div)))
         div.replace_with(f'{_BR_PLACEHOLDER}{reference}{_BR_PLACEHOLDER}')
         references.append(reference)
     table_refs = [TableReference(table, reference) for table, reference in zip(tables, references)]
