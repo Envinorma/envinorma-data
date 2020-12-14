@@ -84,7 +84,6 @@ class GRClassement:
         dict_['famille_nomenclature'] = (
             FamilleNomenclature(dict_['famille_nomenclature']) if dict_['famille_nomenclature'] else None
         )
-
         return GRClassement(**dict_)
 
 
@@ -206,4 +205,3 @@ def load_all_installations() -> List[GeorisquesInstallation]:
     common = id_to_data_geojson.keys() & id_to_data_georisques.keys()
     union = [{**id_to_data_georisques[id_], **id_to_data_geojson[id_]} for id_ in common]
     return [GeorisquesInstallation.from_georisques_dict(doc) for doc in tqdm(union)]
-

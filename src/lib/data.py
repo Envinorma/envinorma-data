@@ -447,6 +447,17 @@ class AMMetadata:
     publication_date: int
     nor: Optional[str] = None
 
+    @staticmethod
+    def from_dict(dict_: Dict[str, Any]) -> 'AMMetadata':
+        dict_ = dict_.copy()
+        dict_['aida_page'] = str(dict_['aida_page'])
+        dict_['state'] = AMState(dict_['state'])
+        dict_['classements'] = [Classement.from_dict(classement) for classement in dict_['classements']]
+        return AMMetadata(**dict_)
+
+    def to_dict(self) -> Dict[str, Any]:
+        return asdict(self)
+
 
 @dataclass
 class AMData:
@@ -507,4 +518,29 @@ class StructuredTextSignature:
     def to_dict(self) -> Dict[str, Any]:
         res = asdict(self)
         res['section_reference'] = list(self.section_reference)
+        return res
+
+
+@dataclass
+class Nomenclature:
+    am_metadata_list: List[AMMetadata]
+    rubrique_and_regime_to_am: Dict[Tuple[int, Regime], List[AMMetadata]] = field(init=False)
+
+    def __post_init__(self):
+        self.rubrique_and_regime_to_am = {}
+        for md in self.am_metadata_list:
+            for classement in md.classements:
+                pair = (classement.rubrique, classement.regime)
+                if pair not in self.rubrique_and_regime_to_am:
+                    self.rubrique_and_regime_to_am[pair] = []
+                self.rubrique_and_regime_to_am[pair].append(md)
+
+    @staticmethod
+    def from_dict(dict_: Dict[str, Any]) -> 'StructuredTextSignature':
+        dict_ = dict_.copy()
+        dict_['am_metadata_list'] = [AMMetadata.from_dict(dict_['am_metadata_list'])]
+        return StructuredTextSignature(**dict_)
+
+    def to_dict(self) -> Dict[str, Any]:
+        res = asdict(self)
         return res

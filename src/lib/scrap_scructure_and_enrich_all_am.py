@@ -54,16 +54,8 @@ def parse_aida_title_date(date_str: str) -> int:
     return int(datetime.strptime(date_str, '%d/%m/%y').timestamp())
 
 
-def load_am_metadata(dict_: Dict) -> AMMetadata:
-    dict_copy = dict_.copy()
-    dict_copy['aida_page'] = str(dict_copy['aida_page'])
-    dict_copy['state'] = AMState(dict_copy['state'])
-    dict_copy['classements'] = [Classement.from_dict(classement) for classement in dict_['classements']]
-    return AMMetadata(**dict_copy)
-
-
 def load_am_data() -> AMData:
-    arretes_ministeriels = [load_am_metadata(x) for x in json.load(open('data/AM/arretes_ministeriels.json'))]
+    arretes_ministeriels = [AMMetadata.from_dict(x) for x in json.load(open('data/AM/arretes_ministeriels.json'))]
     nor_to_aida = {doc.nor: doc.aida_page for doc in arretes_ministeriels if doc.nor}
     aida_to_nor = {value: key for key, value in nor_to_aida.items()}
     return AMData(arretes_ministeriels, nor_to_aida, aida_to_nor)
