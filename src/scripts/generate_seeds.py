@@ -1,9 +1,12 @@
+import os
 import json
-from lib.config import AM_DATA_FOLDER
-from typing import List, Optional, Tuple
+from typing import Optional
+from tqdm import tqdm
 from shutil import copyfile
 
 from lib.data import ArreteMinisteriel
+from lib.config import AM_DATA_FOLDER
+from lib.utils import write_json
 
 
 def _get_input_path(filename: str) -> str:
@@ -24,7 +27,17 @@ def _ruby_optional_str(str_: Optional[str]) -> str:
     return f'"{str_}"'
 
 
-def _handle_filename(filename: str, rubrique: str, installation_id: int) -> str:
+def _concatenate_and_dump_all_am():
+    parametric_texts_folder = AM_DATA_FOLDER + '/parametric_texts'
+    res = [
+        json.load(open(os.path.join(parametric_texts_folder, folder, file)))
+        for folder in tqdm(os.listdir(parametric_texts_folder))
+        for file in os.listdir(parametric_texts_folder + '/' + folder)
+    ]
+    write_json(res, 'am_list.json', pretty=False)
+
+
+def _handle_filename(filename: str, rubrique: str) -> str:
     arrete = ArreteMinisteriel.from_dict(json.load(open(_get_input_path(filename))))
 
     copyfile(_get_input_path(filename), _get_output_path(filename))
@@ -51,18 +64,19 @@ Arrete.create(
 
 
 if __name__ == '__main__':
-    all_args: List[Tuple[str, str, int]] = [
-        ('TREP1900331A/date-d-installation_<_2019-04-09.json', '2521', 1),
-        ('TREP1900331A/date-d-installation_>=_2019-04-09.json', '2521', 1),
-        ('TREP1900331A/no_date_version.json', '2521', 1),
-        ('ATEP9760292A/no_date_version.json', '2517', 1),
-        ('ATEP9760290A/no_date_version.json', '2515', 1),
-        ('DEVP1706393A/reg_E_AND_date_after_2017.json', '1510', 2),
-        ('DEVP1706393A/reg_E_AND_date_before_2003.json', '1510', 2),
-        ('DEVP1706393A/reg_E_AND_date_between_2003_and_2010.json', '1510', 2),
-        ('DEVP1706393A/reg_E_AND_date_between_2010_and_2017.json', '1510', 2),
-        ('DEVP1706393A/reg_E_no_date.json', '1510', 2),
-    ]
-    file_ = open('tmp.txt', 'w')
-    for args in all_args:
-        file_.write(_handle_filename(*args))
+    # all_args: List[Tuple[str, str]] = [
+    #     ('TREP1900331A/date-d-installation_<_2019-04-09.json', '2521'),
+    #     ('TREP1900331A/date-d-installation_>=_2019-04-09.json', '2521'),
+    #     ('TREP1900331A/no_date_version.json', '2521'),
+    #     ('ATEP9760292A/no_date_version.json', '2517'),
+    #     ('ATEP9760290A/no_date_version.json', '2515'),
+    #     ('DEVP1706393A/reg_E_AND_date_after_2017.json', '1510'),
+    #     ('DEVP1706393A/reg_E_AND_date_before_2003.json', '1510'),
+    #     ('DEVP1706393A/reg_E_AND_date_between_2003_and_2010.json', '1510'),
+    #     ('DEVP1706393A/reg_E_AND_date_between_2010_and_2017.json', '1510'),
+    #     ('DEVP1706393A/reg_E_no_date.json', '1510'),
+    # ]
+    # file_ = open('tmp.txt', 'w')
+    # for args in all_args:
+    #     file_.write(_handle_filename(*args))
+    _concatenate_and_dump_all_am()
