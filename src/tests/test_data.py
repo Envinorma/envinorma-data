@@ -13,6 +13,7 @@ from lib.data import (
     StructuredText,
     Table,
     TopicName,
+    is_increasing,
 )
 
 _TABLE = Table([Row([Cell(EnrichedString('bonjour'), 1, 1)], True)])
@@ -65,3 +66,12 @@ def test_table():
     dict_ = _TABLE.to_dict()
     new_dict = Table.from_dict(dict_).to_dict()
     assert new_dict == dict_
+
+
+def test_is_increasing():
+    assert is_increasing([])
+    assert is_increasing([1])
+    assert is_increasing([1, 3])
+    assert is_increasing([1, 3, 4, 5])
+    assert not is_increasing([1, 3, 4, 5, 1])
+    assert not is_increasing([1, 1])

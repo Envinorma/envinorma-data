@@ -1,5 +1,5 @@
 import pandas
-from dataclasses import asdict, dataclass
+from dataclasses import asdict, dataclass, field
 from datetime import date
 from typing import Any, Dict, List, Optional
 
@@ -18,12 +18,23 @@ class ICPESStat:
     code_naf: str
     nb_documents: int
     nb_ap: int
+    nb_am: int
+    nb_arretes: int
     nb_reports: int
     nb_sanctions: int
     nb_med: int
     nb_active_classements: int
     nb_inactive_classements: int
     rubriques: List[str]
+    last_inspection_year: Optional[int] = None
+    last_inspection_month: Optional[int] = None
+    last_inspection_day: Optional[int] = None
+
+    def __post_init__(self):
+        if self.last_inspection:
+            self.last_inspection_day = self.last_inspection.day
+            self.last_inspection_year = self.last_inspection.year
+            self.last_inspection_month = self.last_inspection.month
 
     def to_dict(self) -> Dict[str, Any]:
         return asdict(self)

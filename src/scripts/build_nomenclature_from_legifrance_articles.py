@@ -1,10 +1,21 @@
+import re
 from dataclasses import dataclass
-from typing import List, Optional, Tuple
-from lib.legifrance_API import get_article_by_id, get_legifrance_client
+from typing import List, Optional
 from bs4 import BeautifulSoup
-from lib.data import Cell, EnrichedString, Regime, Row, Table
-from lib.am_structure_extraction import extract_table_from_soup
 from tqdm import tqdm
+from collections import Counter
+from lib.data import Cell, EnrichedString, Nomenclature, Regime, Row, RubriqueSimpleThresholds, Table, is_increasing
+from lib.legifrance_API import get_article_by_id, get_legifrance_client
+from lib.am_structure_extraction import extract_table_from_soup
+from lib.utils import write_json
+from lib.georisques_data import (
+    GRClassementActivite,
+    deduce_regime_if_possible,
+    load_installations_with_classements_and_docs,
+)
+from lib.config import AM_DATA_FOLDER
+from lib.scrap_scructure_and_enrich_all_am import load_am_data
+
 
 _ARTICLE_IDS = [
     'LEGIARTI000039330431',
@@ -126,3 +137,194 @@ def _extract_table_data(table: Table) -> List[_NomenclatureTableRow]:
 
 
 _DATA = [x for table in tqdm(_TABLES) for x in _extract_table_data(table)]
+
+
+def _str_type(str_: str) -> str:
+    if 'mais inf' in str_:
+        return 'between'
+    if 'ou égal' in str_ or 'supérieur' in str_.lower():
+        return 'greater'
+    print(str_)
+    return 'not'
+
+
+Counter(
+    [
+        _str_type(rubrique)
+        for row in _DATA
+        for (regime, rubrique) in zip(row.regimes, row.rubrique_lines)
+        if regime and rubrique
+    ]
+)
+
+_PATTERNS = [
+    r'^[0-9]+\. ',
+    r'^[a-z]\)',
+    r'^[A-Z]\. ',
+]
+
+
+def _has_enumeration(str_: str) -> bool:
+    for pattern in _PATTERNS:
+        if re.match(pattern, str_):
+            return True
+    return False
+
+
+def _extract_matched_str(string: str, match: re.Match) -> str:
+    return string[match.span()[0] : match.span()[1]]
+
+
+def _get_match(str_: str) -> str:
+    for pattern in _PATTERNS:
+        match = re.match(pattern, str_)
+        if match:
+            return _extract_matched_str(str_, match)
+    return ''
+
+
+def _extract_alineas(row: _NomenclatureTableRow) -> List[str]:
+    current_paragraph = ''
+    alineas: List[str] = []
+    for regime, text in zip(row.regimes, row.rubrique_lines):
+        if not regime:
+            if _has_enumeration(text):
+                current_paragraph = _get_match(text).strip()
+        else:
+            alineas.append(current_paragraph + _get_match(text).strip())
+    return alineas
+
+
+_ALINEAS = {row.rubrique: _extract_alineas(row) for row in _DATA}
+
+
+def _is_decreasing(list_: List[float]) -> bool:
+    if not list_:
+        return True
+    for a, b in zip(list_, list_[1:]):
+        if a <= b:
+            return False
+    return True
+
+
+def _has_one_numbering_level(row: _NomenclatureTableRow) -> bool:
+    for regime, text in zip(row.regimes, row.rubrique_lines):
+        if not regime and _has_enumeration(text):
+            return False
+    return True
+
+
+def _has_different_regimes(row: _NomenclatureTableRow) -> bool:
+    non_null = [rg for rg in row.regimes if rg]
+    return len(non_null) == len(set(non_null))
+
+
+def _is_rubrique_simple(row: _NomenclatureTableRow) -> bool:
+    return _has_one_numbering_level(row) and _has_different_regimes(row)
+
+
+Counter([_is_rubrique_simple(row) for row in _DATA])  # Counter({True: 193, False: 73})
+
+
+def _extract_prefix_number(digit_start: str) -> float:
+    i = -1
+    for i, char in enumerate(digit_start):
+        if not char.isdigit() and char != '.':
+            break
+    if i == -1:
+        raise ValueError(f'Should not happen for string starting with digit. Received {digit_start}')
+    return float(digit_start[:i])
+
+
+def _extract_lower_threshold_superieur(text: str) -> float:
+    lower_text = text.lower()
+    clean_text = (
+        lower_text.replace('supérieure', 'supérieur').replace('égale', 'égal').replace('ou égal', '').replace('à', '')
+    )
+    digit_start = clean_text.split('supérieur')[1].replace(' ', '')
+    return _extract_prefix_number(digit_start)
+
+
+class UnhandledClassementDescriptionError(Exception):
+    pass
+
+
+def _extract_lower_threshold(text: str) -> float:
+    if 'supérieur' in text.lower():
+        return _extract_lower_threshold_superieur(text)
+    if 'inférieur' in text.lower():
+        return 0
+    raise UnhandledClassementDescriptionError(text)
+
+
+def _rearrange(list_: List[float]) -> List[float]:
+    if not is_increasing(list_) and not _is_decreasing(list_):
+        raise ValueError(f'Expecting monotonous list, received {list_}')
+    return list_
+
+
+def _extract_thresholds(row: _NomenclatureTableRow) -> List[float]:
+    thresholds: List[float] = []
+    for regime, text in zip(row.regimes, row.rubrique_lines):
+        if regime:
+            thresholds.append(_extract_lower_threshold(text))
+    return _rearrange(thresholds)
+
+
+def _extract_regimes(row: _NomenclatureTableRow) -> List[Regime]:
+    return [reg for reg in row.regimes if reg]
+
+
+def _extract_simple_rubrique(row: _NomenclatureTableRow) -> Optional[RubriqueSimpleThresholds]:
+    assert _is_rubrique_simple(row)
+    try:
+        thresholds, regimes = _extract_thresholds(row), _extract_regimes(row)
+        if _is_decreasing(thresholds):
+            thresholds = thresholds[::-1]
+            regimes = regimes[::-1]
+        return RubriqueSimpleThresholds(row.rubrique, thresholds, regimes, _extract_alineas(row), '', '')
+    except UnhandledClassementDescriptionError:
+        return None
+
+
+_RUBRIQUES_OPT = [_extract_simple_rubrique(row) for row in _DATA if _is_rubrique_simple(row)]
+_RUBRIQUES = {rb.code: rb for rb in _RUBRIQUES_OPT if rb}
+
+
+def _dump_nomenclature() -> Nomenclature:
+    am_data = load_am_data()
+    metadata = am_data.metadata
+    nomenclature = Nomenclature(metadata, _RUBRIQUES)
+    write_json(nomenclature.to_dict(), f'{AM_DATA_FOLDER}/nomenclature.json')
+    return nomenclature
+
+
+_NOMENCLATURE = _dump_nomenclature()
+
+
+def _is_simple(code: str) -> bool:
+    if code and code.isdigit() and int(code) in _RUBRIQUES:
+        return True
+    return False
+
+
+_INSTALLATIONS = load_installations_with_classements_and_docs()
+_SIMPLE_CLASSEMENTS = [cl for ins in _INSTALLATIONS for cl in ins.classements if _is_simple(cl.code_nomenclature)]
+_SIMPLE_ACTIVE_CLASSEMENTS = [cl for cl in _SIMPLE_CLASSEMENTS if cl.etat_activite == GRClassementActivite.ACTIVE]
+
+
+Counter([_is_simple(cl.code_nomenclature) for ins in _INSTALLATIONS for cl in ins.classements])
+# Counter({False: 186258, True: 73714})
+Counter(
+    [
+        _is_simple(cl.code_nomenclature)
+        for ins in _INSTALLATIONS
+        for cl in ins.classements
+        if cl.etat_activite == GRClassementActivite.ACTIVE
+    ]
+)
+# Counter({False: 116419, True: 59810})
+
+
+_COMPUTED_REGIMES = [deduce_regime_if_possible(cl, _NOMENCLATURE) for cl in _SIMPLE_ACTIVE_CLASSEMENTS]
+Counter([(reg, cl.regime) for reg, cl in zip(_COMPUTED_REGIMES, _SIMPLE_ACTIVE_CLASSEMENTS)])

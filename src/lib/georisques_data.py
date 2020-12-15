@@ -1,7 +1,8 @@
 import json
-from dataclasses import dataclass, asdict
+from dataclasses import dataclass, asdict, replace
 from datetime import datetime, date
 from enum import Enum
+from lib.data import Nomenclature, Regime, RubriqueSimpleThresholds
 from tqdm import tqdm
 from typing import Any, Dict, List, Optional
 from pandas import DataFrame
@@ -72,6 +73,7 @@ class GRClassement:
     famille_nomenclature: Optional[FamilleNomenclature]
     volume_inst: Optional[str]
     unite: Optional[str]
+    theoretical_regime: Optional[Regime] = None
 
     @staticmethod
     def from_georisques_dict(dict_: Dict[str, Any]) -> 'GRClassement':
@@ -232,6 +234,41 @@ class GeorisquesInstallation:
         return res
 
 
+def _compute_regime(value: float, rubrique: RubriqueSimpleThresholds) -> Regime:
+    for i, threshold in enumerate(rubrique.thresholds[::-1]):
+        if value >= threshold:
+            return rubrique.regimes[len(rubrique.regimes) - 1 - i]
+    return Regime.NC
+
+
+def _extract_float_value(volume_str: Optional[str]) -> float:
+    if not volume_str:
+        raise ValueError('Expecting volume to extract value.')
+    try:
+        return float(volume_str)
+    except ValueError:
+        raise ValueError(f'Unhandled value: {volume_str}')
+
+
+def _deduce_regime(classement: GRClassement, rubrique: RubriqueSimpleThresholds) -> Optional[Regime]:
+    if classement.volume_inst is None:
+        return None
+    value = _extract_float_value(classement.volume_inst)
+    return _compute_regime(value, rubrique)
+
+
+def _is_in_nomenclature(code: str, nomenclature: Nomenclature) -> bool:
+    if code and code.isdigit() and int(code) in nomenclature.simple_thresholds:
+        return True
+    return False
+
+
+def deduce_regime_if_possible(classement: GRClassement, nomenclature: Nomenclature) -> Optional[Regime]:
+    if _is_in_nomenclature(classement.code_nomenclature, nomenclature):
+        return _deduce_regime(classement, nomenclature.simple_thresholds[int(classement.code_nomenclature)])
+    return None
+
+
 def load_all_installations() -> List[GeorisquesInstallation]:
     data_geojson = json.load(open('/Users/remidelbouys/EnviNorma/brouillons/data/icpe.geojson'))
     id_to_data_geojson = {doc['properties']['code_s3ic']: doc for doc in data_geojson['features']}
@@ -247,9 +284,19 @@ def load_all_installations() -> List[GeorisquesInstallation]:
     return [GeorisquesInstallation.from_georisques_dict(doc) for doc in tqdm(union)]
 
 
+def add_theoretical_regime(
+    classements: Dict[str, List[GRClassement]], nomenclature: Nomenclature
+) -> Dict[str, List[GRClassement]]:
+    return {
+        id_: [replace(cl, theoretical_regime=deduce_regime_if_possible(cl, nomenclature)) for cl in clss]
+        for id_, clss in classements.items()
+    }
+
+
 def load_installations_with_classements_and_docs() -> List[GeorisquesInstallation]:
+    nomenclature = Nomenclature.load_default()
     installations = load_all_installations()
-    classements = load_all_classements()
+    classements = add_theoretical_regime(load_all_classements(), nomenclature)
     documents = load_all_documents()
 
     for installation in installations:

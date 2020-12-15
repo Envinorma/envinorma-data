@@ -1,5 +1,6 @@
 from collections import Counter
-from typing import Dict, List
+from lib.data import Nomenclature, Regime
+from typing import Dict, List, Optional, Set, Tuple
 from lib.graphs.utils import build_data_file_name
 from lib.graphs.icpe.data import ICPEDataset, ICPESStat
 from lib.georisques_data import (
@@ -7,10 +8,9 @@ from lib.georisques_data import (
     GRClassement,
     GRClassementActivite,
     GRDocument,
+    GRRegime,
     GeorisquesInstallation,
-    load_all_classements,
-    load_all_installations,
-    load_all_documents,
+    load_installations_with_classements_and_docs,
 )
 
 
@@ -18,17 +18,46 @@ def _count_document_types(documents: List[GRDocument]) -> Dict[DocumentType, int
     return Counter([doc.type_doc for doc in documents])
 
 
+def _gr_regime_to_regime(regime: Optional[GRRegime]) -> Optional[Regime]:
+    if not regime:
+        return None
+    if regime == regime.AUTORISATION:
+        return Regime.A
+    if regime == regime.ENREGISTREMENT:
+        return Regime.E
+    return None
+
+
+def _compute_rubrique_and_regime(classement: GRClassement) -> Tuple[int, Regime]:
+    regime = classement.theoretical_regime or _gr_regime_to_regime(classement.regime) or Regime.DC  # Bold assumption
+    return (int(classement.code_nomenclature), regime)
+
+
+def _compute_nb_am(classements: List[GRClassement], nomenclature: Nomenclature) -> int:
+    am_ids: Set[str] = set()
+    for classement in classements:
+        if classement.code_nomenclature and classement.code_nomenclature.isdigit():
+            rubrique_regime = _compute_rubrique_and_regime(classement)
+            for am in nomenclature.rubrique_and_regime_to_am.get(rubrique_regime) or []:
+                am_ids.add(am.cid)
+    return len(am_ids)
+
+
 def _build_stat(
-    installation: GeorisquesInstallation, classements: List[GRClassement], documents: List[GRDocument]
+    installation: GeorisquesInstallation,
+    nomenclature: Nomenclature,
 ) -> ICPESStat:
+    classements = installation.classements
+    documents = installation.documents
     nb_active_classements = len(
         [clt for clt in classements if clt.etat_activite and clt.etat_activite == GRClassementActivite.ACTIVE]
     )
     nb_inactive_classements = len(
         [clt for clt in classements if clt.etat_activite and clt.etat_activite == GRClassementActivite.INACTIVE]
     )
-    doc_types = _count_document_types(documents)
+    doc_types = _count_document_types(documents or [])
     rubriques = [classement.code_nomenclature for classement in classements]
+    nb_am = _compute_nb_am(classements or [], nomenclature)
     return ICPESStat(
         num_dep=installation.num_dep,
         region=installation.region or 'unknown',
@@ -40,8 +69,10 @@ def _build_stat(
         active=installation.active.value,
         code_postal=installation.code_postal,
         code_naf=installation.code_naf,
-        nb_documents=len(documents),
+        nb_documents=len(documents or []),
         nb_ap=doc_types[DocumentType.AP],
+        nb_am=nb_am,
+        nb_arretes=nb_am + doc_types[DocumentType.AP],
         nb_reports=doc_types[DocumentType.RAPPORT],
         nb_sanctions=doc_types[DocumentType.SANCTION],
         nb_med=doc_types[DocumentType.APMED],
@@ -52,17 +83,9 @@ def _build_stat(
 
 
 def build():
-    all_documents = load_all_documents()
-    all_installations = load_all_installations()
-    all_classements = load_all_classements()
-    rows = [
-        _build_stat(
-            installation, all_classements[installation.s3ic_id], all_documents[installation.s3ic_id.replace('.', '-')]
-        )
-        for installation in all_installations
-        if installation.s3ic_id in all_classements
-        if installation.s3ic_id.replace('.', '-') in all_documents
-    ]
+    all_installations = load_installations_with_classements_and_docs()
+    nomenclature = Nomenclature.load_default()
+    rows = [_build_stat(installation, nomenclature) for installation in all_installations]
     ICPEDataset(rows).to_csv(build_data_file_name(__file__))
 
 
