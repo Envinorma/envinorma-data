@@ -1,8 +1,0 @@
-{
-    "main_commit_id": "b2654b44eb2d88dab417cb3ce41c41a56de522d2",
-    "version_commit_ids": {
-        "date-d-installation_<_2019-04-09.json": "569682af074e719b7b2bb70c69da97a5a60b3200",
-        "date-d-installation_>=_2019-04-09.json": "8b2621075a36c9d678cac25a919fd6a1482cc7f3",
-        "no_date_version.json": "8057b3d52256a6f476269adbbdcbce24065d9a8a"
-    }
-}
