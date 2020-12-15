@@ -1,9 +1,11 @@
 import json
-from dataclasses import dataclass
+from dataclasses import dataclass, asdict
 from datetime import datetime, date
 from enum import Enum
 from tqdm import tqdm
 from typing import Any, Dict, List, Optional
+from pandas import DataFrame
+from lib.utils import write_json
 
 
 class Seveso(Enum):
@@ -86,6 +88,21 @@ class GRClassement:
         )
         return GRClassement(**dict_)
 
+    def to_dict(self) -> Dict[str, Any]:
+        res = asdict(self)
+        res['seveso'] = self.seveso.value
+        if self.date_autorisation:
+            res['date_autorisation'] = self.date_autorisation.strftime('%Y-%m-%d')
+        if self.etat_activite:
+            res['etat_activite'] = self.etat_activite.value
+        if self.regime:
+            res['regime'] = self.regime.value
+        if self.id_regime:
+            res['id_regime'] = self.id_regime.value
+        if self.famille_nomenclature:
+            res['famille_nomenclature'] = self.famille_nomenclature.value
+        return res
+
 
 def load_all_classements() -> Dict[str, List[GRClassement]]:
     icpe_data = json.load(open('/Users/remidelbouys/EnviNorma/brouillons/data/icpe_admin_data.json'))
@@ -119,6 +136,13 @@ class GRDocument:
         dict_['type_doc'] = DocumentType(dict_['type_doc'])
         dict_['date_doc'] = datetime.strptime(dict_['date_doc'], '%Y-%m-%d').date() if dict_['date_doc'] else None
         return GRDocument(**dict_)
+
+    def to_dict(self) -> Dict[str, Any]:
+        res = asdict(self)
+        res['type_doc'] = self.type_doc.value
+        if self.date_doc:
+            res['date_doc'] = self.date_doc.strftime('%Y-%m-%d')
+        return res
 
 
 def _is_null(doc: Dict[str, Any]) -> bool:
@@ -167,6 +191,8 @@ class GeorisquesInstallation:
     code_postal: str
     code_insee: str
     code_naf: str
+    classements: Optional[List[GRClassement]] = None
+    documents: Optional[List[GRDocument]] = None
 
     @staticmethod
     def from_georisques_dict(dict_: Dict[str, Any]) -> 'GeorisquesInstallation':
@@ -191,6 +217,20 @@ class GeorisquesInstallation:
             code_naf=dict_['properties']['code_naf'],
         )
 
+    def to_dict(self) -> Dict[str, Any]:
+        res = asdict(self)
+        if self.last_inspection:
+            res['last_inspection'] = self.last_inspection.strftime('%Y-%m-%d')
+        res['regime'] = self.regime.value
+        res['seveso'] = self.seveso.value
+        res['family'] = self.family.value
+        res['active'] = self.active.value
+        if self.classements:
+            res['classements'] = [cl.to_dict() for cl in self.classements]
+        if self.documents:
+            res['documents'] = [cl.to_dict() for cl in self.documents]
+        return res
+
 
 def load_all_installations() -> List[GeorisquesInstallation]:
     data_geojson = json.load(open('/Users/remidelbouys/EnviNorma/brouillons/data/icpe.geojson'))
@@ -205,3 +245,50 @@ def load_all_installations() -> List[GeorisquesInstallation]:
     common = id_to_data_geojson.keys() & id_to_data_georisques.keys()
     union = [{**id_to_data_georisques[id_], **id_to_data_geojson[id_]} for id_ in common]
     return [GeorisquesInstallation.from_georisques_dict(doc) for doc in tqdm(union)]
+
+
+def load_installations_with_classements_and_docs() -> List[GeorisquesInstallation]:
+    installations = load_all_installations()
+    classements = load_all_classements()
+    documents = load_all_documents()
+
+    for installation in installations:
+        installation.classements = classements.get(installation.s3ic_id)
+        installation.documents = documents.get(installation.s3ic_id.replace('.', '-'))
+    return installations
+
+
+def _dump_installations() -> None:
+    installations = load_installations_with_classements_and_docs()
+    installations_dict = [it.to_dict() for it in installations]
+    write_json(installations_dict, 'installations.json')
+
+
+def _dump_csv_installations() -> None:
+    installations = load_all_installations()
+    data_frame = DataFrame([it.to_dict() for it in installations])
+    data_frame.to_csv('installations.csv')
+
+
+def _dump_csv_documents() -> None:
+    documents = load_all_documents()
+    dicts = []
+    for id_, docs in documents.items():
+        for doc in docs:
+            dict_ = doc.to_dict()
+            dict_['installation_id'] = id_.replace('-', '.')
+            dicts.append(dict_)
+    data_frame = DataFrame(dicts)
+    data_frame.to_csv('documents.csv')
+
+
+def _dump_csv_classements() -> None:
+    classements = load_all_classements()
+    dicts = []
+    for id_, docs in classements.items():
+        for doc in docs:
+            dict_ = doc.to_dict()
+            dict_['installation_id'] = id_
+            dicts.append(dict_)
+    data_frame = DataFrame(dicts)
+    data_frame.to_csv('classements.csv')
