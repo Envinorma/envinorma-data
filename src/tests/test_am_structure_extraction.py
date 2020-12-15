@@ -1,3 +1,4 @@
+from lib.config import AM_DATA_FOLDER
 import pytest
 import json
 import random
@@ -114,7 +115,9 @@ _SAMPLE_AM_NOR = ['DEVP1706393A', 'TREP1815737A', 'ATEP9870263A', 'DEVP1519168A'
 @pytest.mark.filterwarnings('ignore')
 def test_no_fail_in_structure_extraction():
     for nor in _SAMPLE_AM_NOR:
-        transform_arrete_ministeriel(load_legifrance_text(json.load(open(f'data/AM/legifrance_texts/{nor}.json'))))
+        transform_arrete_ministeriel(
+            load_legifrance_text(json.load(open(f'{AM_DATA_FOLDER}/legifrance_texts/{nor}.json')))
+        )
 
 
 def test_cell_data_extraction():

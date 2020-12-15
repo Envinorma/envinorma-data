@@ -8,7 +8,7 @@ from bs4 import BeautifulSoup, Tag
 from tqdm import tqdm
 
 from lib.data import Hyperlink, Anchor
-from lib.config import AIDA_URL
+from lib.config import AIDA_URL, AM_DATA_FOLDER
 
 _NOR_REGEXP = r'[A-Z]{4}[0-9]{7}[A-Z]'
 
@@ -180,7 +180,6 @@ def aida_anchor_to_github_anchor(anchor: Optional[str], aida_to_github_anchor_na
     return new_anchor
 
 
-_GITHUB_BASE_LOC = '/src/data/AM/markdown_texts'
 _GITHUB_BASE_LOC = ''
 
 
@@ -219,7 +218,7 @@ def transform_aida_links_to_github_markdown_links(
 
 
 def scrap_all_anchors() -> None:
-    arretes_ministeriels = json.load(open('data/AM/arretes_ministeriels.json'))
+    arretes_ministeriels = json.load(open(f'{AM_DATA_FOLDER}/arretes_ministeriels.json'))
     page_ids = [am['aida_page'] for am in arretes_ministeriels]
     page_id_to_anchors_json: Dict[str, List[Dict[str, Any]]] = {}
     for page_id in tqdm(page_ids):

@@ -1,4 +1,5 @@
 import json
+from lib.config import AM_DATA_FOLDER
 from lib.topics.patterns import TopicName
 
 import pytest
@@ -281,7 +282,9 @@ def test_no_fail_in_aida_links_addition():
     for nor in _SAMPLE_AM_NOR:
         links_json = json.load(open(f'data/aida/hyperlinks/{nor}.json'))
         links = [Hyperlink(**link_doc) for link_doc in links_json]
-        add_links_to_am(load_arrete_ministeriel(json.load(open(f'data/AM/structured_texts/{nor}.json'))), links)
+        add_links_to_am(
+            load_arrete_ministeriel(json.load(open(f'{AM_DATA_FOLDER}/structured_texts/{nor}.json'))), links
+        )
 
 
 def test_compute_summary():

@@ -1,4 +1,5 @@
 import json
+from lib.config import AM_DATA_FOLDER
 from typing import List, Optional, Tuple
 from shutil import copyfile
 
@@ -6,7 +7,7 @@ from lib.data import ArreteMinisteriel
 
 
 def _get_input_path(filename: str) -> str:
-    return f'/Users/remidelbouys/EnviNorma/envinorma/src/data/AM/parametric_texts/{filename}'
+    return f'{AM_DATA_FOLDER}/parametric_texts/{filename}'
 
 
 def _get_output_path(filename: str) -> str:

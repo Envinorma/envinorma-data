@@ -1,4 +1,5 @@
 import json
+from lib.config import AM_DATA_FOLDER
 import os
 import random
 import traceback
@@ -14,11 +15,9 @@ from lib.topics.topics import TOPIC_ONTOLOGY
 from lib.data import (
     Hyperlink,
     Anchor,
-    Classement,
     AMMetadata,
     AidaData,
     AMData,
-    AMState,
     Data,
     get_text_defined_id,
     check_am,
@@ -55,7 +54,9 @@ def parse_aida_title_date(date_str: str) -> int:
 
 
 def load_am_data() -> AMData:
-    arretes_ministeriels = [AMMetadata.from_dict(x) for x in json.load(open('data/AM/arretes_ministeriels.json'))]
+    arretes_ministeriels = [
+        AMMetadata.from_dict(x) for x in json.load(open(f'{AM_DATA_FOLDER}/arretes_ministeriels.json'))
+    ]
     nor_to_aida = {doc.nor: doc.aida_page for doc in arretes_ministeriels if doc.nor}
     aida_to_nor = {value: key for key, value in nor_to_aida.items()}
     return AMData(arretes_ministeriels, nor_to_aida, aida_to_nor)
@@ -81,27 +82,27 @@ def load_data() -> Data:
 
 def _get_legifrance_filename(metadata: AMMetadata) -> str:
     id_ = get_text_defined_id(metadata)
-    return f'data/AM/legifrance_texts/{id_}.json'
+    return f'{AM_DATA_FOLDER}/legifrance_texts/{id_}.json'
 
 
 def _get_structured_am_filename(metadata: AMMetadata) -> str:
     id_ = get_text_defined_id(metadata)
-    return f'data/AM/structured_texts/{id_}.json'
+    return f'{AM_DATA_FOLDER}/structured_texts/{id_}.json'
 
 
 def _get_parametrization_filename(metadata: AMMetadata) -> str:
     id_ = get_text_defined_id(metadata)
-    return f'data/AM/parametrizations/{id_}.json'
+    return f'{AM_DATA_FOLDER}/parametrizations/{id_}.json'
 
 
 def _get_enriched_am_filename(metadata: AMMetadata) -> str:
     id_ = get_text_defined_id(metadata)
-    return f'data/AM/enriched_texts/{id_}.json'
+    return f'{AM_DATA_FOLDER}/enriched_texts/{id_}.json'
 
 
 def _get_parametric_ams_folder(metadata: AMMetadata) -> str:
     id_ = get_text_defined_id(metadata)
-    return f'data/AM/parametric_texts/{id_}'
+    return f'{AM_DATA_FOLDER}/parametric_texts/{id_}'
 
 
 def _download_text_if_absent(metadata: AMMetadata, client: OAuth2Session) -> Optional[LegifranceAPIError]:
@@ -165,7 +166,10 @@ def _generate_parametric_descriptor(version_descriptor: Tuple[str, ...]) -> str:
     return '_AND_'.join(version_descriptor).replace(' ', '_')
 
 
-def _generate_parametric_filename(metadata: AMMetadata, version_descriptor: Tuple[str, ...]) -> str:
+def _create_folder_and_generate_parametric_filename(metadata: AMMetadata, version_descriptor: Tuple[str, ...]) -> str:
+    folder_name = _get_parametric_ams_folder(metadata)
+    if not os.path.exists(folder_name):
+        os.makedirs(folder_name)
     return _get_parametric_ams_folder(metadata) + '/' + _generate_parametric_descriptor(version_descriptor) + '.json'
 
 
@@ -201,7 +205,7 @@ def _handle_manual_enrichments(
     if dump_am:
         all_versions_with_summary = {name: add_summary(am_) for name, am_ in all_versions.items()}
         for version_desc, version in all_versions_with_summary.items():
-            filename = _generate_parametric_filename(metadata, version_desc)
+            filename = _create_folder_and_generate_parametric_filename(metadata, version_desc)
             write_json(version.to_dict(), filename)
     diffs = {
         _generate_parametric_descriptor(desc): compute_am_diffs(am, modified_version, am_to_markdown)
@@ -268,5 +272,9 @@ def handle_all_am(
         if param_am:
             cid_to_param[metadata.cid] = param_am
     if dump_log and not am_cids:
-        write_json({cid: log.to_dict() for cid, log in cid_to_log.items()}, 'data/AM/structuration_log.json', safe=True)
+        write_json(
+            {cid: log.to_dict() for cid, log in cid_to_log.items()},
+            f'{AM_DATA_FOLDER}/structuration_log.json',
+            safe=True,
+        )
     return data, cid_to_log, cid_to_am, cid_to_param

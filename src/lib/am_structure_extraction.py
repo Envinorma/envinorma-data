@@ -13,6 +13,7 @@ import bs4
 from bs4 import BeautifulSoup
 from tqdm import tqdm
 
+from lib.config import AM_DATA_FOLDER
 from lib.data import (
     Link,
     LinkReference,
@@ -713,8 +714,8 @@ def transform_and_write_test_am(filename: str, output_filename: Optional[str] = 
 
 
 def transform_all_available_AM():
-    input_folder = 'data/AM/legifrance_texts'
-    output_folder = 'data/AM/structured_texts'
+    input_folder = f'{AM_DATA_FOLDER}/legifrance_texts'
+    output_folder = f'{AM_DATA_FOLDER}/structured_texts'
     file_to_error = {}
     for file_ in tqdm(os.listdir(input_folder)):
         if file_[0] == '.':
@@ -727,7 +728,7 @@ def transform_all_available_AM():
 
 
 def _check_all_legifrance_dicts() -> None:
-    folder = 'data/AM/legifrance_texts'
+    folder = f'{AM_DATA_FOLDER}/legifrance_texts'
     for file_ in tqdm(os.listdir(folder)):
         print(file_)
         try:
@@ -737,7 +738,7 @@ def _check_all_legifrance_dicts() -> None:
 
 
 def _load_all_legifrance_texts() -> Dict[str, LegifranceText]:
-    folder = 'data/AM/legifrance_texts'
+    folder = f'{AM_DATA_FOLDER}/legifrance_texts'
     res: Dict[str, LegifranceText] = {}
     for file_ in tqdm(os.listdir(folder)):
         if file_[0] == '.':

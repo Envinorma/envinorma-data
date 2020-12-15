@@ -100,11 +100,11 @@ def download_text(cid: str, output_filename: str, client: Optional[OAuth2Session
     if not client:
         client = get_legifrance_client()
     res = get_current_loda_via_cid(cid, client)
-    json.dump(res, open(f'data/AM/legifrance_texts/{output_filename}', 'w'), ensure_ascii=False)
+    json.dump(res, open(f'{config.AM_DATA_FOLDER}/legifrance_texts/{output_filename}', 'w'), ensure_ascii=False)
 
 
 def download_all_lf_texts() -> None:
-    texts = json.load(open('data/AM/arretes_ministeriels.json'))
+    texts = json.load(open(f'{config.AM_DATA_FOLDER}/arretes_ministeriels.json'))
     client = get_legifrance_client()
     for text in tqdm(texts):
         if 'nor' in text and 'cid' in text:

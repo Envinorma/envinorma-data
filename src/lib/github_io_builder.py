@@ -290,7 +290,7 @@ def generate_all_markdown(
 
 
 if __name__ == '__main__':
-    random.seed(0)  # to avoid havind different ids
+    random.seed(0)  # to avoid having different ids
     generate_all_markdown(
         am_cids={
             'JORFTEXT000026694913',
@@ -302,4 +302,3 @@ if __name__ == '__main__':
         },
         regenerate_diff_commits=False,
     )
-

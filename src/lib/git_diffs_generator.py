@@ -5,6 +5,7 @@ from typing import Any, Callable, Dict, List
 from git import Repo
 from git.objects.commit import Commit
 
+from lib.config import AM_DATA_FOLDER
 from lib.data import ArreteMinisteriel
 from lib.utils import write_json
 
@@ -68,11 +69,11 @@ def commit_ams(
 
 
 def _get_parametric_ams_folder(id_: str) -> str:
-    return f'data/AM/parametric_texts/{id_}'
+    return f'{AM_DATA_FOLDER}/parametric_texts/{id_}'
 
 
 def _get_enriched_am_filename(id_: str) -> str:
-    return f'data/AM/enriched_texts/{id_}.json'
+    return f'{AM_DATA_FOLDER}/enriched_texts/{id_}.json'
 
 
 def _load_main_am(nor: str) -> ArreteMinisteriel:
@@ -105,4 +106,3 @@ def compute_and_dump_am_git_diffs(nor: str, am_stringifier: Callable[[ArreteMini
     am_commits = commit_ams(f'{nor}.md', main_am, versions, am_stringifier)
     _dump_am_commits(nor, am_commits)
     return am_commits
-

@@ -1,4 +1,5 @@
 import json
+from lib.config import AM_DATA_FOLDER
 from typing import List
 
 from lib.data import ArreteMinisteriel, load_arrete_ministeriel
@@ -16,10 +17,12 @@ def _generate_structured_am(nor: str) -> ArreteMinisteriel:
     data = load_data()
     metadata = _find_metadata_with_nor(data.arretes_ministeriels.metadata, nor)
     handle_am(metadata, get_legifrance_client(), True)
-    return load_arrete_ministeriel(json.load(open(f'data/AM/structured_texts/{nor}.json')))
+    return load_arrete_ministeriel(json.load(open(f'{AM_DATA_FOLDER}/structured_texts/{nor}.json')))
 
 
-def _handle_nor(nor: str,):
+def _handle_nor(
+    nor: str,
+):
     _generate_structured_am(nor)
 
 

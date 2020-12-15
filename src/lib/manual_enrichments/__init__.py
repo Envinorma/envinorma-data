@@ -1,3 +1,4 @@
+import warnings
 from datetime import datetime
 from typing import Callable, Dict, Optional, Set
 from lib.am_enriching import add_topics, remove_prescriptive_power, remove_sections
@@ -40,7 +41,8 @@ def get_manual_enricher(id_: str) -> Callable[[ArreteMinisteriel], ArreteMiniste
         return _enrich_DEVP1235896A
     if id_ == 'DEVP1706393A':
         return manual_1510_enricher
-    raise ValueError(f'No manual enricher found for id_ {id_}')
+    warnings.warn(f'No enricher found for text with id_ {id_}, use default value.')
+    return identity
 
 
 def get_manual_parametrization(id_: str) -> Parametrization:
@@ -56,7 +58,8 @@ def get_manual_parametrization(id_: str) -> Parametrization:
         return _build_DEVP1235896A_parametrization()
     if id_ == 'DEVP1706393A':
         return build_1510_parametrization()
-    raise ValueError(f'No parametrization found for id_ {id_}')
+    warnings.warn(f'No parametrization found for text with id_ {id_}, use default value.')
+    return Parametrization([], [])
 
 
 def get_manual_combinations(id_: str) -> Optional[Combinations]:
@@ -72,8 +75,8 @@ def get_manual_combinations(id_: str) -> Optional[Combinations]:
         return None
     if id_ == 'DEVP1706393A':
         return generate_1510_combinations()
-
-    raise ValueError(f'No combinations found for id_ {id_}')
+    warnings.warn(f'No combinations found for text with id_ {id_}, use default value.')
+    return None
 
 
 # TREP1900331A
