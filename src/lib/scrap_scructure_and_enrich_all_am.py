@@ -17,7 +17,6 @@ from lib.data import (
     Anchor,
     AMMetadata,
     AidaData,
-    AMData,
     Data,
     get_text_defined_id,
     check_am,
@@ -25,10 +24,16 @@ from lib.data import (
     LegifranceTextFormatError,
     StructurationError,
     AMStructurationLog,
+    load_am_data,
 )
 from lib.am_to_markdown import am_to_markdown
 from lib.parametrization import Parametrization, add_am_signatures
-from lib.manual_enrichments import get_manual_combinations, get_manual_enricher, get_manual_parametrization
+from lib.manual_enrichments import (
+    get_manual_combinations,
+    get_manual_enricher,
+    get_manual_parametrization,
+    get_manual_post_process,
+)
 from lib.parametric_am import check_parametrization_is_still_valid, generate_all_am_versions
 from lib.am_enriching import (
     add_references,
@@ -51,15 +56,6 @@ from lib.utils import write_json
 
 def parse_aida_title_date(date_str: str) -> int:
     return int(datetime.strptime(date_str, '%d/%m/%y').timestamp())
-
-
-def load_am_data() -> AMData:
-    arretes_ministeriels = [
-        AMMetadata.from_dict(x) for x in json.load(open(f'{AM_DATA_FOLDER}/arretes_ministeriels.json'))
-    ]
-    nor_to_aida = {doc.nor: doc.aida_page for doc in arretes_ministeriels if doc.nor}
-    aida_to_nor = {value: key for key, value in nor_to_aida.items()}
-    return AMData(arretes_ministeriels, nor_to_aida, aida_to_nor)
 
 
 def load_aida_data() -> AidaData:
@@ -203,7 +199,9 @@ def _handle_manual_enrichments(
         write_json(parametrization.to_dict(), _get_parametrization_filename(metadata))
     all_versions = generate_all_am_versions(enriched_am, parametrization, get_manual_combinations(id_))
     if dump_am:
-        all_versions_with_summary = {name: add_summary(am_) for name, am_ in all_versions.items()}
+        all_versions_with_summary = {
+            name: get_manual_post_process(id_)(add_summary(am_), name) for name, am_ in all_versions.items()
+        }
         for version_desc, version in all_versions_with_summary.items():
             filename = _create_folder_and_generate_parametric_filename(metadata, version_desc)
             write_json(version.to_dict(), filename)
@@ -278,3 +276,8 @@ def handle_all_am(
             safe=True,
         )
     return data, cid_to_log, cid_to_am, cid_to_param
+
+
+if __name__ == '__main__':
+    random.seed(0)  # to avoid having different ids
+    handle_all_am(True, True, None, True)

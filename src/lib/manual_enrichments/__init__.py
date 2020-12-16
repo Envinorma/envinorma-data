@@ -1,6 +1,6 @@
 import warnings
 from datetime import datetime
-from typing import Callable, Dict, Optional, Set
+from typing import Callable, Dict, Optional, Set, Tuple
 from lib.am_enriching import add_topics, remove_prescriptive_power, remove_sections
 from lib.parametric_am import Combinations
 from lib.parametrization import (
@@ -21,6 +21,7 @@ from lib.manual_enrichments.generate_1510_parametrization import (
     build_1510_parametrization,
     generate_1510_combinations,
     manual_1510_enricher,
+    manual_1510_post_process,
 )
 
 
@@ -43,6 +44,16 @@ def get_manual_enricher(id_: str) -> Callable[[ArreteMinisteriel], ArreteMiniste
         return manual_1510_enricher
     warnings.warn(f'No enricher found for text with id_ {id_}, use default value.')
     return identity
+
+
+def _identity_pp(am: ArreteMinisteriel, parameter_values: Tuple[str, ...]) -> ArreteMinisteriel:
+    return am
+
+
+def get_manual_post_process(id_: str) -> Callable[[ArreteMinisteriel, Tuple[str, ...]], ArreteMinisteriel]:
+    if id_ == 'DEVP1706393A':
+        return manual_1510_post_process
+    return _identity_pp
 
 
 def get_manual_parametrization(id_: str) -> Parametrization:

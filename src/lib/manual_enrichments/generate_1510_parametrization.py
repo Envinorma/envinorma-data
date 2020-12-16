@@ -1,3 +1,4 @@
+from dataclasses import replace
 from datetime import datetime
 from lib.parametrization import ConditionSource, EntityReference, SectionReference
 from typing import Dict, List, Optional, Tuple
@@ -682,3 +683,17 @@ def generate_1510_combinations() -> Combinations:
 
 def manual_1510_enricher(raw_am: ArreteMinisteriel) -> ArreteMinisteriel:
     return remove_sections(raw_am, {(8, 3), (8, 4), (8, 5)})
+
+
+def _guess_regime(version_descriptor: Tuple[str, ...]) -> str:
+    for desc in version_descriptor:
+        if 'reg_' in desc:
+            return desc.split('reg_')[1][0]
+    raise ValueError(f'Expecting one descriptor to contain "reg_", received: {version_descriptor}')
+
+
+def manual_1510_post_process(am: ArreteMinisteriel, version_descriptor: Tuple[str, ...]) -> ArreteMinisteriel:
+    classements = am.classements
+    regime = _guess_regime(version_descriptor)
+    new_classements = [cl for cl in classements if cl.regime.value == regime]
+    return replace(am, classements=new_classements)
