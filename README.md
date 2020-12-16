@@ -4,7 +4,7 @@
 
 Envinorma is a project which aims at helping people find applicable regulations to non-nuclear industries ([ICPE](https://fr.wikipedia.org/wiki/Installation_class%C3%A9e_pour_la_protection_de_l'environnement)).
 
-This repository contains utils for manipulating texts called Arrêté Ministériel (AM) and Arrêté Préfectoraux (AP).
+This repository contains utils for manipulating texts called Arrêtés Ministériels (AM) and Arrêtés Préfectoraux (AP).
 
 It generates the source code of:
 
