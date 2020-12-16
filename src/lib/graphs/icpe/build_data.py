@@ -28,15 +28,15 @@ def _gr_regime_to_regime(regime: Optional[GRRegime]) -> Optional[Regime]:
     return None
 
 
-def _compute_rubrique_and_regime(classement: GRClassement) -> Tuple[int, Regime]:
+def _compute_rubrique_and_regime(classement: GRClassement) -> Tuple[str, Regime]:
     regime = classement.theoretical_regime or _gr_regime_to_regime(classement.regime) or Regime.DC  # Bold assumption
-    return (int(classement.code_nomenclature), regime)
+    return (classement.code_nomenclature, regime)
 
 
 def _compute_nb_am(classements: List[GRClassement], nomenclature: Nomenclature) -> int:
     am_ids: Set[str] = set()
     for classement in classements:
-        if classement.code_nomenclature and classement.code_nomenclature.isdigit():
+        if classement.code_nomenclature:
             rubrique_regime = _compute_rubrique_and_regime(classement)
             for am in nomenclature.rubrique_and_regime_to_am.get(rubrique_regime) or []:
                 am_ids.add(am.cid)

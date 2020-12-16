@@ -14,7 +14,7 @@ from lib.georisques_data import (
     load_installations_with_classements_and_docs,
 )
 from lib.config import AM_DATA_FOLDER
-from lib.scrap_scructure_and_enrich_all_am import load_am_data
+from lib.data import load_am_data
 
 
 _ARTICLE_IDS = [
@@ -41,7 +41,7 @@ _TABLES = [_extract_only_table(soup) for soup in _HTML_CONTENTS]
 
 @dataclass
 class _NomenclatureTableRow:
-    rubrique: int
+    rubrique: str
     rubrique_lines: List[str]
     regimes: List[Optional[Regime]]
     rayons: List[Optional[int]]
@@ -60,7 +60,7 @@ def _is_empty(cell: Cell) -> bool:
 
 
 def _row_starts_new_rubrique(row: Row) -> bool:
-    return len(row.cells) == 4 and _extract_stripped_text(row.cells[0].content.text).isdigit()
+    return len(row.cells) == 4 and len(_extract_stripped_text(row.cells[0].content.text)) == 4
 
 
 def _extract_regime(cell) -> Optional[Regime]:
@@ -117,7 +117,7 @@ def _extract_table_data(table: Table) -> List[_NomenclatureTableRow]:
     while True:
         row = non_header_rows[i]
         assert _row_starts_new_rubrique(row)
-        current_rubrique = int(_extract_stripped_text(row.cells[0].content.text))
+        current_rubrique = _extract_stripped_text(row.cells[0].content.text)
         result_row = _NomenclatureTableRow(current_rubrique, [], [], [])
         _extract_and_add_data(row.cells[1:], result_row)
         while True:
@@ -303,7 +303,7 @@ _NOMENCLATURE = _dump_nomenclature()
 
 
 def _is_simple(code: str) -> bool:
-    if code and code.isdigit() and int(code) in _RUBRIQUES:
+    if code and code in _RUBRIQUES:
         return True
     return False
 
