@@ -6,6 +6,7 @@ from shutil import copyfile
 
 from lib.data import ArreteMinisteriel
 from lib.config import AM_DATA_FOLDER
+from lib.scrap_scructure_and_enrich_all_am import load_data
 from lib.utils import write_json
 
 
@@ -27,13 +28,25 @@ def _ruby_optional_str(str_: Optional[str]) -> str:
     return f'"{str_}"'
 
 
+def _exists(folder: str) -> bool:
+    if os.path.exists(folder):
+        return True
+    print(f'Warning: folder {folder} does not exist.')
+    return False
+
+
 def _concatenate_and_dump_all_am():
     parametric_texts_folder = AM_DATA_FOLDER + '/parametric_texts'
+    data = load_data()
+    all_folders = [md.nor or md.cid for md in data.arretes_ministeriels.metadata if md.state == md.state.VIGUEUR]
+    folders_to_copy = [fd for fd in all_folders if _exists(parametric_texts_folder + '/' + fd)]
     res = [
         json.load(open(os.path.join(parametric_texts_folder, folder, file)))
-        for folder in tqdm(os.listdir(parametric_texts_folder))
+        for folder in tqdm(folders_to_copy)
         for file in os.listdir(parametric_texts_folder + '/' + folder)
+        if 'no_date' in file
     ]
+    print(len(res))
     write_json(res, 'am_list.json', pretty=False)
 
 
