@@ -1,4 +1,5 @@
 from copy import copy
+from collections import Counter
 from lib.data import (
     Annotations,
     Applicability,
@@ -14,6 +15,7 @@ from lib.data import (
     Table,
     TopicName,
     is_increasing,
+    load_am_data,
 )
 
 _TABLE = Table([Row([Cell(EnrichedString('bonjour'), 1, 1)], True)])
@@ -75,3 +77,18 @@ def test_is_increasing():
     assert is_increasing([1, 3, 4, 5])
     assert not is_increasing([1, 3, 4, 5, 1])
     assert not is_increasing([1, 1])
+
+
+def test_am_list():
+    am_data = load_am_data()
+    for md in am_data.metadata:
+        assert md.aida_page.isdigit()
+        for classement in md.classements:
+            assert classement.rubrique.isdigit()
+            assert len(classement.rubrique) == 4
+        classements = [(cl.rubrique, cl.regime, cl.alinea) for cl in md.classements]
+        assert len(classements) >= 1
+        most_common = Counter(classements).most_common()[0]
+        if most_common[1] != 1:
+            raise ValueError(most_common)
+        assert most_common[1] == 1

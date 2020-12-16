@@ -218,7 +218,7 @@ def transform_aida_links_to_github_markdown_links(
 
 
 def scrap_all_anchors() -> None:
-    arretes_ministeriels = json.load(open(f'{AM_DATA_FOLDER}/arretes_ministeriels.json'))
+    arretes_ministeriels = json.load(open(f'data/arretes_ministeriels.json'))
     page_ids = [am['aida_page'] for am in arretes_ministeriels]
     page_id_to_anchors_json: Dict[str, List[Dict[str, Any]]] = {}
     for page_id in tqdm(page_ids):

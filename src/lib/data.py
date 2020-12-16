@@ -1,12 +1,13 @@
 import json
-from lib.config import AM_DATA_FOLDER
 import random
 import string
+from collections import Counter
 from dataclasses import dataclass, asdict, field
 from enum import Enum
 from typing import List, Dict, Optional, Any, Tuple
 
 from lib.topics.patterns import TopicName
+from lib.config import AM_DATA_FOLDER
 
 
 class ArticleStatus(Enum):
@@ -224,7 +225,7 @@ class ClassementState(Enum):
 
 @dataclass
 class Classement:
-    rubrique: int
+    rubrique: str
     regime: Regime
     alinea: Optional[str] = None
     state: ClassementState = ClassementState.ACTIVE
@@ -232,7 +233,7 @@ class Classement:
     @staticmethod
     def from_dict(dict_: Dict[str, Any]) -> 'Classement':
         dict_ = dict_.copy()
-        dict_['rubrique'] = int(dict_['rubrique'])
+        dict_['rubrique'] = str(dict_['rubrique'])
         dict_['regime'] = Regime(dict_['regime'])
         dict_['alinea'] = dict_.get('alinea')
         dict_['state'] = ClassementState(dict_.get('state') or ClassementState.ACTIVE.value)
@@ -472,6 +473,23 @@ class AMData:
     nor_to_aida: Dict[str, str]
     aida_to_nor: Dict[str, str]
 
+    def __post_init__(self):
+        ids = [am.nor or am.cid for am in self.metadata]
+        non_unique_ids = [(x, cnt) for x, cnt in Counter(ids).most_common() if cnt > 1]
+        if non_unique_ids:
+            raise ValueError(f'There are non unique ids: {non_unique_ids}')
+
+    @staticmethod
+    def from_dict(dict_: Dict[str, Any]) -> 'AMData':
+        arretes_ministeriels = [AMMetadata.from_dict(x) for x in dict_]
+        nor_to_aida = {doc.nor: doc.aida_page for doc in arretes_ministeriels if doc.nor}
+        aida_to_nor = {value: key for key, value in nor_to_aida.items()}
+        return AMData(arretes_ministeriels, nor_to_aida, aida_to_nor)
+
+
+def load_am_data() -> AMData:
+    return AMData.from_dict(json.load(open(f'data/arretes_ministeriels.json')))
+
 
 @dataclass
 class Hyperlink:
@@ -539,7 +557,7 @@ def is_increasing(list_: List[float]) -> bool:
 
 @dataclass(frozen=True)
 class RubriqueSimpleThresholds:
-    code: int
+    code: str
     thresholds: List[float]
     regimes: List[Regime]
     alineas: List[str]
@@ -558,6 +576,7 @@ class RubriqueSimpleThresholds:
     def from_dict(dict_: Dict[str, Any]) -> 'RubriqueSimpleThresholds':
         dict_ = dict_.copy()
         dict_['regimes'] = [Regime(rg) for rg in dict_['regimes']]
+        dict_['code'] = str(dict_['code'])
         return RubriqueSimpleThresholds(**dict_)
 
     def to_dict(self) -> Dict[str, Any]:
@@ -569,8 +588,8 @@ class RubriqueSimpleThresholds:
 @dataclass
 class Nomenclature:
     am_metadata_list: List[AMMetadata]
-    simple_thresholds: Dict[int, RubriqueSimpleThresholds]
-    rubrique_and_regime_to_am: Dict[Tuple[int, Regime], List[AMMetadata]] = field(init=False)
+    simple_thresholds: Dict[str, RubriqueSimpleThresholds]
+    rubrique_and_regime_to_am: Dict[Tuple[str, Regime], List[AMMetadata]] = field(init=False)
 
     def __post_init__(self):
         self.rubrique_and_regime_to_am = {}
@@ -586,7 +605,7 @@ class Nomenclature:
         dict_ = dict_.copy()
         dict_['am_metadata_list'] = [AMMetadata.from_dict(dc) for dc in dict_['am_metadata_list']]
         dict_['simple_thresholds'] = {
-            id_: RubriqueSimpleThresholds.from_dict(dc) for id_, dc in dict_['simple_thresholds'].items()
+            str(id_): RubriqueSimpleThresholds.from_dict(dc) for id_, dc in dict_['simple_thresholds'].items()
         }
         return Nomenclature(**dict_)
 
