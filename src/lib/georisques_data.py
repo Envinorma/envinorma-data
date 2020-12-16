@@ -1,4 +1,5 @@
 import json
+import random
 from dataclasses import dataclass, asdict, replace
 from datetime import datetime, date
 from enum import Enum
@@ -258,14 +259,14 @@ def _deduce_regime(classement: GRClassement, rubrique: RubriqueSimpleThresholds)
 
 
 def _is_in_nomenclature(code: str, nomenclature: Nomenclature) -> bool:
-    if code and code.isdigit() and int(code) in nomenclature.simple_thresholds:
+    if code and code in nomenclature.simple_thresholds:
         return True
     return False
 
 
 def deduce_regime_if_possible(classement: GRClassement, nomenclature: Nomenclature) -> Optional[Regime]:
     if _is_in_nomenclature(classement.code_nomenclature, nomenclature):
-        return _deduce_regime(classement, nomenclature.simple_thresholds[int(classement.code_nomenclature)])
+        return _deduce_regime(classement, nomenclature.simple_thresholds[classement.code_nomenclature])
     return None
 
 
@@ -311,31 +312,47 @@ def _dump_installations() -> None:
     write_json(installations_dict, 'installations.json')
 
 
-def _dump_csv_installations() -> None:
-    installations = load_all_installations()
-    data_frame = DataFrame([it.to_dict() for it in installations])
-    data_frame.to_csv('installations.csv')
+def _clean_dict(dict_: Dict[str, Any]) -> Dict[str, Any]:
+    del dict_['documents']
+    del dict_['classements']
+    return dict_
 
 
-def _dump_csv_documents() -> None:
-    documents = load_all_documents()
+def _dump_installations_csv(installations: List[GeorisquesInstallation], sample: bool) -> None:
+    data_frame = DataFrame([_clean_dict(it.to_dict()) for it in installations], dtype='str')
+    filename_suffix = '_sample' if sample else ''
+    data_frame.to_csv(f'installations{filename_suffix}.csv')
+
+
+def _dump_classements_csv(installations: List[GeorisquesInstallation], sample: bool) -> None:
     dicts = []
-    for id_, docs in documents.items():
-        for doc in docs:
-            dict_ = doc.to_dict()
-            dict_['installation_id'] = id_.replace('-', '.')
+    for installation in installations:
+        for item in installation.classements or []:
+            dict_ = item.to_dict()
+            dict_['installation_id'] = installation.s3ic_id
             dicts.append(dict_)
-    data_frame = DataFrame(dicts)
-    data_frame.to_csv('documents.csv')
+    data_frame = DataFrame(dicts, dtype='str')
+    filename_suffix = '_sample' if sample else ''
+    data_frame.to_csv(f'classements{filename_suffix}.csv')
 
 
-def _dump_csv_classements() -> None:
-    classements = load_all_classements()
+def _dump_documents_csv(installations: List[GeorisquesInstallation], sample: bool) -> None:
     dicts = []
-    for id_, docs in classements.items():
-        for doc in docs:
+    for installation in installations:
+        for doc in installation.documents or []:
             dict_ = doc.to_dict()
-            dict_['installation_id'] = id_
+            dict_['installation_id'] = installation.s3ic_id
             dicts.append(dict_)
-    data_frame = DataFrame(dicts)
-    data_frame.to_csv('classements.csv')
+    data_frame = DataFrame(dicts, dtype='str')
+    filename_suffix = '_sample' if sample else ''
+    data_frame.to_csv(f'documents{filename_suffix}.csv')
+
+
+def _dump_csvs(sample: bool = False) -> None:
+    installations = load_installations_with_classements_and_docs()
+    if sample:
+        random.seed(1)
+        installations = random.sample(installations, 200)
+    _dump_installations_csv(installations, sample)
+    _dump_classements_csv(installations, sample)
+    _dump_documents_csv(installations, sample)
