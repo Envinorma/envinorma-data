@@ -1,8 +1,11 @@
+import os
+import random
 from bs4 import BeautifulSoup, Tag
 from typing import List
 from lib.data import EnrichedString, Row, Cell
 from lib.docx import (
-    Style,_copy_soup,
+    Style,
+    _copy_soup,
     _extract_property_value,
     _extract_bool_property_value,
     _extract_bold,
@@ -21,6 +24,7 @@ from lib.docx import (
     remove_duplicate_line_break,
     extract_cell,
     extract_row,
+    write_new_document,
 )
 
 _PREFIX = '''<?xml version="1.0" encoding="utf-8"?>\n<w:document mc:Ignorable="w14 wp14" xmlns:m="http://schemas.openxmlformats.org/officeDocument/2006/math" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:mo="http://schemas.microsoft.com/office/mac/office/2008/main" xmlns:mv="urn:schemas-microsoft-com:mac:vml" xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main" xmlns:w10="urn:schemas-microsoft-com:office:word" xmlns:w14="http://schemas.microsoft.com/office/word/2010/wordml" xmlns:wne="http://schemas.microsoft.com/office/word/2006/wordml" xmlns:wp="http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing" xmlns:wp14="http://schemas.microsoft.com/office/word/2010/wordprocessingDrawing" xmlns:wpc="http://schemas.microsoft.com/office/word/2010/wordprocessingCanvas" xmlns:wpg="http://schemas.microsoft.com/office/word/2010/wordprocessingGroup" xmlns:wpi="http://schemas.microsoft.com/office/word/2010/wordprocessingInk" xmlns:wps="http://schemas.microsoft.com/office/word/2010/wordprocessingShape">'''
@@ -273,7 +277,7 @@ def test_remove_table_inplace():
     table = extract_table(tag)
     _remove_table_inplace(soup, table, tag)
     assert len(list(soup.find_all('w:tbl'))) == 0
-    assert len(list(soup.find_all('w:p'))) == 13
+    assert len(list(soup.find_all('w:p'))) == 12
     assert len(list(soup.find_all('w:tc'))) == 0
 
 
@@ -286,7 +290,7 @@ def test_replace_small_tables():
     assert len(list(soup.find_all('w:tc'))) == 3
     soup = _replace_small_tables(soup)
     assert len(list(soup.find_all('w:tbl'))) == 0
-    assert len(list(soup.find_all('w:p'))) == 6
+    assert len(list(soup.find_all('w:p'))) == 5
     assert len(list(soup.find_all('w:tc'))) == 0
 
 
@@ -296,3 +300,13 @@ def test_copy_soup():
     soup = BeautifulSoup(xml_str, 'lxml-xml')
     soup_copy = _copy_soup(soup)
     assert id(soup) != id(soup_copy)
+
+
+def test_docx_writing():
+    filename = 'test_data/small_table.docx'
+    xml = get_docx_xml(filename)
+    output = ''.join([random.choice('abcdef') for _ in range(10)]) + '.docx'
+    write_new_document(filename, str(xml), output)
+    xml_2 = get_docx_xml(output)
+    assert xml == xml_2
+    os.remove(output)

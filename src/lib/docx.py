@@ -1,6 +1,8 @@
 import bs4
-import copy
+import os
 import random
+import shutil
+import tempfile
 
 from bs4 import BeautifulSoup
 from dataclasses import dataclass, replace
@@ -113,13 +115,62 @@ def extract_w_tag_style(tag: bs4.Tag) -> Optional[Style]:
     )
 
 
+def _estimate_text_length(tag: bs4.Tag) -> int:
+    return len(tag.text.replace('\n', ' '))
+
+
 def extract_all_word_styles(soup: BeautifulSoup) -> List[Tuple[Style, int]]:
     res: List[Tuple[Style, int]] = []
     for tag in soup.find_all('r'):
         style = extract_w_tag_style(tag)
         if style:
-            res.append((style, len(tag.text)))
+            res.append((style, _estimate_text_length(tag)))
     return res
+
+
+def extract_styles_to_nb_letters(soup: BeautifulSoup) -> Dict[Style, int]:
+    res: Dict[Style, int] = {}
+    for style, nb_letters in extract_all_word_styles(soup):
+        if style not in res:
+            res[style] = 0
+        res[style] += nb_letters
+    return res
+
+
+def _extract_font_size_occurrences(style_occurrences: Dict[Style, int]) -> Dict[int, int]:
+    res: Dict[int, int] = {}
+    for style, nb_letters in style_occurrences.items():
+        if style.size not in res:
+            res[style.size] = 0
+        res[style.size] += nb_letters
+    return res
+
+
+def _guess_body_font_size(soup: BeautifulSoup) -> int:
+    font_size_occurrences = _extract_font_size_occurrences(extract_styles_to_nb_letters(soup))
+    if not font_size_occurrences:
+        raise ValueError('Need at least one word in soup.')
+    return sorted(font_size_occurrences.items(), key=lambda x: x[1])[-1][0]
+
+
+def _is_body(style: Style, body_font_size: int) -> bool:
+    if style.size > body_font_size:
+        return False
+    if style.size == body_font_size and style.bold:
+        return False
+    return True
+
+
+def remove_tables_and_body_text(soup: BeautifulSoup) -> BeautifulSoup:
+    soup = _copy_soup(soup)
+    body_font_size = _guess_body_font_size(soup)
+    for tag in soup.find_all('w:tbl'):
+        tag.replace_with(soup.new_tag('w:p'))
+    for tag in soup.find_all('w:r'):
+        style = extract_w_tag_style(tag)
+        if style and _is_body(style, body_font_size):
+            tag.replace_with(soup.new_tag('w:p'))
+    return soup
 
 
 def remove_empty(strs: List[str]) -> List[str]:
@@ -258,6 +309,7 @@ def _remove_table_inplace(soup: BeautifulSoup, table: Table, tag: bs4.Tag):
     new_tags = _extract_p_tags_from_cells(table)
     for new_tag in new_tags:
         span_tag.append(new_tag)
+    span_tag.unwrap()
     return soup
 
 
@@ -275,3 +327,16 @@ def _replace_small_tables(soup: BeautifulSoup) -> BeautifulSoup:
         if _is_table_small(table):
             _remove_table_inplace(soup, table, tag)
     return soup
+
+
+def write_new_document(input_filename: str, new_document_xml: str, new_filename: str):
+    tmp_dir = tempfile.mkdtemp()
+    zip_ = ZipFile(input_filename)
+    zip_.extractall(tmp_dir)
+    with open(os.path.join(tmp_dir, 'word/document.xml'), 'wb') as f:
+        f.write(new_document_xml.encode())
+    filenames = zip_.namelist()
+    with ZipFile(new_filename, 'w') as docx:
+        for filename in filenames:
+            docx.write(os.path.join(tmp_dir, filename), filename)
+    shutil.rmtree(tmp_dir)
