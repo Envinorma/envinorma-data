@@ -4,6 +4,7 @@ from dataclasses import dataclass
 from enum import Enum
 from typing import Any, List, Optional, Tuple, Union
 from bs4 import BeautifulSoup
+from zipfile import ZipFile
 
 from lib.am_structure_extraction import split_alineas_in_sections
 from lib.data import Cell, EnrichedString, Row, StructuredText, Table
@@ -318,8 +319,38 @@ def _transform_odt(html: str) -> StructuredText:
     return _build_structured_text_from_soup(tag)
 
 
-def _load_and_transform(filename: str) -> StructuredText:
+def load_and_transform(filename: str) -> StructuredText:
     from zipfile import ZipFile
 
     return _transform_odt(ZipFile(filename).read('content.xml').decode())
     # return _transform_odt(odf2xhtml.load(filename).xml())
+
+
+def _extract_lines_from_page_element(page_element: Any) -> List[str]:
+    if isinstance(page_element, str):
+        return [page_element]
+    if isinstance(page_element, bs4.Tag):
+        return [line for child in page_element.children for line in _extract_lines_from_page_element(child)]
+    raise ValueError(f'Unhandled type {type(page_element)}')
+
+
+def _extract_lines_from_soup(soup: BeautifulSoup) -> List[str]:
+    return [line for child in soup.children for line in _extract_lines_from_page_element(child)]
+
+
+def _extract_lines(filename: str) -> List[str]:
+    html = ZipFile(filename).read('content.xml').decode()
+    soup = BeautifulSoup(html)
+    return _extract_lines_from_soup(soup)
+
+
+if __name__ == '__main__':
+    from lib.am_to_markdown import extract_markdown_text
+
+    _DOC_NAME = 'AP_DDAE_12_2014vcorrigee_cle84ed7d'  # '2020-06-11-AUTO 2001-AP AUTORISATION-Projet_AP_VF'
+
+    FILENAME = f'/Users/remidelbouys/EnviNorma/brouillons/data/icpe_ap_odt/{_DOC_NAME}.odt'
+    TEXT = load_and_transform(FILENAME)
+    open(f'/Users/remidelbouys/EnviNorma/envinorma.github.io/{_DOC_NAME}.md', 'w').write(
+        '\n\n'.join(extract_markdown_text(TEXT, 1))
+    )
