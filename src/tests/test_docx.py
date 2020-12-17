@@ -1,8 +1,8 @@
-from bs4 import BeautifulSoup
+from bs4 import BeautifulSoup, Tag
 from typing import List
 from lib.data import EnrichedString, Row, Cell
 from lib.docx import (
-    Style,
+    Style,_copy_soup,
     _extract_property_value,
     _extract_bool_property_value,
     _extract_bold,
@@ -10,12 +10,15 @@ from lib.docx import (
     _extract_size,
     _extract_font_name,
     _extract_color,
-    extract_table,
-    extract_w_tag_style,
-    remove_empty,
-    remove_duplicate_line_break,
     _build_table_with_correct_rowspan,
     _is_header,
+    _remove_table_inplace,
+    _replace_small_tables,
+    extract_table,
+    extract_w_tag_style,
+    get_docx_xml,
+    remove_empty,
+    remove_duplicate_line_break,
     extract_cell,
     extract_row,
 )
@@ -148,6 +151,8 @@ def test_extract_cell():
     tc_tag = '<w:tc>\n<w:tcPr>\n<w:tcW w:type="dxa" w:w="3212"/>\n<w:tcBorders>\n<w:top w:color="000000" w:space="0" w:sz="2" w:val="single"/>\n<w:left w:color="000000" w:space="0" w:sz="2" w:val="single"/>\n<w:bottom w:color="000000" w:space="0" w:sz="2" w:val="single"/>\n</w:tcBorders>\n</w:tcPr>\n<w:p>\n<w:pPr>\n<w:pStyle w:val="TableHeading"/>\n<w:suppressLineNumbers/>\n<w:bidi w:val="0"/>\n<w:jc w:val="center"/>\n<w:rPr/>\n</w:pPr>\n<w:r>\n<w:rPr/>\n<w:t>\n    AA\n   </w:t>\n</w:r>\n</w:p>\n</w:tc>'
     str_tag = f'<?xml version="1.0" encoding="utf-8"?>\n<w:document mc:Ignorable="w14 wp14" xmlns:m="http://schemas.openxmlformats.org/officeDocument/2006/math" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:mo="http://schemas.microsoft.com/office/mac/office/2008/main" xmlns:mv="urn:schemas-microsoft-com:mac:vml" xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main" xmlns:w10="urn:schemas-microsoft-com:office:word" xmlns:w14="http://schemas.microsoft.com/office/word/2010/wordml" xmlns:wne="http://schemas.microsoft.com/office/word/2006/wordml" xmlns:wp="http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing" xmlns:wp14="http://schemas.microsoft.com/office/word/2010/wordprocessingDrawing" xmlns:wpc="http://schemas.microsoft.com/office/word/2010/wordprocessingCanvas" xmlns:wpg="http://schemas.microsoft.com/office/word/2010/wordprocessingGroup" xmlns:wpi="http://schemas.microsoft.com/office/word/2010/wordprocessingInk" xmlns:wps="http://schemas.microsoft.com/office/word/2010/wordprocessingShape"> {tc_tag}</w:document>'
     tag = BeautifulSoup(str_tag, 'lxml-xml').find('w:tc')
+    if not isinstance(tag, Tag):
+        raise ValueError(f'Expecting Tag, not {type(tag)}')
     is_header, cell, v_merge = extract_cell(tag)
     assert is_header
     assert cell.colspan == 1
@@ -249,3 +254,45 @@ def test_extract_row():
     assert len(extract_row(rows[3])[0].cells) == 3
     for row in rows[1:]:
         assert not extract_row(row)[0].is_header
+
+
+def test_get_docx_xml():
+    xml = get_docx_xml('test_data/simple_table.docx')
+    assert len(xml) == 6580
+
+
+def test_remove_table_inplace():
+    xml_str = open('test_data/table_docx.xml').read()
+    soup = BeautifulSoup(xml_str, 'lxml-xml')
+    assert len(list(soup.find_all('w:tbl'))) == 1
+    assert len(list(soup.find_all('w:p'))) == 13
+    assert len(list(soup.find_all('w:tc'))) == 11
+    tag = soup.find('w:tbl')
+    if not isinstance(tag, Tag):
+        raise ValueError(f'Expecting tag, received {type(tag)}')
+    table = extract_table(tag)
+    _remove_table_inplace(soup, table, tag)
+    assert len(list(soup.find_all('w:tbl'))) == 0
+    assert len(list(soup.find_all('w:p'))) == 13
+    assert len(list(soup.find_all('w:tc'))) == 0
+
+
+def test_replace_small_tables():
+    filename = 'test_data/small_table.docx'
+    xml_str = get_docx_xml(filename)
+    soup = BeautifulSoup(xml_str, 'lxml-xml')
+    assert len(list(soup.find_all('w:tbl'))) == 1
+    assert len(list(soup.find_all('w:p'))) == 5
+    assert len(list(soup.find_all('w:tc'))) == 3
+    soup = _replace_small_tables(soup)
+    assert len(list(soup.find_all('w:tbl'))) == 0
+    assert len(list(soup.find_all('w:p'))) == 6
+    assert len(list(soup.find_all('w:tc'))) == 0
+
+
+def test_copy_soup():
+    filename = 'test_data/small_table.docx'
+    xml_str = get_docx_xml(filename)
+    soup = BeautifulSoup(xml_str, 'lxml-xml')
+    soup_copy = _copy_soup(soup)
+    assert id(soup) != id(soup_copy)

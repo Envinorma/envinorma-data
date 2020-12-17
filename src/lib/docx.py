@@ -1,9 +1,12 @@
 import bs4
+import copy
 import random
 
 from bs4 import BeautifulSoup
 from dataclasses import dataclass, replace
 from typing import Dict, Set, Tuple, List, Optional
+from zipfile import ZipFile
+
 from lib.data import Cell, EnrichedString, Row, Table
 
 
@@ -218,3 +221,57 @@ def extract_table(tag: bs4.Tag) -> Table:
         rows.append(row)
         v_merge_values.append(v_merge)
     return _build_table_with_correct_rowspan(rows, v_merge_values)
+
+
+def get_docx_xml(filename: str) -> str:
+    return ZipFile(filename).read('word/document.xml').decode()
+
+
+def _is_table_small(table: Table) -> bool:
+    nb_cells = len([0 for row in table.rows for _ in row.cells])
+    return nb_cells <= 3
+
+
+_PREFIX = '''<?xml version="1.0" encoding="utf-8"?>\n<w:document mc:Ignorable="w14 wp14" xmlns:m="http://schemas.openxmlformats.org/officeDocument/2006/math" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:mo="http://schemas.microsoft.com/office/mac/office/2008/main" xmlns:mv="urn:schemas-microsoft-com:mac:vml" xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main" xmlns:w10="urn:schemas-microsoft-com:office:word" xmlns:w14="http://schemas.microsoft.com/office/word/2010/wordml" xmlns:wne="http://schemas.microsoft.com/office/word/2006/wordml" xmlns:wp="http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing" xmlns:wp14="http://schemas.microsoft.com/office/word/2010/wordprocessingDrawing" xmlns:wpc="http://schemas.microsoft.com/office/word/2010/wordprocessingCanvas" xmlns:wpg="http://schemas.microsoft.com/office/word/2010/wordprocessingGroup" xmlns:wpi="http://schemas.microsoft.com/office/word/2010/wordprocessingInk" xmlns:wps="http://schemas.microsoft.com/office/word/2010/wordprocessingShape">'''
+
+
+def _extract_p_tags_from_cells(table: Table) -> List[bs4.Tag]:
+    cells = [cell for row in table.rows for cell in row.cells]
+    tags = [BeautifulSoup(_PREFIX + cell.content.text, 'lxml-xml').find('w:document') for cell in cells]
+    p_tags: List[bs4.Tag] = []
+    for tag in tags:
+        if not isinstance(tag, bs4.Tag):
+            raise ValueError()
+        for p_tag in tag.find_all('w:p'):
+            if not isinstance(p_tag, bs4.Tag):
+                raise ValueError()
+            p_tags.append(p_tag.extract())
+    return p_tags
+
+
+def _remove_table_inplace(soup: BeautifulSoup, table: Table, tag: bs4.Tag):
+    span_tag = soup.new_tag('w:p')
+    if not isinstance(span_tag, bs4.Tag):
+        raise ValueError(f'Expecting tag, received {type(tag)}')
+    tag.wrap(span_tag)
+    tag.extract()
+    new_tags = _extract_p_tags_from_cells(table)
+    for new_tag in new_tags:
+        span_tag.append(new_tag)
+    return soup
+
+
+def _copy_soup(soup: BeautifulSoup) -> BeautifulSoup:
+    # Hacky, avoid deepcopy and recursion errors
+    return BeautifulSoup(str(soup), soup.builder.NAME)
+
+
+def _replace_small_tables(soup: BeautifulSoup) -> BeautifulSoup:
+    soup = _copy_soup(soup)
+    tables = [extract_table(tag) for tag in soup.find_all('w:tbl')]
+    for tag, table in zip(soup.find_all('w:tbl'), tables):
+        if not isinstance(tag, bs4.Tag):
+            raise ValueError(f'Expecting tag, received {type(tag)}')
+        if _is_table_small(table):
+            _remove_table_inplace(soup, table, tag)
+    return soup
