@@ -1,8 +1,11 @@
+import os
 import bs4
+import tempfile
+import shutil
 from copy import copy
 from dataclasses import dataclass
 from enum import Enum
-from typing import Any, List, Optional
+from typing import Any, Callable, List, Optional
 from bs4 import BeautifulSoup
 from zipfile import ZipFile
 
@@ -249,11 +252,12 @@ def _transform_odt(html: str) -> StructuredText:
     return _build_structured_text_from_soup(tag)
 
 
-def load_and_transform(filename: str) -> StructuredText:
-    from zipfile import ZipFile
+def get_odt_xml(filename: str) -> str:
+    return ZipFile(filename).read('content.xml').decode()
 
-    return _transform_odt(ZipFile(filename).read('content.xml').decode())
-    # return _transform_odt(odf2xhtml.load(filename).xml())
+
+def load_and_transform(filename: str) -> StructuredText:
+    return _transform_odt(get_odt_xml(filename))
 
 
 def _extract_lines_from_page_element(page_element: Any) -> List[str]:
@@ -272,6 +276,113 @@ def _extract_lines(filename: str) -> List[str]:
     html = ZipFile(filename).read('content.xml').decode()
     soup = BeautifulSoup(html)
     return _extract_lines_from_soup(soup)
+
+
+def _string_to_element(str_: EnrichedString) -> TextElement:
+    if str_.table:
+        return str_.table
+    return str_.text
+
+
+def structured_text_to_text_elements(text: StructuredText, level: int = 1) -> List[TextElement]:
+    elements: List[TextElement] = []
+    elements.append(Title(text.title.text, level))
+    elements.extend([_string_to_element(st) for st in text.outer_alineas])
+    for section in text.sections:
+        elements.extend(structured_text_to_text_elements(section, level + 1))
+    return elements
+
+
+_XML_EMPTY_ODT = (
+    '''<?xml version="1.0" encoding="utf-8"?><office:document-content office:version="1.2" xmlns:chart="urn'''
+    ''':oasis:names:tc:opendocument:xmlns:chart:1.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dom='''
+    '''"http://www.w3.org/2001/xml-events" xmlns:dr3d="urn:oasis:names:tc:opendocument:xmlns:dr3d:1.0" xmln'''
+    '''s:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0" xmlns:field="urn:openoffice:names:experim'''
+    '''ental:ooo-ms-interop:xmlns:field:1.0" xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compati'''
+    '''ble:1.0" xmlns:form="urn:oasis:names:tc:opendocument:xmlns:form:1.0" xmlns:grddl="http://www.w3.org/'''
+    '''2003/g/data-view#" xmlns:math="http://www.w3.org/1998/Math/MathML" xmlns:meta="urn:oasis:names:tc:op'''
+    '''endocument:xmlns:meta:1.0" xmlns:number="urn:oasis:names:tc:opendocument:xmlns:datastyle:1.0" xmlns:'''
+    '''of="urn:oasis:names:tc:opendocument:xmlns:of:1.2" xmlns:office="urn:oasis:names:tc:opendocument:xmln'''
+    '''s:office:1.0" xmlns:ooo="http://openoffice.org/2004/office" xmlns:oooc="http://openoffice.org/2004/c'''
+    '''alc" xmlns:ooow="http://openoffice.org/2004/writer" xmlns:rpt="http://openoffice.org/2005/report" xm'''
+    '''lns:script="urn:oasis:names:tc:opendocument:xmlns:script:1.0" xmlns:style="urn:oasis:names:tc:opendo'''
+    '''cument:xmlns:style:1.0" xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0" xmlns:t'''
+    '''able="urn:oasis:names:tc:opendocument:xmlns:table:1.0" xmlns:tableooo="http://openoffice.org/2009/ta'''
+    '''ble" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:textooo="http://openoffice.or'''
+    '''g/2013/office" xmlns:xforms="http://www.w3.org/2002/xforms" xmlns:xhtml="http://www.w3.org/1999/xhtm'''
+    '''l" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi'''
+    '''="http://www.w3.org/2001/XMLSchema-instance"><office:scripts/><office:font-face-decls><style:font-fa'''
+    '''ce style:font-family-generic="roman" style:font-pitch="variable" style:name="Times New Roman" svg:fo'''
+    '''nt-family="'Times New Roman'"/><style:font-face style:font-family-generic="swiss" style:font-pitch="'''
+    '''variable" style:name="Arial" svg:font-family="Arial"/><style:font-face style:font-family-generic="sy'''
+    '''stem" style:font-pitch="variable" style:name="Arial Unicode MS" svg:font-family="'Arial Unicode MS'"'''
+    '''/></office:font-face-decls><office:automatic-styles><style:style style:family="table" style:name="Ta'''
+    '''bleau1"><style:table-properties style:width="17cm" table:align="margins"/></style:style><style:style'''
+    ''' style:family="table-column" style:name="Tableau1.A"><style:table-column-properties style:column-wid'''
+    '''th="4.251cm" style:rel-column-width="16383*"/></style:style><style:style style:family="table-cell" s'''
+    '''tyle:name="Tableau1.A1"><style:table-cell-properties fo:border-bottom="0.002cm solid #000000" fo:bor'''
+    '''der-left="0.002cm solid #000000" fo:border-right="none" fo:border-top="0.002cm solid #000000" fo:pad'''
+    '''ding="0.097cm"/></style:style><style:style style:family="table-cell" style:name="Tableau1.D1"><style'''
+    ''':table-cell-properties fo:border="0.002cm solid #000000" fo:padding="0.097cm"/></style:style><style:'''
+    '''style style:family="table-cell" style:name="Tableau1.A2"><style:table-cell-properties fo:border-bott'''
+    '''om="0.002cm solid #000000" fo:border-left="0.002cm solid #000000" fo:border-right="none" fo:border-t'''
+    '''op="none" fo:padding="0.097cm"/></style:style><style:style style:family="table-cell" style:name="Tab'''
+    '''leau1.D2"><style:table-cell-properties fo:border-bottom="0.002cm solid #000000" fo:border-left="0.00'''
+    '''2cm solid #000000" fo:border-right="0.002cm solid #000000" fo:border-top="none" fo:padding="0.097cm"'''
+    '''/></style:style></office:automatic-styles><office:body><office:text></office:text></office:body></of'''
+    '''fice:document-content>'''
+)
+
+
+def _add_prefix_and_suffix(xml: str) -> str:
+    return _XML_EMPTY_ODT
+
+
+def _generate_empty_tree() -> str:
+    return ''
+
+
+def _check_tag(candidate: Any) -> bs4.Tag:
+    if not isinstance(candidate, bs4.Tag):
+        raise ValueError(f'Expecting type bs4.Tag, received {type(candidate)}.')
+    return candidate
+
+
+def _get_title_builder(title: Title) -> Callable[[BeautifulSoup, bs4.Tag], None]:
+    raise NotImplementedError() # TODO
+
+
+def _get_soup_modifier(element: TextElement) -> Callable[[BeautifulSoup, bs4.Tag], None]:
+    if isinstance(element, Title):
+        return _get_title_builder(element)
+    raise NotImplementedError(f'Not implemented for type {type(element)}')
+
+
+def _build_open_document(elements: List[TextElement]) -> str:
+    empty_tree = _generate_empty_tree()
+    soup = BeautifulSoup(empty_tree, 'lxml-xml')
+    tag = _check_tag(soup.find('office:text'))
+    for element in elements:
+        _get_soup_modifier(element)(soup, tag)
+    return str(soup)
+
+
+def structured_text_to_odt(text: StructuredText) -> str:
+    elements = structured_text_to_text_elements(text, 1)
+    return _build_open_document(elements)
+
+
+def write_new_document(input_filename: str, new_document_xml: str, new_filename: str):
+    tmp_dir = tempfile.mkdtemp()
+    zip_ = ZipFile(input_filename)
+    zip_.extractall(tmp_dir)
+    with open(os.path.join(tmp_dir, 'content.xml'), 'wb') as f:
+        f.write(new_document_xml.encode())
+    filenames = zip_.namelist()
+    with ZipFile(new_filename, 'w') as docx:
+        for filename in filenames:
+            docx.write(os.path.join(tmp_dir, filename), filename)
+    shutil.rmtree(tmp_dir)
 
 
 if __name__ == '__main__':

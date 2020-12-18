@@ -1,7 +1,11 @@
+import os
 import bs4
+import random
 from lib.data import Table
 from bs4 import BeautifulSoup
 from lib.open_document import (
+    _build_structured_text_from_soup,
+    _check_tag,
     _extract_title,
     _extract_string_from_tag,
     _extract_cell,
@@ -9,10 +13,11 @@ from lib.open_document import (
     _extract_rows,
     _extract_table,
     _extract_flattened_elements,
-    _build_structured_text_from_soup,
     _extract_tag_from_soup,
     _remove_last_line_break,
     _merge_children,
+    get_odt_xml,
+    write_new_document,
 )
 
 _XML_PREFIX = '''<?xml version="1.0" encoding="utf-8"?>
@@ -343,3 +348,22 @@ def test_merge_children():
     assert _merge_children([['test'], ['test 2']], [True, False]) == ['test', 'test 2']
     table = Table([])
     assert _merge_children([['test'], [table]], [True, True]) == ['test', table]
+
+
+def test_write_new_document():
+    filename = 'test_data/bonjour.odt'
+    xml = get_odt_xml(filename)
+    soup = BeautifulSoup(xml, 'lxml-xml')
+    tag = _check_tag(soup.find('office:text'))
+    new_tag = soup.new_tag('text:p')
+    new_tag.append(soup.new_string('World'))
+    tag.append(new_tag)
+    output = ''.join([random.choice('abcdef') for _ in range(10)]) + '.odt'
+    write_new_document(filename, str(soup), output)
+    xml_2 = get_odt_xml(output)
+    new_soup = BeautifulSoup(xml_2, 'lxml-xml')
+    res = list(new_soup.find_all('text:p'))
+    assert len(res) == 2
+    assert res[0].text == 'Bonjour'
+    assert res[1].text == 'World'
+    os.remove(output)
