@@ -1,5 +1,6 @@
 import copy
 import json
+from lib.structure_extraction import split_alineas_in_sections
 import os
 import random
 import traceback
@@ -223,28 +224,10 @@ def _remove_links(text: str) -> Tuple[str, List[LinkReference]]:
     return str(soup), links
 
 
-TP = TypeVar('TP')
-
-
-def split_alineas_in_sections(alineas: List[TP], matches: List[bool]) -> Tuple[List[TP], List[List[TP]]]:
-    found_any_match = False
-    first_match = 0
-    for first_match, match in enumerate(matches):
-        if match:
-            found_any_match = True
-            break
-    if not found_any_match:
-        sections: List[List[TP]] = []
-        return alineas, sections
-    outer_alineas = alineas[:first_match]
-    other_matches = [first_match + 1 + idx for idx, match in enumerate(matches[first_match + 1 :]) if match]
-    sections = [alineas[a:b] for a, b in zip([first_match] + other_matches, other_matches + [len(matches)])]
-    return (outer_alineas, sections)
-
-
 def remove_empty_enriched_str(strs: List[EnrichedString]) -> List[EnrichedString]:
     return [str_ for str_ in strs if str_.text or str_.table]
 
+TP = TypeVar('TP')
 
 def _extract_first_non_null_elt(elements: List[TP]) -> Optional[TP]:
     for element in elements:

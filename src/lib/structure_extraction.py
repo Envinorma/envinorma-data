@@ -1,7 +1,25 @@
 from dataclasses import dataclass
-from typing import List, Optional, Tuple, Union
+from typing import List, Optional, Tuple, TypeVar, Union
 from lib.data import EnrichedString, StructuredText, Table
-from lib.am_structure_extraction import split_alineas_in_sections
+
+
+TP = TypeVar('TP')
+
+
+def split_alineas_in_sections(alineas: List[TP], matches: List[bool]) -> Tuple[List[TP], List[List[TP]]]:
+    found_any_match = False
+    first_match = 0
+    for first_match, match in enumerate(matches):
+        if match:
+            found_any_match = True
+            break
+    if not found_any_match:
+        sections: List[List[TP]] = []
+        return alineas, sections
+    outer_alineas = alineas[:first_match]
+    other_matches = [first_match + 1 + idx for idx, match in enumerate(matches[first_match + 1 :]) if match]
+    sections = [alineas[a:b] for a, b in zip([first_match] + other_matches, other_matches + [len(matches)])]
+    return (outer_alineas, sections)
 
 
 class Linebreak:
