@@ -108,6 +108,10 @@ class Table:
         return Table([load_row(row) for row in dict_['rows']])
 
 
+def count_cells(table: Table) -> int:
+    return sum([len(row.cells) for row in table.rows])
+
+
 def empty_link_list() -> List[Link]:
     return []
 

@@ -1,15 +1,18 @@
 import bs4
 import os
 import random
+import re
+import string
 import shutil
 import tempfile
 
 from bs4 import BeautifulSoup
 from dataclasses import dataclass, replace
-from typing import Dict, Set, Tuple, List, Optional
+from typing import Any, Callable, Dict, Set, Tuple, List, Optional
 from zipfile import ZipFile
 
-from lib.data import Cell, EnrichedString, Row, Table
+from lib.data import Cell, EnrichedString, Row, StructuredText, Table, count_cells
+from lib.structure_extraction import TextElement, Title, build_structured_text
 
 
 def extract_all_xml_tags_from_tag(tag: bs4.Tag) -> List[str]:
@@ -363,10 +366,10 @@ def _is_title_beginning(string: str) -> bool:
 
 def _group_strings(strings: List[str]) -> List[str]:
     groups: List[List[str]] = [[]]
-    for string in strings:
-        if _is_title_beginning(string):
+    for string_ in strings:
+        if _is_title_beginning(string_):
             groups.append([])
-        groups[-1].append(string)
+        groups[-1].append(string_)
     return [' '.join(group) for group in groups if group]
 
 
@@ -387,3 +390,155 @@ def extract_headers(soup: BeautifulSoup) -> List[str]:
     clean_soup = _replace_small_tables(soup)
     titles_soup = _replace_tables_and_body_text_with_empty_p(clean_soup)
     return _build_headers(titles_soup)
+
+
+def _generate_reference() -> str:
+    return 'REF_' + ''.join([random.choice(string.ascii_letters) for _ in range(6)])
+
+
+def _is_a_reference(candidate: str) -> bool:
+    return len(candidate) == 10 and candidate[:4] == 'REF_'
+
+
+def _extract_tags(
+    soup: BeautifulSoup, tag_finder: Callable[[BeautifulSoup], List[bs4.Tag]]
+) -> Tuple[BeautifulSoup, Dict[str, bs4.Tag]]:
+    soup = _copy_soup(soup)
+    tags = tag_finder(soup)
+    reference_to_tag: Dict[str, bs4.Tag] = {}
+    for tag in tags:
+        ref = _generate_reference()
+        str_ = soup.new_string(ref)
+        extracted = tag.replace_with(str_)
+        if not extracted:
+            raise ValueError('Expecting Tag, not None.')
+        reference_to_tag[ref] = extracted
+        str_.wrap(soup.new_tag('w:r'))
+    return soup, reference_to_tag
+
+
+def _check_is_tag(candidate: Any) -> bs4.Tag:
+    if not isinstance(candidate, bs4.Tag):
+        raise ValueError(f'Expecting type Tag, not {type(candidate)}')
+    return candidate
+
+
+def _is_tag_body(tag: bs4.Tag, body_font_size: int) -> bool:
+    style = extract_w_tag_style(tag)
+    if style and _is_body(style, body_font_size):
+        return True
+    return False
+
+
+def _find_table_tags(soup: BeautifulSoup) -> List[bs4.Tag]:
+    return [_check_is_tag(tag) for tag in soup.find_all('tbl')]
+
+
+def _find_body_tags(soup: BeautifulSoup) -> List[bs4.Tag]:
+    body_font_size = _guess_body_font_size(soup)
+    body_tags = [_check_is_tag(tag) for tag in soup.find_all('w:r') if _is_tag_body(_check_is_tag(tag), body_font_size)]
+    return body_tags
+
+
+def _remove_tables_and_bodies(soup: BeautifulSoup) -> Tuple[BeautifulSoup, Dict[str, bs4.Tag], Dict[str, bs4.Tag]]:
+    soup, table_references = _extract_tags(soup, _find_table_tags)
+    soup, body_references = _extract_tags(soup, _find_body_tags)
+    return soup, table_references, body_references
+
+
+def _remove_xml_tags(str_: str) -> str:
+    return ' '.join(BeautifulSoup(str_, 'lxml-xml').stripped_strings)
+
+
+def _cleanup_cell(cell: Cell) -> Cell:
+    return replace(cell, content=EnrichedString(_remove_xml_tags(cell.content.text)))
+
+
+def _cleanup_row_cells(row: Row) -> Row:
+    return replace(row, cells=[_cleanup_cell(cell) for cell in row.cells])
+
+
+def _cleanup_table_cells(table: Table) -> Table:
+    return Table([_cleanup_row_cells(row) for row in table.rows])
+
+
+def _safely_extract_table(tag: bs4.Tag, min_nb_cells: int) -> Table:
+    table = _cleanup_table_cells(extract_table(tag))
+    nb_cells = count_cells(table)
+    if nb_cells < min_nb_cells:
+        raise ValueError(f'Unexpected number of cells {nb_cells}. Expecting at least {min_nb_cells}')
+    return table
+
+
+def _extract_strings(tag: bs4.Tag) -> List[str]:
+    return [' '.join(tag.stripped_strings)]
+
+
+def _build_elements(
+    str_: str,
+    table_references: Dict[str, bs4.Tag],
+    body_references: Dict[str, bs4.Tag],
+    titles: List[str],
+    title_cursor: Tuple[int, int],
+) -> Tuple[List[TextElement], Tuple[int, int]]:
+    elements: List[TextElement] = []
+    if _is_a_reference(str_):
+        if str_ in table_references:
+            elements.append(_safely_extract_table(table_references[str_], 3))
+        elif str_ in body_references:
+            elements.extend(_extract_strings(body_references[str_]))
+        else:
+            raise ValueError(f'Reference {str_} not found')
+    else:
+        expected_string = titles[title_cursor[0]][title_cursor[1] :]
+        if expected_string[: len(str_)] != str_:
+            raise ValueError(f'Expecting string {str_} to be the prefix of {expected_string}')
+        if title_cursor[1] == 0:
+            elements.append(Title(titles[title_cursor[0]], 1))
+        if expected_string == str_:
+            title_cursor = (title_cursor[0] + 1, 0)
+        else:
+            title_cursor = (title_cursor[0], title_cursor[1] + len(str_) + 1)
+    return elements, title_cursor
+
+
+_PATTERNS = [
+    r'[0-9]+\.+[0-9]+',
+    r'[0-9]+\.+[0-9]+\.[0-9]+',
+    r'[0-9]+\.+[0-9]+\.[0-9]+\.[0-9]+',
+]
+
+
+def _guess_title_level(title: str) -> int:
+    if 'titre' in title.lower():
+        return 1
+    for i, pattern in enumerate(_PATTERNS[::-1]):
+        if re.findall(pattern, title):
+            return 4 - i
+    return 1
+
+
+def _guess_and_add_title_levels(elements: List[TextElement]) -> List[TextElement]:
+    return [
+        element if not isinstance(element, Title) else replace(element, level=_guess_title_level(element.text))
+        for element in elements
+    ]
+
+
+def _extract_elements(soup: BeautifulSoup) -> List[TextElement]:
+    titles = extract_headers(soup)
+    soup, table_references, body_references = _remove_tables_and_bodies(soup)
+    stripped_strings = list(soup.stripped_strings)
+    all_elements: List[TextElement] = []
+    title_cursor = (0, 0)
+    for str_ in stripped_strings:
+        elements, title_cursor = _build_elements(str_, table_references, body_references, titles, title_cursor)
+        all_elements.extend(elements)
+    return _guess_and_add_title_levels(all_elements)
+
+
+def build_structured_text_from_docx_xml(xml: str) -> StructuredText:
+    soup = BeautifulSoup(xml, 'lxml-xml')
+    clean_soup = _replace_small_tables(soup)
+    elements = _extract_elements(clean_soup)
+    return build_structured_text(None, elements)

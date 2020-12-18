@@ -14,6 +14,7 @@ from lib.data import (
     StructuredText,
     Table,
     TopicName,
+    count_cells,
     is_increasing,
     load_am_data,
 )
@@ -92,3 +93,11 @@ def test_am_list():
         if most_common[1] != 1:
             raise ValueError(most_common)
         assert most_common[1] == 1
+
+
+def test_count_cells():
+    assert count_cells(Table([])) == 0
+    assert count_cells(Table([Row([], True)])) == 0
+    cells = [Cell(EnrichedString(''), 1, 1)]
+    assert count_cells(Table([Row(cells, True)])) == 1
+    assert count_cells(Table([Row(cells, True)] * 3)) == 3

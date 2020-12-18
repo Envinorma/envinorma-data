@@ -1,28 +1,37 @@
+from lib.structure_extraction import TextElement, Title
 import os
 import random
+import bs4
 import pytest
 from bs4 import BeautifulSoup, Tag
 from typing import List
-from lib.data import EnrichedString, Row, Cell
+from lib.data import EnrichedString, Row, Cell, Table
 from lib.docx import (
     Style,
+    _check_is_tag,
     _copy_soup,
     _extract_property_value,
     _extract_bool_property_value,
     _extract_bold,
+    _extract_color,
+    _extract_elements,
+    _extract_font_name,
+    _extract_font_size_occurrences,
     _extract_italic,
     _extract_size,
-    _extract_font_name,
-    _extract_color,
-    _extract_font_size_occurrences,
+    _extract_tags,
     _build_table_with_correct_rowspan,
     _group_strings,
     _guess_body_font_size,
+    _guess_title_level,
+    _is_a_reference,
     _is_header,
+    _is_title_beginning,
     _remove_table_inplace,
+    _remove_tables_and_bodies,
     _replace_small_tables,
     _replace_tables_and_body_text_with_empty_p,
-    _is_title_beginning,
+    build_structured_text_from_docx_xml,
     empty_soup,
     extract_headers,
     extract_table,
@@ -412,3 +421,75 @@ def test_extract_font_size_occurrences():
     assert _extract_font_size_occurrences(
         {Style(True, True, 1, '', ''): 1, Style(True, False, 1, '', ''): 10, Style(True, True, 3, '', ''): 9}
     ) == {1: 11, 3: 9}
+
+
+def test_is_a_reference():
+    assert _is_a_reference('REF_ZRGezf')
+    assert _is_a_reference('REF_gergZE')
+    assert not _is_a_reference('REF_EBbrr')
+    assert not _is_a_reference('REF_EZRRffff')
+    assert not _is_a_reference('EZREZRR')
+
+
+def _find_first_r_tag(soup: BeautifulSoup) -> List[bs4.Tag]:
+    return [_check_is_tag(soup.find('w:r'))]
+
+
+def test_extract_tags():
+    xml = get_docx_xml('test_data/small_text.docx')
+    soup = BeautifulSoup(xml, 'lxml-xml')
+    new_soup, references = _extract_tags(soup, _find_first_r_tag)
+    assert len(references) == 1
+    assert list(references.keys())[0] in str(new_soup)
+    assert len(list(new_soup.stripped_strings)) != len(list(soup.stripped_strings))
+
+
+def test_remove_tables_and_bodies():
+    xml = get_docx_xml('test_data/small_text.docx')
+    soup = BeautifulSoup(xml, 'lxml-xml')
+    new_soup, references_tb, references_body = _remove_tables_and_bodies(soup)
+    assert len(references_tb) == 0
+    assert len(references_body) == 4
+    for ref in references_body:
+        assert ref in str(new_soup)
+
+
+def test_guess_title_level():
+    assert _guess_title_level('TITRE 1: Dechets') == 1
+    assert _guess_title_level('CECI EST UNE SECTION') == 1
+    assert _guess_title_level('Article 1.1') == 2
+    assert _guess_title_level('Article 1.1.1') == 3
+    assert _guess_title_level('Chapitre 1.1.1.4') == 4
+    assert _guess_title_level('Chapitre 1.1.1.4.5') == 4
+
+
+def check_is_title(element: TextElement) -> Title:
+    if isinstance(element, Title):
+        return element
+    raise ValueError(f'Received {type(element)}, not Title')
+
+
+def test_extract_elements():
+    xml = get_docx_xml('test_data/small_text.docx')
+    soup = BeautifulSoup(xml, 'lxml-xml')
+    elements = _extract_elements(soup)
+    assert len(elements) == 6
+    for element in elements:
+        assert not isinstance(element, Table)
+    assert isinstance(elements[0], str)
+    assert isinstance(elements[1], str)
+    assert isinstance(elements[2], Title) and check_is_title(elements[2]).level == 3
+    assert isinstance(elements[3], str)
+    assert isinstance(elements[4], Title) and check_is_title(elements[4]).level == 2
+    assert isinstance(elements[5], str)
+
+
+def test_build_structured_text_from_docx_xml():
+    xml = get_docx_xml('test_data/small_text.docx')
+    res = build_structured_text_from_docx_xml(xml)
+    assert res.title.text == ''
+    assert len(res.sections) == 2
+    assert len(res.sections[0].sections) == 0
+    assert res.sections[0].title.text == 'Article 6.2.3. Auto surveillance des niveaux sonores'
+    assert len(res.sections[1].sections) == 0
+    assert res.sections[1].title.text == 'Chapitre 6.3 – Vibrations'
