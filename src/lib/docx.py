@@ -58,13 +58,15 @@ class Style:
 def _extract_property_value(properties: bs4.Tag, tag_name: str, attribute_name: str = 'w:val') -> Optional[str]:
     tag = properties.find(tag_name)
     if not tag:
-        return None
+        raise ValueError(f'Tag {tag_name} not found in {properties}')
     if not isinstance(tag, bs4.Tag):
         raise ValueError(f'Expected type bs4.Tag, received {type(tag)}')
     return tag.attrs.get(attribute_name)
 
 
 def _extract_bool_property_value(properties: bs4.Tag, tag_name: str) -> bool:
+    if not properties.find(tag_name):
+        return False
     value = _extract_property_value(properties, tag_name)
     if not value:
         return True
@@ -149,7 +151,7 @@ def _extract_font_size_occurrences(style_occurrences: Dict[Style, int]) -> Dict[
 def _guess_body_font_size(soup: BeautifulSoup) -> int:
     font_size_occurrences = _extract_font_size_occurrences(extract_styles_to_nb_letters(soup))
     if not font_size_occurrences:
-        raise ValueError('Need at least one word in soup.')
+        raise ValueError('Need at least one style tag (rPr) in soup.')
     return sorted(font_size_occurrences.items(), key=lambda x: x[1])[-1][0]
 
 
@@ -161,9 +163,11 @@ def _is_body(style: Style, body_font_size: int) -> bool:
     return True
 
 
-def remove_tables_and_body_text(soup: BeautifulSoup) -> BeautifulSoup:
+def _replace_tables_and_body_text_with_empty_p(
+    soup: BeautifulSoup, body_font_size: Optional[int] = None
+) -> BeautifulSoup:
     soup = _copy_soup(soup)
-    body_font_size = _guess_body_font_size(soup)
+    body_font_size = _guess_body_font_size(soup) if body_font_size is None else body_font_size
     for tag in soup.find_all('w:tbl'):
         tag.replace_with(soup.new_tag('w:p'))
     for tag in soup.find_all('w:r'):
@@ -191,16 +195,23 @@ def print_table_properties(tag: bs4.Tag, verbose: bool = False) -> None:
                 print(remove_duplicate_line_break(cell.text))
 
 
+def _is_header_cell(properties: bs4.Tag) -> bool:
+    tag_name = 'w:pStyle'
+    if not properties.find(tag_name):
+        return False
+    return _extract_property_value(properties, tag_name) == 'TableHeading'
+
+
 def _is_header(cell_tag: bs4.Tag) -> bool:
     properties = cell_tag.find_all('w:pPr')
     if len(properties) == 0:
         return False
-    return all([_extract_property_value(prop, 'w:pStyle') == 'TableHeading' for prop in properties])
+    return all([_is_header_cell(prop) for prop in properties])
 
 
 def extract_cell(cell_tag: bs4.Tag) -> Tuple[bool, Cell, Optional[str]]:
-    v_merge = _extract_property_value(cell_tag, 'w:vMerge')
-    str_colspan = _extract_property_value(cell_tag, 'w:gridSpan')
+    v_merge = _extract_property_value(cell_tag, 'w:vMerge') if cell_tag.find('w:vMerge') else None
+    str_colspan = _extract_property_value(cell_tag, 'w:gridSpan') if cell_tag.find('w:gridSpan') else None
     colspan = int(str_colspan or 1)
     rowspan = 1  # changed globally next using w:vMerge tag
     return _is_header(cell_tag), Cell(EnrichedString(str(cell_tag)), colspan, rowspan), v_merge
@@ -340,3 +351,39 @@ def write_new_document(input_filename: str, new_document_xml: str, new_filename:
         for filename in filenames:
             docx.write(os.path.join(tmp_dir, filename), filename)
     shutil.rmtree(tmp_dir)
+
+
+def _is_title_beginning(string: str) -> bool:
+    patterns = ['titre', 'article', 'chapitre']
+    for pattern in patterns:
+        if string[: len(pattern)].lower() == pattern:
+            return True
+    return False
+
+
+def _group_strings(strings: List[str]) -> List[str]:
+    groups: List[List[str]] = [[]]
+    for string in strings:
+        if _is_title_beginning(string):
+            groups.append([])
+        groups[-1].append(string)
+    return [' '.join(group) for group in groups if group]
+
+
+def _build_headers(soup: BeautifulSoup) -> List[str]:
+    res = []
+    for tag in soup.find_all('w:p'):
+        res.extend(_group_strings(tag.stripped_strings))
+    return [x for x in res if x]
+
+
+def empty_soup(soup: BeautifulSoup) -> bool:
+    return ''.join(soup.stripped_strings) == ''
+
+
+def extract_headers(soup: BeautifulSoup) -> List[str]:
+    if empty_soup(soup):
+        return []
+    clean_soup = _replace_small_tables(soup)
+    titles_soup = _replace_tables_and_body_text_with_empty_p(clean_soup)
+    return _build_headers(titles_soup)

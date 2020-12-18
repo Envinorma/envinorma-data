@@ -1,5 +1,6 @@
 import os
 import random
+import pytest
 from bs4 import BeautifulSoup, Tag
 from typing import List
 from lib.data import EnrichedString, Row, Cell
@@ -13,10 +14,17 @@ from lib.docx import (
     _extract_size,
     _extract_font_name,
     _extract_color,
+    _extract_font_size_occurrences,
     _build_table_with_correct_rowspan,
+    _group_strings,
+    _guess_body_font_size,
     _is_header,
     _remove_table_inplace,
     _replace_small_tables,
+    _replace_tables_and_body_text_with_empty_p,
+    _is_title_beginning,
+    empty_soup,
+    extract_headers,
     extract_table,
     extract_w_tag_style,
     get_docx_xml,
@@ -30,31 +38,37 @@ from lib.docx import (
 _PREFIX = '''<?xml version="1.0" encoding="utf-8"?>\n<w:document mc:Ignorable="w14 wp14" xmlns:m="http://schemas.openxmlformats.org/officeDocument/2006/math" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:mo="http://schemas.microsoft.com/office/mac/office/2008/main" xmlns:mv="urn:schemas-microsoft-com:mac:vml" xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main" xmlns:w10="urn:schemas-microsoft-com:office:word" xmlns:w14="http://schemas.microsoft.com/office/word/2010/wordml" xmlns:wne="http://schemas.microsoft.com/office/word/2006/wordml" xmlns:wp="http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing" xmlns:wp14="http://schemas.microsoft.com/office/word/2010/wordprocessingDrawing" xmlns:wpc="http://schemas.microsoft.com/office/word/2010/wordprocessingCanvas" xmlns:wpg="http://schemas.microsoft.com/office/word/2010/wordprocessingGroup" xmlns:wpi="http://schemas.microsoft.com/office/word/2010/wordprocessingInk" xmlns:wps="http://schemas.microsoft.com/office/word/2010/wordprocessingShape">'''
 
 
-def test__extract_property_value():
+def test_extract_property_value():
     tag = BeautifulSoup(f'{_PREFIX}<w:bottom w:color="#000000" w:sz="2.4" w:val="single"/>', 'lxml-xml')
     assert _extract_property_value(tag, 'bottom') == "single"
     assert _extract_property_value(tag, 'bottom', 'w:val') == "single"
     assert _extract_property_value(tag, 'bottom', 'w:color') == "#000000"
 
 
-def test__extract_bool_property_value():
+def test_extract_bool_property_value():
     tag = BeautifulSoup(f'{_PREFIX}<w:b w:val="0"/>', 'lxml-xml')
-    assert not _extract_bool_property_value(tag, 'w:b')
+    assert not _extract_bool_property_value(tag, 'b')
     tag = BeautifulSoup(f'{_PREFIX}<w:b w:val="1"/>', 'lxml-xml')
-    assert _extract_bool_property_value(tag, 'w:b')
+    assert _extract_bool_property_value(tag, 'b')
     tag = BeautifulSoup(f'{_PREFIX}<w:b/>', 'lxml-xml')
-    assert _extract_bool_property_value(tag, 'w:b')
+    assert _extract_bool_property_value(tag, 'b')
 
 
-def test__extract_bold():
-    assert _extract_bold(BeautifulSoup(f'{_PREFIX}<b/>', 'lxml-xml'))
+def test_extract_bold():
+    tag = BeautifulSoup(f'{_PREFIX}<w:b w:val="0"/>', 'lxml-xml')
+    assert not _extract_bold(tag)
+    tag = BeautifulSoup(f'{_PREFIX}<w:b w:val="1"/>', 'lxml-xml')
+    assert _extract_bold(tag)
+
+    assert _extract_bold(BeautifulSoup(f'{_PREFIX}<w:b/>', 'lxml-xml'))
+    assert not _extract_bold(BeautifulSoup(f'{_PREFIX}', 'lxml-xml'))
 
 
-def test__extract_italic():
+def test_extract_italic():
     assert _extract_italic(BeautifulSoup(f'{_PREFIX}<i/>', 'lxml-xml'))
 
 
-def test__extract_size():
+def test_extract_size():
     assert _extract_size(BeautifulSoup(f'{_PREFIX}<sz w:val="10" />', 'lxml-xml')) == 10
 
 
@@ -146,6 +160,12 @@ def test_is_header():
 
     tag = BeautifulSoup(
         str_tag.replace('w:val="TableHeading"', ''),
+        'lxml-xml',
+    )
+    assert not _is_header(tag)
+
+    tag = BeautifulSoup(
+        str_tag.replace('<w:pStyle w:val="TableHeading"/>', ''),
         'lxml-xml',
     )
     assert not _is_header(tag)
@@ -310,3 +330,85 @@ def test_docx_writing():
     xml_2 = get_docx_xml(output)
     assert xml == xml_2
     os.remove(output)
+
+
+def test_is_title_beginning():
+    assert _is_title_beginning('TITRE 9 – Dispositions à caractère administratif')
+    assert _is_title_beginning('Chapitre 7.4 - Prévention des pollutions accidentelles')
+    assert _is_title_beginning('Article 7.3.4. Travaux d’entretien et de maintenance')
+    assert not _is_title_beginning('Chapitr 7.4 - Prévention des pollutions accidentelles')
+    assert not _is_title_beginning('')
+
+
+def test_group_strings():
+    split_strings = [
+        'TITRE 7 - Prévention',
+        'des risques technologiques',
+        'Chapitre',
+        '7.1 - Caractérisation',
+        'des risques',
+        'Article 7.1.1. Inventaire des substances ou préparations',
+        'dangereuses présentes dans',
+        'l’établissement',
+        'Article 7.1.2. Zonage interne à',
+        'l’établissement',
+    ]
+    res = _group_strings(split_strings)
+    assert len(res) == 4
+    assert res[0] == 'TITRE 7 - Prévention des risques technologiques'
+    assert res[1] == 'Chapitre 7.1 - Caractérisation des risques'
+    assert (
+        res[2] == 'Article 7.1.1. Inventaire des substances ou préparations dangereuses présentes dans l’établissement'
+    )
+    assert res[3] == 'Article 7.1.2. Zonage interne à l’établissement'
+
+
+def test_empty_soup():
+    assert empty_soup(BeautifulSoup('', 'html.parser'))
+    assert empty_soup(BeautifulSoup('<a></a>', 'html.parser'))
+    assert empty_soup(BeautifulSoup('<a> </a>', 'html.parser'))
+    assert not empty_soup(BeautifulSoup('<a>envinorma</a>', 'html.parser'))
+
+
+def test_extract_headers():
+    assert extract_headers(BeautifulSoup('', 'html.parser')) == []
+    xml = get_docx_xml('test_data/small_text.docx')
+    soup = BeautifulSoup(xml, 'lxml-xml')
+    assert extract_headers(soup) == [
+        'Article 6.2.3. Auto surveillance des niveaux sonores',
+        'Chapitre 6.3 – Vibrations',
+    ]
+
+
+def test_replace_tables_and_body_text_with_empty_p():
+    xml = get_docx_xml('test_data/small_text.docx')
+    soup = BeautifulSoup(xml, 'lxml-xml')
+    new_soup = _replace_tables_and_body_text_with_empty_p(soup)
+    assert list(new_soup.stripped_strings) == [
+        'Article 6.2.3. Auto surveillance des niveaux sonores',
+        'Chapitre 6.3 – Vibrations',
+    ]
+
+    xml = ''
+    soup = BeautifulSoup(xml, 'lxml-xml')
+    new_soup = _replace_tables_and_body_text_with_empty_p(soup, 10)
+    assert list(new_soup.stripped_strings) == []
+
+
+def test_guess_body_font_size():
+    xml = get_docx_xml('test_data/small_text.docx')
+    soup = BeautifulSoup(xml, 'lxml-xml')
+    assert _guess_body_font_size(soup) == 24
+
+    xml = '<w></w>'
+    soup = BeautifulSoup(xml, 'lxml-xml')
+    with pytest.raises(ValueError):
+        _guess_body_font_size(soup)
+
+
+def test_extract_font_size_occurrences():
+    assert _extract_font_size_occurrences({}) == {}
+    assert _extract_font_size_occurrences({Style(True, True, 1, '', ''): 10}) == {1: 10}
+    assert _extract_font_size_occurrences(
+        {Style(True, True, 1, '', ''): 1, Style(True, False, 1, '', ''): 10, Style(True, True, 3, '', ''): 9}
+    ) == {1: 11, 3: 9}
