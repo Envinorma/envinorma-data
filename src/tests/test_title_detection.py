@@ -1,5 +1,5 @@
 import re
-from lib.structure_detection import (
+from lib.title_detection import (
     NumberingPattern,
     detect_longest_matched_pattern,
     detect_longest_matched_string,

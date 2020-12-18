@@ -22,7 +22,7 @@ from lib.data import (
     LegifranceArticle,
 )
 from lib.am_structure_extraction import split_in_non_empty_html_line, keep_visa_string
-from lib.structure_detection import (
+from lib.title_detection import (
     NUMBERING_PATTERNS,
     is_mainly_upper,
     get_first_match,

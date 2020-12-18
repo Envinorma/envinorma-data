@@ -15,7 +15,7 @@ from lib.data import (
     Summary,
     SummaryElement,
 )
-from lib.structure_detection import NUMBERING_PATTERNS, ROMAN_PATTERN, NumberingPattern, detect_longest_matched_string
+from lib.title_detection import NUMBERING_PATTERNS, ROMAN_PATTERN, NumberingPattern, detect_longest_matched_string
 from lib.topics.patterns import TopicName, tokenize
 from lib.topics.topics import TopicOntology
 

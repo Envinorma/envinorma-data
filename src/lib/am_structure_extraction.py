@@ -30,7 +30,7 @@ from lib.data import (
     ArticleStatus,
     load_legifrance_text,
 )
-from lib.structure_detection import NumberingPattern, detect_patterns_if_exists, is_mainly_upper, is_probably_title
+from lib.title_detection import NumberingPattern, detect_patterns_if_exists, is_mainly_upper, is_probably_title
 
 
 class AMStructurationError(Exception):
