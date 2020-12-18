@@ -2,27 +2,21 @@ import bs4
 from copy import copy
 from dataclasses import dataclass
 from enum import Enum
-from typing import Any, List, Optional, Tuple, Union
+from typing import Any, List, Optional
 from bs4 import BeautifulSoup
 from zipfile import ZipFile
 
-from lib.am_structure_extraction import split_alineas_in_sections
 from lib.data import Cell, EnrichedString, Row, StructuredText, Table
+from lib.structure_extraction import Linebreak, TextElement, Title, build_structured_text
 
 
-@dataclass
-class ODFTitle:
-    text: str
-    level: int
-
-
-def _extract_title(tag: bs4.Tag) -> ODFTitle:
+def _extract_title(tag: bs4.Tag) -> Title:
     level_str = tag.attrs.get(ODFXMLAttributes.TITLE_LEVEL.value)
     if not isinstance(level_str, str) or not level_str.isdigit():
         raise ValueError(
             f'Expecting {ODFXMLAttributes.TITLE_LEVEL.value} attribute to be a string digit, received: {level_str}'
         )
-    return ODFTitle(tag.text.strip(), int(level_str))
+    return Title(tag.text.strip(), int(level_str))
 
 
 class ODFXMLTagNames(Enum):
@@ -131,13 +125,6 @@ def _extract_table(tag: bs4.Tag) -> Table:
     return Table(rows)
 
 
-class Linebreak:
-    pass
-
-
-_Element = Union[Table, str, ODFTitle, Linebreak]
-
-
 def _extract_list_item_text(tag: bs4.Tag) -> str:
     _expected = (ODFXMLTagNames.TEXT_LIST_ITEM.value, ODFXMLTagNames.TEXT_LIST_HEADER.value)
     if _descriptor(tag) not in _expected:
@@ -171,8 +158,8 @@ def _is_independent_element(tag: Any) -> bool:
     return False
 
 
-def _merge_children(all_elements: List[List[_Element]], can_be_merged_list: List[bool]) -> List[_Element]:
-    final_elements: List[_Element] = []
+def _merge_children(all_elements: List[List[TextElement]], can_be_merged_list: List[bool]) -> List[TextElement]:
+    final_elements: List[TextElement] = []
     current_built_string: List[str] = []
     sep = ''
     for can_be_merged, elements in zip(can_be_merged_list, all_elements):
@@ -193,7 +180,7 @@ def _merge_children(all_elements: List[List[_Element]], can_be_merged_list: List
     return final_elements
 
 
-def _extract_flattened_elements(tag: Any, group_children: bool = False) -> List[_Element]:
+def _extract_flattened_elements(tag: Any, group_children: bool = False) -> List[TextElement]:
     if isinstance(tag, bs4.NavigableString):
         return [tag]
     if not isinstance(tag, bs4.Tag):
@@ -224,63 +211,6 @@ def _extract_flattened_elements(tag: Any, group_children: bool = False) -> List[
     return [elt for elts in children_elements for elt in elts]
 
 
-def _has_a_title(alineas: List[_Element]) -> bool:
-    for alinea in alineas:
-        if isinstance(alinea, ODFTitle):
-            return True
-    return False
-
-
-def _build_enriched_alineas(alineas: List[_Element]) -> Tuple[List[EnrichedString], List[StructuredText]]:
-    if _has_a_title(alineas):
-        structured_text = _build_structured_text(None, alineas)
-        return structured_text.outer_alineas, structured_text.sections
-    result: List[EnrichedString] = []
-    for alinea in alineas:
-        if isinstance(alinea, Table):
-            result.append(EnrichedString('', table=alinea))
-        elif isinstance(alinea, str):
-            result.append(EnrichedString(alinea))
-        elif isinstance(alinea, Linebreak):
-            continue
-        else:
-            if isinstance(alinea, ODFTitle):
-                print(alinea.text)
-            raise ValueError(f'Unexpected element type {type(alinea)} here.')
-    return result, []
-
-
-def _extract_highest_title_level(elements: List[_Element]) -> int:
-    levels = [element.level for element in elements if isinstance(element, ODFTitle)]
-    return min(levels) if levels else -1
-
-
-def _build_structured_text(title: Optional[_Element], elements: List[_Element]) -> StructuredText:
-    if title and not isinstance(title, ODFTitle):
-        raise ValueError(f'Expecting title to be of type ODFTitle not {type(title)}')
-    built_title = EnrichedString('' if not title or not isinstance(title, ODFTitle) else title.text)
-    highest_level = _extract_highest_title_level(elements)
-    matches = [bool(isinstance(elt, ODFTitle) and elt.level == highest_level) for elt in elements]
-    outer, subsections = split_alineas_in_sections(elements, matches)
-    outer_alineas, previous_sections = _build_enriched_alineas(
-        outer
-    )  # There can be a lower level title in previous alineas
-    built_subsections = [
-        _build_structured_text(
-            alinea_group[0],
-            alinea_group[1:],
-        )
-        for alinea_group in subsections
-    ]
-    return StructuredText(
-        built_title,
-        outer_alineas,
-        previous_sections + built_subsections,
-        None,
-        None,
-    )
-
-
 def _add_title_default_numbering(text: StructuredText, prefix: str = '', rank: int = 0) -> StructuredText:
     text = copy(text)
     new_prefix = prefix + f'{rank+1}.'
@@ -291,7 +221,7 @@ def _add_title_default_numbering(text: StructuredText, prefix: str = '', rank: i
 
 def _build_structured_text_from_soup(tag: bs4.Tag) -> StructuredText:
     elements = _extract_flattened_elements(tag)
-    text = _build_structured_text(None, elements)
+    text = build_structured_text(None, elements)
     text.sections = [_add_title_default_numbering(section, '', i) for i, section in enumerate(text.sections)]
     return text
 

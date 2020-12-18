@@ -2,7 +2,6 @@ import bs4
 from lib.data import Table
 from bs4 import BeautifulSoup
 from lib.open_document import (
-    ODFTitle,
     _extract_title,
     _extract_string_from_tag,
     _extract_cell,
@@ -10,9 +9,6 @@ from lib.open_document import (
     _extract_rows,
     _extract_table,
     _extract_flattened_elements,
-    _build_enriched_alineas,
-    _extract_highest_title_level,
-    _build_structured_text,
     _build_structured_text_from_soup,
     _extract_tag_from_soup,
     _remove_last_line_break,
@@ -261,28 +257,6 @@ def test_extract_flattened_elements_4():
     assert len(elements) == 1
     assert isinstance(elements[0], str)
     assert elements[0] == 'subi les opérations de dépollution figurant en annexe II du présent arrêté'
-
-
-def test_build_enriched_alineas():
-    assert _build_enriched_alineas(['Hello'])[0][0].text == 'Hello'
-    assert _build_enriched_alineas([Table([])])[0][0].table.rows == []
-
-
-def test_extract_highest_title_level():
-    assert _extract_highest_title_level([]) == -1
-    assert _extract_highest_title_level([Table([])]) == -1
-    assert _extract_highest_title_level([Table([]), ODFTitle('', 1)]) == 1
-
-
-def test_build_structured_text():
-    elements = [Table([]), ODFTitle('title', 1)]
-    result = _build_structured_text('', elements)
-    assert result.title.text == ''
-    assert len(result.outer_alineas) == 1
-    assert len(result.sections) == 1
-    assert len(result.sections[0].outer_alineas) == 0
-    assert len(result.sections[0].sections) == 0
-    assert result.sections[0].title.text == 'title'
 
 
 def test_build_structured_text_from_soup():
