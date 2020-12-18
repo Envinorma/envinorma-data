@@ -1,17 +1,27 @@
+from dataclasses import dataclass
+from lib.am_to_markdown import extract_markdown_text
+from lib.structure_extraction import TextElement, Title, build_structured_text
+from lib.data import StructuredText, Table
 import os
 from lib.pdf import pdf_to_docx
-from typing import List
+from typing import Any, Dict, List, Tuple, Union
 import bs4
 from bs4 import BeautifulSoup
 from lib.docx import (
+    _copy_soup,
     _replace_small_tables,
+    build_structured_text_from_docx_xml,
+    empty_soup,
     extract_all_word_styles,
+    extract_headers,
     extract_styles_to_nb_letters,
     extract_table,
+    extract_w_tag_style,
     get_docx_xml,
-    remove_tables_and_body_text,
     write_new_document,
     write_xml,
+    _guess_body_font_size,
+    _is_body,
 )
 from zipfile import ZipFile
 
@@ -70,57 +80,19 @@ FOLDER = '/Users/remidelbouys/EnviNorma/brouillons/data/icpe_documents'
 FILENAME = f'{FOLDER}/L_c_e1707b709fed43bda17568f632b8d3bc.pdf'.replace('.pdf', '.docx')
 
 
-# XML = get_docx_xml(FILENAME)
-# SOUP = BeautifulSoup(str(XML), 'lxml-xml')
-
-# CLEAN_SOUP = _replace_small_tables(SOUP)
-# TITLES_SOUP = remove_tables_and_body_text(CLEAN_SOUP)
-# print(TITLES_SOUP.text.replace('\n', ''))
-# write_new_document(FILENAME, str(TITLES_SOUP), FILENAME.replace('.docx', '_titles.docx'))
-
-
-def _is_title_beginning(string: str) -> bool:
-    patterns = ['title', 'article', 'chapitre']
-    for pattern in patterns:
-        if string[: len(pattern)].lower() == pattern:
-            return True
-    return False
-
-
-def _group_strings(strings: List[str]) -> List[str]:
-    groups: List[List[str]] = [[]]
-    for string in strings:
-        if _is_title_beginning(string):
-            groups.append([])
-        groups[-1].append(string)
-    return [' '.join(group) for group in groups if group]
-
-
-def _extract_lines(soup: BeautifulSoup) -> List[str]:
-    res = []
-    for tag in soup.find_all('w:p'):
-        res.append(_group_strings(tag.stripped_strings))
-    return [x for x in res if x]
-
-
-def _empty_soup(soup: BeautifulSoup) -> bool:
-    return ''.join(soup.stripped_strings) == ''
-
-
 def _extract_titles(filename: str) -> List[str]:
     output = filename.replace('.pdf', '.docx')
     if not os.path.exists(output):
         return []
     xml = get_docx_xml(output)
     soup = BeautifulSoup(str(xml), 'lxml-xml')
-    if _empty_soup(soup):
+    if empty_soup(soup):
         return []
-    clean_soup = _replace_small_tables(soup)
-    titles_soup = remove_tables_and_body_text(clean_soup)
-    return _extract_lines(titles_soup)
+    return extract_headers(soup)
 
 
-from tqdm import tqdm
-import os
+# filename_to_title = {filename: _extract_titles(FOLDER + '/' + filename) for filename in tqdm(_SEARCHABLE_PDFS)}
 
-filename_to_title = {filename: _extract_titles(FOLDER + '/' + filename) for filename in tqdm(_SEARCHABLE_PDFS)}
+XML = get_docx_xml(FILENAME)
+res = build_structured_text_from_docx_xml(XML)
+open('tmp.md', 'w').write('\n\n'.join(extract_markdown_text(res, 1, False)))
