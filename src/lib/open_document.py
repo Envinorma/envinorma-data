@@ -1,9 +1,10 @@
-import os
 import bs4
-import tempfile
+import os
+import random
 import shutil
+import string
+import tempfile
 from copy import copy
-from dataclasses import dataclass
 from enum import Enum
 from typing import Any, Callable, List, Optional
 from bs4 import BeautifulSoup
@@ -48,6 +49,8 @@ class ODFXMLAttributes(Enum):
     TITLE_LEVEL = 'text:outline-level'
     TABLE_ROW_SPAN = 'table:number-rows-spanned'
     TABLE_COL_SPAN = 'table:number-columns-spanned'
+    TABLE_COL_REPEATED = 'table:number-columns-repeated'
+    STYLE_NAME = 'text:style-name'
 
 
 def _descriptor(tag: bs4.Tag) -> str:
@@ -222,10 +225,11 @@ def _add_title_default_numbering(text: StructuredText, prefix: str = '', rank: i
     return text
 
 
-def _build_structured_text_from_soup(tag: bs4.Tag) -> StructuredText:
+def _build_structured_text_from_soup(tag: bs4.Tag, with_numbering: bool) -> StructuredText:
     elements = _extract_flattened_elements(tag)
     text = build_structured_text(None, elements)
-    text.sections = [_add_title_default_numbering(section, '', i) for i, section in enumerate(text.sections)]
+    if with_numbering:
+        text.sections = [_add_title_default_numbering(section, '', i) for i, section in enumerate(text.sections)]
     return text
 
 
@@ -246,18 +250,18 @@ def _extract_tag_from_soup(soup: BeautifulSoup) -> bs4.Tag:
     return tags[0]
 
 
-def _transform_odt(html: str) -> StructuredText:
+def _transform_odt(html: str, with_numbering: bool) -> StructuredText:
     soup = BeautifulSoup(html, 'lxml-xml')
     tag = _extract_tag_from_soup(soup)  # expecting exactly one tag, might not hold True
-    return _build_structured_text_from_soup(tag)
+    return _build_structured_text_from_soup(tag, with_numbering)
 
 
 def get_odt_xml(filename: str) -> str:
     return ZipFile(filename).read('content.xml').decode()
 
 
-def load_and_transform(filename: str) -> StructuredText:
-    return _transform_odt(get_odt_xml(filename))
+def load_and_transform(filename: str, add_numbering: bool) -> StructuredText:
+    return _transform_odt(get_odt_xml(filename), add_numbering)
 
 
 def _extract_lines_from_page_element(page_element: Any) -> List[str]:
@@ -312,34 +316,25 @@ _XML_EMPTY_ODT = (
     '''g/2013/office" xmlns:xforms="http://www.w3.org/2002/xforms" xmlns:xhtml="http://www.w3.org/1999/xhtm'''
     '''l" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi'''
     '''="http://www.w3.org/2001/XMLSchema-instance"><office:scripts/><office:font-face-decls><style:font-fa'''
-    '''ce style:font-family-generic="roman" style:font-pitch="variable" style:name="Times New Roman" svg:fo'''
-    '''nt-family="'Times New Roman'"/><style:font-face style:font-family-generic="swiss" style:font-pitch="'''
-    '''variable" style:name="Arial" svg:font-family="Arial"/><style:font-face style:font-family-generic="sy'''
-    '''stem" style:font-pitch="variable" style:name="Arial Unicode MS" svg:font-family="'Arial Unicode MS'"'''
-    '''/></office:font-face-decls><office:automatic-styles><style:style style:family="table" style:name="Ta'''
-    '''bleau1"><style:table-properties style:width="17cm" table:align="margins"/></style:style><style:style'''
-    ''' style:family="table-column" style:name="Tableau1.A"><style:table-column-properties style:column-wid'''
-    '''th="4.251cm" style:rel-column-width="16383*"/></style:style><style:style style:family="table-cell" s'''
-    '''tyle:name="Tableau1.A1"><style:table-cell-properties fo:border-bottom="0.002cm solid #000000" fo:bor'''
-    '''der-left="0.002cm solid #000000" fo:border-right="none" fo:border-top="0.002cm solid #000000" fo:pad'''
-    '''ding="0.097cm"/></style:style><style:style style:family="table-cell" style:name="Tableau1.D1"><style'''
-    ''':table-cell-properties fo:border="0.002cm solid #000000" fo:padding="0.097cm"/></style:style><style:'''
-    '''style style:family="table-cell" style:name="Tableau1.A2"><style:table-cell-properties fo:border-bott'''
-    '''om="0.002cm solid #000000" fo:border-left="0.002cm solid #000000" fo:border-right="none" fo:border-t'''
-    '''op="none" fo:padding="0.097cm"/></style:style><style:style style:family="table-cell" style:name="Tab'''
-    '''leau1.D2"><style:table-cell-properties fo:border-bottom="0.002cm solid #000000" fo:border-left="0.00'''
-    '''2cm solid #000000" fo:border-right="0.002cm solid #000000" fo:border-top="none" fo:padding="0.097cm"'''
-    '''/></style:style></office:automatic-styles><office:body><office:text></office:text></office:body></of'''
-    '''fice:document-content>'''
+    '''ce style:font-family-generic="swiss" style:name="Arial Unicode MS1" svg:font-family="'Arial Unicode '''
+    '''MS'"/><style:font-face style:font-family-generic="roman" style:font-pitch="variable" style:name="Lib'''
+    '''eration Serif" svg:font-family="'Liberation Serif'"/><style:font-face style:font-family-generic="swi'''
+    '''ss" style:font-pitch="variable" style:name="Liberation Sans" svg:font-family="'Liberation Sans'"/><s'''
+    '''tyle:font-face style:font-family-generic="system" style:font-pitch="variable" style:name="Arial Unic'''
+    '''ode MS" svg:font-family="'Arial Unicode MS'"/><style:font-face style:font-family-generic="system" st'''
+    '''yle:font-pitch="variable" style:name="PingFang SC" svg:font-family="'PingFang SC'"/><style:font-face'''
+    ''' style:font-family-generic="system" style:font-pitch="variable" style:name="Songti SC" svg:font-fami'''
+    '''ly="'Songti SC'"/></office:font-face-decls><office:automatic-styles/><office:body><office:text><text'''
+    ''':sequence-decls><text:sequence-decl text:display-outline-level="0" text:name="Illustration"/><text:s'''
+    '''equence-decl text:display-outline-level="0" text:name="Table"/><text:sequence-decl text:display-outl'''
+    '''ine-level="0" text:name="Text"/><text:sequence-decl text:display-outline-level="0" text:name="Drawin'''
+    '''g"/><text:sequence-decl text:display-outline-level="0" text:name="Figure"/></text:sequence-decls></o'''
+    '''ffice:text></office:body></office:document-content>'''
 )
 
 
-def _add_prefix_and_suffix(xml: str) -> str:
-    return _XML_EMPTY_ODT
-
-
 def _generate_empty_tree() -> str:
-    return ''
+    return _XML_EMPTY_ODT
 
 
 def _check_tag(candidate: Any) -> bs4.Tag:
@@ -348,13 +343,86 @@ def _check_tag(candidate: Any) -> bs4.Tag:
     return candidate
 
 
-def _get_title_builder(title: Title) -> Callable[[BeautifulSoup, bs4.Tag], None]:
-    raise NotImplementedError() # TODO
+def _get_title_builder(title: Title) -> Callable[[BeautifulSoup], bs4.PageElement]:
+    def _add_title_tag(soup: BeautifulSoup) -> bs4.Tag:
+        if title.level == 0:
+            new_tag = soup.new_tag(ODFXMLTagNames.TEXT_P.value, attrs={ODFXMLAttributes.STYLE_NAME.value: 'Title'})
+        else:
+            new_tag = soup.new_tag(
+                ODFXMLTagNames.TEXT_H.value, attrs={ODFXMLAttributes.TITLE_LEVEL.value: str(title.level)}
+            )
+        new_tag.append(soup.new_string(title.text))
+        return new_tag
+
+    return _add_title_tag
 
 
-def _get_soup_modifier(element: TextElement) -> Callable[[BeautifulSoup, bs4.Tag], None]:
+def _get_cell_builder(cell: Cell) -> Callable[[BeautifulSoup], bs4.PageElement]:
+    def _add_tag(soup: BeautifulSoup) -> bs4.Tag:
+        new_tag = soup.new_tag(
+            ODFXMLTagNames.TABLE_CELL.value,
+            attrs={
+                ODFXMLAttributes.TABLE_ROW_SPAN.value: str(cell.rowspan),
+                ODFXMLAttributes.TABLE_COL_SPAN.value: str(cell.colspan),
+            },
+        )
+        p_tag = soup.new_tag(ODFXMLTagNames.TEXT_P.value)
+        p_tag.append(soup.new_string(cell.content.text))
+        new_tag.append(p_tag)
+        return new_tag
+
+    return _add_tag
+
+
+def _get_row_builder(row: Row) -> Callable[[BeautifulSoup], bs4.PageElement]:
+    def _add_tag(soup: BeautifulSoup) -> bs4.Tag:
+        new_tag = soup.new_tag(ODFXMLTagNames.TABLE_ROW.value)
+        for cell in row.cells:
+            new_tag.append(_get_cell_builder(cell)(soup))
+        if row.is_header:
+            header_tag = soup.new_tag(ODFXMLTagNames.TABLE_HEADER.value)
+            header_tag.append(new_tag)
+            return header_tag
+        return new_tag
+
+    return _add_tag
+
+
+def _compute_nb_cols(table: Table) -> int:
+    if not table.rows:
+        return 0
+    return sum([cell.colspan for cell in table.rows[0].cells])
+
+
+def _get_table_builder(table: Table) -> Callable[[BeautifulSoup], bs4.PageElement]:
+    def _add_tag(soup: BeautifulSoup) -> bs4.Tag:
+        new_tag = soup.new_tag(ODFXMLTagNames.TABLE_TABLE.value)
+        nb_cols = _compute_nb_cols(table)
+        attrs = {ODFXMLAttributes.TABLE_COL_REPEATED.value: str(nb_cols)}
+        new_tag.append(soup.new_tag(ODFXMLTagNames.TABLE_COLUMN.value, attrs=attrs))
+        for row in table.rows:
+            new_tag.append(_get_row_builder(row)(soup))
+        return new_tag
+
+    return _add_tag
+
+
+def _get_body_builder(str_: str) -> Callable[[BeautifulSoup], bs4.PageElement]:
+    def _add_body_tag(soup: BeautifulSoup) -> bs4.Tag:
+        new_tag = soup.new_tag(ODFXMLTagNames.TEXT_P.value)
+        new_tag.append(soup.new_string(str_))
+        return new_tag
+
+    return _add_body_tag
+
+
+def _get_soup_modifier(element: TextElement) -> Callable[[BeautifulSoup], bs4.PageElement]:
     if isinstance(element, Title):
         return _get_title_builder(element)
+    if isinstance(element, Table):
+        return _get_table_builder(element)
+    if isinstance(element, str):
+        return _get_body_builder(element)
     raise NotImplementedError(f'Not implemented for type {type(element)}')
 
 
@@ -363,13 +431,22 @@ def _build_open_document(elements: List[TextElement]) -> str:
     soup = BeautifulSoup(empty_tree, 'lxml-xml')
     tag = _check_tag(soup.find('office:text'))
     for element in elements:
-        _get_soup_modifier(element)(soup, tag)
+        tag.append(_get_soup_modifier(element)(soup))
     return str(soup)
 
 
-def structured_text_to_odt(text: StructuredText) -> str:
-    elements = structured_text_to_text_elements(text, 1)
+def structured_text_to_odt_xml(text: StructuredText) -> str:
+    elements = structured_text_to_text_elements(text, 0)
     return _build_open_document(elements)
+
+
+def _generate_tmp_filename() -> str:
+    return 'tmp_' + ''.join([random.choice(string.ascii_letters) for _ in range(10)])
+
+
+def structured_text_to_odt_file(text: StructuredText, filename: str) -> None:
+    xml = structured_text_to_odt_xml(text)
+    write_new_document('test_data/simple_document.odt', xml, filename)
 
 
 def write_new_document(input_filename: str, new_document_xml: str, new_filename: str):
@@ -391,7 +468,7 @@ if __name__ == '__main__':
     _DOC_NAME = 'AP_DDAE_12_2014vcorrigee_cle84ed7d'  # '2020-06-11-AUTO 2001-AP AUTORISATION-Projet_AP_VF'
 
     FILENAME = f'/Users/remidelbouys/EnviNorma/brouillons/data/icpe_ap_odt/{_DOC_NAME}.odt'
-    TEXT = load_and_transform(FILENAME)
+    TEXT = load_and_transform(FILENAME, True)
     open(f'/Users/remidelbouys/EnviNorma/envinorma.github.io/{_DOC_NAME}.md', 'w').write(
         '\n\n'.join(extract_markdown_text(TEXT, 1))
     )

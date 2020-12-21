@@ -1,9 +1,11 @@
+from lib.structure_extraction import Title
 import os
 import bs4
 import random
-from lib.data import Table
+from lib.data import Cell, EnrichedString, Row, StructuredText, Table
 from bs4 import BeautifulSoup
 from lib.open_document import (
+    _build_open_document,
     _build_structured_text_from_soup,
     _check_tag,
     _extract_title,
@@ -17,11 +19,15 @@ from lib.open_document import (
     _remove_last_line_break,
     _merge_children,
     get_odt_xml,
+    load_and_transform,
+    structured_text_to_odt_file,
+    structured_text_to_odt_xml,
+    structured_text_to_text_elements,
     write_new_document,
 )
 
 _XML_PREFIX = '''<?xml version="1.0" encoding="utf-8"?>
-<office:document-content office:version="1.2" xmlns:chart="urn:oasis:names:tc:opendocument:xmlns:chart:1.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dom="http://www.w3.org/2001/xml-events" xmlns:dr3d="urn:oasis:names:tc:opendocument:xmlns:dr3d:1.0" xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0" xmlns:field="urn:openoffice:names:experimental:ooo-ms-interop:xmlns:field:1.0" xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0" xmlns:form="urn:oasis:names:tc:opendocument:xmlns:form:1.0" xmlns:grddl="http://www.w3.org/2003/g/data-view#" xmlns:math="http://www.w3.org/1998/Math/MathML" xmlns:meta="urn:oasis:names:tc:opendocument:xmlns:meta:1.0" xmlns:number="urn:oasis:names:tc:opendocument:xmlns:datastyle:1.0" xmlns:of="urn:oasis:names:tc:opendocument:xmlns:of:1.2" xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:ooo="http://openoffice.org/2004/office" xmlns:oooc="http://openoffice.org/2004/calc" xmlns:ooow="http://openoffice.org/2004/writer" xmlns:rpt="http://openoffice.org/2005/report" xmlns:script="urn:oasis:names:tc:opendocument:xmlns:script:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0" xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0" xmlns:tableooo="http://openoffice.org/2009/table" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:textooo="http://openoffice.org/2013/office" xmlns:xforms="http://www.w3.org/2002/xforms" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><office:scripts/><office:font-face-decls><style:font-face style:font-family-generic="roman" style:font-pitch="variable" style:name="Times New Roman" svg:font-family="'Times New Roman'"/><style:font-face style:font-family-generic="swiss" style:font-pitch="variable" style:name="Arial" svg:font-family="Arial"/><style:font-face style:font-family-generic="system" style:font-pitch="variable" style:name="Arial Unicode MS" svg:font-family="'Arial Unicode MS'"/></office:font-face-decls><office:automatic-styles><style:style style:family="table" style:name="Tableau1"><style:table-properties style:width="17cm" table:align="margins"/></style:style><style:style style:family="table-column" style:name="Tableau1.A"><style:table-column-properties style:column-width="4.251cm" style:rel-column-width="16383*"/></style:style><style:style style:family="table-cell" style:name="Tableau1.A1"><style:table-cell-properties fo:border-bottom="0.002cm solid #000000" fo:border-left="0.002cm solid #000000" fo:border-right="none" fo:border-top="0.002cm solid #000000" fo:padding="0.097cm"/></style:style><style:style style:family="table-cell" style:name="Tableau1.D1"><style:table-cell-properties fo:border="0.002cm solid #000000" fo:padding="0.097cm"/></style:style><style:style style:family="table-cell" style:name="Tableau1.A2"><style:table-cell-properties fo:border-bottom="0.002cm solid #000000" fo:border-left="0.002cm solid #000000" fo:border-right="none" fo:border-top="none" fo:padding="0.097cm"/></style:style><style:style style:family="table-cell" style:name="Tableau1.D2"><style:table-cell-properties fo:border-bottom="0.002cm solid #000000" fo:border-left="0.002cm solid #000000" fo:border-right="0.002cm solid #000000" fo:border-top="none" fo:padding="0.097cm"/></style:style></office:automatic-styles><office:body><office:text>'''
+<office:document-content office:version="1.2" xmlns:chart="urn:oasis:names:tc:opendocument:xmlns:chart:1.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dom="http://www.w3.org/2001/xml-events" xmlns:dr3d="urn:oasis:names:tc:opendocument:xmlns:dr3d:1.0" xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0" xmlns:field="urn:openoffice:names:experimental:ooo-ms-interop:xmlns:field:1.0" xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0" xmlns:form="urn:oasis:names:tc:opendocument:xmlns:form:1.0" xmlns:grddl="http://www.w3.org/2003/g/data-view#" xmlns:math="http://www.w3.org/1998/Math/MathML" xmlns:meta="urn:oasis:names:tc:opendocument:xmlns:meta:1.0" xmlns:number="urn:oasis:names:tc:opendocument:xmlns:datastyle:1.0" xmlns:of="urn:oasis:names:tc:opendocument:xmlns:of:1.2" xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:ooo="http://openoffice.org/2004/office" xmlns:oooc="http://openoffice.org/2004/calc" xmlns:ooow="http://openoffice.org/2004/writer" xmlns:rpt="http://openoffice.org/2005/report" xmlns:script="urn:oasis:names:tc:opendocument:xmlns:script:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0" xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0" xmlns:tableooo="http://openoffice.org/2009/table" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:textooo="http://openoffice.org/2013/office" xmlns:xforms="http://www.w3.org/2002/xforms" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><office:scripts/><office:font-face-decls/><office:body><office:text>'''
 _XML_SUFFIX = '''</office:text></office:body></office:document-content>'''
 
 
@@ -296,7 +302,7 @@ def test_build_structured_text_from_soup():
         '''</text:p>'''
         '''</text:span>'''
     )
-    text = _build_structured_text_from_soup(_get_soup(xml))
+    text = _build_structured_text_from_soup(_get_soup(xml), True)
     assert len(text.sections) == 1
     assert text.title.text == ''
     assert len(text.sections[0].sections) == 1
@@ -326,7 +332,7 @@ def test_build_structured_text_from_soup_2():
         '''</text:span>'''
         '''</text:p>'''
     )
-    text = _build_structured_text_from_soup(_get_soup(xml))
+    text = _build_structured_text_from_soup(_get_soup(xml), True)
     assert len(text.sections) == 0
     assert text.title.text == ''
     expected = '''Dans le présent arrêté, le terme VHU désigne un véhicule hors d’usage que son détenteur remet à un tiers pour qu'il le détruise ou qu'il a l'obligation de détruire (article R. 543-154 du CE). Le terme « VHU » couvre les voitures particulières, les camionnettes et les cyclomoteurs à trois roues et par extension, pour cet établissement, les poids lourds, les caravanes, les remorques et les cylomoteurs.'''
@@ -350,6 +356,10 @@ def test_merge_children():
     assert _merge_children([['test'], [table]], [True, True]) == ['test', table]
 
 
+def random_filename() -> str:
+    return ''.join([random.choice('abcdef') for _ in range(10)]) + '.odt'
+
+
 def test_write_new_document():
     filename = 'test_data/bonjour.odt'
     xml = get_odt_xml(filename)
@@ -358,7 +368,7 @@ def test_write_new_document():
     new_tag = soup.new_tag('text:p')
     new_tag.append(soup.new_string('World'))
     tag.append(new_tag)
-    output = ''.join([random.choice('abcdef') for _ in range(10)]) + '.odt'
+    output = random_filename()
     write_new_document(filename, str(soup), output)
     xml_2 = get_odt_xml(output)
     new_soup = BeautifulSoup(xml_2, 'lxml-xml')
@@ -367,3 +377,80 @@ def test_write_new_document():
     assert res[0].text == 'Bonjour'
     assert res[1].text == 'World'
     os.remove(output)
+
+
+def _compare_tables(table_1: Table, table_2: Table):
+    assert len(table_1.rows) == len(table_2.rows)
+    for row_1, row_2 in zip(table_1.rows, table_2.rows):
+        assert len(row_1.cells) == len(row_2.cells)
+        assert row_1.is_header == row_2.is_header
+        for cell_1, cell_2 in zip(row_1.cells, row_2.cells):
+            assert cell_1.colspan == cell_2.colspan
+            assert cell_1.rowspan == cell_2.rowspan
+            assert cell_1.content.text == cell_2.content.text
+
+
+def _compare_texts(text_1: StructuredText, text_2: StructuredText):
+    assert text_1.title.text == text_2.title.text
+    assert len(text_1.outer_alineas) == len(text_2.outer_alineas)
+    for al_1, al_2 in zip(text_1.outer_alineas, text_2.outer_alineas):
+        assert al_1.text == al_2.text
+        if al_1.table or al_2.table:
+            assert al_1.table
+            assert al_2.table
+            _compare_tables(al_1.table, al_2.table)
+    assert len(text_1.sections) == len(text_2.sections)
+    for section_1, section_2 in zip(text_1.sections, text_2.sections):
+        _compare_texts(section_1, section_2)
+
+
+def test_text_to_odt():
+    before = load_and_transform('test_data/simple_document.odt', False)
+    filename = random_filename() + '.odt'
+    structured_text_to_odt_file(before, filename)
+    after = load_and_transform(filename, False)
+    os.remove(filename)
+    _compare_texts(before, after)
+
+
+def _text(txt: str) -> EnrichedString:
+    return EnrichedString(txt)
+
+
+def _cell(txt: str, cs: int = 1, rs: int = 1) -> Cell:
+    return Cell(_text(txt), cs, rs)
+
+
+def _get_simple_text() -> StructuredText:
+    row1 = Row([_cell('AA'), _cell('BB'), _cell('CC')], True)
+    row2 = Row([_cell('DD', rs=2), _cell('EE', cs=2)], False)
+    row3 = Row([_cell('FF'), _cell('GG')], False)
+    table = Table([row1, row2, row3])
+    alineas = [_text('Alinea 1'), _text('Alinea 2'), EnrichedString('', table=table)]
+    sections = [StructuredText(_text('Title 2'), [], [], None, None, None, None)]
+    text = StructuredText(_text('Title'), alineas, sections, None, None, None, None)
+    return text
+
+
+def test_structured_text_to_text_elements():
+    text_elements = structured_text_to_text_elements(_get_simple_text())
+    assert len(text_elements) == 5
+    assert isinstance(text_elements[0], Title)
+    assert isinstance(text_elements[1], str)
+    assert isinstance(text_elements[2], str)
+    assert isinstance(text_elements[3], Table)
+    assert isinstance(text_elements[4], Title)
+
+
+def test_build_open_document():
+    text_elements = structured_text_to_text_elements(_get_simple_text())
+    odt = _build_open_document(text_elements)
+    soup = BeautifulSoup(odt, 'lxml-xml')
+    assert len(list(soup.find_all('table'))) == 1
+    assert len(list(soup.find_all('h'))) == 2
+
+
+def test_structured_text_to_odt_xml():
+    soup = BeautifulSoup(structured_text_to_odt_xml(_get_simple_text()), 'lxml-xml')
+    assert len(list(soup.find_all('table'))) == 1
+    assert len(list(soup.find_all('h'))) == 1
