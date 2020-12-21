@@ -101,8 +101,8 @@ def _article_nb_null_num(dict_) -> int:
     return 1 if dict_['num'] is None else 0
 
 
-def _strip(str_: EnrichedString) -> EnrichedString:
-    return replace(str_, text=str_.text.strip())
+def _clean_title(str_: EnrichedString) -> EnrichedString:
+    return replace(str_, text=str_.text.strip().replace('\r\n', ' ').replace('\n', ' '))
 
 
 def _text_nb_null_num_in_arrete(dict_) -> int:
@@ -265,7 +265,7 @@ def _build_structured_text(
         outer_alineas, grouped_alineas = split_alineas_in_sections(alineas, selected_alineas_for_section)
         _, grouped_pattern_names = split_alineas_in_sections(pattern_names, selected_alineas_for_section)
     return StructuredText(
-        _strip(_extract_links(title)),
+        _clean_title(_extract_links(title)),
         remove_empty_enriched_str([_extract_links(al) for al in outer_alineas]),
         [
             _build_structured_text(alinea_group[0], alinea_group[1:], pattern_name_group[1:])
@@ -312,7 +312,7 @@ def _put_tables_back(text: StructuredText, tables: List[TableReference]) -> Stru
     clean_title = _add_table_if_any(text.title, tables)
 
     return StructuredText(
-        _strip(clean_title),
+        _clean_title(clean_title),
         [_add_table_if_any(alinea, tables) for alinea in text.outer_alineas],
         [_put_tables_back(section, tables) for section in text.sections],
         None,
@@ -338,7 +338,7 @@ def _put_links_back(text: StructuredText, links: List[LinkReference]) -> Structu
     clean_title = _add_links_if_any(text.title, links)
 
     return StructuredText(
-        _strip(clean_title),
+        _clean_title(clean_title),
         [_add_links_if_any(alinea, links) for alinea in text.outer_alineas],
         [_put_links_back(section, links) for section in text.sections],
         None,
@@ -502,14 +502,14 @@ def _extract_structured_text_from_legifrance_article(
     if structured_text.title.text:
         raise ValueError(f'Should not happen. Article should not have titles. Article id : {article.id}')
     title, outer_alineas = _generate_article_title(article, structured_text.outer_alineas)
-    return StructuredText(_strip(title), outer_alineas, structured_text.sections, article, None)
+    return StructuredText(_clean_title(title), outer_alineas, structured_text.sections, article, None)
 
 
 def _extract_structured_text_from_legifrance_section(
     section: LegifranceSection, ascendant_titles: List[str]
 ) -> StructuredText:
     return StructuredText(
-        _strip(_extract_links(section.title)),
+        _clean_title(_extract_links(section.title)),
         [],
         _extract_sections(section.articles, section.sections, ascendant_titles),
         None,
