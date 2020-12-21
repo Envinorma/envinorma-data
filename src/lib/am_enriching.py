@@ -3,10 +3,13 @@ from copy import copy
 from dataclasses import replace
 from typing import Dict, List, Optional, Set, Tuple
 
+from bs4 import BeautifulSoup
+
 from lib.data import (
     Annotations,
     Applicability,
     ArreteMinisteriel,
+    Cell,
     EnrichedString,
     Hyperlink,
     Link,
@@ -14,6 +17,7 @@ from lib.data import (
     StructuredText,
     Summary,
     SummaryElement,
+    Table,
 )
 from lib.title_detection import NUMBERING_PATTERNS, ROMAN_PATTERN, NumberingPattern, detect_longest_matched_string
 from lib.topics.patterns import TopicName, tokenize
@@ -388,3 +392,38 @@ def add_table_inspection_sheet_data(am: ArreteMinisteriel) -> ArreteMinisteriel:
     am = copy(am)
     am.sections = [add_table_inspection_sheet_data_in_section(subsection) for subsection in am.sections]
     return am
+
+
+def _remove_html(str_: str) -> str:
+    return '\n'.join(list(BeautifulSoup(f'<div>{str_}</div>', 'html.parser').stripped_strings))
+
+
+def _remove_html_cell(cell: Cell) -> Cell:
+    cell = copy(cell)
+    cell.content.text = _remove_html(cell.content.text)
+    return cell
+
+
+def _remove_html_row(row: Row) -> Row:
+    row = copy(row)
+    row.cells = [_remove_html_cell(cell) for cell in row.cells]
+    return row
+
+
+def _remove_html_table(table: Table) -> Table:
+    table = copy(table)
+    table.rows = [_remove_html_row(row) for row in table.rows]
+    return table
+
+
+def _remove_html_string(text: EnrichedString) -> EnrichedString:
+    if not text.table:
+        return text
+    return replace(text, table=_remove_html_table(text.table))
+
+
+def _remove_table_html(text: StructuredText) -> StructuredText:
+    text = copy(text)
+    text.outer_alineas = [_remove_html_string(st) for st in text.outer_alineas]
+    text.sections = [_remove_table_html(sec) for sec in text.sections]
+    return text

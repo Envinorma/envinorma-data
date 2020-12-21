@@ -20,18 +20,19 @@ from lib.am_enriching import (
     add_inspection_sheet_in_table_rows,
     add_links_in_enriched_string,
     add_links_to_am,
-    extract_titles_and_reference_pairs,
-    remove_prescriptive_power,
     add_topics,
     add_references,
+    extract_titles_and_reference_pairs,
+    remove_prescriptive_power,
+    remove_sections,
     _extract_special_prefix,
-    _is_probably_section_number,
-    _is_prefix,
-    _merge_prefix_list,
     _extract_summary_elements,
+    _is_prefix,
+    _is_probably_section_number,
+    _merge_prefix_list,
+    _remove_html,
     _remove_last_word,
     _shorten_summary_text,
-    remove_sections,
 )
 
 
@@ -387,3 +388,11 @@ def test_add_inspection_sheet_in_table_rows():
     string = EnrichedString('', table=Table([Row(content_cells, False)]))
     transformed_string = add_inspection_sheet_in_table_rows(string)
     assert transformed_string.table.rows[0].text_in_inspection_sheet == 'content\n 1\ncontent\n 2\ncontent 3'
+
+
+def test_remove_html():
+    assert _remove_html('Hello<br/>How are you ?') == 'Hello\nHow are you ?'
+    assert _remove_html('Hello    How are you ?') == 'Hello    How are you ?'
+    assert _remove_html('') == ''
+    assert _remove_html('<div></div>') == ''
+    assert _remove_html('<a>URL</a>\n<p>P</p>') == 'URL\nP'
