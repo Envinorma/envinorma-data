@@ -11,7 +11,13 @@ from bs4 import BeautifulSoup
 from zipfile import ZipFile
 
 from lib.data import Cell, EnrichedString, Row, StructuredText, Table
-from lib.structure_extraction import Linebreak, TextElement, Title, build_structured_text
+from lib.structure_extraction import (
+    Linebreak,
+    TextElement,
+    Title,
+    build_structured_text,
+    structured_text_to_text_elements,
+)
 
 
 def _extract_title(tag: bs4.Tag) -> Title:
@@ -280,21 +286,6 @@ def _extract_lines(filename: str) -> List[str]:
     html = ZipFile(filename).read('content.xml').decode()
     soup = BeautifulSoup(html)
     return _extract_lines_from_soup(soup)
-
-
-def _string_to_element(str_: EnrichedString) -> TextElement:
-    if str_.table:
-        return str_.table
-    return str_.text
-
-
-def structured_text_to_text_elements(text: StructuredText, level: int = 1) -> List[TextElement]:
-    elements: List[TextElement] = []
-    elements.append(Title(text.title.text, level))
-    elements.extend([_string_to_element(st) for st in text.outer_alineas])
-    for section in text.sections:
-        elements.extend(structured_text_to_text_elements(section, level + 1))
-    return elements
 
 
 _XML_EMPTY_ODT = (

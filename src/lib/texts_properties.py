@@ -149,7 +149,7 @@ def count_tables(am: ArreteMinisteriel) -> int:
 
 
 def _extract_text_articles(text: StructuredText) -> List[StructuredText]:
-    base_articles = [text] if text.legifrance_article else []
+    base_articles = [text] if text.lf_id else []
     return base_articles + [art for section in text.sections for art in _extract_text_articles(section)]
 
 
@@ -317,7 +317,7 @@ _AMOrSection = Union[ArreteMinisteriel, StructuredText]
 
 def get_first_lines_of_articles(text: _AMOrSection) -> List[Tuple[str, str]]:
     res = []
-    if isinstance(text, StructuredText) and text.legifrance_article and text.outer_alineas:
+    if isinstance(text, StructuredText) and text.lf_id and text.outer_alineas:
         res.append((text.title.text, text.outer_alineas[0].text))
     for section in text.sections:
         res.extend(get_first_lines_of_articles(section))
@@ -326,7 +326,7 @@ def get_first_lines_of_articles(text: _AMOrSection) -> List[Tuple[str, str]]:
 
 def get_first_upper_lines_of_articles(text: _AMOrSection) -> List[Tuple[str, List[str]]]:
     res = []
-    if isinstance(text, StructuredText) and text.legifrance_article and text.outer_alineas:
+    if isinstance(text, StructuredText) and text.lf_id and text.outer_alineas:
         first_lines = []
         for i in [0, 1]:
             if len(text.outer_alineas) > i and is_mainly_upper(text.outer_alineas[i].text):

@@ -27,7 +27,6 @@ def _build_simple_structured_text(title: str, alineas: List[str]) -> StructuredT
         title=EnrichedString(title),
         outer_alineas=[EnrichedString(x) for x in alineas],
         sections=[],
-        legifrance_article=None,
         applicability=None,
     )
 

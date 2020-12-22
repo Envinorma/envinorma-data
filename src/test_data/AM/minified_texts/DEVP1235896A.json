@@ -5,13 +5,7 @@
         {
             "annotations": null,
             "applicability": null,
-            "legifrance_article": {
-                "content": "",
-                "etat": "VIGUEUR",
-                "id": "LEGIARTI000037532716",
-                "intOrdre": 524287,
-                "num": "1"
-            },
+            "lf_id": "LEGIARTI000037532716",
             "outer_alineas": [],
             "reference_str": null,
             "sections": [],
@@ -24,13 +18,7 @@
         {
             "annotations": null,
             "applicability": null,
-            "legifrance_article": {
-                "content": "",
-                "etat": "VIGUEUR",
-                "id": "LEGIARTI000037532724",
-                "intOrdre": 1048574,
-                "num": "2"
-            },
+            "lf_id": "LEGIARTI000037532724",
             "outer_alineas": [],
             "reference_str": null,
             "sections": [],
@@ -43,20 +31,14 @@
         {
             "annotations": null,
             "applicability": null,
-            "legifrance_article": null,
+            "lf_id": null,
             "outer_alineas": [],
             "reference_str": null,
             "sections": [
                 {
                     "annotations": null,
                     "applicability": null,
-                    "legifrance_article": {
-                        "content": "",
-                        "etat": "VIGUEUR",
-                        "id": "LEGIARTI000026700199",
-                        "intOrdre": 524287,
-                        "num": "3"
-                    },
+                    "lf_id": "LEGIARTI000026700199",
                     "outer_alineas": [],
                     "reference_str": null,
                     "sections": [],
@@ -69,13 +51,7 @@
                 {
                     "annotations": null,
                     "applicability": null,
-                    "legifrance_article": {
-                        "content": "",
-                        "etat": "VIGUEUR",
-                        "id": "LEGIARTI000037532726",
-                        "intOrdre": 1048574,
-                        "num": "4"
-                    },
+                    "lf_id": "LEGIARTI000037532726",
                     "outer_alineas": [],
                     "reference_str": null,
                     "sections": [],
@@ -88,13 +64,7 @@
                 {
                     "annotations": null,
                     "applicability": null,
-                    "legifrance_article": {
-                        "content": "",
-                        "etat": "VIGUEUR",
-                        "id": "LEGIARTI000037532728",
-                        "intOrdre": 1572861,
-                        "num": "5"
-                    },
+                    "lf_id": "LEGIARTI000037532728",
                     "outer_alineas": [],
                     "reference_str": null,
                     "sections": [],
@@ -107,13 +77,7 @@
                 {
                     "annotations": null,
                     "applicability": null,
-                    "legifrance_article": {
-                        "content": "",
-                        "etat": "VIGUEUR",
-                        "id": "LEGIARTI000037532732",
-                        "intOrdre": 2097148,
-                        "num": "6"
-                    },
+                    "lf_id": "LEGIARTI000037532732",
                     "outer_alineas": [],
                     "reference_str": null,
                     "sections": [],
@@ -126,13 +90,7 @@
                 {
                     "annotations": null,
                     "applicability": null,
-                    "legifrance_article": {
-                        "content": "",
-                        "etat": "VIGUEUR",
-                        "id": "LEGIARTI000037532734",
-                        "intOrdre": 2621435,
-                        "num": "7"
-                    },
+                    "lf_id": "LEGIARTI000037532734",
                     "outer_alineas": [],
                     "reference_str": null,
                     "sections": [],
@@ -152,27 +110,21 @@
         {
             "annotations": null,
             "applicability": null,
-            "legifrance_article": null,
+            "lf_id": null,
             "outer_alineas": [],
             "reference_str": null,
             "sections": [
                 {
                     "annotations": null,
                     "applicability": null,
-                    "legifrance_article": null,
+                    "lf_id": null,
                     "outer_alineas": [],
                     "reference_str": null,
                     "sections": [
                         {
                             "annotations": null,
                             "applicability": null,
-                            "legifrance_article": {
-                                "content": "",
-                                "etat": "VIGUEUR",
-                                "id": "LEGIARTI000026700236",
-                                "intOrdre": 524287,
-                                "num": "8"
-                            },
+                            "lf_id": "LEGIARTI000026700236",
                             "outer_alineas": [],
                             "reference_str": null,
                             "sections": [],
@@ -185,13 +137,7 @@
                         {
                             "annotations": null,
                             "applicability": null,
-                            "legifrance_article": {
-                                "content": "",
-                                "etat": "VIGUEUR",
-                                "id": "LEGIARTI000026700237",
-                                "intOrdre": 1048574,
-                                "num": "9"
-                            },
+                            "lf_id": "LEGIARTI000026700237",
                             "outer_alineas": [],
                             "reference_str": null,
                             "sections": [],
@@ -204,13 +150,7 @@
                         {
                             "annotations": null,
                             "applicability": null,
-                            "legifrance_article": {
-                                "content": "",
-                                "etat": "VIGUEUR",
-                                "id": "LEGIARTI000037532736",
-                                "intOrdre": 1572861,
-                                "num": "10"
-                            },
+                            "lf_id": "LEGIARTI000037532736",
                             "outer_alineas": [],
                             "reference_str": null,
                             "sections": [],
@@ -223,13 +163,7 @@
                         {
                             "annotations": null,
                             "applicability": null,
-                            "legifrance_article": {
-                                "content": "",
-                                "etat": "VIGUEUR",
-                                "id": "LEGIARTI000037532740",
-                                "intOrdre": 2097148,
-                                "num": "11"
-                            },
+                            "lf_id": "LEGIARTI000037532740",
                             "outer_alineas": [],
                             "reference_str": null,
                             "sections": [],
@@ -242,13 +176,7 @@
                         {
                             "annotations": null,
                             "applicability": null,
-                            "legifrance_article": {
-                                "content": "",
-                                "etat": "VIGUEUR",
-                                "id": "LEGIARTI000037532742",
-                                "intOrdre": 2621435,
-                                "num": "12"
-                            },
+                            "lf_id": "LEGIARTI000037532742",
                             "outer_alineas": [],
                             "reference_str": null,
                             "sections": [],
@@ -268,20 +196,14 @@
                 {
                     "annotations": null,
                     "applicability": null,
-                    "legifrance_article": null,
+                    "lf_id": null,
                     "outer_alineas": [],
                     "reference_str": null,
                     "sections": [
                         {
                             "annotations": null,
                             "applicability": null,
-                            "legifrance_article": {
-                                "content": "",
-                                "etat": "VIGUEUR",
-                                "id": "LEGIARTI000037532744",
-                                "intOrdre": 524287,
-                                "num": "13"
-                            },
+                            "lf_id": "LEGIARTI000037532744",
                             "outer_alineas": [],
                             "reference_str": null,
                             "sections": [],
@@ -301,20 +223,14 @@
                 {
                     "annotations": null,
                     "applicability": null,
-                    "legifrance_article": null,
+                    "lf_id": null,
                     "outer_alineas": [],
                     "reference_str": null,
                     "sections": [
                         {
                             "annotations": null,
                             "applicability": null,
-                            "legifrance_article": {
-                                "content": "",
-                                "etat": "VIGUEUR",
-                                "id": "LEGIARTI000026700244",
-                                "intOrdre": 524287,
-                                "num": "14"
-                            },
+                            "lf_id": "LEGIARTI000026700244",
                             "outer_alineas": [],
                             "reference_str": null,
                             "sections": [],
@@ -334,20 +250,14 @@
                 {
                     "annotations": null,
                     "applicability": null,
-                    "legifrance_article": null,
+                    "lf_id": null,
                     "outer_alineas": [],
                     "reference_str": null,
                     "sections": [
                         {
                             "annotations": null,
                             "applicability": null,
-                            "legifrance_article": {
-                                "content": "",
-                                "etat": "VIGUEUR",
-                                "id": "LEGIARTI000026700245",
-                                "intOrdre": 524287,
-                                "num": "15"
-                            },
+                            "lf_id": "LEGIARTI000026700245",
                             "outer_alineas": [],
                             "reference_str": null,
                             "sections": [],
@@ -360,13 +270,7 @@
                         {
                             "annotations": null,
                             "applicability": null,
-                            "legifrance_article": {
-                                "content": "",
-                                "etat": "VIGUEUR",
-                                "id": "LEGIARTI000037532746",
-                                "intOrdre": 1048574,
-                                "num": "16"
-                            },
+                            "lf_id": "LEGIARTI000037532746",
                             "outer_alineas": [],
                             "reference_str": null,
                             "sections": [],
@@ -379,13 +283,7 @@
                         {
                             "annotations": null,
                             "applicability": null,
-                            "legifrance_article": {
-                                "content": "",
-                                "etat": "VIGUEUR",
-                                "id": "LEGIARTI000026700247",
-                                "intOrdre": 1572861,
-                                "num": "17"
-                            },
+                            "lf_id": "LEGIARTI000026700247",
                             "outer_alineas": [],
                             "reference_str": null,
                             "sections": [],
@@ -405,20 +303,14 @@
                 {
                     "annotations": null,
                     "applicability": null,
-                    "legifrance_article": null,
+                    "lf_id": null,
                     "outer_alineas": [],
                     "reference_str": null,
                     "sections": [
                         {
                             "annotations": null,
                             "applicability": null,
-                            "legifrance_article": {
-                                "content": "",
-                                "etat": "VIGUEUR",
-                                "id": "LEGIARTI000026700248",
-                                "intOrdre": 524287,
-                                "num": "18"
-                            },
+                            "lf_id": "LEGIARTI000026700248",
                             "outer_alineas": [],
                             "reference_str": null,
                             "sections": [],
@@ -431,13 +323,7 @@
                         {
                             "annotations": null,
                             "applicability": null,
-                            "legifrance_article": {
-                                "content": "",
-                                "etat": "VIGUEUR",
-                                "id": "LEGIARTI000037532748",
-                                "intOrdre": 1048574,
-                                "num": "19"
-                            },
+                            "lf_id": "LEGIARTI000037532748",
                             "outer_alineas": [],
                             "reference_str": null,
                             "sections": [],
@@ -450,13 +336,7 @@
                         {
                             "annotations": null,
                             "applicability": null,
-                            "legifrance_article": {
-                                "content": "",
-                                "etat": "VIGUEUR",
-                                "id": "LEGIARTI000037532750",
-                                "intOrdre": 1572861,
-                                "num": "20"
-                            },
+                            "lf_id": "LEGIARTI000037532750",
                             "outer_alineas": [],
                             "reference_str": null,
                             "sections": [],
@@ -476,27 +356,21 @@
                 {
                     "annotations": null,
                     "applicability": null,
-                    "legifrance_article": null,
+                    "lf_id": null,
                     "outer_alineas": [],
                     "reference_str": null,
                     "sections": [
                         {
                             "annotations": null,
                             "applicability": null,
-                            "legifrance_article": {
-                                "content": "",
-                                "etat": "VIGUEUR",
-                                "id": "LEGIARTI000026700251",
-                                "intOrdre": 524287,
-                                "num": "21"
-                            },
+                            "lf_id": "LEGIARTI000026700251",
                             "outer_alineas": [],
                             "reference_str": null,
                             "sections": [
                                 {
                                     "annotations": null,
                                     "applicability": null,
-                                    "legifrance_article": null,
+                                    "lf_id": null,
                                     "outer_alineas": [],
                                     "reference_str": null,
                                     "sections": [],
@@ -509,7 +383,7 @@
                                 {
                                     "annotations": null,
                                     "applicability": null,
-                                    "legifrance_article": null,
+                                    "lf_id": null,
                                     "outer_alineas": [],
                                     "reference_str": null,
                                     "sections": [],
@@ -522,7 +396,7 @@
                                 {
                                     "annotations": null,
                                     "applicability": null,
-                                    "legifrance_article": null,
+                                    "lf_id": null,
                                     "outer_alineas": [],
                                     "reference_str": null,
                                     "sections": [],
@@ -535,7 +409,7 @@
                                 {
                                     "annotations": null,
                                     "applicability": null,
-                                    "legifrance_article": null,
+                                    "lf_id": null,
                                     "outer_alineas": [],
                                     "reference_str": null,
                                     "sections": [],
@@ -569,27 +443,21 @@
         {
             "annotations": null,
             "applicability": null,
-            "legifrance_article": null,
+            "lf_id": null,
             "outer_alineas": [],
             "reference_str": null,
             "sections": [
                 {
                     "annotations": null,
                     "applicability": null,
-                    "legifrance_article": null,
+                    "lf_id": null,
                     "outer_alineas": [],
                     "reference_str": null,
                     "sections": [
                         {
                             "annotations": null,
                             "applicability": null,
-                            "legifrance_article": {
-                                "content": "",
-                                "etat": "VIGUEUR",
-                                "id": "LEGIARTI000026700253",
-                                "intOrdre": 524287,
-                                "num": "22"
-                            },
+                            "lf_id": "LEGIARTI000026700253",
                             "outer_alineas": [],
                             "reference_str": null,
                             "sections": [],
@@ -609,20 +477,14 @@
                 {
                     "annotations": null,
                     "applicability": null,
-                    "legifrance_article": null,
+                    "lf_id": null,
                     "outer_alineas": [],
                     "reference_str": null,
                     "sections": [
                         {
                             "annotations": null,
                             "applicability": null,
-                            "legifrance_article": {
-                                "content": "",
-                                "etat": "VIGUEUR",
-                                "id": "LEGIARTI000037532752",
-                                "intOrdre": 524287,
-                                "num": "23"
-                            },
+                            "lf_id": "LEGIARTI000037532752",
                             "outer_alineas": [],
                             "reference_str": null,
                             "sections": [],
@@ -635,13 +497,7 @@
                         {
                             "annotations": null,
                             "applicability": null,
-                            "legifrance_article": {
-                                "content": "",
-                                "etat": "VIGUEUR",
-                                "id": "LEGIARTI000026700258",
-                                "intOrdre": 1048574,
-                                "num": "24"
-                            },
+                            "lf_id": "LEGIARTI000026700258",
                             "outer_alineas": [],
                             "reference_str": null,
                             "sections": [],
@@ -654,13 +510,7 @@
                         {
                             "annotations": null,
                             "applicability": null,
-                            "legifrance_article": {
-                                "content": "",
-                                "etat": "VIGUEUR",
-                                "id": "LEGIARTI000026700259",
-                                "intOrdre": 1572861,
-                                "num": "25"
-                            },
+                            "lf_id": "LEGIARTI000026700259",
                             "outer_alineas": [],
                             "reference_str": null,
                             "sections": [],
@@ -680,20 +530,14 @@
                 {
                     "annotations": null,
                     "applicability": null,
-                    "legifrance_article": null,
+                    "lf_id": null,
                     "outer_alineas": [],
                     "reference_str": null,
                     "sections": [
                         {
                             "annotations": null,
                             "applicability": null,
-                            "legifrance_article": {
-                                "content": "",
-                                "etat": "VIGUEUR",
-                                "id": "LEGIARTI000026700260",
-                                "intOrdre": 524287,
-                                "num": "26"
-                            },
+                            "lf_id": "LEGIARTI000026700260",
                             "outer_alineas": [],
                             "reference_str": null,
                             "sections": [],
@@ -706,13 +550,7 @@
                         {
                             "annotations": null,
                             "applicability": null,
-                            "legifrance_article": {
-                                "content": "",
-                                "etat": "VIGUEUR",
-                                "id": "LEGIARTI000026700263",
-                                "intOrdre": 1048574,
-                                "num": "27"
-                            },
+                            "lf_id": "LEGIARTI000026700263",
                             "outer_alineas": [],
                             "reference_str": null,
                             "sections": [],
@@ -725,13 +563,7 @@
                         {
                             "annotations": null,
                             "applicability": null,
-                            "legifrance_article": {
-                                "content": "",
-                                "etat": "VIGUEUR",
-                                "id": "LEGIARTI000026700264",
-                                "intOrdre": 1572861,
-                                "num": "28"
-                            },
+                            "lf_id": "LEGIARTI000026700264",
                             "outer_alineas": [],
                             "reference_str": null,
                             "sections": [],
@@ -744,13 +576,7 @@
                         {
                             "annotations": null,
                             "applicability": null,
-                            "legifrance_article": {
-                                "content": "",
-                                "etat": "VIGUEUR",
-                                "id": "LEGIARTI000026700265",
-                                "intOrdre": 2097148,
-                                "num": "29"
-                            },
+                            "lf_id": "LEGIARTI000026700265",
                             "outer_alineas": [],
                             "reference_str": null,
                             "sections": [],
@@ -763,13 +589,7 @@
                         {
                             "annotations": null,
                             "applicability": null,
-                            "legifrance_article": {
-                                "content": "",
-                                "etat": "VIGUEUR",
-                                "id": "LEGIARTI000026700268",
-                                "intOrdre": 2621435,
-                                "num": "30"
-                            },
+                            "lf_id": "LEGIARTI000026700268",
                             "outer_alineas": [],
                             "reference_str": null,
                             "sections": [],
@@ -789,20 +609,14 @@
                 {
                     "annotations": null,
                     "applicability": null,
-                    "legifrance_article": null,
+                    "lf_id": null,
                     "outer_alineas": [],
                     "reference_str": null,
                     "sections": [
                         {
                             "annotations": null,
                             "applicability": null,
-                            "legifrance_article": {
-                                "content": "",
-                                "etat": "VIGUEUR",
-                                "id": "LEGIARTI000026700269",
-                                "intOrdre": 524287,
-                                "num": "31"
-                            },
+                            "lf_id": "LEGIARTI000026700269",
                             "outer_alineas": [],
                             "reference_str": null,
                             "sections": [],
@@ -815,13 +629,7 @@
                         {
                             "annotations": null,
                             "applicability": null,
-                            "legifrance_article": {
-                                "content": "",
-                                "etat": "VIGUEUR",
-                                "id": "LEGIARTI000026700274",
-                                "intOrdre": 1048574,
-                                "num": "32"
-                            },
+                            "lf_id": "LEGIARTI000026700274",
                             "outer_alineas": [],
                             "reference_str": null,
                             "sections": [],
@@ -834,13 +642,7 @@
                         {
                             "annotations": null,
                             "applicability": null,
-                            "legifrance_article": {
-                                "content": "",
-                                "etat": "VIGUEUR",
-                                "id": "LEGIARTI000026700275",
-                                "intOrdre": 1572861,
-                                "num": "33"
-                            },
+                            "lf_id": "LEGIARTI000026700275",
                             "outer_alineas": [],
                             "reference_str": null,
                             "sections": [],
@@ -853,13 +655,7 @@
                         {
                             "annotations": null,
                             "applicability": null,
-                            "legifrance_article": {
-                                "content": "",
-                                "etat": "VIGUEUR",
-                                "id": "LEGIARTI000026700257",
-                                "intOrdre": 2097148,
-                                "num": "34"
-                            },
+                            "lf_id": "LEGIARTI000026700257",
                             "outer_alineas": [],
                             "reference_str": null,
                             "sections": [],
@@ -879,20 +675,14 @@
                 {
                     "annotations": null,
                     "applicability": null,
-                    "legifrance_article": null,
+                    "lf_id": null,
                     "outer_alineas": [],
                     "reference_str": null,
                     "sections": [
                         {
                             "annotations": null,
                             "applicability": null,
-                            "legifrance_article": {
-                                "content": "",
-                                "etat": "VIGUEUR",
-                                "id": "LEGIARTI000026700261",
-                                "intOrdre": 524287,
-                                "num": "35"
-                            },
+                            "lf_id": "LEGIARTI000026700261",
                             "outer_alineas": [],
                             "reference_str": null,
                             "sections": [],
@@ -905,13 +695,7 @@
                         {
                             "annotations": null,
                             "applicability": null,
-                            "legifrance_article": {
-                                "content": "",
-                                "etat": "VIGUEUR",
-                                "id": "LEGIARTI000026700219",
-                                "intOrdre": 1048574,
-                                "num": "36"
-                            },
+                            "lf_id": "LEGIARTI000026700219",
                             "outer_alineas": [],
                             "reference_str": null,
                             "sections": [],
@@ -938,27 +722,21 @@
         {
             "annotations": null,
             "applicability": null,
-            "legifrance_article": null,
+            "lf_id": null,
             "outer_alineas": [],
             "reference_str": null,
             "sections": [
                 {
                     "annotations": null,
                     "applicability": null,
-                    "legifrance_article": null,
+                    "lf_id": null,
                     "outer_alineas": [],
                     "reference_str": null,
                     "sections": [
                         {
                             "annotations": null,
                             "applicability": null,
-                            "legifrance_article": {
-                                "content": "",
-                                "etat": "VIGUEUR",
-                                "id": "LEGIARTI000037532756",
-                                "intOrdre": 524287,
-                                "num": "37"
-                            },
+                            "lf_id": "LEGIARTI000037532756",
                             "outer_alineas": [],
                             "reference_str": null,
                             "sections": [],
@@ -978,20 +756,14 @@
                 {
                     "annotations": null,
                     "applicability": null,
-                    "legifrance_article": null,
+                    "lf_id": null,
                     "outer_alineas": [],
                     "reference_str": null,
                     "sections": [
                         {
                             "annotations": null,
                             "applicability": null,
-                            "legifrance_article": {
-                                "content": "",
-                                "etat": "VIGUEUR",
-                                "id": "LEGIARTI000037532758",
-                                "intOrdre": 524287,
-                                "num": "38"
-                            },
+                            "lf_id": "LEGIARTI000037532758",
                             "outer_alineas": [],
                             "reference_str": null,
                             "sections": [],
@@ -1004,13 +776,7 @@
                         {
                             "annotations": null,
                             "applicability": null,
-                            "legifrance_article": {
-                                "content": "",
-                                "etat": "VIGUEUR",
-                                "id": "LEGIARTI000037532760",
-                                "intOrdre": 1048574,
-                                "num": "39"
-                            },
+                            "lf_id": "LEGIARTI000037532760",
                             "outer_alineas": [],
                             "reference_str": null,
                             "sections": [],
@@ -1030,20 +796,14 @@
                 {
                     "annotations": null,
                     "applicability": null,
-                    "legifrance_article": null,
+                    "lf_id": null,
                     "outer_alineas": [],
                     "reference_str": null,
                     "sections": [
                         {
                             "annotations": null,
                             "applicability": null,
-                            "legifrance_article": {
-                                "content": "",
-                                "etat": "VIGUEUR",
-                                "id": "LEGIARTI000037532762",
-                                "intOrdre": 524287,
-                                "num": "40"
-                            },
+                            "lf_id": "LEGIARTI000037532762",
                             "outer_alineas": [],
                             "reference_str": null,
                             "sections": [],
@@ -1056,20 +816,14 @@
                         {
                             "annotations": null,
                             "applicability": null,
-                            "legifrance_article": {
-                                "content": "",
-                                "etat": "VIGUEUR",
-                                "id": "LEGIARTI000037532764",
-                                "intOrdre": 1048574,
-                                "num": "41"
-                            },
+                            "lf_id": "LEGIARTI000037532764",
                             "outer_alineas": [],
                             "reference_str": null,
                             "sections": [
                                 {
                                     "annotations": null,
                                     "applicability": null,
-                                    "legifrance_article": null,
+                                    "lf_id": null,
                                     "outer_alineas": [],
                                     "reference_str": null,
                                     "sections": [],
@@ -1082,7 +836,7 @@
                                 {
                                     "annotations": null,
                                     "applicability": null,
-                                    "legifrance_article": null,
+                                    "lf_id": null,
                                     "outer_alineas": [],
                                     "reference_str": null,
                                     "sections": [],
@@ -1102,13 +856,7 @@
                         {
                             "annotations": null,
                             "applicability": null,
-                            "legifrance_article": {
-                                "content": "",
-                                "etat": "VIGUEUR",
-                                "id": "LEGIARTI000037532766",
-                                "intOrdre": 1572861,
-                                "num": "42"
-                            },
+                            "lf_id": "LEGIARTI000037532766",
                             "outer_alineas": [],
                             "reference_str": null,
                             "sections": [],
@@ -1135,20 +883,14 @@
         {
             "annotations": null,
             "applicability": null,
-            "legifrance_article": null,
+            "lf_id": null,
             "outer_alineas": [],
             "reference_str": null,
             "sections": [
                 {
                     "annotations": null,
                     "applicability": null,
-                    "legifrance_article": {
-                        "content": "",
-                        "etat": "VIGUEUR",
-                        "id": "LEGIARTI000026700205",
-                        "intOrdre": 524287,
-                        "num": "43"
-                    },
+                    "lf_id": "LEGIARTI000026700205",
                     "outer_alineas": [],
                     "reference_str": null,
                     "sections": [],
@@ -1168,20 +910,14 @@
         {
             "annotations": null,
             "applicability": null,
-            "legifrance_article": null,
+            "lf_id": null,
             "outer_alineas": [],
             "reference_str": null,
             "sections": [
                 {
                     "annotations": null,
                     "applicability": null,
-                    "legifrance_article": {
-                        "content": "",
-                        "etat": "VIGUEUR",
-                        "id": "LEGIARTI000026700206",
-                        "intOrdre": 524287,
-                        "num": "44"
-                    },
+                    "lf_id": "LEGIARTI000026700206",
                     "outer_alineas": [],
                     "reference_str": null,
                     "sections": [],
@@ -1194,13 +930,7 @@
                 {
                     "annotations": null,
                     "applicability": null,
-                    "legifrance_article": {
-                        "content": "",
-                        "etat": "VIGUEUR",
-                        "id": "LEGIARTI000026700207",
-                        "intOrdre": 1048574,
-                        "num": "45"
-                    },
+                    "lf_id": "LEGIARTI000026700207",
                     "outer_alineas": [],
                     "reference_str": null,
                     "sections": [],
@@ -1213,13 +943,7 @@
                 {
                     "annotations": null,
                     "applicability": null,
-                    "legifrance_article": {
-                        "content": "",
-                        "etat": "VIGUEUR",
-                        "id": "LEGIARTI000026700209",
-                        "intOrdre": 2097148,
-                        "num": "46"
-                    },
+                    "lf_id": "LEGIARTI000026700209",
                     "outer_alineas": [],
                     "reference_str": null,
                     "sections": [],
@@ -1232,13 +956,7 @@
                 {
                     "annotations": null,
                     "applicability": null,
-                    "legifrance_article": {
-                        "content": "",
-                        "etat": "VIGUEUR",
-                        "id": "LEGIARTI000026700210",
-                        "intOrdre": 2621435,
-                        "num": "47"
-                    },
+                    "lf_id": "LEGIARTI000026700210",
                     "outer_alineas": [],
                     "reference_str": null,
                     "sections": [],
@@ -1251,13 +969,7 @@
                 {
                     "annotations": null,
                     "applicability": null,
-                    "legifrance_article": {
-                        "content": "",
-                        "etat": "VIGUEUR",
-                        "id": "LEGIARTI000026700211",
-                        "intOrdre": 3145722,
-                        "num": "48"
-                    },
+                    "lf_id": "LEGIARTI000026700211",
                     "outer_alineas": [],
                     "reference_str": null,
                     "sections": [],
@@ -1270,13 +982,7 @@
                 {
                     "annotations": null,
                     "applicability": null,
-                    "legifrance_article": {
-                        "content": "",
-                        "etat": "VIGUEUR",
-                        "id": "LEGIARTI000026700213",
-                        "intOrdre": 4194296,
-                        "num": "49"
-                    },
+                    "lf_id": "LEGIARTI000026700213",
                     "outer_alineas": [],
                     "reference_str": null,
                     "sections": [],
@@ -1289,13 +995,7 @@
                 {
                     "annotations": null,
                     "applicability": null,
-                    "legifrance_article": {
-                        "content": "",
-                        "etat": "VIGUEUR",
-                        "id": "LEGIARTI000026700215",
-                        "intOrdre": 5242870,
-                        "num": "50"
-                    },
+                    "lf_id": "LEGIARTI000026700215",
                     "outer_alineas": [],
                     "reference_str": null,
                     "sections": [],
@@ -1308,20 +1008,14 @@
                 {
                     "annotations": null,
                     "applicability": null,
-                    "legifrance_article": {
-                        "content": "",
-                        "etat": "VIGUEUR",
-                        "id": "LEGIARTI000026700220",
-                        "intOrdre": 5767157,
-                        "num": "51"
-                    },
+                    "lf_id": "LEGIARTI000026700220",
                     "outer_alineas": [],
                     "reference_str": null,
                     "sections": [
                         {
                             "annotations": null,
                             "applicability": null,
-                            "legifrance_article": null,
+                            "lf_id": null,
                             "outer_alineas": [],
                             "reference_str": null,
                             "sections": [],
@@ -1334,7 +1028,7 @@
                         {
                             "annotations": null,
                             "applicability": null,
-                            "legifrance_article": null,
+                            "lf_id": null,
                             "outer_alineas": [],
                             "reference_str": null,
                             "sections": [],
@@ -1347,7 +1041,7 @@
                         {
                             "annotations": null,
                             "applicability": null,
-                            "legifrance_article": null,
+                            "lf_id": null,
                             "outer_alineas": [],
                             "reference_str": null,
                             "sections": [],
@@ -1367,20 +1061,14 @@
                 {
                     "annotations": null,
                     "applicability": null,
-                    "legifrance_article": {
-                        "content": "",
-                        "etat": "VIGUEUR",
-                        "id": "LEGIARTI000026700222",
-                        "intOrdre": 6291444,
-                        "num": "52"
-                    },
+                    "lf_id": "LEGIARTI000026700222",
                     "outer_alineas": [],
                     "reference_str": null,
                     "sections": [
                         {
                             "annotations": null,
                             "applicability": null,
-                            "legifrance_article": null,
+                            "lf_id": null,
                             "outer_alineas": [],
                             "reference_str": null,
                             "sections": [],
@@ -1393,7 +1081,7 @@
                         {
                             "annotations": null,
                             "applicability": null,
-                            "legifrance_article": null,
+                            "lf_id": null,
                             "outer_alineas": [],
                             "reference_str": null,
                             "sections": [],
@@ -1406,7 +1094,7 @@
                         {
                             "annotations": null,
                             "applicability": null,
-                            "legifrance_article": null,
+                            "lf_id": null,
                             "outer_alineas": [],
                             "reference_str": null,
                             "sections": [],
@@ -1433,20 +1121,14 @@
         {
             "annotations": null,
             "applicability": null,
-            "legifrance_article": null,
+            "lf_id": null,
             "outer_alineas": [],
             "reference_str": null,
             "sections": [
                 {
                     "annotations": null,
                     "applicability": null,
-                    "legifrance_article": {
-                        "content": "",
-                        "etat": "VIGUEUR",
-                        "id": "LEGIARTI000026700225",
-                        "intOrdre": 524287,
-                        "num": "53"
-                    },
+                    "lf_id": "LEGIARTI000026700225",
                     "outer_alineas": [],
                     "reference_str": null,
                     "sections": [],
@@ -1459,13 +1141,7 @@
                 {
                     "annotations": null,
                     "applicability": null,
-                    "legifrance_article": {
-                        "content": "",
-                        "etat": "VIGUEUR",
-                        "id": "LEGIARTI000026700227",
-                        "intOrdre": 1048574,
-                        "num": "54"
-                    },
+                    "lf_id": "LEGIARTI000026700227",
                     "outer_alineas": [],
                     "reference_str": null,
                     "sections": [],
@@ -1478,13 +1154,7 @@
                 {
                     "annotations": null,
                     "applicability": null,
-                    "legifrance_article": {
-                        "content": "",
-                        "etat": "VIGUEUR",
-                        "id": "LEGIARTI000037532768",
-                        "intOrdre": 1572861,
-                        "num": "55"
-                    },
+                    "lf_id": "LEGIARTI000037532768",
                     "outer_alineas": [],
                     "reference_str": null,
                     "sections": [],
@@ -1504,27 +1174,21 @@
         {
             "annotations": null,
             "applicability": null,
-            "legifrance_article": null,
+            "lf_id": null,
             "outer_alineas": [],
             "reference_str": null,
             "sections": [
                 {
                     "annotations": null,
                     "applicability": null,
-                    "legifrance_article": null,
+                    "lf_id": null,
                     "outer_alineas": [],
                     "reference_str": null,
                     "sections": [
                         {
                             "annotations": null,
                             "applicability": null,
-                            "legifrance_article": {
-                                "content": "",
-                                "etat": "VIGUEUR",
-                                "id": "LEGIARTI000026700277",
-                                "intOrdre": 524287,
-                                "num": "56"
-                            },
+                            "lf_id": "LEGIARTI000026700277",
                             "outer_alineas": [],
                             "reference_str": null,
                             "sections": [],
@@ -1544,20 +1208,14 @@
                 {
                     "annotations": null,
                     "applicability": null,
-                    "legifrance_article": null,
+                    "lf_id": null,
                     "outer_alineas": [],
                     "reference_str": null,
                     "sections": [
                         {
                             "annotations": null,
                             "applicability": null,
-                            "legifrance_article": {
-                                "content": "",
-                                "etat": "VIGUEUR",
-                                "id": "LEGIARTI000026700278",
-                                "intOrdre": 524287,
-                                "num": "57"
-                            },
+                            "lf_id": "LEGIARTI000026700278",
                             "outer_alineas": [],
                             "reference_str": null,
                             "sections": [],
@@ -1577,20 +1235,14 @@
                 {
                     "annotations": null,
                     "applicability": null,
-                    "legifrance_article": null,
+                    "lf_id": null,
                     "outer_alineas": [],
                     "reference_str": null,
                     "sections": [
                         {
                             "annotations": null,
                             "applicability": null,
-                            "legifrance_article": {
-                                "content": "",
-                                "etat": "VIGUEUR",
-                                "id": "LEGIARTI000037532775",
-                                "intOrdre": 524287,
-                                "num": "58"
-                            },
+                            "lf_id": "LEGIARTI000037532775",
                             "outer_alineas": [],
                             "reference_str": null,
                             "sections": [],
@@ -1610,20 +1262,14 @@
                 {
                     "annotations": null,
                     "applicability": null,
-                    "legifrance_article": null,
+                    "lf_id": null,
                     "outer_alineas": [],
                     "reference_str": null,
                     "sections": [
                         {
                             "annotations": null,
                             "applicability": null,
-                            "legifrance_article": {
-                                "content": "",
-                                "etat": "VIGUEUR",
-                                "id": "LEGIARTI000026700193",
-                                "intOrdre": 524287,
-                                "num": "59"
-                            },
+                            "lf_id": "LEGIARTI000026700193",
                             "outer_alineas": [],
                             "reference_str": null,
                             "sections": [],
@@ -1650,20 +1296,14 @@
         {
             "annotations": null,
             "applicability": null,
-            "legifrance_article": null,
+            "lf_id": null,
             "outer_alineas": [],
             "reference_str": null,
             "sections": [
                 {
                     "annotations": null,
                     "applicability": null,
-                    "legifrance_article": {
-                        "content": "",
-                        "etat": "VIGUEUR",
-                        "id": "LEGIARTI000026700231",
-                        "intOrdre": 524287,
-                        "num": "60"
-                    },
+                    "lf_id": "LEGIARTI000026700231",
                     "outer_alineas": [],
                     "reference_str": null,
                     "sections": [],
@@ -1683,34 +1323,28 @@
         {
             "annotations": null,
             "applicability": null,
-            "legifrance_article": null,
+            "lf_id": null,
             "outer_alineas": [],
             "reference_str": null,
             "sections": [
                 {
                     "annotations": null,
                     "applicability": null,
-                    "legifrance_article": {
-                        "content": "",
-                        "etat": "VIGUEUR",
-                        "id": "LEGIARTI000026700234",
-                        "intOrdre": 524287,
-                        "num": "Annexe I"
-                    },
+                    "lf_id": "LEGIARTI000026700234",
                     "outer_alineas": [],
                     "reference_str": null,
                     "sections": [
                         {
                             "annotations": null,
                             "applicability": null,
-                            "legifrance_article": null,
+                            "lf_id": null,
                             "outer_alineas": [],
                             "reference_str": null,
                             "sections": [
                                 {
                                     "annotations": null,
                                     "applicability": null,
-                                    "legifrance_article": null,
+                                    "lf_id": null,
                                     "outer_alineas": [],
                                     "reference_str": null,
                                     "sections": [],
@@ -1723,7 +1357,7 @@
                                 {
                                     "annotations": null,
                                     "applicability": null,
-                                    "legifrance_article": null,
+                                    "lf_id": null,
                                     "outer_alineas": [],
                                     "reference_str": null,
                                     "sections": [],
@@ -1736,7 +1370,7 @@
                                 {
                                     "annotations": null,
                                     "applicability": null,
-                                    "legifrance_article": null,
+                                    "lf_id": null,
                                     "outer_alineas": [],
                                     "reference_str": null,
                                     "sections": [],
@@ -1749,7 +1383,7 @@
                                 {
                                     "annotations": null,
                                     "applicability": null,
-                                    "legifrance_article": null,
+                                    "lf_id": null,
                                     "outer_alineas": [],
                                     "reference_str": null,
                                     "sections": [],
@@ -1762,7 +1396,7 @@
                                 {
                                     "annotations": null,
                                     "applicability": null,
-                                    "legifrance_article": null,
+                                    "lf_id": null,
                                     "outer_alineas": [],
                                     "reference_str": null,
                                     "sections": [],
@@ -1775,7 +1409,7 @@
                                 {
                                     "annotations": null,
                                     "applicability": null,
-                                    "legifrance_article": null,
+                                    "lf_id": null,
                                     "outer_alineas": [],
                                     "reference_str": null,
                                     "sections": [],
@@ -1788,7 +1422,7 @@
                                 {
                                     "annotations": null,
                                     "applicability": null,
-                                    "legifrance_article": null,
+                                    "lf_id": null,
                                     "outer_alineas": [],
                                     "reference_str": null,
                                     "sections": [],
@@ -1801,7 +1435,7 @@
                                 {
                                     "annotations": null,
                                     "applicability": null,
-                                    "legifrance_article": null,
+                                    "lf_id": null,
                                     "outer_alineas": [],
                                     "reference_str": null,
                                     "sections": [],
@@ -1814,7 +1448,7 @@
                                 {
                                     "annotations": null,
                                     "applicability": null,
-                                    "legifrance_article": null,
+                                    "lf_id": null,
                                     "outer_alineas": [],
                                     "reference_str": null,
                                     "sections": [],
@@ -1834,14 +1468,14 @@
                         {
                             "annotations": null,
                             "applicability": null,
-                            "legifrance_article": null,
+                            "lf_id": null,
                             "outer_alineas": [],
                             "reference_str": null,
                             "sections": [
                                 {
                                     "annotations": null,
                                     "applicability": null,
-                                    "legifrance_article": null,
+                                    "lf_id": null,
                                     "outer_alineas": [],
                                     "reference_str": null,
                                     "sections": [],
@@ -1854,7 +1488,7 @@
                                 {
                                     "annotations": null,
                                     "applicability": null,
-                                    "legifrance_article": null,
+                                    "lf_id": null,
                                     "outer_alineas": [],
                                     "reference_str": null,
                                     "sections": [],
@@ -1867,7 +1501,7 @@
                                 {
                                     "annotations": null,
                                     "applicability": null,
-                                    "legifrance_article": null,
+                                    "lf_id": null,
                                     "outer_alineas": [],
                                     "reference_str": null,
                                     "sections": [],
@@ -1880,7 +1514,7 @@
                                 {
                                     "annotations": null,
                                     "applicability": null,
-                                    "legifrance_article": null,
+                                    "lf_id": null,
                                     "outer_alineas": [],
                                     "reference_str": null,
                                     "sections": [],
@@ -1893,14 +1527,14 @@
                                 {
                                     "annotations": null,
                                     "applicability": null,
-                                    "legifrance_article": null,
+                                    "lf_id": null,
                                     "outer_alineas": [],
                                     "reference_str": null,
                                     "sections": [
                                         {
                                             "annotations": null,
                                             "applicability": null,
-                                            "legifrance_article": null,
+                                            "lf_id": null,
                                             "outer_alineas": [],
                                             "reference_str": null,
                                             "sections": [],
@@ -1913,7 +1547,7 @@
                                         {
                                             "annotations": null,
                                             "applicability": null,
-                                            "legifrance_article": null,
+                                            "lf_id": null,
                                             "outer_alineas": [],
                                             "reference_str": null,
                                             "sections": [],
@@ -1933,7 +1567,7 @@
                                 {
                                     "annotations": null,
                                     "applicability": null,
-                                    "legifrance_article": null,
+                                    "lf_id": null,
                                     "outer_alineas": [],
                                     "reference_str": null,
                                     "sections": [],
@@ -1953,7 +1587,7 @@
                         {
                             "annotations": null,
                             "applicability": null,
-                            "legifrance_article": null,
+                            "lf_id": null,
                             "outer_alineas": [],
                             "reference_str": null,
                             "sections": [],
@@ -1966,7 +1600,7 @@
                         {
                             "annotations": null,
                             "applicability": null,
-                            "legifrance_article": null,
+                            "lf_id": null,
                             "outer_alineas": [],
                             "reference_str": null,
                             "sections": [],
@@ -1986,13 +1620,7 @@
                 {
                     "annotations": null,
                     "applicability": null,
-                    "legifrance_article": {
-                        "content": "",
-                        "etat": "VIGUEUR",
-                        "id": "LEGIARTI000037532777",
-                        "intOrdre": 1074003967,
-                        "num": "Annexe II"
-                    },
+                    "lf_id": "LEGIARTI000037532777",
                     "outer_alineas": [],
                     "reference_str": null,
                     "sections": [],

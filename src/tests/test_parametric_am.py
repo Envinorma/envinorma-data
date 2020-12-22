@@ -154,13 +154,12 @@ def _random_enriched_string() -> EnrichedString:
 
 def test_apply_parameter_values_to_am_whole_arrete():
     sections = [
-        StructuredText(_random_enriched_string(), [EnrichedString('Initial version 1')], [], None, None),
-        StructuredText(_random_enriched_string(), [EnrichedString('Initial version 2')], [], None, None),
+        StructuredText(_random_enriched_string(), [EnrichedString('Initial version 1')], [], None),
+        StructuredText(_random_enriched_string(), [EnrichedString('Initial version 2')], [], None),
         StructuredText(
             EnrichedString('Conditions d\'application', []),
             [EnrichedString('Cet arrete ne s\'applique qu\'aux nouvelles installations.')],
             [],
-            None,
             None,
         ),
     ]
@@ -186,8 +185,8 @@ def test_apply_parameter_values_to_am_whole_arrete():
 
 def test_apply_parameter_values_to_am():
     sections = [
-        StructuredText(EnrichedString('Art. 1', []), [EnrichedString('Initial version 1')], [], None, None),
-        StructuredText(EnrichedString('Art. 2', []), [EnrichedString('Initial version 2')], [], None, None),
+        StructuredText(EnrichedString('Art. 1', []), [EnrichedString('Initial version 1')], [], None),
+        StructuredText(EnrichedString('Art. 2', []), [EnrichedString('Initial version 2')], [], None),
         StructuredText(
             EnrichedString('Conditions d\'application', []),
             [
@@ -195,7 +194,6 @@ def test_apply_parameter_values_to_am():
                 EnrichedString('Pour les installations nouvelles, l\'article 2 est remplacé par "version modifiée"'),
             ],
             [],
-            None,
             None,
         ),
     ]
@@ -205,7 +203,7 @@ def test_apply_parameter_values_to_am():
     is_installation_old = Equal(parameter, False)
     is_installation_new = Equal(parameter, True)
     source = ConditionSource('', EntityReference(SectionReference((2,)), None, False))
-    new_text = StructuredText(EnrichedString('Art. 2', []), [EnrichedString('version modifiée')], [], None, None)
+    new_text = StructuredText(EnrichedString('Art. 2', []), [EnrichedString('version modifiée')], [], None)
     parametrization = Parametrization(
         [NonApplicationCondition(EntityReference(SectionReference((0,)), None), is_installation_old, source)],
         [AlternativeSection(SectionReference((1,)), new_text, is_installation_new, source)],
@@ -231,7 +229,7 @@ def test_extract_parameters_from_parametrization():
     parameter_2 = Parameter('nouvelle-installation', ParameterType.BOOLEAN)
     condition_2 = Equal(parameter_2, True)
     source = ConditionSource('', EntityReference(SectionReference((2,)), None, False))
-    new_text = StructuredText(EnrichedString('Art. 2', []), [EnrichedString('version modifiée')], [], None, None)
+    new_text = StructuredText(EnrichedString('Art. 2', []), [EnrichedString('version modifiée')], [], None)
     parametrization = Parametrization(
         [NonApplicationCondition(EntityReference(SectionReference((0,)), None), condition_1, source)],
         [AlternativeSection(SectionReference((1,)), new_text, condition_2, source)],
@@ -248,7 +246,7 @@ def test_extract_parameters_from_parametrization_2():
     parameter_2 = Parameter('nouvelle-installation-2', ParameterType.BOOLEAN)
     condition_2 = Equal(parameter_2, True)
     source = ConditionSource('', EntityReference(SectionReference((2,)), None, False))
-    new_text = StructuredText(EnrichedString('Art. 2', []), [EnrichedString('version modifiée')], [], None, None)
+    new_text = StructuredText(EnrichedString('Art. 2', []), [EnrichedString('version modifiée')], [], None)
     parametrization = Parametrization(
         [NonApplicationCondition(EntityReference(SectionReference((0,)), None), condition_1, source)],
         [AlternativeSection(SectionReference((1,)), new_text, condition_2, source)],
@@ -262,9 +260,9 @@ def test_extract_parameters_from_parametrization_2():
 
 def test_generate_all_am_versions():
     sections = [
-        StructuredText(EnrichedString('Art. 1', []), [EnrichedString('Initial version 1')], [], None, None),
-        StructuredText(EnrichedString('Art. 2', []), [EnrichedString('Initial version 2')], [], None, None),
-        StructuredText(EnrichedString('Art. 3', []), [EnrichedString('condition source')], [], None, None),
+        StructuredText(EnrichedString('Art. 1', []), [EnrichedString('Initial version 1')], [], None),
+        StructuredText(EnrichedString('Art. 2', []), [EnrichedString('Initial version 2')], [], None),
+        StructuredText(EnrichedString('Art. 3', []), [EnrichedString('condition source')], [], None),
     ]
     am = ArreteMinisteriel(_random_enriched_string(), sections, [], '', None)
 
@@ -373,4 +371,3 @@ def test_extract_warnings():
     assert len(_extract_warnings([ref], {ref: base_text}, {ref: replace(base_text, depth_in_am=10)})) == 1
     assert len(_extract_warnings([ref], {ref: base_text}, {ref: replace(base_text, rank_in_section_list=10)})) == 1
     assert len(_extract_warnings([ref], {ref: base_text}, {ref: replace(base_text, section_list_size=10)})) == 1
-

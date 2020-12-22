@@ -100,8 +100,7 @@ def pretty_print(topic: TopicName, texts: List[Tuple[int, List[str], StructuredT
 def compute_detection_performance(dataset: List[_LabelizedText], ontology: TopicOntology):
     all_labels = [label for _, label in dataset]
     texts = [
-        (titles, StructuredText(EnrichedString(''), outer_alineas, [], None, None))
-        for (titles, outer_alineas), _ in dataset
+        (titles, StructuredText(EnrichedString(''), outer_alineas, [], None)) for (titles, outer_alineas), _ in dataset
     ]
     missing_topics_to_elements = defaultdict(list)
     for rank, (labels, (titles, text)) in enumerate(zip(all_labels, texts)):

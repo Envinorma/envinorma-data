@@ -234,17 +234,17 @@ def test_structuration_3():
 
 def test_inconsistency_detection():
     subsections = [
-        StructuredText(EnrichedString('1. Foo'), [], [], None, None),
-        StructuredText(EnrichedString('2. Bar'), [], [], None, None),
-        StructuredText(EnrichedString('3. Pi'), [], [], None, None),
-        StructuredText(EnrichedString('4. Pa'), [], [], None, None),
+        StructuredText(EnrichedString('1. Foo'), [], [], None),
+        StructuredText(EnrichedString('2. Bar'), [], [], None),
+        StructuredText(EnrichedString('3. Pi'), [], [], None),
+        StructuredText(EnrichedString('4. Pa'), [], [], None),
     ]
-    section = StructuredText(EnrichedString(''), [], subsections, None, None)
+    section = StructuredText(EnrichedString(''), [], subsections, None)
     inconsistencies = _extract_section_inconsistencies(section)
     assert len(inconsistencies) == 0
 
-    subsections_err = [*subsections, StructuredText(EnrichedString('4. Pou'), [], [], None, None)]
-    section_err = StructuredText(EnrichedString(''), [], subsections_err, None, None)
+    subsections_err = [*subsections, StructuredText(EnrichedString('4. Pou'), [], [], None)]
+    section_err = StructuredText(EnrichedString(''), [], subsections_err, None)
     inconsistencies_err = _extract_section_inconsistencies(section_err)
     assert len(inconsistencies_err) == 1
 

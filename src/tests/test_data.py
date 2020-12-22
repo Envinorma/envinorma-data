@@ -27,8 +27,8 @@ _LEAF_SECTION = StructuredText(
     copy(_ENRICHED_STRING_SIMPLE),
     [copy(_ENRICHED_STRING_SIMPLE)],
     [],
-    LegifranceArticle('id', 'content', 0, '0', ArticleStatus.ABROGE),
     Applicability(True, 'ra', False, None, ['beware']),
+    'lf_id',
     'ref',
     Annotations(TopicName.AIR_ODEURS, True, 'guide'),
 )

@@ -173,8 +173,8 @@ class StructuredText:
     title: EnrichedString
     outer_alineas: List[EnrichedString]
     sections: List['StructuredText']
-    legifrance_article: Optional[LegifranceArticle]
     applicability: Optional[Applicability]
+    lf_id: Optional[str] = None
     reference_str: Optional[str] = None
     annotations: Optional[Annotations] = None
     id: str = field(default_factory=random_id)
@@ -182,7 +182,6 @@ class StructuredText:
     def to_dict(self) -> Dict[str, Any]:
         res = asdict(self)
         res['sections'] = [se.to_dict() for se in self.sections]
-        res['legifrance_article'] = self.legifrance_article.to_dict() if self.legifrance_article else None
         res['applicability'] = self.applicability.to_dict() if self.applicability else None
         res['annotations'] = self.annotations.to_dict() if self.annotations else None
         return res
@@ -193,9 +192,6 @@ class StructuredText:
         dict_['title'] = load_enriched_string(dict_['title'])
         dict_['outer_alineas'] = [load_enriched_string(al) for al in dict_['outer_alineas']]
         dict_['sections'] = [load_structured_text(sec) for sec in dict_['sections']]
-        dict_['legifrance_article'] = (
-            load_legifrance_article(dict_['legifrance_article']) if dict_['legifrance_article'] else None
-        )
         dict_['applicability'] = Applicability.from_dict(dict_['applicability']) if dict_.get('applicability') else None
         dict_['annotations'] = Annotations.from_dict(dict_['annotations']) if dict_.get('annotations') else None
         return StructuredText(**dict_)
@@ -484,7 +480,7 @@ class AMData:
             raise ValueError(f'There are non unique ids: {non_unique_ids}')
 
     @staticmethod
-    def from_dict(dict_: Dict[str, Any]) -> 'AMData':
+    def from_dict(dict_: List[Dict[str, Any]]) -> 'AMData':
         arretes_ministeriels = [AMMetadata.from_dict(x) for x in dict_]
         nor_to_aida = {doc.nor: doc.aida_page for doc in arretes_ministeriels if doc.nor}
         aida_to_nor = {value: key for key, value in nor_to_aida.items()}
@@ -623,3 +619,7 @@ class Nomenclature:
     @staticmethod
     def load_default() -> 'Nomenclature':
         return Nomenclature.from_dict(json.load(open(f'{AM_DATA_FOLDER}/nomenclature.json')))
+
+
+def am_to_text(am: ArreteMinisteriel) -> StructuredText:
+    return StructuredText(am.title, [], am.sections, None)

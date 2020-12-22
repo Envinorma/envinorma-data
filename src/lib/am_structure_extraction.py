@@ -272,7 +272,6 @@ def _build_structured_text(
             for alinea_group, pattern_name_group in zip(grouped_alineas, grouped_pattern_names)
         ],
         None,
-        None,
     )
 
 
@@ -316,7 +315,6 @@ def _put_tables_back(text: StructuredText, tables: List[TableReference]) -> Stru
         [_add_table_if_any(alinea, tables) for alinea in text.outer_alineas],
         [_put_tables_back(section, tables) for section in text.sections],
         None,
-        None,
     )
 
 
@@ -341,7 +339,6 @@ def _put_links_back(text: StructuredText, links: List[LinkReference]) -> Structu
         _clean_title(clean_title),
         [_add_links_if_any(alinea, links) for alinea in text.outer_alineas],
         [_put_links_back(section, links) for section in text.sections],
-        None,
         None,
     )
 
@@ -502,7 +499,7 @@ def _extract_structured_text_from_legifrance_article(
     if structured_text.title.text:
         raise ValueError(f'Should not happen. Article should not have titles. Article id : {article.id}')
     title, outer_alineas = _generate_article_title(article, structured_text.outer_alineas)
-    return StructuredText(_clean_title(title), outer_alineas, structured_text.sections, article, None)
+    return StructuredText(_clean_title(title), outer_alineas, structured_text.sections, None, lf_id=article.id)
 
 
 def _extract_structured_text_from_legifrance_section(
@@ -512,7 +509,6 @@ def _extract_structured_text_from_legifrance_section(
         _clean_title(_extract_links(section.title)),
         [],
         _extract_sections(section.articles, section.sections, ascendant_titles),
-        None,
         None,
     )
 

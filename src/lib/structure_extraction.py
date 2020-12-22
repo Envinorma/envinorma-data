@@ -88,5 +88,19 @@ def build_structured_text(title: Optional[TextElement], elements: List[TextEleme
         outer_alineas,
         previous_sections + built_subsections,
         None,
-        None,
     )
+
+
+def _string_to_element(str_: EnrichedString) -> TextElement:
+    if str_.table:
+        return str_.table
+    return str_.text
+
+
+def structured_text_to_text_elements(text: StructuredText, level: int = 1) -> List[TextElement]:
+    elements: List[TextElement] = []
+    elements.append(Title(text.title.text, level))
+    elements.extend([_string_to_element(st) for st in text.outer_alineas])
+    for section in text.sections:
+        elements.extend(structured_text_to_text_elements(section, level + 1))
+    return elements

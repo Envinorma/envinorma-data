@@ -1,27 +1,28 @@
 import warnings
 from datetime import datetime
 from typing import Callable, Dict, Optional, Set, Tuple
+
 from lib.am_enriching import add_topics, remove_prescriptive_power, remove_sections
+from lib.data import ArreteMinisteriel, EnrichedString, StructuredText, TopicName
+from lib.manual_enrichments.generate_1510_parametrization import (
+    build_1510_parametrization,
+    generate_1510_combinations,
+    manual_1510_enricher,
+    manual_1510_post_process,
+)
 from lib.parametric_am import Combinations
 from lib.parametrization import (
     ConditionSource,
     EntityReference,
+    Ints,
     Littler,
     NonApplicationCondition,
     Parameter,
     ParameterEnum,
     ParameterType,
     Parametrization,
-    Ints,
     SectionReference,
     build_simple_parametrization,
-)
-from lib.data import ArreteMinisteriel, StructuredText, EnrichedString, TopicName
-from lib.manual_enrichments.generate_1510_parametrization import (
-    build_1510_parametrization,
-    generate_1510_combinations,
-    manual_1510_enricher,
-    manual_1510_post_process,
 )
 
 
@@ -127,7 +128,6 @@ def _build_TREP1900331A_parametrization() -> Parametrization:
                 ),
             ],
             sections=[],
-            legifrance_article=None,
             applicability=None,
         )
     }

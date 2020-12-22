@@ -37,9 +37,9 @@ from lib.am_enriching import (
 
 
 def test_add_topics():
-    sub_section_1 = StructuredText(EnrichedString('Section 1.1'), [], [], None, None)
-    section_1 = StructuredText(EnrichedString('Section 1'), [], [sub_section_1], None, None)
-    section_2 = StructuredText(EnrichedString('Section 2'), [], [], None, None)
+    sub_section_1 = StructuredText(EnrichedString('Section 1.1'), [], [], None)
+    section_1 = StructuredText(EnrichedString('Section 1'), [], [sub_section_1], None)
+    section_2 = StructuredText(EnrichedString('Section 2'), [], [], None)
     am = ArreteMinisteriel(EnrichedString(''), [section_1, section_2], [], '', None)
 
     am_with_topics = add_topics(
@@ -103,16 +103,16 @@ def test_add_references():
         StructuredText(EnrichedString('1. 2. azeaze'), [], [], None, None),
     ]
     sub_sections = [StructuredText(EnrichedString('1. azeaze'), [], sub_sub_sections, None, None)]
-    article = LegifranceArticle('', '', 0, '', ArticleStatus.VIGUEUR)
+    lf_article_id = 'article_id'
     sections = [
-        StructuredText(EnrichedString('Article 1. efzefz'), [], sub_sections, article, None),
-        StructuredText(EnrichedString('2. zefez'), [], [], article, None),
-        StructuredText(EnrichedString('A. zefze'), [], [], article, None),
-        StructuredText(EnrichedString('a) zefze'), [], [], article, None),
-        StructuredText(EnrichedString('V. zefze'), [], [], article, None),
-        StructuredText(EnrichedString('ANNEXE I zefze'), [], [], article, None),
-        StructuredText(EnrichedString('Article 18.1'), [], [], article, None),
-        StructuredText(EnrichedString('Article 1'), [], [], article, None),
+        StructuredText(EnrichedString('Article 1. efzefz'), [], sub_sections, None, lf_article_id),
+        StructuredText(EnrichedString('2. zefez'), [], [], None, lf_article_id),
+        StructuredText(EnrichedString('A. zefze'), [], [], None, lf_article_id),
+        StructuredText(EnrichedString('a) zefze'), [], [], None, lf_article_id),
+        StructuredText(EnrichedString('V. zefze'), [], [], None, lf_article_id),
+        StructuredText(EnrichedString('ANNEXE I zefze'), [], [], None, lf_article_id),
+        StructuredText(EnrichedString('Article 18.1'), [], [], None, lf_article_id),
+        StructuredText(EnrichedString('Article 1'), [], [], None, lf_article_id),
     ]
     am = ArreteMinisteriel(EnrichedString(''), sections, [], '', None)
     am_with_references = add_references(am)
@@ -289,9 +289,9 @@ def test_no_fail_in_aida_links_addition():
 
 
 def test_compute_summary():
-    text = StructuredText(EnrichedString('Test_D2', []), [], [], None, None)
-    parent_text = StructuredText(EnrichedString('Test_D1', []), [], [text] * 2, None, None)
-    grand_parent_text = StructuredText(EnrichedString('Test_D0', []), [], [parent_text] * 2, None, None)
+    text = StructuredText(EnrichedString('Test_D2', []), [], [], None)
+    parent_text = StructuredText(EnrichedString('Test_D1', []), [], [text] * 2, None)
+    grand_parent_text = StructuredText(EnrichedString('Test_D0', []), [], [parent_text] * 2, None)
     summary_elements = _extract_summary_elements(grand_parent_text, 0)
     assert len(summary_elements) == 7
     assert summary_elements[0].depth == 0
@@ -321,14 +321,14 @@ def test_shorten_summary_text():
 
 def test_remove_sections():
     sub_sub_sections = [
-        StructuredText(EnrichedString('1.1. azeaze'), [], [], None, None),
-        StructuredText(EnrichedString('1. 2. azeaze'), [], [], None, None),
+        StructuredText(EnrichedString('1.1. azeaze'), [], [], None),
+        StructuredText(EnrichedString('1. 2. azeaze'), [], [], None),
     ]
-    sub_sections = [StructuredText(EnrichedString('1. azeaze'), [], sub_sub_sections, None, None)]
+    sub_sections = [StructuredText(EnrichedString('1. azeaze'), [], sub_sub_sections, None)]
     sections = [
-        StructuredText(EnrichedString('Article 1. efzefz'), [], sub_sections, None, None),
-        StructuredText(EnrichedString('2. zefez'), [], [], None, None),
-        StructuredText(EnrichedString('A. zefze'), [], [], None, None),
+        StructuredText(EnrichedString('Article 1. efzefz'), [], sub_sections, None),
+        StructuredText(EnrichedString('2. zefez'), [], [], None),
+        StructuredText(EnrichedString('A. zefze'), [], [], None),
     ]
     am = ArreteMinisteriel(EnrichedString(''), sections, [], '', None)
 

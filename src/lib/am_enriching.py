@@ -226,7 +226,7 @@ def _merge_prefix_list(prefixes: List[Optional[str]]) -> str:
 def add_references_in_section(section: StructuredText, previous_prefixes: List[Optional[str]]) -> StructuredText:
     result = copy(section)
     del section
-    if previous_prefixes or result.legifrance_article:
+    if previous_prefixes or result.lf_id:
         prefixes = previous_prefixes + [_extract_prefix(result.title.text)]
         result.reference_str = _merge_prefix_list(prefixes)
     else:
@@ -252,13 +252,7 @@ def extract_titles_and_reference_pairs(am: ArreteMinisteriel) -> List[Tuple[str,
 
 
 def _minify_section(text: StructuredText) -> StructuredText:
-    return StructuredText(
-        text.title,
-        [],
-        [_minify_section(sec) for sec in text.sections],
-        replace(text.legifrance_article, content='') if text.legifrance_article else None,
-        None,
-    )
+    return StructuredText(text.title, [], [_minify_section(sec) for sec in text.sections], None, lf_id=text.lf_id)
 
 
 def _minify_am(am: ArreteMinisteriel) -> ArreteMinisteriel:
