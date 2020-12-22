@@ -1,16 +1,17 @@
 import json
+from lib.utils import jsonify
 import os
-from lib.config import AM_DATA_FOLDER, STORAGE
-from typing import Any, Dict, List, Optional, Union
-from lib.structure_extraction import TextElement, Title, build_structured_text, structured_text_to_text_elements
-import dash
 from dataclasses import replace
 from datetime import datetime
+from typing import Any, Dict, List, Optional, Union
+
+import dash
 import dash_core_components as dcc
 import dash_html_components as html
 from dash.development.base_component import Component
-
+from lib.config import AM_DATA_FOLDER, STORAGE
 from lib.data import ArreteMinisteriel, Cell, Row, StructuredText, Table, am_to_text, load_am_data
+from lib.structure_extraction import TextElement, Title, build_structured_text, structured_text_to_text_elements
 
 _AM = load_am_data()
 _ID_TO_AM_MD = {am.cid: am for am in _AM.metadata if am.cid == 'JORFTEXT000026251890'}
@@ -90,7 +91,7 @@ def _make_form_component(element: TextElement) -> Component:
 
 
 def _text_to_elements(text: StructuredText) -> List[TextElement]:
-    return structured_text_to_text_elements(text, 0)[:20]
+    return structured_text_to_text_elements(text, 0)
 
 
 def _structure_edition_component(text: StructuredText) -> Component:
@@ -195,20 +196,23 @@ def _ensure_no_outer_alineas(text: StructuredText) -> None:
         raise _FormHandlingError(f'There should be no alineas at toplevel, found {len(text.outer_alineas)}.')
 
 
+def _ensure_title(element: TextElement) -> Title:
+    if not isinstance(element, Title):
+        raise ValueError(f'Expecting title, received {type(element)}')
+    return element
+
+
 def _structure_text(am_id: str, title_levels: List[Optional[int]]) -> ArreteMinisteriel:
     am = _load_am(am_id)
     if not am:
         raise _FormHandlingError(f'am with id {am_id} not found, which should not happen')
     text = am_to_text(am)
     elements = _text_to_elements(text)
-    new_elements = _modify_elements_with_new_title_levels(elements, title_levels)
-    new_text = build_structured_text('', new_elements)
+    main_title = _ensure_title(elements[0])
+    new_elements = _modify_elements_with_new_title_levels(elements[1:], title_levels)
+    new_text = build_structured_text(main_title, new_elements)
     _ensure_no_outer_alineas(new_text)
-    return replace(am, sections=text.sections)
-
-
-def _jsonify(dict_: Dict[str, Any]) -> str:
-    return json.dumps(dict_, indent=4, ensure_ascii=False)
+    return replace(am, sections=new_text.sections)
 
 
 def _write_file(content: str, filename: str):
@@ -222,14 +226,13 @@ def _save_text(am_id: str, title_levels: List[Optional[int]]) -> str:
     new_version = datetime.now().strftime('%y%m%d_%H%M')
     filename = f'structured_texts/{am_id}/wip/{new_version}.json'
     text = _structure_text(am_id, title_levels)
-    json_ = _jsonify(text.to_dict())
+    json_ = jsonify(text.to_dict())
     _write_file(json_, filename)
     return f'Enregistrement réussi. (Filename={filename})'
 
 
 def _extract_title_levels_from_form(component_values: Dict[str, Any]) -> List[Optional[int]]:
-    _non_modifiable_title_level: List[Optional[int]] = [0]
-    return _non_modifiable_title_level + _extract_dropdown_values(_make_list(component_values['props']['children']))
+    return _extract_dropdown_values(_make_list(component_values['props']['children']))
 
 
 @app.callback(
