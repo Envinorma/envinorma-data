@@ -8,32 +8,29 @@ import dash
 import dash_core_components as dcc
 import dash_html_components as html
 from dash.development.base_component import Component
-from lib.config import AM_DATA_FOLDER, STORAGE
+from lib.config import STORAGE
 from lib.data import ArreteMinisteriel, Cell, Row, StructuredText, Table, am_to_text
 from lib.structure_extraction import TextElement, Title, build_structured_text, structured_text_to_text_elements
-from lib.utils import get_structured_text_filename, get_structured_text_wip_folder, jsonify
+from lib.utils import get_parametrization_filename, get_structured_text_filename, jsonify
 
 from back_office.utils import ID_TO_AM_MD
 
 
-def _make_dropdown(level: Optional[int], style: Optional[Dict[str, Any]] = None, disabled: bool = False) -> Component:
-    options = [{'label': i, 'value': i} for i in range(1, 11)]
-    return dcc.Dropdown(value=level, options=options, clearable=True, style=style, disabled=disabled)
-
-
-def _add_dropdown(component: Component, level: Optional[int], disabled: bool = False) -> Component:
-    dd = _make_dropdown(
-        level,
-        style={'width': '95%', 'display': 'inline-block', 'margin': 'auto'},
-        disabled=disabled,
+def _make_form(titles: List[Title]) -> Component:
+    options = [{'label': title.text, 'value': i} for i, title in enumerate(titles)]
+    dropdown_source = dcc.Dropdown(options=options, clearable=True)
+    return html.Div(
+        [html.P('Condition de non application'), html.P('Source:'), dropdown_source],
+        className='applicability-form',
     )
+
+
+def _add_form(component: Component, titles: List[Title]) -> Component:
+    form = _make_form(titles)
     return div(
         [
-            div(
-                [dd],
-                style={'width': '10%', 'display': 'inline-block', 'margin': 'auto'},
-            ),
-            div([component], style={'width': '90%', 'display': 'inline-block'}),
+            div([component]),
+            div([form]),
         ]
     )
 
@@ -52,7 +49,7 @@ def _row_to_component(row: Row) -> Component:
 
 
 def _table_to_component(table: Table) -> Component:
-    return _add_dropdown(html.Table([_row_to_component(row) for row in table.rows]), None, disabled=True)
+    return html.Table([_row_to_component(row) for row in table.rows])
 
 
 def _get_html_heading_classname(level: int) -> type:
@@ -61,21 +58,21 @@ def _get_html_heading_classname(level: int) -> type:
     return html.H6
 
 
-def _title_to_component(title: Title) -> Component:
+def _title_to_component(title: Title, all_titles: List[Title]) -> Component:
     if title.level == 0:
         return html.Header(title.text)
-    return _add_dropdown(_get_html_heading_classname(title.level)(title.text), title.level)
+    return _add_form(_get_html_heading_classname(title.level)(title.text), all_titles)
 
 
 def _str_to_component(str_: str) -> Component:
-    return _add_dropdown(html.P(str_), None)
+    return html.P(str_)
 
 
-def _make_form_component(element: TextElement) -> Component:
+def _make_form_component(element: TextElement, all_titles: List[Title]) -> Component:
     if isinstance(element, Table):
         return _table_to_component(element)
     if isinstance(element, Title):
-        return _title_to_component(element)
+        return _title_to_component(element, all_titles)
     if isinstance(element, str):
         return _str_to_component(element)
     raise NotImplementedError(f'Not implemented for type {type(element)}')
@@ -85,9 +82,14 @@ def _text_to_elements(text: StructuredText) -> List[TextElement]:
     return structured_text_to_text_elements(text, 0)
 
 
+def _filter_titles(elements: List[TextElement]) -> List[Title]:
+    return [el for el in elements if isinstance(el, Title)]
+
+
 def _structure_edition_component(text: StructuredText) -> Component:
     text_elements = _text_to_elements(text)
-    components = [_make_form_component(element) for element in text_elements]
+    titles = _filter_titles(text_elements)
+    components = [_make_form_component(element, titles) for element in text_elements]
     return div(components)
 
 
@@ -107,7 +109,7 @@ def _load_am(am_id: str) -> Optional[ArreteMinisteriel]:
     return _load_am_from_file(am_md.nor or am_md.cid)
 
 
-def make_am_structure_edition_component(am_id: str) -> Component:
+def make_am_parametrization_edition_component_todel(am_id: str) -> Component:
     am = _load_am(am_id)
     if not am:
         return _am_not_found_component(am_id)
@@ -115,9 +117,9 @@ def make_am_structure_edition_component(am_id: str) -> Component:
     return div(
         [
             _structure_edition_component(text),
-            html.Div(id='form-output-structure-edition'),
-            html.Button('Submit', id='submit-val-structure-edition'),
-            html.P(am_id, hidden=True, id='am-id-structure-edition'),
+            html.Div(id='form-output-param-edition'),
+            html.Button('Submit', id='submit-val-param-edition'),
+            html.P(am_id, hidden=True, id='am-id-param-edition'),
         ]
     )
 
@@ -206,27 +208,27 @@ def _write_file(content: str, filename: str):
 
 def _save_text(am_id: str, title_levels: List[Optional[int]]) -> str:
     new_version = datetime.now().strftime('%y%m%d_%H%M')
-    filename = os.path.join(get_structured_text_wip_folder(am_id), new_version + '.json')
+    filename = os.path.join(get_parametrization_filename(am_id), new_version + '.json')
     text = _structure_text(am_id, title_levels)
     json_ = jsonify(text.to_dict())
     _write_file(json_, filename)
     return f'Enregistrement réussi. (Filename={filename})'
 
 
-def _extract_title_levels_from_form(component_values: Dict[str, Any]) -> List[Optional[int]]:
+def _extract_form_values(component_values: Dict[str, Any]) -> List[Optional[int]]:
     return _extract_dropdown_values(_make_list(component_values['props']['children']))
 
 
-def add_structure_edition_callbacks(app: dash.Dash):
+def add_parametrization_edition_callbacks(app: dash.Dash):
     def update_output(_, am_id, children):
-        title_levels = _extract_title_levels_from_form(children)
-        return html.P(_save_text(am_id, title_levels))
+        form_values = _extract_form_values(children)
+        return html.P(datetime.now().strftime('%y%m%d_%H%M'))
 
     app.callback(
-        dash.dependencies.Output('form-output-structure-edition', 'children'),
+        dash.dependencies.Output('form-output-param-edition', 'children'),
         [
-            dash.dependencies.Input('submit-val-structure-edition', 'n_clicks'),
-            dash.dependencies.Input('am-id-structure-edition', 'children'),
+            dash.dependencies.Input('submit-val-param-edition', 'n_clicks'),
+            dash.dependencies.Input('am-id-param-edition', 'children'),
         ],
         [dash.dependencies.State('page-content', 'children')],
     )(update_output)

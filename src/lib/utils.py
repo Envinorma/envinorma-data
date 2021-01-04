@@ -1,6 +1,9 @@
 import json
+import os
 import traceback
-from typing import Union, List, Dict
+from typing import Dict, List, Union
+
+from lib.config import AM_DATA_FOLDER
 
 
 def jsonify(obj: Union[Dict, List]) -> str:
@@ -17,3 +20,19 @@ def write_json(obj: Union[Dict, List], filename: str, safe: bool = False, pretty
                 json.dump(obj, file_, indent=indent, sort_keys=True, ensure_ascii=False)
             except Exception:  # pylint: disable=broad-except
                 print(traceback.format_exc())
+
+
+def get_structured_text_filename(am_id: str) -> str:
+    return os.path.join(AM_DATA_FOLDER, 'structured_texts', am_id + '.json')
+
+
+def get_structured_text_wip_folder(am_id: str) -> str:
+    return os.path.join(AM_DATA_FOLDER, 'structured_texts', am_id, 'wip')
+
+
+def get_parametrization_filename(am_id: str) -> str:
+    return os.path.join(AM_DATA_FOLDER, 'parametrization', am_id + '.json')
+
+
+def get_parametrization_wip_folder(am_id: str) -> str:
+    return os.path.join(AM_DATA_FOLDER, 'parametrization', am_id, 'wip')
