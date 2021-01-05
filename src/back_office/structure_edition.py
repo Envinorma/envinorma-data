@@ -1,3 +1,4 @@
+import traceback
 import json
 import os
 from dataclasses import replace
@@ -16,29 +17,23 @@ from lib.utils import get_structured_text_filename, get_structured_text_wip_fold
 from back_office.utils import ID_TO_AM_MD
 
 
+_LEVEL_OPTIONS = [{'label': i, 'value': i} for i in range(1, 11)]
+
+
 def _make_dropdown(level: Optional[int], style: Optional[Dict[str, Any]] = None, disabled: bool = False) -> Component:
-    options = [{'label': i, 'value': i} for i in range(1, 11)]
-    return dcc.Dropdown(value=level, options=options, clearable=True, style=style, disabled=disabled)
+    return dcc.Dropdown(value=level, options=_LEVEL_OPTIONS, clearable=True, style=style, disabled=disabled)
 
 
 def _add_dropdown(component: Component, level: Optional[int], disabled: bool = False) -> Component:
-    dd = _make_dropdown(
+    dropdown = _make_dropdown(
         level,
-        style={'width': '95%', 'display': 'inline-block', 'margin': 'auto'},
+        style={'width': '60px', 'margin-right': '10px'},
         disabled=disabled,
     )
-    return div(
-        [
-            div(
-                [dd],
-                style={'width': '10%', 'display': 'inline-block', 'margin': 'auto'},
-            ),
-            div([component], style={'width': '90%', 'display': 'inline-block'}),
-        ]
-    )
+    return div([dropdown, component], style={'display': 'flex', 'vertical-align': 'text-top', 'margin-top': '10px'})
 
 
-def div(children: List[Component], style: Optional[Dict[str, Any]] = None) -> Component:
+def div(children: Union[List[Component], Component], style: Optional[Dict[str, Any]] = None) -> Component:
     return html.Div(children, style=style)
 
 
@@ -64,7 +59,8 @@ def _get_html_heading_classname(level: int) -> type:
 def _title_to_component(title: Title) -> Component:
     if title.level == 0:
         return html.Header(title.text)
-    return _add_dropdown(_get_html_heading_classname(title.level)(title.text), title.level)
+    title_component = _get_html_heading_classname(title.level)(title.text)
+    return _add_dropdown(title_component, title.level)
 
 
 def _str_to_component(str_: str) -> Component:
@@ -83,6 +79,18 @@ def _make_form_component(element: TextElement) -> Component:
 
 def _text_to_elements(text: StructuredText) -> List[TextElement]:
     return structured_text_to_text_elements(text, 0)
+
+
+def _get_title_ranks(elements: List[TextElement]) -> List[int]:
+    res: List[int] = []
+    rank = 0
+    for element in elements:
+        if isinstance(element, Title):
+            res.append(rank)
+            rank += 1
+            continue
+        res.append(0)
+    return res
 
 
 def _structure_edition_component(text: StructuredText) -> Component:
@@ -107,6 +115,46 @@ def _load_am(am_id: str) -> Optional[ArreteMinisteriel]:
     return _load_am_from_file(am_md.nor or am_md.cid)
 
 
+def _time(func):
+    def new_func(*args, **kwargs):
+        from time import time
+
+        start = time()
+        res = func(*args, **kwargs)
+        print(f'Elapsed: {time() - start}s.')
+        return res
+
+    return new_func
+
+
+def _get_toc_str(text: StructuredText, level: int = 0, rank: int = 0) -> str:
+    trunc_title = (level * '| ' + ' ' + text.title.text)[:120]
+    return '\n'.join(
+        [
+            f'{trunc_title}',
+            *[_get_toc_str(sec, level + 1, rank + i + 1) for i, sec in enumerate(text.sections)],
+        ]
+    )
+
+
+def _get_md_toc(text: StructuredText) -> Component:
+    return dcc.Markdown(f'```txt\n{_get_toc_str(text)}\n```')
+
+
+def _get_toc(text: StructuredText, level: int = 0, rank: int = 0) -> Component:
+    trunc_title = (level * '| ' + ' ' + text.title.text)[:120]
+    return div(
+        [
+            dcc.Link(
+                trunc_title,
+                href=f'#TITLE_{rank}',
+                style={'color': 'black', 'text-decoration': 'none', 'font-family': '"DM Mono", monospace'},
+            ),
+            *[_get_toc(sec, level + 1, rank + i + 1) for i, sec in enumerate(text.sections)],
+        ]
+    )
+
+
 def make_am_structure_edition_component(am_id: str) -> Component:
     am = _load_am(am_id)
     if not am:
@@ -114,6 +162,9 @@ def make_am_structure_edition_component(am_id: str) -> Component:
     text = am_to_text(am)
     return div(
         [
+            html.H1('Sommaire'),
+            _get_md_toc(text),
+            html.H1('Texte'),
             _structure_edition_component(text),
             html.Div(id='form-output-structure-edition'),
             html.Button('Submit', id='submit-val-structure-edition'),
@@ -204,7 +255,7 @@ def _write_file(content: str, filename: str):
         file_.write(content)
 
 
-def _save_text(am_id: str, title_levels: List[Optional[int]]) -> str:
+def _save_text_and_get_message(am_id: str, title_levels: List[Optional[int]]) -> str:
     new_version = datetime.now().strftime('%y%m%d_%H%M')
     filename = os.path.join(get_structured_text_wip_folder(am_id), new_version + '.json')
     text = _structure_text(am_id, title_levels)
@@ -217,10 +268,50 @@ def _extract_title_levels_from_form(component_values: Dict[str, Any]) -> List[Op
     return _extract_dropdown_values(_make_list(component_values['props']['children']))
 
 
+_BLOCKQUOTE_SUCCESS_STYLE = {
+    'border-left': '4px solid rgb(98, 186, 181)',
+    'padding-left': '1rem',
+    'margin-top': '2rem',
+    'margin-bottom': '2rem',
+    'margin-left': '0rem',
+    'font-style': 'italic',
+    'font-size': '0.85em',
+    'padding-top': '5px',
+    'padding-bottom': '5px',
+}
+_BLOCKQUOTE_ERROR_STYLE = {
+    **_BLOCKQUOTE_SUCCESS_STYLE,
+    'border-left': '4px solid rgb(250, 120, 120)',
+    'background-color': 'rgb(249, 237, 237)',
+}
+
+
+def _replace_line_breaks(message: str) -> List[Component]:
+    return [html.P(piece) for piece in message.split('\n')]
+
+
+def _error_component(message: str) -> Component:
+    return html.P(_replace_line_breaks(message), style=_BLOCKQUOTE_ERROR_STYLE)
+
+
+def _success_component(message: str) -> Component:
+    return html.P(_replace_line_breaks(message), style=_BLOCKQUOTE_SUCCESS_STYLE)
+
+
+def _extract_form_value_and_save_text(nb_clicks: int, am_id: str, state: Dict[str, Any]) -> Component:
+    if nb_clicks == 0:
+        return div([])
+    try:
+        new_title_levels = _extract_title_levels_from_form(state)
+        success_message = _save_text_and_get_message(am_id, new_title_levels)
+    except Exception:  # pylint: disable=broad-except
+        return _error_component(f'Erreur pendant l\'enregistrement. Détails de l\'erreur:\n{traceback.format_exc()}')
+    return _success_component(success_message)
+
+
 def add_structure_edition_callbacks(app: dash.Dash):
-    def update_output(_, am_id, children):
-        title_levels = _extract_title_levels_from_form(children)
-        return html.P(_save_text(am_id, title_levels))
+    def update_output(nb_clicks, am_id, state):
+        return _extract_form_value_and_save_text(nb_clicks, am_id, state)
 
     app.callback(
         dash.dependencies.Output('form-output-structure-edition', 'children'),
