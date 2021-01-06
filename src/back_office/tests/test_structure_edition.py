@@ -33,12 +33,12 @@ def test_extract_dropdown_values():
 
 def test_modify_elements_with_new_title_levels():
     assert _modify_elements_with_new_title_levels([], []) == []
-    assert _modify_elements_with_new_title_levels([Title('', 0)], [None]) == ['']
+    assert _modify_elements_with_new_title_levels([Title('', 0)], [-1]) == ['']
     assert _ensure_title(_modify_elements_with_new_title_levels([Title('', 0)], [1])[0]).level == 1
     assert _ensure_title(_modify_elements_with_new_title_levels([Title('', 0)], [1])[0]).text == ''
-    assert _modify_elements_with_new_title_levels([''], [None]) == ['']
+    assert _modify_elements_with_new_title_levels([''], [-1]) == ['']
     assert _ensure_title(_modify_elements_with_new_title_levels([''], [1])[0]).level == 1
     assert _ensure_title(_modify_elements_with_new_title_levels([''], [1])[0]).text == ''
-    assert _modify_elements_with_new_title_levels(['', ''], [None, None]) == ['', '']
+    assert _modify_elements_with_new_title_levels(['', ''], [-1, -1]) == ['', '']
     tb = Table([])
-    assert _modify_elements_with_new_title_levels(['', '', tb], [None, None, None]) == ['', '', tb]
+    assert _modify_elements_with_new_title_levels(['', '', tb], [-1, -1, -1]) == ['', '', tb]

@@ -45,18 +45,15 @@ def _get_am_status(am_id: str) -> _Status:
     return _Status.PENDING_STRUCTURE_VALIDATION
 
 
-def _get_buttons(am_id: str, operation: AMOperation, enabled: bool) -> Component:
-    if enabled:
-        style = {'margin': '5px', 'color': 'white', 'background-color': '#00B0FF'}
-    else:
-        style = {'margin': '5px', 'color': 'grey', 'cursor': 'not-allowed'}
-    edit_button = html.Button('Éditer', disabled=not enabled, style=style)
+def _get_buttons(am_id: str, operation: AMOperation, enabled: bool, button_text: str) -> Component:
+    style = {'margin': '5px'}
+    edit_button = html.Button('Éditer', disabled=not enabled, style=style, className='btn btn-primary')
     if enabled:
         edit_button = dcc.Link(
             edit_button,
             href=f'/arrete_ministeriel/{am_id}/{operation.value}',
         )
-    validate_button = html.Button('Valider', disabled=not enabled, style=style)
+    validate_button = html.Button(button_text, disabled=not enabled, style=style, className='btn btn-primary')
     return html.P([edit_button, validate_button], style=dict(display='flex'))
 
 
@@ -64,10 +61,22 @@ def _build_component_based_on_status(am_id: str, am_status: _Status) -> Componen
     children: List[Component] = []
     children.append(html.H3('Edition de structure.'))
     children.append(
-        _get_buttons(am_id, AMOperation.EDIT_STRUCTURE, am_status == am_status.PENDING_STRUCTURE_VALIDATION)
+        _get_buttons(
+            am_id,
+            AMOperation.EDIT_STRUCTURE,
+            am_status == am_status.PENDING_STRUCTURE_VALIDATION,
+            'Valider la structure',
+        )
     )
-    children.append(html.H3('Edition de paramètres d\'application.'))
-    children.append(_get_buttons(am_id, AMOperation.EDIT_PARAMETRIZATION, am_status == am_status.PENDING_ENRICHMENT))
+    children.append(html.H3('Edition de l\'enrichissement.'))
+    children.append(
+        _get_buttons(
+            am_id,
+            AMOperation.EDIT_PARAMETRIZATION,
+            am_status == am_status.PENDING_ENRICHMENT,
+            'Valider l\'enrichissement',
+        )
+    )
     return html.Div(children)
 
 
@@ -76,13 +85,14 @@ def _make_am_index_component(am_id: str) -> Component:
     return _build_component_based_on_status(am_id, am_status)
 
 
-def _router(pathname: str) -> Component:
+def _router(pathname: str, parent_page: str) -> Component:
     print(pathname)
     am_id, operation_id, rest_of_path = _extract_am_id_and_operation(pathname)
+    parent_page = parent_page + '/' + am_id
     if not operation_id:
         return _make_am_index_component(am_id)
     if operation_id == operation_id.EDIT_STRUCTURE:
-        return make_am_structure_edition_component(am_id)
+        return make_am_structure_edition_component(am_id, parent_page)
     if operation_id == operation_id.EDIT_PARAMETRIZATION:
         return make_am_parametrization_edition_component(am_id)
     # if operation == operation.EDIT_PARAMETRIZATION_TODEL:

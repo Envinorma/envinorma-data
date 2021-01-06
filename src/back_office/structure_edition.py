@@ -1,6 +1,6 @@
-import traceback
 import json
 import os
+import traceback
 from dataclasses import replace
 from datetime import datetime
 from typing import Any, Dict, List, Optional, Union
@@ -9,32 +9,25 @@ import dash
 import dash_core_components as dcc
 import dash_html_components as html
 from dash.development.base_component import Component
-from lib.config import AM_DATA_FOLDER, STORAGE
+
+from lib.config import STORAGE
 from lib.data import ArreteMinisteriel, Cell, Row, StructuredText, Table, am_to_text
 from lib.structure_extraction import TextElement, Title, build_structured_text, structured_text_to_text_elements
 from lib.utils import get_structured_text_filename, get_structured_text_wip_folder, jsonify
 
-from back_office.utils import ID_TO_AM_MD
+from back_office.utils import ID_TO_AM_MD, div
+
+_LEVEL_OPTIONS = [{'label': f'Titre {i}', 'value': i} for i in range(1, 11)] + [{'label': 'Alinea', 'value': -1}]
+_DROPDOWN_STYLE = {'width': '100px', 'margin-right': '10px'}
 
 
-_LEVEL_OPTIONS = [{'label': i, 'value': i} for i in range(1, 11)]
+def _make_dropdown(level: int, disabled: bool = False) -> Component:
+    return dcc.Dropdown(value=level, options=_LEVEL_OPTIONS, clearable=False, style=_DROPDOWN_STYLE, disabled=disabled)
 
 
-def _make_dropdown(level: Optional[int], style: Optional[Dict[str, Any]] = None, disabled: bool = False) -> Component:
-    return dcc.Dropdown(value=level, options=_LEVEL_OPTIONS, clearable=True, style=style, disabled=disabled)
-
-
-def _add_dropdown(component: Component, level: Optional[int], disabled: bool = False) -> Component:
-    dropdown = _make_dropdown(
-        level,
-        style={'width': '60px', 'margin-right': '10px'},
-        disabled=disabled,
-    )
+def _add_dropdown(component: Component, level: int, disabled: bool = False) -> Component:
+    dropdown = _make_dropdown(level, disabled=disabled)
     return div([dropdown, component], style={'display': 'flex', 'vertical-align': 'text-top', 'margin-top': '10px'})
-
-
-def div(children: Union[List[Component], Component], style: Optional[Dict[str, Any]] = None) -> Component:
-    return html.Div(children, style=style)
 
 
 def _cell_to_component(cell: Cell) -> Component:
@@ -47,7 +40,7 @@ def _row_to_component(row: Row) -> Component:
 
 
 def _table_to_component(table: Table) -> Component:
-    return _add_dropdown(html.Table([_row_to_component(row) for row in table.rows]), None, disabled=True)
+    return _add_dropdown(html.Table([_row_to_component(row) for row in table.rows]), -1, disabled=True)
 
 
 def _get_html_heading_classname(level: int) -> type:
@@ -64,7 +57,7 @@ def _title_to_component(title: Title) -> Component:
 
 
 def _str_to_component(str_: str) -> Component:
-    return _add_dropdown(html.P(str_), None)
+    return _add_dropdown(html.P(str_), -1)
 
 
 def _make_form_component(element: TextElement) -> Component:
@@ -155,7 +148,44 @@ def _get_toc(text: StructuredText, level: int = 0, rank: int = 0) -> Component:
     )
 
 
-def make_am_structure_edition_component(am_id: str) -> Component:
+def _submit_button() -> Component:
+    return html.Button(
+        'Enregistrer',
+        id='submit-val-structure-edition',
+        className='btn btn-primary center',
+        style={'margin-right': '10px'},
+    )
+
+
+def _go_back_button(parent_page: str) -> Component:
+    return dcc.Link(
+        html.Button('Annuler', id='submit-val-structure-edition', className='btn btn-primary center'), href=parent_page
+    )
+
+
+def _footer_buttons(parent_page: str) -> Component:
+    style = {'display': 'inline-block'}
+    return div([_submit_button(), _go_back_button(parent_page)], style)
+
+
+def _fixed_footer(parent_page: str) -> Component:
+    output = div(html.Div(id='form-output-structure-edition'), style={'display': 'inline-block'})
+    content = div([output, html.Br(), _footer_buttons(parent_page)])
+    return div(
+        content,
+        {
+            'position': 'fixed',
+            'width': '80%',
+            'bottom': '0px',
+            'text-align': 'center',
+            'background-color': 'white',
+            'padding-bottom': '35px',
+            'padding-top': '35px',
+        },
+    )
+
+
+def make_am_structure_edition_component(am_id: str, parent_page: str) -> Component:
     am = _load_am(am_id)
     if not am:
         return _am_not_found_component(am_id)
@@ -166,10 +196,10 @@ def make_am_structure_edition_component(am_id: str) -> Component:
             _get_md_toc(text),
             html.H1('Texte'),
             _structure_edition_component(text),
-            html.Div(id='form-output-structure-edition'),
-            html.Button('Submit', id='submit-val-structure-edition'),
+            _fixed_footer(parent_page),
             html.P(am_id, hidden=True, id='am-id-structure-edition'),
-        ]
+        ],
+        {'margin-bottom': '100px'},
     )
 
 
@@ -181,14 +211,17 @@ def _make_list(candidate: Optional[Union[List[Dict[str, Any]], Dict[str, Any]]])
     return [candidate]
 
 
-def _extract_dropdown_values(components: List[Dict[str, Any]]) -> List[Optional[int]]:
-    res: List[Optional[int]] = []
+def _extract_dropdown_values(components: List[Dict[str, Any]]) -> List[int]:
+    res: List[int] = []
     for component in components:
         if isinstance(component, str):
             continue
         assert isinstance(component, dict)
         if component['type'] == 'Dropdown':
-            res.append(component['props'].get('value'))
+            value = component['props'].get('value')
+            if not isinstance(value, int):
+                raise ValueError(f'Expecting int values in dropdown. Received {value}.')
+            res.append(value)
         else:
             res.extend(_extract_dropdown_values(_make_list(component['props'].get('children'))))
     return res
@@ -198,25 +231,23 @@ class _FormHandlingError(Exception):
     pass
 
 
-def _update_element(element: TextElement, title_level: Optional[int]) -> TextElement:
+def _update_element(element: TextElement, title_level: int) -> TextElement:
     if isinstance(element, str):
-        if title_level is None:
+        if title_level == -1:
             return element
         return Title(element, level=title_level)
     if isinstance(element, Table):
-        if title_level is None:
+        if title_level == -1:
             return element
         raise _FormHandlingError(f'Unexpected title_level value {title_level}: should be None for table element.')
     if isinstance(element, Title):
-        if title_level is None:
+        if title_level == -1:
             return element.text
         return Title(element.text, level=title_level)
     raise NotImplementedError(f'Not implemented for element with type {type(element)}')
 
 
-def _modify_elements_with_new_title_levels(
-    elements: List[TextElement], title_levels: List[Optional[int]]
-) -> List[TextElement]:
+def _modify_elements_with_new_title_levels(elements: List[TextElement], title_levels: List[int]) -> List[TextElement]:
     if len(elements) != len(title_levels):
         raise _FormHandlingError(
             f'There should be as many elements as title_levels' f'(resp. {len(elements)} and {len(title_levels)}).'
@@ -235,7 +266,7 @@ def _ensure_title(element: TextElement) -> Title:
     return element
 
 
-def _structure_text(am_id: str, title_levels: List[Optional[int]]) -> ArreteMinisteriel:
+def _structure_text(am_id: str, title_levels: List[int]) -> ArreteMinisteriel:
     am = _load_am(am_id)
     if not am:
         raise _FormHandlingError(f'am with id {am_id} not found, which should not happen')
@@ -255,7 +286,7 @@ def _write_file(content: str, filename: str):
         file_.write(content)
 
 
-def _save_text_and_get_message(am_id: str, title_levels: List[Optional[int]]) -> str:
+def _save_text_and_get_message(am_id: str, title_levels: List[int]) -> str:
     new_version = datetime.now().strftime('%y%m%d_%H%M')
     filename = os.path.join(get_structured_text_wip_folder(am_id), new_version + '.json')
     text = _structure_text(am_id, title_levels)
@@ -264,26 +295,8 @@ def _save_text_and_get_message(am_id: str, title_levels: List[Optional[int]]) ->
     return f'Enregistrement réussi. (Filename={filename})'
 
 
-def _extract_title_levels_from_form(component_values: Dict[str, Any]) -> List[Optional[int]]:
+def _extract_title_levels_from_form(component_values: Dict[str, Any]) -> List[int]:
     return _extract_dropdown_values(_make_list(component_values['props']['children']))
-
-
-_BLOCKQUOTE_SUCCESS_STYLE = {
-    'border-left': '4px solid rgb(98, 186, 181)',
-    'padding-left': '1rem',
-    'margin-top': '2rem',
-    'margin-bottom': '2rem',
-    'margin-left': '0rem',
-    'font-style': 'italic',
-    'font-size': '0.85em',
-    'padding-top': '5px',
-    'padding-bottom': '5px',
-}
-_BLOCKQUOTE_ERROR_STYLE = {
-    **_BLOCKQUOTE_SUCCESS_STYLE,
-    'border-left': '4px solid rgb(250, 120, 120)',
-    'background-color': 'rgb(249, 237, 237)',
-}
 
 
 def _replace_line_breaks(message: str) -> List[Component]:
@@ -291,11 +304,11 @@ def _replace_line_breaks(message: str) -> List[Component]:
 
 
 def _error_component(message: str) -> Component:
-    return html.P(_replace_line_breaks(message), style=_BLOCKQUOTE_ERROR_STYLE)
+    return html.Div(_replace_line_breaks(message), className='alert alert-danger')
 
 
 def _success_component(message: str) -> Component:
-    return html.P(_replace_line_breaks(message), style=_BLOCKQUOTE_SUCCESS_STYLE)
+    return html.Div(_replace_line_breaks(message), className='alert alert-success')
 
 
 def _extract_form_value_and_save_text(nb_clicks: int, am_id: str, state: Dict[str, Any]) -> Component:
