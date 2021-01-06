@@ -1,0 +1,230 @@
+rubrique,name
+2101,"Bovins (élevage, vente, transit,  etc)"
+2980,Installation terrestre de production d'électricité
+1530,"Bois, papier, carton ou analogues (dépôt de) hors ERP"
+2102,Elevage de porcs
+1136,AMMONIAC (EMPLOI OU STOCKAGE)
+1185,Gaz à effet de serre fluorés
+1511,Entrepôts frigorifiques
+2221,Alimentaires (préparation ou conservation) produits d'origine animale
+2921,Refroidissement par dispersion d'eau dans un flux d'air (installations de)
+2925,Charge d'accumulateurs
+2910,Combustion
+1432,Liquides inflammables (stockage)
+1433,LIQUIDES INFLAMMABLES (MELANGE OU EMPLOI)
+2440,Fabrication de papier carton
+2661,"MATIERES PLASTIQUES, CAOUTCHOUC...(EMPLOI OU REEMPLOI)"
+2663,"Pneumatiques,produits avec polymères>50%(stockage)"
+1111,Très toxiques (emploi ou stockage)
+1131,Toxiques (emploi ou stockage)
+2531,Verre ou cristal (travail chimique du)
+2515,"Broyage, concassage,...et autres produits minéraux ou déchets non dangereux inertes"
+2517,Produits minéraux ou déchets non dangereux inertes (transit)
+2521,Enrobage au bitume de matériaux routiers (centrale d')
+2915,Chauffage (procédé de) fluide caloporteur organique combustible
+4734,Produits pétroliers spécifiques et carburants de substitution
+4801,"Houille, coke, lignite, charbon de bois, goudron, asphalte, brais et matières bitumineuses"
+2111,"Volailles, gibier à plume (élevage, vente, etc)"
+3660,avec plus de 40 000 emplacements pour les volailles
+2565,METAUX ET MATIERES PLASTIQUES (TRAITEMENT DES)
+2662,"MATIERES PLASTIQUES, CAOUTCHOUC...(STOCKAGE DE)"
+2940,"Vernis, peinture, colle, ... (application, cuisson, séchage)"
+2560,Métaux et alliages (travail mécanique des)
+4718,Gaz inflammables liquéfiés de catégorie 1 et 2
+2340,"Blanchisseries, laveries de linge"
+1510,Entrepôts couverts autres que 1511
+1532,Bois ou matériaux combustibles analogues (dépôt de)
+2630,Détergents et savons (fabrication de ou à base de)
+4331,Liquides inflammables de catégorie 2 ou catégorie 3
+4510,Dangereux pour l'environnement aquatique de catégorie aiguë 1 ou chronique 1
+4511,Dangereux pour l’environnement aquatique 2
+4802,Gaz à effet de serre fluorés ou substances qui appauvrissent la couche d'ozone
+2712,"Stockage, dépollution, démontage,… de VHU"
+2731,Dépôt de sous-produits d'origine animale
+2552,Fonderie (fabrication de produits moulés) métaux et alliages non ferreux
+2714,"déchets non dangereux de papiers, plastiques, bois,… (transit) hors 2710,2711"
+2716,déchets non dangereux non inertes (transit)
+2780,Installations de traitement aérobie de déchets non dangereux
+2791,Déchets non dangereux (traitement)
+2260,"BROYAGE, CONCASSAGE, CRIBLAGE, ETC DES SUBSTANCES VEGETALES"
+2575,Emploi de matières abrasives
+2120,"Chiens (élevage, vente, transit, garde, fourrières)"
+1172,DANGEREUX POUR L'ENVIRONNEMENT - A - TRES TOXIQUES (EMPLOI et STOCKAGE)
+1412,Gaz inflammables liquéfiés (stockage)
+1418,Acétylène (stockage ou emploi)
+2564,"Nettoyage,dégraissage,décapage avec organohalogénés ou solvants organiques"
+1434,Liquides inflammables (remplissage ou distribution) autres que 1435
+1435,Stations-service
+2410,Travail du bois ou matériaux combustibles analogues
+2710,collecte de déchets dangereux-DC
+1436,Liquides combustibles
+2930,"Ateliers de réparation,entretien de véhicules à moteur, dont carrosserie et tôlerie"
+4719,Acétylène (numéro CAS 74-86-2)
+4720,Oxyde d'éthylène (numéro CAS 75-21-8)
+4725,Oxygène (numéro CAS 7782-44-7)
+2760,Installations de stockage de déchets inertes
+1531,"Stockages, par voie humide (immersion ou aspersion), de bois non traité chimiquement"
+2415,Mise en oeuvre de produits de préservation du bois et dérivés
+2160,"SILOS DE STOCKAGE DE CEREALES, GRAINS,ETC DEGAGEANT DES POUSSIERES INFLAMMABLES"
+2510,Carrières (exploitation de)
+2713,Métaux et déchets de métaux (transit)
+2251,"Vins (préparation, conditionnement)"
+2794,Broyage de déchets verts
+1212,PEROXYDES ORGANIQUES (EMPLOI ET STOCKAGE)
+2640,"Colorants et pigments organiques, minéraux et naturels"
+2563,"Supérieure à 500 l, mais inférieure ou égale à 7500 l"
+2220,Alimentaires (préparation ou conservation) produits d'origine végétale
+2711,"Transit, regroupement, tri, ...équipements électriques mis au rebut"
+2718,Déchets dangereux ou contenant des substances ou préparations dangereuses (transit ou tri)
+2171,"Dépôts de fumiers, engrais et supports de culture"
+2230,"Lait (réception, stockage, traitement, transformation,etc) ou produits issus du lait"
+1414,Gaz inflammables liquéfiés (remplissage ou distribution)
+1173,DANGEREUX POUR L'ENVIRONNEMENT - TOXIQUES (STOCKAGE ET EMPLOI)
+1220,Oxygène (emploi et stockage)
+1611,"ACIDE ACETIQUE, CHLORHYDRIQUE, FORMIQUE,ETC (EMPLOI OU STOCKAGE)"
+1612,"Acide chlorosulfurique, oléums"
+1630,Soude ou potasse caustique
+3260,Traitement de surface
+2210,ABATTAGE D'ANIMAUX
+1450,Solides facilement inflammables
+4110,Toxicité aiguë catégorie 1
+4120,Toxicité aiguë catégorie 2
+4130,Toxicité aiguë catégorie 3 pour les voies d'exposition par inhalation
+4140,Toxicité aiguë catégorie 3 pour la voie d'exposition orale
+4150,Toxicité spécifique pour certains organes cibles
+4320,Aérosols extrêmement inflammables ou inflammables
+4321,Aérosols extrêmement inflammables ou inflammables
+4330,Liquides inflammables de catégorie 1
+4440,"Solides comburants catégorie 1,2 ou 3"
+4441,"Liquides comburants catégorie 1,2 ou 3"
+4442,Gaz comburants catégorie 1.
+2781,Installations de méthanisation de déchets non dangereux
+2170,Engrais et supports de culture (fabrication) à partir de matières organiques
+2524,"Taillage, sciage et polissage de minéraux naturels ou artificiels"
+4220,Produits explosifs (stockage de)
+2518,Installation de production de béton prêt à l'emploi
+1311,"POUDRES, EXPLOSIFS, ET AUTRES (STOCKAGE)"
+1416,Hydrogène (stockage ou emploi)
+2561,"Métaux et alliages (trempe, recuit ou revenu)"
+2567,"Métaux (galvanisation, étamage de) ou revêtement métallique"
+4715,Hydrogène (numéro CAS 133-74-0)
+3110,Combustion
+2566,Métaux (décapage ou nettoyage des) par traitement thermique
+1158,Diisocyanate de diphénylméthane (MDI)
+2660,Polymères (fabrication industrielle ou régénération)
+1150,"Substances particulières (stockage,emploi,fabrication,formulation,conditionnement)"
+4735,Ammoniac
+1155,AGRO-PHARMACEUTIQUES (DEPOTS)
+2771,Traitement thermique de déchets non dangereux
+2520,"Fabrication de ciments, chaux, plâtres"
+2350,"Tanneries, mégisseries, …"
+2351,Teinture et pigmentation de peaux
+2355,Dépôts de peaux
+2931,"Ateliers d’essais sur banc de moteurs à combustion interne ou à réaction, turbines"
+2570,Email
+2562,Bains de sels fondus (chauffage et traitements par l'intermédiaire de)
+2253,"Boissons (préparation, conditionnement) bières,jus de fruit,autres"
+2275,Fabrication de levure
+4422,Peroxydes organiques type E ou type F
+1331,"ENGRAIS SIMPLES SOLIDES...BASE NITRATES ,ENGRAIS COMPOSES(STOCKAGE)"
+2445,"Transformation du papier, carton"
+2450,Imprimeries ou reproduction graphique utilisant une forme imprimante
+2240,"Huiles végétales, animales, corps gras (extraction ou traitement)"
+2250,"Alcools,eaux de vie et liqueurs (production par distillation)"
+2715,"Transit, regroupement ou tri de déchets non dangereux de verre"
+2795,"Lavage de fûts, conteneurs,... de matières alimentaires, dangereuses ou de déchets dangereux"
+2680,Organismes génétiquement modifiés (mise en oeuvre industrielle ou commerciale)
+2685,"MEDICAMENTS, INSECTICIDES, ACARICIDES (FABRICATION, DIVISION)"
+3610,papier ou carton
+2330,"TEINTURES, APPRET, ENDUCTION,ETC DE TEXTILES"
+2522,Matériel vibrant (emploi de)
+4421,Peroxydes organiques type C ou type D
+4726,"2,4-diisocyanate de toluène (numéro CAS 584-84-9) ou 2,6-diisocyanate de toluène (numéro CAS 91-08-7)"
+2935,"PARCS DE STATIONNEMENT COUVERTS, ..."
+2950,Traitement et développement des surfaces photosensibles
+1141,CHLORURE D'HYDROGENE ANHYDRE LIQUEFIE (EMPLOI OU STOCKAGE )
+1413,Gaz naturel ou biogaz sous pression (remplissage réservoirs alimentant moteurs ou autres appareils)
+2311,"Traitement de fibres (battage, cardage, lavage, etc.)"
+1978,Autres revêtements
+2792,"Déchets PCB/PCT (transit, tri, regroupement)"
+2516,Produits minéraux pulvérulents non ensachés (transit)
+2740,Incinération de cadavres d'animaux de compagnie
+2130,Piscicultures
+2719,Installation temporaire de transit de déchets issus de pollutions accidentelles marines ou fluviales ou de catastrophes naturelles
+2546,"Traitement industriel des minerais non ferreux, élaboration des métaux et alliages non ferreux"
+4702,Engrais solides
+2430,Préparation de la pâte à papier
+1138,Chlore (emploi ou stockage)
+4210,"Produits explosifs (fabrication, chargement, encartouchage, conditionnement...)"
+2175,Engrais liquide (dépôt ) en récipients >= 3 000 l
+4610,Substances ou mélanges auxquels est attribuée la mention de danger EUH014
+4713,Fluor (numéro CAS 7782-41-4)
+4710,Chlore (numéro CAS 7782-50-5)
+2321,"Atelier de fabrication de tissus, ..."
+2140,Présentation au public d’animaux d’espèces non domestiques
+1156,OXYDES D'AZOTE (EMPLOI OU STOCKAGE)
+2793,Autre installation de traitement de déchets de produits explosifs
+2730,Traitement de sous-produits d'origine animale
+2550,Fonderie (fabrication produits moulés) de plomb et alliages
+4722,Méthanol (numéro CAS 67-56-1)
+1310,"POUDRES, EXPLOSIFS, ET AUTRES (FABRICATION, CONDITIONNEMENT, ...)"
+2551,Fonderie (fabrication produits moulés) métaux et alliages ferreux
+2530,Verre (fabrication et travail du)
+1332,Nitrate d'ammonium hors spécifications ou engrais non conformes sur la détonabilité (stockage de)
+2265,Fermentation acétique liquide (procédé)
+2252,"Cidre (préparation, conditionnement)"
+2631,"PARFUMS, HUILES ESSENTIELLES (EXTRACTION PAR LA VAPEUR DES) DES PLANTES AROMATIQUES"
+1455,Stockage de carbure de calcium
+4411,"Substances et mélanges autoréactifs type C, D, E ou F"
+4705,Nitrate de potassium et engrais composés (sous forme de comprimés ou de granulés)
+4706,Nitrate de potassium et engrais composés (sous forme de cristaux)
+1716,Substances radioactives
+1330,Nitrate d'ammonium (stockage)
+2720,"Déchets de l'extraction, ,,, de ressources minérales (stockage)"
+2345,NETTOYAGE A SEC DES TEXTILES OU VETEMENTS
+2420,Charbon de bois (fabrication du)
+4741,Mélanges d'hypochlorite de sodium classés dans la catégorie de toxicité aquatique aiguë 1
+1810,"Réagissant violemment au contact de l'eau(fabrication, emploi ou stockage)"
+2180,Tabac (fabrication et dépôt)
+4620,"Substances et mélanges qui, au contact de l’eau, dégagent des gaz inflammables, catégorie 1."
+4420,Peroxydes organiques type A ou type B
+1820,"Dégageant gaz toxiques au contact de l'eau(fabrication, emploi ou stockage)"
+4748,1-bromo-3-chloropropane (numéro CAS 109-70-6)
+4737,Sulfure d'hydrogène (numéro CAS 7783-06-4)
+2112,Couvoirs
+4701,Nitrate d'ammonium
+2360,"Fabrication de chaussures, maroquinerie, travail cuirs peaux"
+1139,"DIOXYDE DE CHLORE (FABRICATION, STOCKAGE OU EMPLOI)"
+4711,Composés de nickel sous forme pulvérulente inhalable
+4630,Substances ou mélanges auxquels est attribuée la mention de danger EUH029
+1735,"Dépôt, entreposage ou stockage de substances radioactives"
+2110,"LAPINS (ELEVAGE, VENTE, TRANSIT, ETC) DE PLUS D'UN MOIS"
+2113,"Carnassiers à fourrure (élevage, vente, transit, etc)"
+4733,Cancérogènes spécifiques ou les mélanges contenant les cancérogènes
+2797,Gestion des déchets radioactifs
+2150,Verminières
+1419,OXYDES D'ETHYLENE OU PROPYLENE (STOCKAGE OU EMPLOI)
+4410,Substances et mélanges autoréactifs type A ou type B
+1140,Formaldéhyde de concentration supérieure ou égale à 90%
+4716,Chlorure d'hydrogène (gaz liquéfié) (numéro CAS 7647-01-0)
+2690,Produits opothérapiques (préparation de)
+4739,Bis (2-dimethylaminoéthyl) (méthyl) amine (numéro CAS 3030-47-5)
+4740,3-(2-Ethylhexyloxy) propylamine (numéro CAS 5397-31-9)
+4714,Formaldéhyde (concentration > 90 %) (numéro CAS 50-00-0)
+4707,Pentoxyde d’arsenic…
+1157,Trioxyde de soufre (emploi ou stockage)
+4723,"4,4-méthylène-bis (2-chloraniline) et/ ou ses sels, sous forme pulvérulente (numéro CAS 101-14-4)"
+4709,Brome (numéro CAS 7726-95-6)
+4736,Trifluorure de bore (numéro CAS 7637-07-2)
+4744,2-méthyl-3-butènenitrile (numéro CAS 16529-56-9)
+4746,Acrylate de méthyle (numéro CAS 96-33-3)
+4729,Phosphine (trihydrure de phosphore) (numéro CAS 7803-51-2)
+4703,Nitrate d’ammonium ou d’engrais hors spécification
+1116,Dichlorure de carbonyle ou phosgène (emploi ou stockage)
+2971,Autres installations
+4717,Plombs alkyls
+4745,"Tétrahydro-3,5-diméthyl-1,3,5, thiadiazine-2-thione (dazomet) (numéro CAS 533-74-4)"
+4731,Trioxyde de soufre (numéro CAS 7446-11-9)
+4732,Polychlorodibenzofuranes et polychlorodibenzodioxines (y compris TCDD)
+4728,Arsine (trihydrure d'arsenic) (numéro CAS 7784-42-1)
+4738,Pipéridine (numéro CAS 110-89-4)
