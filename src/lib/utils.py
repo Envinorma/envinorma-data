@@ -36,3 +36,7 @@ def get_parametrization_filename(am_id: str) -> str:
 
 def get_parametrization_wip_folder(am_id: str) -> str:
     return os.path.join(AM_DATA_FOLDER, 'parametrization', am_id, 'wip')
+
+
+def get_state_file(am_id: str) -> str:
+    return os.path.join(AM_DATA_FOLDER, 'states', am_id + '.json')

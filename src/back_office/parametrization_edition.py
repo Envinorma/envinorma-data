@@ -5,7 +5,6 @@ import dash
 import dash_core_components as dcc
 import dash_html_components as html
 from dash.development.base_component import Component
-from lib.config import STORAGE
 from lib.data import ArreteMinisteriel, StructuredText, am_to_text
 
 from back_office.utils import AMOperation, div
@@ -156,17 +155,6 @@ def _extract_dropdown_values(components: List[Dict[str, Any]]) -> List[Optional[
         else:
             res.extend(_extract_dropdown_values(_make_list(component['props'].get('children'))))
     return res
-
-
-class _FormHandlingError(Exception):
-    pass
-
-
-def _write_file(content: str, filename: str):
-    if STORAGE != 'local':
-        raise ValueError(f'Unhandled storage value {STORAGE}')
-    with open(filename, 'w') as file_:
-        file_.write(content)
 
 
 def _extract_form_values(component_values: Dict[str, Any]) -> List[Optional[int]]:

@@ -1,4 +1,4 @@
-from typing import Dict, List
+from typing import Dict
 
 import dash
 import dash_core_components as dcc
@@ -10,7 +10,6 @@ from lib.data import AMMetadata
 from back_office import am_page
 from back_office.utils import ID_TO_AM_MD, div
 
-# external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 
 app = dash.Dash(
     __name__,
@@ -37,8 +36,8 @@ def _get_row(am: AMMetadata) -> Component:
         html.Td(dcc.Link(am.cid, href=f'/arrete_ministeriel/{am.cid}')),
         html.Td(str(am.nor)),
         html.Td(am.short_title),
-        html.Td('', className='table-success'),
-        html.Td('', className='table-danger'),
+        html.Td('', className='table-success'),  # TODO
+        html.Td('', className='table-danger'),  # TODO
     ]
     return html.Tr(rows)
 
