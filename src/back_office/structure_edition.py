@@ -1,4 +1,3 @@
-import json
 import os
 import traceback
 from dataclasses import replace
@@ -9,13 +8,12 @@ import dash
 import dash_core_components as dcc
 import dash_html_components as html
 from dash.development.base_component import Component
-
 from lib.config import STORAGE
 from lib.data import ArreteMinisteriel, Cell, Row, StructuredText, Table, am_to_text
 from lib.structure_extraction import TextElement, Title, build_structured_text, structured_text_to_text_elements
-from lib.utils import get_structured_text_filename, get_structured_text_wip_folder, jsonify
+from lib.utils import get_structured_text_wip_folder, jsonify
 
-from back_office.utils import ID_TO_AM_MD, div
+from back_office.utils import div, load_am
 
 _LEVEL_OPTIONS = [{'label': f'Titre {i}', 'value': i} for i in range(1, 11)] + [{'label': 'Alinea', 'value': -1}]
 _DROPDOWN_STYLE = {'width': '100px', 'margin-right': '10px'}
@@ -92,22 +90,6 @@ def _structure_edition_component(text: StructuredText) -> Component:
     return div(components)
 
 
-def _am_not_found_component(am_id: str) -> Component:
-    return html.P(f'L\'arrêté ministériel avec id {am_id} n\'a pas été trouvé.')
-
-
-def _load_am_from_file(am_id: str) -> ArreteMinisteriel:
-    path = get_structured_text_filename(am_id)
-    return ArreteMinisteriel.from_dict(json.load(open(path)))
-
-
-def _load_am(am_id: str) -> Optional[ArreteMinisteriel]:
-    am_md = ID_TO_AM_MD.get(am_id)
-    if not am_md:
-        return None
-    return _load_am_from_file(am_md.nor or am_md.cid)
-
-
 def _time(func):
     def new_func(*args, **kwargs):
         from time import time
@@ -153,14 +135,13 @@ def _submit_button() -> Component:
         'Enregistrer',
         id='submit-val-structure-edition',
         className='btn btn-primary center',
+        n_clicks=0,
         style={'margin-right': '10px'},
     )
 
 
 def _go_back_button(parent_page: str) -> Component:
-    return dcc.Link(
-        html.Button('Annuler', id='submit-val-structure-edition', className='btn btn-primary center'), href=parent_page
-    )
+    return dcc.Link(html.Button('Annuler', className='btn btn-primary center'), href=parent_page)
 
 
 def _footer_buttons(parent_page: str) -> Component:
@@ -175,8 +156,8 @@ def _fixed_footer(parent_page: str) -> Component:
         content,
         {
             'position': 'fixed',
-            'width': '80%',
             'bottom': '0px',
+            'width': '80%',
             'text-align': 'center',
             'background-color': 'white',
             'padding-bottom': '35px',
@@ -185,10 +166,7 @@ def _fixed_footer(parent_page: str) -> Component:
     )
 
 
-def make_am_structure_edition_component(am_id: str, parent_page: str) -> Component:
-    am = _load_am(am_id)
-    if not am:
-        return _am_not_found_component(am_id)
+def make_am_structure_edition_component(am_id: str, parent_page: str, am: ArreteMinisteriel) -> Component:
     text = am_to_text(am)
     return div(
         [
@@ -199,7 +177,7 @@ def make_am_structure_edition_component(am_id: str, parent_page: str) -> Compone
             _fixed_footer(parent_page),
             html.P(am_id, hidden=True, id='am-id-structure-edition'),
         ],
-        {'margin-bottom': '100px'},
+        {'margin-bottom': '300px'},
     )
 
 
@@ -267,7 +245,7 @@ def _ensure_title(element: TextElement) -> Title:
 
 
 def _structure_text(am_id: str, title_levels: List[int]) -> ArreteMinisteriel:
-    am = _load_am(am_id)
+    am = load_am(am_id)
     if not am:
         raise _FormHandlingError(f'am with id {am_id} not found, which should not happen')
     text = am_to_text(am)

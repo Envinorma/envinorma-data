@@ -1,14 +1,13 @@
-from dash_html_components.Tbody import Tbody
-from lib.data import AMMetadata
 from typing import Dict, List
 
 import dash
 import dash_core_components as dcc
 import dash_html_components as html
-from dash.development.base_component import Component
 from dash.dependencies import Input, Output
-from back_office import am_page
+from dash.development.base_component import Component
+from lib.data import AMMetadata
 
+from back_office import am_page
 from back_office.utils import ID_TO_AM_MD, div
 
 # external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']

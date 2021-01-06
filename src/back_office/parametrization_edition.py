@@ -1,4 +1,3 @@
-import json
 from datetime import datetime
 from typing import Any, Dict, List, Optional, Union
 
@@ -8,9 +7,8 @@ import dash_html_components as html
 from dash.development.base_component import Component
 from lib.config import STORAGE
 from lib.data import ArreteMinisteriel, StructuredText, am_to_text
-from lib.utils import get_structured_text_filename
 
-from back_office.utils import ID_TO_AM_MD, div
+from back_office.utils import AMOperation, div
 
 _Options = List[Dict[str, Any]]
 
@@ -39,7 +37,45 @@ _ALINEA_TARGETS_OPERATIONS = [*range(1, 51), 'TOUS']
 _ALINEA_OPTIONS = [{'label': condition, 'value': condition} for condition in _ALINEA_TARGETS_OPERATIONS]
 
 
-def _make_non_application_form(options: _Options) -> Component:
+def _get_main_title(operation: AMOperation) -> Component:
+    return (
+        html.H3('Nouvelle condition de non-application')
+        if operation == operation.ADD_CONDITION
+        else html.H3('Nouvelle section alternative')
+    )
+
+
+def _get_description_help(operation: AMOperation) -> Component:
+    if operation == operation.ADD_CONDITION:
+        return html.P(
+            'Ex: "Ce paragraphe ne s\'applique pas aux installations à enregistrement installées avant le 01/01/2008."'
+        )
+    return html.P(
+        'Ex: "Ce paragraphe est modifié pour les installations à enregistrement installées avant le 01/01/2008."'
+    )
+
+
+def _is_condition(operation: AMOperation) -> bool:
+    return operation == operation.ADD_CONDITION
+
+
+def _get_new_section_form() -> Component:
+    return div(
+        [
+            html.H4('Nouvelle version'),
+            html.Label('Titre', htmlFor='new-section-title', className='form-label'),
+            dcc.Input(id='new-section-title', placeholder='Titre', className='form-control'),
+            html.Label('Contenu du paragraphe', htmlFor='new-section-paragraph', className='form-label'),
+            div(dcc.Textarea(id='new-section-paragraph', className='form-control')),
+        ]
+    )
+
+
+def _go_back_button(parent_page: str) -> Component:
+    return dcc.Link(html.Button('Retour', className='btn btn-primary center'), href=parent_page)
+
+
+def _make_form(options: _Options, operation: AMOperation, parent_page: str) -> Component:
     dropdown_source = dcc.Dropdown(options=options)
     dropdown_target = dcc.Dropdown(options=options)
     dropdown_alineas = dcc.Dropdown(options=_ALINEA_OPTIONS, multi=True, value=['TOUS'])
@@ -51,26 +87,29 @@ def _make_non_application_form(options: _Options) -> Component:
     )
     return html.Div(
         [
-            html.H2('Nouvelle condition de non application'),
+            _get_main_title(operation),
             html.H4('Description (visible par l\'utilisateur)'),
-            dcc.Textarea(value=''),
+            _get_description_help(operation),
+            dcc.Textarea(value='', className='form-control'),
             html.H4('Source'),
             dropdown_source,
             html.H4('Paragraphe visé'),
             dropdown_target,
-            html.H4('Alineas visés'),
-            dropdown_alineas,
+            html.H4('Alineas visés') if _is_condition(operation) else html.Div(),
+            dropdown_alineas if _is_condition(operation) else html.Div(),
+            _get_new_section_form() if not _is_condition(operation) else html.Div(),
             html.H4('Condition'),
-            html.H4(''),
-            html.P('Opération :'),
+            html.P('Opération'),
             dropdown_condition_merge,
-            html.P('Nombre de conditions :'),
+            html.P('Nombre de conditions'),
             dropdown_nb_conditions,
-            html.P('Liste de conditions :'),
+            html.P('Liste de conditions'),
             html.Div(id='nac-conditions'),
             html.Div(id='form-output-param-edition'),
-            html.Button('Submit', id='submit-val-param-edition'),
-            # html.H3(am_id, hidden=True, id='am-id-param-edition'),
+            html.Button(
+                'Enregistrer', id='submit-val-param-edition', className='btn btn-primary', style={'margin-right': '5px'}
+            ),
+            _go_back_button(parent_page),
         ]
     )
 
@@ -86,33 +125,16 @@ def _extract_paragraph_reference_dropdown_values(text: StructuredText) -> _Optio
     return [{'label': title, 'value': i} for i, title in enumerate(title_references)]
 
 
-def _structure_edition_component(text: StructuredText) -> Component:
+def _structure_edition_component(text: StructuredText, operation: AMOperation, parent_page: str) -> Component:
     dropdown_values = _extract_paragraph_reference_dropdown_values(text)
-    return _make_non_application_form(dropdown_values)
+    return _make_form(dropdown_values, operation, parent_page)
 
 
-def _am_not_found_component(am_id: str) -> Component:
-    return html.P(f'L\'arrêté ministériel avec id {am_id} n\'a pas été trouvé.')
-
-
-def _load_am_from_file(am_id: str) -> ArreteMinisteriel:
-    path = get_structured_text_filename(am_id)
-    return ArreteMinisteriel.from_dict(json.load(open(path)))
-
-
-def _load_am(am_id: str) -> Optional[ArreteMinisteriel]:
-    am_md = ID_TO_AM_MD.get(am_id)
-    if not am_md:
-        return None
-    return _load_am_from_file(am_md.nor or am_md.cid)
-
-
-def make_am_parametrization_edition_component(am_id: str) -> Component:
-    am = _load_am(am_id)
-    if not am:
-        return _am_not_found_component(am_id)
+def make_am_parametrization_edition_component(
+    am: ArreteMinisteriel, operation: AMOperation, parent_page: str
+) -> Component:
     text = am_to_text(am)
-    return div(_structure_edition_component(text))
+    return div(_structure_edition_component(text, operation, parent_page))
 
 
 def _make_list(candidate: Optional[Union[List[Dict[str, Any]], Dict[str, Any]]]) -> List[Dict[str, Any]]:
@@ -147,21 +169,11 @@ def _write_file(content: str, filename: str):
         file_.write(content)
 
 
-# def _save_text(am_id: str, title_levels: List[Optional[int]]) -> str:
-#     new_version = datetime.now().strftime('%y%m%d_%H%M')
-#     filename = os.path.join(get_parametrization_filename(am_id), new_version + '.json')
-#     text = _structure_text(am_id, title_levels)
-#     json_ = jsonify(text.to_dict())
-#     _write_file(json_, filename)
-#     return f'Enregistrement réussi. (Filename={filename})'
-
-
 def _extract_form_values(component_values: Dict[str, Any]) -> List[Optional[int]]:
     return _extract_dropdown_values(_make_list(component_values['props']['children']))
 
 
 def add_parametrization_edition_callbacks(app: dash.Dash):
-    # def update_output(_, am_id, children):
     def update_output(n_clicks, state):
         print(n_clicks)
         print(state)
