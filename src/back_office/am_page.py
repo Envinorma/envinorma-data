@@ -1,4 +1,3 @@
-import json
 from typing import List, Optional, Tuple
 
 import dash_core_components as dcc
@@ -24,6 +23,7 @@ from back_office.utils import (
     dump_am_state,
     load_am,
     load_am_state,
+    load_parametrization,
 )
 
 _VALIDATE_STRUCTURE_BUTTON_ID = '_validate_structure_button_id'
@@ -39,13 +39,6 @@ def _extract_am_id_and_operation(pathname: str) -> Tuple[str, Optional[AMOperati
     if len(pieces) == 1:
         return pieces[0], None, ''
     return pieces[0], AMOperation(pieces[1]), '/'.join(pieces[2:])
-
-
-def _load_parametrization(am_state: AMState) -> Optional[Parametrization]:
-    if not am_state.parametrization_draft_filenames:
-        return Parametrization([], [])
-    last_filename = am_state.parametrization_draft_filenames[-1]
-    return Parametrization.from_dict(json.load(open(last_filename)))
 
 
 def _inline_buttons(buttons: List[Component]) -> Component:
@@ -278,24 +271,31 @@ def _get_body_component(
     if operation_id == operation_id.EDIT_STRUCTURE:
         return make_am_structure_edition_component(am_id, parent_page, am)
     if operation_id in (operation_id.ADD_CONDITION, operation_id.ADD_ALTERNATIVE_SECTION):
-        return make_am_parametrization_edition_component(am, operation_id, parent_page)
+        return make_am_parametrization_edition_component(am, operation_id, parent_page, am_id)
     raise NotImplementedError()
 
 
 def _router(pathname: str, parent_page: str) -> Component:
-    print(pathname)
     am_id, operation_id, _ = _extract_am_id_and_operation(pathname)
     parent_page = parent_page + '/' + am_id
-    am = load_am(am_id)
     am_state = load_am_state(am_id)
-    parametrization = _load_parametrization(am_state)
+    am = load_am(am_id, am_state)
+    parametrization = load_parametrization(am_id, am_state)
     if not am or not parametrization:
         body = html.P('Arrêté introuvable.')
     else:
         body = _get_body_component(operation_id, am_id, parent_page, am, am_state, parametrization)
     subtitle_component = _get_subtitle_component(am_id, parent_page)
 
-    return html.Div([subtitle_component, body, html.P(am_id, hidden=True, id='am-id-am-page')], id='am-page')
+    return html.Div(
+        [
+            subtitle_component,
+            body,
+            html.P(am_id, hidden=True, id='am-id-am-page'),
+            html.P(parent_page, hidden=True, id='parent-page-am-page'),
+        ],
+        id='am-page',
+    )
 
 
 def _update_am_state(clicked_button: str, am_id: str) -> None:
@@ -318,24 +318,26 @@ def _add_callbacks(app: Dash) -> None:
     add_structure_edition_callbacks(app)
     add_parametrization_edition_callbacks(app)
 
-    am_id = Input('am-id-am-page', 'children')
     ids = [
         _VALIDATE_STRUCTURE_BUTTON_ID,
         _INVALIDATE_STRUCTURE_BUTTON_ID,
         _VALIDATE_PARAMETRIZATION_BUTTON_ID,
         _INVALIDATE_PARAMETRIZATION_BUTTON_ID,
     ]
-    inputs = [Input(id_, 'n_clicks') for id_ in ids]
+    inputs = [Input(id_, 'n_clicks') for id_ in ids] + [
+        Input('am-id-am-page', 'children'),
+        Input('parent-page-am-page', 'children'),
+    ]
     out = Output('am-page', 'children')
 
-    def _handle_click(n_clicks_0, n_clicks_1, n_clicks_2, n_clicks_3, am_id_):
+    def _handle_click(n_clicks_0, n_clicks_1, n_clicks_2, n_clicks_3, am_id_, parent_page):
         all_n_clicks = n_clicks_0, n_clicks_1, n_clicks_2, n_clicks_3
         for id_, n_clicks in zip(ids, all_n_clicks):
             if n_clicks >= 1:
                 _update_am_state(id_, am_id_)
-        return _router(f'/{am_id_}', '/arrete_ministeriel')  # TODO
+        return _router(f'/{am_id_}', '/'.join(parent_page.split('/')[:-1]))
 
-    app.callback(out, [*inputs, am_id])(_handle_click)
+    app.callback(out, inputs)(_handle_click)
 
 
 page = Page(_router, _add_callbacks)

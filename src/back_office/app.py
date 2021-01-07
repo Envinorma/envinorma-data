@@ -1,4 +1,4 @@
-from typing import Dict
+from typing import Dict, List
 
 import dash
 import dash_core_components as dcc
@@ -8,7 +8,7 @@ from dash.development.base_component import Component
 from lib.data import AMMetadata
 
 from back_office import am_page
-from back_office.utils import ID_TO_AM_MD, div
+from back_office.utils import AMState, ID_TO_AM_MD, div, load_am_state
 
 
 app = dash.Dash(
@@ -31,13 +31,17 @@ app.layout = html.Div(
 )
 
 
-def _get_row(am: AMMetadata) -> Component:
+def _class_name_from_bool(bool_: bool) -> str:
+    return 'table-success' if bool_ else 'table-danger'
+
+
+def _get_row(am_state: AMState, am_metadata: AMMetadata) -> Component:
     rows = [
-        html.Td(dcc.Link(am.cid, href=f'/arrete_ministeriel/{am.cid}')),
-        html.Td(str(am.nor)),
-        html.Td(am.short_title),
-        html.Td('', className='table-success'),  # TODO
-        html.Td('', className='table-danger'),  # TODO
+        html.Td(dcc.Link(am_metadata.cid, href=f'/arrete_ministeriel/{am_metadata.cid}')),
+        html.Td(str(am_metadata.nor)),
+        html.Td(am_metadata.short_title),
+        html.Td('', className=_class_name_from_bool(am_state.state != am_state.state.PENDING_STRUCTURE_VALIDATION)),
+        html.Td('', className=_class_name_from_bool(am_state.state == am_state.state.VALIDATED)),
     ]
     return html.Tr(rows)
 
@@ -46,24 +50,29 @@ def _get_header() -> Component:
     return html.Tr([html.Th('N° CID'), html.Th('N° NOR'), html.Th('Nom'), html.Th('Structuré'), html.Th('Enrichi')])
 
 
-def _build_am_table(id_to_am_metadata: Dict[str, AMMetadata]) -> Component:
+def _build_am_table(id_to_state: Dict[str, AMState], id_to_am_metadata: Dict[str, AMMetadata]) -> Component:
     header = _get_header()
     return html.Table(
-        [html.Thead(header), html.Tbody([_get_row(am) for am in id_to_am_metadata.values()])],
+        [html.Thead(header), html.Tbody([_get_row(id_to_state[am_id], am) for am_id, am in id_to_am_metadata.items()])],
         className='table table-hover',
     )
 
 
-def _make_index_component(id_to_am_metadata: Dict[str, AMMetadata]) -> Component:
-    return div([html.H3('Arrêtés ministériels.'), _build_am_table(id_to_am_metadata)])
+def _make_index_component(id_to_state: Dict[str, AMState], id_to_am_metadata: Dict[str, AMMetadata]) -> Component:
+    return div([html.H3('Arrêtés ministériels.'), _build_am_table(id_to_state, id_to_am_metadata)])
 
 
 _CHILD_PAGES = {'/arrete_ministeriel': am_page.page}
 
 
+def _load_am_states(ids: List[str]) -> Dict[str, AMState]:
+    return {id_: load_am_state(id_) for id_ in ids}
+
+
 def router(pathname: str) -> Component:
     if pathname == '/':
-        return _make_index_component(ID_TO_AM_MD)
+        id_to_state = _load_am_states(list(ID_TO_AM_MD.keys()))
+        return _make_index_component(id_to_state, ID_TO_AM_MD)
     for key, page in _CHILD_PAGES.items():
         if pathname[: len(key)] == key:
             return page.router(pathname[len(key) :], key)

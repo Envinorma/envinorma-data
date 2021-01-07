@@ -8,12 +8,11 @@ import dash
 import dash_core_components as dcc
 import dash_html_components as html
 from dash.development.base_component import Component
-from lib.config import STORAGE
 from lib.data import ArreteMinisteriel, Cell, Row, StructuredText, Table, am_to_text
 from lib.structure_extraction import TextElement, Title, build_structured_text, structured_text_to_text_elements
 from lib.utils import get_structured_text_wip_folder, jsonify
 
-from back_office.utils import div, load_am
+from back_office.utils import AMState, div, dump_am_state, load_am, load_am_state, write_file
 
 _LEVEL_OPTIONS = [{'label': f'Titre {i}', 'value': i} for i in range(1, 11)] + [{'label': 'Alinea', 'value': -1}]
 _DROPDOWN_STYLE = {'width': '100px', 'margin-right': '10px'}
@@ -245,7 +244,8 @@ def _ensure_title(element: TextElement) -> Title:
 
 
 def _structure_text(am_id: str, title_levels: List[int]) -> ArreteMinisteriel:
-    am = load_am(am_id)
+    am_state = load_am_state(am_id)
+    am = load_am(am_id, am_state)
     if not am:
         raise _FormHandlingError(f'am with id {am_id} not found, which should not happen')
     text = am_to_text(am)
@@ -257,20 +257,21 @@ def _structure_text(am_id: str, title_levels: List[int]) -> ArreteMinisteriel:
     return replace(am, sections=new_text.sections)
 
 
-def _write_file(content: str, filename: str):
-    if STORAGE != 'local':
-        raise ValueError(f'Unhandled storage value {STORAGE}')
-    with open(filename, 'w') as file_:
-        file_.write(content)
+def _add_filename_to_state(am_id: str, filename: str) -> None:
+    am_state = load_am_state(am_id)
+    am_state.structure_draft_filenames.append(filename)
+    dump_am_state(am_id, am_state)
 
 
 def _save_text_and_get_message(am_id: str, title_levels: List[int]) -> str:
     new_version = datetime.now().strftime('%y%m%d_%H%M')
-    filename = os.path.join(get_structured_text_wip_folder(am_id), new_version + '.json')
+    filename = new_version + '.json'
+    full_filename = os.path.join(get_structured_text_wip_folder(am_id), filename)
     text = _structure_text(am_id, title_levels)
     json_ = jsonify(text.to_dict())
-    _write_file(json_, filename)
-    return f'Enregistrement réussi. (Filename={filename})'
+    write_file(json_, full_filename)
+    _add_filename_to_state(am_id, filename)
+    return f'Enregistrement réussi. (Filename={full_filename})'
 
 
 def _extract_title_levels_from_form(component_values: Dict[str, Any]) -> List[int]:
