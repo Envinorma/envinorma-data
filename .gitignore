@@ -4,4 +4,4 @@
 src/.vscode
 src/.coverage
 tmp*
-src/lib/config.py
+src/lib/secrets.py

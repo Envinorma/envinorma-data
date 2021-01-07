@@ -488,7 +488,8 @@ class AMData:
 
 
 def load_am_data() -> AMData:
-    return AMData.from_dict(json.load(open(f'data/arretes_ministeriels.json')))
+    filename = __file__.replace('lib/data.py', 'data/arretes_ministeriels.json')
+    return AMData.from_dict(json.load(open(filename)))
 
 
 @dataclass

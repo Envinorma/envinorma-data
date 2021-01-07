@@ -31,11 +31,11 @@ def get_structured_text_wip_folder(am_id: str) -> str:
 
 
 def get_parametrization_filename(am_id: str) -> str:
-    return os.path.join(AM_DATA_FOLDER, 'parametrization', am_id + '.json')
+    return os.path.join(AM_DATA_FOLDER, 'parametrizations', am_id + '.json')
 
 
 def get_parametrization_wip_folder(am_id: str) -> str:
-    return os.path.join(AM_DATA_FOLDER, 'parametrization', 'wip', am_id)
+    return os.path.join(AM_DATA_FOLDER, 'parametrizations', 'wip', am_id)
 
 
 def get_state_file(am_id: str) -> str:
