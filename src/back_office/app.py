@@ -6,10 +6,22 @@ import dash_html_components as html
 from dash.dependencies import Input, Output
 from dash.development.base_component import Component
 from lib.data import AMMetadata
+from lib.config import AM_DATA_FOLDER
 
 from back_office import am_page
 from back_office.utils import AMState, ID_TO_AM_MD, div, load_am_state
 
+
+def _prepare_archive_if_no_data():
+    import os, shutil
+
+    if not os.listdir(AM_DATA_FOLDER):
+        print('No AM data. Unzipping default archive.')
+        path_to_archive = __file__.replace('back_office/app.py', 'data/AM.zip')
+        shutil.unpack_archive(path_to_archive, AM_DATA_FOLDER)
+
+
+_prepare_archive_if_no_data()
 
 app = dash.Dash(
     __name__,
@@ -84,7 +96,10 @@ def display_page(pathname: str):
     return router(pathname)
 
 
+for _PAGE in _CHILD_PAGES.values():
+    _PAGE.add_callbacks(app)
+
+APP = app.server  # for gunicorn deployment
+
 if __name__ == '__main__':
-    for _PAGE in _CHILD_PAGES.values():
-        _PAGE.add_callbacks(app)
     app.run_server(debug=True)

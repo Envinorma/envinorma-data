@@ -96,10 +96,34 @@ def _load_am_from_file(path: str) -> ArreteMinisteriel:
     return ArreteMinisteriel.from_dict(json.load(open(path)))
 
 
-def load_am(am_id: str, am_state: AMState) -> ArreteMinisteriel:
+def load_am(am_id: str, am_state: AMState) -> Optional[ArreteMinisteriel]:
     if len(am_state.structure_draft_filenames) == 0:
         last_filename = 'default.json'
     else:
         last_filename = am_state.structure_draft_filenames[-1]
     full_filename = os.path.join(get_structured_text_wip_folder(am_id), last_filename)
+    if not os.path.exists(full_filename):
+        return None
     return _load_am_from_file(full_filename)
+
+
+# from tqdm import tqdm
+# import shutil
+
+# for AM in tqdm(_AM.metadata):
+#     AM_ID = AM.cid
+
+#     if not os.path.exists(get_parametrization_wip_folder(AM_ID)):
+#         os.mkdir(get_parametrization_wip_folder(AM_ID))
+#     default_param = get_parametrization_filename(AM.nor or AM.cid)
+#     if os.path.exists(default_param):
+#         shutil.copy(default_param, get_parametrization_wip_folder(AM_ID) + '/default.json')
+
+#     if not os.path.exists(get_structured_text_wip_folder(AM_ID)):
+#         os.mkdir(get_structured_text_wip_folder(AM_ID))
+#     default_text = get_structured_text_filename(AM.nor or AM.cid)
+#     if os.path.exists(default_text):
+#         shutil.copy(default_text, get_structured_text_wip_folder(AM_ID) + '/default.json')
+
+#     new_state = AMState(AMWorkflowState.PENDING_STRUCTURE_VALIDATION, [], [])
+#     dump_am_state(AM_ID, new_state)
