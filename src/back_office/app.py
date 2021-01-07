@@ -15,11 +15,15 @@ from back_office.utils import AMState, ID_TO_AM_MD, div, load_am_state
 def _prepare_archive_if_no_data():
     import os, shutil
 
+    if not os.path.exists(AM_DATA_FOLDER):
+        os.mkdir(AM_DATA_FOLDER)
+
     if not os.listdir(AM_DATA_FOLDER):
         print('No AM data. Unzipping default archive.')
         path_to_archive = __file__.replace('back_office/app.py', 'data/AM.zip')
         shutil.unpack_archive(path_to_archive, AM_DATA_FOLDER)
-
+    else:
+        print(os.listdir(AM_DATA_FOLDER))
 
 _prepare_archive_if_no_data()
 
