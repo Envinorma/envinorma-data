@@ -1,0 +1,1 @@
+web: gunicorn --pythonpath src -e DATA_FOLDER='src/data' src.scripts.dash_app:APP --preload

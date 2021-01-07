@@ -11,5 +11,7 @@ if __name__ == '__main__':
         if not os.path.exists(dst_folder):
             os.makedirs(dst_folder)
         copy_tree(src_folder, dst_folder)
-    for file_ in ('requirements.txt', 'Procfile', '.gitignore'):
+    shutil.copyfile(full_repo + 'dashboard.Procfile', heroku_repo + 'Procfile')
+    for file_ in ('requirements.txt', '.gitignore'):
         shutil.copyfile(full_repo + file_, heroku_repo + file_)
+     
