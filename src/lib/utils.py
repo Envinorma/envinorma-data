@@ -27,7 +27,7 @@ def get_structured_text_filename(am_id: str) -> str:
 
 
 def get_structured_text_wip_folder(am_id: str) -> str:
-    return os.path.join(AM_DATA_FOLDER, 'structured_texts', am_id, 'wip')
+    return os.path.join(AM_DATA_FOLDER, 'structured_texts', 'wip', am_id)
 
 
 def get_parametrization_filename(am_id: str) -> str:
@@ -35,7 +35,7 @@ def get_parametrization_filename(am_id: str) -> str:
 
 
 def get_parametrization_wip_folder(am_id: str) -> str:
-    return os.path.join(AM_DATA_FOLDER, 'parametrization', am_id, 'wip')
+    return os.path.join(AM_DATA_FOLDER, 'parametrization', 'wip', am_id)
 
 
 def get_state_file(am_id: str) -> str:
