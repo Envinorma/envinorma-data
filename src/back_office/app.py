@@ -37,7 +37,7 @@ app = dash.Dash(
 
 
 def _get_page_heading() -> Component:
-    src = 'assets/logo-envinorma.png'
+    src = '/assets/logo-envinorma.png'
     return html.Header(
         dcc.Link(
             html.Div(
@@ -67,7 +67,7 @@ app.layout = html.Div(
         dcc.Location(id='url', refresh=False),
         _get_page_heading(),
         html.Div(id='page-content', style={'width': '80%', 'margin': 'auto'}),
-    ]
+    ], id='layout'
 )
 
 

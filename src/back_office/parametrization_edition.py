@@ -30,7 +30,17 @@ from lib.parametrization import (
 )
 from lib.utils import get_parametrization_wip_folder, jsonify
 
-from back_office.utils import AMOperation, div, dump_am_state, load_am_state, load_parametrization, write_file
+from back_office.utils import (
+    AMOperation,
+    assert_int,
+    assert_list,
+    assert_str,
+    div,
+    dump_am_state,
+    load_am_state,
+    load_parametrization,
+    write_file,
+)
 
 _Options = List[Dict[str, Any]]
 
@@ -263,30 +273,12 @@ def _get_with_error(dict_: Dict[str, Any], key: str) -> Any:
     return dict_[key]
 
 
-def _assert_int(value: Any) -> int:
-    if not isinstance(value, int):
-        raise ValueError(f'Expecting type int, received type {type(value)}')
-    return value
-
-
-def _assert_str(value: Any) -> str:
-    if not isinstance(value, str):
-        raise ValueError(f'Expecting type str, received type {type(value)}')
-    return value
-
-
-def _assert_list(value: Any) -> List:
-    if not isinstance(value, list):
-        raise ValueError(f'Expecting type list, received type {type(value)}')
-    return value
-
-
 def _extract_conditions(nb_conditions: int, id_to_value: Dict[str, Any]) -> List[Tuple[str, str, str]]:
     return [
         (
-            _assert_str(_get_with_error(id_to_value, f'{_CONDITION_PARAMETER}_{i}')),
-            _assert_str(_get_with_error(id_to_value, f'{_CONDITION_OPERATION}_{i}')),
-            _assert_str(_get_with_error(id_to_value, f'{_CONDITION_VALUE}_{i}')),
+            assert_str(_get_with_error(id_to_value, f'{_CONDITION_PARAMETER}_{i}')),
+            assert_str(_get_with_error(id_to_value, f'{_CONDITION_OPERATION}_{i}')),
+            assert_str(_get_with_error(id_to_value, f'{_CONDITION_VALUE}_{i}')),
         )
         for i in range(nb_conditions)
     ]
@@ -301,14 +293,14 @@ def _build_source(source_str: str) -> ConditionSource:
 
 
 def _extract_alinea_indices(target_alineas: List[Union[str, int]]) -> Optional[List[int]]:
-    _assert_list(target_alineas)
+    assert_list(target_alineas)
     if target_alineas == ['TOUS']:
         return None
     if 'TOUS' in target_alineas and len(target_alineas) >= 2:
         raise _ErrorInForm(
             'Le champ "Alineas visés" ne peut contenir la valeur "TOUS" que ' 'si c\'est la seule valeur renseignée.'
         )
-    return [_assert_int(x) for x in target_alineas]
+    return [assert_int(x) for x in target_alineas]
 
 
 def _get_path(path_str: str) -> Ints:
@@ -430,7 +422,7 @@ def _extract_new_text_parameters(id_to_value: Dict[str, str]) -> Tuple[str, str]
 
 def _extract_new_parameter_object(page_state: Dict[str, Any], operation: AMOperation) -> _ParameterObject:
     id_to_value = _extract_id_to_value(page_state)
-    description = _assert_str(_get_with_error(id_to_value, _DESCRIPTION))
+    description = assert_str(_get_with_error(id_to_value, _DESCRIPTION))
     if len(description) < _MIN_NB_CHARS:
         raise _ErrorInForm(f'Le champ "Description" doit contenir au moins {_MIN_NB_CHARS} caractères.')
     source = _get_with_error(id_to_value, _SOURCE)

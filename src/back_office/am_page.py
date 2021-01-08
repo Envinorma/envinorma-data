@@ -278,6 +278,8 @@ def _get_body_component(
 
 def _router(pathname: str, parent_page: str) -> Component:
     am_id, operation_id, _ = _extract_am_id_and_operation(pathname)
+    if am_id not in ID_TO_AM_MD:
+        return html.P('404 - Arrêté inconnu')
     parent_page = parent_page + '/' + am_id
     am_state = load_am_state(am_id)
     am_metadata = ID_TO_AM_MD.get(am_id)
@@ -287,7 +289,8 @@ def _router(pathname: str, parent_page: str) -> Component:
         body = html.P('Arrêté introuvable.')
     else:
         body = _get_body_component(operation_id, am_id, parent_page, am, am_state, parametrization)
-    subtitle_component = _get_subtitle_component(am_metadata.nor or am_metadata.cid, parent_page)
+    page_title = am_metadata.nor or am_metadata.cid if am_metadata else am_id
+    subtitle_component = _get_subtitle_component(page_title, parent_page)
 
     return html.Div(
         [

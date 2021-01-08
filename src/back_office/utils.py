@@ -23,6 +23,24 @@ ID_TO_AM_MD = {am.cid: am for am in _AM.metadata if am.state != am.state.ABROGE}
 # ID_TO_AM_MD = {am.cid: am for am in ID_TO_AM_MD.values() if '26' in am.cid}
 
 
+def assert_int(value: Any) -> int:
+    if not isinstance(value, int):
+        raise ValueError(f'Expecting type int, received type {type(value)}')
+    return value
+
+
+def assert_str(value: Any) -> str:
+    if not isinstance(value, str):
+        raise ValueError(f'Expecting type str, received type {type(value)}')
+    return value
+
+
+def assert_list(value: Any) -> List:
+    if not isinstance(value, list):
+        raise ValueError(f'Expecting type list, received type {type(value)}')
+    return value
+
+
 class Page:
     def __init__(self, router: Callable[[str, str], Component], add_callbacks: Callable[[dash.Dash], None]) -> None:
         self.router: Callable[[str, str], Component] = router

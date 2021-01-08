@@ -7,15 +7,19 @@ from typing import Any, Dict, List, Optional, Union
 import dash
 import dash_core_components as dcc
 import dash_html_components as html
+from dash.dependencies import Input, Output, State
 from dash.development.base_component import Component
 from lib.data import ArreteMinisteriel, Cell, Row, StructuredText, Table, am_to_text
 from lib.structure_extraction import TextElement, Title, build_structured_text, structured_text_to_text_elements
 from lib.utils import get_structured_text_wip_folder, jsonify
 
-from back_office.utils import AMState, div, dump_am_state, load_am, load_am_state, write_file
+from back_office.utils import assert_str, div, dump_am_state, load_am, load_am_state, write_file
 
 _LEVEL_OPTIONS = [{'label': f'Titre {i}', 'value': i} for i in range(1, 11)] + [{'label': 'Alinea', 'value': -1}]
 _DROPDOWN_STYLE = {'width': '100px', 'margin-right': '10px'}
+_TOC_COMPONENT = 'structure-edition-toc'
+_TEXT_AREA_COMPONENT = 'structure-edition-text-area-component'
+_PREVIEW_BUTTON = 'structure-editition-preview-button'
 
 
 def _make_dropdown(level: int, disabled: bool = False) -> Component:
@@ -71,36 +75,54 @@ def _text_to_elements(text: StructuredText) -> List[TextElement]:
     return structured_text_to_text_elements(text, 0)
 
 
-def _get_title_ranks(elements: List[TextElement]) -> List[int]:
-    res: List[int] = []
-    rank = 0
+def _element_to_str(element: TextElement) -> str:
+    if isinstance(element, Title):
+        return '#' * element.level + ' ' + element.text
+    if isinstance(element, str):
+        return element
+    raise NotImplementedError(f'Not implemented for type {type(element)}')
+
+
+def _element_to_component(rank: int, element: TextElement) -> Component:
+    if isinstance(element, Table):
+        return html.P(f'Tableau numéro {rank} non reproduit', className='alert alert-dark')
+    if isinstance(element, Title):
+        return html.P(html.Strong('#' * element.level + ' ' + element.text))
+    if isinstance(element, str):
+        return html.P(element)
+    raise NotImplementedError(f'Not implemented for type {type(element)}')
+
+
+def _prepare_text_area_components(elements: List[TextElement]) -> List[Component]:
+    return [_element_to_component(i, element) for i, element in enumerate(elements)]
+
+
+def _prepare_text_area_value(elements: List[TextElement]) -> str:
+    table_rank = 0
+    strs: List[str] = []
     for element in elements:
-        if isinstance(element, Title):
-            res.append(rank)
-            rank += 1
-            continue
-        res.append(0)
-    return res
+        if isinstance(element, Table):
+            strs.append(f'{_TABLEAU_PREFIX}{table_rank} non reproduit - ne pas modifier!!')
+            table_rank += 1
+        else:
+            strs.append(_element_to_str(element))
+    return '\n\n'.join(strs)
 
 
 def _structure_edition_component(text: StructuredText) -> Component:
-    text_elements = _text_to_elements(text)
-    components = [_make_form_component(element) for element in text_elements]
-    return div(components)
-
-
-def _get_toc_str(text: StructuredText, level: int = 0, rank: int = 0) -> str:
-    trunc_title = (level * '| ' + ' ' + text.title.text)[:120]
-    return '\n'.join(
-        [
-            f'{trunc_title}',
-            *[_get_toc_str(sec, level + 1, rank + i + 1) for i, sec in enumerate(text.sections)],
-        ]
+    text_elements = _text_to_elements(text)[1:]  # Don't modify main title.
+    # style = {'padding': '10px', 'border': '1px solid rgba(0,0,0,.1)', 'border-radius': '5px'}
+    # children=html.Div(_prepare_text_area_value(text_elements), contentEditable='true', style=style),
+    return dcc.Textarea(
+        id=_TEXT_AREA_COMPONENT,
+        value=_prepare_text_area_value(text_elements),
+        className='form-control',
+        style={'height': '1000px'},
     )
 
 
-def _get_md_toc(text: StructuredText) -> Component:
-    return dcc.Markdown(f'```txt\n{_get_toc_str(text)}\n```')
+def _get_toc_component() -> Component:
+    return html.Div(id=_TOC_COMPONENT)
 
 
 def _get_toc(text: StructuredText, level: int = 0, rank: int = 0) -> Component:
@@ -127,13 +149,23 @@ def _submit_button() -> Component:
     )
 
 
+def _preview_button() -> Component:
+    return html.Button(
+        'Actualiser le sommaire',
+        id=_PREVIEW_BUTTON,
+        className='btn btn-primary center',
+        n_clicks=0,
+        style={'margin-right': '10px'},
+    )
+
+
 def _go_back_button(parent_page: str) -> Component:
     return dcc.Link(html.Button('Annuler', className='btn btn-primary center'), href=parent_page)
 
 
 def _footer_buttons(parent_page: str) -> Component:
     style = {'display': 'inline-block'}
-    return div([_submit_button(), _go_back_button(parent_page)], style)
+    return div([_preview_button(), _submit_button(), _go_back_button(parent_page)], style)
 
 
 def _fixed_footer(parent_page: str) -> Component:
@@ -153,14 +185,45 @@ def _fixed_footer(parent_page: str) -> Component:
     )
 
 
+def _get_instructions() -> Component:
+    return html.P(
+        html.Ul(
+            [
+                html.Li('Le niveau de titre est indiqué par le nombre de symboles "#" au début de la ligne.'),
+                html.Li('Le sommaire peut-être recalculé en cliquant sur le bouton "Actualiser le sommaire".'),
+                html.Li('Veillez à enregistrer régulièrement pour ne pas perdre le travail effectué.'),
+                html.Li(
+                    'Les tableaux présents dans les AM ne sont pas reproduits ici. '
+                    'Leur position est signalée par l\'expression'
+                    ' "!!Tableau numéro n non reproduit - ne pas modifier!!". '
+                    'Ces lignes doivent rester inchangées.'
+                ),
+            ]
+        )
+    )
+
+
 def make_am_structure_edition_component(am_id: str, parent_page: str, am: ArreteMinisteriel) -> Component:
     text = am_to_text(am)
     return div(
         [
-            html.H1('Sommaire'),
-            _get_md_toc(text),
-            html.H1('Texte'),
-            _structure_edition_component(text),
+            html.Div(
+                html.Div(
+                    [
+                        html.Div(
+                            [html.H1('Texte'), _get_instructions(), _structure_edition_component(text)],
+                            className='col-9',
+                            # style={'max-width': '1000px'},
+                        ),
+                        html.Div(
+                            [html.H1('Sommaire'), _get_toc_component()],
+                            className='col-3',
+                            # style={'max-width': '400px'},
+                        ),
+                    ],
+                    className='row',
+                ),
+            ),
             _fixed_footer(parent_page),
             html.P(am_id, hidden=True, id='am-id-structure-edition'),
         ],
@@ -196,51 +259,83 @@ class _FormHandlingError(Exception):
     pass
 
 
-def _update_element(element: TextElement, title_level: int) -> TextElement:
-    if isinstance(element, str):
-        if title_level == -1:
-            return element
-        return Title(element, level=title_level)
-    if isinstance(element, Table):
-        if title_level == -1:
-            return element
-        raise _FormHandlingError(f'Unexpected title_level value {title_level}: should be None for table element.')
-    if isinstance(element, Title):
-        if title_level == -1:
-            return element.text
-        return Title(element.text, level=title_level)
-    raise NotImplementedError(f'Not implemented for element with type {type(element)}')
-
-
-def _modify_elements_with_new_title_levels(elements: List[TextElement], title_levels: List[int]) -> List[TextElement]:
-    if len(elements) != len(title_levels):
-        raise _FormHandlingError(
-            f'There should be as many elements as title_levels' f'(resp. {len(elements)} and {len(title_levels)}).'
-        )
-    return [_update_element(element, title_level) for element, title_level in zip(elements, title_levels)]
-
-
 def _ensure_no_outer_alineas(text: StructuredText) -> None:
     if len(text.outer_alineas) != 0:
         raise _FormHandlingError(f'There should be no alineas at toplevel, found {len(text.outer_alineas)}.')
 
 
-def _ensure_title(element: TextElement) -> Title:
-    if not isinstance(element, Title):
-        raise ValueError(f'Expecting title, received {type(element)}')
-    return element
+def _extract_tables(text: StructuredText) -> List[Table]:
+    return [al.table for al in text.outer_alineas if al.table] + [
+        tb for sec in text.sections for tb in _extract_tables(sec)
+    ]
 
 
-def _structure_text(am_id: str, title_levels: List[int]) -> ArreteMinisteriel:
+def _build_title(line: str) -> Title:
+    nb_hastags = _count_prefix_hashtags(line)
+    return Title(line[nb_hastags:].strip(), level=nb_hastags)
+
+
+_TABLEAU_PREFIX = '!!Tableau numéro '
+
+
+def _get_correct_table(line: str, tables: List[Table]) -> Table:
+    digit_str = line.replace(_TABLEAU_PREFIX, '').split(' ')[0]
+    try:
+        digit = int(digit_str)
+    except ValueError:
+        raise _FormHandlingError(
+            f'Erreur lors de l\'enregistrement: le numéro du tableau parsé dans une ligne est invalide. '
+            f'La ligne: "{line}" ; le numéro candidat "{digit_str}"'
+        )
+    if digit >= len(tables):
+        raise _FormHandlingError(
+            f'Erreur lors de l\'enregistrement: le tableau n°{digit} est '
+            'renseigné mais n\'existe pas dans l\'AM initial.'
+        )
+    return tables[digit]
+
+
+def _make_text_element(line: str, tables: List[Table]) -> TextElement:
+    if line.startswith('#'):
+        return _build_title(line)
+    if line.startswith(_TABLEAU_PREFIX):
+        return _get_correct_table(line, tables)
+    return line
+
+
+def _build_new_elements(new_am: str, tables: List[Table]) -> List[TextElement]:
+    lines = [x for x in new_am.split('\n') if x.strip()]
+    return [_make_text_element(line, tables) for line in lines]
+
+
+def _keep_tables(elements: List[TextElement]) -> List[TextElement]:
+    return [el for el in elements if isinstance(el, Table)]
+
+
+def _ensure_all_tables_are_found_once(initial_tables: List[Table], new_tables: List[TextElement]) -> None:
+    missing_tables = [i for i, table in enumerate(initial_tables) if table not in new_tables]
+    if missing_tables:
+        raise _FormHandlingError(
+            f'Erreur lors de l\'enregistrement: dans le texte de sortie, il manque les tableaux n° {missing_tables}.'
+        )
+    if len(initial_tables) != len(new_tables):
+        raise _FormHandlingError(
+            f'Erreur lors de l\'enregistrement: dans le texte de sortie, il y a trop '
+            f'de tableaux: {len(new_tables)} contre {len(initial_tables) } dans le texte d\'entrée.'
+        )
+
+
+def _structure_text(am_id: str, new_am: str) -> ArreteMinisteriel:
     am_state = load_am_state(am_id)
     am = load_am(am_id, am_state)
     if not am:
         raise _FormHandlingError(f'am with id {am_id} not found, which should not happen')
     text = am_to_text(am)
-    elements = _text_to_elements(text)
-    main_title = _ensure_title(elements[0])
-    new_elements = _modify_elements_with_new_title_levels(elements[1:], title_levels)
-    new_text = build_structured_text(main_title, new_elements)
+    tables = _extract_tables(text)
+    new_elements = _build_new_elements(new_am, tables)
+    new_tables = _keep_tables(new_elements)
+    _ensure_all_tables_are_found_once(tables, new_tables)
+    new_text = build_structured_text(Title(text.title.text, 0), new_elements)
     _ensure_no_outer_alineas(new_text)
     return replace(am, sections=new_text.sections)
 
@@ -251,11 +346,11 @@ def _add_filename_to_state(am_id: str, filename: str) -> None:
     dump_am_state(am_id, am_state)
 
 
-def _save_text_and_get_message(am_id: str, title_levels: List[int]) -> str:
+def _save_text_and_get_message(am_id: str, new_am: str) -> str:
     new_version = datetime.now().strftime('%y%m%d_%H%M')
     filename = new_version + '.json'
     full_filename = os.path.join(get_structured_text_wip_folder(am_id), filename)
-    text = _structure_text(am_id, title_levels)
+    text = _structure_text(am_id, new_am)
     json_ = jsonify(text.to_dict())
     write_file(json_, full_filename)
     _add_filename_to_state(am_id, filename)
@@ -278,15 +373,59 @@ def _success_component(message: str) -> Component:
     return html.Div(_replace_line_breaks(message), className='alert alert-success')
 
 
-def _extract_form_value_and_save_text(nb_clicks: int, am_id: str, state: Dict[str, Any]) -> Component:
+def _extract_form_value_and_save_text(nb_clicks: int, am_id: str, text_area_content: Dict[str, Any]) -> Component:
+    new_am = assert_str(text_area_content)
     if nb_clicks == 0:
         return div([])
     try:
-        new_title_levels = _extract_title_levels_from_form(state)
-        success_message = _save_text_and_get_message(am_id, new_title_levels)
+        success_message = _save_text_and_get_message(am_id, new_am)
     except Exception:  # pylint: disable=broad-except
         return _error_component(f'Erreur pendant l\'enregistrement. Détails de l\'erreur:\n{traceback.format_exc()}')
     return _success_component(success_message)
+
+
+def _extract_all_lines_one_element(element: Dict[str, Any]) -> List[str]:
+    if not element.get('props', {}).get('children'):
+        return []
+    children = element.get('props', {}).get('children')
+    if isinstance(children, list):
+        return _extract_all_lines(children)
+    if isinstance(children, str):
+        return [children]
+    if isinstance(children, dict):
+        return _extract_all_lines_one_element(children)
+    raise ValueError(f'Unexpected element type type({element})')
+
+
+def _extract_all_lines(elements: List[Dict[str, Any]]) -> List[str]:
+    return [line for element in elements for line in _extract_all_lines_one_element(element)]
+
+
+def _count_prefix_hashtags(line: str) -> int:
+    for i, char in enumerate(line):
+        if char != '#':
+            return i
+    return len(line)
+
+
+assert _count_prefix_hashtags('') == 0
+assert _count_prefix_hashtags('###') == 3
+assert _count_prefix_hashtags(' ###') == 0
+assert _count_prefix_hashtags('###  ') == 3
+
+
+def _format_toc_line(line: str) -> Component:
+    nb_hashtags = _count_prefix_hashtags(line)
+    trunc_title = ' ' + line[nb_hashtags:][:120]
+    return html.Span([html.Span(nb_hashtags * '•', style={'color': 'grey'}), trunc_title, html.Br()])
+
+
+def _extract_text_area_and_display_toc(content: str) -> Component:
+    # lines = _extract_all_lines(text_area_children)
+    lines = content.split('\n')
+    formatted_lines = [_format_toc_line(line) for line in lines if line.startswith('#')]
+    new_title_levels = html.P(formatted_lines)
+    return html.P(new_title_levels)
 
 
 def add_structure_edition_callbacks(app: dash.Dash):
@@ -294,10 +433,16 @@ def add_structure_edition_callbacks(app: dash.Dash):
         return _extract_form_value_and_save_text(nb_clicks, am_id, state)
 
     app.callback(
-        dash.dependencies.Output('form-output-structure-edition', 'children'),
-        [
-            dash.dependencies.Input('submit-val-structure-edition', 'n_clicks'),
-            dash.dependencies.Input('am-id-structure-edition', 'children'),
-        ],
-        [dash.dependencies.State('page-content', 'children')],
+        Output('form-output-structure-edition', 'children'),
+        [Input('submit-val-structure-edition', 'n_clicks'), Input('am-id-structure-edition', 'children')],
+        [State(_TEXT_AREA_COMPONENT, 'value')],
     )(update_output)
+
+    def update_toc(_, state):
+        return _extract_text_area_and_display_toc(state)
+
+    app.callback(
+        Output(_TOC_COMPONENT, 'children'),
+        [Input(_PREVIEW_BUTTON, 'n_clicks')],
+        [State(_TEXT_AREA_COMPONENT, 'value')],
+    )(update_toc)
