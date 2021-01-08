@@ -1,5 +1,3 @@
-from lib.data import Table
-from lib.structure_extraction import Title
 import dash_html_components as html
 from back_office.structure_edition import (
     _get_html_heading_classname,
