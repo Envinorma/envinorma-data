@@ -18,6 +18,7 @@ from back_office.utils import (
     AMOperation,
     AMState,
     AMWorkflowState,
+    ID_TO_AM_MD,
     Page,
     div,
     dump_am_state,
@@ -279,13 +280,14 @@ def _router(pathname: str, parent_page: str) -> Component:
     am_id, operation_id, _ = _extract_am_id_and_operation(pathname)
     parent_page = parent_page + '/' + am_id
     am_state = load_am_state(am_id)
+    am_metadata = ID_TO_AM_MD.get(am_id)
     am = load_am(am_id, am_state)
     parametrization = load_parametrization(am_id, am_state)
-    if not am or not parametrization:
+    if not am or not parametrization or not am_metadata:
         body = html.P('Arrêté introuvable.')
     else:
         body = _get_body_component(operation_id, am_id, parent_page, am, am_state, parametrization)
-    subtitle_component = _get_subtitle_component(am_id, parent_page)
+    subtitle_component = _get_subtitle_component(am_metadata.nor or am_metadata.cid, parent_page)
 
     return html.Div(
         [

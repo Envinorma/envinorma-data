@@ -3,6 +3,7 @@ from typing import Dict, List
 import dash
 import dash_core_components as dcc
 import dash_html_components as html
+import dash_bootstrap_components as dbc
 from dash.dependencies import Input, Output
 from dash.development.base_component import Component
 from lib.data import AMMetadata
@@ -23,25 +24,48 @@ def _prepare_archive_if_no_data():
         path_to_archive = __file__.replace('back_office/app.py', 'data/AM.zip')
         shutil.unpack_archive(path_to_archive, AM_DATA_FOLDER)
     else:
-        print(os.listdir(AM_DATA_FOLDER))
+        print(f'AM data folder not empty: contains {os.listdir(AM_DATA_FOLDER)}')
+
 
 _prepare_archive_if_no_data()
 
 app = dash.Dash(
     __name__,
-    external_stylesheets=['https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css'],
+    external_stylesheets=[dbc.themes.BOOTSTRAP],
     suppress_callback_exceptions=True,
 )
+
+
+def _get_page_heading() -> Component:
+    src = 'assets/logo-envinorma.png'
+    return html.Header(
+        dcc.Link(
+            html.Div(
+                [html.Img(src=src, style={'width': '30px'})],
+                style={
+                    'padding': '.5em',
+                    'border-bottom': '1px solid rgba(0,0,0,.1)',
+                    'position': 'sticky',
+                    'top': '0',
+                    'background-color': '#fff',
+                    'z-index': '1',
+                    'width': '100%',
+                    'padding-right': '100px',
+                    'padding-left': '100px',
+                    'margin-right': 'auto',
+                    'margin-left': 'auto',
+                    'margin-bottom': '10px',
+                },
+            ),
+            href='/',
+        )
+    )
 
 
 app.layout = html.Div(
     [
         dcc.Location(id='url', refresh=False),
-        html.Div(
-            id='title',
-            style={'width': '80%', 'margin': 'auto'},
-            children=[dcc.Link(html.H1('Envinorma'), href='/')],
-        ),
+        _get_page_heading(),
         html.Div(id='page-content', style={'width': '80%', 'margin': 'auto'}),
     ]
 )

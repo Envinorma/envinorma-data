@@ -5,6 +5,7 @@ from datetime import datetime
 from typing import Any, Dict, List, Optional, Tuple, Type, Union
 
 import dash
+import dash_bootstrap_components as dbc
 import dash_core_components as dcc
 import dash_html_components as html
 from dash.dependencies import Input, Output, State
@@ -149,7 +150,11 @@ def _make_form(options: _Options, operation: AMOperation, parent_page: str, am_i
             dropdown_condition_merge,
             html.P('Nombre de conditions'),
             dropdown_nb_conditions,
-            html.P('Liste de conditions'),
+            html.P(['Liste de conditions ', dbc.Badge('?', id='param-edition-conditions-tooltip', pill=True)]),
+            dbc.Tooltip(
+                [html.P('Formats:'), html.P('Régime: A, E, D ou NC.'), html.P('Date: JJ/MM/AAAA')],
+                target='param-edition-conditions-tooltip',
+            ),
             html.Div(id='parametrization-conditions'),
             html.Div(id='form-output-param-edition'),
             html.Button(

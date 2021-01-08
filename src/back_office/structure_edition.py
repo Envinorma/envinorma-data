@@ -89,18 +89,6 @@ def _structure_edition_component(text: StructuredText) -> Component:
     return div(components)
 
 
-def _time(func):
-    def new_func(*args, **kwargs):
-        from time import time
-
-        start = time()
-        res = func(*args, **kwargs)
-        print(f'Elapsed: {time() - start}s.')
-        return res
-
-    return new_func
-
-
 def _get_toc_str(text: StructuredText, level: int = 0, rank: int = 0) -> str:
     trunc_title = (level * '| ' + ' ' + text.title.text)[:120]
     return '\n'.join(
