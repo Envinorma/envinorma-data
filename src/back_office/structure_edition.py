@@ -6,6 +6,7 @@ from typing import Any, Dict, List, Optional, Union
 
 import dash
 import dash_core_components as dcc
+import dash_bootstrap_components as dbc
 import dash_html_components as html
 from dash.dependencies import Input, Output, State
 from dash.development.base_component import Component
@@ -117,26 +118,30 @@ def _structure_edition_component(text: StructuredText) -> Component:
         id=_TEXT_AREA_COMPONENT,
         value=_prepare_text_area_value(text_elements),
         className='form-control',
-        style={'height': '1000px'},
+        style={'height': '100vh'},
     )
 
 
 def _get_toc_component() -> Component:
-    return html.Div(id=_TOC_COMPONENT)
-
-
-def _get_toc(text: StructuredText, level: int = 0, rank: int = 0) -> Component:
-    trunc_title = (level * '| ' + ' ' + text.title.text)[:120]
-    return div(
-        [
-            dcc.Link(
-                trunc_title,
-                href=f'#TITLE_{rank}',
-                style={'color': 'black', 'text-decoration': 'none', 'font-family': '"DM Mono", monospace'},
-            ),
-            *[_get_toc(sec, level + 1, rank + i + 1) for i, sec in enumerate(text.sections)],
-        ]
+    return html.Div(
+        html.Div(id=_TOC_COMPONENT),
+        style={
+            'overflow-y': 'auto',
+            'position': 'sticky',
+            'border-left': '2px solid #007bff',
+            'font-size': '.8em',
+            'padding-left': '5px',
+            'height': '100vh',
+        },
     )
+
+
+def _get_truncated_title(title: str) -> str:
+    _max_len = 80
+    trunc_title = title[:_max_len]
+    if len(title) > _max_len:
+        return trunc_title[:-5] + '[...]'
+    return trunc_title
 
 
 def _submit_button() -> Component:
@@ -186,19 +191,34 @@ def _fixed_footer(parent_page: str) -> Component:
 
 
 def _get_instructions() -> Component:
-    return html.P(
-        html.Ul(
-            [
-                html.Li('Le niveau de titre est indiqué par le nombre de symboles "#" au début de la ligne.'),
-                html.Li('Le sommaire peut-être recalculé en cliquant sur le bouton "Actualiser le sommaire".'),
-                html.Li('Veillez à enregistrer régulièrement pour ne pas perdre le travail effectué.'),
-                html.Li(
-                    'Les tableaux présents dans les AM ne sont pas reproduits ici. '
-                    'Leur position est signalée par l\'expression'
-                    ' "!!Tableau numéro n non reproduit - ne pas modifier!!". '
-                    'Ces lignes doivent rester inchangées.'
+    return html.Div(
+        # className='container',
+        children=html.A(
+            id='structure-edition-collapse-button',
+            children=[
+                html.Button('NB', className='btn btn-light btn-sm'),
+                dbc.Collapse(
+                    html.Ul(
+                        [
+                            html.Li(
+                                'Le niveau de titre est indiqué par le nombre de symboles "#" au début de la ligne.'
+                            ),
+                            html.Li(
+                                'Le sommaire peut-être recalculé en cliquant sur le bouton "Actualiser le sommaire".'
+                            ),
+                            html.Li('Veillez à enregistrer régulièrement pour ne pas perdre le travail effectué.'),
+                            html.Li(
+                                'Les tableaux présents dans les AM ne sont pas reproduits ici. '
+                                'Leur position est signalée par l\'expression'
+                                ' "!!Tableau numéro n non reproduit - ne pas modifier!!". '
+                                'Ces lignes doivent rester inchangées.'
+                            ),
+                        ],
+                    ),
+                    id='structure-edition-collapse',
+                    is_open=True,
                 ),
-            ]
+            ],
         )
     )
 
@@ -207,22 +227,19 @@ def make_am_structure_edition_component(am_id: str, parent_page: str, am: Arrete
     text = am_to_text(am)
     return div(
         [
+            html.Div(className='row', children=_get_instructions()),
             html.Div(
-                html.Div(
-                    [
-                        html.Div(
-                            [html.H1('Texte'), _get_instructions(), _structure_edition_component(text)],
-                            className='col-9',
-                            # style={'max-width': '1000px'},
-                        ),
-                        html.Div(
-                            [html.H1('Sommaire'), _get_toc_component()],
-                            className='col-3',
-                            # style={'max-width': '400px'},
-                        ),
-                    ],
-                    className='row',
-                ),
+                className='row',
+                children=[
+                    html.Div(
+                        className='col-9',
+                        children=[html.H1('Texte'), _structure_edition_component(text)],
+                    ),
+                    html.Div(
+                        className='col-3',
+                        children=[html.H1('Sommaire'), _get_toc_component()],
+                    ),
+                ],
             ),
             _fixed_footer(parent_page),
             html.P(am_id, hidden=True, id='am-id-structure-edition'),
@@ -416,8 +433,10 @@ assert _count_prefix_hashtags('###  ') == 3
 
 def _format_toc_line(line: str) -> Component:
     nb_hashtags = _count_prefix_hashtags(line)
-    trunc_title = ' ' + line[nb_hashtags:][:120]
-    return html.Span([html.Span(nb_hashtags * '•', style={'color': 'grey'}), trunc_title, html.Br()])
+    trunc_title = _get_truncated_title(line[nb_hashtags:])
+    trunc_title_component = html.Span(trunc_title) if nb_hashtags > 1 else html.B(trunc_title)
+
+    return html.Span([html.Span(nb_hashtags * '•' + ' ', style={'color': 'grey'}), trunc_title_component, html.Br()])
 
 
 def _extract_text_area_and_display_toc(content: str) -> Component:
@@ -446,3 +465,13 @@ def add_structure_edition_callbacks(app: dash.Dash):
         [Input(_PREVIEW_BUTTON, 'n_clicks')],
         [State(_TEXT_AREA_COMPONENT, 'value')],
     )(update_toc)
+
+    @app.callback(
+        Output('structure-edition-collapse', 'is_open'),
+        [Input('structure-edition-collapse-button', 'n_clicks')],
+        [State('structure-edition-collapse', 'is_open')],
+    )
+    def _(n_clicks, is_open):
+        if n_clicks:
+            return not is_open
+        return True
