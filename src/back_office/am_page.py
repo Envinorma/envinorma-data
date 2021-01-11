@@ -1,6 +1,6 @@
 import difflib
 import os
-from typing import List, Optional, Tuple
+from typing import Any, Dict, List, Optional, Set, Tuple, Union
 
 import dash_core_components as dcc
 import dash_html_components as html
@@ -241,50 +241,95 @@ def _get_parametrization_summary(
     )
 
 
-def _keep_defined(elements: List[Optional[Component]]) -> List[Component]:
-    return [el for el in elements if el is not None]
+def _keep_defined_and_join(elements: List[Optional[Union[str, Component]]]) -> List[Union[str, Component]]:
+    return [el_lb for el in elements if el is not None for el_lb in (el, html.Br())]
 
 
-def _diff_to_component(diff: str, previous_diff: Optional[str], next_diff: Optional[str]) -> Optional[Component]:
-    if diff[:3] in ('---', '+++') or diff[:2] == '@@':
-        return None
-    if diff[:1] == ' ':
-        next_diff_interesting = next_diff and next_diff[:1] in ('-', '+')
-        previous_diff_interesting = previous_diff and previous_diff[:1] in ('-', '+')
-        if next_diff_interesting or previous_diff_interesting:
-            return html.Tr([html.Td(diff), html.Td(diff)])
-        return None
+def _extract_char_positions(str_: str, char: str) -> Set[int]:
+    return {i for i, ch in enumerate(str_) if ch == char}
+
+
+def _surline_text(str_: str, positions_to_surline: Set[int], style: Dict[str, Any]) -> Union[Component, str]:
+    if not positions_to_surline:
+        return str_
+    surline = False
+    current_word = ''
+    components: List[Union[Component, str]] = []
+    for position, char in enumerate(str_):
+        if position in positions_to_surline:
+            if not surline:
+                components.append(current_word)
+                current_word = char
+                surline = True
+            else:
+                current_word += char
+        else:
+            if surline:
+                components.append(html.Span(current_word, style=style))
+                surline = False
+                current_word = char
+            else:
+                current_word += char
+    if surline:
+        components.append(html.Span(current_word, style=style))
+    else:
+        components.append(current_word)
+    return html.Span(components)
+
+
+def _diffline_is_special(line: Optional[str]) -> bool:
+    return bool(line and line[:1] in ('-', '+', '?'))
+
+
+def _extract_diff_component(diff: str, next_diff: Optional[str]) -> Optional[Union[Component, str]]:
     if diff[:1] == '+':
-        return html.Tr([html.Td(), html.Td(diff, className='table-success')])
-    if diff[:1] == '-':
-        return html.Tr([html.Td(diff, className='table-danger'), html.Td()])
+        symbol = '+'
+        strong_color = '#acf2bd'
+        light_color = '#e6ffec'
+    elif diff[:1] == '-':
+        symbol = '-'
+        strong_color = '#fdb8c0'
+        light_color = '#feeef0'
+    else:
+        raise ValueError(f'Expecting diff to start with "+" or "-", received {diff[:1]}')
+    to_surline = _extract_char_positions(next_diff, symbol) if next_diff and next_diff[0] == '?' else set()
+    rich_diff = _surline_text(diff, to_surline, {'background-color': strong_color})
+    return html.Span(rich_diff, style={'background-color': light_color})
+
+
+def _ellipse() -> Component:
+    return html.Span('[...]', style={'color': 'grey'})
+
+
+def _diff_to_component(
+    diff: str, previous_diff: Optional[str], next_diff: Optional[str]
+) -> Optional[Union[Component, str]]:
+    if not _diffline_is_special(diff):
+        if _diffline_is_special(previous_diff):
+            if _diffline_is_special(next_diff):
+                return diff
+            return html.Span([diff, html.Br(), _ellipse()])
+        if _diffline_is_special(next_diff):
+            return diff
+        return None
+    if diff[:1] in ('+', '-'):
+        return _extract_diff_component(diff, next_diff)
+    if diff[:1] == '?':
+        return None
     raise ValueError(f'Unexpected diff format "{diff}"')
 
 
 def _build_diff_component(text_1: List[str], text_2: List[str]) -> Component:
-    diffs = list(difflib.unified_diff(text_1, text_2))
-    components = _keep_defined(
+    diffs = list(difflib.Differ().compare(text_1, text_2))
+    components = _keep_defined_and_join(
         [
-            _diff_to_component(diff, diffs[i - 1] if i >= 1 else None, diffs[i] if i < len(diffs) else None)
-            for i, diff in enumerate(diffs)
+            _diff_to_component(diff, previous, next_)
+            for diff, previous, next_ in zip(diffs, [None, *diffs[:-1]], [*diffs[1:], None])
         ]
     )
     if not components:
         return html.P('Pas de différences.')
-    header = html.Thead(
-        [html.Tr([html.Th('Version initiale'), html.Th('Version modifiée')])], className='table-secondary'
-    )
-    return html.Div(
-        [
-            html.H4('Liste des différences.'),
-            html.Table(
-                [header, html.Tbody(components)],
-                className='table table-sm table-light table-hover',
-                style={'table-layout': 'fixed'},
-            ),
-        ],
-        className='col-10',
-    )
+    return html.Div([html.H4('Liste des différences avec le texte d\'origine.'), *components], className='col-10')
 
 
 def _extract_text_lines(text: StructuredText, level: int = 0) -> List[str]:
