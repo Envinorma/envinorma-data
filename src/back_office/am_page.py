@@ -1,3 +1,5 @@
+import difflib
+import os
 from typing import List, Optional, Tuple
 
 import dash_core_components as dcc
@@ -6,8 +8,9 @@ from dash.dash import Dash
 from dash.dependencies import Input, Output
 from dash.development.base_component import Component
 from lib.am_to_markdown import extract_markdown_text
-from lib.data import ArreteMinisteriel, StructuredText
+from lib.data import ArreteMinisteriel, StructuredText, am_to_text
 from lib.parametrization import AlternativeSection, NonApplicationCondition, Parametrization, condition_to_str
+from lib.utils import get_structured_text_wip_folder
 
 from back_office.parametrization_edition import (
     add_parametrization_edition_callbacks,
@@ -15,14 +18,16 @@ from back_office.parametrization_edition import (
 )
 from back_office.structure_edition import add_structure_edition_callbacks, make_am_structure_edition_component
 from back_office.utils import (
+    ID_TO_AM_MD,
     AMOperation,
     AMState,
     AMWorkflowState,
-    ID_TO_AM_MD,
     Page,
     div,
     dump_am_state,
+    get_default_structure_filename,
     load_am,
+    load_am_from_file,
     load_am_state,
     load_parametrization,
 )
@@ -236,23 +241,96 @@ def _get_parametrization_summary(
     )
 
 
+def _keep_defined(elements: List[Optional[Component]]) -> List[Component]:
+    return [el for el in elements if el is not None]
+
+
+def _diff_to_component(diff: str, previous_diff: Optional[str], next_diff: Optional[str]) -> Optional[Component]:
+    if diff[:3] in ('---', '+++') or diff[:2] == '@@':
+        return None
+    if diff[:1] == ' ':
+        next_diff_interesting = next_diff and next_diff[:1] in ('-', '+')
+        previous_diff_interesting = previous_diff and previous_diff[:1] in ('-', '+')
+        if next_diff_interesting or previous_diff_interesting:
+            return html.Tr([html.Td(diff), html.Td(diff)])
+        return None
+    if diff[:1] == '+':
+        return html.Tr([html.Td(), html.Td(diff, className='table-success')])
+    if diff[:1] == '-':
+        return html.Tr([html.Td(diff, className='table-danger'), html.Td()])
+    raise ValueError(f'Unexpected diff format "{diff}"')
+
+
+def _build_diff_component(text_1: List[str], text_2: List[str]) -> Component:
+    diffs = list(difflib.unified_diff(text_1, text_2))
+    components = _keep_defined(
+        [
+            _diff_to_component(diff, diffs[i - 1] if i >= 1 else None, diffs[i] if i < len(diffs) else None)
+            for i, diff in enumerate(diffs)
+        ]
+    )
+    if not components:
+        return html.P('Pas de différences.')
+    header = html.Thead(
+        [html.Tr([html.Th('Version initiale'), html.Th('Version modifiée')])], className='table-secondary'
+    )
+    return html.Div(
+        [
+            html.H4('Liste des différences.'),
+            html.Table(
+                [header, html.Tbody(components)],
+                className='table table-sm table-light table-hover',
+                style={'table-layout': 'fixed'},
+            ),
+        ],
+        className='col-10',
+    )
+
+
+def _extract_text_lines(text: StructuredText, level: int = 0) -> List[str]:
+    title_lines = ['#' * level + (' ' if level else '') + text.title.text.strip()]
+    alinena_lines = [al.text.strip() for al in text.outer_alineas]
+    section_lines = [line for sec in text.sections for line in _extract_text_lines(sec, level + 1)]
+    return title_lines + alinena_lines + section_lines
+
+
+def _load_file_and_get_lines(text_file: str) -> List[str]:
+    return _extract_text_lines(am_to_text(load_am_from_file(text_file)))
+
+
+def _build_diff_component_from_files(text_file_1: str, text_file_2: str) -> Component:
+    return _build_diff_component(_load_file_and_get_lines(text_file_1), _load_file_and_get_lines(text_file_2))
+
+
+def _get_structure_validation_diff(am_id: str, status: AMState) -> Component:
+    if status.state != status.state.PENDING_STRUCTURE_VALIDATION:
+        return html.Div()
+    files = status.structure_draft_filenames
+    if len(files) == 0:
+        return html.Div('Pas de modifications de structuration.')
+    initial_file = get_default_structure_filename(am_id)
+    final_file = os.path.join(get_structured_text_wip_folder(am_id), files[-1])
+    return _build_diff_component_from_files(initial_file, final_file)
+
+
 def _build_component_based_on_status(
-    parent_page: str, am_status: AMWorkflowState, parametrization: Parametrization, am: ArreteMinisteriel
+    am_id: str, parent_page: str, am_state: AMState, parametrization: Parametrization, am: ArreteMinisteriel
 ) -> Component:
     children = [
-        _get_structure_validation_title(am_status),
-        _get_structure_validation_buttons(parent_page, am_status),
-        _get_parametrization_edition_title(am_status),
-        _get_parametrization_summary(parent_page, am_status, parametrization, am),
-        _get_parametrization_edition_buttons(am_status),
+        _get_structure_validation_title(am_state.state),
+        _get_structure_validation_diff(am_id, am_state),
+        _get_structure_validation_buttons(parent_page, am_state.state),
+        _get_parametrization_edition_title(am_state.state),
+        _get_parametrization_summary(parent_page, am_state.state, parametrization, am),
+        _get_parametrization_edition_buttons(am_state.state),
     ]
     return html.Div(children)
 
 
 def _make_am_index_component(
-    am_state: AMState, parent_page: str, parametrization: Parametrization, am: ArreteMinisteriel
+    am_id: str, am_state: AMState, parent_page: str, parametrization: Parametrization, am: ArreteMinisteriel
 ) -> Component:
-    return _build_component_based_on_status(parent_page, am_state.state, parametrization, am)
+    return _build_component_based_on_status(am_id, parent_page, am_state, parametrization, am)
 
 
 def _get_subtitle_component(am_id: str, parent_page: str) -> Component:
@@ -268,7 +346,7 @@ def _get_body_component(
     parametrization: Parametrization,
 ) -> Component:
     if not operation_id:
-        return _make_am_index_component(am_state, parent_page, parametrization, am)
+        return _make_am_index_component(am_id, am_state, parent_page, parametrization, am)
     if operation_id == operation_id.EDIT_STRUCTURE:
         return make_am_structure_edition_component(am_id, parent_page, am)
     if operation_id in (operation_id.ADD_CONDITION, operation_id.ADD_ALTERNATIVE_SECTION):

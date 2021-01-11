@@ -1,5 +1,5 @@
-import os
 import json
+import os
 from dataclasses import asdict, dataclass
 from enum import Enum
 from typing import Any, Callable, Dict, List, Optional, Union
@@ -10,17 +10,10 @@ from dash.development.base_component import Component
 from lib.config import STORAGE
 from lib.data import ArreteMinisteriel, load_am_data
 from lib.parametrization import Parametrization
-from lib.utils import (
-    get_parametrization_wip_folder,
-    get_state_file,
-    get_structured_text_wip_folder,
-    write_json,
-)
+from lib.utils import get_parametrization_wip_folder, get_state_file, get_structured_text_wip_folder, write_json
 
 _AM = load_am_data()
 ID_TO_AM_MD = {am.cid: am for am in _AM.metadata if am.state != am.state.ABROGE}
-# ID_TO_AM_MD = {am.cid: am for am in ID_TO_AM_MD.values() if am.cid == 'JORFTEXT000026251890'}
-# ID_TO_AM_MD = {am.cid: am for am in ID_TO_AM_MD.values() if '26' in am.cid}
 
 
 def assert_int(value: Any) -> int:
@@ -98,10 +91,18 @@ def write_file(content: str, filename: str):
         file_.write(content)
 
 
+def get_default_structure_filename(am_id: str) -> str:
+    return os.path.join(get_structured_text_wip_folder(am_id), 'default.json')
+
+
+def get_default_parametrization_filename(am_id: str) -> str:
+    return os.path.join(get_parametrization_wip_folder(am_id), 'default.json')
+
+
 def load_parametrization(am_id: str, am_state: AMState) -> Parametrization:
     folder = get_parametrization_wip_folder(am_id)
     if len(am_state.parametrization_draft_filenames) == 0:
-        full_filename = os.path.join(folder, 'default.json')
+        full_filename = get_default_parametrization_filename(am_id)
         if not os.path.exists(full_filename):
             return Parametrization([], [])
     else:
@@ -110,7 +111,7 @@ def load_parametrization(am_id: str, am_state: AMState) -> Parametrization:
     return Parametrization.from_dict(json.load(open(full_filename)))
 
 
-def _load_am_from_file(path: str) -> ArreteMinisteriel:
+def load_am_from_file(path: str) -> ArreteMinisteriel:
     return ArreteMinisteriel.from_dict(json.load(open(path)))
 
 
@@ -122,7 +123,7 @@ def load_am(am_id: str, am_state: AMState) -> Optional[ArreteMinisteriel]:
     full_filename = os.path.join(get_structured_text_wip_folder(am_id), last_filename)
     if not os.path.exists(full_filename):
         return None
-    return _load_am_from_file(full_filename)
+    return load_am_from_file(full_filename)
 
 
 # from tqdm import tqdm
