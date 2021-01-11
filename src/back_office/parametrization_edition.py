@@ -284,7 +284,7 @@ def _extract_conditions(nb_conditions: int, id_to_value: Dict[str, Any]) -> List
     ]
 
 
-class _ErrorInForm(Exception):
+class _FormHandlingError(Exception):
     pass
 
 
@@ -297,7 +297,7 @@ def _extract_alinea_indices(target_alineas: List[Union[str, int]]) -> Optional[L
     if target_alineas == ['TOUS']:
         return None
     if 'TOUS' in target_alineas and len(target_alineas) >= 2:
-        raise _ErrorInForm(
+        raise _FormHandlingError(
             'Le champ "Alineas visés" ne peut contenir la valeur "TOUS" que ' 'si c\'est la seule valeur renseignée.'
         )
     return [assert_int(x) for x in target_alineas]
@@ -328,12 +328,12 @@ def _get_condition_cls(merge: str) -> Union[Type[AndCondition], Type[OrCondition
         return AndCondition
     if merge == 'or':
         return OrCondition
-    raise _ErrorInForm('Mauvaise opération d\'aggrégation dans le formulaire. Attendu: ET ou OU.')
+    raise _FormHandlingError('Mauvaise opération d\'aggrégation dans le formulaire. Attendu: ET ou OU.')
 
 
 def _extract_parameter(parameter: str) -> Parameter:
     if parameter not in _CONDITION_VARIABLES:
-        raise _ErrorInForm(f'Paramètre {parameter} inconnu, attendus: {list(_CONDITION_VARIABLES.keys())}')
+        raise _FormHandlingError(f'Paramètre {parameter} inconnu, attendus: {list(_CONDITION_VARIABLES.keys())}')
     return _CONDITION_VARIABLES[parameter].value
 
 
@@ -341,14 +341,14 @@ def _parse_dmy(date_str: str) -> datetime:
     try:
         return datetime.strptime(date_str, '%d/%m/%Y')
     except ValueError:
-        raise _ErrorInForm(f'Date mal formattée. Format attendu JJ/MM/AAAA. Reçu: "{date_str}"')
+        raise _FormHandlingError(f'Date mal formattée. Format attendu JJ/MM/AAAA. Reçu: "{date_str}"')
 
 
 def _parse_regime(regime_str: str) -> Regime:
     try:
         return Regime(regime_str)
     except ValueError:
-        raise _ErrorInForm(f'Mauvais régime. Attendu: {[x.value for x in Regime]}. Reçu: "{regime_str}"')
+        raise _FormHandlingError(f'Mauvais régime. Attendu: {[x.value for x in Regime]}. Reçu: "{regime_str}"')
 
 
 def _build_parameter_value(parameter_type: ParameterType, value_str: str) -> Any:
@@ -356,15 +356,15 @@ def _build_parameter_value(parameter_type: ParameterType, value_str: str) -> Any
         return _parse_dmy(value_str)
     if parameter_type == parameter_type.REGIME:
         return _parse_regime(value_str)
-    raise _ErrorInForm(f'Ce type de paramètre n\'est pas géré: {parameter_type.value}')
+    raise _FormHandlingError(f'Ce type de paramètre n\'est pas géré: {parameter_type.value}')
 
 
 def _extract_condition(rank: int, parameter: str, operator: str, value_str: str) -> Condition:
     try:
         built_parameter = _extract_parameter(parameter)
         value = _build_parameter_value(built_parameter.type, value_str)
-    except _ErrorInForm as exc:
-        raise _ErrorInForm(f'Erreur dans la {rank+1}{"ère" if rank == 0 else "ème"} condition: {exc}')
+    except _FormHandlingError as exc:
+        raise _FormHandlingError(f'Erreur dans la {rank+1}{"ère" if rank == 0 else "ème"} condition: {exc}')
     if operator == '<':
         return Littler(built_parameter, value, True)
     if operator == '<=':
@@ -375,7 +375,7 @@ def _extract_condition(rank: int, parameter: str, operator: str, value_str: str)
         return Greater(built_parameter, value, False)
     if operator == '=':
         return Equal(built_parameter, value)
-    raise _ErrorInForm(f'La {rank+1}{"ère" if rank == 0 else "ème"} condition contient un opérateur inattendu.')
+    raise _FormHandlingError(f'La {rank+1}{"ère" if rank == 0 else "ème"} condition contient un opérateur inattendu.')
 
 
 def _build_condition(conditions_raw: List[Tuple[str, str, str]], merge: str) -> Condition:
@@ -413,10 +413,10 @@ _MIN_NB_CHARS = 5
 def _extract_new_text_parameters(id_to_value: Dict[str, str]) -> Tuple[str, str]:
     new_text_title = _get_with_error(id_to_value, _NEW_TEXT_TITLE)
     if len(new_text_title or '') < _MIN_NB_CHARS:
-        raise _ErrorInForm(f'Le champ "Titre" doit contenir au moins {_MIN_NB_CHARS} caractères.')
+        raise _FormHandlingError(f'Le champ "Titre" doit contenir au moins {_MIN_NB_CHARS} caractères.')
     new_text_content = _get_with_error(id_to_value, _NEW_TEXT_CONTENT)
     if len(new_text_content or '') < _MIN_NB_CHARS:
-        raise _ErrorInForm(f'Le champ "Contenu du paragraphe" doit contenir au moins {_MIN_NB_CHARS} caractères.')
+        raise _FormHandlingError(f'Le champ "Contenu du paragraphe" doit contenir au moins {_MIN_NB_CHARS} caractères.')
     return new_text_title, new_text_content
 
 
@@ -424,13 +424,13 @@ def _extract_new_parameter_object(page_state: Dict[str, Any], operation: AMOpera
     id_to_value = _extract_id_to_value(page_state)
     description = assert_str(_get_with_error(id_to_value, _DESCRIPTION))
     if len(description) < _MIN_NB_CHARS:
-        raise _ErrorInForm(f'Le champ "Description" doit contenir au moins {_MIN_NB_CHARS} caractères.')
+        raise _FormHandlingError(f'Le champ "Description" doit contenir au moins {_MIN_NB_CHARS} caractères.')
     source = _get_with_error(id_to_value, _SOURCE)
     if not source:
-        raise _ErrorInForm('Le champ "Source" est obligatoire.')
+        raise _FormHandlingError('Le champ "Source" est obligatoire.')
     target_section = _get_with_error(id_to_value, _TARGET_SECTION)
     if not target_section:
-        raise _ErrorInForm('Le champ "Paragraphe visé" est obligatoire.')
+        raise _FormHandlingError('Le champ "Paragraphe visé" est obligatoire.')
     merge = _get_with_error(id_to_value, _CONDITION_MERGE)
     nb_conditions = int(_get_with_error(id_to_value, _NB_CONDITIONS))
     conditions = _extract_conditions(nb_conditions, id_to_value)
@@ -486,7 +486,7 @@ def _handle_submit(n_clicks: int, operation_str: str, am_id: str, state: Dict[st
     try:
         operation = AMOperation(operation_str)
         _extract_and_dump_new_object(state, am_id, operation)
-    except _ErrorInForm as exc:
+    except _FormHandlingError as exc:
         return _error_component(f'Erreur dans le formulaire:\n{exc}')
     except Exception:  # pylint: disable=broad-except
         return _error_component(f'Unexpected error:\n{traceback.format_exc()}')

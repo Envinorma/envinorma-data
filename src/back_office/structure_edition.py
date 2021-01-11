@@ -1,8 +1,9 @@
+import re
 import os
 import traceback
 from dataclasses import replace
 from datetime import datetime
-from typing import Any, Dict, List, Optional, Union
+from typing import Any, Dict, List, Optional
 
 import dash
 import dash_core_components as dcc
@@ -10,7 +11,7 @@ import dash_bootstrap_components as dbc
 import dash_html_components as html
 from dash.dependencies import Input, Output, State
 from dash.development.base_component import Component
-from lib.data import ArreteMinisteriel, Cell, Row, StructuredText, Table, am_to_text
+from lib.data import ArreteMinisteriel, Cell, EnrichedString, Row, StructuredText, Table, am_to_text
 from lib.structure_extraction import TextElement, Title, build_structured_text, structured_text_to_text_elements
 from lib.utils import get_structured_text_wip_folder, jsonify
 
@@ -233,7 +234,7 @@ def make_am_structure_edition_component(am_id: str, parent_page: str, am: Arrete
                 children=[
                     html.Div(
                         className='col-9',
-                        children=[html.H1('Texte'), _structure_edition_component(text)],
+                        children=[html.H1('Texte'), html.P(text.title.text), _structure_edition_component(text)],
                     ),
                     html.Div(
                         className='col-3',
@@ -246,30 +247,6 @@ def make_am_structure_edition_component(am_id: str, parent_page: str, am: Arrete
         ],
         {'margin-bottom': '300px'},
     )
-
-
-def _make_list(candidate: Optional[Union[List[Dict[str, Any]], Dict[str, Any]]]) -> List[Dict[str, Any]]:
-    if not candidate:
-        return []
-    if isinstance(candidate, list):
-        return candidate
-    return [candidate]
-
-
-def _extract_dropdown_values(components: List[Dict[str, Any]]) -> List[int]:
-    res: List[int] = []
-    for component in components:
-        if isinstance(component, str):
-            continue
-        assert isinstance(component, dict)
-        if component['type'] == 'Dropdown':
-            value = component['props'].get('value')
-            if not isinstance(value, int):
-                raise ValueError(f'Expecting int values in dropdown. Received {value}.')
-            res.append(value)
-        else:
-            res.extend(_extract_dropdown_values(_make_list(component['props'].get('children'))))
-    return res
 
 
 class _FormHandlingError(Exception):
@@ -342,12 +319,59 @@ def _ensure_all_tables_are_found_once(initial_tables: List[Table], new_tables: L
         )
 
 
+def _extract_words_outside_table(text: StructuredText) -> List[str]:
+    title_words = _extract_words(text.title.text)
+    alinea_words = [word for al in text.outer_alineas for word in _extract_words(al.text)]
+    section_words = [word for sec in text.sections for word in _extract_words_outside_table(sec)]
+    return title_words + alinea_words + section_words
+
+
+def _keep_non_empty(strs: List[str]) -> List[str]:
+    return [x for x in strs if x]
+
+
+def _extract_words(str_: str) -> List[str]:
+    return _keep_non_empty(re.split(r'\W+', str_))
+
+
+def _extract_first_different_word(text_1: List[str], text_2: List[str]) -> Optional[int]:
+    if len(text_1) != len(text_2):
+        raise ValueError(
+            f'Input texts must have same length, received lists of lengths {len(text_1)} and {len(text_2)}'
+        )
+    min_length = min(len(text_1), len(text_2))
+    for i in range(min_length):
+        if text_1[i] != text_2[i]:
+            return i
+    return None
+
+
+def _check_have_same_words(am: StructuredText, new_am: str) -> None:
+    previous_am_words = _extract_words_outside_table(replace(am, title=EnrichedString('')))
+    new_am_words = _extract_words(new_am)
+    min_len = min(len(previous_am_words), len(new_am_words))
+    word_index = _extract_first_different_word(previous_am_words[:min_len], new_am_words[:min_len])
+    if len(previous_am_words) != len(new_am_words) or word_index:
+        message = '\n'.join(
+            [
+                'Le texte modifié est différent du texte initial',
+                f'Taille du texte initial: {len(previous_am_words)}',
+                f'Taille du texte modifié: {len(new_am_words)}',
+                f'Premier mot différent: {previous_am_words[word_index]} != {new_am_words[word_index]}'
+                if word_index is not None
+                else '',
+            ]
+        )
+        raise _FormHandlingError(message)
+
+
 def _structure_text(am_id: str, new_am: str) -> ArreteMinisteriel:
     am_state = load_am_state(am_id)
     am = load_am(am_id, am_state)
     if not am:
         raise _FormHandlingError(f'am with id {am_id} not found, which should not happen')
     text = am_to_text(am)
+    _check_have_same_words(text, new_am)
     tables = _extract_tables(text)
     new_elements = _build_new_elements(new_am, tables)
     new_tables = _keep_tables(new_elements)
@@ -374,10 +398,6 @@ def _save_text_and_get_message(am_id: str, new_am: str) -> str:
     return f'Enregistrement réussi. (Filename={full_filename})'
 
 
-def _extract_title_levels_from_form(component_values: Dict[str, Any]) -> List[int]:
-    return _extract_dropdown_values(_make_list(component_values['props']['children']))
-
-
 def _replace_line_breaks(message: str) -> List[Component]:
     return [html.P(piece) for piece in message.split('\n')]
 
@@ -396,8 +416,12 @@ def _extract_form_value_and_save_text(nb_clicks: int, am_id: str, text_area_cont
         return div([])
     try:
         success_message = _save_text_and_get_message(am_id, new_am)
+    except _FormHandlingError as exc:
+        return _error_component(f'Erreur pendant l\'enregistrement. Détails de l\'erreur:\n{str(exc)}')
     except Exception:  # pylint: disable=broad-except
-        return _error_component(f'Erreur pendant l\'enregistrement. Détails de l\'erreur:\n{traceback.format_exc()}')
+        return _error_component(
+            f'Erreur inattendue pendant l\'enregistrement. Détails de l\'erreur:\n{traceback.format_exc()}'
+        )
     return _success_component(success_message)
 
 

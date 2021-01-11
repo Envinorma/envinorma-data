@@ -1,30 +1,7 @@
 import json
-from lib.config import AM_DATA_FOLDER
-from lib.topics.patterns import TopicName
 
 import pytest
-from lib.data import (
-    ArreteMinisteriel,
-    ArticleStatus,
-    Cell,
-    EnrichedString,
-    Hyperlink,
-    LegifranceArticle,
-    Link,
-    Row,
-    StructuredText,
-    Table,
-    load_arrete_ministeriel,
-)
 from lib.am_enriching import (
-    add_inspection_sheet_in_table_rows,
-    add_links_in_enriched_string,
-    add_links_to_am,
-    add_topics,
-    add_references,
-    extract_titles_and_reference_pairs,
-    remove_prescriptive_power,
-    remove_sections,
     _extract_special_prefix,
     _extract_summary_elements,
     _is_prefix,
@@ -33,7 +10,28 @@ from lib.am_enriching import (
     _remove_html,
     _remove_last_word,
     _shorten_summary_text,
+    add_inspection_sheet_in_table_rows,
+    add_links_in_enriched_string,
+    add_links_to_am,
+    add_references,
+    add_topics,
+    extract_titles_and_reference_pairs,
+    remove_prescriptive_power,
+    remove_sections,
 )
+from lib.config import AM_DATA_FOLDER
+from lib.data import (
+    ArreteMinisteriel,
+    Cell,
+    EnrichedString,
+    Hyperlink,
+    Link,
+    Row,
+    StructuredText,
+    Table,
+    load_arrete_ministeriel,
+)
+from lib.topics.patterns import TopicName
 
 
 def test_add_topics():
