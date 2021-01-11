@@ -160,12 +160,13 @@ def _preview_button() -> Component:
         id=_PREVIEW_BUTTON,
         className='btn btn-primary center',
         n_clicks=0,
+        hidden=True,
         style={'margin-right': '10px'},
     )
 
 
 def _go_back_button(parent_page: str) -> Component:
-    return dcc.Link(html.Button('Annuler', className='btn btn-primary center'), href=parent_page)
+    return dcc.Link(html.Button('Annuler', className='btn btn-link center'), href=parent_page)
 
 
 def _footer_buttons(parent_page: str) -> Component:
@@ -196,7 +197,7 @@ def _get_instructions() -> Component:
         children=html.A(
             id='structure-edition-collapse-button',
             children=[
-                html.Button('NB', className='btn btn-light btn-sm'),
+                html.Button('Instructions', className='btn btn-light btn-sm'),
                 dbc.Collapse(
                     html.Ul(
                         [
@@ -216,7 +217,6 @@ def _get_instructions() -> Component:
                         ],
                     ),
                     id='structure-edition-collapse',
-                    is_open=True,
                 ),
             ],
         )
@@ -457,21 +457,19 @@ def add_structure_edition_callbacks(app: dash.Dash):
         [State(_TEXT_AREA_COMPONENT, 'value')],
     )(update_output)
 
-    def update_toc(_, state):
-        return _extract_text_area_and_display_toc(state)
-
-    app.callback(
+    @app.callback(
         Output(_TOC_COMPONENT, 'children'),
-        [Input(_PREVIEW_BUTTON, 'n_clicks')],
-        [State(_TEXT_AREA_COMPONENT, 'value')],
-    )(update_toc)
+        [Input(_PREVIEW_BUTTON, 'n_clicks'), Input(_TEXT_AREA_COMPONENT, 'value')],
+    )
+    def _(_, state):
+        return _extract_text_area_and_display_toc(state)
 
     @app.callback(
         Output('structure-edition-collapse', 'is_open'),
         [Input('structure-edition-collapse-button', 'n_clicks')],
         [State('structure-edition-collapse', 'is_open')],
     )
-    def _(n_clicks, is_open):
+    def __(n_clicks, is_open):
         if n_clicks:
             return not is_open
-        return True
+        return False
