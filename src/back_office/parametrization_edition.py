@@ -31,18 +31,21 @@ from lib.parametrization import (
 from lib.utils import get_parametrization_wip_folder, jsonify
 
 from back_office.utils import (
+    ID_TO_AM_MD,
     AMOperation,
     assert_int,
     assert_list,
     assert_str,
     div,
     dump_am_state,
+    load_am,
     load_am_state,
     load_parametrization,
     write_file,
 )
 
 _Options = List[Dict[str, Any]]
+_ParameterObject = Union[NonApplicationCondition, AlternativeSection]
 
 _CONDITION_VARIABLES = {'Régime': ParameterEnum.REGIME, 'Date d\'autorisation': ParameterEnum.DATE_AUTORISATION}
 _CONDITION_VARIABLE_OPTIONS = [{'label': condition, 'value': condition} for condition in _CONDITION_VARIABLES]
@@ -129,18 +132,58 @@ def _get_new_section_form() -> Component:
 
 
 def _go_back_button(parent_page: str) -> Component:
-    return dcc.Link(html.Button('Retour', className='btn btn-primary center'), href=parent_page)
+    return dcc.Link(html.Button('Retour', className='btn btn-link center'), href=parent_page)
 
 
-def _make_form(options: _Options, operation: AMOperation, parent_page: str, am_id: str) -> Component:
-    dropdown_source = dcc.Dropdown(options=options, id=_SOURCE)
-    dropdown_target = dcc.Dropdown(options=options, id=_TARGET_SECTION)
-    dropdown_alineas = dcc.Dropdown(options=_ALINEA_OPTIONS, multi=True, value=['TOUS'], id=_TARGET_ALINEAS)
+def _buttons(parent_page: str) -> Component:
+    return html.Div(
+        [
+            html.Button(
+                'Enregistrer',
+                id='submit-val-param-edition',
+                className='btn btn-primary',
+                style={'margin-right': '5px'},
+                n_clicks=0,
+            ),
+            _go_back_button(parent_page),
+        ],
+        style={'margin-top': '10px'},
+    )
+
+
+def _get_condition() -> Component:
     merge_values = [{'value': 'and', 'label': 'ET'}, {'value': 'or', 'label': 'OU'}]
     dropdown_condition_merge = dcc.Dropdown(options=merge_values, clearable=False, value='and', id=_CONDITION_MERGE)
     dropdown_nb_conditions = dcc.Dropdown(
         _NB_CONDITIONS, options=[{'label': i, 'value': i} for i in range(10)], clearable=False, value=1
     )
+
+    return html.Div(
+        [
+            html.H4('Condition'),
+            html.P('Opération'),
+            dropdown_condition_merge,
+            html.P('Nombre de conditions'),
+            dropdown_nb_conditions,
+            html.P(['Liste de conditions ', dbc.Badge('?', id='param-edition-conditions-tooltip', pill=True)]),
+            dbc.Tooltip(
+                [html.P('Formats:'), html.P('Régime: A, E, D ou NC.'), html.P('Date: JJ/MM/AAAA')],
+                target='param-edition-conditions-tooltip',
+            ),
+        ]
+    )
+
+
+def _make_form(
+    options: _Options,
+    operation: AMOperation,
+    parent_page: str,
+    am_id: str,
+    loaded_parameter: Optional[_ParameterObject],
+) -> Component:
+    dropdown_source = dcc.Dropdown(options=options, id=_SOURCE)
+    dropdown_target = dcc.Dropdown(options=options, id=_TARGET_SECTION)
+    dropdown_alineas = dcc.Dropdown(options=_ALINEA_OPTIONS, multi=True, value=['TOUS'], id=_TARGET_ALINEAS)
 
     return html.Div(
         [
@@ -155,26 +198,10 @@ def _make_form(options: _Options, operation: AMOperation, parent_page: str, am_i
             html.H4('Alineas visés') if _is_condition(operation) else html.Div(),
             dropdown_alineas if _is_condition(operation) else html.Div(),
             _get_new_section_form() if not _is_condition(operation) else html.Div(),
-            html.H4('Condition'),
-            html.P('Opération'),
-            dropdown_condition_merge,
-            html.P('Nombre de conditions'),
-            dropdown_nb_conditions,
-            html.P(['Liste de conditions ', dbc.Badge('?', id='param-edition-conditions-tooltip', pill=True)]),
-            dbc.Tooltip(
-                [html.P('Formats:'), html.P('Régime: A, E, D ou NC.'), html.P('Date: JJ/MM/AAAA')],
-                target='param-edition-conditions-tooltip',
-            ),
+            _get_condition(),
             html.Div(id='parametrization-conditions'),
             html.Div(id='form-output-param-edition'),
-            html.Button(
-                'Enregistrer',
-                id='submit-val-param-edition',
-                className='btn btn-primary',
-                style={'margin-right': '5px'},
-                n_clicks=0,
-            ),
-            _go_back_button(parent_page),
+            _buttons(parent_page),
             html.P(am_id, hidden=True, id=_AM_ID),
             html.P(operation.value, hidden=True, id=_AM_OPERATION),
         ]
@@ -195,17 +222,25 @@ def _extract_paragraph_reference_dropdown_values(text: StructuredText) -> _Optio
 
 
 def _structure_edition_component(
-    text: StructuredText, operation: AMOperation, parent_page: str, am_id: str
+    text: StructuredText,
+    operation: AMOperation,
+    parent_page: str,
+    am_id: str,
+    loaded_parameter: Optional[_ParameterObject],
 ) -> Component:
     dropdown_values = _extract_paragraph_reference_dropdown_values(text)
-    return _make_form(dropdown_values, operation, parent_page, am_id)
+    return _make_form(dropdown_values, operation, parent_page, am_id, loaded_parameter)
 
 
-def make_am_parametrization_edition_component(
-    am: ArreteMinisteriel, operation: AMOperation, parent_page: str, am_id: str
+def _make_am_parametrization_edition_component(
+    am: ArreteMinisteriel,
+    operation: AMOperation,
+    am_page: str,
+    am_id: str,
+    loaded_parameter: Optional[_ParameterObject],
 ) -> Component:
     text = am_to_text(am)
-    return div(_structure_edition_component(text, operation, parent_page, am_id))
+    return div(_structure_edition_component(text, operation, am_page, am_id, loaded_parameter))
 
 
 def _make_list(candidate: Optional[Union[List[Dict[str, Any]], Dict[str, Any]]]) -> List[Dict[str, Any]]:
@@ -241,7 +276,8 @@ def _add_filename_to_state(am_id: str, filename: str) -> None:
     dump_am_state(am_id, am_state)
 
 
-_ParameterObject = Union[NonApplicationCondition, AlternativeSection]
+def _remove_str(elements: List[Union[str, Dict[str, Any]]]) -> List[Dict[str, Any]]:
+    return [el for el in elements if not isinstance(el, str)]
 
 
 def _extract_non_str_children(page_state: Dict[str, Any]) -> List[Dict[str, Any]]:
@@ -251,15 +287,14 @@ def _extract_non_str_children(page_state: Dict[str, Any]) -> List[Dict[str, Any]
     if isinstance(child_or_children, dict):
         return [child_or_children]
     if isinstance(child_or_children, list):
-        return child_or_children
+        return _remove_str(child_or_children)
     return []
 
 
 def _extract_components_with_id(page_state: Dict[str, Any]) -> List[Dict[str, Any]]:
     children = _extract_non_str_children(page_state)
-    return [child for child in children if child.get('props', {}).get('id')] + [
-        dc for child in children for dc in _extract_components_with_id(child)
-    ]
+    shallow = [child for child in children if child.get('props', {}).get('id')]
+    return shallow + [dc for child in children for dc in _extract_components_with_id(child)]
 
 
 def _extract_id_to_value(page_state: Dict[str, Any]) -> Dict[str, Any]:
@@ -514,3 +549,59 @@ def add_parametrization_edition_callbacks(app: dash.Dash):
         Output('parametrization-conditions', 'children'),
         [Input(_NB_CONDITIONS, 'value')],
     )(nb_conditions)
+
+
+class _RouteParsingError(Exception):
+    pass
+
+
+def _parse_route(route: str) -> Tuple[str, AMOperation, Optional[int]]:
+    pieces = route.split('/')[1:]
+    if len(pieces) <= 1:
+        raise _RouteParsingError(f'Error parsing route {route}')
+    am_id = pieces[0]
+    try:
+        operation = AMOperation(pieces[1])
+    except ValueError:
+        raise _RouteParsingError(f'Error parsing route {route}')
+    if len(pieces) == 2:
+        return am_id, operation, None
+    try:
+        parameter_rank = int(pieces[2])
+    except ValueError:
+        raise _RouteParsingError(f'Error parsing route {route}')
+    return am_id, operation, parameter_rank
+
+
+def _get_parameter(
+    parametrization: Parametrization, operation_id: AMOperation, parameter_rank: int
+) -> _ParameterObject:
+    if operation_id == operation_id.ADD_ALTERNATIVE_SECTION:
+        parameters = parametrization.alternative_sections
+    elif operation_id == operation_id.ADD_CONDITION:
+        parameters = parametrization.application_conditions
+    else:
+        raise NotImplementedError(f'{operation_id.value}')
+    if parameter_rank >= len(parameters):
+        raise _RouteParsingError(f'Parameter with rank {parameter_rank} not found.')
+    return parameters[parameter_rank]
+
+
+def router(pathname: str) -> Component:
+    try:
+        am_id, operation_id, parameter_rank = _parse_route(pathname)
+        if am_id not in ID_TO_AM_MD:
+            return html.P('404 - Arrêté inconnu')
+        am_page = '/arrete_ministeriel/' + am_id
+        am_state = load_am_state(am_id)
+        am_metadata = ID_TO_AM_MD.get(am_id)
+        am = load_am(am_id, am_state)
+        parametrization = load_parametrization(am_id, am_state)
+        loaded_parameter = (
+            _get_parameter(parametrization, operation_id, parameter_rank) if parameter_rank is not None else None
+        )
+    except _RouteParsingError as exc:
+        return html.P(f'404 - Page introuvable - {str(exc)}')
+    if not am or not parametrization or not am_metadata:
+        return html.P('Arrêté introuvable.')
+    return _make_am_parametrization_edition_component(am, operation_id, am_page, am_id, loaded_parameter)

@@ -12,10 +12,7 @@ from lib.data import ArreteMinisteriel, StructuredText, am_to_text
 from lib.parametrization import AlternativeSection, NonApplicationCondition, Parametrization, condition_to_str
 from lib.utils import get_structured_text_wip_folder
 
-from back_office.parametrization_edition import (
-    add_parametrization_edition_callbacks,
-    make_am_parametrization_edition_component,
-)
+from back_office.parametrization_edition import add_parametrization_edition_callbacks, router as parametrization_router
 from back_office.structure_edition import add_structure_edition_callbacks, make_am_structure_edition_component
 from back_office.utils import (
     ID_TO_AM_MD,
@@ -113,7 +110,7 @@ def _get_validate_structure_button(am_status: AMWorkflowState) -> Component:
 def _get_structure_validation_buttons(parent_page: str, am_status: AMWorkflowState) -> Component:
     edit_button = _get_edit_structure_button(parent_page, am_status)
     validate_button = _get_validate_structure_button(am_status)
-    return _inline_buttons([edit_button, validate_button])
+    return div(_inline_buttons([edit_button, validate_button]), {'margin-bottom': '35px'})
 
 
 def _get_validate_parametrization_button_(
@@ -154,14 +151,14 @@ def _get_structure_validation_title(status: AMWorkflowState) -> Component:
     title = 'Edition de structure '
     if status == status.PENDING_STRUCTURE_VALIDATION:
         return html.H3(title)
-    return html.H3([title, html.Span('ok', className='badge rounded-pill bg-success')])
+    return html.H3([title, html.Span('ok', className='badge bg-success', style={'color': 'white'})])
 
 
 def _get_parametrization_edition_title(status: AMWorkflowState) -> Component:
     title = 'Edition de la paramétrisation '
     if status != status.VALIDATED:
         return html.H3(title)
-    return html.H3([title, html.Span('ok', className='badge rounded-pill bg-success')])
+    return html.H3([title, html.Span('ok', className='badge bg-success', style={'color': 'white'})])
 
 
 def _get_subsection(path: Tuple[int, ...], text: StructuredText) -> StructuredText:
@@ -175,21 +172,33 @@ def _get_section(path: Tuple[int, ...], am: ArreteMinisteriel) -> StructuredText
 
 
 def _application_condition_to_row(
-    non_application_condition: NonApplicationCondition, am: ArreteMinisteriel
+    non_application_condition: NonApplicationCondition, am: ArreteMinisteriel, rank: int, current_page: str
 ) -> Component:
     reference_str = _get_section(non_application_condition.targeted_entity.section.path, am).title.text
     alineas = non_application_condition.targeted_entity.outer_alinea_indices or 'Tous'
     description = non_application_condition.description
     condition = condition_to_str(non_application_condition.condition)
     source = _get_section(non_application_condition.source.reference.section.path, am).title.text
-    cells = [reference_str, alineas, description, condition, source]
+    cells = [
+        dcc.Link(rank, href=f'{current_page}/{AMOperation.ADD_CONDITION.value}/{rank}'),
+        reference_str,
+        alineas,
+        description,
+        condition,
+        source,
+    ]
     return html.Tr([html.Td(cell) for cell in cells])
 
 
-def _get_non_application_table(parametrization: Parametrization, am: ArreteMinisteriel) -> Component:
-    header_names = ['Paragraphe visé', 'Alineas visés', 'Description', 'Condition', 'Source']
+def _get_non_application_table(parametrization: Parametrization, am: ArreteMinisteriel, current_page: str) -> Component:
+    header_names = ['#', 'Paragraphe visé', 'Alineas visés', 'Description', 'Condition', 'Source']
     header = html.Thead(html.Tr([html.Th(name) for name in header_names]))
-    body = html.Tbody([_application_condition_to_row(row, am) for row in parametrization.application_conditions])
+    body = html.Tbody(
+        [
+            _application_condition_to_row(row, am, rank, current_page)
+            for rank, row in enumerate(parametrization.application_conditions)
+        ]
+    )
     return html.Table([header, body], className='table table-hover')
 
 
@@ -197,33 +206,56 @@ def _wrap_in_paragraphs(strs: List[str]) -> Component:
     return div([html.P(str_) for str_ in strs])
 
 
-def _alternative_section_to_row(alternative_section: AlternativeSection, am: ArreteMinisteriel) -> Component:
+def _alternative_section_to_row(
+    alternative_section: AlternativeSection, am: ArreteMinisteriel, rank: int, current_page: str
+) -> Component:
     reference_str = _get_section(alternative_section.targeted_section.path, am).title.text
     description = alternative_section.description
     condition = condition_to_str(alternative_section.condition)
     source = _get_section(alternative_section.source.reference.section.path, am).title.text
     new_version = _wrap_in_paragraphs(extract_markdown_text(alternative_section.new_text, level=1))
-    cells = [reference_str, description, condition, source, new_version]
+    cells = [
+        dcc.Link(rank, href=f'{current_page}/{AMOperation.ADD_CONDITION.value}/{rank}'),
+        reference_str,
+        description,
+        condition,
+        source,
+        new_version,
+    ]
     return html.Tr([html.Td(cell) for cell in cells])
 
 
-def _get_alternative_section_table(parametrization: Parametrization, am: ArreteMinisteriel) -> Component:
-    header_names = ['Paragraphe visé', 'Description', 'Condition', 'Source', 'Nouvelle version']
+def _get_alternative_section_table(
+    parametrization: Parametrization, am: ArreteMinisteriel, current_page: str
+) -> Component:
+    header_names = ['#', 'Paragraphe visé', 'Description', 'Condition', 'Source', 'Nouvelle version']
     header = html.Thead(html.Tr([html.Th(name) for name in header_names]))
-    body = html.Tbody([_alternative_section_to_row(row, am) for row in parametrization.alternative_sections])
+    body = html.Tbody(
+        [
+            _alternative_section_to_row(row, am, rank, current_page)
+            for rank, row in enumerate(parametrization.alternative_sections)
+        ]
+    )
     return html.Table([header, body], className='table table-hover')
+
+
+def _link_button(text: str, href: str, disabled: bool) -> html.Button:
+    return dcc.Link(
+        html.Button(text, style={'margin-bottom': '35px'}, className='btn btn-link', n_clicks=0, disabled=disabled),
+        href=href,
+    )
 
 
 def _get_add_condition_button(parent_page: str, status: AMWorkflowState) -> Component:
     disabled = status != status.PENDING_PARAMETRIZATION
     href = f'{parent_page}/{AMOperation.ADD_CONDITION.value}'
-    return _primary_link_button('Nouveau', href, disabled)
+    return _link_button('+ Nouveau', href, disabled)
 
 
 def _get_add_alternative_section_button(parent_page: str, status: AMWorkflowState) -> Component:
     disabled = status != status.PENDING_PARAMETRIZATION
     href = f'{parent_page}/{AMOperation.ADD_ALTERNATIVE_SECTION.value}'
-    return _primary_link_button('Nouveau', href, disabled)
+    return _link_button('+ Nouveau', href, disabled)
 
 
 def _get_parametrization_summary(
@@ -233,10 +265,12 @@ def _get_parametrization_summary(
         return div([])
     return div(
         [
-            html.H4(['Conditions de non-application', _get_add_condition_button(parent_page, status)]),
-            _get_non_application_table(parametrization, am),
-            html.H4(['Paragraphes alternatifs', _get_add_alternative_section_button(parent_page, status)]),
-            _get_alternative_section_table(parametrization, am),
+            html.H4('Conditions de non-application'),
+            _get_non_application_table(parametrization, am, parent_page),
+            _get_add_condition_button(parent_page, status),
+            html.H4('Paragraphes alternatifs'),
+            _get_alternative_section_table(parametrization, am, parent_page),
+            _get_add_alternative_section_button(parent_page, status),
         ]
     )
 
@@ -394,15 +428,15 @@ def _get_body_component(
         return _make_am_index_component(am_id, am_state, parent_page, parametrization, am)
     if operation_id == operation_id.EDIT_STRUCTURE:
         return make_am_structure_edition_component(am_id, parent_page, am)
-    if operation_id in (operation_id.ADD_CONDITION, operation_id.ADD_ALTERNATIVE_SECTION):
-        return make_am_parametrization_edition_component(am, operation_id, parent_page, am_id)
     raise NotImplementedError()
 
 
-def _router(pathname: str, parent_page: str) -> Component:
-    am_id, operation_id, _ = _extract_am_id_and_operation(pathname)
+def _router(route: str, parent_page: str) -> Component:
+    am_id, operation_id, _ = _extract_am_id_and_operation(route)
     if am_id not in ID_TO_AM_MD:
         return html.P('404 - Arrêté inconnu')
+    if operation_id in (AMOperation.ADD_ALTERNATIVE_SECTION, AMOperation.ADD_CONDITION):
+        return parametrization_router(route)
     parent_page = parent_page + '/' + am_id
     am_state = load_am_state(am_id)
     am_metadata = ID_TO_AM_MD.get(am_id)
