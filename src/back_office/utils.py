@@ -142,6 +142,13 @@ def get_section_title(path: Ints, am: ArreteMinisteriel) -> str:
     return get_subsection(path[1:], am.sections[path[0]]).title.text
 
 
+def get_truncated_str(str_: str, _max_len: int = 80) -> str:
+    truncated_str = str_[:_max_len]
+    if len(str_) > _max_len:
+        return truncated_str[:-5] + '[...]'
+    return truncated_str
+
+
 # from tqdm import tqdm
 # import shutil
 

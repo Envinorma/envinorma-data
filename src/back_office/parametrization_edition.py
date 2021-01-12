@@ -39,6 +39,7 @@ from back_office.utils import (
     assert_str,
     div,
     get_section,
+    get_truncated_str,
     load_am,
     load_am_state,
     load_parametrization,
@@ -430,7 +431,7 @@ def _make_form(
 
 
 def _extract_reference_and_values_titles(text: StructuredText, path: Ints, level: int = 0) -> List[Tuple[str, str]]:
-    return [(_dump_path(path), '#' * level + ' ' + text.title.text[:60])] + [
+    return [(_dump_path(path), get_truncated_str('#' * level + ' ' + text.title.text))] + [
         elt
         for rank, sec in enumerate(text.sections)
         for elt in _extract_reference_and_values_titles(sec, path + (rank,), level + 1)
@@ -759,14 +760,6 @@ def _handle_delete(n_clicks: int, operation_str: str, am_id: str, parameter_rank
     )
 
 
-def _remove_initial_hashtags(str_: str) -> str:
-    i = 0
-    for i, char in enumerate(str_):
-        if char != '#':
-            break
-    return str_[i:]
-
-
 def _load_am(am_id: str) -> Optional[ArreteMinisteriel]:
     return load_am(am_id, load_am_state(am_id))
 
@@ -796,7 +789,7 @@ def _active_alineas_component(alineas: List[str], active_alineas: Set[int]) -> C
 def _build_targeted_alinea_component(
     alineas: List[Union[str, int]], str_path: Optional[str], am_id: str, operation_str: str
 ) -> Component:
-    if operation_str != AMOperation.ADD_CONDITION.value or not alineas or not str_path:
+    if operation_str != AMOperation.ADD_CONDITION.value or not str_path:
         return _get_new_section_form('', '')
     am = _load_am(am_id)
     if not am:

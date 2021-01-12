@@ -1,6 +1,6 @@
 from datetime import date
 
-from back_office.parametrization_edition import _AND_ID, _OR_ID, _remove_initial_hashtags, _simplify_condition
+from back_office.parametrization_edition import _AND_ID, _OR_ID, _simplify_condition
 from lib.parametrization import Equal, Greater, Littler, OrCondition, ParameterEnum, Range
 
 
@@ -40,10 +40,3 @@ def test_simplify_condition():
     assert len(res[1]) == 2
     assert res[1][0] == Greater(_date, date(2010, 1, 1), False)
     assert res[1][1] == Equal(_regime, 'A')
-
-
-def test_remove_initial_hashtags():
-    assert _remove_initial_hashtags('### Hello') == ' Hello'
-    assert _remove_initial_hashtags('') == ''
-    assert _remove_initial_hashtags('Holà') == 'Holà'
-    assert _remove_initial_hashtags('Foo#') == 'Foo#'

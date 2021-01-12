@@ -14,7 +14,7 @@ from lib.data import ArreteMinisteriel, Cell, EnrichedString, Row, StructuredTex
 from lib.structure_extraction import TextElement, Title, build_structured_text, structured_text_to_text_elements
 from lib.utils import get_structured_text_wip_folder, jsonify
 
-from back_office.utils import assert_str, div, dump_am_state, load_am, load_am_state, write_file
+from back_office.utils import assert_str, div, dump_am_state, get_truncated_str, load_am, load_am_state, write_file
 
 _LEVEL_OPTIONS = [{'label': f'Titre {i}', 'value': i} for i in range(1, 11)] + [{'label': 'Alinea', 'value': -1}]
 _DROPDOWN_STYLE = {'width': '100px', 'margin-right': '10px'}
@@ -134,14 +134,6 @@ def _get_toc_component() -> Component:
             'height': '100vh',
         },
     )
-
-
-def _get_truncated_title(title: str) -> str:
-    _max_len = 80
-    trunc_title = title[:_max_len]
-    if len(title) > _max_len:
-        return trunc_title[:-5] + '[...]'
-    return trunc_title
 
 
 def _submit_button() -> Component:
@@ -444,14 +436,13 @@ assert _count_prefix_hashtags('###  ') == 3
 
 def _format_toc_line(line: str) -> Component:
     nb_hashtags = _count_prefix_hashtags(line)
-    trunc_title = _get_truncated_title(line[nb_hashtags:])
+    trunc_title = get_truncated_str(line[nb_hashtags:])
     trunc_title_component = html.Span(trunc_title) if nb_hashtags > 1 else html.B(trunc_title)
 
     return html.Span([html.Span(nb_hashtags * '•' + ' ', style={'color': 'grey'}), trunc_title_component, html.Br()])
 
 
 def _extract_text_area_and_display_toc(content: str) -> Component:
-    # lines = _extract_all_lines(text_area_children)
     lines = content.split('\n')
     formatted_lines = [_format_toc_line(line) for line in lines if line.startswith('#')]
     new_title_levels = html.P(formatted_lines)
