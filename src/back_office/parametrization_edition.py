@@ -213,7 +213,7 @@ def _get_new_section_form(loaded_parameter: Optional[ParameterObject]) -> Compon
         [
             html.H4('Nouvelle version'),
             html.Label('Titre', htmlFor=_NEW_TEXT_TITLE, className='form-label'),
-            dcc.Input(id=_NEW_TEXT_TITLE, value=default_title, className='form-control'),
+            dcc.Input(id=_NEW_TEXT_TITLE, value=default_title, className='form-control', disabled=True),
             html.Label('Contenu du paragraphe', htmlFor=_NEW_TEXT_CONTENT, className='form-label'),
             div(dcc.Textarea(id=_NEW_TEXT_CONTENT, className='form-control', value=default_content)),
         ]
@@ -257,7 +257,7 @@ _MERGE_VALUES_OPTIONS = [{'value': _AND_ID, 'label': 'ET'}, {'value': _OR_ID, 'l
 def _get_condition_tooltip() -> Component:
     return html.Div(
         [
-            'Liste de conditions',
+            'Liste de conditions ',
             dbc.Badge('?', id='param-edition-conditions-tooltip', pill=True),
             dbc.Tooltip(
                 ['Formats:', html.Br(), 'Régime: A, E, D ou NC.', html.Br(), 'Date: JJ/MM/AAAA'],
@@ -351,7 +351,7 @@ def _get_target_entity(parameter: ParameterObject) -> Ints:
 
 def _get_target_section_form(options: _Options, loaded_parameter: Optional[ParameterObject]) -> Component:
     default_value = _dump_path(_get_target_entity(loaded_parameter)) if loaded_parameter else None
-    dropdown_target = dcc.Dropdown(options=options, id=_TARGET_SECTION, value=default_value)
+    dropdown_target = html.Div([dcc.Dropdown(options=options, id=_TARGET_SECTION, value=default_value)], id='test')
     return html.Div([html.H4('Paragraphe visé'), dropdown_target])
 
 
@@ -713,7 +713,7 @@ def _handle_submit(
         return _error_component(f'Unexpected error:\n{traceback.format_exc()}')
     return div(
         [
-            _success_component(f'Suppression réussie.'),
+            _success_component(f'Enregistrement réussi.'),
             dcc.Location(pathname=_build_am_page(am_id), id='param-edition-success-redirect'),
         ]
     )
@@ -729,13 +729,29 @@ def _handle_delete(n_clicks: int, operation_str: str, am_id: str, parameter_rank
         return _error_component(f'Unexpected error:\n{traceback.format_exc()}')
     return div(
         [
-            _success_component(f'Enregistrement réussi.'),
+            _success_component(f'Suppression réussie.'),
             dcc.Location(pathname=_build_am_page(am_id), id='param-edition-success-redirect'),
         ]
     )
 
 
+def _remove_initial_hashtags(str_: str) -> str:
+    i = 0
+    for i, char in enumerate(str_):
+        if char != '#':
+            break
+    return str_[i:]
+
+
 def add_parametrization_edition_callbacks(app: dash.Dash):
+    @app.callback(Output(_NEW_TEXT_TITLE, 'value'), Input(_TARGET_SECTION, 'value'), State('test', 'children'))
+    def _(value, title):
+        options = title[0]['props']['options']
+        for dic in options:
+            if dic['value'] == value:
+                return _remove_initial_hashtags(dic['label']).strip()
+        return ''
+
     @app.callback(
         Output('param-edition-upsert-output', 'children'),
         Input('submit-val-param-edition', 'n_clicks'),
@@ -744,7 +760,7 @@ def add_parametrization_edition_callbacks(app: dash.Dash):
         State(_PARAMETER_RANK, 'children'),
         State('page-content', 'children'),
     )
-    def _(n_clicks, operation, am_id, parameter_rank, state):
+    def __(n_clicks, operation, am_id, parameter_rank, state):
         return _handle_submit(n_clicks, operation, am_id, parameter_rank, state)
 
     @app.callback(
@@ -754,7 +770,7 @@ def add_parametrization_edition_callbacks(app: dash.Dash):
         State(_AM_ID, 'children'),
         State(_PARAMETER_RANK, 'children'),
     )
-    def __(n_clicks, operation, am_id, parameter_rank):
+    def ___(n_clicks, operation, am_id, parameter_rank):
         return _handle_delete(n_clicks, operation, am_id, parameter_rank)
 
     def nb_conditions(value):
