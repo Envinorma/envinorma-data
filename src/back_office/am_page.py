@@ -30,10 +30,10 @@ from back_office.utils import (
     load_parametrization,
 )
 
-_VALIDATE_STRUCTURE_BUTTON_ID = '_validate_structure_button_id'
-_INVALIDATE_STRUCTURE_BUTTON_ID = '_invalidate_structure_button_id'
-_VALIDATE_PARAMETRIZATION_BUTTON_ID = '_validate_parametrization_button_id'
-_INVALIDATE_PARAMETRIZATION_BUTTON_ID = '_invalidate_parametrization_button_id'
+_VALIDATE_STRUCTURE_BUTTON_ID = 'am-page-validate-structure'
+_INVALIDATE_STRUCTURE_BUTTON_ID = 'am-page-invalidate-structure'
+_VALIDATE_PARAMETRIZATION_BUTTON_ID = 'am-page-validate-parametrization'
+_INVALIDATE_PARAMETRIZATION_BUTTON_ID = 'am-page-invalidate-parametrization'
 
 
 def _extract_am_id_and_operation(pathname: str) -> Tuple[str, Optional[AMOperation], str]:
@@ -182,30 +182,28 @@ def _get_section_title(path: Tuple[int, ...], am: ArreteMinisteriel) -> str:
     return _get_subsection(path[1:], am.sections[path[0]]).title.text
 
 
+def _human_alinea_tuple(ints: Optional[List[int]]) -> str:
+    if not ints:
+        return 'Tous'
+    return ', '.join(map(str, sorted(ints)))
+
+
 def _application_condition_to_row(
     non_application_condition: NonApplicationCondition, am: ArreteMinisteriel, rank: int, current_page: str
 ) -> Component:
     reference_str = _get_section_title(non_application_condition.targeted_entity.section.path, am)
-    alineas = non_application_condition.targeted_entity.outer_alinea_indices or 'Tous'
+    alineas = _human_alinea_tuple(non_application_condition.targeted_entity.outer_alinea_indices)
     description = non_application_condition.description
     condition = condition_to_str(non_application_condition.condition)
     source = _get_section_title(non_application_condition.source.reference.section.path, am)
     href = f'{current_page}/{AMOperation.ADD_CONDITION.value}/{rank}'
-    cells = [
-        rank,
-        reference_str,
-        alineas,
-        description,
-        condition,
-        source,
-        _link_button('Éditer', href=href, className='btn btn-link', state=_ButtonState.NORMAL),
-        _link_button('Supprimer', href=href, className='btn btn-link', state=_ButtonState.NORMAL),
-    ]
+    edit = _link_button('Éditer', href=href, className='btn btn-link', state=_ButtonState.NORMAL)
+    cells = [rank, reference_str, alineas, description, condition, source, edit]
     return html.Tr([html.Td(cell) for cell in cells])
 
 
 def _get_non_application_table(parametrization: Parametrization, am: ArreteMinisteriel, current_page: str) -> Component:
-    header_names = ['#', 'Paragraphe visé', 'Alineas visés', 'Description', 'Condition', 'Source', '', '']
+    header_names = ['#', 'Paragraphe visé', 'Alineas visés', 'Description', 'Condition', 'Source', '']
     header = html.Thead(html.Tr([html.Th(name) for name in header_names]))
     body = html.Tbody(
         [
@@ -229,23 +227,15 @@ def _alternative_section_to_row(
     source = _get_section(alternative_section.source.reference.section.path, am).title.text
     new_version = _wrap_in_paragraphs(extract_markdown_text(alternative_section.new_text, level=1))
     href = f'{current_page}/{AMOperation.ADD_ALTERNATIVE_SECTION.value}/{rank}'
-    cells = [
-        rank,
-        reference_str,
-        description,
-        condition,
-        source,
-        new_version,
-        _link_button('Éditer', href=href, className='btn btn-link', state=_ButtonState.NORMAL),
-        _link_button('Supprimer', href=href, className='btn btn-link', state=_ButtonState.NORMAL),
-    ]
+    edit = _link_button('Éditer', href=href, className='btn btn-link', state=_ButtonState.NORMAL)
+    cells = [rank, reference_str, description, condition, source, new_version, edit]
     return html.Tr([html.Td(cell) for cell in cells])
 
 
 def _get_alternative_section_table(
     parametrization: Parametrization, am: ArreteMinisteriel, current_page: str
 ) -> Component:
-    header_names = ['#', 'Paragraphe visé', 'Description', 'Condition', 'Source', 'Nouvelle version', '', '']
+    header_names = ['#', 'Paragraphe visé', 'Description', 'Condition', 'Source', 'Nouvelle version', '']
     header = html.Thead(html.Tr([html.Th(name) for name in header_names]))
     body = html.Tbody(
         [

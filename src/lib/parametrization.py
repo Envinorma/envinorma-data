@@ -376,8 +376,8 @@ class Parametrization:
         )
 
 
+ParameterObject = Union[NonApplicationCondition, AlternativeSection]
 Combinations = Dict[Tuple[str, ...], Dict[Parameter, Any]]
-
 
 def _extract_text(text: StructuredText, depth: int) -> List[str]:
     lines: List[str] = []

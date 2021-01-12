@@ -1,7 +1,6 @@
 import json
-import os
 import traceback
-from datetime import datetime, date
+from datetime import date, datetime
 from typing import Any, Dict, List, Optional, Tuple, Type, Union
 
 import dash
@@ -24,13 +23,14 @@ from lib.parametrization import (
     OrCondition,
     Parameter,
     ParameterEnum,
+    ParameterObject,
     ParameterType,
     Parametrization,
     Range,
     SectionReference,
 )
-from lib.utils import get_parametrization_wip_folder, jsonify
 
+from back_office.state_update import remove_parameter, upsert_parameter
 from back_office.utils import (
     ID_TO_AM_MD,
     AMOperation,
@@ -38,21 +38,18 @@ from back_office.utils import (
     assert_list,
     assert_str,
     div,
-    dump_am_state,
     load_am,
     load_am_state,
     load_parametrization,
-    write_file,
 )
 
 _Options = List[Dict[str, Any]]
-_ParameterObject = Union[NonApplicationCondition, AlternativeSection]
 
 _AUTORISATION_DATE_FR = 'Date d\'autorisation'
 _CONDITION_VARIABLES = {
     'Régime': ParameterEnum.REGIME,
     _AUTORISATION_DATE_FR: ParameterEnum.DATE_AUTORISATION,
-    'Date d\'installation': ParameterEnum.DATE_INSTALLATION,
+    'Date de mise en service': ParameterEnum.DATE_INSTALLATION,
 }
 _CONDITION_VARIABLE_OPTIONS = [{'label': condition, 'value': condition} for condition in _CONDITION_VARIABLES]
 _CONDITION_OPERATIONS = ['<', '<=', '=', '>', '>=']
@@ -206,7 +203,7 @@ def _extract_title_and_content(text: StructuredText, level: int = 0) -> Tuple[st
     return title, '\n'.join(contents)
 
 
-def _get_new_section_form(loaded_parameter: Optional[_ParameterObject]) -> Component:
+def _get_new_section_form(loaded_parameter: Optional[ParameterObject]) -> Component:
     parameter = _ensure_optional_alternative_section(loaded_parameter)
     if parameter:
         default_title, default_content = _extract_title_and_content(parameter.new_text)
@@ -227,9 +224,17 @@ def _go_back_button(parent_page: str) -> Component:
     return dcc.Link(html.Button('Retour', className='btn btn-link center'), href=parent_page)
 
 
-def _buttons(parent_page: str) -> Component:
+def _buttons(parent_page: str, is_edition: bool) -> Component:
     return html.Div(
         [
+            html.Button(
+                'Supprimer',
+                id='param-edition-delete-button',
+                className='btn btn-danger',
+                style={'margin-right': '5px'},
+                n_clicks=0,
+                hidden=not is_edition,
+            ),
             html.Button(
                 'Enregistrer',
                 id='submit-val-param-edition',
@@ -316,7 +321,7 @@ def _get_condition_form(default_condition: Optional[Condition]) -> Component:
     return html.Div([html.H4('Condition'), dropdown_condition_merge, dropdown_nb_conditions, tooltip, conditions])
 
 
-def _get_description_form(operation: AMOperation, loaded_parameter: Optional[_ParameterObject]) -> Component:
+def _get_description_form(operation: AMOperation, loaded_parameter: Optional[ParameterObject]) -> Component:
     description_default_value = loaded_parameter.description if loaded_parameter else ''
     return html.Div(
         [
@@ -327,7 +332,7 @@ def _get_description_form(operation: AMOperation, loaded_parameter: Optional[_Pa
     )
 
 
-def _get_source_form(options: _Options, loaded_parameter: Optional[_ParameterObject]) -> Component:
+def _get_source_form(options: _Options, loaded_parameter: Optional[ParameterObject]) -> Component:
     if loaded_parameter:
         default_value = _dump_path(loaded_parameter.source.reference.section.path)
     else:
@@ -336,7 +341,7 @@ def _get_source_form(options: _Options, loaded_parameter: Optional[_ParameterObj
     return html.Div([html.H4('Source'), dropdown_source])
 
 
-def _get_target_entity(parameter: _ParameterObject) -> Ints:
+def _get_target_entity(parameter: ParameterObject) -> Ints:
     if isinstance(parameter, NonApplicationCondition):
         return parameter.targeted_entity.section.path
     if isinstance(parameter, AlternativeSection):
@@ -344,13 +349,13 @@ def _get_target_entity(parameter: _ParameterObject) -> Ints:
     raise NotImplementedError(f'{type(parameter)}')
 
 
-def _get_target_section_form(options: _Options, loaded_parameter: Optional[_ParameterObject]) -> Component:
+def _get_target_section_form(options: _Options, loaded_parameter: Optional[ParameterObject]) -> Component:
     default_value = _dump_path(_get_target_entity(loaded_parameter)) if loaded_parameter else None
     dropdown_target = dcc.Dropdown(options=options, id=_TARGET_SECTION, value=default_value)
     return html.Div([html.H4('Paragraphe visé'), dropdown_target])
 
 
-def _ensure_optional_condition(parameter: Optional[_ParameterObject]) -> Optional[NonApplicationCondition]:
+def _ensure_optional_condition(parameter: Optional[ParameterObject]) -> Optional[NonApplicationCondition]:
     if not parameter:
         return None
     if not isinstance(parameter, NonApplicationCondition):
@@ -358,7 +363,7 @@ def _ensure_optional_condition(parameter: Optional[_ParameterObject]) -> Optiona
     return parameter
 
 
-def _ensure_optional_alternative_section(parameter: Optional[_ParameterObject]) -> Optional[AlternativeSection]:
+def _ensure_optional_alternative_section(parameter: Optional[ParameterObject]) -> Optional[AlternativeSection]:
     if not parameter:
         return None
     if not isinstance(parameter, AlternativeSection):
@@ -366,7 +371,7 @@ def _ensure_optional_alternative_section(parameter: Optional[_ParameterObject]) 
     return parameter
 
 
-def _get_target_alineas_form(operation: AMOperation, loaded_parameter: Optional[_ParameterObject]) -> Component:
+def _get_target_alineas_form(operation: AMOperation, loaded_parameter: Optional[ParameterObject]) -> Component:
     if not _is_condition(operation):
         return html.Div()
     condition = _ensure_optional_condition(loaded_parameter)
@@ -387,7 +392,7 @@ def _make_form(
     text_title_options: _Options,
     operation: AMOperation,
     parent_page: str,
-    loaded_parameter: Optional[_ParameterObject],
+    loaded_parameter: Optional[ParameterObject],
 ) -> Component:
     return html.Div(
         [
@@ -398,8 +403,9 @@ def _make_form(
             _get_target_alineas_form(operation, loaded_parameter),
             _get_new_section_form(loaded_parameter) if not _is_condition(operation) else html.Div(),
             _get_condition_form(loaded_parameter.condition if loaded_parameter else None),
-            html.Div(id='form-output-param-edition'),
-            _buttons(parent_page),
+            html.Div(id='param-edition-upsert-output'),
+            html.Div(id='param-edition-delete-output'),
+            _buttons(parent_page, is_edition=loaded_parameter is not None),
         ]
     )
 
@@ -421,7 +427,7 @@ def _structure_edition_component(
     text: StructuredText,
     operation: AMOperation,
     parent_page: str,
-    loaded_parameter: Optional[_ParameterObject],
+    loaded_parameter: Optional[ParameterObject],
 ) -> Component:
     dropdown_values = _extract_paragraph_reference_dropdown_values(text)
     return _make_form(dropdown_values, operation, parent_page, loaded_parameter)
@@ -433,7 +439,7 @@ def _make_am_parametrization_edition_component(
     am_page: str,
     am_id: str,
     parameter_rank: int,
-    loaded_parameter: Optional[_ParameterObject],
+    loaded_parameter: Optional[ParameterObject],
 ) -> Component:
     text = am_to_text(am)
     hidden_components = [
@@ -463,18 +469,6 @@ def _extract_dropdown_values(components: List[Dict[str, Any]]) -> List[Optional[
         else:
             res.extend(_extract_dropdown_values(_make_list(component['props'].get('children'))))
     return res
-
-
-def _compute_filename() -> str:
-    new_version = datetime.now().strftime('%y%m%d_%H%M')
-    filename = new_version + '.json'
-    return filename
-
-
-def _add_filename_to_state(am_id: str, filename: str) -> None:
-    am_state = load_am_state(am_id)
-    am_state.parametrization_draft_filenames.append(filename)
-    dump_am_state(am_id, am_state)
 
 
 def _remove_str(elements: List[Union[str, Dict[str, Any]]]) -> List[Dict[str, Any]]:
@@ -661,7 +655,7 @@ def _extract_new_text_parameters(id_to_value: Dict[str, str]) -> Tuple[str, str]
     return new_text_title, new_text_content
 
 
-def _extract_new_parameter_object(page_state: Dict[str, Any], operation: AMOperation) -> _ParameterObject:
+def _extract_new_parameter_object(page_state: Dict[str, Any], operation: AMOperation) -> ParameterObject:
     id_to_value = _extract_id_to_value(page_state)
     description = assert_str(_get_with_error(id_to_value, _DESCRIPTION))
     if len(description) < _MIN_NB_CHARS:
@@ -686,42 +680,11 @@ def _extract_new_parameter_object(page_state: Dict[str, Any], operation: AMOpera
     raise NotImplementedError(f'Expecting operation not to be {operation.value}')
 
 
-def _ensure_len(list_: List, min_len: int) -> None:
-    if len(list_) < min_len:
-        raise ValueError(f'Expecting len(list_) >= {min_len}, got {len(list_)}')
-
-
-def _build_new_parametrization(am_id: str, new_parameter: _ParameterObject, parameter_rank: int) -> Parametrization:
-    old_parametrization = load_parametrization(am_id, load_am_state(am_id))
-    if not old_parametrization:
-        raise ValueError('Parametrization not found, which should not happen.')
-    new_sections = old_parametrization.alternative_sections
-    new_conditions = old_parametrization.application_conditions
-    if isinstance(new_parameter, NonApplicationCondition):
-        if parameter_rank >= 0:
-            _ensure_len(old_parametrization.application_conditions, parameter_rank + 1)
-            new_conditions[parameter_rank] = new_parameter
-        else:
-            new_conditions.append(new_parameter)
-    else:
-        if parameter_rank >= 0:
-            _ensure_len(old_parametrization.alternative_sections, parameter_rank + 1)
-            new_sections[parameter_rank] = new_parameter
-        else:
-            new_sections.append(new_parameter)
-    return Parametrization(new_conditions, new_sections)
-
-
-def _extract_and_dump_new_object(
+def _extract_and_upsert_new_parameter(
     page_state: Dict[str, Any], am_id: str, operation: AMOperation, parameter_rank: int
 ) -> None:
     new_parameter = _extract_new_parameter_object(page_state, operation)
-    parametrization = _build_new_parametrization(am_id, new_parameter, parameter_rank)
-    filename = _compute_filename()
-    full_filename = os.path.join(get_parametrization_wip_folder(am_id), filename)
-    json_ = jsonify(parametrization.to_dict())
-    write_file(json_, full_filename)
-    _add_filename_to_state(am_id, filename)
+    upsert_parameter(am_id, new_parameter, parameter_rank)
 
 
 def _replace_line_breaks(message: str) -> List[Component]:
@@ -743,17 +706,38 @@ def _handle_submit(
         return html.Div()
     try:
         operation = AMOperation(operation_str)
-        _extract_and_dump_new_object(state, am_id, operation, parameter_rank)
+        _extract_and_upsert_new_parameter(state, am_id, operation, parameter_rank)
     except _FormHandlingError as exc:
         return _error_component(f'Erreur dans le formulaire:\n{exc}')
     except Exception:  # pylint: disable=broad-except
         return _error_component(f'Unexpected error:\n{traceback.format_exc()}')
-    return _success_component(f'Enregistrement réussi.')
+    return div(
+        [
+            _success_component(f'Suppression réussie.'),
+            dcc.Location(pathname=_build_am_page(am_id), id='param-edition-success-redirect'),
+        ]
+    )
+
+
+def _handle_delete(n_clicks: int, operation_str: str, am_id: str, parameter_rank: int) -> Component:
+    if n_clicks == 0:
+        return html.Div()
+    try:
+        operation = AMOperation(operation_str)
+        remove_parameter(am_id, operation, parameter_rank)
+    except Exception:  # pylint: disable=broad-except
+        return _error_component(f'Unexpected error:\n{traceback.format_exc()}')
+    return div(
+        [
+            _success_component(f'Enregistrement réussi.'),
+            dcc.Location(pathname=_build_am_page(am_id), id='param-edition-success-redirect'),
+        ]
+    )
 
 
 def add_parametrization_edition_callbacks(app: dash.Dash):
     @app.callback(
-        Output('form-output-param-edition', 'children'),
+        Output('param-edition-upsert-output', 'children'),
         Input('submit-val-param-edition', 'n_clicks'),
         State(_AM_OPERATION, 'children'),
         State(_AM_ID, 'children'),
@@ -762,6 +746,16 @@ def add_parametrization_edition_callbacks(app: dash.Dash):
     )
     def _(n_clicks, operation, am_id, parameter_rank, state):
         return _handle_submit(n_clicks, operation, am_id, parameter_rank, state)
+
+    @app.callback(
+        Output('param-edition-delete-output', 'children'),
+        Input('param-edition-delete-button', 'n_clicks'),
+        State(_AM_OPERATION, 'children'),
+        State(_AM_ID, 'children'),
+        State(_PARAMETER_RANK, 'children'),
+    )
+    def __(n_clicks, operation, am_id, parameter_rank):
+        return _handle_delete(n_clicks, operation, am_id, parameter_rank)
 
     def nb_conditions(value):
         return _get_condition_components(value)
@@ -793,9 +787,7 @@ def _parse_route(route: str) -> Tuple[str, AMOperation, Optional[int]]:
     return am_id, operation, parameter_rank
 
 
-def _get_parameter(
-    parametrization: Parametrization, operation_id: AMOperation, parameter_rank: int
-) -> _ParameterObject:
+def _get_parameter(parametrization: Parametrization, operation_id: AMOperation, parameter_rank: int) -> ParameterObject:
     if operation_id == operation_id.ADD_ALTERNATIVE_SECTION:
         parameters = parametrization.alternative_sections
     elif operation_id == operation_id.ADD_CONDITION:
@@ -807,12 +799,16 @@ def _get_parameter(
     return parameters[parameter_rank]
 
 
+def _build_am_page(am_id: str) -> str:
+    return '/arrete_ministeriel/' + am_id
+
+
 def router(pathname: str) -> Component:
     try:
         am_id, operation_id, parameter_rank = _parse_route(pathname)
         if am_id not in ID_TO_AM_MD:
             return html.P('404 - Arrêté inconnu')
-        am_page = '/arrete_ministeriel/' + am_id
+        am_page = _build_am_page(am_id)
         am_state = load_am_state(am_id)
         am_metadata = ID_TO_AM_MD.get(am_id)
         am = load_am(am_id, am_state)
