@@ -171,12 +171,12 @@ def _get_main_title(operation: AMOperation, is_edition: bool) -> Component:
         return (
             html.H3('Modification d\'une condition de non-application')
             if operation == operation.ADD_CONDITION
-            else html.H3('Modification d\'une section alternative')
+            else html.H3('Modification d\'un paragraphe alternatif')
         )
     return (
         html.H3('Nouvelle condition de non-application')
         if operation == operation.ADD_CONDITION
-        else html.H3('Nouvelle section alternative')
+        else html.H3('Nouveau paragraphe alternatif')
     )
 
 

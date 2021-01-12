@@ -1,3 +1,4 @@
+from enum import Enum
 import difflib
 import os
 from typing import Any, Dict, List, Optional, Set, Tuple, Union
@@ -48,13 +49,20 @@ def _inline_buttons(buttons: List[Component]) -> Component:
     return html.P(buttons, style=dict(display='flex'))
 
 
+class _ButtonState(Enum):
+    NORMAL = 0
+    DISABLED = 1
+    HIDDEN = 2
+
+
 def _button_with_id(
     text: str,
-    disabled: bool = False,
+    state: _ButtonState,
     id_: Optional[str] = None,
-    hidden: bool = False,
     className: str = 'btn btn-primary',
 ) -> html.Button:
+    disabled = state != _ButtonState.NORMAL
+    hidden = state == _ButtonState.HIDDEN
     if id_:
         return html.Button(
             text,
@@ -68,46 +76,38 @@ def _button_with_id(
     return html.Button(text, disabled=disabled, style={'margin': '5px'}, className=className, n_clicks=0, hidden=hidden)
 
 
-def _primary_link_button(
+def _link_button(
     text: str,
     href: str,
-    disabled: bool = False,
+    state: _ButtonState,
     className: str = 'btn btn-primary',
 ) -> html.Button:
-    if disabled:
-        return _button_with_id(text, disabled, className=className)
-    return dcc.Link(_button_with_id(text, disabled, className=className), href=href)
-
-
-def _get_edit_button(href: str, enabled: bool) -> Component:
-    return _primary_link_button('Éditer', href, not enabled, 'btn btn-link')
+    if state == _ButtonState.NORMAL:
+        return _button_with_id(text, state, className=className)
+    return dcc.Link(_button_with_id(text, state, className=className), href=href)
 
 
 def _get_edit_structure_button(parent_page: str, am_status: AMWorkflowState) -> Component:
-    return _get_edit_button(
-        f'{parent_page}/{AMOperation.EDIT_STRUCTURE.value}', am_status == am_status.PENDING_STRUCTURE_VALIDATION
-    )
+    href = f'{parent_page}/{AMOperation.EDIT_STRUCTURE.value}'
+    state = _ButtonState.NORMAL if am_status == am_status.PENDING_STRUCTURE_VALIDATION else _ButtonState.HIDDEN
+    return _link_button('Éditer', href, state, 'btn btn-link')
 
 
-def _get_validate_structure_button_(disabled_0: bool, hidden_0: bool, disabled_1: bool, hidden_1: bool) -> Component:
+def _get_validate_structure_button_(state_0: _ButtonState, state_1: _ButtonState) -> Component:
     return div(
         [
-            _button_with_id(
-                'Valider la structure', id_=_VALIDATE_STRUCTURE_BUTTON_ID, disabled=disabled_0, hidden=hidden_0
-            ),
-            _button_with_id(
-                'Invalider la structure', id_=_INVALIDATE_STRUCTURE_BUTTON_ID, disabled=disabled_1, hidden=hidden_1
-            ),
+            _button_with_id('Valider la structure', id_=_VALIDATE_STRUCTURE_BUTTON_ID, state=state_0),
+            _button_with_id('Invalider la structure', id_=_INVALIDATE_STRUCTURE_BUTTON_ID, state=state_1),
         ]
     )
 
 
 def _get_validate_structure_button(am_status: AMWorkflowState) -> Component:
     if am_status == am_status.PENDING_STRUCTURE_VALIDATION:
-        return _get_validate_structure_button_(False, False, False, True)
+        return _get_validate_structure_button_(_ButtonState.NORMAL, _ButtonState.HIDDEN)
     if am_status == am_status.PENDING_PARAMETRIZATION:
-        return _get_validate_structure_button_(False, True, False, False)
-    return _get_validate_structure_button_(False, True, True, False)
+        return _get_validate_structure_button_(_ButtonState.HIDDEN, _ButtonState.NORMAL)
+    return _get_validate_structure_button_(_ButtonState.HIDDEN, _ButtonState.DISABLED)
 
 
 def _get_structure_validation_buttons(parent_page: str, am_status: AMWorkflowState) -> Component:
@@ -116,33 +116,35 @@ def _get_structure_validation_buttons(parent_page: str, am_status: AMWorkflowSta
     return div(_inline_buttons([edit_button, validate_button]), {'margin-bottom': '35px'})
 
 
-def _get_validate_parametrization_button_(
-    disabled_0: bool, hidden_0: bool, disabled_1: bool, hidden_1: bool
-) -> Component:
-    return div(
-        [
-            _button_with_id(
-                'Valider la paramétrisation',
-                id_=_VALIDATE_PARAMETRIZATION_BUTTON_ID,
-                disabled=disabled_0,
-                hidden=hidden_0,
-            ),
-            _button_with_id(
-                'Invalider la paramétrisation',
-                id_=_INVALIDATE_PARAMETRIZATION_BUTTON_ID,
-                disabled=disabled_1,
-                hidden=hidden_1,
-            ),
-        ]
-    )
+def _get_validate_parametrization_button_(state: _ButtonState) -> Component:
+    return _button_with_id('Valider la paramétrisation', id_=_VALIDATE_PARAMETRIZATION_BUTTON_ID, state=state)
+
+
+def _get_invalidate_parametrization_button(state: _ButtonState) -> Component:
+    return _button_with_id('Invalider la paramétrisation', id_=_INVALIDATE_PARAMETRIZATION_BUTTON_ID, state=state)
 
 
 def _get_validate_parametrization_button(am_status: AMWorkflowState) -> Component:
     if am_status == am_status.PENDING_STRUCTURE_VALIDATION:
-        return _get_validate_parametrization_button_(True, False, False, True)
+        return div(
+            [
+                _get_validate_parametrization_button_(_ButtonState.HIDDEN),
+                _get_invalidate_parametrization_button(_ButtonState.HIDDEN),
+            ]
+        )
     if am_status == am_status.PENDING_PARAMETRIZATION:
-        return _get_validate_parametrization_button_(False, False, False, True)
-    return _get_validate_parametrization_button_(True, False, False, False)
+        return div(
+            [
+                _get_validate_parametrization_button_(_ButtonState.NORMAL),
+                _get_invalidate_parametrization_button(_ButtonState.HIDDEN),
+            ]
+        )
+    return div(
+        [
+            _get_validate_parametrization_button_(_ButtonState.HIDDEN),
+            _get_invalidate_parametrization_button(_ButtonState.NORMAL),
+        ]
+    )
 
 
 def _get_parametrization_edition_buttons(am_status: AMWorkflowState) -> Component:
@@ -188,19 +190,22 @@ def _application_condition_to_row(
     description = non_application_condition.description
     condition = condition_to_str(non_application_condition.condition)
     source = _get_section_title(non_application_condition.source.reference.section.path, am)
+    href = f'{current_page}/{AMOperation.ADD_CONDITION.value}/{rank}'
     cells = [
-        dcc.Link(rank, href=f'{current_page}/{AMOperation.ADD_CONDITION.value}/{rank}'),
+        rank,
         reference_str,
         alineas,
         description,
         condition,
         source,
+        _link_button('Éditer', href=href, className='btn btn-link', state=_ButtonState.NORMAL),
+        _link_button('Supprimer', href=href, className='btn btn-link', state=_ButtonState.NORMAL),
     ]
     return html.Tr([html.Td(cell) for cell in cells])
 
 
 def _get_non_application_table(parametrization: Parametrization, am: ArreteMinisteriel, current_page: str) -> Component:
-    header_names = ['#', 'Paragraphe visé', 'Alineas visés', 'Description', 'Condition', 'Source']
+    header_names = ['#', 'Paragraphe visé', 'Alineas visés', 'Description', 'Condition', 'Source', '', '']
     header = html.Thead(html.Tr([html.Th(name) for name in header_names]))
     body = html.Tbody(
         [
@@ -223,13 +228,16 @@ def _alternative_section_to_row(
     condition = condition_to_str(alternative_section.condition)
     source = _get_section(alternative_section.source.reference.section.path, am).title.text
     new_version = _wrap_in_paragraphs(extract_markdown_text(alternative_section.new_text, level=1))
+    href = f'{current_page}/{AMOperation.ADD_ALTERNATIVE_SECTION.value}/{rank}'
     cells = [
-        dcc.Link(rank, href=f'{current_page}/{AMOperation.ADD_ALTERNATIVE_SECTION.value}/{rank}'),
+        rank,
         reference_str,
         description,
         condition,
         source,
         new_version,
+        _link_button('Éditer', href=href, className='btn btn-link', state=_ButtonState.NORMAL),
+        _link_button('Supprimer', href=href, className='btn btn-link', state=_ButtonState.NORMAL),
     ]
     return html.Tr([html.Td(cell) for cell in cells])
 
@@ -237,7 +245,7 @@ def _alternative_section_to_row(
 def _get_alternative_section_table(
     parametrization: Parametrization, am: ArreteMinisteriel, current_page: str
 ) -> Component:
-    header_names = ['#', 'Paragraphe visé', 'Description', 'Condition', 'Source', 'Nouvelle version']
+    header_names = ['#', 'Paragraphe visé', 'Description', 'Condition', 'Source', 'Nouvelle version', '', '']
     header = html.Thead(html.Tr([html.Th(name) for name in header_names]))
     body = html.Tbody(
         [
@@ -248,29 +256,29 @@ def _get_alternative_section_table(
     return html.Table([header, body], className='table table-hover')
 
 
-def _link_button(text: str, href: str, disabled: bool) -> html.Button:
-    return dcc.Link(
-        html.Button(text, style={'margin-bottom': '35px'}, className='btn btn-link', n_clicks=0, disabled=disabled),
-        href=href,
-    )
+# def _link_button(text: str, href: str, disabled: bool) -> html.Button:
+#     return dcc.Link(
+#         html.Button(text, style={'margin-bottom': '35px'}, className='btn btn-link', n_clicks=0, disabled=disabled),
+#         href=href,
+#     )
 
 
 def _get_add_condition_button(parent_page: str, status: AMWorkflowState) -> Component:
-    disabled = status != status.PENDING_PARAMETRIZATION
+    state = _ButtonState.NORMAL if status == status.PENDING_PARAMETRIZATION else _ButtonState.HIDDEN
     href = f'{parent_page}/{AMOperation.ADD_CONDITION.value}'
-    return _link_button('+ Nouveau', href, disabled)
+    return div(_link_button('+ Nouveau', href, state, 'btn btn-link'), {'margin-bottom': '35px'})
 
 
 def _get_add_alternative_section_button(parent_page: str, status: AMWorkflowState) -> Component:
-    disabled = status != status.PENDING_PARAMETRIZATION
+    state = _ButtonState.NORMAL if status == status.PENDING_PARAMETRIZATION else _ButtonState.HIDDEN
     href = f'{parent_page}/{AMOperation.ADD_ALTERNATIVE_SECTION.value}'
-    return _link_button('+ Nouveau', href, disabled)
+    return div(_link_button('+ Nouveau', href, state, 'btn btn-link'), {'margin-bottom': '35px'})
 
 
 def _get_parametrization_summary(
     parent_page: str, status: AMWorkflowState, parametrization: Parametrization, am: ArreteMinisteriel
 ) -> Component:
-    if status == status.PENDING_STRUCTURE_VALIDATION:
+    if status != AMWorkflowState.PENDING_PARAMETRIZATION:
         return div([])
     return div(
         [
