@@ -1,5 +1,5 @@
-import re
 import os
+import re
 import traceback
 from dataclasses import replace
 from datetime import datetime
@@ -7,7 +7,6 @@ from typing import Any, Dict, List, Optional
 
 import dash
 import dash_core_components as dcc
-import dash_bootstrap_components as dbc
 import dash_html_components as html
 from dash.dependencies import Input, Output, State
 from dash.development.base_component import Component
@@ -209,7 +208,7 @@ def _get_instructions() -> Component:
             'Ces lignes doivent rester inchangées.'
         ),
     ]
-    return html.Div(children=[html.Ul(li_tags)])
+    return html.Div(children=[html.Ul(li_tags)], className='alert alert-light')
 
 
 def make_am_structure_edition_component(am_id: str, parent_page: str, am: ArreteMinisteriel) -> Component:

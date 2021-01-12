@@ -1,5 +1,5 @@
 from back_office.utils import get_section_title
-from lib.data import ArreteMinisteriel, StructuredText, EnrichedString
+from lib.data import ArreteMinisteriel, EnrichedString, StructuredText
 
 
 def _get_simple_text() -> StructuredText:
