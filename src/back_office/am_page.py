@@ -82,7 +82,7 @@ def _link_button(
     state: _ButtonState,
     className: str = 'btn btn-primary',
 ) -> html.Button:
-    if state == _ButtonState.NORMAL:
+    if state != _ButtonState.NORMAL:
         return _button_with_id(text, state, className=className)
     return dcc.Link(_button_with_id(text, state, className=className), href=href)
 

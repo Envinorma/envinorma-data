@@ -209,19 +209,7 @@ def _get_instructions() -> Component:
             'Ces lignes doivent rester inchangées.'
         ),
     ]
-    return html.Div(
-        # className='container',
-        children=html.A(
-            id='structure-edition-collapse-button',
-            children=[
-                html.Button('Instructions', className='btn btn-light btn-sm'),
-                dbc.Collapse(
-                    html.Ul(li_tags),
-                    id='structure-edition-collapse',
-                ),
-            ],
-        )
-    )
+    return html.Div(children=[html.Ul(li_tags)])
 
 
 def make_am_structure_edition_component(am_id: str, parent_page: str, am: ArreteMinisteriel) -> Component:
@@ -487,13 +475,3 @@ def add_structure_edition_callbacks(app: dash.Dash):
     )
     def _(_, state):
         return _extract_text_area_and_display_toc(state)
-
-    @app.callback(
-        Output('structure-edition-collapse', 'is_open'),
-        [Input('structure-edition-collapse-button', 'n_clicks')],
-        [State('structure-edition-collapse', 'is_open')],
-    )
-    def __(n_clicks, is_open):
-        if n_clicks:
-            return not is_open
-        return False
