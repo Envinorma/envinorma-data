@@ -48,30 +48,39 @@ def _inline_buttons(buttons: List[Component]) -> Component:
     return html.P(buttons, style=dict(display='flex'))
 
 
-def _primary_button(text: str, disabled: bool = False, id_: Optional[str] = None, hidden: bool = False) -> html.Button:
+def _button_with_id(
+    text: str,
+    disabled: bool = False,
+    id_: Optional[str] = None,
+    hidden: bool = False,
+    className: str = 'btn btn-primary',
+) -> html.Button:
     if id_:
         return html.Button(
             text,
             id=id_,
             disabled=disabled,
             style={'margin': '5px'},
-            className='btn btn-primary',
+            className=className,
             n_clicks=0,
             hidden=hidden,
         )
-    return html.Button(
-        text, disabled=disabled, style={'margin': '5px'}, className='btn btn-primary', n_clicks=0, hidden=hidden
-    )
+    return html.Button(text, disabled=disabled, style={'margin': '5px'}, className=className, n_clicks=0, hidden=hidden)
 
 
-def _primary_link_button(text: str, href: str, disabled: bool = False) -> html.Button:
+def _primary_link_button(
+    text: str,
+    href: str,
+    disabled: bool = False,
+    className: str = 'btn btn-primary',
+) -> html.Button:
     if disabled:
-        return _primary_button(text, disabled)
-    return dcc.Link(_primary_button(text, disabled), href=href)
+        return _button_with_id(text, disabled, className=className)
+    return dcc.Link(_button_with_id(text, disabled, className=className), href=href)
 
 
 def _get_edit_button(href: str, enabled: bool) -> Component:
-    return _primary_link_button('Éditer', href, not enabled)
+    return _primary_link_button('Éditer', href, not enabled, 'btn btn-link')
 
 
 def _get_edit_structure_button(parent_page: str, am_status: AMWorkflowState) -> Component:
@@ -83,17 +92,11 @@ def _get_edit_structure_button(parent_page: str, am_status: AMWorkflowState) -> 
 def _get_validate_structure_button_(disabled_0: bool, hidden_0: bool, disabled_1: bool, hidden_1: bool) -> Component:
     return div(
         [
-            _primary_button(
-                'Valider la structure',
-                id_=_VALIDATE_STRUCTURE_BUTTON_ID,
-                disabled=disabled_0,
-                hidden=hidden_0,
+            _button_with_id(
+                'Valider la structure', id_=_VALIDATE_STRUCTURE_BUTTON_ID, disabled=disabled_0, hidden=hidden_0
             ),
-            _primary_button(
-                'Invalider la structure',
-                id_=_INVALIDATE_STRUCTURE_BUTTON_ID,
-                disabled=disabled_1,
-                hidden=hidden_1,
+            _button_with_id(
+                'Invalider la structure', id_=_INVALIDATE_STRUCTURE_BUTTON_ID, disabled=disabled_1, hidden=hidden_1
             ),
         ]
     )
@@ -118,13 +121,13 @@ def _get_validate_parametrization_button_(
 ) -> Component:
     return div(
         [
-            _primary_button(
+            _button_with_id(
                 'Valider la paramétrisation',
                 id_=_VALIDATE_PARAMETRIZATION_BUTTON_ID,
                 disabled=disabled_0,
                 hidden=hidden_0,
             ),
-            _primary_button(
+            _button_with_id(
                 'Invalider la paramétrisation',
                 id_=_INVALIDATE_PARAMETRIZATION_BUTTON_ID,
                 disabled=disabled_1,
@@ -171,14 +174,20 @@ def _get_section(path: Tuple[int, ...], am: ArreteMinisteriel) -> StructuredText
     return _get_subsection(path[1:], am.sections[path[0]])
 
 
+def _get_section_title(path: Tuple[int, ...], am: ArreteMinisteriel) -> str:
+    if not path:
+        return 'Arrêté complet.'
+    return _get_subsection(path[1:], am.sections[path[0]]).title.text
+
+
 def _application_condition_to_row(
     non_application_condition: NonApplicationCondition, am: ArreteMinisteriel, rank: int, current_page: str
 ) -> Component:
-    reference_str = _get_section(non_application_condition.targeted_entity.section.path, am).title.text
+    reference_str = _get_section_title(non_application_condition.targeted_entity.section.path, am)
     alineas = non_application_condition.targeted_entity.outer_alinea_indices or 'Tous'
     description = non_application_condition.description
     condition = condition_to_str(non_application_condition.condition)
-    source = _get_section(non_application_condition.source.reference.section.path, am).title.text
+    source = _get_section_title(non_application_condition.source.reference.section.path, am)
     cells = [
         dcc.Link(rank, href=f'{current_page}/{AMOperation.ADD_CONDITION.value}/{rank}'),
         reference_str,
@@ -215,7 +224,7 @@ def _alternative_section_to_row(
     source = _get_section(alternative_section.source.reference.section.path, am).title.text
     new_version = _wrap_in_paragraphs(extract_markdown_text(alternative_section.new_text, level=1))
     cells = [
-        dcc.Link(rank, href=f'{current_page}/{AMOperation.ADD_CONDITION.value}/{rank}'),
+        dcc.Link(rank, href=f'{current_page}/{AMOperation.ADD_ALTERNATIVE_SECTION.value}/{rank}'),
         reference_str,
         description,
         condition,

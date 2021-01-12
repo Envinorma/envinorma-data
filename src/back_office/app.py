@@ -6,7 +6,7 @@ import dash_html_components as html
 import dash_bootstrap_components as dbc
 from dash.dependencies import Input, Output
 from dash.development.base_component import Component
-from lib.data import AMMetadata
+from lib.data import AMMetadata, Classement
 from lib.config import AM_DATA_FOLDER
 
 from back_office import am_page
@@ -67,7 +67,8 @@ app.layout = html.Div(
         dcc.Location(id='url', refresh=False),
         _get_page_heading(),
         html.Div(id='page-content', style={'width': '80%', 'margin': 'auto'}),
-    ], id='layout'
+    ],
+    id='layout',
 )
 
 
@@ -75,11 +76,23 @@ def _class_name_from_bool(bool_: bool) -> str:
     return 'table-success' if bool_ else 'table-danger'
 
 
-def _get_row(am_state: AMState, am_metadata: AMMetadata) -> Component:
+def _get_str_classement(classement: Classement) -> str:
+    if classement.alinea:
+        return f'{classement.rubrique}-{classement.regime.value}-al.{classement.alinea}'
+    return f'{classement.rubrique}-{classement.regime.value}'
+
+
+def _get_str_classements(classements: List[Classement]) -> str:
+    return ', '.join([_get_str_classement(classement) for classement in classements])
+
+
+def _get_row(rank: int, am_state: AMState, am_metadata: AMMetadata) -> Component:
     rows = [
+        html.Td(rank),
         html.Td(dcc.Link(am_metadata.cid, href=f'/arrete_ministeriel/{am_metadata.cid}')),
         html.Td(str(am_metadata.nor)),
         html.Td(am_metadata.short_title),
+        html.Td(_get_str_classements(am_metadata.classements)),
         html.Td('', className=_class_name_from_bool(am_state.state != am_state.state.PENDING_STRUCTURE_VALIDATION)),
         html.Td('', className=_class_name_from_bool(am_state.state == am_state.state.VALIDATED)),
     ]
@@ -87,13 +100,28 @@ def _get_row(am_state: AMState, am_metadata: AMMetadata) -> Component:
 
 
 def _get_header() -> Component:
-    return html.Tr([html.Th('N° CID'), html.Th('N° NOR'), html.Th('Nom'), html.Th('Structuré'), html.Th('Enrichi')])
+    return html.Tr(
+        [
+            html.Th('#'),
+            html.Th('N° CID'),
+            html.Th('N° NOR'),
+            html.Th('Nom'),
+            html.Th('Classements'),
+            html.Th('Structuré'),
+            html.Th('Enrichi'),
+        ]
+    )
 
 
 def _build_am_table(id_to_state: Dict[str, AMState], id_to_am_metadata: Dict[str, AMMetadata]) -> Component:
     header = _get_header()
     return html.Table(
-        [html.Thead(header), html.Tbody([_get_row(id_to_state[am_id], am) for am_id, am in id_to_am_metadata.items()])],
+        [
+            html.Thead(header),
+            html.Tbody(
+                [_get_row(rank, id_to_state[am_id], am) for rank, (am_id, am) in enumerate(id_to_am_metadata.items())]
+            ),
+        ],
         className='table table-hover',
     )
 

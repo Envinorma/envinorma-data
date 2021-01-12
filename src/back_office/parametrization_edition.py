@@ -1,7 +1,7 @@
 import json
 import os
 import traceback
-from datetime import datetime
+from datetime import datetime, date
 from typing import Any, Dict, List, Optional, Tuple, Type, Union
 
 import dash
@@ -26,6 +26,7 @@ from lib.parametrization import (
     ParameterEnum,
     ParameterType,
     Parametrization,
+    Range,
     SectionReference,
 )
 from lib.utils import get_parametrization_wip_folder, jsonify
@@ -47,12 +48,17 @@ from back_office.utils import (
 _Options = List[Dict[str, Any]]
 _ParameterObject = Union[NonApplicationCondition, AlternativeSection]
 
-_CONDITION_VARIABLES = {'Régime': ParameterEnum.REGIME, 'Date d\'autorisation': ParameterEnum.DATE_AUTORISATION}
+_AUTORISATION_DATE_FR = 'Date d\'autorisation'
+_CONDITION_VARIABLES = {
+    'Régime': ParameterEnum.REGIME,
+    _AUTORISATION_DATE_FR: ParameterEnum.DATE_AUTORISATION,
+    'Date d\'installation': ParameterEnum.DATE_INSTALLATION,
+}
 _CONDITION_VARIABLE_OPTIONS = [{'label': condition, 'value': condition} for condition in _CONDITION_VARIABLES]
 _CONDITION_OPERATIONS = ['<', '<=', '=', '>', '>=']
 _CONDITION_OPERATION_OPTIONS = [{'label': condition, 'value': condition} for condition in _CONDITION_OPERATIONS]
 
-_CONDITION_PARAMETER = 'param-edition-condition-parameter'
+_CONDITION_VARIABLE = 'param-edition-condition-parameter'
 _CONDITION_OPERATION = 'param-edition-condition-operation'
 _CONDITION_VALUE = 'param-edition-condition-value'
 _DESCRIPTION = 'param-edition-description'
@@ -64,40 +70,109 @@ _NB_CONDITIONS = 'param-edition-nb-conditions'
 _NEW_TEXT_TITLE = 'param-edition-new-text-title'
 _NEW_TEXT_CONTENT = 'param-edition-new-text-content'
 _AM_ID = 'param-edition-am-id'
+_PARAMETER_RANK = 'param-edition-param-rank'
 _AM_OPERATION = 'param-edition-am-operation'
 
+_MonoCondition = Union[Equal, Greater, Littler]
 
-def _get_condition_component(rank: int) -> Component:
+
+def _get_str_operation(condition: _MonoCondition) -> str:
+    if isinstance(condition, Equal):
+        return '='
+    if isinstance(condition, Greater):
+        return '>' if condition.strict else '>='
+    if isinstance(condition, Littler):
+        return '<' if condition.strict else '<='
+    raise NotImplementedError(f'Unknown type {type(condition)}')
+
+
+def _get_str_variable(condition: _MonoCondition) -> str:
+    for variable_name, variable in _CONDITION_VARIABLES.items():
+        if variable.value == condition.parameter:
+            return variable_name
+    return ''
+
+
+def _date_to_dmy(date_: Union[date, datetime]) -> str:
+    return date_.strftime('%d/%m/%Y')
+
+
+def _ensure_date(value: Any) -> Union[date, datetime]:
+    if isinstance(value, (date, datetime)):
+        return value
+    raise ValueError(f'Expected type (date, datetime), received type {type(value)}')
+
+
+def _ensure_regime(
+    value: Any,
+) -> Regime:
+    if isinstance(value, Regime):
+        return value
+    raise ValueError(f'Expected type Regime, received type {type(value)}')
+
+
+def _get_str_target(value: Any, parameter_type: ParameterType) -> Any:
+    if parameter_type == parameter_type.DATE:
+        return _date_to_dmy(_ensure_date(value))
+    if parameter_type == parameter_type.REGIME:
+        return _ensure_regime(value).value
+    raise ValueError(f'Unhandled parameter type: {parameter_type.value}')
+
+
+def _get_condition_component(rank: int, default_condition: Optional[_MonoCondition] = None) -> Component:
+    default_variable = _AUTORISATION_DATE_FR if not default_condition else _get_str_variable(default_condition)
+    default_operation = '=' if not default_condition else _get_str_operation(default_condition)
+    default_target = (
+        '' if not default_condition else _get_str_target(default_condition.target, default_condition.parameter.type)
+    )
     dropdown_conditions = [
         dcc.Dropdown(
-            id=f'{_CONDITION_PARAMETER}_{rank}',
+            id=f'{_CONDITION_VARIABLE}_{rank}',
             options=_CONDITION_VARIABLE_OPTIONS,
             clearable=False,
-            value='Date d\'autorisation',
+            value=default_variable,
             style={'width': '200px'},
         ),
         dcc.Dropdown(
             id=f'{_CONDITION_OPERATION}_{rank}',
             options=_CONDITION_OPERATION_OPTIONS,
             clearable=False,
-            value='=',
+            value=default_operation,
             style=dict(width='50px'),
         ),
-        dcc.Input(id=f'{_CONDITION_VALUE}_{rank}', value='', type='text', style={'padding': '0', 'height': '36px'}),
+        dcc.Input(
+            id=f'{_CONDITION_VALUE}_{rank}',
+            value=default_target,
+            type='text',
+            style={'height': '36px'},
+            className='form-control',
+        ),
     ]
     return div([*dropdown_conditions], style=dict(display='flex'))
 
 
-def _get_condition_components(nb_components: int) -> Component:
-    dropdown_conditions = [_get_condition_component(i) for i in range(nb_components)]
+def _get_condition_components(
+    nb_components: int, default_conditions: Optional[List[_MonoCondition]] = None
+) -> Component:
+    if default_conditions:
+        dropdown_conditions = [_get_condition_component(i, cd) for i, cd in enumerate(default_conditions)]
+    else:
+        dropdown_conditions = [_get_condition_component(i) for i in range(nb_components)]
     return div([*dropdown_conditions])
 
 
-_ALINEA_TARGETS_OPERATIONS = [*range(1, 51), 'TOUS']
+_ALL_ALINEAS = 'TOUS'
+_ALINEA_TARGETS_OPERATIONS = [*range(1, 51), _ALL_ALINEAS]
 _ALINEA_OPTIONS = [{'label': condition, 'value': condition} for condition in _ALINEA_TARGETS_OPERATIONS]
 
 
-def _get_main_title(operation: AMOperation) -> Component:
+def _get_main_title(operation: AMOperation, is_edition: bool) -> Component:
+    if is_edition:
+        return (
+            html.H3('Modification d\'une condition de non-application')
+            if operation == operation.ADD_CONDITION
+            else html.H3('Modification d\'une section alternative')
+        )
     return (
         html.H3('Nouvelle condition de non-application')
         if operation == operation.ADD_CONDITION
@@ -119,14 +194,31 @@ def _is_condition(operation: AMOperation) -> bool:
     return operation == operation.ADD_CONDITION
 
 
-def _get_new_section_form() -> Component:
+def _extract_title_and_content(text: StructuredText, level: int = 0) -> Tuple[str, str]:
+    title = text.title.text
+    contents: List[str] = []
+    for alinea in text.outer_alineas:
+        contents.append(alinea.text)
+    for section in text.sections:
+        section_title, section_content = _extract_title_and_content(section, level + 1)
+        contents.append('#' * (level + 1) + ' ' + section_title)
+        contents.append(section_content)
+    return title, '\n'.join(contents)
+
+
+def _get_new_section_form(loaded_parameter: Optional[_ParameterObject]) -> Component:
+    parameter = _ensure_optional_alternative_section(loaded_parameter)
+    if parameter:
+        default_title, default_content = _extract_title_and_content(parameter.new_text)
+    else:
+        default_title, default_content = '', ''
     return div(
         [
             html.H4('Nouvelle version'),
             html.Label('Titre', htmlFor=_NEW_TEXT_TITLE, className='form-label'),
-            dcc.Input(id=_NEW_TEXT_TITLE, placeholder='Titre', className='form-control'),
+            dcc.Input(id=_NEW_TEXT_TITLE, value=default_title, className='form-control'),
             html.Label('Contenu du paragraphe', htmlFor=_NEW_TEXT_CONTENT, className='form-label'),
-            div(dcc.Textarea(id=_NEW_TEXT_CONTENT, className='form-control')),
+            div(dcc.Textarea(id=_NEW_TEXT_CONTENT, className='form-control', value=default_content)),
         ]
     )
 
@@ -151,65 +243,169 @@ def _buttons(parent_page: str) -> Component:
     )
 
 
-def _get_condition() -> Component:
-    merge_values = [{'value': 'and', 'label': 'ET'}, {'value': 'or', 'label': 'OU'}]
-    dropdown_condition_merge = dcc.Dropdown(options=merge_values, clearable=False, value='and', id=_CONDITION_MERGE)
-    dropdown_nb_conditions = dcc.Dropdown(
-        _NB_CONDITIONS, options=[{'label': i, 'value': i} for i in range(10)], clearable=False, value=1
-    )
+_NB_CONDITIONS_OPTIONS = [{'label': i, 'value': i} for i in range(10)]
+_AND_ID = 'and'
+_OR_ID = 'or'
+_MERGE_VALUES_OPTIONS = [{'value': _AND_ID, 'label': 'ET'}, {'value': _OR_ID, 'label': 'OU'}]
 
+
+def _get_condition_tooltip() -> Component:
     return html.Div(
         [
-            html.H4('Condition'),
-            html.P('Opération'),
-            dropdown_condition_merge,
-            html.P('Nombre de conditions'),
-            dropdown_nb_conditions,
-            html.P(['Liste de conditions ', dbc.Badge('?', id='param-edition-conditions-tooltip', pill=True)]),
+            'Liste de conditions',
+            dbc.Badge('?', id='param-edition-conditions-tooltip', pill=True),
             dbc.Tooltip(
-                [html.P('Formats:'), html.P('Régime: A, E, D ou NC.'), html.P('Date: JJ/MM/AAAA')],
+                ['Formats:', html.Br(), 'Régime: A, E, D ou NC.', html.Br(), 'Date: JJ/MM/AAAA'],
                 target='param-edition-conditions-tooltip',
             ),
         ]
     )
 
 
-def _make_form(
-    options: _Options,
-    operation: AMOperation,
-    parent_page: str,
-    am_id: str,
-    loaded_parameter: Optional[_ParameterObject],
-) -> Component:
-    dropdown_source = dcc.Dropdown(options=options, id=_SOURCE)
-    dropdown_target = dcc.Dropdown(options=options, id=_TARGET_SECTION)
-    dropdown_alineas = dcc.Dropdown(options=_ALINEA_OPTIONS, multi=True, value=['TOUS'], id=_TARGET_ALINEAS)
+def _ensure_mono_condition(condition: Condition) -> _MonoCondition:
+    if isinstance(condition, (Equal, Greater, Littler)):
+        return condition
+    raise ValueError(f'Unexpected condition type {type(condition)}')
 
+
+def _ensure_mono_conditions(conditions: List[Condition]) -> List[_MonoCondition]:
+    return [_ensure_mono_condition(x) for x in conditions]
+
+
+def _simplify_condition(condition: Condition) -> Tuple[str, List[_MonoCondition]]:
+    if isinstance(condition, (Equal, Greater, Littler)):
+        return _AND_ID, [condition]
+    if isinstance(condition, Range):
+        conditions = [
+            Littler(condition.parameter, condition.right, condition.right_strict),
+            Greater(condition.parameter, condition.left, condition.left_strict),
+        ]
+        return _AND_ID, conditions
+    if isinstance(condition, (AndCondition, OrCondition)):
+        mono_conditions = _ensure_mono_conditions(condition.conditions)
+        merge = _AND_ID if isinstance(condition, AndCondition) else _OR_ID
+        return merge, mono_conditions
+    raise NotImplementedError(f'Unhandled condition {type(condition)}')
+
+
+def _get_condition_form(default_condition: Optional[Condition]) -> Component:
+    if default_condition:
+        default_merge, default_conditions = _simplify_condition(default_condition)
+    else:
+        default_merge = _AND_ID
+        default_conditions = []
+    dropdown_condition_merge = html.Div(
+        [
+            'Opération',
+            dcc.Dropdown(options=_MERGE_VALUES_OPTIONS, clearable=False, value=default_merge, id=_CONDITION_MERGE),
+        ]
+    )
+    dropdown_nb_conditions = html.Div(
+        [
+            'Nombre de conditions',
+            dcc.Dropdown(
+                _NB_CONDITIONS, options=_NB_CONDITIONS_OPTIONS, clearable=False, value=len(default_conditions)
+            ),
+        ]
+    )
+    tooltip = _get_condition_tooltip()
+    conditions = html.Div(
+        id='parametrization-conditions', children=_get_condition_components(len(default_conditions), default_conditions)
+    )
+
+    return html.Div([html.H4('Condition'), dropdown_condition_merge, dropdown_nb_conditions, tooltip, conditions])
+
+
+def _get_description_form(operation: AMOperation, loaded_parameter: Optional[_ParameterObject]) -> Component:
+    description_default_value = loaded_parameter.description if loaded_parameter else ''
     return html.Div(
         [
-            _get_main_title(operation),
             html.H4('Description (visible par l\'utilisateur)'),
             _get_description_help(operation),
-            dcc.Textarea(value='', className='form-control', id=_DESCRIPTION),
-            html.H4('Source'),
-            dropdown_source,
-            html.H4('Paragraphe visé'),
-            dropdown_target,
+            dcc.Textarea(value=description_default_value, className='form-control', id=_DESCRIPTION),
+        ]
+    )
+
+
+def _get_source_form(options: _Options, loaded_parameter: Optional[_ParameterObject]) -> Component:
+    if loaded_parameter:
+        default_value = _dump_path(loaded_parameter.source.reference.section.path)
+    else:
+        default_value = ''
+    dropdown_source = dcc.Dropdown(value=default_value, options=options, id=_SOURCE)
+    return html.Div([html.H4('Source'), dropdown_source])
+
+
+def _get_target_entity(parameter: _ParameterObject) -> Ints:
+    if isinstance(parameter, NonApplicationCondition):
+        return parameter.targeted_entity.section.path
+    if isinstance(parameter, AlternativeSection):
+        return parameter.targeted_section.path
+    raise NotImplementedError(f'{type(parameter)}')
+
+
+def _get_target_section_form(options: _Options, loaded_parameter: Optional[_ParameterObject]) -> Component:
+    default_value = _dump_path(_get_target_entity(loaded_parameter)) if loaded_parameter else None
+    dropdown_target = dcc.Dropdown(options=options, id=_TARGET_SECTION, value=default_value)
+    return html.Div([html.H4('Paragraphe visé'), dropdown_target])
+
+
+def _ensure_optional_condition(parameter: Optional[_ParameterObject]) -> Optional[NonApplicationCondition]:
+    if not parameter:
+        return None
+    if not isinstance(parameter, NonApplicationCondition):
+        raise ValueError(f'Expection NonApplicationCondition, not {type(parameter)}')
+    return parameter
+
+
+def _ensure_optional_alternative_section(parameter: Optional[_ParameterObject]) -> Optional[AlternativeSection]:
+    if not parameter:
+        return None
+    if not isinstance(parameter, AlternativeSection):
+        raise ValueError(f'Expection AlternativeSection, not {type(parameter)}')
+    return parameter
+
+
+def _get_target_alineas_form(operation: AMOperation, loaded_parameter: Optional[_ParameterObject]) -> Component:
+    if not _is_condition(operation):
+        return html.Div()
+    condition = _ensure_optional_condition(loaded_parameter)
+    if not condition or not condition.targeted_entity.outer_alinea_indices:
+        default_value = [_ALL_ALINEAS]
+    else:
+        default_value = condition.targeted_entity.outer_alinea_indices
+    dropdown_alineas = dcc.Dropdown(options=_ALINEA_OPTIONS, multi=True, value=default_value, id=_TARGET_ALINEAS)
+    return html.Div(
+        [
             html.H4('Alineas visés') if _is_condition(operation) else html.Div(),
             dropdown_alineas if _is_condition(operation) else html.Div(),
-            _get_new_section_form() if not _is_condition(operation) else html.Div(),
-            _get_condition(),
-            html.Div(id='parametrization-conditions'),
+        ]
+    )
+
+
+def _make_form(
+    text_title_options: _Options,
+    operation: AMOperation,
+    parent_page: str,
+    loaded_parameter: Optional[_ParameterObject],
+) -> Component:
+    return html.Div(
+        [
+            _get_main_title(operation, is_edition=loaded_parameter is not None),
+            _get_description_form(operation, loaded_parameter),
+            _get_source_form(text_title_options, loaded_parameter),
+            _get_target_section_form(text_title_options, loaded_parameter),
+            _get_target_alineas_form(operation, loaded_parameter),
+            _get_new_section_form(loaded_parameter) if not _is_condition(operation) else html.Div(),
+            _get_condition_form(loaded_parameter.condition if loaded_parameter else None),
             html.Div(id='form-output-param-edition'),
             _buttons(parent_page),
-            html.P(am_id, hidden=True, id=_AM_ID),
-            html.P(operation.value, hidden=True, id=_AM_OPERATION),
         ]
     )
 
 
 def _extract_reference_and_values_titles(text: StructuredText, path: Ints, level: int = 0) -> List[Tuple[str, str]]:
-    return [(json.dumps(path), '#' * level + ' ' + text.title.text[:60])] + [
+    return [(_dump_path(path), '#' * level + ' ' + text.title.text[:60])] + [
         elt
         for rank, sec in enumerate(text.sections)
         for elt in _extract_reference_and_values_titles(sec, path + (rank,), level + 1)
@@ -225,11 +421,10 @@ def _structure_edition_component(
     text: StructuredText,
     operation: AMOperation,
     parent_page: str,
-    am_id: str,
     loaded_parameter: Optional[_ParameterObject],
 ) -> Component:
     dropdown_values = _extract_paragraph_reference_dropdown_values(text)
-    return _make_form(dropdown_values, operation, parent_page, am_id, loaded_parameter)
+    return _make_form(dropdown_values, operation, parent_page, loaded_parameter)
 
 
 def _make_am_parametrization_edition_component(
@@ -237,10 +432,16 @@ def _make_am_parametrization_edition_component(
     operation: AMOperation,
     am_page: str,
     am_id: str,
+    parameter_rank: int,
     loaded_parameter: Optional[_ParameterObject],
 ) -> Component:
     text = am_to_text(am)
-    return div(_structure_edition_component(text, operation, am_page, am_id, loaded_parameter))
+    hidden_components = [
+        html.P(am_id, hidden=True, id=_AM_ID),
+        html.P(operation.value, hidden=True, id=_AM_OPERATION),
+        html.P(parameter_rank, hidden=True, id=_PARAMETER_RANK),
+    ]
+    return div([_structure_edition_component(text, operation, am_page, loaded_parameter), *hidden_components])
 
 
 def _make_list(candidate: Optional[Union[List[Dict[str, Any]], Dict[str, Any]]]) -> List[Dict[str, Any]]:
@@ -311,7 +512,7 @@ def _get_with_error(dict_: Dict[str, Any], key: str) -> Any:
 def _extract_conditions(nb_conditions: int, id_to_value: Dict[str, Any]) -> List[Tuple[str, str, str]]:
     return [
         (
-            assert_str(_get_with_error(id_to_value, f'{_CONDITION_PARAMETER}_{i}')),
+            assert_str(_get_with_error(id_to_value, f'{_CONDITION_VARIABLE}_{i}')),
             assert_str(_get_with_error(id_to_value, f'{_CONDITION_OPERATION}_{i}')),
             assert_str(_get_with_error(id_to_value, f'{_CONDITION_VALUE}_{i}')),
         )
@@ -324,22 +525,27 @@ class _FormHandlingError(Exception):
 
 
 def _build_source(source_str: str) -> ConditionSource:
-    return ConditionSource('', EntityReference(SectionReference(_get_path(source_str)), None))
+    return ConditionSource('', EntityReference(SectionReference(_load_path(source_str)), None))
 
 
 def _extract_alinea_indices(target_alineas: List[Union[str, int]]) -> Optional[List[int]]:
     assert_list(target_alineas)
-    if target_alineas == ['TOUS']:
+    if target_alineas == [_ALL_ALINEAS]:
         return None
-    if 'TOUS' in target_alineas and len(target_alineas) >= 2:
+    if _ALL_ALINEAS in target_alineas and len(target_alineas) >= 2:
         raise _FormHandlingError(
-            'Le champ "Alineas visés" ne peut contenir la valeur "TOUS" que ' 'si c\'est la seule valeur renseignée.'
+            f'Le champ "Alineas visés" ne peut contenir la valeur "{_ALL_ALINEAS}" que '
+            'si c\'est la seule valeur renseignée.'
         )
     return [assert_int(x) for x in target_alineas]
 
 
-def _get_path(path_str: str) -> Ints:
+def _load_path(path_str: str) -> Ints:
     return tuple(json.loads(path_str))
+
+
+def _dump_path(path: Ints) -> str:
+    return json.dumps(path)
 
 
 def _build_non_application_condition(
@@ -351,7 +557,7 @@ def _build_non_application_condition(
     target_alineas: List[Union[str, int]],
 ) -> NonApplicationCondition:
     return NonApplicationCondition(
-        EntityReference(SectionReference(_get_path(target_section)), _extract_alinea_indices(target_alineas)),
+        EntityReference(SectionReference(_load_path(target_section)), _extract_alinea_indices(target_alineas)),
         _build_condition(conditions, merge),
         _build_source(source),
         description,
@@ -434,7 +640,7 @@ def _build_alternative_section(
 ) -> AlternativeSection:
     new_text = StructuredText(EnrichedString(new_text_title), _extract_alineas(new_text_content), [], None)
     return AlternativeSection(
-        SectionReference(_get_path(target_section)),
+        SectionReference(_load_path(target_section)),
         new_text,
         _build_condition(conditions, merge),
         _build_source(source),
@@ -480,22 +686,37 @@ def _extract_new_parameter_object(page_state: Dict[str, Any], operation: AMOpera
     raise NotImplementedError(f'Expecting operation not to be {operation.value}')
 
 
-def _build_new_parametrization(am_id: str, new_parameter: _ParameterObject) -> Parametrization:
+def _ensure_len(list_: List, min_len: int) -> None:
+    if len(list_) < min_len:
+        raise ValueError(f'Expecting len(list_) >= {min_len}, got {len(list_)}')
+
+
+def _build_new_parametrization(am_id: str, new_parameter: _ParameterObject, parameter_rank: int) -> Parametrization:
     old_parametrization = load_parametrization(am_id, load_am_state(am_id))
     if not old_parametrization:
         raise ValueError('Parametrization not found, which should not happen.')
+    new_sections = old_parametrization.alternative_sections
+    new_conditions = old_parametrization.application_conditions
     if isinstance(new_parameter, NonApplicationCondition):
-        new_conditions = old_parametrization.application_conditions + [new_parameter]
-        new_sections = old_parametrization.alternative_sections
+        if parameter_rank >= 0:
+            _ensure_len(old_parametrization.application_conditions, parameter_rank + 1)
+            new_conditions[parameter_rank] = new_parameter
+        else:
+            new_conditions.append(new_parameter)
     else:
-        new_conditions = old_parametrization.application_conditions
-        new_sections = old_parametrization.alternative_sections + [new_parameter]
+        if parameter_rank >= 0:
+            _ensure_len(old_parametrization.alternative_sections, parameter_rank + 1)
+            new_sections[parameter_rank] = new_parameter
+        else:
+            new_sections.append(new_parameter)
     return Parametrization(new_conditions, new_sections)
 
 
-def _extract_and_dump_new_object(page_state: Dict[str, Any], am_id: str, operation: AMOperation) -> None:
+def _extract_and_dump_new_object(
+    page_state: Dict[str, Any], am_id: str, operation: AMOperation, parameter_rank: int
+) -> None:
     new_parameter = _extract_new_parameter_object(page_state, operation)
-    parametrization = _build_new_parametrization(am_id, new_parameter)
+    parametrization = _build_new_parametrization(am_id, new_parameter, parameter_rank)
     filename = _compute_filename()
     full_filename = os.path.join(get_parametrization_wip_folder(am_id), filename)
     json_ = jsonify(parametrization.to_dict())
@@ -515,12 +736,14 @@ def _success_component(message: str) -> Component:
     return html.Div(_replace_line_breaks(message), className='alert alert-success', style={'margin-top': '15px'})
 
 
-def _handle_submit(n_clicks: int, operation_str: str, am_id: str, state: Dict[str, Any]) -> Component:
+def _handle_submit(
+    n_clicks: int, operation_str: str, am_id: str, parameter_rank: int, state: Dict[str, Any]
+) -> Component:
     if n_clicks == 0:
         return html.Div()
     try:
         operation = AMOperation(operation_str)
-        _extract_and_dump_new_object(state, am_id, operation)
+        _extract_and_dump_new_object(state, am_id, operation, parameter_rank)
     except _FormHandlingError as exc:
         return _error_component(f'Erreur dans le formulaire:\n{exc}')
     except Exception:  # pylint: disable=broad-except
@@ -529,25 +752,22 @@ def _handle_submit(n_clicks: int, operation_str: str, am_id: str, state: Dict[st
 
 
 def add_parametrization_edition_callbacks(app: dash.Dash):
-    def handle_submit(n_clicks, operation, am_id, state):
-        return _handle_submit(n_clicks, operation, am_id, state)
-
-    app.callback(
+    @app.callback(
         Output('form-output-param-edition', 'children'),
-        [
-            Input('submit-val-param-edition', 'n_clicks'),
-            Input(_AM_OPERATION, 'children'),
-            Input(_AM_ID, 'children'),
-        ],
-        [State('page-content', 'children')],
-    )(handle_submit)
+        Input('submit-val-param-edition', 'n_clicks'),
+        State(_AM_OPERATION, 'children'),
+        State(_AM_ID, 'children'),
+        State(_PARAMETER_RANK, 'children'),
+        State('page-content', 'children'),
+    )
+    def _(n_clicks, operation, am_id, parameter_rank, state):
+        return _handle_submit(n_clicks, operation, am_id, parameter_rank, state)
 
     def nb_conditions(value):
         return _get_condition_components(value)
 
     app.callback(
-        Output('parametrization-conditions', 'children'),
-        [Input(_NB_CONDITIONS, 'value')],
+        Output('parametrization-conditions', 'children'), [Input(_NB_CONDITIONS, 'value')], prevent_initial_call=True
     )(nb_conditions)
 
 
@@ -604,4 +824,7 @@ def router(pathname: str) -> Component:
         return html.P(f'404 - Page introuvable - {str(exc)}')
     if not am or not parametrization or not am_metadata:
         return html.P('Arrêté introuvable.')
-    return _make_am_parametrization_edition_component(am, operation_id, am_page, am_id, loaded_parameter)
+    parameter_rank = parameter_rank if parameter_rank is not None else -1
+    return _make_am_parametrization_edition_component(
+        am, operation_id, am_page, am_id, parameter_rank, loaded_parameter
+    )
