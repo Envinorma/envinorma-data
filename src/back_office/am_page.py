@@ -444,26 +444,25 @@ def _router(route: str, parent_page: str) -> Component:
     am_id, operation_id, _ = _extract_am_id_and_operation(route)
     if am_id not in ID_TO_AM_MD:
         return html.P('404 - Arrêté inconnu')
-    if operation_id in (AMOperation.ADD_ALTERNATIVE_SECTION, AMOperation.ADD_CONDITION):
-        return parametrization_router(route)
-    parent_page = parent_page + '/' + am_id
-    am_state = load_am_state(am_id)
     am_metadata = ID_TO_AM_MD.get(am_id)
+    page_title = am_metadata.nor or am_metadata.cid if am_metadata else am_id
+    current_page = parent_page + '/' + am_id
+    subtitle_component = _get_subtitle_component(page_title, current_page)
+    if operation_id in (AMOperation.ADD_ALTERNATIVE_SECTION, AMOperation.ADD_CONDITION):
+        return html.Div([subtitle_component, parametrization_router(route)])
+    am_state = load_am_state(am_id)
     am = load_am(am_id, am_state)
     parametrization = load_parametrization(am_id, am_state)
     if not am or not parametrization or not am_metadata:
         body = html.P('Arrêté introuvable.')
     else:
-        body = _get_body_component(operation_id, am_id, parent_page, am, am_state, parametrization)
-    page_title = am_metadata.nor or am_metadata.cid if am_metadata else am_id
-    subtitle_component = _get_subtitle_component(page_title, parent_page)
-
+        body = _get_body_component(operation_id, am_id, current_page, am, am_state, parametrization)
     return html.Div(
         [
             subtitle_component,
             body,
             html.P(am_id, hidden=True, id='am-id-am-page'),
-            html.P(parent_page, hidden=True, id='parent-page-am-page'),
+            html.P(current_page, hidden=True, id='parent-page-am-page'),
         ],
         id='am-page',
     )
