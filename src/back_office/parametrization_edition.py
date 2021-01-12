@@ -1,7 +1,7 @@
 import json
 import traceback
 from datetime import date, datetime
-from typing import Any, Dict, List, Optional, Tuple, Type, Union
+from typing import Any, Dict, List, Optional, Set, Tuple, Type, Union
 
 import dash
 import dash_bootstrap_components as dbc
@@ -38,6 +38,7 @@ from back_office.utils import (
     assert_list,
     assert_str,
     div,
+    get_section,
     load_am,
     load_am_state,
     load_parametrization,
@@ -62,8 +63,10 @@ _DESCRIPTION = 'param-edition-description'
 _SOURCE = 'param-edition-source'
 _TARGET_SECTION = 'param-edition-target-section'
 _TARGET_ALINEAS = 'param-edition-target-alineas'
+_TARGETED_ALINEAS = 'param-edition-targeted-alineas'
 _CONDITION_MERGE = 'param-edition-condition-merge'
 _NB_CONDITIONS = 'param-edition-nb-conditions'
+_NEW_TEXT = 'param-edition-new-text'
 _NEW_TEXT_TITLE = 'param-edition-new-text-title'
 _NEW_TEXT_CONTENT = 'param-edition-new-text-content'
 _AM_ID = 'param-edition-am-id'
@@ -159,8 +162,11 @@ def _get_condition_components(
 
 
 _ALL_ALINEAS = 'TOUS'
-_ALINEA_TARGETS_OPERATIONS = [*range(1, 51), _ALL_ALINEAS]
-_ALINEA_OPTIONS = [{'label': condition, 'value': condition} for condition in _ALINEA_TARGETS_OPERATIONS]
+_ALINEA_TARGETS_OPERATIONS = [*range(50), _ALL_ALINEAS]
+_ALINEA_OPTIONS = [
+    {'label': condition + 1 if isinstance(condition, int) else condition, 'value': condition}
+    for condition in _ALINEA_TARGETS_OPERATIONS
+]
 
 
 def _get_main_title(operation: AMOperation, is_edition: bool) -> Component:
@@ -203,21 +209,26 @@ def _extract_title_and_content(text: StructuredText, level: int = 0) -> Tuple[st
     return title, '\n'.join(contents)
 
 
-def _get_new_section_form(loaded_parameter: Optional[ParameterObject]) -> Component:
+def _get_new_section_form(default_title: str, default_content: str) -> Component:
+    return html.Div(
+        [
+            html.H4('Nouvelle version'),
+            html.Div(dcc.Input(id=_NEW_TEXT_TITLE, value=default_title), hidden=True),
+            html.Label('Contenu du paragraphe', htmlFor=_NEW_TEXT_CONTENT, className='form-label'),
+            div(dcc.Textarea(id=_NEW_TEXT_CONTENT, className='form-control', value=default_content)),
+        ],
+        id=_NEW_TEXT,
+    )
+
+
+def _get_new_section_form_from_default(loaded_parameter: Optional[ParameterObject]) -> Component:
     parameter = _ensure_optional_alternative_section(loaded_parameter)
     if parameter:
         default_title, default_content = _extract_title_and_content(parameter.new_text)
     else:
         default_title, default_content = '', ''
-    return div(
-        [
-            html.H4('Nouvelle version'),
-            html.Label('Titre', htmlFor=_NEW_TEXT_TITLE, className='form-label'),
-            dcc.Input(id=_NEW_TEXT_TITLE, value=default_title, className='form-control', disabled=True),
-            html.Label('Contenu du paragraphe', htmlFor=_NEW_TEXT_CONTENT, className='form-label'),
-            div(dcc.Textarea(id=_NEW_TEXT_CONTENT, className='form-control', value=default_content)),
-        ]
-    )
+
+    return _get_new_section_form(default_title, default_content)
 
 
 def _go_back_button(parent_page: str) -> Component:
@@ -352,7 +363,7 @@ def _get_target_entity(parameter: ParameterObject) -> Ints:
 def _get_target_section_form(options: _Options, loaded_parameter: Optional[ParameterObject]) -> Component:
     default_value = _dump_path(_get_target_entity(loaded_parameter)) if loaded_parameter else None
     dropdown_target = html.Div([dcc.Dropdown(options=options, id=_TARGET_SECTION, value=default_value)], id='test')
-    return html.Div([html.H4('Paragraphe visé'), dropdown_target])
+    return html.Div([html.H6('Titre'), dropdown_target])
 
 
 def _ensure_optional_condition(parameter: Optional[ParameterObject]) -> Optional[NonApplicationCondition]:
@@ -380,10 +391,18 @@ def _get_target_alineas_form(operation: AMOperation, loaded_parameter: Optional[
     else:
         default_value = condition.targeted_entity.outer_alinea_indices
     dropdown_alineas = dcc.Dropdown(options=_ALINEA_OPTIONS, multi=True, value=default_value, id=_TARGET_ALINEAS)
+    return html.Div([html.H6('Alineas visés'), dropdown_alineas])
+
+
+def _get_target_section_block(
+    operation: AMOperation, text_title_options: _Options, loaded_parameter: Optional[ParameterObject]
+) -> Component:
     return html.Div(
         [
-            html.H4('Alineas visés') if _is_condition(operation) else html.Div(),
-            dropdown_alineas if _is_condition(operation) else html.Div(),
+            html.H4('Paragraphe visé'),
+            _get_target_section_form(text_title_options, loaded_parameter),
+            _get_target_alineas_form(operation, loaded_parameter),
+            html.Div(id=_TARGETED_ALINEAS),
         ]
     )
 
@@ -393,19 +412,19 @@ def _make_form(
     operation: AMOperation,
     parent_page: str,
     loaded_parameter: Optional[ParameterObject],
+    destination_rank: int,
 ) -> Component:
     return html.Div(
         [
-            _get_main_title(operation, is_edition=loaded_parameter is not None),
+            _get_main_title(operation, is_edition=destination_rank != -1),
             _get_description_form(operation, loaded_parameter),
             _get_source_form(text_title_options, loaded_parameter),
-            _get_target_section_form(text_title_options, loaded_parameter),
-            _get_target_alineas_form(operation, loaded_parameter),
-            _get_new_section_form(loaded_parameter) if not _is_condition(operation) else html.Div(),
+            _get_target_section_block(operation, text_title_options, loaded_parameter),
+            _get_new_section_form_from_default(loaded_parameter) if not _is_condition(operation) else html.Div(),
             _get_condition_form(loaded_parameter.condition if loaded_parameter else None),
             html.Div(id='param-edition-upsert-output'),
             html.Div(id='param-edition-delete-output'),
-            _buttons(parent_page, is_edition=loaded_parameter is not None),
+            _buttons(parent_page, is_edition=destination_rank != -1),
         ]
     )
 
@@ -428,9 +447,10 @@ def _structure_edition_component(
     operation: AMOperation,
     parent_page: str,
     loaded_parameter: Optional[ParameterObject],
+    destination_rank: int,
 ) -> Component:
     dropdown_values = _extract_paragraph_reference_dropdown_values(text)
-    return _make_form(dropdown_values, operation, parent_page, loaded_parameter)
+    return _make_form(dropdown_values, operation, parent_page, loaded_parameter, destination_rank)
 
 
 def _make_am_parametrization_edition_component(
@@ -438,16 +458,18 @@ def _make_am_parametrization_edition_component(
     operation: AMOperation,
     am_page: str,
     am_id: str,
-    parameter_rank: int,
+    destination_rank: int,
     loaded_parameter: Optional[ParameterObject],
 ) -> Component:
     text = am_to_text(am)
     hidden_components = [
         html.P(am_id, hidden=True, id=_AM_ID),
         html.P(operation.value, hidden=True, id=_AM_OPERATION),
-        html.P(parameter_rank, hidden=True, id=_PARAMETER_RANK),
+        html.P(destination_rank, hidden=True, id=_PARAMETER_RANK),
     ]
-    return div([_structure_edition_component(text, operation, am_page, loaded_parameter), *hidden_components])
+    return div(
+        [_structure_edition_component(text, operation, am_page, loaded_parameter, destination_rank), *hidden_components]
+    )
 
 
 def _make_list(candidate: Optional[Union[List[Dict[str, Any]], Dict[str, Any]]]) -> List[Dict[str, Any]]:
@@ -642,7 +664,7 @@ def _build_alternative_section(
     )
 
 
-_MIN_NB_CHARS = 5
+_MIN_NB_CHARS = 1
 
 
 def _extract_new_text_parameters(id_to_value: Dict[str, str]) -> Tuple[str, str]:
@@ -668,6 +690,8 @@ def _extract_new_parameter_object(page_state: Dict[str, Any], operation: AMOpera
         raise _FormHandlingError('Le champ "Paragraphe visé" est obligatoire.')
     merge = _get_with_error(id_to_value, _CONDITION_MERGE)
     nb_conditions = int(_get_with_error(id_to_value, _NB_CONDITIONS))
+    if nb_conditions == 0:
+        raise _FormHandlingError('Il doit y avoir au moins une condition.')
     conditions = _extract_conditions(nb_conditions, id_to_value)
     if operation == operation.ADD_CONDITION:
         target_alineas = _get_with_error(id_to_value, _TARGET_ALINEAS)
@@ -743,14 +767,67 @@ def _remove_initial_hashtags(str_: str) -> str:
     return str_[i:]
 
 
+def _load_am(am_id: str) -> Optional[ArreteMinisteriel]:
+    return load_am(am_id, load_am_state(am_id))
+
+
+def _build_new_text_component(str_path: Optional[str], am_id: str, operation_str: str) -> Component:
+    if operation_str != AMOperation.ADD_ALTERNATIVE_SECTION.value or not str_path:
+        return _get_new_section_form('', '')
+    am = _load_am(am_id)
+    if not am:
+        return _get_new_section_form('', '')
+    path = _load_path(str_path)
+    section = get_section(path, am)
+    title, content = _extract_title_and_content(section)
+    return _get_new_section_form(title, content)
+
+
+def _active_alineas_component(alineas: List[str], active_alineas: Set[int]) -> Component:
+    if alineas:
+        components = [
+            html.Div([' ', html.B(alinea) if i in active_alineas else alinea]) for i, alinea in enumerate(alineas)
+        ]
+    else:
+        components = [html.Div('Paragraphe vide.')]
+    return html.Div([html.H6('Contenu du paragraphe'), *components], className='alert alert-light')
+
+
+def _build_targeted_alinea_component(
+    alineas: List[Union[str, int]], str_path: Optional[str], am_id: str, operation_str: str
+) -> Component:
+    if operation_str != AMOperation.ADD_CONDITION.value or not alineas or not str_path:
+        return _get_new_section_form('', '')
+    am = _load_am(am_id)
+    if not am:
+        return _get_new_section_form('', '')
+    path = _load_path(str_path)
+    section = get_section(path, am)
+    alineas_str = [al.text for al in section.outer_alineas]
+    active_alineas = range(len(alineas_str)) if _ALL_ALINEAS in alineas else map(int, alineas)
+    return _active_alineas_component(alineas_str, set(active_alineas))
+
+
 def add_parametrization_edition_callbacks(app: dash.Dash):
-    @app.callback(Output(_NEW_TEXT_TITLE, 'value'), Input(_TARGET_SECTION, 'value'), State('test', 'children'))
-    def _(value, title):
-        options = title[0]['props']['options']
-        for dic in options:
-            if dic['value'] == value:
-                return _remove_initial_hashtags(dic['label']).strip()
-        return ''
+    @app.callback(
+        Output(_NEW_TEXT, 'children'),
+        Input(_TARGET_SECTION, 'value'),
+        State(_AM_ID, 'children'),
+        State(_AM_OPERATION, 'children'),
+        prevent_initial_call=True,
+    )
+    def _(path, am_id, operation):
+        return _build_new_text_component(path, am_id, operation)
+
+    @app.callback(
+        Output(_TARGETED_ALINEAS, 'children'),
+        Input(_TARGET_ALINEAS, 'value'),
+        Input(_TARGET_SECTION, 'value'),
+        State(_AM_ID, 'children'),
+        State(_AM_OPERATION, 'children'),
+    )
+    def _2(alineas, path, am_id, operation):
+        return _build_targeted_alinea_component(alineas, path, am_id, operation)
 
     @app.callback(
         Output('param-edition-upsert-output', 'children'),
@@ -785,7 +862,7 @@ class _RouteParsingError(Exception):
     pass
 
 
-def _parse_route(route: str) -> Tuple[str, AMOperation, Optional[int]]:
+def _parse_route(route: str) -> Tuple[str, AMOperation, Optional[int], bool]:
     pieces = route.split('/')[1:]
     if len(pieces) <= 1:
         raise _RouteParsingError(f'Error parsing route {route}')
@@ -795,12 +872,16 @@ def _parse_route(route: str) -> Tuple[str, AMOperation, Optional[int]]:
     except ValueError:
         raise _RouteParsingError(f'Error parsing route {route}')
     if len(pieces) == 2:
-        return am_id, operation, None
+        return am_id, operation, None, False
     try:
         parameter_rank = int(pieces[2])
     except ValueError:
         raise _RouteParsingError(f'Error parsing route {route}')
-    return am_id, operation, parameter_rank
+    if len(pieces) == 3:
+        return am_id, operation, parameter_rank, False
+    if pieces[3] != 'copy':
+        raise _RouteParsingError(f'Error parsing route {route}')
+    return am_id, operation, parameter_rank, True
 
 
 def _get_parameter(parametrization: Parametrization, operation_id: AMOperation, parameter_rank: int) -> ParameterObject:
@@ -821,7 +902,7 @@ def _build_am_page(am_id: str) -> str:
 
 def router(pathname: str) -> Component:
     try:
-        am_id, operation_id, parameter_rank = _parse_route(pathname)
+        am_id, operation_id, parameter_rank, copy = _parse_route(pathname)
         if am_id not in ID_TO_AM_MD:
             return html.P('404 - Arrêté inconnu')
         am_page = _build_am_page(am_id)
@@ -836,7 +917,10 @@ def router(pathname: str) -> Component:
         return html.P(f'404 - Page introuvable - {str(exc)}')
     if not am or not parametrization or not am_metadata:
         return html.P('Arrêté introuvable.')
-    parameter_rank = parameter_rank if parameter_rank is not None else -1
+    if parameter_rank is not None and not copy:
+        destination_parameter_rank = parameter_rank
+    else:
+        destination_parameter_rank = -1
     return _make_am_parametrization_edition_component(
-        am, operation_id, am_page, am_id, parameter_rank, loaded_parameter
+        am, operation_id, am_page, am_id, destination_parameter_rank, loaded_parameter
     )

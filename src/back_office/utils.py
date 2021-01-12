@@ -8,7 +8,7 @@ import dash
 import dash_html_components as html
 from dash.development.base_component import Component
 from lib.config import STORAGE
-from lib.data import ArreteMinisteriel, load_am_data
+from lib.data import ArreteMinisteriel, Ints, StructuredText, load_am_data
 from lib.parametrization import Parametrization
 from lib.utils import get_parametrization_wip_folder, get_state_file, get_structured_text_wip_folder, write_json
 
@@ -124,6 +124,22 @@ def load_am(am_id: str, am_state: AMState) -> Optional[ArreteMinisteriel]:
     if not os.path.exists(full_filename):
         return None
     return load_am_from_file(full_filename)
+
+
+def get_subsection(path: Ints, text: StructuredText) -> StructuredText:
+    if not path:
+        return text
+    return get_subsection(path[1:], text.sections[path[0]])
+
+
+def get_section(path: Ints, am: ArreteMinisteriel) -> StructuredText:
+    return get_subsection(path[1:], am.sections[path[0]])
+
+
+def get_section_title(path: Ints, am: ArreteMinisteriel) -> str:
+    if not path:
+        return 'Arrêté complet.'
+    return get_subsection(path[1:], am.sections[path[0]]).title.text
 
 
 # from tqdm import tqdm

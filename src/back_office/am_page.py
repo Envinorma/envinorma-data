@@ -24,6 +24,7 @@ from back_office.utils import (
     div,
     dump_am_state,
     get_default_structure_filename,
+    get_section_title,
     load_am,
     load_am_from_file,
     load_am_state,
@@ -166,22 +167,6 @@ def _get_parametrization_edition_title(status: AMWorkflowState) -> Component:
     return html.H3([title, html.Span('ok', className='badge bg-success', style={'color': 'white'})])
 
 
-def _get_subsection(path: Tuple[int, ...], text: StructuredText) -> StructuredText:
-    if not path:
-        return text
-    return _get_subsection(path[1:], text.sections[path[0]])
-
-
-def _get_section(path: Tuple[int, ...], am: ArreteMinisteriel) -> StructuredText:
-    return _get_subsection(path[1:], am.sections[path[0]])
-
-
-def _get_section_title(path: Tuple[int, ...], am: ArreteMinisteriel) -> str:
-    if not path:
-        return 'Arrêté complet.'
-    return _get_subsection(path[1:], am.sections[path[0]]).title.text
-
-
 def _human_alinea_tuple(ints: Optional[List[int]]) -> str:
     if not ints:
         return 'Tous'
@@ -191,19 +176,21 @@ def _human_alinea_tuple(ints: Optional[List[int]]) -> str:
 def _application_condition_to_row(
     non_application_condition: NonApplicationCondition, am: ArreteMinisteriel, rank: int, current_page: str
 ) -> Component:
-    reference_str = _get_section_title(non_application_condition.targeted_entity.section.path, am)
+    reference_str = get_section_title(non_application_condition.targeted_entity.section.path, am)
     alineas = _human_alinea_tuple(non_application_condition.targeted_entity.outer_alinea_indices)
     description = non_application_condition.description
     condition = condition_to_str(non_application_condition.condition)
-    source = _get_section_title(non_application_condition.source.reference.section.path, am)
+    source = get_section_title(non_application_condition.source.reference.section.path, am)
     href = f'{current_page}/{AMOperation.ADD_CONDITION.value}/{rank}'
     edit = _link_button('Éditer', href=href, className='btn btn-link', state=_ButtonState.NORMAL)
-    cells = [rank, reference_str, alineas, description, condition, source, edit]
+    href_copy = f'{current_page}/{AMOperation.ADD_CONDITION.value}/{rank}/copy'
+    copy = _link_button('Copier', href=href_copy, className='btn btn-link', state=_ButtonState.NORMAL)
+    cells = [rank, reference_str, alineas, description, condition, source, edit, copy]
     return html.Tr([html.Td(cell) for cell in cells])
 
 
 def _get_non_application_table(parametrization: Parametrization, am: ArreteMinisteriel, current_page: str) -> Component:
-    header_names = ['#', 'Paragraphe visé', 'Alineas visés', 'Description', 'Condition', 'Source', '']
+    header_names = ['#', 'Paragraphe visé', 'Alineas visés', 'Description', 'Condition', 'Source', '', '']
     header = html.Thead(html.Tr([html.Th(name) for name in header_names]))
     body = html.Tbody(
         [
@@ -221,21 +208,23 @@ def _wrap_in_paragraphs(strs: List[str]) -> Component:
 def _alternative_section_to_row(
     alternative_section: AlternativeSection, am: ArreteMinisteriel, rank: int, current_page: str
 ) -> Component:
-    reference_str = _get_section(alternative_section.targeted_section.path, am).title.text
+    reference_str = get_section_title(alternative_section.targeted_section.path, am)
     description = alternative_section.description
     condition = condition_to_str(alternative_section.condition)
-    source = _get_section(alternative_section.source.reference.section.path, am).title.text
+    source = get_section_title(alternative_section.source.reference.section.path, am)
     new_version = _wrap_in_paragraphs(extract_markdown_text(alternative_section.new_text, level=1))
     href = f'{current_page}/{AMOperation.ADD_ALTERNATIVE_SECTION.value}/{rank}'
     edit = _link_button('Éditer', href=href, className='btn btn-link', state=_ButtonState.NORMAL)
-    cells = [rank, reference_str, description, condition, source, new_version, edit]
+    href_copy = f'{current_page}/{AMOperation.ADD_ALTERNATIVE_SECTION.value}/{rank}/copy'
+    copy = _link_button('Copier', href=href_copy, className='btn btn-link', state=_ButtonState.NORMAL)
+    cells = [rank, reference_str, description, condition, source, new_version, edit, copy]
     return html.Tr([html.Td(cell) for cell in cells])
 
 
 def _get_alternative_section_table(
     parametrization: Parametrization, am: ArreteMinisteriel, current_page: str
 ) -> Component:
-    header_names = ['#', 'Paragraphe visé', 'Description', 'Condition', 'Source', 'Nouvelle version', '']
+    header_names = ['#', 'Paragraphe visé', 'Description', 'Condition', 'Source', 'Nouvelle version', '', '']
     header = html.Thead(html.Tr([html.Th(name) for name in header_names]))
     body = html.Tbody(
         [
@@ -244,13 +233,6 @@ def _get_alternative_section_table(
         ]
     )
     return html.Table([header, body], className='table table-hover')
-
-
-# def _link_button(text: str, href: str, disabled: bool) -> html.Button:
-#     return dcc.Link(
-#         html.Button(text, style={'margin-bottom': '35px'}, className='btn btn-link', n_clicks=0, disabled=disabled),
-#         href=href,
-#     )
 
 
 def _get_add_condition_button(parent_page: str, status: AMWorkflowState) -> Component:
