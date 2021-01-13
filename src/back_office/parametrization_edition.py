@@ -30,19 +30,23 @@ from lib.parametrization import (
     SectionReference,
 )
 
+from back_office.routing import build_am_page
 from back_office.state_update import remove_parameter, upsert_parameter
 from back_office.utils import (
     ID_TO_AM_MD,
     AMOperation,
+    RouteParsingError,
     assert_int,
     assert_list,
     assert_str,
     div,
+    error_component,
     get_section,
     get_truncated_str,
     load_am,
     load_am_state,
     load_parametrization,
+    success_component,
 )
 
 _Options = List[Dict[str, Any]]
@@ -712,18 +716,6 @@ def _extract_and_upsert_new_parameter(
     upsert_parameter(am_id, new_parameter, parameter_rank)
 
 
-def _replace_line_breaks(message: str) -> List[Component]:
-    return [html.P(piece) for piece in message.split('\n')]
-
-
-def _error_component(message: str) -> Component:
-    return html.Div(_replace_line_breaks(message), className='alert alert-danger', style={'margin-top': '15px'})
-
-
-def _success_component(message: str) -> Component:
-    return html.Div(_replace_line_breaks(message), className='alert alert-success', style={'margin-top': '15px'})
-
-
 def _handle_submit(
     n_clicks: int, operation_str: str, am_id: str, parameter_rank: int, state: Dict[str, Any]
 ) -> Component:
@@ -733,13 +725,13 @@ def _handle_submit(
         operation = AMOperation(operation_str)
         _extract_and_upsert_new_parameter(state, am_id, operation, parameter_rank)
     except _FormHandlingError as exc:
-        return _error_component(f'Erreur dans le formulaire:\n{exc}')
+        return error_component(f'Erreur dans le formulaire:\n{exc}')
     except Exception:  # pylint: disable=broad-except
-        return _error_component(f'Unexpected error:\n{traceback.format_exc()}')
+        return error_component(f'Unexpected error:\n{traceback.format_exc()}')
     return div(
         [
-            _success_component(f'Enregistrement réussi.'),
-            dcc.Location(pathname=_build_am_page(am_id), id='param-edition-success-redirect'),
+            success_component(f'Enregistrement réussi.'),
+            dcc.Location(pathname=build_am_page(am_id), id='param-edition-success-redirect'),
         ]
     )
 
@@ -751,11 +743,11 @@ def _handle_delete(n_clicks: int, operation_str: str, am_id: str, parameter_rank
         operation = AMOperation(operation_str)
         remove_parameter(am_id, operation, parameter_rank)
     except Exception:  # pylint: disable=broad-except
-        return _error_component(f'Unexpected error:\n{traceback.format_exc()}')
+        return error_component(f'Unexpected error:\n{traceback.format_exc()}')
     return div(
         [
-            _success_component(f'Suppression réussie.'),
-            dcc.Location(pathname=_build_am_page(am_id), id='param-edition-success-redirect'),
+            success_component(f'Suppression réussie.'),
+            dcc.Location(pathname=build_am_page(am_id), id='param-edition-success-redirect'),
         ]
     )
 
@@ -851,29 +843,25 @@ def add_parametrization_edition_callbacks(app: dash.Dash):
     )(nb_conditions)
 
 
-class _RouteParsingError(Exception):
-    pass
-
-
 def _parse_route(route: str) -> Tuple[str, AMOperation, Optional[int], bool]:
     pieces = route.split('/')[1:]
     if len(pieces) <= 1:
-        raise _RouteParsingError(f'Error parsing route {route}')
+        raise RouteParsingError(f'Error parsing route {route}')
     am_id = pieces[0]
     try:
         operation = AMOperation(pieces[1])
     except ValueError:
-        raise _RouteParsingError(f'Error parsing route {route}')
+        raise RouteParsingError(f'Error parsing route {route}')
     if len(pieces) == 2:
         return am_id, operation, None, False
     try:
         parameter_rank = int(pieces[2])
     except ValueError:
-        raise _RouteParsingError(f'Error parsing route {route}')
+        raise RouteParsingError(f'Error parsing route {route}')
     if len(pieces) == 3:
         return am_id, operation, parameter_rank, False
     if pieces[3] != 'copy':
-        raise _RouteParsingError(f'Error parsing route {route}')
+        raise RouteParsingError(f'Error parsing route {route}')
     return am_id, operation, parameter_rank, True
 
 
@@ -885,12 +873,8 @@ def _get_parameter(parametrization: Parametrization, operation_id: AMOperation, 
     else:
         raise NotImplementedError(f'{operation_id.value}')
     if parameter_rank >= len(parameters):
-        raise _RouteParsingError(f'Parameter with rank {parameter_rank} not found.')
+        raise RouteParsingError(f'Parameter with rank {parameter_rank} not found.')
     return parameters[parameter_rank]
-
-
-def _build_am_page(am_id: str) -> str:
-    return '/arrete_ministeriel/' + am_id
 
 
 def router(pathname: str) -> Component:
@@ -898,7 +882,7 @@ def router(pathname: str) -> Component:
         am_id, operation_id, parameter_rank, copy = _parse_route(pathname)
         if am_id not in ID_TO_AM_MD:
             return html.P('404 - Arrêté inconnu')
-        am_page = _build_am_page(am_id)
+        am_page = build_am_page(am_id)
         am_state = load_am_state(am_id)
         am_metadata = ID_TO_AM_MD.get(am_id)
         am = load_am(am_id, am_state)
@@ -906,7 +890,7 @@ def router(pathname: str) -> Component:
         loaded_parameter = (
             _get_parameter(parametrization, operation_id, parameter_rank) if parameter_rank is not None else None
         )
-    except _RouteParsingError as exc:
+    except RouteParsingError as exc:
         return html.P(f'404 - Page introuvable - {str(exc)}')
     if not am or not parametrization or not am_metadata:
         return html.P('Arrêté introuvable.')

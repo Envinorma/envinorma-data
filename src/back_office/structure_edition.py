@@ -1,3 +1,4 @@
+from back_office.routing import build_am_page
 import os
 import re
 import traceback
@@ -14,7 +15,19 @@ from lib.data import ArreteMinisteriel, Cell, EnrichedString, Row, StructuredTex
 from lib.structure_extraction import TextElement, Title, build_structured_text, structured_text_to_text_elements
 from lib.utils import get_structured_text_wip_folder, jsonify
 
-from back_office.utils import assert_str, div, dump_am_state, get_truncated_str, load_am, load_am_state, write_file
+from back_office.utils import (
+    AMOperation,
+    RouteParsingError,
+    assert_str,
+    div,
+    dump_am_state,
+    error_component,
+    get_truncated_str,
+    load_am,
+    load_am_state,
+    success_component,
+    write_file,
+)
 
 _LEVEL_OPTIONS = [{'label': f'Titre {i}', 'value': i} for i in range(1, 11)] + [{'label': 'Alinea', 'value': -1}]
 _DROPDOWN_STYLE = {'width': '100px', 'margin-right': '10px'}
@@ -84,20 +97,6 @@ def _element_to_str(element: TextElement) -> str:
     raise NotImplementedError(f'Not implemented for type {type(element)}')
 
 
-def _element_to_component(rank: int, element: TextElement) -> Component:
-    if isinstance(element, Table):
-        return html.P(f'Tableau numéro {rank} non reproduit', className='alert alert-dark')
-    if isinstance(element, Title):
-        return html.P(html.Strong('#' * element.level + ' ' + element.text))
-    if isinstance(element, str):
-        return html.P(element)
-    raise NotImplementedError(f'Not implemented for type {type(element)}')
-
-
-def _prepare_text_area_components(elements: List[TextElement]) -> List[Component]:
-    return [_element_to_component(i, element) for i, element in enumerate(elements)]
-
-
 def _prepare_text_area_value(elements: List[TextElement]) -> str:
     table_rank = 0
     strs: List[str] = []
@@ -157,18 +156,18 @@ def _preview_button() -> Component:
     )
 
 
-def _go_back_button(parent_page: str) -> Component:
-    return dcc.Link(html.Button('Annuler', className='btn btn-link center'), href=parent_page)
+def _go_back_button(am_page: str) -> Component:
+    return dcc.Link(html.Button('Annuler', className='btn btn-link center'), href=am_page)
 
 
-def _footer_buttons(parent_page: str) -> Component:
+def _footer_buttons(am_page: str) -> Component:
     style = {'display': 'inline-block'}
-    return div([_preview_button(), _submit_button(), _go_back_button(parent_page)], style)
+    return div([_preview_button(), _submit_button(), _go_back_button(am_page)], style)
 
 
-def _fixed_footer(parent_page: str) -> Component:
+def _fixed_footer(am_page: str) -> Component:
     output = div(html.Div(id='form-output-structure-edition'), style={'display': 'inline-block'})
-    content = div([output, html.Br(), _footer_buttons(parent_page)])
+    content = div([output, html.Br(), _footer_buttons(am_page)])
     return div(
         content,
         {
@@ -203,29 +202,51 @@ def _get_instructions() -> Component:
     return html.Div(children=[html.Ul(li_tags)], className='alert alert-light')
 
 
-def make_am_structure_edition_component(am_id: str, parent_page: str, am: ArreteMinisteriel) -> Component:
-    text = am_to_text(am)
+def _get_main_row(text: StructuredText) -> Component:
+    first_column = html.Div(
+        className='col-9',
+        children=[html.H1('Texte'), html.P(text.title.text), _structure_edition_component(text)],
+    )
+    second_column = html.Div(className='col-3', children=[html.H1('Sommaire'), _get_toc_component()])
+    return html.Div(className='row', children=[first_column, second_column])
+
+
+def _make_am_structure_edition_component(am_id: str, am: ArreteMinisteriel) -> Component:
     return div(
         [
             html.Div(className='row', children=_get_instructions()),
-            html.Div(
-                className='row',
-                children=[
-                    html.Div(
-                        className='col-9',
-                        children=[html.H1('Texte'), html.P(text.title.text), _structure_edition_component(text)],
-                    ),
-                    html.Div(
-                        className='col-3',
-                        children=[html.H1('Sommaire'), _get_toc_component()],
-                    ),
-                ],
-            ),
-            _fixed_footer(parent_page),
+            _get_main_row(am_to_text(am)),
+            _fixed_footer(build_am_page(am_id)),
             html.P(am_id, hidden=True, id='am-id-structure-edition'),
         ],
         {'margin-bottom': '300px'},
     )
+
+
+def _parse_route(route: str) -> str:
+    pieces = route.split('/')[1:]
+    if len(pieces) != 2:
+        raise RouteParsingError(f'Error parsing route {route}')
+    am_id = pieces[0]
+    try:
+        operation = AMOperation(pieces[1])
+    except ValueError:
+        raise RouteParsingError(f'Error parsing route {route}')
+    if operation != AMOperation.EDIT_STRUCTURE:
+        raise RouteParsingError(f'Error parsing route {route}')
+    return am_id
+
+
+def router(pathname: str) -> Component:
+    try:
+        am_id = _parse_route(pathname)
+        am_state = load_am_state(am_id)
+        am = load_am(am_id, am_state)
+    except RouteParsingError as exc:
+        return html.P(f'404 - Page introuvable - {str(exc)}')
+    if not am:
+        return html.P('Arrêté introuvable.')
+    return _make_am_structure_edition_component(am_id, am)
 
 
 class _FormHandlingError(Exception):
@@ -309,8 +330,16 @@ def _keep_non_empty(strs: List[str]) -> List[str]:
     return [x for x in strs if x]
 
 
+def _is_table_line(line: str) -> bool:
+    return line.startswith(_TABLEAU_PREFIX)
+
+
 def _extract_words(str_: str) -> List[str]:
     return _keep_non_empty(re.split(r'\W+', str_))
+
+
+def _extract_text_area_words(str_: str) -> List[str]:
+    return [word for line in str_.split('\n') if not _is_table_line(line) for word in _extract_words(line)]
 
 
 def _extract_first_different_word(text_1: List[str], text_2: List[str]) -> Optional[int]:
@@ -327,7 +356,7 @@ def _extract_first_different_word(text_1: List[str], text_2: List[str]) -> Optio
 
 def _check_have_same_words(am: StructuredText, new_am: str) -> None:
     previous_am_words = _extract_words_outside_table(replace(am, title=EnrichedString('')))
-    new_am_words = _extract_words(new_am)
+    new_am_words = _extract_text_area_words(new_am)
     min_len = min(len(previous_am_words), len(new_am_words))
     word_index = _extract_first_different_word(previous_am_words[:min_len], new_am_words[:min_len])
     if len(previous_am_words) != len(new_am_words) or word_index:
@@ -377,18 +406,6 @@ def _save_text_and_get_message(am_id: str, new_am: str) -> str:
     return f'Enregistrement réussi. (Filename={full_filename})'
 
 
-def _replace_line_breaks(message: str) -> List[Component]:
-    return [html.P(piece) for piece in message.split('\n')]
-
-
-def _error_component(message: str) -> Component:
-    return html.Div(_replace_line_breaks(message), className='alert alert-danger')
-
-
-def _success_component(message: str) -> Component:
-    return html.Div(_replace_line_breaks(message), className='alert alert-success')
-
-
 def _extract_form_value_and_save_text(nb_clicks: int, am_id: str, text_area_content: Dict[str, Any]) -> Component:
     new_am = assert_str(text_area_content)
     if nb_clicks == 0:
@@ -396,12 +413,12 @@ def _extract_form_value_and_save_text(nb_clicks: int, am_id: str, text_area_cont
     try:
         success_message = _save_text_and_get_message(am_id, new_am)
     except _FormHandlingError as exc:
-        return _error_component(f'Erreur pendant l\'enregistrement. Détails de l\'erreur:\n{str(exc)}')
+        return error_component(f'Erreur pendant l\'enregistrement. Détails de l\'erreur:\n{str(exc)}')
     except Exception:  # pylint: disable=broad-except
-        return _error_component(
+        return error_component(
             f'Erreur inattendue pendant l\'enregistrement. Détails de l\'erreur:\n{traceback.format_exc()}'
         )
-    return _success_component(success_message)
+    return success_component(success_message)
 
 
 def _extract_all_lines_one_element(element: Dict[str, Any]) -> List[str]:
@@ -426,12 +443,6 @@ def _count_prefix_hashtags(line: str) -> int:
         if char != '#':
             return i
     return len(line)
-
-
-assert _count_prefix_hashtags('') == 0
-assert _count_prefix_hashtags('###') == 3
-assert _count_prefix_hashtags(' ###') == 0
-assert _count_prefix_hashtags('###  ') == 3
 
 
 def _format_toc_line(line: str) -> Component:

@@ -149,6 +149,22 @@ def get_truncated_str(str_: str, _max_len: int = 80) -> str:
     return truncated_str
 
 
+def _replace_line_breaks(message: str) -> List[Union[str, Component]]:
+    return [el for piece in message.split('\n') for el in [piece, html.Br()]]
+
+
+def error_component(message: str) -> Component:
+    return html.Div(_replace_line_breaks(message), className='alert alert-danger')
+
+
+def success_component(message: str) -> Component:
+    return html.Div(_replace_line_breaks(message), className='alert alert-success')
+
+
+class RouteParsingError(Exception):
+    pass
+
+
 # from tqdm import tqdm
 # import shutil
 

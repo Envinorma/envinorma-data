@@ -1,12 +1,15 @@
-from lib.data import EnrichedString, StructuredText
 import dash_html_components as html
 from back_office.structure_edition import (
-    _get_html_heading_classname,
-    _extract_words_outside_table,
-    _extract_words,
+    _TABLEAU_PREFIX,
+    _count_prefix_hashtags,
     _extract_first_different_word,
+    _extract_text_area_words,
+    _extract_words,
+    _extract_words_outside_table,
+    _get_html_heading_classname,
     _keep_non_empty,
 )
+from lib.data import EnrichedString, StructuredText
 
 
 def test_get_html_heading_classname():
@@ -62,8 +65,29 @@ def test_extract_words():
     assert _extract_words('foo\nbar...') == ['foo', 'bar']
 
 
+def test_extract_text_area_words():
+    assert _extract_text_area_words('hello how are you??') == ['hello', 'how', 'are', 'you']
+    assert _extract_text_area_words('') == []
+    assert _extract_text_area_words('?') == []
+    assert _extract_text_area_words('\n') == []
+    assert _extract_text_area_words('foo\nbar') == ['foo', 'bar']
+    assert _extract_text_area_words('foo\nbar...') == ['foo', 'bar']
+    assert _extract_text_area_words('foo\nbar...') == ['foo', 'bar']
+    assert _extract_text_area_words(f'foo\nbar...\n{_TABLEAU_PREFIX}0 non reproduit - ne pas modifier!!') == [
+        'foo',
+        'bar',
+    ]
+
+
 def test_extract_first_different_word():
     assert _extract_first_different_word(['Hello', 'how'], ['hello', 'how']) == 0
     assert _extract_first_different_word([], []) is None
     assert _extract_first_different_word(['foo'], ['foo']) is None
     assert _extract_first_different_word(['foo', 'bar'], ['foo', '']) == 1
+
+
+def test_count_prefix_hashtags():
+    assert _count_prefix_hashtags('') == 0
+    assert _count_prefix_hashtags('###') == 3
+    assert _count_prefix_hashtags(' ###') == 0
+    assert _count_prefix_hashtags('###  ') == 3

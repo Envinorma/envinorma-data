@@ -14,7 +14,7 @@ from lib.parametrization import AlternativeSection, NonApplicationCondition, Par
 from lib.utils import get_structured_text_wip_folder
 
 from back_office.parametrization_edition import add_parametrization_edition_callbacks, router as parametrization_router
-from back_office.structure_edition import add_structure_edition_callbacks, make_am_structure_edition_component
+from back_office.structure_edition import add_structure_edition_callbacks, router as structure_router
 from back_office.utils import (
     ID_TO_AM_MD,
     AMOperation,
@@ -415,8 +415,6 @@ def _get_body_component(
 ) -> Component:
     if not operation_id:
         return _make_am_index_component(am_id, am_state, parent_page, parametrization, am)
-    if operation_id == operation_id.EDIT_STRUCTURE:
-        return make_am_structure_edition_component(am_id, parent_page, am)
     raise NotImplementedError()
 
 
@@ -430,6 +428,8 @@ def _router(route: str, parent_page: str) -> Component:
     subtitle_component = _get_subtitle_component(page_title, current_page)
     if operation_id in (AMOperation.ADD_ALTERNATIVE_SECTION, AMOperation.ADD_CONDITION):
         return html.Div([subtitle_component, parametrization_router(route)])
+    if operation_id == AMOperation.EDIT_STRUCTURE:
+        return html.Div([subtitle_component, structure_router(route)])
     am_state = load_am_state(am_id)
     am = load_am(am_id, am_state)
     parametrization = load_parametrization(am_id, am_state)
