@@ -175,17 +175,17 @@ _ALINEA_OPTIONS = [
 ]
 
 
-def _get_main_title(operation: AMOperation, is_edition: bool) -> Component:
+def _get_main_title(operation: AMOperation, is_edition: bool, rank: int) -> Component:
     if is_edition:
         return (
-            html.H3('Modification d\'une condition de non-application')
+            html.H4(f'Condition de non-application n°{rank}')
             if operation == operation.ADD_CONDITION
-            else html.H3('Modification d\'un paragraphe alternatif')
+            else html.H4(f'Paragraphe alternatif n°{rank}')
         )
     return (
-        html.H3('Nouvelle condition de non-application')
+        html.H4('Nouvelle condition de non-application')
         if operation == operation.ADD_CONDITION
-        else html.H3('Nouveau paragraphe alternatif')
+        else html.H4('Nouveau paragraphe alternatif')
     )
 
 
@@ -218,7 +218,7 @@ def _extract_title_and_content(text: StructuredText, level: int = 0) -> Tuple[st
 def _get_new_section_form(default_title: str, default_content: str) -> Component:
     return html.Div(
         [
-            html.H4('Nouvelle version'),
+            html.H5('Nouvelle version'),
             html.Div(dcc.Input(id=_NEW_TEXT_TITLE, value=default_title), hidden=True),
             html.Label('Contenu du paragraphe', htmlFor=_NEW_TEXT_CONTENT, className='form-label'),
             div(dcc.Textarea(id=_NEW_TEXT_CONTENT, className='form-control', value=default_content)),
@@ -241,17 +241,9 @@ def _go_back_button(parent_page: str) -> Component:
     return dcc.Link(html.Button('Retour', className='btn btn-link center'), href=parent_page)
 
 
-def _buttons(parent_page: str, is_edition: bool) -> Component:
+def _buttons(parent_page: str) -> Component:
     return html.Div(
         [
-            html.Button(
-                'Supprimer',
-                id='param-edition-delete-button',
-                className='btn btn-danger',
-                style={'margin-right': '5px'},
-                n_clicks=0,
-                hidden=not is_edition,
-            ),
             html.Button(
                 'Enregistrer',
                 id='submit-val-param-edition',
@@ -335,14 +327,14 @@ def _get_condition_form(default_condition: Optional[Condition]) -> Component:
         id='parametrization-conditions', children=_get_condition_components(len(default_conditions), default_conditions)
     )
 
-    return html.Div([html.H4('Condition'), dropdown_condition_merge, dropdown_nb_conditions, tooltip, conditions])
+    return html.Div([html.H5('Condition'), dropdown_condition_merge, dropdown_nb_conditions, tooltip, conditions])
 
 
 def _get_description_form(operation: AMOperation, loaded_parameter: Optional[ParameterObject]) -> Component:
     description_default_value = loaded_parameter.description if loaded_parameter else ''
     return html.Div(
         [
-            html.H4('Description (visible par l\'utilisateur)'),
+            html.H5('Description (visible par l\'utilisateur)'),
             _get_description_help(operation),
             dcc.Textarea(value=description_default_value, className='form-control', id=_DESCRIPTION),
         ]
@@ -355,7 +347,7 @@ def _get_source_form(options: _Options, loaded_parameter: Optional[ParameterObje
     else:
         default_value = ''
     dropdown_source = dcc.Dropdown(value=default_value, options=options, id=_SOURCE, style={'font-size': '0.8em'})
-    return html.Div([html.H4('Source'), dropdown_source])
+    return html.Div([html.H5('Source'), dropdown_source])
 
 
 def _get_target_entity(parameter: ParameterObject) -> Ints:
@@ -407,11 +399,22 @@ def _get_target_section_block(
 ) -> Component:
     return html.Div(
         [
-            html.H4('Paragraphe visé'),
+            html.H5('Paragraphe visé'),
             _get_target_section_form(text_title_options, loaded_parameter),
             _get_target_alineas_form(operation, loaded_parameter),
             html.Div(id=_TARGETED_ALINEAS),
         ]
+    )
+
+
+def _get_delete_button(is_edition: bool) -> Component:
+    return html.Button(
+        'Supprimer',
+        id='param-edition-delete-button',
+        className='btn btn-danger',
+        style={'margin-right': '5px'},
+        n_clicks=0,
+        hidden=not is_edition,
     )
 
 
@@ -424,7 +427,8 @@ def _make_form(
 ) -> Component:
     return html.Div(
         [
-            _get_main_title(operation, is_edition=destination_rank != -1),
+            _get_main_title(operation, is_edition=destination_rank != -1, rank=destination_rank),
+            _get_delete_button(is_edition=destination_rank != -1),
             _get_description_form(operation, loaded_parameter),
             _get_source_form(text_title_options, loaded_parameter),
             _get_target_section_block(operation, text_title_options, loaded_parameter),
@@ -432,7 +436,7 @@ def _make_form(
             _get_condition_form(loaded_parameter.condition if loaded_parameter else None),
             html.Div(id='param-edition-upsert-output'),
             html.Div(id='param-edition-delete-output'),
-            _buttons(parent_page, is_edition=destination_rank != -1),
+            _buttons(parent_page),
         ]
     )
 
