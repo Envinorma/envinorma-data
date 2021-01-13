@@ -6,6 +6,7 @@ from unidecode import unidecode
 
 
 class TopicName(Enum):
+    UNNAMED = 'UNNAMED'
     EPANDAGE = 'EPANDAGE'
     EAU = 'EAU'
     DECHETS = 'DECHETS'
@@ -134,6 +135,12 @@ class Topic:
         return Topic(
             topic, metatopic, compatible_topics, _clean_patterns(short_title_patterns), _clean_patterns(other_patterns)
         )
+
+    @staticmethod
+    def monotopic(
+        patterns: List[str],
+    ) -> 'Topic':
+        return Topic(TopicName.UNNAMED, TopicName.UNNAMED, [], [], _clean_patterns(patterns))
 
 
 ALL_TOPICS = [

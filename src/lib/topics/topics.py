@@ -29,6 +29,11 @@ class TopicOntology:
         self.title_compiled_pattern = re.compile(merge_patterns(all_patterns))
 
     @staticmethod
+    def monotopic(patterns: List[str]) -> 'TopicOntology':
+        topic = Topic.monotopic(patterns)
+        return TopicOntology([topic])
+
+    @staticmethod
     def _check_consistency(topics: Iterable[Topic]) -> None:
         pattern_to_topic: Dict[str, TopicName] = {}
         errors: List[Tuple[str, TopicName, TopicName]] = []
