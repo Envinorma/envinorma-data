@@ -1,12 +1,14 @@
 import json
 import random
-from dataclasses import dataclass, asdict, replace
-from datetime import datetime, date
+from dataclasses import asdict, dataclass, replace
+from datetime import date, datetime
 from enum import Enum
-from lib.data import Nomenclature, Regime, RubriqueSimpleThresholds
-from tqdm import tqdm
 from typing import Any, Dict, List, Optional
+
 from pandas import DataFrame
+from tqdm import tqdm
+
+from lib.data import Nomenclature, Regime, RubriqueSimpleThresholds
 from lib.utils import write_json
 
 
