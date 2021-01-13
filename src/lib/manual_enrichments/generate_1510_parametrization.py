@@ -3,7 +3,7 @@ from datetime import datetime
 from lib.parametrization import ConditionSource, EntityReference, SectionReference
 from typing import Dict, List, Optional, Tuple
 
-from lib.data import ArreteMinisteriel, EnrichedString, Regime, StructuredText
+from lib.data import ArreteMinisteriel, ClassementWithAlineas, EnrichedString, Regime, StructuredText
 from lib.parametrization import (
     AlternativeSection,
     AndCondition,
@@ -695,4 +695,7 @@ def manual_1510_post_process(am: ArreteMinisteriel, version_descriptor: Tuple[st
     classements = am.classements
     regime = _guess_regime(version_descriptor)
     new_classements = [cl for cl in classements if cl.regime.value == regime]
-    return replace(am, classements=new_classements)
+    assert len(new_classements) == 1
+    classement = new_classements[0]
+    new_classements_with_alineas = [ClassementWithAlineas(classement.rubrique, classement.regime, [])]
+    return replace(am, classements=new_classements, classements_with_alineas=new_classements_with_alineas)
