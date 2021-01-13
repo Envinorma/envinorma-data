@@ -30,6 +30,7 @@ from lib.parametrization import (
     SectionReference,
 )
 
+from back_office.components.am_component import am_component
 from back_office.routing import build_am_page
 from back_office.state_update import remove_parameter, upsert_parameter
 from back_office.utils import (
@@ -353,7 +354,7 @@ def _get_source_form(options: _Options, loaded_parameter: Optional[ParameterObje
         default_value = _dump_path(loaded_parameter.source.reference.section.path)
     else:
         default_value = ''
-    dropdown_source = dcc.Dropdown(value=default_value, options=options, id=_SOURCE)
+    dropdown_source = dcc.Dropdown(value=default_value, options=options, id=_SOURCE, style={'font-size': '0.8em'})
     return html.Div([html.H4('Source'), dropdown_source])
 
 
@@ -367,7 +368,9 @@ def _get_target_entity(parameter: ParameterObject) -> Ints:
 
 def _get_target_section_form(options: _Options, loaded_parameter: Optional[ParameterObject]) -> Component:
     default_value = _dump_path(_get_target_entity(loaded_parameter)) if loaded_parameter else None
-    dropdown_target = html.Div([dcc.Dropdown(options=options, id=_TARGET_SECTION, value=default_value)], id='test')
+    dropdown_target = html.Div(
+        [dcc.Dropdown(options=options, id=_TARGET_SECTION, value=default_value, style={'font-size': '0.8em'})]
+    )
     return html.Div([html.H6('Titre'), dropdown_target])
 
 
@@ -472,9 +475,21 @@ def _make_am_parametrization_edition_component(
         html.P(operation.value, hidden=True, id=_AM_OPERATION),
         html.P(destination_rank, hidden=True, id=_PARAMETER_RANK),
     ]
-    return div(
-        [_structure_edition_component(text, operation, am_page, loaded_parameter, destination_rank), *hidden_components]
-    )
+    border_style = {'padding': '10px', 'border': '1px solid rgba(0,0,0,.1)', 'border-radius': '5px'}
+    am_component_ = am_component(am, ['installations existantes'])
+    cols = [
+        html.Div(
+            _structure_edition_component(text, operation, am_page, loaded_parameter, destination_rank),
+            className='col-4',
+        ),
+        html.Div(
+            am_component_,
+            className='col-8',
+            style={'overflow-y': 'auto', 'position': 'sticky', 'height': '90vh', **border_style},
+        ),
+    ]
+    page = html.Div(cols, className='row')
+    return div([page, *hidden_components])
 
 
 def _make_list(candidate: Optional[Union[List[Dict[str, Any]], Dict[str, Any]]]) -> List[Dict[str, Any]]:
@@ -771,11 +786,13 @@ def _build_new_text_component(str_path: Optional[str], am_id: str, operation_str
 def _active_alineas_component(alineas: List[str], active_alineas: Set[int]) -> Component:
     if alineas:
         components = [
-            html.Div([' ', html.B(alinea) if i in active_alineas else alinea]) for i, alinea in enumerate(alineas)
+            html.Div([' ', html.B(alinea) if i in active_alineas else alinea], style={'margin-bottom': '5px'})
+            for i, alinea in enumerate(alineas)
         ]
     else:
         components = [html.Div('Paragraphe vide.')]
-    return html.Div([html.H6('Contenu du paragraphe'), *components], className='alert alert-light')
+    title = html.H6('Contenu du paragraphe (en gras, les alineas sélectionnés)')
+    return html.Div([title, *components], className='alert alert-light')
 
 
 def _build_targeted_alinea_component(

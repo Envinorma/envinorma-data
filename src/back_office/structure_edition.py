@@ -1,4 +1,3 @@
-from back_office.routing import build_am_page
 import os
 import re
 import traceback
@@ -11,10 +10,11 @@ import dash_core_components as dcc
 import dash_html_components as html
 from dash.dependencies import Input, Output, State
 from dash.development.base_component import Component
-from lib.data import ArreteMinisteriel, Cell, EnrichedString, Row, StructuredText, Table, am_to_text
+from lib.data import ArreteMinisteriel, EnrichedString, StructuredText, Table, am_to_text
 from lib.structure_extraction import TextElement, Title, build_structured_text, structured_text_to_text_elements
 from lib.utils import get_structured_text_wip_folder, jsonify
 
+from back_office.routing import build_am_page
 from back_office.utils import (
     AMOperation,
     RouteParsingError,
@@ -29,60 +29,9 @@ from back_office.utils import (
     write_file,
 )
 
-_LEVEL_OPTIONS = [{'label': f'Titre {i}', 'value': i} for i in range(1, 11)] + [{'label': 'Alinea', 'value': -1}]
-_DROPDOWN_STYLE = {'width': '100px', 'margin-right': '10px'}
 _TOC_COMPONENT = 'structure-edition-toc'
 _TEXT_AREA_COMPONENT = 'structure-edition-text-area-component'
 _PREVIEW_BUTTON = 'structure-editition-preview-button'
-
-
-def _make_dropdown(level: int, disabled: bool = False) -> Component:
-    return dcc.Dropdown(value=level, options=_LEVEL_OPTIONS, clearable=False, style=_DROPDOWN_STYLE, disabled=disabled)
-
-
-def _add_dropdown(component: Component, level: int, disabled: bool = False) -> Component:
-    dropdown = _make_dropdown(level, disabled=disabled)
-    return div([dropdown, component], style={'display': 'flex', 'vertical-align': 'text-top', 'margin-top': '10px'})
-
-
-def _cell_to_component(cell: Cell) -> Component:
-    return html.Td([html.P(cell.content.text)], colSpan=cell.colspan, rowSpan=cell.rowspan)
-
-
-def _row_to_component(row: Row) -> Component:
-    cls_ = html.Th if row.is_header else html.Tr
-    return cls_([_cell_to_component(cell) for cell in row.cells])
-
-
-def _table_to_component(table: Table) -> Component:
-    return _add_dropdown(html.Table([_row_to_component(row) for row in table.rows]), -1, disabled=True)
-
-
-def _get_html_heading_classname(level: int) -> type:
-    if level <= 6:
-        return getattr(html, f'H{level}')
-    return html.H6
-
-
-def _title_to_component(title: Title) -> Component:
-    if title.level == 0:
-        return html.Header(title.text)
-    title_component = _get_html_heading_classname(title.level)(title.text)
-    return _add_dropdown(title_component, title.level)
-
-
-def _str_to_component(str_: str) -> Component:
-    return _add_dropdown(html.P(str_), -1)
-
-
-def _make_form_component(element: TextElement) -> Component:
-    if isinstance(element, Table):
-        return _table_to_component(element)
-    if isinstance(element, Title):
-        return _title_to_component(element)
-    if isinstance(element, str):
-        return _str_to_component(element)
-    raise NotImplementedError(f'Not implemented for type {type(element)}')
 
 
 def _text_to_elements(text: StructuredText) -> List[TextElement]:

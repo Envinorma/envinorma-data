@@ -6,16 +6,9 @@ from back_office.structure_edition import (
     _extract_text_area_words,
     _extract_words,
     _extract_words_outside_table,
-    _get_html_heading_classname,
     _keep_non_empty,
 )
 from lib.data import EnrichedString, StructuredText
-
-
-def test_get_html_heading_classname():
-    assert isinstance(_get_html_heading_classname(1)(), html.H1)
-    assert isinstance(_get_html_heading_classname(6)(), html.H6)
-    assert isinstance(_get_html_heading_classname(7)(), html.H6)
 
 
 def _get_simple_text() -> StructuredText:
