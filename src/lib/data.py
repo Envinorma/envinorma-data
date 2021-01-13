@@ -247,6 +247,36 @@ class Classement:
 
 
 @dataclass
+class ClassementWithAlineas:
+    rubrique: str
+    regime: Regime
+    alineas: List[str]
+
+    @staticmethod
+    def from_dict(dict_: Dict[str, Any]) -> 'ClassementWithAlineas':
+        dict_ = dict_.copy()
+        dict_['rubrique'] = str(dict_['rubrique'])
+        dict_['regime'] = Regime(dict_['regime'])
+        return ClassementWithAlineas(**dict_)
+
+    def to_dict(self) -> Dict[str, Any]:
+        res = asdict(self)
+        res['regime'] = self.regime.value
+        return res
+
+
+def group_classements_by_alineas(classements: List[Classement]) -> List[ClassementWithAlineas]:
+    rubrique_regime_to_alineas: Dict[Tuple[str, Regime], List[str]] = {}
+    for classement in classements:
+        key = (classement.rubrique, classement.regime)
+        if key not in rubrique_regime_to_alineas:
+            rubrique_regime_to_alineas[key] = []
+        if classement.alinea:
+            rubrique_regime_to_alineas[key].append(classement.alinea)
+    return [ClassementWithAlineas(rub, reg, als) for (rub, reg), als in rubrique_regime_to_alineas.items()]
+
+
+@dataclass
 class SummaryElement:
     section_id: str
     section_title: str
@@ -282,6 +312,7 @@ class ArreteMinisteriel:
     aida_url: Optional[str] = None
     legifrance_url: Optional[str] = None
     classements: List[Classement] = field(default_factory=list)
+    classements_with_alineas: List[ClassementWithAlineas] = field(default_factory=list)
     unique_version: bool = False
     summary: Optional[Summary] = None
     id: Optional[str] = field(default_factory=random_id)
@@ -291,6 +322,7 @@ class ArreteMinisteriel:
         res['sections'] = [section.to_dict() for section in self.sections]
         res['applicability'] = self.applicability.to_dict() if self.applicability else None
         res['classements'] = [cl.to_dict() for cl in self.classements]
+        res['classements_with_alineas'] = [cl.to_dict() for cl in self.classements_with_alineas]
         return res
 
     @classmethod
@@ -304,6 +336,10 @@ class ArreteMinisteriel:
         dict_[dt_key] = DateCriterion.from_dict(dict_[dt_key]) if dict_.get(dt_key) else None
         classements = [Classement.from_dict(cl) for cl in dict_.get('classements') or []]
         dict_['classements'] = list(sorted(classements, key=lambda x: x.regime.value))
+        classements_with_alineas = [
+            ClassementWithAlineas.from_dict(cl) for cl in dict_.get('classements_with_alineas') or []
+        ]
+        dict_['classements_with_alineas'] = list(sorted(classements_with_alineas, key=lambda x: x.regime.value))
         dict_['summary'] = Summary.from_dict(dict_['summary']) if dict_.get('summary') else None
         return cls(**dict_)
 

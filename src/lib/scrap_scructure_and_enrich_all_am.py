@@ -1,40 +1,15 @@
 import json
-from lib.config import AM_DATA_FOLDER
 import os
 import random
 import traceback
 from copy import copy
 from datetime import datetime
-from typing import List, Dict, Optional, Set, Tuple, Union
+from typing import Dict, List, Optional, Set, Tuple, Union
 from warnings import warn
 
 from requests_oauthlib import OAuth2Session
 from tqdm import tqdm
 
-from lib.topics.topics import TOPIC_ONTOLOGY
-from lib.data import (
-    Hyperlink,
-    Anchor,
-    AMMetadata,
-    AidaData,
-    Data,
-    get_text_defined_id,
-    check_am,
-    LegifranceAPIError,
-    LegifranceTextFormatError,
-    StructurationError,
-    AMStructurationLog,
-    load_am_data,
-)
-from lib.am_to_markdown import am_to_markdown
-from lib.parametrization import Parametrization, add_am_signatures
-from lib.manual_enrichments import (
-    get_manual_combinations,
-    get_manual_enricher,
-    get_manual_parametrization,
-    get_manual_post_process,
-)
-from lib.parametric_am import check_parametrization_is_still_valid, generate_all_am_versions
 from lib.am_enriching import (
     add_references,
     add_summary,
@@ -42,15 +17,41 @@ from lib.am_enriching import (
     detect_and_add_topics,
     remove_null_applicabilities,
 )
-from lib.legifrance_API import get_current_loda_via_cid_response, get_legifrance_client
-from lib.texts_properties import LegifranceText, compute_am_diffs, compute_am_signatures, compute_texts_properties
 from lib.am_structure_extraction import (
-    ArreteMinisteriel,
-    transform_arrete_ministeriel,
-    load_legifrance_text,
-    check_legifrance_dict,
     AMStructurationError,
+    ArreteMinisteriel,
+    check_legifrance_dict,
+    load_legifrance_text,
+    transform_arrete_ministeriel,
 )
+from lib.am_to_markdown import am_to_markdown
+from lib.config import AM_DATA_FOLDER
+from lib.data import (
+    AidaData,
+    AMMetadata,
+    AMStructurationLog,
+    Anchor,
+    Data,
+    Hyperlink,
+    LegifranceAPIError,
+    LegifranceTextFormatError,
+    StructurationError,
+    check_am,
+    get_text_defined_id,
+    group_classements_by_alineas,
+    load_am_data,
+)
+from lib.legifrance_API import get_current_loda_via_cid_response, get_legifrance_client
+from lib.manual_enrichments import (
+    get_manual_combinations,
+    get_manual_enricher,
+    get_manual_parametrization,
+    get_manual_post_process,
+)
+from lib.parametric_am import check_parametrization_is_still_valid, generate_all_am_versions
+from lib.parametrization import Parametrization, add_am_signatures
+from lib.texts_properties import LegifranceText, compute_am_diffs, compute_am_signatures, compute_texts_properties
+from lib.topics.topics import TOPIC_ONTOLOGY
 from lib.utils import write_json
 
 
@@ -153,6 +154,7 @@ def _add_metadata(am: ArreteMinisteriel, metadata: AMMetadata) -> ArreteMinister
     am.legifrance_url = _build_legifrance_url(metadata.cid)
     am.aida_url = _build_aida_url(metadata.aida_page)
     am.classements = metadata.classements
+    am.classements_with_alineas = group_classements_by_alineas(metadata.classements)
     return am
 
 

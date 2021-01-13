@@ -1,13 +1,13 @@
-import os
 import json
-from typing import Optional
-from tqdm import tqdm
+import os
 from shutil import copyfile
+from typing import Optional
 
-from lib.data import ArreteMinisteriel
 from lib.config import AM_DATA_FOLDER
+from lib.data import ArreteMinisteriel
 from lib.scrap_scructure_and_enrich_all_am import load_data
 from lib.utils import write_json
+from tqdm import tqdm
 
 
 def _get_input_path(filename: str) -> str:

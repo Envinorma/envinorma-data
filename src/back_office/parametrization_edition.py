@@ -476,7 +476,7 @@ def _make_am_parametrization_edition_component(
         html.P(destination_rank, hidden=True, id=_PARAMETER_RANK),
     ]
     border_style = {'padding': '10px', 'border': '1px solid rgba(0,0,0,.1)', 'border-radius': '5px'}
-    am_component_ = am_component(am, ['installations existantes'])
+    am_component_ = am_component(am, ['installations existantes', 'appliquent', 'applicables', 'applicable'])
     cols = [
         html.Div(
             _structure_edition_component(text, operation, am_page, loaded_parameter, destination_rank),

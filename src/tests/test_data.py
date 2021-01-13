@@ -4,17 +4,18 @@ from lib.data import (
     Annotations,
     Applicability,
     ArreteMinisteriel,
-    ArticleStatus,
     Cell,
+    Classement,
     DateCriterion,
     EnrichedString,
-    LegifranceArticle,
     Link,
+    Regime,
     Row,
     StructuredText,
     Table,
     TopicName,
     count_cells,
+    group_classements_by_alineas,
     is_increasing,
     load_am_data,
 )
@@ -101,3 +102,43 @@ def test_count_cells():
     cells = [Cell(EnrichedString(''), 1, 1)]
     assert count_cells(Table([Row(cells, True)])) == 1
     assert count_cells(Table([Row(cells, True)] * 3)) == 3
+
+
+def test_group_classements_by_alineas():
+    assert group_classements_by_alineas([]) == []
+
+    res = group_classements_by_alineas([Classement('1510', Regime.A)])
+    assert len(res) == 1
+    assert res[0].alineas == []
+    assert res[0].rubrique == '1510'
+    assert res[0].regime == Regime.A
+
+    res = group_classements_by_alineas([Classement('1510', Regime.A, 'C')])
+    assert len(res) == 1
+    assert res[0].alineas == ['C']
+    assert res[0].rubrique == '1510'
+    assert res[0].regime == Regime.A
+
+    res = group_classements_by_alineas([Classement('1510', Regime.A, 'C'), Classement('1510', Regime.A, 'D')])
+    assert len(res) == 1
+    assert res[0].alineas == ['C', 'D']
+    assert res[0].rubrique == '1510'
+    assert res[0].regime == Regime.A
+
+    res = group_classements_by_alineas([Classement('1510', Regime.A, 'C'), Classement('1520', Regime.A, 'D')])
+    assert len(res) == 2
+    assert res[0].alineas == ['C']
+    assert res[0].rubrique == '1510'
+    assert res[0].regime == Regime.A
+    assert res[1].alineas == ['D']
+    assert res[1].rubrique == '1520'
+    assert res[1].regime == Regime.A
+
+    res = group_classements_by_alineas([Classement('1510', Regime.A, 'C'), Classement('1510', Regime.E, 'D')])
+    assert len(res) == 2
+    assert res[0].alineas == ['C']
+    assert res[0].rubrique == '1510'
+    assert res[0].regime == Regime.A
+    assert res[1].alineas == ['D']
+    assert res[1].rubrique == '1510'
+    assert res[1].regime == Regime.E
