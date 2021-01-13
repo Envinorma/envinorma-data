@@ -321,6 +321,7 @@ def _clean_dict(dict_: Dict[str, Any]) -> Dict[str, Any]:
 def _dump_installations_csv(installations: List[GeorisquesInstallation], sample: bool) -> None:
     data_frame = DataFrame([_clean_dict(it.to_dict()) for it in installations], dtype='str')
     filename_suffix = '_sample' if sample else ''
+    print(f'Dumping {len(data_frame)} installations.')
     data_frame.to_csv(f'installations{filename_suffix}.csv')
 
 
@@ -328,10 +329,13 @@ def _dump_classements_csv(installations: List[GeorisquesInstallation], sample: b
     dicts = []
     for installation in installations:
         for item in installation.classements or []:
+            if item.etat_activite != GRClassementActivite.ACTIVE:
+                continue
             dict_ = item.to_dict()
             dict_['installation_id'] = installation.s3ic_id
             dicts.append(dict_)
     data_frame = DataFrame(dicts, dtype='str')
+    print(f'Dumping {len(data_frame)} classements.')
     filename_suffix = '_sample' if sample else ''
     data_frame.to_csv(f'classements{filename_suffix}.csv')
 
@@ -345,14 +349,26 @@ def _dump_documents_csv(installations: List[GeorisquesInstallation], sample: boo
             dicts.append(dict_)
     data_frame = DataFrame(dicts, dtype='str')
     filename_suffix = '_sample' if sample else ''
+    print(f'Dumping {len(data_frame)} documents.')
     data_frame.to_csv(f'documents{filename_suffix}.csv')
 
 
-def _dump_csvs(sample: bool = False) -> None:
+def _dump_csvs(sample: bool = False, only_idf: bool = False) -> None:
     installations = load_installations_with_classements_and_docs()
+    if only_idf:
+        installations = [
+            ins
+            for ins in installations
+            if ins.region == 'ILE-DE-FRANCE' and ins.active == ActivityStatus.EN_FONCTIONNEMENT
+        ]
+        print(f'{len(installations)} found in île-de-France')
     if sample:
         random.seed(1)
         installations = random.sample(installations, 200)
     _dump_installations_csv(installations, sample)
     _dump_classements_csv(installations, sample)
     _dump_documents_csv(installations, sample)
+
+
+if __name__ == '__main__':
+    _dump_csvs(sample=False, only_idf=True)
