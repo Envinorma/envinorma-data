@@ -301,11 +301,12 @@ def _simplify_condition(condition: Condition) -> Tuple[str, List[_MonoCondition]
 
 
 def _get_condition_form(default_condition: Optional[Condition]) -> Component:
+    default_conditions: List[_MonoCondition] = []
     if default_condition:
         default_merge, default_conditions = _simplify_condition(default_condition)
     else:
         default_merge = _AND_ID
-        default_conditions = []
+        default_conditions = [Littler(ParameterEnum.DATE_AUTORISATION.value, datetime.now())]
     dropdown_condition_merge = html.Div(
         [
             'Opération',
@@ -479,21 +480,14 @@ def _structure_edition_component(
     return _make_form(dropdown_values, operation, parent_page, loaded_parameter, destination_rank, text)
 
 
-def _make_am_parametrization_edition_component(
+def _get_main_component(
     am: ArreteMinisteriel,
     operation: AMOperation,
     am_page: str,
-    am_id: str,
     destination_rank: int,
     loaded_parameter: Optional[ParameterObject],
 ) -> Component:
     text = am_to_text(am)
-    hidden_components = [
-        html.P(am_id, hidden=True, id=_AM_ID),
-        html.P(operation.value, hidden=True, id=_AM_OPERATION),
-        html.P(destination_rank, hidden=True, id=_PARAMETER_RANK),
-        dcc.Store(id=_TARGET_SECTION_STORE),
-    ]
     border_style = {'padding': '10px', 'border': '1px solid rgba(0,0,0,.1)', 'border-radius': '5px'}
     am_component_ = am_component(am, ['installations existantes', 'appliquent', 'applicables', 'applicable'])
     cols = [
@@ -507,7 +501,25 @@ def _make_am_parametrization_edition_component(
             style={'overflow-y': 'auto', 'position': 'sticky', 'height': '90vh', **border_style},
         ),
     ]
-    page = html.Div(cols, className='row')
+    return html.Div(cols, className='row')
+
+
+def _build_page(
+    am: ArreteMinisteriel,
+    operation: AMOperation,
+    am_page: str,
+    am_id: str,
+    destination_rank: int,
+    loaded_parameter: Optional[ParameterObject],
+) -> Component:
+    hidden_components = [
+        html.P(am_id, hidden=True, id=_AM_ID),
+        html.P(operation.value, hidden=True, id=_AM_OPERATION),
+        html.P(destination_rank, hidden=True, id=_PARAMETER_RANK),
+        dcc.Store(id=_TARGET_SECTION_STORE),
+    ]
+    page = _get_main_component(am, operation, am_page, destination_rank, loaded_parameter)
+
     return div([page, *hidden_components])
 
 
@@ -968,6 +980,4 @@ def router(pathname: str) -> Component:
         destination_parameter_rank = parameter_rank
     else:
         destination_parameter_rank = -1
-    return _make_am_parametrization_edition_component(
-        am, operation_id, am_page, am_id, destination_parameter_rank, loaded_parameter
-    )
+    return _build_page(am, operation_id, am_page, am_id, destination_parameter_rank, loaded_parameter)
