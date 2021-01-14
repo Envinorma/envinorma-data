@@ -1,7 +1,7 @@
 import json
 import traceback
 from datetime import date, datetime
-from typing import Any, Dict, List, Optional, Set, Tuple, Type, Union
+from typing import Any, Dict, List, Optional, Tuple, Type, Union
 
 import dash
 import dash_bootstrap_components as dbc
@@ -43,6 +43,7 @@ from back_office.utils import (
     div,
     error_component,
     get_section,
+    get_subsection,
     get_truncated_str,
     load_am,
     load_am_state,
@@ -68,8 +69,9 @@ _CONDITION_VALUE = 'param-edition-condition-value'
 _DESCRIPTION = 'param-edition-description'
 _SOURCE = 'param-edition-source'
 _TARGET_SECTION = 'param-edition-target-section'
+_TARGET_SECTION_STORE = 'param-edition-target-section-store'
 _TARGET_ALINEAS = 'param-edition-target-alineas'
-_TARGETED_ALINEAS = 'param-edition-targeted-alineas'
+_LOADED_NB_ALINEAS = 'param-edition-loaded-nb-alineas'
 _CONDITION_MERGE = 'param-edition-condition-merge'
 _NB_CONDITIONS = 'param-edition-nb-conditions'
 _NEW_TEXT = 'param-edition-new-text'
@@ -167,14 +169,6 @@ def _get_condition_components(
     return div([*dropdown_conditions])
 
 
-_ALL_ALINEAS = 'TOUS'
-_ALINEA_TARGETS_OPERATIONS = [*range(50), _ALL_ALINEAS]
-_ALINEA_OPTIONS = [
-    {'label': condition + 1 if isinstance(condition, int) else condition, 'value': condition}
-    for condition in _ALINEA_TARGETS_OPERATIONS
-]
-
-
 def _get_main_title(operation: AMOperation, is_edition: bool, rank: int) -> Component:
     if is_edition:
         return (
@@ -221,7 +215,11 @@ def _get_new_section_form(default_title: str, default_content: str) -> Component
             html.H5('Nouvelle version'),
             html.Div(dcc.Input(id=_NEW_TEXT_TITLE, value=default_title), hidden=True),
             html.Label('Contenu du paragraphe', htmlFor=_NEW_TEXT_CONTENT, className='form-label'),
-            div(dcc.Textarea(id=_NEW_TEXT_CONTENT, className='form-control', value=default_content)),
+            div(
+                dcc.Textarea(
+                    id=_NEW_TEXT_CONTENT, className='form-control', value=default_content, style={'min-height': '300px'}
+                )
+            ),
         ],
         id=_NEW_TEXT,
     )
@@ -253,7 +251,7 @@ def _buttons(parent_page: str) -> Component:
             ),
             _go_back_button(parent_page),
         ],
-        style={'margin-top': '10px'},
+        style={'margin-top': '10px', 'margin-bottom': '100px'},
     )
 
 
@@ -382,27 +380,42 @@ def _ensure_optional_alternative_section(parameter: Optional[ParameterObject]) -
     return parameter
 
 
-def _get_target_alineas_form(operation: AMOperation, loaded_parameter: Optional[ParameterObject]) -> Component:
+def _get_target_alineas_form(
+    operation: AMOperation, loaded_parameter: Optional[ParameterObject], text: StructuredText
+) -> Component:
     if not _is_condition(operation):
         return html.Div()
     condition = _ensure_optional_condition(loaded_parameter)
-    if not condition or not condition.targeted_entity.outer_alinea_indices:
-        default_value = [_ALL_ALINEAS]
+
+    if not condition:
+        value = []
+        options = []
     else:
-        default_value = condition.targeted_entity.outer_alinea_indices
-    dropdown_alineas = dcc.Dropdown(options=_ALINEA_OPTIONS, multi=True, value=default_value, id=_TARGET_ALINEAS)
-    return html.Div([html.H6('Alineas visés'), dropdown_alineas])
+        path = condition.targeted_entity.section.path
+        alineas = condition.targeted_entity.outer_alinea_indices
+        target_section = get_subsection(path, text)
+        options = [{'label': al.text, 'value': i} for i, al in enumerate(target_section.outer_alineas)]
+        value = alineas if alineas else list(range(len(target_section.outer_alineas)))
+    return html.Div(
+        [
+            html.H6('Alineas visés'),
+            dcc.Checklist(options=options, value=value, id=_TARGET_ALINEAS),
+            dcc.Store(data=len(options), id=_LOADED_NB_ALINEAS),
+        ]
+    )
 
 
 def _get_target_section_block(
-    operation: AMOperation, text_title_options: _Options, loaded_parameter: Optional[ParameterObject]
+    operation: AMOperation,
+    text_title_options: _Options,
+    loaded_parameter: Optional[ParameterObject],
+    text: StructuredText,
 ) -> Component:
     return html.Div(
         [
             html.H5('Paragraphe visé'),
             _get_target_section_form(text_title_options, loaded_parameter),
-            _get_target_alineas_form(operation, loaded_parameter),
-            html.Div(id=_TARGETED_ALINEAS),
+            _get_target_alineas_form(operation, loaded_parameter, text),
         ]
     )
 
@@ -424,6 +437,7 @@ def _make_form(
     parent_page: str,
     loaded_parameter: Optional[ParameterObject],
     destination_rank: int,
+    text: StructuredText,
 ) -> Component:
     return html.Div(
         [
@@ -431,7 +445,7 @@ def _make_form(
             _get_delete_button(is_edition=destination_rank != -1),
             _get_description_form(operation, loaded_parameter),
             _get_source_form(text_title_options, loaded_parameter),
-            _get_target_section_block(operation, text_title_options, loaded_parameter),
+            _get_target_section_block(operation, text_title_options, loaded_parameter, text),
             _get_new_section_form_from_default(loaded_parameter) if not _is_condition(operation) else html.Div(),
             _get_condition_form(loaded_parameter.condition if loaded_parameter else None),
             html.Div(id='param-edition-upsert-output'),
@@ -462,7 +476,7 @@ def _structure_edition_component(
     destination_rank: int,
 ) -> Component:
     dropdown_values = _extract_paragraph_reference_dropdown_values(text)
-    return _make_form(dropdown_values, operation, parent_page, loaded_parameter, destination_rank)
+    return _make_form(dropdown_values, operation, parent_page, loaded_parameter, destination_rank, text)
 
 
 def _make_am_parametrization_edition_component(
@@ -478,6 +492,7 @@ def _make_am_parametrization_edition_component(
         html.P(am_id, hidden=True, id=_AM_ID),
         html.P(operation.value, hidden=True, id=_AM_OPERATION),
         html.P(destination_rank, hidden=True, id=_PARAMETER_RANK),
+        dcc.Store(id=_TARGET_SECTION_STORE),
     ]
     border_style = {'padding': '10px', 'border': '1px solid rgba(0,0,0,.1)', 'border-radius': '5px'}
     am_component_ = am_component(am, ['installations existantes', 'appliquent', 'applicables', 'applicable'])
@@ -568,15 +583,10 @@ def _build_source(source_str: str) -> ConditionSource:
     return ConditionSource('', EntityReference(SectionReference(_load_path(source_str)), None))
 
 
-def _extract_alinea_indices(target_alineas: List[Union[str, int]]) -> Optional[List[int]]:
-    assert_list(target_alineas)
-    if target_alineas == [_ALL_ALINEAS]:
+def _extract_alinea_indices(target_alineas: Optional[List[int]]) -> Optional[List[int]]:
+    if target_alineas is None:
         return None
-    if _ALL_ALINEAS in target_alineas and len(target_alineas) >= 2:
-        raise _FormHandlingError(
-            f'Le champ "Alineas visés" ne peut contenir la valeur "{_ALL_ALINEAS}" que '
-            'si c\'est la seule valeur renseignée.'
-        )
+    assert_list(target_alineas)
     return [assert_int(x) for x in target_alineas]
 
 
@@ -594,7 +604,7 @@ def _build_non_application_condition(
     target_section: str,
     merge: str,
     conditions: List[Tuple[str, str, str]],
-    target_alineas: List[Union[str, int]],
+    target_alineas: Optional[List[int]],
 ) -> NonApplicationCondition:
     return NonApplicationCondition(
         EntityReference(SectionReference(_load_path(target_section)), _extract_alinea_indices(target_alineas)),
@@ -701,7 +711,15 @@ def _extract_new_text_parameters(id_to_value: Dict[str, str]) -> Tuple[str, str]
     return new_text_title, new_text_content
 
 
-def _extract_new_parameter_object(page_state: Dict[str, Any], operation: AMOperation) -> ParameterObject:
+def _count_alineas_in_section(text_dict: Dict[str, Any]) -> int:
+    if not text_dict:
+        return 0
+    return len(StructuredText.from_dict(text_dict).outer_alineas)
+
+
+def _extract_new_parameter_object(
+    page_state: Dict[str, Any], operation: AMOperation, nb_alinea_options: int
+) -> ParameterObject:
     id_to_value = _extract_id_to_value(page_state)
     description = assert_str(_get_with_error(id_to_value, _DESCRIPTION))
     if len(description) < _MIN_NB_CHARS:
@@ -719,6 +737,8 @@ def _extract_new_parameter_object(page_state: Dict[str, Any], operation: AMOpera
     conditions = _extract_conditions(nb_conditions, id_to_value)
     if operation == operation.ADD_CONDITION:
         target_alineas = _get_with_error(id_to_value, _TARGET_ALINEAS)
+        if len(set(target_alineas)) == nb_alinea_options:
+            target_alineas = None
         return _build_non_application_condition(description, source, target_section, merge, conditions, target_alineas)
     if operation == operation.ADD_ALTERNATIVE_SECTION:
         new_text_title, new_text_content = _extract_new_text_parameters(id_to_value)
@@ -729,20 +749,31 @@ def _extract_new_parameter_object(page_state: Dict[str, Any], operation: AMOpera
 
 
 def _extract_and_upsert_new_parameter(
-    page_state: Dict[str, Any], am_id: str, operation: AMOperation, parameter_rank: int
+    page_state: Dict[str, Any], am_id: str, operation: AMOperation, parameter_rank: int, nb_alinea_options: int
 ) -> None:
-    new_parameter = _extract_new_parameter_object(page_state, operation)
+    new_parameter = _extract_new_parameter_object(page_state, operation, nb_alinea_options)
     upsert_parameter(am_id, new_parameter, parameter_rank)
 
 
+def _extract_selected_section_nb_alineas(target_text_dict: Dict[str, Any], loaded_nb_alineas: int) -> int:
+    return _count_alineas_in_section(target_text_dict) or loaded_nb_alineas
+
+
 def _handle_submit(
-    n_clicks: int, operation_str: str, am_id: str, parameter_rank: int, state: Dict[str, Any]
+    n_clicks: int,
+    operation_str: str,
+    am_id: str,
+    parameter_rank: int,
+    target_text_dict: Dict[str, Any],
+    loaded_nb_alineas: int,
+    state: Dict[str, Any],
 ) -> Component:
     if n_clicks == 0:
         return html.Div()
     try:
         operation = AMOperation(operation_str)
-        _extract_and_upsert_new_parameter(state, am_id, operation, parameter_rank)
+        target_section_nb_alineas = _extract_selected_section_nb_alineas(target_text_dict, loaded_nb_alineas)
+        _extract_and_upsert_new_parameter(state, am_id, operation, parameter_rank, target_section_nb_alineas)
     except _FormHandlingError as exc:
         return error_component(f'Erreur dans le formulaire:\n{exc}')
     except Exception:  # pylint: disable=broad-except
@@ -787,31 +818,30 @@ def _build_new_text_component(str_path: Optional[str], am_id: str, operation_str
     return _get_new_section_form(title, content)
 
 
-def _active_alineas_component(alineas: List[str], active_alineas: Set[int]) -> Component:
-    if alineas:
-        components = [
-            html.Div([' ', html.B(alinea) if i in active_alineas else alinea], style={'margin-bottom': '5px'})
-            for i, alinea in enumerate(alineas)
-        ]
-    else:
-        components = [html.Div('Paragraphe vide.')]
-    title = html.H6('Contenu du paragraphe (en gras, les alineas sélectionnés)')
-    return html.Div([title, *components], className='alert alert-light')
+def _build_targeted_alinea_options(section_dict: Dict[str, Any], operation_str: str) -> List[Dict[str, Any]]:
+    if operation_str != AMOperation.ADD_CONDITION.value or not section_dict:
+        return []
+    section = StructuredText.from_dict(section_dict)
+    alineas_str = [al.text for al in section.outer_alineas]
+    return [{'label': al, 'value': i} for i, al in enumerate(alineas_str)]
 
 
-def _build_targeted_alinea_component(
-    alineas: List[Union[str, int]], str_path: Optional[str], am_id: str, operation_str: str
-) -> Component:
-    if operation_str != AMOperation.ADD_CONDITION.value or not str_path:
-        return _get_new_section_form('', '')
+def _store_target_section(str_path: Optional[str], am_id: str) -> Dict[str, Any]:
+    if not str_path:
+        return {}
     am = _load_am(am_id)
     if not am:
-        return _get_new_section_form('', '')
+        return {}
     path = _load_path(str_path)
     section = get_section(path, am)
-    alineas_str = [al.text for al in section.outer_alineas]
-    active_alineas = range(len(alineas_str)) if _ALL_ALINEAS in alineas else map(int, alineas)
-    return _active_alineas_component(alineas_str, set(active_alineas))
+    return section.to_dict()
+
+
+def _build_targeted_alinea_value(section_dict: Dict[str, Any], operation_str: str) -> List[int]:
+    if operation_str != AMOperation.ADD_CONDITION.value or not section_dict:
+        return []
+    section = StructuredText.from_dict(section_dict)
+    return list(range(len(section.outer_alineas)))
 
 
 def add_parametrization_edition_callbacks(app: dash.Dash):
@@ -826,14 +856,31 @@ def add_parametrization_edition_callbacks(app: dash.Dash):
         return _build_new_text_component(path, am_id, operation)
 
     @app.callback(
-        Output(_TARGETED_ALINEAS, 'children'),
-        Input(_TARGET_ALINEAS, 'value'),
+        Output(_TARGET_SECTION_STORE, 'data'),
         Input(_TARGET_SECTION, 'value'),
         State(_AM_ID, 'children'),
-        State(_AM_OPERATION, 'children'),
+        prevent_initial_call=True,
     )
-    def _2(alineas, path, am_id, operation):
-        return _build_targeted_alinea_component(alineas, path, am_id, operation)
+    def __store_target_section(path, am_id):
+        return _store_target_section(path, am_id)
+
+    @app.callback(
+        Output(_TARGET_ALINEAS, 'options'),
+        Input(_TARGET_SECTION_STORE, 'data'),
+        State(_AM_OPERATION, 'children'),
+        prevent_initial_call=True,
+    )
+    def __build_targeted_alinea_options(target_section, operation):
+        return _build_targeted_alinea_options(target_section, operation)
+
+    @app.callback(
+        Output(_TARGET_ALINEAS, 'value'),
+        Input(_TARGET_SECTION_STORE, 'data'),
+        State(_AM_OPERATION, 'children'),
+        prevent_initial_call=True,
+    )
+    def __build_targeted_alinea_value(target_section, operation):
+        return _build_targeted_alinea_value(target_section, operation)
 
     @app.callback(
         Output('param-edition-upsert-output', 'children'),
@@ -841,10 +888,12 @@ def add_parametrization_edition_callbacks(app: dash.Dash):
         State(_AM_OPERATION, 'children'),
         State(_AM_ID, 'children'),
         State(_PARAMETER_RANK, 'children'),
+        State(_TARGET_SECTION_STORE, 'data'),
+        State(_LOADED_NB_ALINEAS, 'data'),
         State('page-content', 'children'),
     )
-    def __(n_clicks, operation, am_id, parameter_rank, state):
-        return _handle_submit(n_clicks, operation, am_id, parameter_rank, state)
+    def __(n_clicks, operation, am_id, parameter_rank, target_text_dict, loaded_nb_alineas, state):
+        return _handle_submit(n_clicks, operation, am_id, parameter_rank, target_text_dict, loaded_nb_alineas, state)
 
     @app.callback(
         Output('param-edition-delete-output', 'children'),
