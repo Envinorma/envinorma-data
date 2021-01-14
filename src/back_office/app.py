@@ -30,9 +30,7 @@ def _prepare_archive_if_no_data():
 _prepare_archive_if_no_data()
 
 app = dash.Dash(
-    __name__,
-    external_stylesheets=[dbc.themes.BOOTSTRAP],
-    suppress_callback_exceptions=True,
+    __name__, external_stylesheets=[dbc.themes.BOOTSTRAP], suppress_callback_exceptions=True, title='Envinorma'
 )
 
 
