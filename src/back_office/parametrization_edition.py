@@ -119,7 +119,9 @@ def _ensure_regime(
     raise ValueError(f'Expected type Regime, received type {type(value)}')
 
 
-def _get_str_target(value: Any, parameter_type: ParameterType) -> Any:
+def _get_str_target(value: Any, parameter_type: ParameterType) -> str:
+    if value is None:
+        return ''
     if parameter_type == parameter_type.DATE:
         return _date_to_dmy(_ensure_date(value))
     if parameter_type == parameter_type.REGIME:
@@ -306,7 +308,7 @@ def _get_condition_form(default_condition: Optional[Condition]) -> Component:
         default_merge, default_conditions = _simplify_condition(default_condition)
     else:
         default_merge = _AND_ID
-        default_conditions = [Littler(ParameterEnum.DATE_AUTORISATION.value, datetime.now())]
+        default_conditions = [Littler(ParameterEnum.DATE_AUTORISATION.value, None)]
     dropdown_condition_merge = html.Div(
         [
             'Opération',
