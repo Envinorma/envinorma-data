@@ -5,3 +5,4 @@ src/.vscode
 src/.coverage
 tmp*
 src/lib/secrets.py
+src/lib/s3ic_data.py

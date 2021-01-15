@@ -113,7 +113,7 @@ def load_all_classements() -> Dict[str, List[GRClassement]]:
     icpe_data = json.load(open('/Users/remidelbouys/EnviNorma/brouillons/data/icpe_admin_data.json'))
     return {
         id_: [GRClassement.from_georisques_dict(classement) for classement in classements if classement['seveso']]
-        for id_, classements in tqdm(icpe_data.items())
+        for id_, classements in tqdm(icpe_data.items(), 'Initializing classements.')
     }
 
 
@@ -284,7 +284,7 @@ def load_all_installations() -> List[GeorisquesInstallation]:
         print(f'{len(diff)} installations lack one source of data and are therefore skipped.')
     common = id_to_data_geojson.keys() & id_to_data_georisques.keys()
     union = [{**id_to_data_georisques[id_], **id_to_data_geojson[id_]} for id_ in common]
-    return [GeorisquesInstallation.from_georisques_dict(doc) for doc in tqdm(union)]
+    return [GeorisquesInstallation.from_georisques_dict(doc) for doc in tqdm(union, 'Initializing installations.')]
 
 
 def add_theoretical_regime(
