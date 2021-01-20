@@ -71,3 +71,7 @@ def handle_am(am_id: str) -> Optional[ArreteMinisteriel]:
     am_versions = _apply_parametrization(cid, am, parametrization)
     _dump(cid, am_versions)
     return am
+
+
+if __name__ == '__main__':
+    handle_am(TEST_ID)
