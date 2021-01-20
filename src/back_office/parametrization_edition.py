@@ -60,7 +60,7 @@ _CONDITION_VARIABLES = {
     'Date de mise en service': ParameterEnum.DATE_INSTALLATION,
 }
 _CONDITION_VARIABLE_OPTIONS = [{'label': condition, 'value': condition} for condition in _CONDITION_VARIABLES]
-_CONDITION_OPERATIONS = ['<', '<=', '=', '>', '>=']
+_CONDITION_OPERATIONS = ['<', '=', '>=']
 _CONDITION_OPERATION_OPTIONS = [{'label': condition, 'value': condition} for condition in _CONDITION_OPERATIONS]
 
 _CONDITION_VARIABLE = 'param-edition-condition-parameter'
@@ -386,8 +386,12 @@ def _ensure_optional_alternative_section(parameter: Optional[ParameterObject]) -
 def _get_target_alineas_form(
     operation: AMOperation, loaded_parameter: Optional[ParameterObject], text: StructuredText
 ) -> Component:
+    title = html.H6('Alineas visés')
     if not _is_condition(operation):
-        return html.Div()
+        return html.Div(
+            [title, dcc.Checklist(options=[], id=_TARGET_ALINEAS), dcc.Store(data=0, id=_LOADED_NB_ALINEAS)],
+            hidden=True,
+        )
     condition = _ensure_optional_condition(loaded_parameter)
 
     if not condition:
@@ -401,7 +405,7 @@ def _get_target_alineas_form(
         value = alineas if alineas else list(range(len(target_section.outer_alineas)))
     return html.Div(
         [
-            html.H6('Alineas visés'),
+            title,
             dcc.Checklist(options=options, value=value, id=_TARGET_ALINEAS),
             dcc.Store(data=len(options), id=_LOADED_NB_ALINEAS),
         ]

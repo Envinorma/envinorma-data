@@ -39,19 +39,14 @@ def _get_page_heading() -> Component:
     return html.Header(
         dcc.Link(
             html.Div(
-                [html.Img(src=src, style={'width': '30px'})],
+                html.Div(html.Img(src=src, style={'width': '30px'}), className='container'),
                 style={
                     'padding': '.5em',
                     'border-bottom': '1px solid rgba(0,0,0,.1)',
                     'position': 'sticky',
-                    'top': '0',
+                    'top': 0,
                     'background-color': '#fff',
                     'z-index': '1',
-                    'width': '100%',
-                    'padding-right': '100px',
-                    'padding-left': '100px',
-                    'margin-right': 'auto',
-                    'margin-left': 'auto',
                     'margin-bottom': '10px',
                 },
             ),
@@ -61,11 +56,7 @@ def _get_page_heading() -> Component:
 
 
 app.layout = html.Div(
-    [
-        dcc.Location(id='url', refresh=False),
-        _get_page_heading(),
-        html.Div(id='page-content', style={'width': '80%', 'margin': 'auto'}),
-    ],
+    [dcc.Location(id='url', refresh=False), _get_page_heading(), html.Div(id='page-content', className='container')],
     id='layout',
 )
 

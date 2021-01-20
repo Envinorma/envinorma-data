@@ -1,26 +1,26 @@
-from lib.structure_extraction import TextElement, Title
 import os
 import random
+from typing import List
+
 import bs4
 import pytest
 from bs4 import BeautifulSoup, Tag
-from typing import List
-from lib.data import EnrichedString, Row, Cell, Table
+from lib.data import Cell, EnrichedString, Row, Table
 from lib.docx import (
     Style,
+    _build_table_with_correct_rowspan,
     _check_is_tag,
     _copy_soup,
-    _extract_property_value,
-    _extract_bool_property_value,
     _extract_bold,
+    _extract_bool_property_value,
     _extract_color,
     _extract_elements,
     _extract_font_name,
     _extract_font_size_occurrences,
     _extract_italic,
+    _extract_property_value,
     _extract_size,
     _extract_tags,
-    _build_table_with_correct_rowspan,
     _group_strings,
     _guess_body_font_size,
     _guess_title_level,
@@ -33,16 +33,17 @@ from lib.docx import (
     _replace_tables_and_body_text_with_empty_p,
     build_structured_text_from_docx_xml,
     empty_soup,
+    extract_cell,
     extract_headers,
+    extract_row,
     extract_table,
     extract_w_tag_style,
     get_docx_xml,
-    remove_empty,
     remove_duplicate_line_break,
-    extract_cell,
-    extract_row,
+    remove_empty,
     write_new_document,
 )
+from lib.structure_extraction import TextElement, Title
 
 _PREFIX = '''<?xml version="1.0" encoding="utf-8"?>\n<w:document mc:Ignorable="w14 wp14" xmlns:m="http://schemas.openxmlformats.org/officeDocument/2006/math" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:mo="http://schemas.microsoft.com/office/mac/office/2008/main" xmlns:mv="urn:schemas-microsoft-com:mac:vml" xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main" xmlns:w10="urn:schemas-microsoft-com:office:word" xmlns:w14="http://schemas.microsoft.com/office/word/2010/wordml" xmlns:wne="http://schemas.microsoft.com/office/word/2006/wordml" xmlns:wp="http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing" xmlns:wp14="http://schemas.microsoft.com/office/word/2010/wordprocessingDrawing" xmlns:wpc="http://schemas.microsoft.com/office/word/2010/wordprocessingCanvas" xmlns:wpg="http://schemas.microsoft.com/office/word/2010/wordprocessingGroup" xmlns:wpi="http://schemas.microsoft.com/office/word/2010/wordprocessingInk" xmlns:wps="http://schemas.microsoft.com/office/word/2010/wordprocessingShape">'''
 
@@ -81,7 +82,7 @@ def test_extract_size():
     assert _extract_size(BeautifulSoup(f'{_PREFIX}<sz w:val="10" />', 'lxml-xml')) == 10
 
 
-def test__extract_font_name():
+def test_extract_font_name():
     assert (
         _extract_property_value(
             BeautifulSoup(f'{_PREFIX}<w:rFonts w:ascii="Times" />', 'lxml-xml'), 'rFonts', 'w:ascii'
@@ -91,7 +92,7 @@ def test__extract_font_name():
     assert _extract_font_name(BeautifulSoup(f'{_PREFIX}<w:rFonts w:ascii="Times" />', 'lxml-xml')) == 'Times'
 
 
-def test__extract_color():
+def test_extract_color():
     assert _extract_color(BeautifulSoup(f'{_PREFIX}<color w:val="FF0000" />', 'lxml-xml')) == 'FF0000'
 
 

@@ -1,6 +1,6 @@
-from enum import Enum
 import difflib
 import os
+from enum import Enum
 from typing import Any, Dict, List, Optional, Set, Tuple, Union
 
 import dash_core_components as dcc
@@ -11,10 +11,12 @@ from dash.development.base_component import Component
 from lib.am_to_markdown import extract_markdown_text
 from lib.data import ArreteMinisteriel, StructuredText, am_to_text
 from lib.parametrization import AlternativeSection, NonApplicationCondition, Parametrization, condition_to_str
-from lib.utils import get_structured_text_wip_folder
+from lib.paths import get_structured_text_wip_folder
 
-from back_office.parametrization_edition import add_parametrization_edition_callbacks, router as parametrization_router
-from back_office.structure_edition import add_structure_edition_callbacks, router as structure_router
+from back_office.parametrization_edition import add_parametrization_edition_callbacks
+from back_office.parametrization_edition import router as parametrization_router
+from back_office.structure_edition import add_structure_edition_callbacks
+from back_office.structure_edition import router as structure_router
 from back_office.utils import (
     ID_TO_AM_MD,
     AMOperation,

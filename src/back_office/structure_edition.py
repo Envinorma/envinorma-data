@@ -12,7 +12,8 @@ from dash.dependencies import Input, Output, State
 from dash.development.base_component import Component
 from lib.data import ArreteMinisteriel, EnrichedString, StructuredText, Table, am_to_text
 from lib.structure_extraction import TextElement, Title, build_structured_text, structured_text_to_text_elements
-from lib.utils import get_structured_text_wip_folder, jsonify
+from lib.paths import get_structured_text_wip_folder
+from lib.utils import jsonify
 
 from back_office.routing import build_am_page
 from back_office.utils import (

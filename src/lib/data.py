@@ -2,6 +2,7 @@ import json
 import random
 import string
 from collections import Counter
+from copy import copy
 from dataclasses import dataclass, asdict, field
 from enum import Enum
 from typing import List, Dict, Optional, Any, Tuple
@@ -487,6 +488,10 @@ class AMMetadata:
     state: AMState
     publication_date: int
     nor: Optional[str] = None
+    id: str = field(init=False)
+
+    def __post_init__(self):
+        self.id = self.nor or self.cid
 
     @staticmethod
     def from_dict(dict_: Dict[str, Any]) -> 'AMMetadata':
@@ -501,6 +506,29 @@ class AMMetadata:
         dict_['state'] = self.state.value
         dict_['classements'] = [classement.to_dict() for classement in self.classements]
         return dict_
+
+
+_LEGIFRANCE_LODA_BASE_URL = 'https://www.legifrance.gouv.fr/loda/id/'
+
+
+def _build_legifrance_url(cid: str) -> str:
+    return _LEGIFRANCE_LODA_BASE_URL + cid
+
+
+_AIDA_BASE_URL = 'https://aida.ineris.fr/consultation_document/'
+
+
+def _build_aida_url(page: str) -> str:
+    return _AIDA_BASE_URL + page
+
+
+def add_metadata(am: ArreteMinisteriel, metadata: AMMetadata) -> ArreteMinisteriel:
+    am = copy(am)
+    am.legifrance_url = _build_legifrance_url(metadata.cid)
+    am.aida_url = _build_aida_url(metadata.aida_page)
+    am.classements = metadata.classements
+    am.classements_with_alineas = group_classements_by_alineas(metadata.classements)
+    return am
 
 
 @dataclass

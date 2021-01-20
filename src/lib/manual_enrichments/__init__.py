@@ -52,7 +52,7 @@ def _identity_pp(am: ArreteMinisteriel, parameter_values: Tuple[str, ...]) -> Ar
 
 
 def get_manual_post_process(id_: str) -> Callable[[ArreteMinisteriel, Tuple[str, ...]], ArreteMinisteriel]:
-    if id_ == 'DEVP1706393A':
+    if id_ in ('DEVP1706393A', 'JORFTEXT000034429274'):
         return manual_1510_post_process
     return _identity_pp
 

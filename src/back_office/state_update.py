@@ -3,7 +3,8 @@ from datetime import datetime
 from typing import List
 
 from lib.parametrization import NonApplicationCondition, ParameterObject, Parametrization
-from lib.utils import get_parametrization_wip_folder, jsonify
+from lib.utils import jsonify
+from lib.paths import get_parametrization_wip_folder
 
 from back_office.utils import AMOperation, dump_am_state, load_am_state, load_parametrization, write_file
 

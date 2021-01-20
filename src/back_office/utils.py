@@ -10,7 +10,8 @@ from dash.development.base_component import Component
 from lib.config import STORAGE
 from lib.data import ArreteMinisteriel, Ints, StructuredText, load_am_data
 from lib.parametrization import Parametrization
-from lib.utils import get_parametrization_wip_folder, get_state_file, get_structured_text_wip_folder, write_json
+from lib.paths import get_parametrization_wip_folder, get_state_file, get_structured_text_wip_folder
+from lib.utils import write_json
 
 _AM = load_am_data()
 ID_TO_AM_MD = {am.cid: am for am in _AM.metadata if am.state != am.state.ABROGE}

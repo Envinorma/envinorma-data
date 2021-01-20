@@ -2,9 +2,8 @@ import json
 import os
 import random
 import traceback
-from copy import copy
 from datetime import datetime
-from typing import Dict, List, Optional, Set, Tuple, Union
+from typing import Any, Dict, List, Optional, Set, Tuple
 from warnings import warn
 
 from requests_oauthlib import OAuth2Session
@@ -36,9 +35,8 @@ from lib.data import (
     LegifranceAPIError,
     LegifranceTextFormatError,
     StructurationError,
+    add_metadata,
     check_am,
-    get_text_defined_id,
-    group_classements_by_alineas,
     load_am_data,
 )
 from lib.legifrance_API import get_current_loda_via_cid_response, get_legifrance_client
@@ -50,6 +48,14 @@ from lib.manual_enrichments import (
 )
 from lib.parametric_am import check_parametrization_is_still_valid, generate_all_am_versions
 from lib.parametrization import Parametrization, add_am_signatures
+from lib.paths import (
+    create_folder_and_generate_parametric_filename,
+    generate_parametric_descriptor,
+    get_enriched_am_filename,
+    get_legifrance_filename,
+    get_parametrization_filename,
+    get_structured_am_filename,
+)
 from lib.texts_properties import LegifranceText, compute_am_diffs, compute_am_signatures, compute_texts_properties
 from lib.topics.topics import TOPIC_ONTOLOGY
 from lib.utils import write_json
@@ -77,33 +83,8 @@ def load_data() -> Data:
     return Data(load_aida_data(), load_am_data())
 
 
-def _get_legifrance_filename(metadata: AMMetadata) -> str:
-    id_ = get_text_defined_id(metadata)
-    return f'{AM_DATA_FOLDER}/legifrance_texts/{id_}.json'
-
-
-def _get_structured_am_filename(metadata: AMMetadata) -> str:
-    id_ = get_text_defined_id(metadata)
-    return f'{AM_DATA_FOLDER}/structured_texts/{id_}.json'
-
-
-def _get_parametrization_filename(metadata: AMMetadata) -> str:
-    id_ = get_text_defined_id(metadata)
-    return f'{AM_DATA_FOLDER}/parametrizations/{id_}.json'
-
-
-def _get_enriched_am_filename(metadata: AMMetadata) -> str:
-    id_ = get_text_defined_id(metadata)
-    return f'{AM_DATA_FOLDER}/enriched_texts/{id_}.json'
-
-
-def _get_parametric_ams_folder(metadata: AMMetadata) -> str:
-    id_ = get_text_defined_id(metadata)
-    return f'{AM_DATA_FOLDER}/parametric_texts/{id_}'
-
-
 def _download_text_if_absent(metadata: AMMetadata, client: OAuth2Session) -> Optional[LegifranceAPIError]:
-    filename = _get_legifrance_filename(metadata)
+    filename = get_legifrance_filename(metadata.id)
     if os.path.exists(filename):
         return None
     response = get_current_loda_via_cid_response(metadata.cid, client)
@@ -135,80 +116,43 @@ def _structure_am(
         return None, StructurationError(str(exc), traceback.format_exc())
 
 
-_LEGIFRANCE_LODA_BASE_URL = 'https://www.legifrance.gouv.fr/loda/id/'
-
-
-def _build_legifrance_url(cid: str) -> str:
-    return _LEGIFRANCE_LODA_BASE_URL + cid
-
-
-_AIDA_BASE_URL = 'https://aida.ineris.fr/consultation_document/'
-
-
-def _build_aida_url(page: str) -> str:
-    return _AIDA_BASE_URL + page
-
-
-def _add_metadata(am: ArreteMinisteriel, metadata: AMMetadata) -> ArreteMinisteriel:
-    am = copy(am)
-    am.legifrance_url = _build_legifrance_url(metadata.cid)
-    am.aida_url = _build_aida_url(metadata.aida_page)
-    am.classements = metadata.classements
-    am.classements_with_alineas = group_classements_by_alineas(metadata.classements)
-    return am
-
-
-def _generate_parametric_descriptor(version_descriptor: Tuple[str, ...]) -> str:
-    if not version_descriptor:
-        return 'no_date_version'
-    return '_AND_'.join(version_descriptor).replace(' ', '_')
-
-
-def _create_folder_and_generate_parametric_filename(metadata: AMMetadata, version_descriptor: Tuple[str, ...]) -> str:
-    folder_name = _get_parametric_ams_folder(metadata)
-    if not os.path.exists(folder_name):
-        os.makedirs(folder_name)
-    return _get_parametric_ams_folder(metadata) + '/' + _generate_parametric_descriptor(version_descriptor) + '.json'
-
-
 _ParametricAM = Tuple[Parametrization, Dict[str, List[str]]]
 
 
-def _check_parametrization_not_deprecated(am: ArreteMinisteriel, metadata: AMMetadata) -> None:
-    filename = _get_parametrization_filename(metadata)
+def _check_parametrization_not_deprecated(am: ArreteMinisteriel, am_id: str) -> None:
+    filename = get_parametrization_filename(am_id)
     if not os.path.exists(filename):
         return
     previous_parametrization = Parametrization.from_dict(json.load(open(filename)))
     if not previous_parametrization.signatures:
-        warn(f'Parametrization of AM with nor {metadata.nor} has no signatures, this should happen only once!')
+        warn(f'Parametrization of AM with id {am_id} has no signatures, this should happen only once!')
         return
     is_valid, warnings = check_parametrization_is_still_valid(previous_parametrization, am)
     if not is_valid:
-        raise ValueError(f'Parametrization of AM with nor {metadata.nor} is not valid. Change log: {warnings}')
+        raise ValueError(f'Parametrization of AM with id {am_id} is not valid. Change log: {warnings}')
 
 
 def _handle_manual_enrichments(
-    am: ArreteMinisteriel, metadata: AMMetadata, dump_am: bool
+    am: ArreteMinisteriel, am_id: str, dump_am: bool
 ) -> Tuple[ArreteMinisteriel, _ParametricAM]:
-    id_ = get_text_defined_id(metadata)
-    enriched_am = remove_null_applicabilities(get_manual_enricher(id_)(am))
+    enriched_am = remove_null_applicabilities(get_manual_enricher(am_id)(am))
     if dump_am:
-        write_json(enriched_am.to_dict(), _get_enriched_am_filename(metadata))
-    parametrization = get_manual_parametrization(id_)
-    _check_parametrization_not_deprecated(am, metadata)
+        write_json(enriched_am.to_dict(), get_enriched_am_filename(am_id))
+    parametrization = get_manual_parametrization(am_id)
+    _check_parametrization_not_deprecated(am, am_id)
     if dump_am:
         parametrization = add_am_signatures(parametrization, compute_am_signatures(am))
-        write_json(parametrization.to_dict(), _get_parametrization_filename(metadata))
-    all_versions = generate_all_am_versions(enriched_am, parametrization, get_manual_combinations(id_))
+        write_json(parametrization.to_dict(), get_parametrization_filename(am_id))
+    all_versions = generate_all_am_versions(enriched_am, parametrization, get_manual_combinations(am_id))
     if dump_am:
         all_versions_with_summary = {
-            name: get_manual_post_process(id_)(add_summary(am_), name) for name, am_ in all_versions.items()
+            name: get_manual_post_process(am_id)(add_summary(am_), name) for name, am_ in all_versions.items()
         }
         for version_desc, version in all_versions_with_summary.items():
-            filename = _create_folder_and_generate_parametric_filename(metadata, version_desc)
+            filename = create_folder_and_generate_parametric_filename(am_id, version_desc)
             write_json(version.to_dict(), filename)
     diffs = {
-        _generate_parametric_descriptor(desc): compute_am_diffs(am, modified_version, am_to_markdown)
+        generate_parametric_descriptor(desc): compute_am_diffs(am, modified_version, am_to_markdown)
         for desc, modified_version in all_versions.items()
     }
     return am, (parametrization, diffs)
@@ -216,7 +160,7 @@ def _handle_manual_enrichments(
 
 def _enrich_am(am: ArreteMinisteriel, metadata: AMMetadata) -> ArreteMinisteriel:
     return add_table_inspection_sheet_data(
-        detect_and_add_topics(add_references(_add_metadata(am, metadata)), TOPIC_ONTOLOGY)
+        detect_and_add_topics(add_references(add_metadata(am, metadata)), TOPIC_ONTOLOGY)
     )
 
 
@@ -226,7 +170,7 @@ def handle_am(
     api_result = _download_text_if_absent(metadata, client)
     if api_result:
         return None, AMStructurationLog(api_result), None
-    legifrance_text_json = json.load(open(_get_legifrance_filename(metadata)))
+    legifrance_text_json = json.load(open(get_legifrance_filename(metadata.id)))
     lf_format_error = _extract_legifrance_format_error(legifrance_text_json)
     if lf_format_error:
         return None, AMStructurationLog(api_result, lf_format_error), None
@@ -237,11 +181,11 @@ def handle_am(
         am = _enrich_am(am, metadata)
         check_am(am)
     if dump_am and am:
-        write_json(am.to_dict(), _get_structured_am_filename(metadata))
+        write_json(am.to_dict(), get_structured_am_filename(metadata.id))
     properties = compute_texts_properties(legifrance_text, am)
     parametric_am = None
     if am and with_manual_enrichments:
-        am, parametric_am = _handle_manual_enrichments(am, metadata, dump_am)
+        am, parametric_am = _handle_manual_enrichments(am, metadata.id, dump_am)
         check_am(am)
     return am, AMStructurationLog(api_result, lf_format_error, structuration_error, properties), parametric_am
 
@@ -249,6 +193,12 @@ def handle_am(
 _ParametricAMs = Dict[str, _ParametricAM]
 _AMStructurationLogs = Dict[str, AMStructurationLog]
 _ArreteMinisteriels = Dict[str, ArreteMinisteriel]
+
+
+def _ensure_metadata(obj: Any) -> AMMetadata:
+    if not isinstance(obj, AMMetadata):
+        raise ValueError(f'Wrong type {type(obj)}')
+    return obj
 
 
 def handle_all_am(
@@ -264,6 +214,7 @@ def handle_all_am(
     client = get_legifrance_client()
     am_cids = am_cids or set()
     for metadata in tqdm(data.arretes_ministeriels.metadata, 'Processsing AM...'):
+        metadata = _ensure_metadata(metadata)
         if am_cids and metadata.cid not in am_cids:
             continue
         am, cid_to_log[metadata.cid], param_am = handle_am(metadata, client, dump_am, with_manual_enrichments)
