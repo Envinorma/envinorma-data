@@ -1,8 +1,8 @@
 import json
 import os
-from urllib.parse import unquote
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from typing import List, Optional, Tuple
+from urllib.parse import unquote
 
 import dash_html_components as html
 from dash.development.base_component import Component
@@ -28,11 +28,47 @@ def _parse_route(route: str) -> Tuple[str, str]:
     return am_id, filename
 
 
+def _extract_text_modifications(text: StructuredText) -> List[StructuredText]:
+    applicability = _ensure_applicability(text.applicability)
+    if applicability.modified:
+        return [text]
+    if not applicability.active:
+        return []
+    return [mod for sec in text.sections for mod in _extract_text_modifications(sec)]
+
+
+def _extract_modifications(am: Optional[ArreteMinisteriel]) -> List[StructuredText]:
+    if not am:
+        return []
+    return [mod for sec in am.sections for mod in _extract_text_modifications(sec)]
+
+
+def _extract_text_inapplicabilities(text: StructuredText) -> List[StructuredText]:
+    applicability = _ensure_applicability(text.applicability)
+    if not applicability.active:
+        return [text]
+    if applicability.modified:
+        return []
+    return [inap for sec in text.sections for inap in _extract_text_inapplicabilities(sec)]
+
+
+def _extract_inapplicabilities(am: Optional[ArreteMinisteriel]) -> List[StructuredText]:
+    if not am:
+        return []
+    return [inap for sec in am.sections for inap in _extract_text_inapplicabilities(sec)]
+
+
 @dataclass
 class _PageData:
     path: str
     file_found: bool
     am: Optional[ArreteMinisteriel]
+    modifications: List[StructuredText] = field(init=False)
+    inapplicabilities: List[StructuredText] = field(init=False)
+
+    def __post_init__(self):
+        self.modifications = _extract_modifications(self.am)
+        self.inapplicabilities = _extract_inapplicabilities(self.am)
 
 
 def _fetch_data(am_id: str, filename: str) -> _PageData:
@@ -102,7 +138,7 @@ def _modified_text_component(text: StructuredText) -> Component:
 def _active_text_component(text: StructuredText) -> Component:
     return html.Div(
         [
-            html.P(html.B(text.title.text)),
+            html.P(html.B(text.title.text), id=text.id),
             *_alineas_to_components(text.outer_alineas),
             _get_sections_components(text.sections),
         ]
@@ -122,11 +158,39 @@ def _get_sections_components(sections: List[StructuredText]) -> Component:
     return html.Div([_get_text_component(section) for section in sections])
 
 
+def _inapplicabilities_component(modifications: List[StructuredText]) -> Component:
+    return html.Div(
+        [
+            html.A(modification.applicability.reason_modified, href=f'#{modification.id}')
+            for modification in modifications
+        ]
+    )
+
+
+def _modifications_component(inapplicabilities: List[StructuredText]) -> Component:
+    return html.Div(
+        [
+            html.H4('Modifications'),
+            *[
+                html.A(inapplicability.applicability.reason_inactive, href=f'#{inapplicability.id}')
+                for inapplicability in inapplicabilities
+            ],
+        ]
+    )
+
+
 def _main_component(page_data: _PageData) -> Component:
     am = _ensure_am(page_data.am)
     if not am.applicability.active:
         return html.P('AM is not applicable')
-    return html.Div([html.H4(am.title.text), _get_sections_components(am.sections)])
+    return html.Div(
+        [
+            html.H4(am.title.text),
+            _modifications_component(page_data.modifications),
+            _inapplicabilities_component(page_data.inapplicabilities),
+            _get_sections_components(am.sections),
+        ]
+    )
 
 
 def _build_component(page_data: _PageData) -> Component:
