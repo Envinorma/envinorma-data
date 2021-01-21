@@ -49,6 +49,7 @@ class AMOperation(Enum):
     EDIT_STRUCTURE = 'edit_structure'
     ADD_CONDITION = 'add_condition'
     ADD_ALTERNATIVE_SECTION = 'add_alternative_section'
+    DISPLAY_AM = 'display_am'
 
 
 class AMWorkflowState(Enum):

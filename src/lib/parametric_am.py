@@ -333,6 +333,20 @@ def _deactivate_child_section(section: StructuredText) -> StructuredText:
     return section
 
 
+def _generate_modification_str(nb_deletions: int) -> str:
+    if nb_deletions >= 2:
+        return f'({nb_deletions} alineas ne s\'appliquent pas.)'
+    return '(Un alinea ne s\'applique pas.)'
+
+
+def _text_without_alineas(text: StructuredText, alineas_to_delete: Set[int], description: str) -> StructuredText:
+    text.outer_alineas = [al for i, al in enumerate(text.outer_alineas) if i not in alineas_to_delete]
+    suffix = _generate_modification_str(len(alineas_to_delete))
+    modification_description = f'{description} {suffix}'
+    text.applicability = Applicability(True, None, True, modification_description)
+    return text
+
+
 def _build_filtered_text(
     text: StructuredText, non_applicability_condition: NonApplicationCondition, parameter_values: Dict[Parameter, Any]
 ) -> StructuredText:
@@ -341,11 +355,9 @@ def _build_filtered_text(
         non_applicability_condition.condition, parameter_values
     )
     if non_applicability_condition.targeted_entity.outer_alinea_indices:
-        alineas_to_delete = set(non_applicability_condition.targeted_entity.outer_alinea_indices)
-        text.outer_alineas = [al for i, al in enumerate(text.outer_alineas) if i not in alineas_to_delete]
-        modification_description = f'{description} ({len(alineas_to_delete)} alineas ne s\'appliquent pas.)'
-        text.applicability = Applicability(True, None, True, modification_description)
-        return text
+        return _text_without_alineas(
+            text, set(non_applicability_condition.targeted_entity.outer_alinea_indices), description
+        )
 
     text.applicability = Applicability(False, description)
     text.sections = [_deactivate_child_section(section) for section in text.sections]

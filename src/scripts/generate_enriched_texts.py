@@ -1,51 +1,14 @@
-from lib.topics.topics import TOPIC_ONTOLOGY
-from typing import Dict, Optional, Tuple
+from typing import Optional
 
-from back_office.utils import load_am, load_am_state, load_parametrization
-from lib.am_enriching import (
-    add_references,
-    add_summary,
-    add_table_inspection_sheet_data,
-    detect_and_add_topics,
-    remove_null_applicabilities,
-)
-from lib.data import AMMetadata, ArreteMinisteriel, add_metadata, load_am_data
-from lib.manual_enrichments import get_manual_post_process
-from lib.parametric_am import generate_all_am_versions
-from lib.parametrization import Parametrization
+from lib.data import AMMetadata, load_am_data
 from lib.paths import create_folder_and_generate_parametric_filename
 from lib.utils import write_json
+from lib.generate_final_am import AMVersions, generate_final_am
 
 TEST_ID = 'JORFTEXT000023081678'
 
-_AMVersions = Dict[Tuple[str, ...], ArreteMinisteriel]
 
-
-def _apply_parametrization(
-    am_id: str, am: Optional[ArreteMinisteriel], parametrization: Parametrization
-) -> Optional[_AMVersions]:
-    if not am:
-        return
-    enriched_am = remove_null_applicabilities(am)
-    all_versions = generate_all_am_versions(enriched_am, parametrization)
-    return {name: get_manual_post_process(am_id)(add_summary(am_), name) for name, am_ in all_versions.items()}
-
-
-def add_enrichments(am: ArreteMinisteriel, metadata: AMMetadata) -> ArreteMinisteriel:
-    return remove_null_applicabilities(
-        add_table_inspection_sheet_data(
-            detect_and_add_topics(add_references(add_metadata(am, metadata)), TOPIC_ONTOLOGY)
-        )
-    )
-
-
-def _enrich_am(am: Optional[ArreteMinisteriel], metadata: AMMetadata) -> Optional[ArreteMinisteriel]:
-    if not am:
-        return None
-    return add_enrichments(am, metadata)
-
-
-def _dump(am_id: str, versions: Optional[_AMVersions]) -> None:
+def _dump(am_id: str, versions: Optional[AMVersions]) -> None:
     if not versions:
         return
     for version_desc, version in versions.items():
@@ -61,16 +24,10 @@ def _get_am_metadata(am_id: str) -> AMMetadata:
     raise ValueError(f'AM {am_id} not found.')
 
 
-def handle_am(am_id: str) -> Optional[ArreteMinisteriel]:
+def handle_am(am_id: str) -> None:
     metadata = _get_am_metadata(am_id)
-    cid = metadata.cid
-    am_state = load_am_state(cid)
-    am = load_am(cid, am_state)
-    am = _enrich_am(am, metadata)
-    parametrization = load_parametrization(cid, am_state)
-    am_versions = _apply_parametrization(cid, am, parametrization)
-    _dump(cid, am_versions)
-    return am
+    final_am = generate_final_am(metadata)
+    _dump(am_id, final_am.am_versions)
 
 
 if __name__ == '__main__':

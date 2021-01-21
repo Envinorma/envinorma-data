@@ -29,7 +29,7 @@ def _split_in_header_and_body_rows(rows: List[Row]) -> Tuple[List[Row], List[Row
     return rows[:nb_headers], rows[nb_headers:]
 
 
-def _table_to_component(table: Table, ontology: Optional[TopicOntology]) -> Component:
+def table_to_component(table: Table, ontology: Optional[TopicOntology]) -> Component:
     header_rows, body_rows = _split_in_header_and_body_rows(table.rows)
     return html.Table(
         [
@@ -63,7 +63,7 @@ def _str_to_component(str_: str, ontology: Optional[TopicOntology]) -> Component
 
 def _make_component(element: TextElement, ontology: Optional[TopicOntology]) -> Component:
     if isinstance(element, Table):
-        return _table_to_component(element, ontology)
+        return table_to_component(element, ontology)
     if isinstance(element, Title):
         return _title_to_component(element, ontology)
     if isinstance(element, str):

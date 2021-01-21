@@ -97,8 +97,8 @@ def _copy_all_files():
         'DEVP1706393A/reg_E_AND_date_between_2003_and_2010.json',
         'DEVP1706393A/reg_E_AND_date_between_2010_and_2017.json',
         'DEVP1706393A/reg_E_no_date.json',
-        'JORFTEXT000023081678/date-d-autorisation_>=_2010-10-03.json',
-        'JORFTEXT000023081678/date-d-autorisation_<_2010-10-03.json',
+        'JORFTEXT000023081678/date-d-installation_>=_2010-10-03.json',
+        'JORFTEXT000023081678/date-d-installation_<_2010-10-03.json',
         'JORFTEXT000023081678/no_date_version.json',
     ]
     for file_ in files_to_move:

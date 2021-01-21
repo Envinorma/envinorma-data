@@ -3,43 +3,44 @@ from copy import copy
 from dataclasses import replace
 from datetime import datetime, timedelta
 from string import ascii_letters
-from typing import List, Optional
+from typing import List
 
 from lib.data import ArreteMinisteriel, EnrichedString, Regime, StructuredText, StructuredTextSignature
+from lib.parametric_am import (
+    _apply_parameter_values_to_am,
+    _change_value,
+    _date_not_in_parametrization,
+    _extract_installation_date_criterion,
+    _extract_interval_midpoints,
+    _extract_parameters_from_parametrization,
+    _extract_sorted_targets,
+    _extract_warning,
+    _extract_warnings,
+    _generate_combinations,
+    _generate_equal_option_dicts,
+    _generate_options_dict,
+    _is_satisfied,
+    _mean,
+    _text_without_alineas,
+    generate_all_am_versions,
+)
 from lib.parametrization import (
     AlternativeSection,
+    AndCondition,
+    Condition,
     ConditionSource,
     EntityReference,
-    SectionReference,
-    AndCondition,
-    NonApplicationCondition,
     Equal,
     Greater,
     Littler,
+    NonApplicationCondition,
     OrCondition,
+    Parameter,
     ParameterEnum,
     ParameterType,
     Parametrization,
     Range,
-    Parameter,
-    Condition,
-)
-from lib.parametric_am import (
-    generate_all_am_versions,
-    _mean,
-    _is_satisfied,
-    _extract_interval_midpoints,
-    _generate_options_dict,
-    _extract_sorted_targets,
-    _generate_combinations,
-    _generate_equal_option_dicts,
-    _change_value,
-    _apply_parameter_values_to_am,
-    _extract_parameters_from_parametrization,
-    _extract_installation_date_criterion,
-    _date_not_in_parametrization,
-    _extract_warning,
-    _extract_warnings,
+    SectionReference,
 )
 
 
@@ -371,3 +372,25 @@ def test_extract_warnings():
     assert len(_extract_warnings([ref], {ref: base_text}, {ref: replace(base_text, depth_in_am=10)})) == 1
     assert len(_extract_warnings([ref], {ref: base_text}, {ref: replace(base_text, rank_in_section_list=10)})) == 1
     assert len(_extract_warnings([ref], {ref: base_text}, {ref: replace(base_text, section_list_size=10)})) == 1
+
+
+def _get_simple_text() -> StructuredText:
+    return StructuredText(
+        EnrichedString('Conditions d\'application', []), [EnrichedString('al 1'), EnrichedString('al 2')], [], None
+    )
+
+
+def test_text_without_alineas():
+    out = _text_without_alineas(_get_simple_text(), {1}, 'desc')
+    assert len(out.outer_alineas) == 1
+    assert out.applicability.active
+    assert not out.applicability.reason_inactive
+    assert out.applicability.modified
+    assert out.applicability.reason_modified == '''desc (Un alinea ne s'applique pas.)'''
+
+    out = _text_without_alineas(_get_simple_text(), {0, 1}, 'desc')
+    assert len(out.outer_alineas) == 0
+    assert out.applicability.active
+    assert not out.applicability.reason_inactive
+    assert out.applicability.modified
+    assert out.applicability.reason_modified == '''desc (2 alineas ne s'appliquent pas.)'''

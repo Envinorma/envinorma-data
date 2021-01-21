@@ -1,18 +1,27 @@
 import difflib
 import os
+import traceback
 from enum import Enum
 from typing import Any, Dict, List, Optional, Set, Tuple, Union
 
+import dash_bootstrap_components as dbc
 import dash_core_components as dcc
 import dash_html_components as html
 from dash.dash import Dash
 from dash.dependencies import Input, Output
 from dash.development.base_component import Component
 from lib.am_to_markdown import extract_markdown_text
-from lib.data import ArreteMinisteriel, StructuredText, am_to_text
+from lib.data import AMMetadata, ArreteMinisteriel, StructuredText, am_to_text
+from lib.generate_final_am import AMVersions, generate_final_am
 from lib.parametrization import AlternativeSection, NonApplicationCondition, Parametrization, condition_to_str
-from lib.paths import get_structured_text_wip_folder
+from lib.paths import (
+    create_folder_and_generate_parametric_filename,
+    get_parametric_ams_folder,
+    get_structured_text_wip_folder,
+)
+from lib.utils import write_json
 
+from back_office.display_am import router as display_am_router
 from back_office.parametrization_edition import add_parametrization_edition_callbacks
 from back_office.parametrization_edition import router as parametrization_router
 from back_office.structure_edition import add_structure_edition_callbacks
@@ -25,6 +34,7 @@ from back_office.utils import (
     Page,
     div,
     dump_am_state,
+    error_component,
     get_default_structure_filename,
     get_section_title,
     load_am,
@@ -37,6 +47,7 @@ _VALIDATE_STRUCTURE_BUTTON_ID = 'am-page-validate-structure'
 _INVALIDATE_STRUCTURE_BUTTON_ID = 'am-page-invalidate-structure'
 _VALIDATE_PARAMETRIZATION_BUTTON_ID = 'am-page-validate-parametrization'
 _INVALIDATE_PARAMETRIZATION_BUTTON_ID = 'am-page-invalidate-parametrization'
+_LOADER = 'am-page-loading-output'
 
 
 def _extract_am_id_and_operation(pathname: str) -> Tuple[str, Optional[AMOperation], str]:
@@ -383,6 +394,21 @@ def _get_structure_validation_diff(am_id: str, status: AMState) -> Component:
     return _build_diff_component_from_files(initial_file, final_file)
 
 
+def _get_parametric_texts_list(am_id: str, page_url: str) -> Component:
+    folder = get_parametric_ams_folder(am_id)
+    prefix_url = f'{page_url}/{AMOperation.DISPLAY_AM.value}'
+    lis = [html.Li(dcc.Link(file_, href=f'{prefix_url}/{file_}')) for file_ in os.listdir(folder)]
+    return html.Ul(lis)
+
+
+def _final_parametric_texts_component(am_id: str, page_url: str) -> Component:
+    return html.Div([html.H3('Versions finales'), _get_parametric_texts_list(am_id, page_url)])
+
+
+def _get_final_parametric_texts_component(am_id: str, am_state: AMWorkflowState, page_url: str) -> Component:
+    return html.Div([_final_parametric_texts_component(am_id, page_url)], hidden=am_state != AMWorkflowState.VALIDATED)
+
+
 def _build_component_based_on_status(
     am_id: str, parent_page: str, am_state: AMState, parametrization: Parametrization, am: ArreteMinisteriel
 ) -> Component:
@@ -393,6 +419,7 @@ def _build_component_based_on_status(
         _get_parametrization_edition_title(am_state.state),
         _get_parametrization_summary(parent_page, am_state.state, parametrization, am),
         _get_parametrization_edition_buttons(am_state.state),
+        _get_final_parametric_texts_component(am_id, am_state.state, parent_page),
     ]
     return html.Div(children)
 
@@ -403,51 +430,68 @@ def _make_am_index_component(
     return _build_component_based_on_status(am_id, parent_page, am_state, parametrization, am)
 
 
-def _get_subtitle_component(am_id: str, parent_page: str) -> Component:
+def _get_title_component(am_metadata: AMMetadata, parent_page: str) -> Component:
+    am_id = am_metadata.nor or am_metadata.cid
     return dcc.Link(html.H2(f'Arrêté ministériel {am_id}'), href=parent_page)
 
 
 def _get_body_component(
-    operation_id: Optional[AMOperation],
-    am_id: str,
-    parent_page: str,
-    am: ArreteMinisteriel,
-    am_state: AMState,
-    parametrization: Parametrization,
+    am_id: str, parent_page: str, am: ArreteMinisteriel, am_state: AMState, parametrization: Parametrization
 ) -> Component:
-    if not operation_id:
-        return _make_am_index_component(am_id, am_state, parent_page, parametrization, am)
-    raise NotImplementedError()
+    return _make_am_index_component(am_id, am_state, parent_page, parametrization, am)
 
 
-def _router(route: str, parent_page: str) -> Component:
-    am_id, operation_id, _ = _extract_am_id_and_operation(route)
-    if am_id not in ID_TO_AM_MD:
-        return html.P('404 - Arrêté inconnu')
-    am_metadata = ID_TO_AM_MD.get(am_id)
-    page_title = am_metadata.nor or am_metadata.cid if am_metadata else am_id
-    current_page = parent_page + '/' + am_id
-    subtitle_component = _get_subtitle_component(page_title, current_page)
+def _get_subpage_content(route: str, operation_id: AMOperation) -> Component:
     if operation_id in (AMOperation.ADD_ALTERNATIVE_SECTION, AMOperation.ADD_CONDITION):
-        return html.Div([subtitle_component, parametrization_router(route)])
+        return parametrization_router(route)
     if operation_id == AMOperation.EDIT_STRUCTURE:
-        return html.Div([subtitle_component, structure_router(route)])
+        return structure_router(route)
+    if operation_id == AMOperation.DISPLAY_AM:
+        return display_am_router(route)
+    raise NotImplementedError(f'Operation {operation_id} not handled')
+
+
+def _page(am_id: str, current_page: str) -> Component:
+    am_metadata = ID_TO_AM_MD.get(am_id)
     am_state = load_am_state(am_id)
     am = load_am(am_id, am_state)
     parametrization = load_parametrization(am_id, am_state)
     if not am or not parametrization or not am_metadata:
-        body = html.P('Arrêté introuvable.')
-    else:
-        body = _get_body_component(operation_id, am_id, current_page, am, am_state, parametrization)
+        return html.P('Arrêté introuvable.')
+    body = _get_body_component(am_id, current_page, am, am_state, parametrization)
     return html.Div(
         [
-            subtitle_component,
+            _get_title_component(am_metadata, current_page),
             body,
-            html.P(am_id, hidden=True, id='am-id-am-page'),
-            html.P(current_page, hidden=True, id='parent-page-am-page'),
-        ],
-        id='am-page',
+            html.P(am_id, hidden=True, id='am-page-am-id'),
+            html.P(current_page, hidden=True, id='am-page-current-page'),
+        ]
     )
+
+
+def _page_with_spinner(am_id: str, current_page: str) -> Component:
+    return dbc.Spinner(html.Div(_page(am_id, current_page), id=_LOADER))
+
+
+def _flush_folder(am_id: str) -> None:
+    folder = get_parametric_ams_folder(am_id)
+    if os.path.exists(folder):
+        for file_ in os.listdir(folder):
+            os.remove(os.path.join(folder, file_))
+
+
+def _dump_am_versions(am_id: str, versions: Optional[AMVersions]) -> None:
+    if not versions:
+        return
+    _flush_folder(am_id)
+    for version_desc, version in versions.items():
+        filename = create_folder_and_generate_parametric_filename(am_id, version_desc)
+        write_json(version.to_dict(), filename)
+
+
+def _generate_and_dump_am_version(am_id: str) -> None:
+    final_am = generate_final_am(ID_TO_AM_MD[am_id])
+    _dump_am_versions(am_id, final_am.am_versions)
 
 
 def _update_am_state(clicked_button: str, am_id: str) -> None:
@@ -464,6 +508,8 @@ def _update_am_state(clicked_button: str, am_id: str) -> None:
     am_state = load_am_state(am_id)
     am_state.state = new_state
     dump_am_state(am_id, am_state)
+    if clicked_button == _VALIDATE_PARAMETRIZATION_BUTTON_ID:
+        _generate_and_dump_am_version(am_id)
 
 
 def _add_callbacks(app: Dash) -> None:
@@ -477,19 +523,34 @@ def _add_callbacks(app: Dash) -> None:
         _INVALIDATE_PARAMETRIZATION_BUTTON_ID,
     ]
     inputs = [Input(id_, 'n_clicks') for id_ in ids] + [
-        Input('am-id-am-page', 'children'),
-        Input('parent-page-am-page', 'children'),
+        Input('am-page-am-id', 'children'),
+        Input('am-page-current-page', 'children'),
     ]
-    out = Output('am-page', 'children')
+    out = Output(_LOADER, 'children')
 
-    def _handle_click(n_clicks_0, n_clicks_1, n_clicks_2, n_clicks_3, am_id_, parent_page):
+    def _handle_click(n_clicks_0, n_clicks_1, n_clicks_2, n_clicks_3, am_id, current_page):
         all_n_clicks = n_clicks_0, n_clicks_1, n_clicks_2, n_clicks_3
         for id_, n_clicks in zip(ids, all_n_clicks):
             if n_clicks >= 1:
-                _update_am_state(id_, am_id_)
-        return _router(f'/{am_id_}', '/'.join(parent_page.split('/')[:-1]))
+                try:
+                    _update_am_state(id_, am_id)
+                except Exception:  # pylint: disable = broad-except
+                    return error_component(traceback.format_exc())
+        return _page_with_spinner(am_id, current_page)
 
     app.callback(out, inputs)(_handle_click)
+
+
+def _router(route: str, parent_page: str) -> Component:
+    am_id, operation_id, _ = _extract_am_id_and_operation(route)
+    if am_id not in ID_TO_AM_MD:
+        return html.P('404 - Arrêté inconnu')
+    am_metadata = ID_TO_AM_MD[am_id]
+    current_page = parent_page + '/' + am_id
+    if operation_id:
+        subpage_component = _get_subpage_content(route, operation_id)
+        return html.Div([_get_title_component(am_metadata, current_page), subpage_component])
+    return _page_with_spinner(am_id, current_page)
 
 
 page = Page(_router, _add_callbacks)

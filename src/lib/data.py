@@ -143,7 +143,7 @@ class Applicability:
 
     @classmethod
     def from_dict(cls, dict_: Dict) -> 'Applicability':
-        return Applicability(**dict_)
+        return cls(**dict_)
 
 
 @dataclass
@@ -162,7 +162,7 @@ class Annotations:
     def from_dict(cls, dict_: Dict) -> 'Annotations':
         new_dict = dict_.copy()
         new_dict['topic'] = TopicName(dict_['topic']) if dict_['topic'] else None
-        return Annotations(**new_dict)
+        return cls(**new_dict)
 
 
 def random_id() -> str:
@@ -687,4 +687,4 @@ class Nomenclature:
 
 
 def am_to_text(am: ArreteMinisteriel) -> StructuredText:
-    return StructuredText(am.title, [], am.sections, None)
+    return StructuredText(am.title, [], am.sections, applicability=am.applicability)
