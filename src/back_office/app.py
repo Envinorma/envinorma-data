@@ -36,22 +36,18 @@ app = dash.Dash(
 
 def _get_page_heading() -> Component:
     src = '/assets/logo-envinorma.png'
-    return html.Header(
-        dcc.Link(
-            html.Div(
-                html.Div(html.Img(src=src, style={'width': '30px'}), className='container'),
-                style={
-                    'padding': '.5em',
-                    'border-bottom': '1px solid rgba(0,0,0,.1)',
-                    'position': 'sticky',
-                    'top': 0,
-                    'background-color': '#fff',
-                    'z-index': '1',
-                    'margin-bottom': '10px',
-                },
-            ),
-            href='/',
-        )
+    sticky_style = {
+        'padding': '.5em',
+        'border-bottom': '1px solid rgba(0,0,0,.1)',
+        'position': 'sticky',
+        'top': 0,
+        'background-color': '#fff',
+        'z-index': '1',
+        'margin-bottom': '10px',
+    }
+    return dcc.Link(
+        html.Div(html.Div(html.Img(src=src, style={'width': '30px'}), className='container'), style=sticky_style),
+        href='/',
     )
 
 
