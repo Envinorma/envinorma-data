@@ -394,8 +394,14 @@ def _get_structure_validation_diff(am_id: str, status: AMState) -> Component:
     return _build_diff_component_from_files(initial_file, final_file)
 
 
+def _create_if_inexistent(folder: str) -> None:
+    if not os.path.exists(folder):
+        os.mkdir(folder)
+
+
 def _get_parametric_texts_list(am_id: str, page_url: str) -> Component:
     folder = get_parametric_ams_folder(am_id)
+    _create_if_inexistent(folder)
     prefix_url = f'{page_url}/{AMOperation.DISPLAY_AM.value}'
     lis = [html.Li(dcc.Link(file_, href=f'{prefix_url}/{file_}')) for file_ in os.listdir(folder)]
     return html.Ul(lis)

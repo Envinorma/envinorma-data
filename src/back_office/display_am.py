@@ -98,7 +98,7 @@ def _ensure_applicability(applicability: Optional[Applicability]) -> Applicabili
 def _inactive_text_component(text: StructuredText) -> Component:
     return html.Div(
         [
-            html.P(html.B(text.title.text)),
+            _title_component(text.title.text, text.id),
             html.Div(
                 f'Paragraphe non applicable : {text.applicability.reason_inactive}', className='alert alert-primary'
             ),
@@ -118,10 +118,15 @@ def _alineas_to_components(alineas: List[EnrichedString]) -> List[Component]:
     return [_alinea_to_component(alinea) for alinea in alineas]
 
 
+def _title_component(title: str, text_id: str) -> Component:
+    style = {'position': 'relative', 'left': '-25px', 'margin-top': '30px'}
+    return html.H5([html.A('⬆️ ', href='#'), html.B(title)], id=text_id, style=style)
+
+
 def _raw_text_component(text: StructuredText, alert: Optional[Component]) -> Component:
     subsections = [_raw_text_component(section, None) for section in text.sections]
     components: List[Component] = []
-    components.append(html.P(html.B(text.title.text)))
+    components.append(_title_component(text.title.text, text.id))
     if alert:
         components.append(alert)
     components.extend(_alineas_to_components(text.outer_alineas))
@@ -138,7 +143,7 @@ def _modified_text_component(text: StructuredText) -> Component:
 def _active_text_component(text: StructuredText) -> Component:
     return html.Div(
         [
-            html.P(html.B(text.title.text), id=text.id),
+            _title_component(text.title.text, text.id),
             *_alineas_to_components(text.outer_alineas),
             _get_sections_components(text.sections),
         ]
@@ -158,25 +163,22 @@ def _get_sections_components(sections: List[StructuredText]) -> Component:
     return html.Div([_get_text_component(section) for section in sections])
 
 
-def _inapplicabilities_component(modifications: List[StructuredText]) -> Component:
-    return html.Div(
-        [
-            html.A(modification.applicability.reason_modified, href=f'#{modification.id}')
-            for modification in modifications
-        ]
+def _inapplicabilities_component(inapplicabilities: List[StructuredText]) -> Component:
+    list_ = (
+        html.Ul([html.Li(html.A(ina.applicability.reason_inactive, href=f'#{ina.id}')) for ina in inapplicabilities])
+        if inapplicabilities
+        else 'Aucun paragraphes inapplicables'
     )
+    return html.Div([html.H4('Paragraphes inapplicables'), list_])
 
 
-def _modifications_component(inapplicabilities: List[StructuredText]) -> Component:
-    return html.Div(
-        [
-            html.H4('Modifications'),
-            *[
-                html.A(inapplicability.applicability.reason_inactive, href=f'#{inapplicability.id}')
-                for inapplicability in inapplicabilities
-            ],
-        ]
+def _modifications_component(modifications: List[StructuredText]) -> Component:
+    list_ = (
+        html.Ul([html.Li(html.A(mod.applicability.reason_modified, href=f'#{mod.id}')) for mod in modifications])
+        if modifications
+        else 'Aucune modifications.'
     )
+    return html.Div([html.H4('Modifications'), list_])
 
 
 def _main_component(page_data: _PageData) -> Component:
@@ -185,7 +187,7 @@ def _main_component(page_data: _PageData) -> Component:
         return html.P('AM is not applicable')
     return html.Div(
         [
-            html.H4(am.title.text),
+            html.I(am.title.text),
             _modifications_component(page_data.modifications),
             _inapplicabilities_component(page_data.inapplicabilities),
             _get_sections_components(am.sections),
