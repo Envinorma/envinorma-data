@@ -1,5 +1,6 @@
-from lib.am_to_markdown import extract_markdown_text
 from typing import Optional
+
+from lib.am_to_markdown import extract_markdown_text
 from lib.docx import build_structured_text_from_docx_xml, get_docx_xml
 from lib.pdf import pdf_to_docx
 

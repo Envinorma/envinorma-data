@@ -1,4 +1,3 @@
-import bs4
 import os
 import random
 import shutil
@@ -7,8 +6,10 @@ import tempfile
 from copy import copy
 from enum import Enum
 from typing import Any, Callable, List, Optional
-from bs4 import BeautifulSoup
 from zipfile import ZipFile
+
+import bs4
+from bs4 import BeautifulSoup
 
 from lib.data import Cell, EnrichedString, Row, StructuredText, Table
 from lib.structure_extraction import (
@@ -18,6 +19,7 @@ from lib.structure_extraction import (
     build_structured_text,
     structured_text_to_text_elements,
 )
+from lib.utils import random_string
 
 
 def _extract_title(tag: bs4.Tag) -> Title:
@@ -268,6 +270,12 @@ def get_odt_xml(filename: str) -> str:
 
 def load_and_transform(filename: str, add_numbering: bool) -> StructuredText:
     return _transform_odt(get_odt_xml(filename), add_numbering)
+
+
+def extract_text(file_content: bytes) -> StructuredText:
+    filename = f'/tmp/tmp_{random_string()}'
+    open(filename, 'wb').write(file_content)
+    return _transform_odt(get_odt_xml(filename), False)
 
 
 def _extract_lines_from_page_element(page_element: Any) -> List[str]:

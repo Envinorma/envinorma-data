@@ -9,3 +9,5 @@ gunicorn==20.0.4
 psycopg2-binary==2.8.6
 pydantic==1.7.3
 lxml==4.6.2
+pdf2docx==0.5.1
+pdfplumber==0.5.25

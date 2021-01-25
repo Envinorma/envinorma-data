@@ -1,4 +1,6 @@
 import json
+import random
+import string
 import traceback
 from typing import Dict, List, Union
 
@@ -17,3 +19,7 @@ def write_json(obj: Union[Dict, List], filename: str, safe: bool = False, pretty
                 json.dump(obj, file_, indent=indent, sort_keys=True, ensure_ascii=False)
             except Exception:  # pylint: disable=broad-except
                 print(traceback.format_exc())
+
+
+def random_string(size: int = 6) -> str:
+    return ''.join([random.choice(string.ascii_letters) for _ in range(size)])

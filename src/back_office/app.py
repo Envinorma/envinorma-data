@@ -1,20 +1,21 @@
 from typing import Dict, List
 
-import dash
 import dash_core_components as dcc
 import dash_html_components as html
-import dash_bootstrap_components as dbc
 from dash.dependencies import Input, Output
 from dash.development.base_component import Component
-from lib.data import AMMetadata, Classement
 from lib.config import AM_DATA_FOLDER
+from lib.data import AMMetadata, Classement
 
 from back_office import am_page
-from back_office.utils import AMState, ID_TO_AM_MD, div, load_am_state
+from back_office.ap_parsing import page as ap_parsing_page
+from back_office.app_init import app
+from back_office.utils import ID_TO_AM_MD, AMState, div, load_am_state
 
 
 def _prepare_archive_if_no_data():
-    import os, shutil
+    import os
+    import shutil
 
     if not os.path.exists(AM_DATA_FOLDER):
         os.mkdir(AM_DATA_FOLDER)
@@ -28,10 +29,6 @@ def _prepare_archive_if_no_data():
 
 
 _prepare_archive_if_no_data()
-
-app = dash.Dash(
-    __name__, external_stylesheets=[dbc.themes.BOOTSTRAP], suppress_callback_exceptions=True, title='Envinorma'
-)
 
 
 def _get_page_heading() -> Component:
@@ -126,6 +123,8 @@ def router(pathname: str) -> Component:
     if pathname == '/':
         id_to_state = _load_am_states(list(ID_TO_AM_MD.keys()))
         return _make_index_component(id_to_state, ID_TO_AM_MD)
+    if pathname == '/ap_parsing':
+        return ap_parsing_page()
     for key, page in _CHILD_PAGES.items():
         if pathname[: len(key)] == key:
             return page.router(pathname[len(key) :], key)

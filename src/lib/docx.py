@@ -1,18 +1,19 @@
-import bs4
 import os
 import random
 import re
-import string
 import shutil
+import string
 import tempfile
-
-from bs4 import BeautifulSoup
 from dataclasses import dataclass, replace
-from typing import Any, Callable, Dict, Set, Tuple, List, Optional
+from typing import Any, Callable, Dict, List, Optional, Set, Tuple
 from zipfile import ZipFile
+
+import bs4
+from bs4 import BeautifulSoup
 
 from lib.data import Cell, EnrichedString, Row, StructuredText, Table, count_cells
 from lib.structure_extraction import TextElement, Title, build_structured_text
+from lib.utils import random_string
 
 
 def extract_all_xml_tags_from_tag(tag: bs4.Tag) -> List[str]:
@@ -542,3 +543,9 @@ def build_structured_text_from_docx_xml(xml: str) -> StructuredText:
     clean_soup = _replace_small_tables(soup)
     elements = _extract_elements(clean_soup)
     return build_structured_text(None, elements)
+
+
+def extract_text(file_content: bytes) -> StructuredText:
+    filename = f'/tmp/tmp_{random_string()}'
+    open(filename, 'wb').write(file_content)
+    return build_structured_text_from_docx_xml(get_docx_xml(filename))
