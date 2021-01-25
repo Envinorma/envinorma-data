@@ -4,7 +4,7 @@ from typing import Any, Dict, List, Optional, Set, Tuple
 
 import pandas
 from lib.data import Regime
-from lib.georisques_data import load_all_installations
+from lib.georisques_data import load_idf_installation_ids
 from scripts.s3ic import ClassementType, fetch_records
 from pydantic import BaseModel
 from tqdm import tqdm
@@ -212,16 +212,9 @@ def _build_dataframe(classements: List[DetailedClassement]) -> pandas.DataFrame:
     return pandas.DataFrame(rows, columns=keys).drop_duplicates()
 
 
-def _load_idf_codes() -> Set[str]:
-    installations = load_all_installations()
-    idf_ids = {installation.s3ic_id for installation in installations if installation.region == 'ILE-DE-FRANCE'}
-    print(f'found {len(idf_ids)} installations in ILE-DE-FRANCE')
-    return idf_ids
-
-
 def dump_all_active_classements() -> None:
     classements = load_all_classements()
-    idf_ids = _load_idf_codes()
+    idf_ids = load_idf_installation_ids()
     active_classements = [cl for cl in classements if cl.s3ic_id in idf_ids and cl.state == State.EN_FONCTIONNEMENT]
     dataframe = _build_dataframe(active_classements)
     dataframe.to_csv('classements.csv')

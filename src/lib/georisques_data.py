@@ -1,9 +1,10 @@
+import argparse
 import json
 import random
 from dataclasses import asdict, dataclass, replace
 from datetime import date, datetime
 from enum import Enum
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List, Optional, Set, Tuple
 
 from pandas import DataFrame
 from tqdm import tqdm
@@ -157,7 +158,7 @@ def _is_null(doc: Dict[str, Any]) -> bool:
 def load_all_documents() -> Dict[str, List[GRDocument]]:
     icpe_data = json.load(open('/Users/remidelbouys/EnviNorma/brouillons/data/georisques_documents.json'))
     return {
-        id_: [GRDocument.from_georisques_dict(doc) for doc in docs if not _is_null(doc)]
+        id_.replace('-', '.'): [GRDocument.from_georisques_dict(doc) for doc in docs if not _is_null(doc)]
         for id_, docs in icpe_data.items()
     }
 
@@ -334,12 +335,51 @@ def _dump_classements_csv(installations: List[GeorisquesInstallation], sample: b
             if item.etat_activite != GRClassementActivite.ACTIVE:
                 continue
             dict_ = item.to_dict()
-            dict_['installation_id'] = installation.s3ic_id
+            dict_['s3ic_id'] = installation.s3ic_id
             dicts.append(dict_)
     data_frame = DataFrame(dicts, dtype='str')
     print(f'Dumping {len(data_frame)} classements.')
     filename_suffix = '_sample' if sample else ''
     data_frame.to_csv(f'classements{filename_suffix}.csv')
+
+
+def load_idf_installation_ids() -> Set[str]:
+    installations = load_all_installations()
+    idf_ids = {installation.s3ic_id for installation in installations if installation.region == 'ILE-DE-FRANCE'}
+    print(f'found {len(idf_ids)} installations in ILE-DE-FRANCE')
+    return idf_ids
+
+
+_GR_DOC_BASE_URL = 'http://documents.installationsclassees.developpement-durable.gouv.fr/commun'
+
+
+def _rowify_doc(id_: str, ap: GRDocument) -> Dict[str, Any]:
+    return {
+        'installation_s3ic_id': id_,
+        'description': ap.description_doc,
+        'date': ap.date_doc,
+        'url': f'{_GR_DOC_BASE_URL}/{ap.url_doc}',
+    }
+
+
+def _build_aps_dataframe(installation_ids_and_aps: List[Tuple[str, GRDocument]]) -> DataFrame:
+    dicts = [_rowify_doc(id, ap) for id, ap in installation_ids_and_aps]
+    return DataFrame(dicts)
+
+
+def _dump_idf_aps() -> None:
+    installation_id_to_documents = load_all_documents()
+    idf_ids = load_idf_installation_ids()
+    all_idf_aps = [
+        (installation_id, doc)
+        for installation_id, docs in installation_id_to_documents.items()
+        for doc in docs
+        if installation_id in idf_ids
+        if doc.type_doc == DocumentType.AP
+    ]
+    print(f'Found {len(all_idf_aps)} AP in IDF.')
+    dataframe = _build_aps_dataframe(all_idf_aps)
+    dataframe.to_csv('aps.csv')
 
 
 def _dump_documents_csv(installations: List[GeorisquesInstallation], sample: bool) -> None:
@@ -370,7 +410,19 @@ def _dump_csvs(sample: bool = False, only_idf: bool = False) -> None:
     _dump_installations_csv(installations, sample)
     _dump_classements_csv(installations, sample)
     _dump_documents_csv(installations, sample)
+    _dump_idf_aps()
+
+
+def main() -> None:
+    parser = argparse.ArgumentParser()
+    parser.add_argument('-a', '--all', nargs='?', const=True, default=False, help='Dump idf csvs')
+    parser.add_argument('-p', '--ap', nargs='?', const=True, default=False, help='Dump idf AP')
+    args = parser.parse_args()
+    if args.all:
+        _dump_csvs(False, True)
+    if args.ap:
+        _dump_idf_aps()
 
 
 if __name__ == '__main__':
-    _dump_csvs(sample=False, only_idf=True)
+    main()
