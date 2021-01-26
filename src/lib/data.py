@@ -688,3 +688,11 @@ class Nomenclature:
 
 def am_to_text(am: ArreteMinisteriel) -> StructuredText:
     return StructuredText(am.title, [], am.sections, applicability=am.applicability)
+
+
+def add_title_default_numbering(text: StructuredText, prefix: str = '', rank: int = 0) -> StructuredText:
+    text = copy(text)
+    new_prefix = prefix + f'{rank+1}.'
+    text.title.text = f'{new_prefix} {text.title.text}'
+    text.sections = [add_title_default_numbering(section, new_prefix, i) for i, section in enumerate(text.sections)]
+    return text

@@ -1,0 +1,31 @@
+.summary {
+  position: sticky;
+  top: 170px;
+  border-left: 2px solid #007bff;
+  font-size: 0.8em;
+  bottom: 0;
+  height: 70vh;
+  overflow-y: auto;
+}
+.summary a {
+  color: inherit;
+  display: block;
+  padding-left: 10px;
+}
+.summary a.current,
+.summary a:hover {
+  text-decoration: none;
+  color: #000;
+  border-left: 3px solid #007bff;
+  padding-left: 7px;
+}
+.summary .level_0 {
+  text-transform: uppercase;
+  font-weight: 700;
+}
+.display-summary.current {
+  display: block;
+}
+.display-summary {
+  display: none;
+}

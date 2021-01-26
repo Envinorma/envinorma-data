@@ -30,6 +30,7 @@ class Linebreak:
 class Title:
     text: str
     level: int
+    id: Optional[str] = None
 
 
 TextElement = Union[Table, str, Title, Linebreak]
@@ -99,7 +100,7 @@ def _string_to_element(str_: EnrichedString) -> TextElement:
 
 def structured_text_to_text_elements(text: StructuredText, level: int = 1) -> List[TextElement]:
     elements: List[TextElement] = []
-    elements.append(Title(text.title.text, level))
+    elements.append(Title(text.title.text, level, id=text.id))
     elements.extend([_string_to_element(st) for st in text.outer_alineas])
     for section in text.sections:
         elements.extend(structured_text_to_text_elements(section, level + 1))

@@ -11,7 +11,7 @@ from zipfile import ZipFile
 import bs4
 from bs4 import BeautifulSoup
 
-from lib.data import Cell, EnrichedString, Row, StructuredText, Table
+from lib.data import Cell, EnrichedString, Row, StructuredText, Table, add_title_default_numbering
 from lib.structure_extraction import (
     Linebreak,
     TextElement,
@@ -225,19 +225,11 @@ def _extract_flattened_elements(tag: Any, group_children: bool = False) -> List[
     return [elt for elts in children_elements for elt in elts]
 
 
-def _add_title_default_numbering(text: StructuredText, prefix: str = '', rank: int = 0) -> StructuredText:
-    text = copy(text)
-    new_prefix = prefix + f'{rank+1}.'
-    text.title.text = f'{new_prefix} {text.title.text}'
-    text.sections = [_add_title_default_numbering(section, new_prefix, i) for i, section in enumerate(text.sections)]
-    return text
-
-
 def _build_structured_text_from_soup(tag: bs4.Tag, with_numbering: bool) -> StructuredText:
     elements = _extract_flattened_elements(tag)
     text = build_structured_text(None, elements)
     if with_numbering:
-        text.sections = [_add_title_default_numbering(section, '', i) for i, section in enumerate(text.sections)]
+        text.sections = [add_title_default_numbering(section, '', i) for i, section in enumerate(text.sections)]
     return text
 
 
@@ -268,7 +260,7 @@ def get_odt_xml(filename: str) -> str:
     return ZipFile(filename).read('content.xml').decode()
 
 
-def load_and_transform(filename: str, add_numbering: bool) -> StructuredText:
+def load_and_transform(filename: str, add_numbering: bool = False) -> StructuredText:
     return _transform_odt(get_odt_xml(filename), add_numbering)
 
 

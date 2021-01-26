@@ -49,7 +49,11 @@ def _get_html_heading_classname(level: int) -> type:
 def _title_to_component(title: Title, ontology: Optional[TopicOntology]) -> Component:
     if title.level == 0:
         return html.P(title.text)
-    title_component = _get_html_heading_classname(title.level)(title.text)
+    cls_ = _get_html_heading_classname(title.level)
+    if title.id:
+        title_component = cls_(title.text, id=title.id)
+    else:
+        title_component = cls_(title.text, id=None)
     if ontology and ontology.parse(title.text):
         return html.Div(title_component, style={'background-color': '#EEEEEE'})
     return title_component

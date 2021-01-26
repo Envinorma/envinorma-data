@@ -155,7 +155,8 @@ def _extract_font_size_occurrences(style_occurrences: Dict[Style, int]) -> Dict[
 def _guess_body_font_size(soup: BeautifulSoup) -> int:
     font_size_occurrences = _extract_font_size_occurrences(extract_styles_to_nb_letters(soup))
     if not font_size_occurrences:
-        raise ValueError('Need at least one style tag (rPr) in soup.')
+        strings = '\n'.join(list(soup.stripped_strings))
+        raise ValueError(f'Need at least one style tag (rPr) in soup.\nZone: {strings[:280]}\nSoup{str(soup)[:280]}')
     return sorted(font_size_occurrences.items(), key=lambda x: x[1])[-1][0]
 
 
@@ -291,6 +292,10 @@ def extract_table(tag: bs4.Tag) -> Table:
 
 def get_docx_xml(filename: str) -> str:
     return ZipFile(filename).read('word/document.xml').decode()
+
+
+def get_docx_xml_soup(filename: str) -> BeautifulSoup:
+    return BeautifulSoup(get_docx_xml(filename), 'lxml-xml')
 
 
 def _is_table_small(table: Table) -> bool:
@@ -538,14 +543,21 @@ def _extract_elements(soup: BeautifulSoup) -> List[TextElement]:
     return _guess_and_add_title_levels(all_elements)
 
 
-def build_structured_text_from_docx_xml(xml: str) -> StructuredText:
-    soup = BeautifulSoup(xml, 'lxml-xml')
+def build_structured_text_from_soup(soup: BeautifulSoup) -> StructuredText:
     clean_soup = _replace_small_tables(soup)
     elements = _extract_elements(clean_soup)
     return build_structured_text(None, elements)
 
 
+def build_structured_text_from_docx_xml(xml: str) -> StructuredText:
+    return build_structured_text_from_soup(BeautifulSoup(xml, 'lxml-xml'))
+
+
+def extract_text_from_file(filename: str) -> StructuredText:
+    return build_structured_text_from_docx_xml(get_docx_xml(filename))
+
+
 def extract_text(file_content: bytes) -> StructuredText:
     filename = f'/tmp/tmp_{random_string()}'
     open(filename, 'wb').write(file_content)
-    return build_structured_text_from_docx_xml(get_docx_xml(filename))
+    return extract_text_from_file(filename)

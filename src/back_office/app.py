@@ -123,8 +123,8 @@ def router(pathname: str) -> Component:
     if pathname == '/':
         id_to_state = _load_am_states(list(ID_TO_AM_MD.keys()))
         return _make_index_component(id_to_state, ID_TO_AM_MD)
-    if pathname == '/ap_parsing':
-        return ap_parsing_page()
+    # if pathname == '/ap_parsing':
+    #     return ap_parsing_page()
     for key, page in _CHILD_PAGES.items():
         if pathname[: len(key)] == key:
             return page.router(pathname[len(key) :], key)
