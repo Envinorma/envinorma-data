@@ -7,41 +7,29 @@ from typing import Any, Dict, List, Optional, Set, Tuple, Union
 import dash_bootstrap_components as dbc
 import dash_core_components as dcc
 import dash_html_components as html
-from dash.dash import Dash
 from dash.dependencies import Input, Output
 from dash.development.base_component import Component
 from lib.am_to_markdown import extract_markdown_text
-from lib.data import AMMetadata, ArreteMinisteriel, StructuredText, am_to_text
+from lib.data import AMMetadata, ArreteMinisteriel, Ints, StructuredText, am_to_text
 from lib.generate_final_am import AMVersions, generate_final_am
 from lib.parametrization import AlternativeSection, NonApplicationCondition, Parametrization, condition_to_str
-from lib.paths import (
-    create_folder_and_generate_parametric_filename,
-    get_parametric_ams_folder,
-    get_structured_text_wip_folder,
-)
+from lib.paths import create_folder_and_generate_parametric_filename, get_parametric_ams_folder
 from lib.utils import write_json
 
+from back_office.components import error_component
 from back_office.display_am import router as display_am_router
-from back_office.parametrization_edition import add_parametrization_edition_callbacks
-from back_office.parametrization_edition import router as parametrization_router
-from back_office.structure_edition import add_structure_edition_callbacks
-from back_office.structure_edition import router as structure_router
-from back_office.utils import (
-    ID_TO_AM_MD,
-    AMOperation,
-    AMState,
-    AMWorkflowState,
-    Page,
-    div,
-    dump_am_state,
-    error_component,
-    get_default_structure_filename,
-    get_section_title,
-    load_am,
-    load_am_from_file,
-    load_am_state,
+from back_office.fetch_data import (
+    load_am_status,
+    load_initial_am,
     load_parametrization,
+    load_structured_am,
+    upsert_am_status,
 )
+
+from back_office.parametrization_edition import router as parametrization_router
+from back_office.structure_edition import router as structure_router
+from back_office.utils import ID_TO_AM_MD, AMOperation, AMStatus, get_section_title
+from back_office.app_init import app
 
 _VALIDATE_STRUCTURE_BUTTON_ID = 'am-page-validate-structure'
 _INVALIDATE_STRUCTURE_BUTTON_ID = 'am-page-invalidate-structure'
@@ -70,10 +58,7 @@ class _ButtonState(Enum):
 
 
 def _button_with_id(
-    text: str,
-    state: _ButtonState,
-    id_: Optional[str] = None,
-    className: str = 'btn btn-primary',
+    text: str, state: _ButtonState, id_: Optional[str] = None, className: str = 'btn btn-primary'
 ) -> html.Button:
     disabled = state != _ButtonState.NORMAL
     hidden = state == _ButtonState.HIDDEN
@@ -101,14 +86,14 @@ def _link_button(
     return dcc.Link(_button_with_id(text, state, className=className), href=href)
 
 
-def _get_edit_structure_button(parent_page: str, am_status: AMWorkflowState) -> Component:
+def _get_edit_structure_button(parent_page: str, am_status: AMStatus) -> Component:
     href = f'{parent_page}/{AMOperation.EDIT_STRUCTURE.value}'
     state = _ButtonState.NORMAL if am_status == am_status.PENDING_STRUCTURE_VALIDATION else _ButtonState.HIDDEN
     return _link_button('Éditer', href, state, 'btn btn-link')
 
 
 def _get_validate_structure_button_(state_0: _ButtonState, state_1: _ButtonState) -> Component:
-    return div(
+    return html.Div(
         [
             _button_with_id('Valider la structure', id_=_VALIDATE_STRUCTURE_BUTTON_ID, state=state_0),
             _button_with_id('Invalider la structure', id_=_INVALIDATE_STRUCTURE_BUTTON_ID, state=state_1),
@@ -116,7 +101,7 @@ def _get_validate_structure_button_(state_0: _ButtonState, state_1: _ButtonState
     )
 
 
-def _get_validate_structure_button(am_status: AMWorkflowState) -> Component:
+def _get_validate_structure_button(am_status: AMStatus) -> Component:
     if am_status == am_status.PENDING_STRUCTURE_VALIDATION:
         return _get_validate_structure_button_(_ButtonState.NORMAL, _ButtonState.HIDDEN)
     if am_status == am_status.PENDING_PARAMETRIZATION:
@@ -124,10 +109,10 @@ def _get_validate_structure_button(am_status: AMWorkflowState) -> Component:
     return _get_validate_structure_button_(_ButtonState.HIDDEN, _ButtonState.DISABLED)
 
 
-def _get_structure_validation_buttons(parent_page: str, am_status: AMWorkflowState) -> Component:
+def _get_structure_validation_buttons(parent_page: str, am_status: AMStatus) -> Component:
     edit_button = _get_edit_structure_button(parent_page, am_status)
     validate_button = _get_validate_structure_button(am_status)
-    return div(_inline_buttons([edit_button, validate_button]), {'margin-bottom': '35px'})
+    return html.Div(_inline_buttons([edit_button, validate_button]), {'margin-bottom': '35px'})
 
 
 def _get_validate_parametrization_button_(state: _ButtonState) -> Component:
@@ -138,22 +123,22 @@ def _get_invalidate_parametrization_button(state: _ButtonState) -> Component:
     return _button_with_id('Invalider la paramétrisation', id_=_INVALIDATE_PARAMETRIZATION_BUTTON_ID, state=state)
 
 
-def _get_validate_parametrization_button(am_status: AMWorkflowState) -> Component:
+def _get_validate_parametrization_button(am_status: AMStatus) -> Component:
     if am_status == am_status.PENDING_STRUCTURE_VALIDATION:
-        return div(
+        return html.Div(
             [
                 _get_validate_parametrization_button_(_ButtonState.HIDDEN),
                 _get_invalidate_parametrization_button(_ButtonState.HIDDEN),
             ]
         )
     if am_status == am_status.PENDING_PARAMETRIZATION:
-        return div(
+        return html.Div(
             [
                 _get_validate_parametrization_button_(_ButtonState.NORMAL),
                 _get_invalidate_parametrization_button(_ButtonState.HIDDEN),
             ]
         )
-    return div(
+    return html.Div(
         [
             _get_validate_parametrization_button_(_ButtonState.HIDDEN),
             _get_invalidate_parametrization_button(_ButtonState.NORMAL),
@@ -161,19 +146,19 @@ def _get_validate_parametrization_button(am_status: AMWorkflowState) -> Componen
     )
 
 
-def _get_parametrization_edition_buttons(am_status: AMWorkflowState) -> Component:
+def _get_parametrization_edition_buttons(am_status: AMStatus) -> Component:
     validate_button = _get_validate_parametrization_button(am_status)
     return _inline_buttons([validate_button])
 
 
-def _get_structure_validation_title(status: AMWorkflowState) -> Component:
+def _get_structure_validation_title(status: AMStatus) -> Component:
     title = 'Edition de structure '
     if status == status.PENDING_STRUCTURE_VALIDATION:
         return html.H3(title)
     return html.H3([title, html.Span('ok', className='badge bg-success', style={'color': 'white'})])
 
 
-def _get_parametrization_edition_title(status: AMWorkflowState) -> Component:
+def _get_parametrization_edition_title(status: AMStatus) -> Component:
     title = 'Edition de la paramétrisation '
     if status != status.VALIDATED:
         return html.H3(title)
@@ -189,11 +174,11 @@ def _human_alinea_tuple(ints: Optional[List[int]]) -> str:
 def _application_condition_to_row(
     non_application_condition: NonApplicationCondition, am: ArreteMinisteriel, rank: int, current_page: str
 ) -> Component:
-    reference_str = get_section_title(non_application_condition.targeted_entity.section.path, am)
+    reference_str = _get_section_title_or_error(non_application_condition.targeted_entity.section.path, am)
     alineas = _human_alinea_tuple(non_application_condition.targeted_entity.outer_alinea_indices)
     description = non_application_condition.description
     condition = condition_to_str(non_application_condition.condition)
-    source = get_section_title(non_application_condition.source.reference.section.path, am)
+    source = _get_section_title_or_error(non_application_condition.source.reference.section.path, am)
     href = f'{current_page}/{AMOperation.ADD_CONDITION.value}/{rank}'
     edit = _link_button('Éditer', href=href, className='btn btn-link', state=_ButtonState.NORMAL)
     href_copy = f'{current_page}/{AMOperation.ADD_CONDITION.value}/{rank}/copy'
@@ -215,16 +200,25 @@ def _get_non_application_table(parametrization: Parametrization, am: ArreteMinis
 
 
 def _wrap_in_paragraphs(strs: List[str]) -> Component:
-    return div([html.P(str_) for str_ in strs])
+    return html.Div([html.P(str_) for str_ in strs])
+
+
+def _get_section_title_or_error(path: Ints, am: ArreteMinisteriel) -> Component:
+    title = get_section_title(path, am)
+    style = {}
+    if title is None:
+        style = {'color': 'red'}
+        title = 'Introuvable, ce paramètre doit être modifié.'
+    return html.Span(title, style=style)
 
 
 def _alternative_section_to_row(
     alternative_section: AlternativeSection, am: ArreteMinisteriel, rank: int, current_page: str
 ) -> Component:
-    reference_str = get_section_title(alternative_section.targeted_section.path, am)
+    reference_str = _get_section_title_or_error(alternative_section.targeted_section.path, am)
     description = alternative_section.description
     condition = condition_to_str(alternative_section.condition)
-    source = get_section_title(alternative_section.source.reference.section.path, am)
+    source = _get_section_title_or_error(alternative_section.source.reference.section.path, am)
     new_version = _wrap_in_paragraphs(extract_markdown_text(alternative_section.new_text, level=1))
     href = f'{current_page}/{AMOperation.ADD_ALTERNATIVE_SECTION.value}/{rank}'
     edit = _link_button('Éditer', href=href, className='btn btn-link', state=_ButtonState.NORMAL)
@@ -248,24 +242,24 @@ def _get_alternative_section_table(
     return html.Table([header, body], className='table table-hover')
 
 
-def _get_add_condition_button(parent_page: str, status: AMWorkflowState) -> Component:
+def _get_add_condition_button(parent_page: str, status: AMStatus) -> Component:
     state = _ButtonState.NORMAL if status == status.PENDING_PARAMETRIZATION else _ButtonState.HIDDEN
     href = f'{parent_page}/{AMOperation.ADD_CONDITION.value}'
-    return div(_link_button('+ Nouveau', href, state, 'btn btn-link'), {'margin-bottom': '35px'})
+    return html.Div(_link_button('+ Nouveau', href, state, 'btn btn-link'), {'margin-bottom': '35px'})
 
 
-def _get_add_alternative_section_button(parent_page: str, status: AMWorkflowState) -> Component:
+def _get_add_alternative_section_button(parent_page: str, status: AMStatus) -> Component:
     state = _ButtonState.NORMAL if status == status.PENDING_PARAMETRIZATION else _ButtonState.HIDDEN
     href = f'{parent_page}/{AMOperation.ADD_ALTERNATIVE_SECTION.value}'
-    return div(_link_button('+ Nouveau', href, state, 'btn btn-link'), {'margin-bottom': '35px'})
+    return html.Div(_link_button('+ Nouveau', href, state, 'btn btn-link'), {'margin-bottom': '35px'})
 
 
 def _get_parametrization_summary(
-    parent_page: str, status: AMWorkflowState, parametrization: Parametrization, am: ArreteMinisteriel
+    parent_page: str, status: AMStatus, parametrization: Parametrization, am: ArreteMinisteriel
 ) -> Component:
-    if status != AMWorkflowState.PENDING_PARAMETRIZATION:
-        return div([])
-    return div(
+    if status != AMStatus.PENDING_PARAMETRIZATION:
+        return html.Div([])
+    return html.Div(
         [
             html.H4('Conditions de non-application'),
             _get_non_application_table(parametrization, am, parent_page),
@@ -375,23 +369,22 @@ def _extract_text_lines(text: StructuredText, level: int = 0) -> List[str]:
     return title_lines + alinena_lines + section_lines
 
 
-def _load_file_and_get_lines(text_file: str) -> List[str]:
-    return _extract_text_lines(am_to_text(load_am_from_file(text_file)))
+def _build_am_diff_component(initial_am: ArreteMinisteriel, current_am: ArreteMinisteriel) -> Component:
+    return _build_diff_component(
+        _extract_text_lines(am_to_text(initial_am)), _extract_text_lines(am_to_text(current_am))
+    )
 
 
-def _build_diff_component_from_files(text_file_1: str, text_file_2: str) -> Component:
-    return _build_diff_component(_load_file_and_get_lines(text_file_1), _load_file_and_get_lines(text_file_2))
-
-
-def _get_structure_validation_diff(am_id: str, status: AMState) -> Component:
-    if status.state != status.state.PENDING_STRUCTURE_VALIDATION:
+def _get_structure_validation_diff(am_id: str, status: AMStatus) -> Component:
+    if status != status.PENDING_STRUCTURE_VALIDATION:
         return html.Div()
-    files = status.structure_draft_filenames
-    if len(files) == 0:
+    initial_am = load_initial_am(am_id)
+    if not initial_am:
+        return html.Div('AM introuvable.')
+    current_am = load_structured_am(am_id)
+    if not current_am:
         return html.Div('Pas de modifications de structuration.')
-    initial_file = get_default_structure_filename(am_id)
-    final_file = os.path.join(get_structured_text_wip_folder(am_id), files[-1])
-    return _build_diff_component_from_files(initial_file, final_file)
+    return _build_am_diff_component(initial_am, current_am)
 
 
 def _create_if_inexistent(folder: str) -> None:
@@ -399,41 +392,51 @@ def _create_if_inexistent(folder: str) -> None:
         os.mkdir(folder)
 
 
-def _get_parametric_texts_list(am_id: str, page_url: str) -> Component:
+def _generate_versions_if_empty(am_id: str, folder: str) -> None:
+    if os.listdir(folder):
+        return
+    _generate_and_dump_am_version(am_id)
+
+
+def _get_parametric_texts_list(am_id: str, page_url: str, am_status: AMStatus) -> Component:
     folder = get_parametric_ams_folder(am_id)
     _create_if_inexistent(folder)
+    if am_status == AMStatus.VALIDATED:
+        _generate_versions_if_empty(am_id, folder)
     prefix_url = f'{page_url}/{AMOperation.DISPLAY_AM.value}'
     lis = [html.Li(dcc.Link(file_, href=f'{prefix_url}/{file_}')) for file_ in os.listdir(folder)]
     return html.Ul(lis)
 
 
-def _final_parametric_texts_component(am_id: str, page_url: str) -> Component:
-    return html.Div([html.H3('Versions finales'), _get_parametric_texts_list(am_id, page_url)])
+def _final_parametric_texts_component(am_id: str, page_url: str, am_status: AMStatus) -> Component:
+    return html.Div([html.H3('Versions finales'), _get_parametric_texts_list(am_id, page_url, am_status)])
 
 
-def _get_final_parametric_texts_component(am_id: str, am_state: AMWorkflowState, page_url: str) -> Component:
-    return html.Div([_final_parametric_texts_component(am_id, page_url)], hidden=am_state != AMWorkflowState.VALIDATED)
+def _get_final_parametric_texts_component(am_id: str, am_status: AMStatus, page_url: str) -> Component:
+    return html.Div(
+        [_final_parametric_texts_component(am_id, page_url, am_status)], hidden=am_status != AMStatus.VALIDATED
+    )
 
 
 def _build_component_based_on_status(
-    am_id: str, parent_page: str, am_state: AMState, parametrization: Parametrization, am: ArreteMinisteriel
+    am_id: str, parent_page: str, am_status: AMStatus, parametrization: Parametrization, am: ArreteMinisteriel
 ) -> Component:
     children = [
-        _get_structure_validation_title(am_state.state),
-        _get_structure_validation_diff(am_id, am_state),
-        _get_structure_validation_buttons(parent_page, am_state.state),
-        _get_parametrization_edition_title(am_state.state),
-        _get_parametrization_summary(parent_page, am_state.state, parametrization, am),
-        _get_parametrization_edition_buttons(am_state.state),
-        _get_final_parametric_texts_component(am_id, am_state.state, parent_page),
+        _get_structure_validation_title(am_status),
+        _get_structure_validation_diff(am_id, am_status),
+        _get_structure_validation_buttons(parent_page, am_status),
+        _get_parametrization_edition_title(am_status),
+        _get_parametrization_summary(parent_page, am_status, parametrization, am),
+        _get_parametrization_edition_buttons(am_status),
+        _get_final_parametric_texts_component(am_id, am_status, parent_page),
     ]
     return html.Div(children)
 
 
 def _make_am_index_component(
-    am_id: str, am_state: AMState, parent_page: str, parametrization: Parametrization, am: ArreteMinisteriel
+    am_id: str, am_status: AMStatus, parent_page: str, parametrization: Parametrization, am: ArreteMinisteriel
 ) -> Component:
-    return _build_component_based_on_status(am_id, parent_page, am_state, parametrization, am)
+    return _build_component_based_on_status(am_id, parent_page, am_status, parametrization, am)
 
 
 def _get_title_component(am_metadata: AMMetadata, parent_page: str) -> Component:
@@ -442,9 +445,9 @@ def _get_title_component(am_metadata: AMMetadata, parent_page: str) -> Component
 
 
 def _get_body_component(
-    am_id: str, parent_page: str, am: ArreteMinisteriel, am_state: AMState, parametrization: Parametrization
+    am_id: str, parent_page: str, am: ArreteMinisteriel, am_status: AMStatus, parametrization: Parametrization
 ) -> Component:
-    return _make_am_index_component(am_id, am_state, parent_page, parametrization, am)
+    return _make_am_index_component(am_id, am_status, parent_page, parametrization, am)
 
 
 def _get_subpage_content(route: str, operation_id: AMOperation) -> Component:
@@ -459,12 +462,12 @@ def _get_subpage_content(route: str, operation_id: AMOperation) -> Component:
 
 def _page(am_id: str, current_page: str) -> Component:
     am_metadata = ID_TO_AM_MD.get(am_id)
-    am_state = load_am_state(am_id)
-    am = load_am(am_id, am_state)
-    parametrization = load_parametrization(am_id, am_state)
-    if not am or not parametrization or not am_metadata:
+    am_status = load_am_status(am_id)
+    am = load_structured_am(am_id) or load_initial_am(am_id)  # Fetch initial AM if no parametrization ever done.
+    parametrization = load_parametrization(am_id) or Parametrization([], [])
+    if not am or not am_metadata:
         return html.P('Arrêté introuvable.')
-    body = _get_body_component(am_id, current_page, am, am_state, parametrization)
+    body = _get_body_component(am_id, current_page, am, am_status, parametrization)
     return html.Div(
         [
             _get_title_component(am_metadata, current_page),
@@ -500,63 +503,53 @@ def _generate_and_dump_am_version(am_id: str) -> None:
     _dump_am_versions(am_id, final_am.am_versions)
 
 
-def _update_am_state(clicked_button: str, am_id: str) -> None:
+def _update_am_status(clicked_button: str, am_id: str) -> None:
     if clicked_button == _VALIDATE_STRUCTURE_BUTTON_ID:
-        new_state = AMWorkflowState.PENDING_PARAMETRIZATION
+        new_status = AMStatus.PENDING_PARAMETRIZATION
     elif clicked_button == _INVALIDATE_STRUCTURE_BUTTON_ID:
-        new_state = AMWorkflowState.PENDING_STRUCTURE_VALIDATION
+        new_status = AMStatus.PENDING_STRUCTURE_VALIDATION
     elif clicked_button == _VALIDATE_PARAMETRIZATION_BUTTON_ID:
-        new_state = AMWorkflowState.VALIDATED
+        new_status = AMStatus.VALIDATED
     elif clicked_button == _INVALIDATE_PARAMETRIZATION_BUTTON_ID:
-        new_state = AMWorkflowState.PENDING_PARAMETRIZATION
+        new_status = AMStatus.PENDING_PARAMETRIZATION
     else:
         raise NotImplementedError(f'Unknown button id {clicked_button}')
-    am_state = load_am_state(am_id)
-    am_state.state = new_state
-    dump_am_state(am_id, am_state)
+    upsert_am_status(am_id, new_status)
     if clicked_button == _VALIDATE_PARAMETRIZATION_BUTTON_ID:
         _generate_and_dump_am_version(am_id)
 
 
-def _add_callbacks(app: Dash) -> None:
-    add_structure_edition_callbacks(app)
-    add_parametrization_edition_callbacks(app)
-
-    ids = [
-        _VALIDATE_STRUCTURE_BUTTON_ID,
-        _INVALIDATE_STRUCTURE_BUTTON_ID,
-        _VALIDATE_PARAMETRIZATION_BUTTON_ID,
-        _INVALIDATE_PARAMETRIZATION_BUTTON_ID,
-    ]
-    inputs = [Input(id_, 'n_clicks') for id_ in ids] + [
-        Input('am-page-am-id', 'children'),
-        Input('am-page-current-page', 'children'),
-    ]
-    out = Output(_LOADER, 'children')
-
-    def _handle_click(n_clicks_0, n_clicks_1, n_clicks_2, n_clicks_3, am_id, current_page):
-        all_n_clicks = n_clicks_0, n_clicks_1, n_clicks_2, n_clicks_3
-        for id_, n_clicks in zip(ids, all_n_clicks):
-            if n_clicks >= 1:
-                try:
-                    _update_am_state(id_, am_id)
-                except Exception:  # pylint: disable = broad-except
-                    return error_component(traceback.format_exc())
-        return _page_with_spinner(am_id, current_page)
-
-    app.callback(out, inputs)(_handle_click)
+_BUTTON_IDS = [
+    _VALIDATE_STRUCTURE_BUTTON_ID,
+    _INVALIDATE_STRUCTURE_BUTTON_ID,
+    _VALIDATE_PARAMETRIZATION_BUTTON_ID,
+    _INVALIDATE_PARAMETRIZATION_BUTTON_ID,
+]
+_INPUTS = [Input(id_, 'n_clicks') for id_ in _BUTTON_IDS] + [
+    Input('am-page-am-id', 'children'),
+    Input('am-page-current-page', 'children'),
+]
 
 
-def _router(route: str, parent_page: str) -> Component:
+@app.callback(Output(_LOADER, 'children'), _INPUTS)
+def _handle_click(n_clicks_0, n_clicks_1, n_clicks_2, n_clicks_3, am_id, current_page):
+    all_n_clicks = n_clicks_0, n_clicks_1, n_clicks_2, n_clicks_3
+    for id_, n_clicks in zip(_BUTTON_IDS, all_n_clicks):
+        if n_clicks >= 1:
+            try:
+                _update_am_status(id_, am_id)
+            except Exception:  # pylint: disable = broad-except
+                return error_component(traceback.format_exc())
+    return _page_with_spinner(am_id, current_page)
+
+
+def router(parent_page: str, route: str) -> Component:
     am_id, operation_id, _ = _extract_am_id_and_operation(route)
     if am_id not in ID_TO_AM_MD:
-        return html.P('404 - Arrêté inconnu')
+        return html.P(f'404 - Arrêté {am_id} inconnu')
     am_metadata = ID_TO_AM_MD[am_id]
     current_page = parent_page + '/' + am_id
     if operation_id:
         subpage_component = _get_subpage_content(route, operation_id)
         return html.Div([_get_title_component(am_metadata, current_page), subpage_component])
     return _page_with_spinner(am_id, current_page)
-
-
-page = Page(_router, _add_callbacks)

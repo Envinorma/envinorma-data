@@ -7,10 +7,11 @@ from dash.development.base_component import Component
 from lib.config import AM_DATA_FOLDER
 from lib.data import AMMetadata, Classement
 
-from back_office import am_page
-from back_office.ap_parsing import page as ap_parsing_page
+# from back_office.ap_parsing import page as ap_parsing_page
+from back_office.am_page import router as am_page_router
 from back_office.app_init import app
-from back_office.utils import ID_TO_AM_MD, AMState, div, load_am_state
+from back_office.fetch_data import load_am_status
+from back_office.utils import ID_TO_AM_MD, AMStatus, split_route
 
 
 def _prepare_archive_if_no_data():
@@ -68,15 +69,15 @@ def _get_str_classements(classements: List[Classement]) -> str:
     return ', '.join([_get_str_classement(classement) for classement in classements])
 
 
-def _get_row(rank: int, am_state: AMState, am_metadata: AMMetadata) -> Component:
+def _get_row(rank: int, am_state: AMStatus, am_metadata: AMMetadata) -> Component:
     rows = [
         html.Td(rank),
         html.Td(dcc.Link(am_metadata.cid, href=f'/arrete_ministeriel/{am_metadata.cid}')),
         html.Td(str(am_metadata.nor)),
         html.Td(am_metadata.short_title),
         html.Td(_get_str_classements(am_metadata.classements)),
-        html.Td('', className=_class_name_from_bool(am_state.state != am_state.state.PENDING_STRUCTURE_VALIDATION)),
-        html.Td('', className=_class_name_from_bool(am_state.state == am_state.state.VALIDATED)),
+        html.Td('', className=_class_name_from_bool(am_state != AMStatus.PENDING_STRUCTURE_VALIDATION)),
+        html.Td('', className=_class_name_from_bool(am_state == AMStatus.VALIDATED)),
     ]
     return html.Tr(rows)
 
@@ -95,7 +96,7 @@ def _get_header() -> Component:
     )
 
 
-def _build_am_table(id_to_state: Dict[str, AMState], id_to_am_metadata: Dict[str, AMMetadata]) -> Component:
+def _build_am_table(id_to_state: Dict[str, AMStatus], id_to_am_metadata: Dict[str, AMMetadata]) -> Component:
     header = _get_header()
     return html.Table(
         [
@@ -108,26 +109,25 @@ def _build_am_table(id_to_state: Dict[str, AMState], id_to_am_metadata: Dict[str
     )
 
 
-def _make_index_component(id_to_state: Dict[str, AMState], id_to_am_metadata: Dict[str, AMMetadata]) -> Component:
-    return div([html.H3('Arrêtés ministériels.'), _build_am_table(id_to_state, id_to_am_metadata)])
+def _make_index_component(id_to_state: Dict[str, AMStatus], id_to_am_metadata: Dict[str, AMMetadata]) -> Component:
+    return html.Div([html.H3('Arrêtés ministériels.'), _build_am_table(id_to_state, id_to_am_metadata)])
 
 
-_CHILD_PAGES = {'/arrete_ministeriel': am_page.page}
-
-
-def _load_am_states(ids: List[str]) -> Dict[str, AMState]:
-    return {id_: load_am_state(id_) for id_ in ids}
+def _load_am_states(ids: List[str]) -> Dict[str, AMStatus]:
+    return {id_: load_am_status(id_) for id_ in ids}
 
 
 def router(pathname: str) -> Component:
+    if not pathname.startswith('/'):
+        raise ValueError(f'Expecting pathname to start with /, received {pathname}')
     if pathname == '/':
         id_to_state = _load_am_states(list(ID_TO_AM_MD.keys()))
         return _make_index_component(id_to_state, ID_TO_AM_MD)
+    prefix, suffix = split_route(pathname)
+    if prefix == '/arrete_ministeriel':
+        return am_page_router(prefix, suffix)
     # if pathname == '/ap_parsing':
     #     return ap_parsing_page()
-    for key, page in _CHILD_PAGES.items():
-        if pathname[: len(key)] == key:
-            return page.router(pathname[len(key) :], key)
     return html.H3('404 error: Unknown path {}'.format(pathname))
 
 
@@ -135,9 +135,6 @@ def router(pathname: str) -> Component:
 def display_page(pathname: str):
     return router(pathname)
 
-
-for _PAGE in _CHILD_PAGES.values():
-    _PAGE.add_callbacks(app)
 
 APP = app.server  # for gunicorn deployment
 
