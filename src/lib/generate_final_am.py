@@ -1,8 +1,8 @@
 from dataclasses import dataclass
-from lib.topics.topics import TOPIC_ONTOLOGY
 from typing import Dict, Optional, Tuple
 
-from back_office.utils import load_am, load_am_state, load_parametrization
+from back_office.fetch_data import load_initial_am, load_parametrization, load_structured_am
+
 from lib.am_enriching import (
     add_references,
     add_summary,
@@ -10,10 +10,11 @@ from lib.am_enriching import (
     detect_and_add_topics,
     remove_null_applicabilities,
 )
-from lib.data import AMMetadata, ArreteMinisteriel, add_metadata, load_am_data
-from lib.manual_enrichments import get_manual_post_process
+from lib.data import AMMetadata, ArreteMinisteriel, add_metadata
+from lib.manual_enrichments import get_manual_combinations, get_manual_post_process
 from lib.parametric_am import generate_all_am_versions
 from lib.parametrization import Parametrization
+from lib.topics.topics import TOPIC_ONTOLOGY
 
 AMVersions = Dict[Tuple[str, ...], ArreteMinisteriel]
 
@@ -24,7 +25,8 @@ def _apply_parametrization(
     if not am:
         return
     enriched_am = remove_null_applicabilities(am)
-    all_versions = generate_all_am_versions(enriched_am, parametrization)
+    manual_combinations = get_manual_combinations(am_id)  # For AM 1510 mainly, none otherwise
+    all_versions = generate_all_am_versions(enriched_am, parametrization, manual_combinations)
     return {name: get_manual_post_process(am_id)(add_summary(am_), name) for name, am_ in all_versions.items()}
 
 
@@ -50,9 +52,10 @@ class FinalAM:
 
 def generate_final_am(metadata: AMMetadata) -> FinalAM:
     cid = metadata.cid
-    am_state = load_am_state(cid)
-    am = load_am(cid, am_state)
+    am = load_structured_am(cid) or load_initial_am(cid)
+    if not am:
+        raise ValueError('Expecting one AM to proceed.')
     am = _enrich_am(am, metadata)
-    parametrization = load_parametrization(cid, am_state)
+    parametrization = load_parametrization(cid) or Parametrization([], [])
     am_versions = _apply_parametrization(cid, am, parametrization)
     return FinalAM(base_am=am, am_versions=am_versions)

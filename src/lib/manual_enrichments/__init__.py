@@ -85,7 +85,7 @@ def get_manual_combinations(id_: str) -> Optional[Combinations]:
         return None
     if id_ == 'DEVP1235896A':
         return None
-    if id_ == 'DEVP1706393A':
+    if id_ in ('DEVP1706393A', 'JORFTEXT000034429274'):
         return generate_1510_combinations()
     warnings.warn(f'No combinations found for text with id_ {id_}, use default value.')
     return None

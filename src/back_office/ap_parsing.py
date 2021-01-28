@@ -9,15 +9,16 @@ import dash_html_components as html
 from dash.dependencies import Input, Output, State
 from dash.development.base_component import Component
 from lib.data import StructuredText, add_title_default_numbering
-from lib.docx import extract_text_from_file as parse_docx, get_docx_xml, get_docx_xml_soup
+from lib.docx import extract_text_from_file as parse_docx
+from lib.docx import get_docx_xml_soup
 from lib.open_document import load_and_transform as parse_odt
 from lib.pdf import pdf_to_docx
 from lib.utils import random_string
 
 from back_office.app_init import app
+from back_office.components import error_component
 from back_office.components.am_component import structured_text_component
 from back_office.components.summary_component import summary_component
-from back_office.utils import error_component
 
 _UPLOAD = 'ap-parsing-upload-data'
 _FILENAME_PDF = 'ap-parsing-filename-pdf'

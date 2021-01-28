@@ -1,4 +1,4 @@
-from back_office.utils import get_section_title
+from back_office.utils import get_section_title, split_route
 from lib.data import ArreteMinisteriel, EnrichedString, StructuredText
 
 
@@ -18,3 +18,13 @@ def test_get_section_title():
     assert get_section_title((0, 0), am) == 'Section 1'
     assert get_section_title((0, 1), am) == 'Section 2'
     assert get_section_title((0, 0, 0), am) == 'Section 1.1'
+    assert get_section_title((0, 0, 0, 1, 1), am) == None
+
+
+def test_split_route():
+    assert split_route('/') == ('/', '')
+    assert split_route('/a') == ('/a', '')
+    assert split_route('/a/') == ('/a', '/')
+    assert split_route('/a/b') == ('/a', '/b')
+    assert split_route('/a/b/') == ('/a', '/b/')
+    assert split_route('/a/b/c') == ('/a', '/b/c')

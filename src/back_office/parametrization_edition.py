@@ -3,7 +3,6 @@ import traceback
 from datetime import date, datetime
 from typing import Any, Dict, List, Optional, Tuple, Type, Union
 
-import dash
 import dash_bootstrap_components as dbc
 import dash_core_components as dcc
 import dash_html_components as html
@@ -30,9 +29,17 @@ from lib.parametrization import (
     SectionReference,
 )
 
+from back_office.app_init import app
+from back_office.components import error_component, success_component
 from back_office.components.am_component import am_component
+from back_office.fetch_data import (
+    load_initial_am,
+    load_parametrization,
+    load_structured_am,
+    remove_parameter,
+    upsert_parameter,
+)
 from back_office.routing import build_am_page
-from back_office.state_update import remove_parameter, upsert_parameter
 from back_office.utils import (
     ID_TO_AM_MD,
     AMOperation,
@@ -40,15 +47,9 @@ from back_office.utils import (
     assert_int,
     assert_list,
     assert_str,
-    div,
-    error_component,
     get_section,
     get_subsection,
     get_truncated_str,
-    load_am,
-    load_am_state,
-    load_parametrization,
-    success_component,
 )
 
 _Options = List[Dict[str, Any]]
@@ -158,7 +159,7 @@ def _get_condition_component(rank: int, default_condition: Optional[_MonoConditi
             className='form-control',
         ),
     ]
-    return div([*dropdown_conditions], style=dict(display='flex'))
+    return html.Div(dropdown_conditions, style=dict(display='flex'))
 
 
 def _get_condition_components(
@@ -168,7 +169,7 @@ def _get_condition_components(
         dropdown_conditions = [_get_condition_component(i, cd) for i, cd in enumerate(default_conditions)]
     else:
         dropdown_conditions = [_get_condition_component(i) for i in range(nb_components)]
-    return div([*dropdown_conditions])
+    return html.Div(dropdown_conditions)
 
 
 def _get_main_title(operation: AMOperation, is_edition: bool, rank: int) -> Component:
@@ -217,7 +218,7 @@ def _get_new_section_form(default_title: str, default_content: str) -> Component
             html.H5('Nouvelle version'),
             html.Div(dcc.Input(id=_NEW_TEXT_TITLE, value=default_title), hidden=True),
             html.Label('Contenu du paragraphe', htmlFor=_NEW_TEXT_CONTENT, className='form-label'),
-            div(
+            html.Div(
                 dcc.Textarea(
                     id=_NEW_TEXT_CONTENT, className='form-control', value=default_content, style={'min-height': '300px'}
                 )
@@ -526,7 +527,7 @@ def _build_page(
     ]
     page = _get_main_component(am, operation, am_page, destination_rank, loaded_parameter)
 
-    return div([page, *hidden_components])
+    return html.Div([page, *hidden_components])
 
 
 def _make_list(candidate: Optional[Union[List[Dict[str, Any]], Dict[str, Any]]]) -> List[Dict[str, Any]]:
@@ -796,7 +797,7 @@ def _handle_submit(
         return error_component(f'Erreur dans le formulaire:\n{exc}')
     except Exception:  # pylint: disable=broad-except
         return error_component(f'Unexpected error:\n{traceback.format_exc()}')
-    return div(
+    return html.Div(
         [
             success_component(f'Enregistrement réussi.'),
             dcc.Location(pathname=build_am_page(am_id), id='param-edition-success-redirect'),
@@ -812,7 +813,7 @@ def _handle_delete(n_clicks: int, operation_str: str, am_id: str, parameter_rank
         remove_parameter(am_id, operation, parameter_rank)
     except Exception:  # pylint: disable=broad-except
         return error_component(f'Unexpected error:\n{traceback.format_exc()}')
-    return div(
+    return html.Div(
         [
             success_component(f'Suppression réussie.'),
             dcc.Location(pathname=build_am_page(am_id), id='param-edition-success-redirect'),
@@ -821,7 +822,7 @@ def _handle_delete(n_clicks: int, operation_str: str, am_id: str, parameter_rank
 
 
 def _load_am(am_id: str) -> Optional[ArreteMinisteriel]:
-    return load_am(am_id, load_am_state(am_id))
+    return load_structured_am(am_id) or load_initial_am(am_id)
 
 
 def _build_new_text_component(str_path: Optional[str], am_id: str, operation_str: str) -> Component:
@@ -862,73 +863,77 @@ def _build_targeted_alinea_value(section_dict: Dict[str, Any], operation_str: st
     return list(range(len(section.outer_alineas)))
 
 
-def add_parametrization_edition_callbacks(app: dash.Dash):
-    @app.callback(
-        Output(_NEW_TEXT, 'children'),
-        Input(_TARGET_SECTION, 'value'),
-        State(_AM_ID, 'children'),
-        State(_AM_OPERATION, 'children'),
-        prevent_initial_call=True,
-    )
-    def _(path, am_id, operation):
-        return _build_new_text_component(path, am_id, operation)
+@app.callback(
+    Output(_NEW_TEXT, 'children'),
+    Input(_TARGET_SECTION, 'value'),
+    State(_AM_ID, 'children'),
+    State(_AM_OPERATION, 'children'),
+    prevent_initial_call=True,
+)
+def _(path, am_id, operation):
+    return _build_new_text_component(path, am_id, operation)
 
-    @app.callback(
-        Output(_TARGET_SECTION_STORE, 'data'),
-        Input(_TARGET_SECTION, 'value'),
-        State(_AM_ID, 'children'),
-        prevent_initial_call=True,
-    )
-    def __store_target_section(path, am_id):
-        return _store_target_section(path, am_id)
 
-    @app.callback(
-        Output(_TARGET_ALINEAS, 'options'),
-        Input(_TARGET_SECTION_STORE, 'data'),
-        State(_AM_OPERATION, 'children'),
-        prevent_initial_call=True,
-    )
-    def __build_targeted_alinea_options(target_section, operation):
-        return _build_targeted_alinea_options(target_section, operation)
+@app.callback(
+    Output(_TARGET_SECTION_STORE, 'data'),
+    Input(_TARGET_SECTION, 'value'),
+    State(_AM_ID, 'children'),
+    prevent_initial_call=True,
+)
+def __store_target_section(path, am_id):
+    return _store_target_section(path, am_id)
 
-    @app.callback(
-        Output(_TARGET_ALINEAS, 'value'),
-        Input(_TARGET_SECTION_STORE, 'data'),
-        State(_AM_OPERATION, 'children'),
-        prevent_initial_call=True,
-    )
-    def __build_targeted_alinea_value(target_section, operation):
-        return _build_targeted_alinea_value(target_section, operation)
 
-    @app.callback(
-        Output('param-edition-upsert-output', 'children'),
-        Input('submit-val-param-edition', 'n_clicks'),
-        State(_AM_OPERATION, 'children'),
-        State(_AM_ID, 'children'),
-        State(_PARAMETER_RANK, 'children'),
-        State(_TARGET_SECTION_STORE, 'data'),
-        State(_LOADED_NB_ALINEAS, 'data'),
-        State('page-content', 'children'),
-    )
-    def __(n_clicks, operation, am_id, parameter_rank, target_text_dict, loaded_nb_alineas, state):
-        return _handle_submit(n_clicks, operation, am_id, parameter_rank, target_text_dict, loaded_nb_alineas, state)
+@app.callback(
+    Output(_TARGET_ALINEAS, 'options'),
+    Input(_TARGET_SECTION_STORE, 'data'),
+    State(_AM_OPERATION, 'children'),
+    prevent_initial_call=True,
+)
+def __build_targeted_alinea_options(target_section, operation):
+    return _build_targeted_alinea_options(target_section, operation)
 
-    @app.callback(
-        Output('param-edition-delete-output', 'children'),
-        Input('param-edition-delete-button', 'n_clicks'),
-        State(_AM_OPERATION, 'children'),
-        State(_AM_ID, 'children'),
-        State(_PARAMETER_RANK, 'children'),
-    )
-    def ___(n_clicks, operation, am_id, parameter_rank):
-        return _handle_delete(n_clicks, operation, am_id, parameter_rank)
 
-    def nb_conditions(value):
-        return _get_condition_components(value)
+@app.callback(
+    Output(_TARGET_ALINEAS, 'value'),
+    Input(_TARGET_SECTION_STORE, 'data'),
+    State(_AM_OPERATION, 'children'),
+    prevent_initial_call=True,
+)
+def __build_targeted_alinea_value(target_section, operation):
+    return _build_targeted_alinea_value(target_section, operation)
 
-    app.callback(
-        Output('parametrization-conditions', 'children'), [Input(_NB_CONDITIONS, 'value')], prevent_initial_call=True
-    )(nb_conditions)
+
+@app.callback(
+    Output('param-edition-upsert-output', 'children'),
+    Input('submit-val-param-edition', 'n_clicks'),
+    State(_AM_OPERATION, 'children'),
+    State(_AM_ID, 'children'),
+    State(_PARAMETER_RANK, 'children'),
+    State(_TARGET_SECTION_STORE, 'data'),
+    State(_LOADED_NB_ALINEAS, 'data'),
+    State('page-content', 'children'),
+)
+def __(n_clicks, operation, am_id, parameter_rank, target_text_dict, loaded_nb_alineas, state):
+    return _handle_submit(n_clicks, operation, am_id, parameter_rank, target_text_dict, loaded_nb_alineas, state)
+
+
+@app.callback(
+    Output('param-edition-delete-output', 'children'),
+    Input('param-edition-delete-button', 'n_clicks'),
+    State(_AM_OPERATION, 'children'),
+    State(_AM_ID, 'children'),
+    State(_PARAMETER_RANK, 'children'),
+)
+def ___(n_clicks, operation, am_id, parameter_rank):
+    return _handle_delete(n_clicks, operation, am_id, parameter_rank)
+
+
+@app.callback(
+    Output('parametrization-conditions', 'children'), [Input(_NB_CONDITIONS, 'value')], prevent_initial_call=True
+)
+def nb_conditions(value):
+    return _get_condition_components(value)
 
 
 def _parse_route(route: str) -> Tuple[str, AMOperation, Optional[int], bool]:
@@ -971,17 +976,16 @@ def router(pathname: str) -> Component:
         if am_id not in ID_TO_AM_MD:
             return html.P('404 - Arrêté inconnu')
         am_page = build_am_page(am_id)
-        am_state = load_am_state(am_id)
         am_metadata = ID_TO_AM_MD.get(am_id)
-        am = load_am(am_id, am_state)
-        parametrization = load_parametrization(am_id, am_state)
+        am = _load_am(am_id)
+        parametrization = load_parametrization(am_id) or Parametrization([], [])
         loaded_parameter = (
             _get_parameter(parametrization, operation_id, parameter_rank) if parameter_rank is not None else None
         )
     except RouteParsingError as exc:
         return html.P(f'404 - Page introuvable - {str(exc)}')
     if not am or not parametrization or not am_metadata:
-        return html.P('Arrêté introuvable.')
+        return html.P(f'404 - Arrêté {am_id} introuvable.')
     if parameter_rank is not None and not copy:
         destination_parameter_rank = parameter_rank
     else:

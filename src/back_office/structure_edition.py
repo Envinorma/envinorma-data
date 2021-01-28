@@ -1,34 +1,20 @@
-import os
 import re
 import traceback
 from dataclasses import replace
-from datetime import datetime
 from typing import Any, Dict, List, Optional
 
-import dash
 import dash_core_components as dcc
 import dash_html_components as html
 from dash.dependencies import Input, Output, State
 from dash.development.base_component import Component
 from lib.data import ArreteMinisteriel, EnrichedString, StructuredText, Table, am_to_text
 from lib.structure_extraction import TextElement, Title, build_structured_text, structured_text_to_text_elements
-from lib.paths import get_structured_text_wip_folder
-from lib.utils import jsonify
 
+from back_office.app_init import app
+from back_office.components import error_component, success_component
+from back_office.fetch_data import load_initial_am, load_structured_am, upsert_structured_am
 from back_office.routing import build_am_page
-from back_office.utils import (
-    AMOperation,
-    RouteParsingError,
-    assert_str,
-    div,
-    dump_am_state,
-    error_component,
-    get_truncated_str,
-    load_am,
-    load_am_state,
-    success_component,
-    write_file,
-)
+from back_office.utils import AMOperation, RouteParsingError, assert_str, get_truncated_str
 
 _TOC_COMPONENT = 'structure-edition-toc'
 _TEXT_AREA_COMPONENT = 'structure-edition-text-area-component'
@@ -112,15 +98,15 @@ def _go_back_button(am_page: str) -> Component:
 
 def _footer_buttons(am_page: str) -> Component:
     style = {'display': 'inline-block'}
-    return div([_preview_button(), _submit_button(), _go_back_button(am_page)], style)
+    return html.Div([_preview_button(), _submit_button(), _go_back_button(am_page)], style=style)
 
 
 def _fixed_footer(am_page: str) -> Component:
-    output = div(html.Div(id='form-output-structure-edition'), style={'display': 'inline-block'})
-    content = div([output, html.Br(), _footer_buttons(am_page)])
-    return div(
+    output = html.Div(html.Div(id='form-output-structure-edition'), style={'display': 'inline-block'})
+    content = html.Div([output, html.Br(), _footer_buttons(am_page)])
+    return html.Div(
         content,
-        {
+        style={
             'position': 'fixed',
             'bottom': '0px',
             'width': '80%',
@@ -162,15 +148,13 @@ def _get_main_row(text: StructuredText) -> Component:
 
 
 def _make_am_structure_edition_component(am_id: str, am: ArreteMinisteriel) -> Component:
-    return div(
-        [
-            html.Div(className='row', children=_get_instructions()),
-            _get_main_row(am_to_text(am)),
-            _fixed_footer(build_am_page(am_id)),
-            html.P(am_id, hidden=True, id='am-id-structure-edition'),
-        ],
-        {'margin-bottom': '300px'},
-    )
+    components = [
+        html.Div(className='row', children=_get_instructions()),
+        _get_main_row(am_to_text(am)),
+        _fixed_footer(build_am_page(am_id)),
+        html.P(am_id, hidden=True, id='am-id-structure-edition'),
+    ]
+    return html.Div(components, style={'margin-bottom': '300px'})
 
 
 def _parse_route(route: str) -> str:
@@ -190,12 +174,11 @@ def _parse_route(route: str) -> str:
 def router(pathname: str) -> Component:
     try:
         am_id = _parse_route(pathname)
-        am_state = load_am_state(am_id)
-        am = load_am(am_id, am_state)
+        am = load_structured_am(am_id) or load_initial_am(am_id)
     except RouteParsingError as exc:
         return html.P(f'404 - Page introuvable - {str(exc)}')
     if not am:
-        return html.P('Arrêté introuvable.')
+        return html.P(f'404 - Arrêté {am_id} introuvable.')
     return _make_am_structure_edition_component(am_id, am)
 
 
@@ -324,8 +307,7 @@ def _check_have_same_words(am: StructuredText, new_am: str) -> None:
 
 
 def _structure_text(am_id: str, new_am: str) -> ArreteMinisteriel:
-    am_state = load_am_state(am_id)
-    am = load_am(am_id, am_state)
+    am = load_structured_am(am_id) or load_initial_am(am_id)
     if not am:
         raise _FormHandlingError(f'am with id {am_id} not found, which should not happen')
     text = am_to_text(am)
@@ -339,27 +321,16 @@ def _structure_text(am_id: str, new_am: str) -> ArreteMinisteriel:
     return replace(am, sections=new_text.sections)
 
 
-def _add_filename_to_state(am_id: str, filename: str) -> None:
-    am_state = load_am_state(am_id)
-    am_state.structure_draft_filenames.append(filename)
-    dump_am_state(am_id, am_state)
-
-
 def _save_text_and_get_message(am_id: str, new_am: str) -> str:
-    new_version = datetime.now().strftime('%y%m%d_%H%M')
-    filename = new_version + '.json'
-    full_filename = os.path.join(get_structured_text_wip_folder(am_id), filename)
     text = _structure_text(am_id, new_am)
-    json_ = jsonify(text.to_dict())
-    write_file(json_, full_filename)
-    _add_filename_to_state(am_id, filename)
-    return f'Enregistrement réussi. (Filename={full_filename})'
+    upsert_structured_am(am_id, text)
+    return f'Enregistrement réussi.'
 
 
 def _extract_form_value_and_save_text(nb_clicks: int, am_id: str, text_area_content: Dict[str, Any]) -> Component:
     new_am = assert_str(text_area_content)
     if nb_clicks == 0:
-        return div([])
+        return html.Div()
     try:
         success_message = _save_text_and_get_message(am_id, new_am)
     except _FormHandlingError as exc:
@@ -410,19 +381,18 @@ def _extract_text_area_and_display_toc(content: str) -> Component:
     return html.P(new_title_levels)
 
 
-def add_structure_edition_callbacks(app: dash.Dash):
-    def update_output(nb_clicks, am_id, state):
-        return _extract_form_value_and_save_text(nb_clicks, am_id, state)
+@app.callback(
+    Output('form-output-structure-edition', 'children'),
+    [Input('submit-val-structure-edition', 'n_clicks'), Input('am-id-structure-edition', 'children')],
+    [State(_TEXT_AREA_COMPONENT, 'value')],
+)
+def update_output(nb_clicks, am_id, state):
+    return _extract_form_value_and_save_text(nb_clicks, am_id, state)
 
-    app.callback(
-        Output('form-output-structure-edition', 'children'),
-        [Input('submit-val-structure-edition', 'n_clicks'), Input('am-id-structure-edition', 'children')],
-        [State(_TEXT_AREA_COMPONENT, 'value')],
-    )(update_output)
 
-    @app.callback(
-        Output(_TOC_COMPONENT, 'children'),
-        [Input(_PREVIEW_BUTTON, 'n_clicks'), Input(_TEXT_AREA_COMPONENT, 'value')],
-    )
-    def _(_, state):
-        return _extract_text_area_and_display_toc(state)
+@app.callback(
+    Output(_TOC_COMPONENT, 'children'),
+    [Input(_PREVIEW_BUTTON, 'n_clicks'), Input(_TEXT_AREA_COMPONENT, 'value')],
+)
+def _(_, state):
+    return _extract_text_area_and_display_toc(state)
