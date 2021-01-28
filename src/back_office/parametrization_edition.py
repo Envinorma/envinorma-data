@@ -299,7 +299,7 @@ def _get_condition_form(default_condition: Optional[Condition]) -> Component:
         default_merge, default_conditions = _simplify_condition(default_condition)
     else:
         default_merge = _AND_ID
-        default_conditions = [Littler(ParameterEnum.DATE_AUTORISATION.value, None)]
+        default_conditions = [Littler(ParameterEnum.DATE_INSTALLATION.value, None)]
     dropdown_condition_merge = html.Div(
         [
             'Opération',
