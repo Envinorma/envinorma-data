@@ -68,6 +68,8 @@ Missing parameter warning
 def _parameter_id_to_str(parameter_id: str) -> str:
     if parameter_id == ParameterEnum.DATE_AUTORISATION.value.id:
         return 'la date d\'autorisation'
+    if parameter_id == ParameterEnum.DATE_INSTALLATION.value.id:
+        return 'la date de mise en service'
     if parameter_id == ParameterEnum.REGIME.value.id:
         return 'le régime'
     return f'la valeur du paramètre {parameter_id}'
@@ -107,6 +109,18 @@ def _manual_active_conditions(parameter_id: str, condition: LeafCondition) -> Op
             rg_dt = _date_to_human_str(condition.right)
             return 'elle a été autorisée entre le ' + lf_dt + ' et le ' + rg_dt
     regime = ParameterEnum.REGIME.value.id
+
+    date_installation = ParameterEnum.DATE_INSTALLATION.value.id
+    if parameter_id == date_installation:
+        if isinstance(condition, Greater):
+            return 'elle a été mise en service après le ' + _date_to_human_str(condition.target)
+        if isinstance(condition, Littler):
+            return 'elle a été mise en service avant le ' + _date_to_human_str(condition.target)
+        if isinstance(condition, Range):
+            lf_dt = _date_to_human_str(condition.left)
+            rg_dt = _date_to_human_str(condition.right)
+            return 'elle a été mise en service entre le ' + lf_dt + ' et le ' + rg_dt
+
     if parameter_id == regime:
         if isinstance(condition, Equal):
             if condition.target == Regime.A:

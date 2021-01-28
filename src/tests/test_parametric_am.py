@@ -313,7 +313,7 @@ def test_generate_all_am_versions():
         [NonApplicationCondition(EntityReference(SectionReference((0,)), None), condition, source)], []
     )
 
-    res = generate_all_am_versions(am, parametrization)
+    res = generate_all_am_versions(am, parametrization, False)
     assert len(res) == 3
     assert ('nouvelle-installation != False',) in res
     assert ('nouvelle-installation == False',) in res
@@ -323,7 +323,7 @@ def test_generate_all_am_versions():
     assert _all_alineas_active(res[()].sections[0])
     assert len(res[()].sections[0].applicability.warnings) == 1
 
-    res_2 = generate_all_am_versions(am, Parametrization([], []))
+    res_2 = generate_all_am_versions(am, Parametrization([], []), False)
     assert len(res_2) == 1
     assert tuple() in res_2
     assert res_2[()].sections[0].applicability is None

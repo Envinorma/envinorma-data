@@ -26,7 +26,7 @@ def _apply_parametrization(
         return
     enriched_am = remove_null_applicabilities(am)
     manual_combinations = get_manual_combinations(am_id)  # For AM 1510 mainly, none otherwise
-    all_versions = generate_all_am_versions(enriched_am, parametrization, manual_combinations)
+    all_versions = generate_all_am_versions(enriched_am, parametrization, True, manual_combinations)
     return {name: get_manual_post_process(am_id)(add_summary(am_), name) for name, am_ in all_versions.items()}
 
 

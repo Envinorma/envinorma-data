@@ -433,8 +433,10 @@ def _extract_parameters_from_parametrization(parametrization: Parametrization) -
     return application_conditions.union(alternative_sections)
 
 
-def _generate_options_dicts(parametrization: Parametrization) -> List[OptionsDict]:
+def _generate_options_dicts(parametrization: Parametrization, date_only: bool) -> List[OptionsDict]:
     parameters = _extract_parameters_from_parametrization(parametrization)
+    if date_only:
+        parameters = [param for param in parameters if param == ParameterEnum.DATE_INSTALLATION.value]
     options_dicts = []
     for parameter in parameters:
         conditions = _extract_conditions_from_parametrization(parameter, parametrization)
@@ -442,8 +444,8 @@ def _generate_options_dicts(parametrization: Parametrization) -> List[OptionsDic
     return options_dicts
 
 
-def _generate_exhaustive_combinations(parametrization: Parametrization) -> Combinations:
-    options_dicts = _generate_options_dicts(parametrization)
+def _generate_exhaustive_combinations(parametrization: Parametrization, date_only: bool) -> Combinations:
+    options_dicts = _generate_options_dicts(parametrization, date_only)
     if not options_dicts:
         return {}
     combinations = _generate_combinations(options_dicts)
@@ -453,10 +455,13 @@ def _generate_exhaustive_combinations(parametrization: Parametrization) -> Combi
 
 
 def generate_all_am_versions(
-    am: ArreteMinisteriel, parametrization: Parametrization, combinations: Optional[Combinations] = None
+    am: ArreteMinisteriel,
+    parametrization: Parametrization,
+    date_only: bool,
+    combinations: Optional[Combinations] = None,
 ) -> Dict[Tuple[str, ...], ArreteMinisteriel]:
     if combinations is None:
-        combinations = _generate_exhaustive_combinations(parametrization)
+        combinations = _generate_exhaustive_combinations(parametrization, date_only)
     if not combinations:
         return {tuple(): replace(am, unique_version=True)}
     return {

@@ -55,10 +55,11 @@ from back_office.utils import (
 _Options = List[Dict[str, Any]]
 
 _AUTORISATION_DATE_FR = 'Date d\'autorisation'
+_INSTALLATION_DATE_FR = 'Date de mise en service'
 _CONDITION_VARIABLES = {
     'Régime': ParameterEnum.REGIME,
     _AUTORISATION_DATE_FR: ParameterEnum.DATE_AUTORISATION,
-    'Date de mise en service': ParameterEnum.DATE_INSTALLATION,
+    _INSTALLATION_DATE_FR: ParameterEnum.DATE_INSTALLATION,
 }
 _CONDITION_VARIABLE_OPTIONS = [{'label': condition, 'value': condition} for condition in _CONDITION_VARIABLES]
 _CONDITION_OPERATIONS = ['<', '=', '>=']
@@ -130,7 +131,7 @@ def _get_str_target(value: Any, parameter_type: ParameterType) -> str:
 
 
 def _get_condition_component(rank: int, default_condition: Optional[_MonoCondition] = None) -> Component:
-    default_variable = _AUTORISATION_DATE_FR if not default_condition else _get_str_variable(default_condition)
+    default_variable = _INSTALLATION_DATE_FR if not default_condition else _get_str_variable(default_condition)
     default_operation = '=' if not default_condition else _get_str_operation(default_condition)
     default_target = (
         '' if not default_condition else _get_str_target(default_condition.target, default_condition.parameter.type)
