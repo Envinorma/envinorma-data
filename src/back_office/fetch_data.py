@@ -1,5 +1,5 @@
 import json
-from typing import Any, List, Optional, Tuple
+from typing import Any, Dict, List, Optional, Tuple
 
 import psycopg2
 from lib.config import config
@@ -164,6 +164,11 @@ def load_am_status(am_id: str) -> AMStatus:
     query = 'SELECT status FROM am_status WHERE am_id = %s;'
     status = _ensure_one_variable(_exectute_select_query(query, (am_id,)))
     return AMStatus(status)
+
+
+def load_all_am_statuses() -> Dict[str, AMStatus]:
+    query = 'SELECT am_id, status FROM am_status'
+    return {am_id: AMStatus(status) for am_id, status in _exectute_select_query(query, ())}
 
 
 def upsert_am_status(am_id: str, new_status: AMStatus) -> None:

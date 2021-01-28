@@ -11,7 +11,7 @@ from lib.data import AMMetadata, Classement
 # from back_office.ap_parsing import page as ap_parsing_page
 from back_office.am_page import router as am_page_router
 from back_office.app_init import app
-from back_office.fetch_data import load_am_status
+from back_office.fetch_data import load_all_am_statuses
 from back_office.utils import ID_TO_AM_MD, AMStatus, split_route
 
 
@@ -41,12 +41,6 @@ def _get_page_heading() -> Component:
         html.Div(html.Div(html.Img(src=src, style={'width': '30px'}), className='container'), style=sticky_style),
         href='/',
     )
-
-
-app.layout = html.Div(
-    [dcc.Location(id='url', refresh=False), _get_page_heading(), html.Div(id='page-content', className='container')],
-    id='layout',
-)
 
 
 def _class_name_from_bool(bool_: bool) -> str:
@@ -107,15 +101,11 @@ def _make_index_component(id_to_state: Dict[str, AMStatus], id_to_am_metadata: D
     return html.Div([html.H3('Arrêtés ministériels.'), _build_am_table(id_to_state, id_to_am_metadata)])
 
 
-def _load_am_states(ids: List[str]) -> Dict[str, AMStatus]:
-    return {id_: load_am_status(id_) for id_ in ids}
-
-
 def router(pathname: str) -> Component:
     if not pathname.startswith('/'):
         raise ValueError(f'Expecting pathname to start with /, received {pathname}')
     if pathname == '/':
-        id_to_state = _load_am_states(list(ID_TO_AM_MD.keys()))
+        id_to_state = load_all_am_statuses()
         return _make_index_component(id_to_state, ID_TO_AM_MD)
     prefix, suffix = split_route(pathname)
     if prefix == '/arrete_ministeriel':
@@ -123,6 +113,12 @@ def router(pathname: str) -> Component:
     # if pathname == '/ap_parsing':
     #     return ap_parsing_page()
     return html.H3('404 error: Unknown path {}'.format(pathname))
+
+
+app.layout = html.Div(
+    [dcc.Location(id='url', refresh=False), _get_page_heading(), html.Div(id='page-content', className='container')],
+    id='layout',
+)
 
 
 @app.callback(Output('page-content', 'children'), [Input('url', 'pathname')])
