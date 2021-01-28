@@ -18,6 +18,9 @@ from back_office.utils import ID_TO_AM_MD, AMStatus, split_route
 def _create_tmp_am_folder():
     if not os.path.exists(config.storage.am_data_folder):
         os.mkdir(config.storage.am_data_folder)
+    parametric_folder = f'{config.storage.am_data_folder}/parametric_texts'
+    if not os.path.exists(parametric_folder):
+        os.mkdir(parametric_folder)
 
 
 _create_tmp_am_folder()
