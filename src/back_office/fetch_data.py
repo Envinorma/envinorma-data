@@ -1,13 +1,14 @@
 import json
-
-from lib.data import ArreteMinisteriel
 from typing import Any, List, Optional, Tuple
 
 import psycopg2
-from back_office.utils import AMOperation, AMStatus
+from lib.config import config
+from lib.data import ArreteMinisteriel
 from lib.parametrization import NonApplicationCondition, ParameterObject, Parametrization
 
-_CONNECTION = psycopg2.connect(dbname='am', user='remidelbouys')
+from back_office.utils import AMOperation, AMStatus
+
+_CONNECTION = psycopg2.connect(config.storage.psql_dsn)
 
 
 def _ensure_len(list_: List, min_len: int) -> None:
@@ -62,7 +63,7 @@ def _upsert_new_parametrization(am_id: str, parametrization: Parametrization) ->
     data = json.dumps(parametrization.to_dict())
     query = (
         'INSERT INTO parametrization(am_id, data) VALUES(%s, %s) ON CONFLICT (am_id)'
-        ' DO UPDATE SET data = %s WHERE parametrization.am_id =%s;'
+        ' DO UPDATE SET data = %s WHERE parametrization.am_id = %s;'
     )
     _exectute_update_query(query, (am_id, data, data, am_id))
 
@@ -169,61 +170,3 @@ def upsert_am_status(am_id: str, new_status: AMStatus) -> None:
         ' DO UPDATE SET status = %s WHERE am_status.am_id =%s;'
     )
     _exectute_update_query(query, (am_id, new_status.value, new_status.value, am_id))
-
-
-def _create_tables():
-    commands = (
-        """CREATE TABLE am_status (am_id VARCHAR(255) PRIMARY KEY, status VARCHAR(255) NOT NULL)""",
-        """CREATE TABLE initial_am (am_id VARCHAR(255) PRIMARY KEY, data TEXT NOT NULL)""",
-        """CREATE TABLE structured_am (am_id VARCHAR(255) PRIMARY KEY, data TEXT NOT NULL)""",
-        """CREATE TABLE parametrization (am_id VARCHAR(255) PRIMARY KEY, data TEXT NOT NULL)""",
-    )
-    cur = _CONNECTION.cursor()
-    for command in commands:
-        cur.execute(command)
-    _CONNECTION.commit()
-    cur.close()
-
-
-def _get_most_recent_filename(folder: str) -> Optional[str]:
-    import os
-
-    files = os.listdir(folder)
-    dates = sorted([file_ for file_ in files if file_ != 'default.json'])
-    if not dates:
-        return None
-    return dates[-1]
-
-
-def _fill_tables():
-    from back_office.utils import ID_TO_AM_MD
-
-    for am_id in ID_TO_AM_MD:
-        upsert_am_status(am_id, AMStatus.PENDING_STRUCTURE_VALIDATION)
-
-    import json, os
-    from tqdm import tqdm
-    from lib.paths import get_structured_text_wip_folder, get_parametrization_wip_folder
-
-    for am_id in tqdm(ID_TO_AM_MD):
-        filename = get_structured_text_wip_folder(am_id) + '/default.json'
-        if os.path.exists(filename):
-            upsert_initial_am(am_id, ArreteMinisteriel.from_dict(json.load(open(filename))))
-        filename = _get_most_recent_filename(get_structured_text_wip_folder(am_id))
-        if filename:
-            upsert_structured_am(
-                am_id,
-                ArreteMinisteriel.from_dict(json.load(open(get_structured_text_wip_folder(am_id) + '/' + filename))),
-            )
-
-        filename = _get_most_recent_filename(get_parametrization_wip_folder(am_id))
-        if filename:
-            _upsert_new_parametrization(
-                am_id,
-                Parametrization.from_dict(json.load(open(get_parametrization_wip_folder(am_id) + '/' + filename))),
-            )
-
-
-if __name__ == '__main__':
-    # _create_tables()
-    _fill_tables()

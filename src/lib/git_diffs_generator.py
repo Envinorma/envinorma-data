@@ -42,12 +42,12 @@ class AMCommits:
         return AMCommits(**dict_)
 
 
-def write_file(content: str, path: str):
+def _write_file(content: str, path: str):
     open(path, 'w').write(content)
 
 
-def write_file_and_commit(repo: Repo, filename: str, file_content, commit_detail: str) -> str:
-    write_file(file_content, get_absolute_path_with_repo(repo, filename))
+def _write_file_and_commit(repo: Repo, filename: str, file_content, commit_detail: str) -> str:
+    _write_file(file_content, get_absolute_path_with_repo(repo, filename))
     commit_message = f'{filename} {commit_detail}'
     return str(commit_file(repo, filename, commit_message).hexsha)
 
@@ -63,8 +63,8 @@ def commit_ams(
     repo = get_repo()
     version_commit_ids: Dict[str, str] = {}
     for version_name, am_str in all_am_versions_str.items():
-        version_commit_ids[version_name] = write_file_and_commit(repo, filename, am_str, 'version ' + version_name)
-    main_commit_id = write_file_and_commit(repo, filename, main_am_str, 'main commit')
+        version_commit_ids[version_name] = _write_file_and_commit(repo, filename, am_str, 'version ' + version_name)
+    main_commit_id = _write_file_and_commit(repo, filename, main_am_str, 'main commit')
     return AMCommits(main_commit_id, version_commit_ids)
 
 

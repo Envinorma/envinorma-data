@@ -1,10 +1,11 @@
+import os
 from typing import Dict, List
 
 import dash_core_components as dcc
 import dash_html_components as html
 from dash.dependencies import Input, Output
 from dash.development.base_component import Component
-from lib.config import AM_DATA_FOLDER
+from lib.config import config
 from lib.data import AMMetadata, Classement
 
 # from back_office.ap_parsing import page as ap_parsing_page
@@ -14,22 +15,12 @@ from back_office.fetch_data import load_am_status
 from back_office.utils import ID_TO_AM_MD, AMStatus, split_route
 
 
-def _prepare_archive_if_no_data():
-    import os
-    import shutil
-
-    if not os.path.exists(AM_DATA_FOLDER):
-        os.mkdir(AM_DATA_FOLDER)
-
-    if not os.listdir(AM_DATA_FOLDER):
-        print('No AM data. Unzipping default archive.')
-        path_to_archive = __file__.replace('back_office/app.py', 'data/AM.zip')
-        shutil.unpack_archive(path_to_archive, AM_DATA_FOLDER)
-    else:
-        print(f'AM data folder not empty: contains {os.listdir(AM_DATA_FOLDER)}')
+def _create_tmp_am_folder():
+    if not os.path.exists(config.storage.am_data_folder):
+        os.mkdir(config.storage.am_data_folder)
 
 
-_prepare_archive_if_no_data()
+_create_tmp_am_folder()
 
 
 def _get_page_heading() -> Component:

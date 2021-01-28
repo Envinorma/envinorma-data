@@ -1,7 +1,6 @@
 from enum import Enum
 from typing import Any, List, Optional, Tuple
 
-from lib.config import STORAGE
 from lib.data import ArreteMinisteriel, Ints, StructuredText, load_am_data
 
 _AM = load_am_data()
@@ -37,13 +36,6 @@ class AMStatus(Enum):
     PENDING_STRUCTURE_VALIDATION = 'pending-structure-validation'
     PENDING_PARAMETRIZATION = 'pending-enrichment'
     VALIDATED = 'validated'
-
-
-def write_file(content: str, filename: str):
-    if STORAGE != 'local':
-        raise ValueError(f'Unhandled storage value {STORAGE}')
-    with open(filename, 'w') as file_:
-        file_.write(content)
 
 
 def get_subsection(path: Ints, text: StructuredText) -> StructuredText:
@@ -94,25 +86,3 @@ def split_route(route: str) -> Tuple[str, str]:
 
 class RouteParsingError(Exception):
     pass
-
-
-# from tqdm import tqdm
-# import shutil
-
-# for AM in tqdm(_AM.metadata):
-#     AM_ID = AM.cid
-
-#     if not os.path.exists(get_parametrization_wip_folder(AM_ID)):
-#         os.mkdir(get_parametrization_wip_folder(AM_ID))
-#     default_param = get_parametrization_filename(AM.nor or AM.cid)
-#     if os.path.exists(default_param):
-#         shutil.copy(default_param, get_parametrization_wip_folder(AM_ID) + '/default.json')
-
-#     if not os.path.exists(get_structured_text_wip_folder(AM_ID)):
-#         os.mkdir(get_structured_text_wip_folder(AM_ID))
-#     default_text = get_structured_text_filename(AM.nor or AM.cid)
-#     if os.path.exists(default_text):
-#         shutil.copy(default_text, get_structured_text_wip_folder(AM_ID) + '/default.json')
-
-#     new_state = AMState(AMStatus.PENDING_STRUCTURE_VALIDATION, [], [])
-#     dump_am_state(AM_ID, new_state)

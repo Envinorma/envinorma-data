@@ -11,7 +11,7 @@ from lib.am_enriching import (
     remove_null_applicabilities,
 )
 from lib.data import AMMetadata, ArreteMinisteriel, add_metadata
-from lib.manual_enrichments import get_manual_post_process
+from lib.manual_enrichments import get_manual_combinations, get_manual_post_process
 from lib.parametric_am import generate_all_am_versions
 from lib.parametrization import Parametrization
 from lib.topics.topics import TOPIC_ONTOLOGY
@@ -25,7 +25,8 @@ def _apply_parametrization(
     if not am:
         return
     enriched_am = remove_null_applicabilities(am)
-    all_versions = generate_all_am_versions(enriched_am, parametrization)
+    manual_combinations = get_manual_combinations(am_id)  # For AM 1510 mainly, none otherwise
+    all_versions = generate_all_am_versions(enriched_am, parametrization, manual_combinations)
     return {name: get_manual_post_process(am_id)(add_summary(am_), name) for name, am_ in all_versions.items()}
 
 

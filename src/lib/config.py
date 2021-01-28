@@ -1,8 +1,7 @@
-from dataclasses import dataclass
 import os
-from functools import lru_cache
 from configparser import ConfigParser
-from typing import Any, Dict
+from dataclasses import dataclass
+from functools import lru_cache
 
 
 def _get_var(section: str, varname: str) -> str:
@@ -13,7 +12,7 @@ def _get_var(section: str, varname: str) -> str:
     try:
         return config[section][varname]
     except KeyError:
-        raise ValueError(f'Variable {varname} must either be defined in lib.secrets or in environment.')
+        raise ValueError(f'Variable {varname} must either be defined in config.ini or in environment.')
 
 
 @dataclass
@@ -37,7 +36,7 @@ class LegifranceConfig:
 @dataclass
 class StorageConfig:
     am_data_folder: str
-    storage: str
+    psql_dsn: str
 
     @classmethod
     def default_load(cls) -> 'StorageConfig':
@@ -71,4 +70,3 @@ config = Config.default_load()
 AIDA_URL = config.aida.base_url
 LEGIFRANCE_CLIENT_SECRET = config.legifrance.client_secret
 AM_DATA_FOLDER = config.storage.am_data_folder
-STORAGE = config.storage.storage
