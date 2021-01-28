@@ -38,7 +38,7 @@ def test_add_topics():
     sub_section_1 = StructuredText(EnrichedString('Section 1.1'), [], [], None)
     section_1 = StructuredText(EnrichedString('Section 1'), [], [sub_section_1], None)
     section_2 = StructuredText(EnrichedString('Section 2'), [], [], None)
-    am = ArreteMinisteriel(EnrichedString(''), [section_1, section_2], [], '', None)
+    am = ArreteMinisteriel(EnrichedString(''), [section_1, section_2], [], '')
 
     am_with_topics = add_topics(
         am, {(0,): TopicName.INCENDIE, (0, 0): TopicName.INCENDIE, (1,): TopicName.BRUIT_VIBRATIONS}
@@ -112,7 +112,7 @@ def test_add_references():
         StructuredText(EnrichedString('Article 18.1'), [], [], None, lf_article_id),
         StructuredText(EnrichedString('Article 1'), [], [], None, lf_article_id),
     ]
-    am = ArreteMinisteriel(EnrichedString(''), sections, [], '', None)
+    am = ArreteMinisteriel(EnrichedString(''), sections, [], '')
     am_with_references = add_references(am)
 
     assert am_with_references.sections[0].reference_str == 'Art. 1.'
@@ -328,7 +328,7 @@ def test_remove_sections():
         StructuredText(EnrichedString('2. zefez'), [], [], None),
         StructuredText(EnrichedString('A. zefze'), [], [], None),
     ]
-    am = ArreteMinisteriel(EnrichedString(''), sections, [], '', None)
+    am = ArreteMinisteriel(EnrichedString(''), sections, [], '')
 
     am_1 = remove_sections(am, {(0,)})
     assert len(am_1.sections) == 2

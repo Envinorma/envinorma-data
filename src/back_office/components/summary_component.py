@@ -7,8 +7,9 @@ from lib.data import StructuredText
 from lib.structure_extraction import Title, structured_text_to_text_elements
 
 
-def _build_summary_line(title: Title) -> Component:
-    trunc_title = title.level * '—' + ' ' + get_truncated_str(title.text)
+def _build_summary_line(title: Title, with_dashes: bool) -> Component:
+    prefix = (title.level * '—' + ' ') if with_dashes else ''
+    trunc_title = prefix + get_truncated_str(title.text)
     class_name = 'level_0' if title.level <= 1 else 'level_1'
     return html.Dd(html.A(trunc_title, href=f'#{title.id}', className=class_name))
 
@@ -17,11 +18,11 @@ def _extract_titles(text: StructuredText) -> List[Title]:
     return [el for el in structured_text_to_text_elements(text, level=0) if isinstance(el, Title)]
 
 
-def _build_component(titles: List[Title]) -> Component:
-    lines = [_build_summary_line(title) for title in titles]
+def _build_component(titles: List[Title], with_dashes: bool) -> Component:
+    lines = [_build_summary_line(title, with_dashes) for title in titles]
     return html.Dl(lines, className='summary')
 
 
-def summary_component(text: StructuredText) -> Component:
+def summary_component(text: StructuredText, with_dashes: bool = True) -> Component:
     titles = _extract_titles(text)
-    return _build_component(titles)
+    return _build_component(titles, with_dashes)

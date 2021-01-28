@@ -404,7 +404,7 @@ def _get_parametric_texts_list(am_id: str, page_url: str, am_status: AMStatus) -
     if am_status == AMStatus.VALIDATED:
         _generate_versions_if_empty(am_id, folder)
     prefix_url = f'{page_url}/{AMOperation.DISPLAY_AM.value}'
-    lis = [html.Li(dcc.Link(file_, href=f'{prefix_url}/{file_}')) for file_ in os.listdir(folder)]
+    lis = [html.Li(dcc.Link(file_, href=f'{prefix_url}/{file_}')) for file_ in sorted(os.listdir(folder))]
     return html.Ul(lis)
 
 
@@ -441,7 +441,7 @@ def _make_am_index_component(
 
 def _get_title_component(am_metadata: AMMetadata, parent_page: str) -> Component:
     am_id = am_metadata.nor or am_metadata.cid
-    return dcc.Link(html.H2(f'Arrêté ministériel {am_id}'), href=parent_page)
+    return html.Div(dcc.Link(html.H2(f'Arrêté ministériel {am_id}'), href=parent_page), className='am_title')
 
 
 def _get_body_component(
@@ -467,7 +467,9 @@ def _page(am_id: str, current_page: str) -> Component:
     parametrization = load_parametrization(am_id) or Parametrization([], [])
     if not am or not am_metadata:
         return html.P('Arrêté introuvable.')
-    body = _get_body_component(am_id, current_page, am, am_status, parametrization)
+    body = html.Div(
+        _get_body_component(am_id, current_page, am, am_status, parametrization), className='am_page_content'
+    )
     return html.Div(
         [
             _get_title_component(am_metadata, current_page),

@@ -1,6 +1,6 @@
 import json
 import os
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, replace
 from typing import List, Optional, Tuple
 from urllib.parse import unquote
 
@@ -10,6 +10,7 @@ from lib.data import Applicability, ArreteMinisteriel, EnrichedString, Structure
 from lib.paths import get_parametric_ams_folder
 
 from back_office.components.am_component import table_to_component
+from back_office.components.summary_component import summary_component
 from back_office.utils import AMOperation, RouteParsingError
 
 
@@ -28,34 +29,17 @@ def _parse_route(route: str) -> Tuple[str, str]:
     return am_id, filename
 
 
-def _extract_text_modifications(text: StructuredText) -> List[StructuredText]:
+def _extract_text_warnings(text: StructuredText) -> List[Tuple[Applicability, str]]:
     applicability = _ensure_applicability(text.applicability)
-    if applicability.modified:
-        return [text]
-    if not applicability.active:
-        return []
-    return [mod for sec in text.sections for mod in _extract_text_modifications(sec)]
+    if applicability.warnings:
+        return [(applicability, text.id)]
+    return [inap for sec in text.sections for inap in _extract_text_warnings(sec)]
 
 
-def _extract_modifications(am: Optional[ArreteMinisteriel]) -> List[StructuredText]:
+def _extract_warnings(am: Optional[ArreteMinisteriel]) -> List[Tuple[Applicability, str]]:
     if not am:
         return []
-    return [mod for sec in am.sections for mod in _extract_text_modifications(sec)]
-
-
-def _extract_text_inapplicabilities(text: StructuredText) -> List[StructuredText]:
-    applicability = _ensure_applicability(text.applicability)
-    if not applicability.active:
-        return [text]
-    if applicability.modified:
-        return []
-    return [inap for sec in text.sections for inap in _extract_text_inapplicabilities(sec)]
-
-
-def _extract_inapplicabilities(am: Optional[ArreteMinisteriel]) -> List[StructuredText]:
-    if not am:
-        return []
-    return [inap for sec in am.sections for inap in _extract_text_inapplicabilities(sec)]
+    return [el for sec in am.sections for el in _extract_text_warnings(sec)]
 
 
 @dataclass
@@ -63,12 +47,16 @@ class _PageData:
     path: str
     file_found: bool
     am: Optional[ArreteMinisteriel]
-    modifications: List[StructuredText] = field(init=False)
-    inapplicabilities: List[StructuredText] = field(init=False)
+    text: Optional[StructuredText] = field(init=False)
+    warnings: List[Tuple[Applicability, str]] = field(init=False)
 
     def __post_init__(self):
-        self.modifications = _extract_modifications(self.am)
-        self.inapplicabilities = _extract_inapplicabilities(self.am)
+        self.text = (
+            StructuredText(EnrichedString(self.am.short_title), [], self.am.sections, Applicability())
+            if self.am
+            else None
+        )
+        self.warnings = _extract_warnings(self.am)
 
 
 def _fetch_data(am_id: str, filename: str) -> _PageData:
@@ -89,26 +77,21 @@ def _ensure_am(am: Optional[ArreteMinisteriel]) -> ArreteMinisteriel:
     return am
 
 
+def _ensure_text(text: Optional[StructuredText]) -> StructuredText:
+    if not text:
+        raise ValueError('Text expected to exist')
+    return text
+
+
 def _ensure_applicability(applicability: Optional[Applicability]) -> Applicability:
     if not applicability:
         raise ValueError('applicability expected to exist')
     return applicability
 
 
-def _inactive_text_component(text: StructuredText) -> Component:
-    return html.Div(
-        [
-            _title_component(text.title.text, text.id),
-            html.Div(
-                f'Paragraphe non applicable : {text.applicability.reason_inactive}', className='alert alert-primary'
-            ),
-        ]
-    )
-
-
 def _alinea_to_component(alinea: EnrichedString) -> Component:
     if alinea.text:
-        return html.P(alinea.text)
+        return html.P(alinea.text, className='' if alinea.active else 'inactive')
     if alinea.table:
         return table_to_component(alinea.table, None)
     return html.Span()
@@ -118,87 +101,91 @@ def _alineas_to_components(alineas: List[EnrichedString]) -> List[Component]:
     return [_alinea_to_component(alinea) for alinea in alineas]
 
 
-def _title_component(title: str, text_id: str) -> Component:
-    style = {'position': 'relative', 'left': '-25px', 'margin-top': '30px'}
-    return html.H5([html.A('⬆️ ', href='#'), html.B(title)], id=text_id, style=style)
+def _warning_to_component(warning: str) -> Component:
+    return html.Div(warning, className='alert alert-secondary')
 
 
-def _raw_text_component(text: StructuredText, alert: Optional[Component]) -> Component:
-    subsections = [_raw_text_component(section, None) for section in text.sections]
-    components: List[Component] = []
-    components.append(_title_component(text.title.text, text.id))
-    if alert:
-        components.append(alert)
-    components.extend(_alineas_to_components(text.outer_alineas))
-    components.extend(subsections)
-    return html.Div(components)
+def _warnings_to_components(warnings: List[str]) -> List[Component]:
+    return [_warning_to_component(warning) for warning in warnings]
 
 
-def _modified_text_component(text: StructuredText) -> Component:
-    return _raw_text_component(
-        text, html.Div(f'Paragraphe modifié : {text.applicability.reason_modified}', className='alert alert-primary')
-    )
+def _title_component(title: str, text_id: str, depth: int) -> Component:
+    if depth == 0:
+        return html.Div([html.H4(title, id=text_id), html.Hr()], style={'margin-top': '30px'})
+    return html.H5(title, id=text_id)
 
 
-def _active_text_component(text: StructuredText) -> Component:
+def _extract_lines(text: StructuredText) -> List[str]:
+    alinea_lines = [al.text if not al.table else '*tableau*' for al in text.outer_alineas]
+    section_lines = [li for sec in text.sections for li in _extract_lines(sec)]
+    return [text.title.text] + alinea_lines + section_lines
+
+
+def _previous_text_component(text: StructuredText) -> Component:
+    return html.Div([html.P(line, className='previous_version_alinea') for line in _extract_lines(text)])
+
+
+def _text_component(text: StructuredText, depth: int, previous_version: Optional[StructuredText] = None) -> Component:
+    previous_version_component = _previous_text_component(previous_version) if previous_version else html.Div()
+
     return html.Div(
         [
-            _title_component(text.title.text, text.id),
+            _title_component(text.title.text, text.id, depth),
+            *_warnings_to_components(text.applicability.warnings),
+            previous_version_component,
             *_alineas_to_components(text.outer_alineas),
-            _get_sections_components(text.sections),
+            *[_get_text_component(sec, depth + 1) for sec in text.sections],
         ]
     )
 
 
-def _get_text_component(text: StructuredText) -> Component:
+def _get_text_component(text: StructuredText, depth: int) -> Component:
     applicability = _ensure_applicability(text.applicability)
-    if not applicability.active:
-        return _inactive_text_component(text)
     if applicability.modified:
-        return _modified_text_component(text)
-    return _active_text_component(text)
+        if not applicability.new_version:
+            raise ValueError('Should not happen. Must have a new_version when modified is True.')
+        return _text_component(
+            replace(applicability.new_version, applicability=text.applicability, id=text.id), depth, text
+        )
+    return _text_component(text, depth)
 
 
-def _get_sections_components(sections: List[StructuredText]) -> Component:
-    return html.Div([_get_text_component(section) for section in sections])
-
-
-def _inapplicabilities_component(inapplicabilities: List[StructuredText]) -> Component:
-    list_ = (
-        html.Ul([html.Li(html.A(ina.applicability.reason_inactive, href=f'#{ina.id}')) for ina in inapplicabilities])
-        if inapplicabilities
-        else 'Aucun paragraphes inapplicables'
+def _li(app: Applicability, id_: str) -> Component:
+    badge = (
+        html.Span('modification', className='badge bg-secondary', style={'color': 'white'})
+        if app.modified
+        else html.Span()
     )
-    return html.Div([html.H4('Paragraphes inapplicables'), list_])
+    return html.Li([html.A(', '.join(app.warnings) + ' ', href=f'#{id_}'), badge])
 
 
-def _modifications_component(modifications: List[StructuredText]) -> Component:
-    list_ = (
-        html.Ul([html.Li(html.A(mod.applicability.reason_modified, href=f'#{mod.id}')) for mod in modifications])
-        if modifications
-        else 'Aucune modifications.'
-    )
-    return html.Div([html.H4('Modifications'), list_])
+def _warnings_component(apps: List[Tuple[Applicability, str]]) -> Component:
+    list_ = html.Ul([_li(app, id_) for app, id_ in apps]) if apps else 'Aucune modifications.'
+    return html.Div([html.H4('Modifications', style={'margin-top': '30px'}), html.Hr(), list_])
 
 
 def _main_component(page_data: _PageData) -> Component:
     am = _ensure_am(page_data.am)
-    if not am.applicability.active:
-        return html.P('AM is not applicable')
+    text = _ensure_text(page_data.text)
+    if not am.active:
+        return html.P('L\'arrêté n\'est pas applicable.')
     return html.Div(
         [
             html.I(am.title.text),
-            _modifications_component(page_data.modifications),
-            _inapplicabilities_component(page_data.inapplicabilities),
-            _get_sections_components(am.sections),
-        ]
+            _warnings_component(page_data.warnings),
+            _get_text_component(text, 0),
+        ],
+        style={'margin-top': '60px'},
     )
 
 
 def _build_component(page_data: _PageData) -> Component:
     if not page_data.file_found:
         return _not_found_component(page_data.path)
-    return _main_component(page_data)
+    summary = summary_component(page_data.text, False) if page_data.text else html.Div()
+    return html.Div(
+        [html.Div(summary, className='col-3'), html.Div(_main_component(page_data), className='col-9')], className='row'
+    )
 
 
 def _make_page(am_id: str, filename: str) -> Component:

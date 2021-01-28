@@ -256,23 +256,21 @@ def _minify_section(text: StructuredText) -> StructuredText:
 
 
 def _minify_am(am: ArreteMinisteriel) -> ArreteMinisteriel:
-    return ArreteMinisteriel(am.title, [_minify_section(sec) for sec in am.sections], [], '', None, None)
+    return ArreteMinisteriel(am.title, [_minify_section(sec) for sec in am.sections], [], '')
 
 
 def remove_null_applicabilities_in_section(paragraph: StructuredText) -> StructuredText:
     new_paragraph = copy(paragraph)
     del paragraph
-    new_paragraph.applicability = new_paragraph.applicability or Applicability(True)
+    new_paragraph.applicability = new_paragraph.applicability or Applicability()
     new_paragraph.sections = [remove_null_applicabilities_in_section(section) for section in new_paragraph.sections]
     return new_paragraph
 
 
 def remove_null_applicabilities(am: ArreteMinisteriel) -> ArreteMinisteriel:
-    new_am = copy(am)
-    del am
-    new_am.applicability = new_am.applicability or Applicability(True)
-    new_am.sections = [remove_null_applicabilities_in_section(section) for section in new_am.sections]
-    return new_am
+    am = copy(am)
+    am.sections = [remove_null_applicabilities_in_section(section) for section in am.sections]
+    return am
 
 
 def generate_re_pattern_not_followed_by_alphanumeric(str_: str) -> str:

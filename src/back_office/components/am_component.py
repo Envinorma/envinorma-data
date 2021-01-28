@@ -46,10 +46,10 @@ def _get_html_heading_classname(level: int) -> type:
     return html.H6
 
 
-def _title_to_component(title: Title, ontology: Optional[TopicOntology]) -> Component:
+def _title_to_component(title: Title, ontology: Optional[TopicOntology], smallest_level: int) -> Component:
     if title.level == 0:
         return html.P(title.text)
-    cls_ = _get_html_heading_classname(title.level)
+    cls_ = _get_html_heading_classname(title.level + smallest_level - 1)
     if title.id:
         title_component = cls_(title.text, id=title.id)
     else:
@@ -65,11 +65,11 @@ def _str_to_component(str_: str, ontology: Optional[TopicOntology]) -> Component
     return html.P(str_)
 
 
-def _make_component(element: TextElement, ontology: Optional[TopicOntology]) -> Component:
+def _make_component(element: TextElement, ontology: Optional[TopicOntology], smallest_level: int) -> Component:
     if isinstance(element, Table):
         return table_to_component(element, ontology)
     if isinstance(element, Title):
-        return _title_to_component(element, ontology)
+        return _title_to_component(element, ontology, smallest_level)
     if isinstance(element, str):
         return _str_to_component(element, ontology)
     raise NotImplementedError(f'Not implemented for type {type(element)}')
@@ -79,12 +79,12 @@ def _text_to_elements(text: StructuredText) -> List[TextElement]:
     return structured_text_to_text_elements(text, 0)
 
 
-def structured_text_component(text: StructuredText, emphasized_words: List[str]) -> Component:
+def structured_text_component(text: StructuredText, emphasized_words: List[str], first_level: int = 0) -> Component:
     elements = _text_to_elements(text)
     ontology = TopicOntology.monotopic(emphasized_words) if emphasized_words else None
-    return html.Div([_make_component(el, ontology) for el in elements])
+    return html.Div([_make_component(el, ontology, first_level) for el in elements])
 
 
-def am_component(am: ArreteMinisteriel, emphasized_words: List[str]) -> Component:
+def am_component(am: ArreteMinisteriel, emphasized_words: List[str], first_level: int = 0) -> Component:
     text = am_to_text(am)
-    return structured_text_component(text, emphasized_words)
+    return structured_text_component(text, emphasized_words, first_level)

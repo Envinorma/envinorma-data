@@ -12,7 +12,7 @@ def _get_simple_text() -> StructuredText:
 
 
 def test_get_section_title():
-    am = ArreteMinisteriel(EnrichedString('AM'), [_get_simple_text()], [], '', None)
+    am = ArreteMinisteriel(EnrichedString('AM'), [_get_simple_text()], [], '')
     assert get_section_title((), am) == 'Arrêté complet.'
     assert get_section_title((0,), am) == 'All sections'
     assert get_section_title((0, 0), am) == 'Section 1'

@@ -681,7 +681,7 @@ def transform_arrete_ministeriel(
     text_with_merged_articles = _clean_text_articles(input_text, keep_abrogated_articles)
     sections = _extract_sections(text_with_merged_articles.articles, text_with_merged_articles.sections, [])
     short_title = extract_short_title(input_text.title)
-    return ArreteMinisteriel(EnrichedString(text_with_merged_articles.title), sections, visa, short_title, None)
+    return ArreteMinisteriel(EnrichedString(text_with_merged_articles.title), sections, visa, short_title)
 
 
 def test(lf_text_filename: str) -> ArreteMinisteriel:

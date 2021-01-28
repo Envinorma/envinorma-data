@@ -67,7 +67,6 @@ _CONDITION_OPERATION_OPTIONS = [{'label': condition, 'value': condition} for con
 _CONDITION_VARIABLE = 'param-edition-condition-parameter'
 _CONDITION_OPERATION = 'param-edition-condition-operation'
 _CONDITION_VALUE = 'param-edition-condition-value'
-_DESCRIPTION = 'param-edition-description'
 _SOURCE = 'param-edition-source'
 _TARGET_SECTION = 'param-edition-target-section'
 _TARGET_SECTION_STORE = 'param-edition-target-section-store'
@@ -183,16 +182,6 @@ def _get_main_title(operation: AMOperation, is_edition: bool, rank: int) -> Comp
         html.H4('Nouvelle condition de non-application')
         if operation == operation.ADD_CONDITION
         else html.H4('Nouveau paragraphe alternatif')
-    )
-
-
-def _get_description_help(operation: AMOperation) -> Component:
-    if operation == operation.ADD_CONDITION:
-        return html.P(
-            'Ex: "Ce paragraphe ne s\'applique pas aux installations à enregistrement installées avant le 01/01/2008."'
-        )
-    return html.P(
-        'Ex: "Ce paragraphe est modifié pour les installations à enregistrement installées avant le 01/01/2008."'
     )
 
 
@@ -332,17 +321,6 @@ def _get_condition_form(default_condition: Optional[Condition]) -> Component:
     return html.Div([html.H5('Condition'), dropdown_condition_merge, dropdown_nb_conditions, tooltip, conditions])
 
 
-def _get_description_form(operation: AMOperation, loaded_parameter: Optional[ParameterObject]) -> Component:
-    description_default_value = loaded_parameter.description if loaded_parameter else ''
-    return html.Div(
-        [
-            html.H5('Description (visible par l\'utilisateur)'),
-            _get_description_help(operation),
-            dcc.Textarea(value=description_default_value, className='form-control', id=_DESCRIPTION),
-        ]
-    )
-
-
 def _get_source_form(options: _Options, loaded_parameter: Optional[ParameterObject]) -> Component:
     if loaded_parameter:
         default_value = _dump_path(loaded_parameter.source.reference.section.path)
@@ -451,7 +429,6 @@ def _make_form(
         [
             _get_main_title(operation, is_edition=destination_rank != -1, rank=destination_rank),
             _get_delete_button(is_edition=destination_rank != -1),
-            _get_description_form(operation, loaded_parameter),
             _get_source_form(text_title_options, loaded_parameter),
             _get_target_section_block(operation, text_title_options, loaded_parameter, text),
             _get_new_section_form_from_default(loaded_parameter) if not _is_condition(operation) else html.Div(),
@@ -496,7 +473,9 @@ def _get_main_component(
 ) -> Component:
     text = am_to_text(am)
     border_style = {'padding': '10px', 'border': '1px solid rgba(0,0,0,.1)', 'border-radius': '5px'}
-    am_component_ = am_component(am, ['installations existantes', 'appliquent', 'applicables', 'applicable'])
+    am_component_ = am_component(
+        am, ['installations existantes', 'appliquent', 'applicables', 'applicable'], first_level=3
+    )
     cols = [
         html.Div(
             _structure_edition_component(text, operation, am_page, loaded_parameter, destination_rank),
@@ -527,7 +506,7 @@ def _build_page(
     ]
     page = _get_main_component(am, operation, am_page, destination_rank, loaded_parameter)
 
-    return html.Div([page, *hidden_components])
+    return html.Div([page, *hidden_components], className='parametrization_content')
 
 
 def _make_list(candidate: Optional[Union[List[Dict[str, Any]], Dict[str, Any]]]) -> List[Dict[str, Any]]:
@@ -618,7 +597,6 @@ def _dump_path(path: Ints) -> str:
 
 
 def _build_non_application_condition(
-    description: str,
     source: str,
     target_section: str,
     merge: str,
@@ -629,7 +607,7 @@ def _build_non_application_condition(
         EntityReference(SectionReference(_load_path(target_section)), _extract_alinea_indices(target_alineas)),
         _build_condition(conditions, merge),
         _build_source(source),
-        description,
+        description='',
     )
 
 
@@ -699,7 +677,6 @@ def _extract_alineas(text: str) -> List[EnrichedString]:
 
 
 def _build_alternative_section(
-    description: str,
     source: str,
     target_section: str,
     merge: str,
@@ -713,7 +690,7 @@ def _build_alternative_section(
         new_text,
         _build_condition(conditions, merge),
         _build_source(source),
-        description,
+        description='',
     )
 
 
@@ -740,9 +717,6 @@ def _extract_new_parameter_object(
     page_state: Dict[str, Any], operation: AMOperation, nb_alinea_options: int
 ) -> ParameterObject:
     id_to_value = _extract_id_to_value(page_state)
-    description = assert_str(_get_with_error(id_to_value, _DESCRIPTION))
-    if len(description) < _MIN_NB_CHARS:
-        raise _FormHandlingError(f'Le champ "Description" doit contenir au moins {_MIN_NB_CHARS} caractères.')
     source = _get_with_error(id_to_value, _SOURCE)
     if not source:
         raise _FormHandlingError('Le champ "Source" est obligatoire.')
@@ -758,12 +732,10 @@ def _extract_new_parameter_object(
         target_alineas = _get_with_error(id_to_value, _TARGET_ALINEAS)
         if len(set(target_alineas)) == nb_alinea_options:
             target_alineas = None
-        return _build_non_application_condition(description, source, target_section, merge, conditions, target_alineas)
+        return _build_non_application_condition(source, target_section, merge, conditions, target_alineas)
     if operation == operation.ADD_ALTERNATIVE_SECTION:
         new_text_title, new_text_content = _extract_new_text_parameters(id_to_value)
-        return _build_alternative_section(
-            description, source, target_section, merge, conditions, new_text_title, new_text_content
-        )
+        return _build_alternative_section(source, target_section, merge, conditions, new_text_title, new_text_content)
     raise NotImplementedError(f'Expecting operation not to be {operation.value}')
 
 

@@ -1,11 +1,16 @@
-from copy import copy
+import random
 from collections import Counter
+from copy import copy
+from string import ascii_letters
+from typing import Optional
+
 from lib.data import (
     Annotations,
     Applicability,
     ArreteMinisteriel,
     Cell,
     Classement,
+    ClassementWithAlineas,
     DateCriterion,
     EnrichedString,
     Link,
@@ -20,6 +25,19 @@ from lib.data import (
     load_am_data,
 )
 
+
+def _random_string() -> str:
+    return ''.join([random.choice(ascii_letters) for _ in range(9)])
+
+
+def _random_enriched_string() -> EnrichedString:
+    return EnrichedString(_random_string(), [], None)
+
+
+def _str(text: Optional[str] = None) -> EnrichedString:
+    return EnrichedString(text) if text else _random_enriched_string()
+
+
 _TABLE = Table([Row([Cell(EnrichedString('bonjour'), 1, 1)], True)])
 _ENRICHED_STRING_TABLE = EnrichedString('', [], copy(_TABLE))
 _ENRICHED_STRING_LINKS = EnrichedString('abc', [Link('abc', 0, 3)], None)
@@ -28,7 +46,7 @@ _LEAF_SECTION = StructuredText(
     copy(_ENRICHED_STRING_SIMPLE),
     [copy(_ENRICHED_STRING_SIMPLE)],
     [],
-    Applicability(True, 'ra', False, None, ['beware']),
+    Applicability(True, ['beware'], StructuredText(_str(), [], [], None)),
     'lf_id',
     'ref',
     Annotations(TopicName.AIR_ODEURS, True, 'guide'),
@@ -50,10 +68,16 @@ def test_arrete_ministeriel():
         [_NODE_SECTION],
         [_ENRICHED_STRING_LINKS],
         'short_title',
-        None,
         DateCriterion('2020/07/23', '2021/07/23'),
         'aida',
         'legifrance',
+        classements=[Classement('1510', Regime.A, 'al')],
+        classements_with_alineas=[ClassementWithAlineas('1510', Regime.A, ['al', 'albis'])],
+        unique_version=True,
+        summary=None,
+        id='id',
+        active=True,
+        warning_inactive='warning',
     )
     dict_ = am.to_dict()
     new_dict = ArreteMinisteriel.from_dict(dict_).to_dict()

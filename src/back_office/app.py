@@ -98,7 +98,7 @@ def _build_am_table(id_to_state: Dict[str, AMStatus], id_to_am_metadata: Dict[st
 
 
 def _make_index_component(id_to_state: Dict[str, AMStatus], id_to_am_metadata: Dict[str, AMMetadata]) -> Component:
-    return html.Div([html.H3('Arrêtés ministériels.'), _build_am_table(id_to_state, id_to_am_metadata)])
+    return html.Div([html.H2('Arrêtés ministériels.'), _build_am_table(id_to_state, id_to_am_metadata)])
 
 
 def router(pathname: str) -> Component:
