@@ -5,17 +5,20 @@ It is meant to be run once and will probably not be run again.
 """
 from typing import Optional
 
+import psycopg2
 from back_office.fetch_data import (
-    _CONNECTION,
     _upsert_new_parametrization,
     upsert_am_status,
     upsert_initial_am,
     upsert_structured_am,
 )
 from back_office.utils import ID_TO_AM_MD, AMStatus
+from lib.config import config
 from lib.data import ArreteMinisteriel
 from lib.parametrization import Parametrization
 
+
+_CONNECTION = psycopg2.connect(config.storage.psql_dsn)
 
 def _create_tables():
     commands = (
@@ -75,5 +78,5 @@ def _fill_tables():
 
 
 if __name__ == '__main__':
-    # _create_tables()
+    _create_tables()
     _fill_tables()

@@ -8,8 +8,6 @@ from lib.parametrization import NonApplicationCondition, ParameterObject, Parame
 
 from back_office.utils import AMOperation, AMStatus
 
-_CONNECTION = psycopg2.connect(config.storage.psql_dsn)
-
 
 def _ensure_len(list_: List, min_len: int) -> None:
     if len(list_) < min_len:
@@ -22,18 +20,22 @@ def _ensure_non_negative(int_: int) -> None:
 
 
 def _exectute_select_query(query: str, values: Tuple) -> List[Tuple]:
-    cursor = _CONNECTION.cursor()
+    connection = psycopg2.connect(config.storage.psql_dsn)
+    cursor = connection.cursor()
     cursor.execute(query, values)
     res = list(cursor.fetchall())
     cursor.close()
+    connection.close()
     return res
 
 
 def _exectute_update_query(query: str, values: Tuple) -> None:
-    cursor = _CONNECTION.cursor()
+    connection = psycopg2.connect(config.storage.psql_dsn)
+    cursor = connection.cursor()
     cursor.execute(query, values)
-    _CONNECTION.commit()
+    connection.commit()
     cursor.close()
+    connection.close()
 
 
 def _recreate_with_removed_parameter(
