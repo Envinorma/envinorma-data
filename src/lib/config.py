@@ -6,7 +6,7 @@ from functools import lru_cache
 
 def _get_var(section: str, varname: str) -> str:
     env_key = f'{section}_{varname}'
-    if varname in os.environ:
+    if env_key in os.environ:
         return os.environ[env_key]
     config = load_config()
     try:
