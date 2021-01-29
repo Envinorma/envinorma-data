@@ -149,20 +149,25 @@ def estr(text: Optional[str] = None) -> EnrichedString:
 class Applicability:
     modified: bool = False
     warnings: List[str] = field(default_factory=list)
-    new_version: Optional['StructuredText'] = None
+    previous_version: Optional['StructuredText'] = None
 
     def __post_init__(self):
         if self.modified:
-            if not self.new_version:
-                raise ValueError('when modified is True, new_version must be provided.')
+            if not self.previous_version:
+                raise ValueError('when modified is True, previous_version must be provided.')
 
     def to_dict(self) -> Dict[str, Any]:
-        return asdict(self)
+        dict_ = asdict(self)
+        if self.previous_version:
+            dict_['previous_version'] = self.previous_version.to_dict()
+        return dict_
 
     @classmethod
     def from_dict(cls, dict_: Dict) -> 'Applicability':
         dict_ = dict_.copy()
-        dict_['new_version'] = StructuredText.from_dict(dict_['new_version']) if dict_['new_version'] else None
+        dict_['previous_version'] = (
+            StructuredText.from_dict(dict_['previous_version']) if dict_['previous_version'] else None
+        )
         return cls(**dict_)
 
 

@@ -142,11 +142,9 @@ def _text_component(text: StructuredText, depth: int, previous_version: Optional
 def _get_text_component(text: StructuredText, depth: int) -> Component:
     applicability = _ensure_applicability(text.applicability)
     if applicability.modified:
-        if not applicability.new_version:
-            raise ValueError('Should not happen. Must have a new_version when modified is True.')
-        return _text_component(
-            replace(applicability.new_version, applicability=text.applicability, id=text.id), depth, text
-        )
+        if not applicability.previous_version:
+            raise ValueError('Should not happen. Must have a previous_version when modified is True.')
+        return _text_component(text, depth, applicability.previous_version)
     return _text_component(text, depth)
 
 

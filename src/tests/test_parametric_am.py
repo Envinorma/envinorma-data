@@ -245,7 +245,8 @@ def test_apply_parameter_values_to_am():
 
     assert new_am_2.sections[1].applicability.modified
     assert len(new_am_2.sections[1].applicability.warnings) == 1
-    assert new_am_2.sections[1].applicability.new_version.outer_alineas[0].text == 'version modifiée'
+    assert new_am_2.sections[1].outer_alineas[0].text == 'version modifiée'
+    assert new_am_2.sections[1].applicability.previous_version is not None
 
     assert new_am_2.sections[3].outer_alineas[0].active
     assert new_am_2.sections[3].outer_alineas[1].active

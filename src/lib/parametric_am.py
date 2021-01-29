@@ -94,11 +94,9 @@ def lower_first_letter(str_: str) -> str:
 def _build_alternative_text(
     text: StructuredText, alternative_section: AlternativeSection, parameter_values: Dict[Parameter, Any]
 ) -> StructuredText:
-    new_text = copy(text)
+    new_text = copy(alternative_section.new_text)
     new_text.applicability = Applicability(
-        True,
-        [generate_modification_warning(alternative_section.condition, parameter_values)],
-        alternative_section.new_text,
+        True, [generate_modification_warning(alternative_section.condition, parameter_values)], previous_version=text
     )
     return new_text
 
