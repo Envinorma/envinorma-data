@@ -119,23 +119,14 @@ def _fixed_footer(am_page: str) -> Component:
 
 
 def _get_instructions() -> Component:
-    li_tags = [
-        html.Li('Cette interface permet de modifier la structure des AM. Modifiez les niveaux de titre si besoin.'),
-        html.Li('Le niveau de titre est indiqué par le nombre de symboles "#" au début de la ligne.'),
-        html.Li(
-            'Il n\'est pas possible d\'enregistrer si il y a eu ajout, modification ou suppression des mots.'
-            ' Seule la ponctuation et les sauts de lignes peuvent être modifiés.'
+    return html.Div(
+        html.A(
+            'Guide de structuration',
+            href='https://www.notion.so/R-gles-de-structuration-c1ee7ecc6d79474097991595cba3471b',
         ),
-        html.Li('Le sommaire de droite est mis à jour dynamiquement et peut aider à détecter les incohérences.'),
-        html.Li('Veillez à enregistrer régulièrement pour ne pas perdre le travail effectué.'),
-        html.Li(
-            'Les tableaux présents dans les AM ne sont pas reproduits ici. '
-            'Leur position est signalée par l\'expression'
-            ' "!!Tableau numéro n non reproduit - ne pas modifier!!". '
-            'Ces lignes doivent rester inchangées.'
-        ),
-    ]
-    return html.Div(children=[html.Ul(li_tags)], className='alert alert-light')
+        className='alert alert-light',
+        style={'margin-top': '30px'},
+    )
 
 
 def _get_main_row(text: StructuredText) -> Component:

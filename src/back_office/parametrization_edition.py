@@ -454,6 +454,16 @@ def _extract_paragraph_reference_dropdown_values(text: StructuredText) -> _Optio
     return [{'label': title, 'value': reference} for reference, title in title_references_and_values]
 
 
+def _get_instructions() -> Component:
+    return html.Div(
+        html.A(
+            'Guide de paramétrisation',
+            href='https://www.notion.so/R-gles-de-param-trisation-47d8e5c4d3434d8691cbd9f59d556f0f',
+        ),
+        className='alert alert-light',
+    )
+
+
 def _structure_edition_component(
     text: StructuredText,
     operation: AMOperation,
@@ -462,7 +472,25 @@ def _structure_edition_component(
     destination_rank: int,
 ) -> Component:
     dropdown_values = _extract_paragraph_reference_dropdown_values(text)
-    return _make_form(dropdown_values, operation, parent_page, loaded_parameter, destination_rank, text)
+    return html.Div(
+        [
+            _get_instructions(),
+            _make_form(dropdown_values, operation, parent_page, loaded_parameter, destination_rank, text),
+        ]
+    )
+
+
+_EMPHASIZED_WORDS = [
+    'déclaration',
+    'enregistrement',
+    'autorisation',
+    'application',
+    'alinéa',
+    'installations existantes',
+    'appliquent',
+    'applicables',
+    'applicable',
+]
 
 
 def _get_main_component(
@@ -474,9 +502,7 @@ def _get_main_component(
 ) -> Component:
     text = am_to_text(am)
     border_style = {'padding': '10px', 'border': '1px solid rgba(0,0,0,.1)', 'border-radius': '5px'}
-    am_component_ = am_component(
-        am, ['installations existantes', 'appliquent', 'applicables', 'applicable'], first_level=3
-    )
+    am_component_ = am_component(am, emphasized_words=_EMPHASIZED_WORDS, first_level=3)
     cols = [
         html.Div(
             _structure_edition_component(text, operation, am_page, loaded_parameter, destination_rank),

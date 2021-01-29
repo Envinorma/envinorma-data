@@ -29,7 +29,7 @@ _create_tmp_am_folder()
 def _get_page_heading() -> Component:
     src = '/assets/logo-envinorma.png'
     sticky_style = {
-        'padding': '.5em',
+        'padding': '.2em',
         'border-bottom': '1px solid rgba(0,0,0,.1)',
         'position': 'sticky',
         'top': 0,
@@ -37,10 +37,25 @@ def _get_page_heading() -> Component:
         'z-index': '1',
         'margin-bottom': '10px',
     }
-    return dcc.Link(
-        html.Div(html.Div(html.Img(src=src, style={'width': '30px'}), className='container'), style=sticky_style),
-        href='/',
+    nav = html.Span(
+        [
+            html.Span(
+                html.A('Arrêtés', href='/', className='nav-link', style={'color': 'grey', 'display': 'inline-block'})
+            ),
+            html.Span(
+                html.A(
+                    'Guide d\'enrichissement',
+                    href='https://www.notion.so/Guide-d-enrichissement-3874408245dc474ca8181a3d1d50f78e',
+                    className='nav-link',
+                    target="_blank",
+                    style={'color': 'grey', 'display': 'inline-block'},
+                )
+            ),
+        ],
+        style={'display': 'inline-block'},
     )
+    img = html.Img(src=src, style={'width': '30px', 'display': 'inline-block'})
+    return html.Div(html.Div([dcc.Link(img, href='/'), nav], className='container'), style=sticky_style)
 
 
 def _class_name_from_bool(bool_: bool) -> str:
