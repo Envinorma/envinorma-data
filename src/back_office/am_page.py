@@ -176,19 +176,18 @@ def _application_condition_to_row(
 ) -> Component:
     reference_str = _get_section_title_or_error(non_application_condition.targeted_entity.section.path, am)
     alineas = _human_alinea_tuple(non_application_condition.targeted_entity.outer_alinea_indices)
-    description = non_application_condition.description
     condition = condition_to_str(non_application_condition.condition)
     source = _get_section_title_or_error(non_application_condition.source.reference.section.path, am)
     href = f'{current_page}/{AMOperation.ADD_CONDITION.value}/{rank}'
     edit = _link_button('Éditer', href=href, className='btn btn-link', state=_ButtonState.NORMAL)
     href_copy = f'{current_page}/{AMOperation.ADD_CONDITION.value}/{rank}/copy'
     copy = _link_button('Copier', href=href_copy, className='btn btn-link', state=_ButtonState.NORMAL)
-    cells = [rank, reference_str, alineas, description, condition, source, edit, copy]
+    cells = [rank, reference_str, alineas, condition, source, edit, copy]
     return html.Tr([html.Td(cell) for cell in cells])
 
 
 def _get_non_application_table(parametrization: Parametrization, am: ArreteMinisteriel, current_page: str) -> Component:
-    header_names = ['#', 'Paragraphe visé', 'Alineas visés', 'Description', 'Condition', 'Source', '', '']
+    header_names = ['#', 'Paragraphe visé', 'Alineas visés', 'Condition', 'Source', '', '']
     header = html.Thead(html.Tr([html.Th(name) for name in header_names]))
     body = html.Tbody(
         [
@@ -216,7 +215,6 @@ def _alternative_section_to_row(
     alternative_section: AlternativeSection, am: ArreteMinisteriel, rank: int, current_page: str
 ) -> Component:
     reference_str = _get_section_title_or_error(alternative_section.targeted_section.path, am)
-    description = alternative_section.description
     condition = condition_to_str(alternative_section.condition)
     source = _get_section_title_or_error(alternative_section.source.reference.section.path, am)
     new_version = _wrap_in_paragraphs(extract_markdown_text(alternative_section.new_text, level=1))
@@ -224,14 +222,14 @@ def _alternative_section_to_row(
     edit = _link_button('Éditer', href=href, className='btn btn-link', state=_ButtonState.NORMAL)
     href_copy = f'{current_page}/{AMOperation.ADD_ALTERNATIVE_SECTION.value}/{rank}/copy'
     copy = _link_button('Copier', href=href_copy, className='btn btn-link', state=_ButtonState.NORMAL)
-    cells = [rank, reference_str, description, condition, source, new_version, edit, copy]
+    cells = [rank, reference_str, condition, source, new_version, edit, copy]
     return html.Tr([html.Td(cell) for cell in cells])
 
 
 def _get_alternative_section_table(
     parametrization: Parametrization, am: ArreteMinisteriel, current_page: str
 ) -> Component:
-    header_names = ['#', 'Paragraphe visé', 'Description', 'Condition', 'Source', 'Nouvelle version', '', '']
+    header_names = ['#', 'Paragraphe visé', 'Condition', 'Source', 'Nouvelle version', '', '']
     header = html.Thead(html.Tr([html.Th(name) for name in header_names]))
     body = html.Tbody(
         [
