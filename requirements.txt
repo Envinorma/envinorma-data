@@ -12,3 +12,4 @@ pydantic==1.7.3
 lxml==4.6.2
 pdf2docx==0.5.1
 pdfplumber==0.5.25
+requests==2.25.1
