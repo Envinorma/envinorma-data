@@ -44,10 +44,20 @@ class StorageConfig:
 
 
 @dataclass
+class SlackConfig:
+    enrichment_notification_url: str
+
+    @classmethod
+    def default_load(cls) -> 'SlackConfig':
+        return cls(**{key: _get_var('slack', key) for key in cls.__annotations__})
+
+
+@dataclass
 class Config:
     aida: AidaConfig
     legifrance: LegifranceConfig
     storage: StorageConfig
+    slack: SlackConfig
 
     @classmethod
     def default_load(cls) -> 'Config':
@@ -55,6 +65,7 @@ class Config:
             aida=AidaConfig.default_load(),
             legifrance=LegifranceConfig.default_load(),
             storage=StorageConfig.default_load(),
+            slack=SlackConfig.default_load(),
         )
 
 

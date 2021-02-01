@@ -2,7 +2,12 @@ import json
 import random
 import string
 import traceback
+from enum import Enum
 from typing import Dict, List, Union
+
+import requests
+
+from lib.config import config
 
 
 def jsonify(obj: Union[Dict, List]) -> str:
@@ -23,3 +28,20 @@ def write_json(obj: Union[Dict, List], filename: str, safe: bool = False, pretty
 
 def random_string(size: int = 6) -> str:
     return ''.join([random.choice(string.ascii_letters) for _ in range(size)])
+
+
+class SlackChannel(Enum):
+    ENRICHMENT_NOTIFICATIONS = 'ENRICHMENT_NOTIFICATIONS'
+
+    def slack_url(self) -> str:
+        if self == self.ENRICHMENT_NOTIFICATIONS:
+            return config.slack.enrichment_notification_url
+        raise NotImplementedError(f'Missing slack channel url {self}.')
+
+
+def send_slack_notification(message: str, channel: SlackChannel) -> None:
+    url = channel.slack_url()
+    answer = requests.post(url, json={'text': message})
+    if not (200 <= answer.status_code < 300):
+        print('Error with status code', answer.status_code)
+        print(answer.content.decode())

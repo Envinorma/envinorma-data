@@ -14,7 +14,7 @@ from lib.data import AMMetadata, ArreteMinisteriel, Ints, StructuredText, Table,
 from lib.generate_final_am import AMVersions, generate_final_am
 from lib.parametrization import AlternativeSection, NonApplicationCondition, Parametrization, condition_to_str
 from lib.paths import create_folder_and_generate_parametric_filename, get_parametric_ams_folder
-from lib.utils import write_json
+from lib.utils import SlackChannel, send_slack_notification, write_json
 
 from back_office.am_init_edition import router as am_init_router
 from back_office.am_init_tab import am_init_tab
@@ -541,6 +541,9 @@ def _update_am_status(clicked_button: str, am_id: str) -> None:
     else:
         raise NotImplementedError(f'Unknown button id {clicked_button}')
     upsert_am_status(am_id, new_status)
+    send_slack_notification(
+        f'AM {am_id} a désormais le statut {new_status.value}', SlackChannel.ENRICHMENT_NOTIFICATIONS
+    )
     if clicked_button == _VALIDATE_PARAMETRIZATION:
         _generate_and_dump_am_version(am_id)
 
