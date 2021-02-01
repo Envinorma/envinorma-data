@@ -1,7 +1,7 @@
 import re
 import traceback
 from dataclasses import replace
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List, Optional, Union
 
 import dash_bootstrap_components as dbc
 import dash_core_components as dcc
@@ -24,6 +24,7 @@ from back_office.utils import AMOperation, RouteParsingError, assert_str, get_tr
 _TOC_COMPONENT = 'structure-edition-toc'
 _TEXT_AREA_COMPONENT = 'structure-edition-text-area-component'
 _PREVIEW_BUTTON = 'structure-editition-preview-button'
+_FORM_OUTPUT = 'structure-edition-form-output'
 
 
 def _text_to_elements(text: StructuredText) -> List[TextElement]:
@@ -59,17 +60,7 @@ def _get_toc_component(text: StructuredText) -> Component:
     elements = _text_to_elements(text)
     initial_value = html.P([_format_toc_line(el) for el in elements if isinstance(el, Title) and el.level > 0])
     return html.Div(
-        dbc.Spinner(html.Div(initial_value, id=_TOC_COMPONENT)),
-        className='summary',
-        style={'height': '60vh'}
-        # style={
-        #     'overflow-y': 'auto',
-        #     'position': 'sticky',
-        #     'border-left': '2px solid #007bff',
-        #     'font-size': '.8em',
-        #     'padding-left': '5px',
-        #     'height': '100vh',
-        # },
+        dbc.Spinner(html.Div(initial_value, id=_TOC_COMPONENT)), className='summary', style={'height': '60vh'}
     )
 
 
@@ -95,7 +86,7 @@ def _preview_button() -> Component:
 
 
 def _go_back_button(am_page: str) -> Component:
-    return dcc.Link(html.Button('Annuler', className='btn btn-link center'), href=am_page)
+    return dcc.Link(html.Button('Retour', className='btn btn-link center'), href=am_page)
 
 
 def _footer_buttons(am_page: str) -> Component:
@@ -104,7 +95,7 @@ def _footer_buttons(am_page: str) -> Component:
 
 
 def _fixed_footer(am_page: str) -> Component:
-    output = html.Div(html.Div(id='form-output-structure-edition'), style={'display': 'inline-block'})
+    output = html.Div(html.Div(id=_FORM_OUTPUT), style={'display': 'inline-block'})
     content = html.Div([output, html.Br(), _footer_buttons(am_page)])
     return html.Div(
         content,
@@ -132,11 +123,11 @@ def _get_instructions() -> Component:
 
 
 def _get_main_row(text: StructuredText) -> Component:
-    first_column = html.Div(
+    first_column = html.Div(className='col-3', children=[_get_toc_component(text)])
+    second_column = html.Div(
         className='col-9',
         children=[html.P(text.title.text), _structure_edition_component(text)],
     )
-    second_column = html.Div(className='col-3', children=[_get_toc_component(text)])
     return html.Div(className='row', children=[first_column, second_column])
 
 
@@ -195,7 +186,7 @@ def _build_title(line: str) -> Title:
     return Title(line[nb_hastags:].strip(), level=nb_hastags)
 
 
-_TABLEAU_PREFIX = '$$TABLE_'
+_TABLE_MARK = 'XXXTABLEAUXXX'
 
 
 def _clean_element(element: TextElement) -> TextElement:
@@ -215,7 +206,7 @@ def _replace_tables(elements: List[TextElement], tables: List[Table]) -> List[Te
     i = 0
     final_elements: List[TextElement] = []
     for element in elements:
-        if isinstance(element, str) and element.startswith(_TABLEAU_PREFIX):
+        if isinstance(element, Table):
             if i >= len(tables):
                 raise ValueError('Not enough tables to replace')
             final_elements.append(tables[i])
@@ -247,10 +238,12 @@ def _ensure_all_tables_are_found_once(initial_tables: List[Table], new_tables: L
         )
 
 
-def _extract_words_outside_table(text: StructuredText) -> List[str]:
+def _extract_words_from_structured_text(text: StructuredText) -> List[str]:
     title_words = _extract_words(text.title.text)
-    alinea_words = [word for al in text.outer_alineas for word in _extract_words(al.text)]
-    section_words = [word for sec in text.sections for word in _extract_words_outside_table(sec)]
+    alinea_words = [
+        word for al in text.outer_alineas for word in _extract_words(al.text if not al.table else _TABLE_MARK)
+    ]
+    section_words = [word for sec in text.sections for word in _extract_words_from_structured_text(sec)]
     return title_words + alinea_words + section_words
 
 
@@ -258,13 +251,23 @@ def _keep_non_empty(strs: List[str]) -> List[str]:
     return [x for x in strs if x]
 
 
+def _ensure_str(str_: Any) -> str:
+    if not isinstance(str_, str):
+        raise ValueError('Wrong type {type(str_)}, expecting str')
+    return str_
+
+
+def _ensure_strs(strs: List[Any]) -> List[str]:
+    return [_ensure_str(str_) for str_ in strs]
+
+
 def _extract_words(str_: str) -> List[str]:
-    return _keep_non_empty(re.split(r'\W+', str_))
+    return _keep_non_empty(_ensure_strs(re.split(r'\W+', str_)))
 
 
-def _extract_str_repr(element: TextElement, table_index: int) -> str:
+def _extract_str_repr(element: TextElement) -> str:
     if isinstance(element, Table):
-        return f'{_TABLEAU_PREFIX}{table_index}$$'
+        return _TABLE_MARK
     if isinstance(element, str):
         return element
     if isinstance(element, Title):
@@ -272,21 +275,9 @@ def _extract_str_repr(element: TextElement, table_index: int) -> str:
     raise NotImplementedError(f'Unhandled type {type(element)}')
 
 
-def _generate_table_indices(elements: List[TextElement]) -> List[int]:
-    ints: List[int] = []
-    i = 0
-    for element in elements:
-        if isinstance(element, Table):
-            ints.append(i)
-            i += 1
-        else:
-            ints.append(-1)
-    return ints
-
-
 def _extract_element_words(elements: List[TextElement]) -> List[str]:
-    table_indices = _generate_table_indices(elements)
-    lines = [_extract_str_repr(element, table_index) for element, table_index in zip(elements, table_indices)]
+
+    lines = [_extract_str_repr(element) for element in elements]
     return [word for line in lines for word in _extract_words(line)]
 
 
@@ -308,7 +299,7 @@ def _extract_first_different_word(text_1: List[str], text_2: List[str]) -> Optio
 
 
 def _check_have_same_words(am: StructuredText, new_am_soup: BeautifulSoup) -> None:
-    previous_am_words = _extract_words_outside_table(replace(am, title=EnrichedString('')))
+    previous_am_words = _extract_words_from_structured_text(replace(am, title=EnrichedString('')))
     new_am_words = _extract_text_area_words(new_am_soup)
     min_len = min(len(previous_am_words), len(new_am_words))
     word_index = _extract_first_different_word(previous_am_words[:min_len], new_am_words[:min_len])
@@ -353,8 +344,8 @@ def _parse_text_and_save_message(am_id: str, new_am: str) -> str:
     return f'Enregistrement réussi.'
 
 
-def _extract_form_value_and_save_text(nb_clicks: int, am_id: str, text_area_content: Dict[str, Any]) -> Component:
-    if nb_clicks == 0:
+def _extract_form_value_and_save_text(nb_clicks: int, am_id: str, text_area_content: Optional[str]) -> Component:
+    if nb_clicks == 0 or text_area_content is None:
         return html.Div()
     new_am = assert_str(text_area_content)
     try:
@@ -426,11 +417,11 @@ def _parse_html_area_and_display_toc(html_str: str) -> Component:
 
 
 @app.callback(
-    Output('form-output-structure-edition', 'children'),
+    Output(_FORM_OUTPUT, 'children'),
     [Input('submit-val-structure-edition', 'n_clicks'), Input('am-id-structure-edition', 'children')],
     [State(_TEXT_AREA_COMPONENT, 'value')],
 )
-def update_output(nb_clicks, am_id, state):
+def update_output(nb_clicks, am_id, state: Optional[str]):
     return _extract_form_value_and_save_text(nb_clicks, am_id, state)
 
 

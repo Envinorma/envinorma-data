@@ -6,7 +6,8 @@ from back_office.structure_edition import (
     _extract_first_different_word,
     _extract_text_area_words,
     _extract_words,
-    _extract_words_outside_table,
+    _extract_words_from_structured_text,
+    _TABLE_MARK,
     _keep_non_empty,
     _replace_tables,
 )
@@ -24,13 +25,19 @@ def _get_simple_text() -> StructuredText:
     )
 
 
-def test_extract_words_outside_table():
-    assert _extract_words_outside_table(StructuredText(EnrichedString(''), [], [], None)) == []
-    assert _extract_words_outside_table(StructuredText(EnrichedString('test'), [], [], None)) == ['test']
-    assert _extract_words_outside_table(StructuredText(EnrichedString('test 2'), [], [], None)) == ['test', '2']
+def test_extract_words_from_structured_text():
+    assert _extract_words_from_structured_text(StructuredText(EnrichedString(''), [], [], None)) == []
+    assert _extract_words_from_structured_text(StructuredText(EnrichedString('test'), [], [], None)) == ['test']
+    assert _extract_words_from_structured_text(StructuredText(EnrichedString('test 2'), [], [], None)) == ['test', '2']
+    table = EnrichedString('', table=Table([]))
+    assert _extract_words_from_structured_text(StructuredText(EnrichedString('test 2'), [table], [], None)) == [
+        'test',
+        '2',
+        _TABLE_MARK,
+    ]
     am = _get_simple_text()
     expected = ['AM', 'alinea', 'foo', 'Section', '1', 'Section', '1', '1', 'Section', '2', 'bar']
-    assert _extract_words_outside_table(am) == expected
+    assert _extract_words_from_structured_text(am) == expected
 
 
 def test_keep_non_empty():
@@ -61,7 +68,7 @@ def test_extract_text_area_words():
     assert func('<br/>') == []
     assert func('<p>foo<br/>bar</p>') == ['foo', 'bar']
     assert func('<p>foo<br/>bar...</p>') == ['foo', 'bar']
-    assert func(f'<p>foo<br/>bar...<table><tr><td>unique cell</td></tr></table></p>') == ['foo', 'bar', 'TABLE_0']
+    assert func(f'<p>foo<br/>bar...<table><tr><td>unique cell</td></tr></table></p>') == ['foo', 'bar', _TABLE_MARK]
 
 
 def test_extract_first_different_word():
@@ -87,8 +94,8 @@ def test_extract_element_words():
     assert _extract_element_words(['foo\nbar...']) == ['foo', 'bar']
     assert _extract_element_words(['foo\nbar...']) == ['foo', 'bar']
     assert _extract_element_words(['foo\nbar...', Title('foo\nbar...', 1)]) == ['foo', 'bar', 'foo', 'bar']
-    assert _extract_element_words([f'foo\nbar...', Table([])]) == ['foo', 'bar', 'TABLE_0']
-    expected = ['foo', 'bar', 'TABLE_0', 'test', 'TABLE_1', 'test']
+    assert _extract_element_words([f'foo\nbar...', Table([])]) == ['foo', 'bar', _TABLE_MARK]
+    expected = ['foo', 'bar', _TABLE_MARK, 'test', _TABLE_MARK, 'test']
     assert _extract_element_words([f'foo\nbar...', Table([]), 'test', Table([]), 'test']) == expected
 
 
@@ -99,6 +106,6 @@ def test_replace_tables():
     title = Title('', 1)
     assert _replace_tables(['', '', title], []) == ['', '', title]
     table = Table([])
-    assert _replace_tables(['', '', '$$TABLE_0$$'], [table]) == ['', '', table]
-    assert _replace_tables(['', '', '$$TABLE_0$$'], [table]) == ['', '', table]
-    assert _replace_tables(['$$TABLE_0$$', '', '', '$$TABLE_0$$'], [table, table]) == [table, '', '', table]
+    assert _replace_tables(['', '', Table([])], [table]) == ['', '', table]
+    assert _replace_tables(['', '', Table([])], [table]) == ['', '', table]
+    assert _replace_tables([Table([]), '', '', Table([])], [table, table]) == [table, '', '', table]

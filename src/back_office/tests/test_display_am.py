@@ -12,7 +12,7 @@ def _get_simple_text(active: bool, modified: bool, sections: Optional[List[Struc
     if not modified:
         return StructuredText(estr('txt'), als, sections or [], Applicability())
     return StructuredText(
-        estr('txt'), als, sections or [], Applicability(True, ['modified'], _get_simple_text(True, False))
+        estr('txt'), als, sections or [], Applicability(True, True, ['modified'], _get_simple_text(True, False))
     )
 
 

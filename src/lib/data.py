@@ -147,6 +147,7 @@ def estr(text: Optional[str] = None) -> EnrichedString:
 
 @dataclass
 class Applicability:
+    active: bool = True
     modified: bool = False
     warnings: List[str] = field(default_factory=list)
     previous_version: Optional['StructuredText'] = None

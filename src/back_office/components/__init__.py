@@ -23,14 +23,17 @@ class ButtonState(Enum):
     DISABLED = 1
     HIDDEN = 2
     NORMAL_LINK = 3
+    NORMAL_LIGHT = 4
 
 
 def button(text: str, state: ButtonState, id_: Optional[str] = None) -> html.Button:
-    disabled = state not in (ButtonState.NORMAL, ButtonState.NORMAL_LINK)
+    disabled = state not in (ButtonState.NORMAL, ButtonState.NORMAL_LINK, ButtonState.NORMAL_LIGHT)
     hidden = state == ButtonState.HIDDEN
     className = 'btn btn-primary'
     if state == ButtonState.NORMAL_LINK:
         className = 'btn btn-link'
+    if state == ButtonState.NORMAL_LIGHT:
+        className = 'btn btn-light'
     if id_:
         return html.Button(
             text,

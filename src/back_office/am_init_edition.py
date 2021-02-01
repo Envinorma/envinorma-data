@@ -164,7 +164,10 @@ def _save_button() -> Component:
         'text-align': 'center',
     }
     return html.Div(
-        [html.Div(id=_SAVE_OUTPUT), html.Button('Enregistrer', className='btn btn-primary', id=_SAVE_BUTTON)],
+        [
+            html.Div(id=_SAVE_OUTPUT, className='container'),
+            html.Button('Enregistrer', className='btn btn-primary', id=_SAVE_BUTTON),
+        ],
         style=style,
     )
 
@@ -273,6 +276,12 @@ def _build_title(str_: str) -> Title:
     return Title(str_[level:].strip(), level=level)
 
 
+def _is_empty(element: TextElement) -> bool:
+    if isinstance(element, str) and not element.strip():
+        return True
+    return False
+
+
 def _add_title(element: TextElement) -> TextElement:
     if isinstance(element, str) and element.startswith('#'):
         return _build_title(element)
@@ -282,8 +291,13 @@ def _add_title(element: TextElement) -> TextElement:
 def _extract_elements(am_content: str) -> List[TextElement]:
     soup = BeautifulSoup(am_content, 'html.parser')
     text_elements = extract_text_elements(soup)
-    split_lines = [line for el in text_elements for line in (el.split('\n') if isinstance(el, str) else [el])]
-    final_elements = [_add_title(el) for el in split_lines if el]
+    split_lines = [
+        line
+        for el in text_elements
+        for line in (el.split('\n') if isinstance(el, str) else [el])
+        if not _is_empty(line)
+    ]
+    final_elements = [_add_title(el) for el in split_lines]
     return final_elements
 
 

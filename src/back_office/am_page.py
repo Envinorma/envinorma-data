@@ -52,7 +52,7 @@ def _extract_am_id_and_operation(pathname: str) -> Tuple[str, Optional[AMOperati
 
 def _get_edit_structure_button(parent_page: str, am_status: AMStatus) -> Component:
     href = f'{parent_page}/{AMOperation.EDIT_STRUCTURE.value}'
-    state = ButtonState.NORMAL if am_status == am_status.PENDING_STRUCTURE_VALIDATION else ButtonState.HIDDEN
+    state = ButtonState.NORMAL_LINK if am_status == am_status.PENDING_STRUCTURE_VALIDATION else ButtonState.HIDDEN
     return link_button('Éditer', href, state)
 
 
@@ -62,20 +62,20 @@ def _get_am_initialization_buttons() -> Tuple[Optional[Component], Optional[Comp
 
 def _get_structure_validation_buttons() -> Tuple[Optional[Component], Optional[Component]]:
     return (
-        button('Étape précédente', id_=_INVALIDATE_INITIALIZATION, state=ButtonState.NORMAL_LINK),
+        button('Étape précédente', id_=_INVALIDATE_INITIALIZATION, state=ButtonState.NORMAL_LIGHT),
         button('Valider la structure', id_=_VALIDATE_STRUCTURE, state=ButtonState.NORMAL),
     )
 
 
 def _get_parametrization_edition_buttons() -> Tuple[Optional[Component], Optional[Component]]:
     return (
-        button('Étape précédente', id_=_INVALIDATE_STRUCTURE, state=ButtonState.NORMAL_LINK),
+        button('Étape précédente', id_=_INVALIDATE_STRUCTURE, state=ButtonState.NORMAL_LIGHT),
         button('Valider la paramétrisation', id_=_VALIDATE_PARAMETRIZATION, state=ButtonState.NORMAL),
     )
 
 
 def _get_validated_buttons() -> Tuple[Optional[Component], Optional[Component]]:
-    return (button('Étape précédente', id_=_INVALIDATE_PARAMETRIZATION, state=ButtonState.NORMAL_LINK), None)
+    return (button('Étape précédente', id_=_INVALIDATE_PARAMETRIZATION, state=ButtonState.NORMAL_LIGHT), None)
 
 
 def _inline_buttons(button_left: Optional[Component], button_right: Optional[Component]) -> List[Component]:
@@ -372,17 +372,25 @@ def _get_structure_validation_diff(am_id: str, status: AMStatus, parent_page: st
         return html.Div('AM introuvable.')
     current_am = load_structured_am(am_id)
     edit_button = html.Div(
-        html.Div(
-            _get_edit_structure_button(parent_page, status),
-            style={'display': 'flex', 'position': 'fixed', 'top': '200px'},
-        ),
-        className='col-2',
+        _get_edit_structure_button(parent_page, status),
+        style={
+            'display': 'inline-block',
+            'position': 'fixed',
+            'bottom': '0px',
+            'left': '25%',
+            'z-index': '10',
+            'width': '50%',
+            'text-align': 'center',
+            'padding-bottom': '10px',
+            'padding-top': '10px',
+            'margin': 'auto',
+        },
     )
     if not current_am:
-        diff = html.Div('Pas de modifications de structuration.', className='col-10')
+        diff = html.Div('Pas de modifications de structuration.')
     else:
-        diff = html.Div([_build_am_diff_component(initial_am, current_am)], className='col-10')
-    return html.Div([diff, edit_button], className='row')
+        diff = html.Div([_build_am_diff_component(initial_am, current_am)])
+    return html.Div([diff, edit_button])
 
 
 def _create_if_inexistent(folder: str) -> None:

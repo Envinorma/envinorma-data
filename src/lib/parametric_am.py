@@ -96,7 +96,9 @@ def _build_alternative_text(
 ) -> StructuredText:
     new_text = copy(alternative_section.new_text)
     new_text.applicability = Applicability(
-        True, [generate_modification_warning(alternative_section.condition, parameter_values)], previous_version=text
+        modified=True,
+        warnings=[generate_modification_warning(alternative_section.condition, parameter_values)],
+        previous_version=text,
     )
     return new_text
 
@@ -163,7 +165,7 @@ def _deactivate_alineas(
         ]
     else:
         new_outer_alineas = [replace(al, active=False) for al in text.outer_alineas]
-    text.applicability = Applicability(warnings=[warning])
+    text.applicability = Applicability(active=inactive_alineas is None, warnings=[warning])
     text.sections = [_deactivate_child_section(section) for section in text.sections]
     text.outer_alineas = new_outer_alineas
     return text

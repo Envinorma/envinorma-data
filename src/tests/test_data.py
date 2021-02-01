@@ -46,7 +46,7 @@ _LEAF_SECTION = StructuredText(
     copy(_ENRICHED_STRING_SIMPLE),
     [copy(_ENRICHED_STRING_SIMPLE)],
     [],
-    Applicability(True, ['beware'], StructuredText(_str(), [], [], None)),
+    Applicability(True, True, ['beware'], StructuredText(_str(), [], [], None)),
     'lf_id',
     'ref',
     Annotations(TopicName.AIR_ODEURS, True, 'guide'),
