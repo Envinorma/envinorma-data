@@ -2,11 +2,12 @@ import json
 import os
 from datetime import datetime
 from typing import Dict, Optional
+
 import requests
 from requests_oauthlib import OAuth2Session
 from tqdm import tqdm
 
-from lib import config
+from lib.config import LEGIFRANCE_CLIENT_SECRET, AM_DATA_FOLDER
 
 _API_HOST = 'https://api.aife.economie.gouv.fr/dila/legifrance-beta/lf-engine-app'
 _TOKEN_URL = 'https://oauth.aife.economie.gouv.fr/api/oauth/token'
@@ -14,7 +15,7 @@ _NOR_URL = f'{_API_HOST}/consult/getJoWithNor'
 
 
 def get_legifrance_client() -> OAuth2Session:
-    secret = os.environ.get('CLIENT_SECRET', config.LEGIFRANCE_CLIENT_SECRET)
+    secret = os.environ.get('CLIENT_SECRET', LEGIFRANCE_CLIENT_SECRET)
     if not secret:
         raise ValueError('Provide CLIENT_SECRET in environment variables')
     data = {
@@ -29,10 +30,16 @@ def get_legifrance_client() -> OAuth2Session:
     return client
 
 
+class LegifranceRequestError(Exception):
+    pass
+
+
 def _extract_response_content(response: requests.Response) -> Dict:
     if 200 <= response.status_code < 300:
         return response.json()
-    raise ValueError(f'Requests has status_code {response.status_code} and content {response.content.decode()}')
+    raise LegifranceRequestError(
+        f'Request has status_code {response.status_code} and content {response.content.decode()}'
+    )
 
 
 def get_arrete_by_nor(nor: str, client: OAuth2Session) -> Dict:
@@ -100,7 +107,7 @@ def download_text(cid: str, output_filename: str, client: Optional[OAuth2Session
     if not client:
         client = get_legifrance_client()
     res = get_current_loda_via_cid(cid, client)
-    json.dump(res, open(f'{config.AM_DATA_FOLDER}/legifrance_texts/{output_filename}', 'w'), ensure_ascii=False)
+    json.dump(res, open(f'{AM_DATA_FOLDER}/legifrance_texts/{output_filename}', 'w'), ensure_ascii=False)
 
 
 def download_all_lf_texts() -> None:

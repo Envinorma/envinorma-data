@@ -26,6 +26,7 @@ def assert_list(value: Any) -> List:
 
 
 class AMOperation(Enum):
+    INIT = 'init'
     EDIT_STRUCTURE = 'edit_structure'
     ADD_CONDITION = 'add_condition'
     ADD_ALTERNATIVE_SECTION = 'add_alternative_section'
@@ -33,9 +34,21 @@ class AMOperation(Enum):
 
 
 class AMStatus(Enum):
+    PENDING_INITIALIZATION = 'pending-initialization'
     PENDING_STRUCTURE_VALIDATION = 'pending-structure-validation'
     PENDING_PARAMETRIZATION = 'pending-enrichment'
     VALIDATED = 'validated'
+
+    def step(self) -> int:
+        if self == AMStatus.PENDING_INITIALIZATION:
+            return 0
+        if self == AMStatus.PENDING_STRUCTURE_VALIDATION:
+            return 1
+        if self == AMStatus.PENDING_PARAMETRIZATION:
+            return 2
+        if self == AMStatus.VALIDATED:
+            return 3
+        raise NotImplementedError()
 
 
 def get_subsection(path: Ints, text: StructuredText) -> StructuredText:

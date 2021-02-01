@@ -3,15 +3,20 @@ import traceback
 from dataclasses import replace
 from typing import Any, Dict, List, Optional
 
+import dash_bootstrap_components as dbc
 import dash_core_components as dcc
+import dash_editable_div as ded
 import dash_html_components as html
+from bs4 import BeautifulSoup
 from dash.dependencies import Input, Output, State
 from dash.development.base_component import Component
 from lib.data import ArreteMinisteriel, EnrichedString, StructuredText, Table, am_to_text
+from lib.parse_html import extract_text_elements
 from lib.structure_extraction import TextElement, Title, build_structured_text, structured_text_to_text_elements
 
 from back_office.app_init import app
 from back_office.components import error_component, success_component
+from back_office.components.am_component import table_to_component
 from back_office.fetch_data import load_initial_am, load_structured_am, upsert_structured_am
 from back_office.routing import build_am_page
 from back_office.utils import AMOperation, RouteParsingError, assert_str, get_truncated_str
@@ -25,49 +30,46 @@ def _text_to_elements(text: StructuredText) -> List[TextElement]:
     return structured_text_to_text_elements(text, 0)
 
 
-def _element_to_str(element: TextElement) -> str:
-    if isinstance(element, Title):
-        return '#' * element.level + ' ' + element.text
-    if isinstance(element, str):
-        return element
+def _element_to_component(element: TextElement) -> Component:
+    if isinstance(element, Table):
+        return table_to_component(element, None)
+    elif isinstance(element, Title):
+        classname = f'H{element.level + 3}' if element.level <= 3 else 'H6'
+        return getattr(html, classname)('#' * element.level + ' ' + element.text)
+    elif isinstance(element, str):
+        return html.P(element)
     raise NotImplementedError(f'Not implemented for type {type(element)}')
 
 
-def _prepare_text_area_value(elements: List[TextElement]) -> str:
-    table_rank = 0
-    strs: List[str] = []
-    for element in elements:
-        if isinstance(element, Table):
-            strs.append(f'{_TABLEAU_PREFIX}{table_rank} non reproduit - ne pas modifier!!')
-            table_rank += 1
-        else:
-            strs.append(_element_to_str(element))
-    return '\n\n'.join(strs)
+def _prepare_editable_div_value(elements: List[TextElement]) -> List[Component]:
+    return [_element_to_component(el) for el in elements]
 
 
 def _structure_edition_component(text: StructuredText) -> Component:
     text_elements = _text_to_elements(text)[1:]  # Don't modify main title.
-    # style = {'padding': '10px', 'border': '1px solid rgba(0,0,0,.1)', 'border-radius': '5px'}
-    # children=html.Div(_prepare_text_area_value(text_elements), contentEditable='true', style=style),
-    return dcc.Textarea(
+    return ded.EditableDiv(
         id=_TEXT_AREA_COMPONENT,
-        value=_prepare_text_area_value(text_elements),
-        className='form-control',
-        style={'height': '100vh'},
+        children=_prepare_editable_div_value(text_elements),
+        className='text',
+        style={'padding': '10px', 'border': '1px solid rgba(0,0,0,.1)', 'border-radius': '5px'},
     )
 
 
-def _get_toc_component() -> Component:
+def _get_toc_component(text: StructuredText) -> Component:
+    elements = _text_to_elements(text)
+    initial_value = html.P([_format_toc_line(el) for el in elements if isinstance(el, Title) and el.level > 0])
     return html.Div(
-        html.Div(id=_TOC_COMPONENT),
-        style={
-            'overflow-y': 'auto',
-            'position': 'sticky',
-            'border-left': '2px solid #007bff',
-            'font-size': '.8em',
-            'padding-left': '5px',
-            'height': '100vh',
-        },
+        dbc.Spinner(html.Div(initial_value, id=_TOC_COMPONENT)),
+        className='summary',
+        style={'height': '60vh'}
+        # style={
+        #     'overflow-y': 'auto',
+        #     'position': 'sticky',
+        #     'border-left': '2px solid #007bff',
+        #     'font-size': '.8em',
+        #     'padding-left': '5px',
+        #     'height': '100vh',
+        # },
     )
 
 
@@ -132,9 +134,9 @@ def _get_instructions() -> Component:
 def _get_main_row(text: StructuredText) -> Component:
     first_column = html.Div(
         className='col-9',
-        children=[html.H1('Texte'), html.P(text.title.text), _structure_edition_component(text)],
+        children=[html.P(text.title.text), _structure_edition_component(text)],
     )
-    second_column = html.Div(className='col-3', children=[html.H1('Sommaire'), _get_toc_component()])
+    second_column = html.Div(className='col-3', children=[_get_toc_component(text)])
     return html.Div(className='row', children=[first_column, second_column])
 
 
@@ -193,44 +195,46 @@ def _build_title(line: str) -> Title:
     return Title(line[nb_hastags:].strip(), level=nb_hastags)
 
 
-_TABLEAU_PREFIX = '!!Tableau numéro '
+_TABLEAU_PREFIX = '$$TABLE_'
 
 
-def _get_correct_table(line: str, tables: List[Table]) -> Table:
-    digit_str = line.replace(_TABLEAU_PREFIX, '').split(' ')[0]
-    try:
-        digit = int(digit_str)
-    except ValueError:
-        raise _FormHandlingError(
-            f'Erreur lors de l\'enregistrement: le numéro du tableau parsé dans une ligne est invalide. '
-            f'La ligne: "{line}" ; le numéro candidat "{digit_str}"'
-        )
-    if digit >= len(tables):
-        raise _FormHandlingError(
-            f'Erreur lors de l\'enregistrement: le tableau n°{digit} est '
-            'renseigné mais n\'existe pas dans l\'AM initial.'
-        )
-    return tables[digit]
+def _clean_element(element: TextElement) -> TextElement:
+    if not isinstance(element, (Title, str)):
+        return element
+    str_ = element.text if isinstance(element, Title) else element
+    if not str_.startswith('#'):
+        return str_
+    return _build_title(str_)
 
 
-def _make_text_element(line: str, tables: List[Table]) -> TextElement:
-    if line.startswith('#'):
-        return _build_title(line)
-    if line.startswith(_TABLEAU_PREFIX):
-        return _get_correct_table(line, tables)
-    return line
+def _remove_hashtags_from_elements(elements: List[TextElement]) -> List[TextElement]:
+    return [_clean_element(el) for el in elements]
 
 
-def _build_new_elements(new_am: str, tables: List[Table]) -> List[TextElement]:
-    lines = [x for x in new_am.split('\n') if x.strip()]
-    return [_make_text_element(line, tables) for line in lines]
+def _replace_tables(elements: List[TextElement], tables: List[Table]) -> List[TextElement]:
+    i = 0
+    final_elements: List[TextElement] = []
+    for element in elements:
+        if isinstance(element, str) and element.startswith(_TABLEAU_PREFIX):
+            if i >= len(tables):
+                raise ValueError('Not enough tables to replace')
+            final_elements.append(tables[i])
+            i += 1
+        else:
+            final_elements.append(element)
+    return final_elements
 
 
-def _keep_tables(elements: List[TextElement]) -> List[TextElement]:
+def _build_new_elements(am_soup: BeautifulSoup, tables: List[Table]) -> List[TextElement]:
+    elements = _replace_tables(extract_text_elements(am_soup), tables)
+    return _remove_hashtags_from_elements(elements)
+
+
+def _keep_tables(elements: List[TextElement]) -> List[Table]:
     return [el for el in elements if isinstance(el, Table)]
 
 
-def _ensure_all_tables_are_found_once(initial_tables: List[Table], new_tables: List[TextElement]) -> None:
+def _ensure_all_tables_are_found_once(initial_tables: List[Table], new_tables: List[Table]) -> None:
     missing_tables = [i for i, table in enumerate(initial_tables) if table not in new_tables]
     if missing_tables:
         raise _FormHandlingError(
@@ -254,16 +258,41 @@ def _keep_non_empty(strs: List[str]) -> List[str]:
     return [x for x in strs if x]
 
 
-def _is_table_line(line: str) -> bool:
-    return line.startswith(_TABLEAU_PREFIX)
-
-
 def _extract_words(str_: str) -> List[str]:
     return _keep_non_empty(re.split(r'\W+', str_))
 
 
-def _extract_text_area_words(str_: str) -> List[str]:
-    return [word for line in str_.split('\n') if not _is_table_line(line) for word in _extract_words(line)]
+def _extract_str_repr(element: TextElement, table_index: int) -> str:
+    if isinstance(element, Table):
+        return f'{_TABLEAU_PREFIX}{table_index}$$'
+    if isinstance(element, str):
+        return element
+    if isinstance(element, Title):
+        return element.text
+    raise NotImplementedError(f'Unhandled type {type(element)}')
+
+
+def _generate_table_indices(elements: List[TextElement]) -> List[int]:
+    ints: List[int] = []
+    i = 0
+    for element in elements:
+        if isinstance(element, Table):
+            ints.append(i)
+            i += 1
+        else:
+            ints.append(-1)
+    return ints
+
+
+def _extract_element_words(elements: List[TextElement]) -> List[str]:
+    table_indices = _generate_table_indices(elements)
+    lines = [_extract_str_repr(element, table_index) for element, table_index in zip(elements, table_indices)]
+    return [word for line in lines for word in _extract_words(line)]
+
+
+def _extract_text_area_words(soup: BeautifulSoup) -> List[str]:
+    elements = extract_text_elements(soup)
+    return _extract_element_words(elements)
 
 
 def _extract_first_different_word(text_1: List[str], text_2: List[str]) -> Optional[int]:
@@ -278,9 +307,9 @@ def _extract_first_different_word(text_1: List[str], text_2: List[str]) -> Optio
     return None
 
 
-def _check_have_same_words(am: StructuredText, new_am: str) -> None:
+def _check_have_same_words(am: StructuredText, new_am_soup: BeautifulSoup) -> None:
     previous_am_words = _extract_words_outside_table(replace(am, title=EnrichedString('')))
-    new_am_words = _extract_text_area_words(new_am)
+    new_am_words = _extract_text_area_words(new_am_soup)
     min_len = min(len(previous_am_words), len(new_am_words))
     word_index = _extract_first_different_word(previous_am_words[:min_len], new_am_words[:min_len])
     if len(previous_am_words) != len(new_am_words) or word_index:
@@ -297,33 +326,39 @@ def _check_have_same_words(am: StructuredText, new_am: str) -> None:
         raise _FormHandlingError(message)
 
 
-def _structure_text(am_id: str, new_am: str) -> ArreteMinisteriel:
-    am = load_structured_am(am_id) or load_initial_am(am_id)
-    if not am:
-        raise _FormHandlingError(f'am with id {am_id} not found, which should not happen')
-    text = am_to_text(am)
-    _check_have_same_words(text, new_am)
-    tables = _extract_tables(text)
-    new_elements = _build_new_elements(new_am, tables)
+def _create_new_text(previous_text: StructuredText, new_am_str: str) -> StructuredText:
+    new_am_soup = BeautifulSoup(new_am_str, 'html.parser')
+    _check_have_same_words(previous_text, new_am_soup)
+    tables = _extract_tables(previous_text)
+    new_elements = _build_new_elements(new_am_soup, tables)
     new_tables = _keep_tables(new_elements)
     _ensure_all_tables_are_found_once(tables, new_tables)
-    new_text = build_structured_text(Title(text.title.text, 0), new_elements)
+    new_text = build_structured_text(Title(previous_text.title.text, 0), new_elements)
     _ensure_no_outer_alineas(new_text)
-    return replace(am, sections=new_text.sections)
+    return new_text
 
 
-def _save_text_and_get_message(am_id: str, new_am: str) -> str:
+def _structure_text(am_id: str, new_am: str) -> ArreteMinisteriel:
+    previous_am_version = load_structured_am(am_id) or load_initial_am(am_id)
+    if not previous_am_version:
+        raise _FormHandlingError(f'am with id {am_id} not found, which should not happen')
+    previous_text = am_to_text(previous_am_version)
+    new_text = _create_new_text(previous_text, new_am)
+    return replace(previous_am_version, sections=new_text.sections)
+
+
+def _parse_text_and_save_message(am_id: str, new_am: str) -> str:
     text = _structure_text(am_id, new_am)
     upsert_structured_am(am_id, text)
     return f'Enregistrement réussi.'
 
 
 def _extract_form_value_and_save_text(nb_clicks: int, am_id: str, text_area_content: Dict[str, Any]) -> Component:
-    new_am = assert_str(text_area_content)
     if nb_clicks == 0:
         return html.Div()
+    new_am = assert_str(text_area_content)
     try:
-        success_message = _save_text_and_get_message(am_id, new_am)
+        success_message = _parse_text_and_save_message(am_id, new_am)
     except _FormHandlingError as exc:
         return error_component(f'Erreur pendant l\'enregistrement. Détails de l\'erreur:\n{str(exc)}')
     except Exception:  # pylint: disable=broad-except
@@ -357,17 +392,35 @@ def _count_prefix_hashtags(line: str) -> int:
     return len(line)
 
 
-def _format_toc_line(line: str) -> Component:
+def _make_title(line: str) -> Title:
     nb_hashtags = _count_prefix_hashtags(line)
-    trunc_title = get_truncated_str(line[nb_hashtags:])
-    trunc_title_component = html.Span(trunc_title) if nb_hashtags > 1 else html.B(trunc_title)
-
-    return html.Span([html.Span(nb_hashtags * '•' + ' ', style={'color': 'grey'}), trunc_title_component, html.Br()])
+    trunc_title = line[nb_hashtags:].strip()
+    return Title(trunc_title, level=nb_hashtags)
 
 
-def _extract_text_area_and_display_toc(content: str) -> Component:
-    lines = content.split('\n')
-    formatted_lines = [_format_toc_line(line) for line in lines if line.startswith('#')]
+def _format_toc_line(title: Title) -> Component:
+    trunc_title = get_truncated_str(title.text)
+    trunc_title_component = html.Span(trunc_title) if title.level > 1 else html.B(trunc_title)
+    return html.Span(
+        [html.Span(title.level * '•' + ' ', style={'color': 'grey'}), trunc_title_component, html.Br()],
+        style={'margin-left': '5px'},
+    )
+
+
+def _extract_lines(html: BeautifulSoup) -> List[str]:
+    text_elements = extract_text_elements(html)
+    strs: List[str] = []
+    for element in text_elements:
+        if isinstance(element, Title):
+            strs.append(element.text)
+        elif isinstance(element, str):
+            strs.append(element)
+    return strs
+
+
+def _parse_html_area_and_display_toc(html_str: str) -> Component:
+    lines = _extract_lines(BeautifulSoup(html_str, 'html.parser'))
+    formatted_lines = [_format_toc_line(_make_title(line)) for line in lines if line.startswith('#')]
     new_title_levels = html.P(formatted_lines)
     return html.P(new_title_levels)
 
@@ -384,6 +437,7 @@ def update_output(nb_clicks, am_id, state):
 @app.callback(
     Output(_TOC_COMPONENT, 'children'),
     [Input(_PREVIEW_BUTTON, 'n_clicks'), Input(_TEXT_AREA_COMPONENT, 'value')],
+    prevent_initial_call=True,
 )
-def _(_, state):
-    return _extract_text_area_and_display_toc(state)
+def _(_, text_area_content):
+    return _parse_html_area_and_display_toc(text_area_content)

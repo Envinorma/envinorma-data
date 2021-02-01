@@ -1,4 +1,4 @@
-from back_office.utils import get_section_title, split_route
+from back_office.utils import AMStatus, get_section_title, split_route
 from lib.data import ArreteMinisteriel, EnrichedString, StructuredText
 
 
@@ -28,3 +28,8 @@ def test_split_route():
     assert split_route('/a/b') == ('/a', '/b')
     assert split_route('/a/b/') == ('/a', '/b/')
     assert split_route('/a/b/c') == ('/a', '/b/c')
+
+
+def test_am_status_step():
+    for element in AMStatus:
+        assert isinstance(element.step(), int)

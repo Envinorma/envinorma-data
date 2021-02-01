@@ -79,12 +79,12 @@ def _text_to_elements(text: StructuredText) -> List[TextElement]:
     return structured_text_to_text_elements(text, 0)
 
 
-def structured_text_component(text: StructuredText, emphasized_words: List[str], first_level: int = 0) -> Component:
+def structured_text_component(text: StructuredText, emphasized_words: List[str], first_level: int = 1) -> Component:
     elements = _text_to_elements(text)
     ontology = TopicOntology.monotopic(emphasized_words) if emphasized_words else None
     return html.Div([_make_component(el, ontology, first_level) for el in elements])
 
 
-def am_component(am: ArreteMinisteriel, emphasized_words: List[str], first_level: int = 0) -> Component:
+def am_component(am: ArreteMinisteriel, emphasized_words: List[str], first_level: int = 1) -> Component:
     text = am_to_text(am)
     return structured_text_component(text, emphasized_words, first_level)

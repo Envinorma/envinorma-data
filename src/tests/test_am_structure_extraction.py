@@ -1,35 +1,35 @@
-from lib.config import AM_DATA_FOLDER
-import pytest
 import json
 import random
+
+import pytest
 from lib.am_structure_extraction import (
+    _BASE_LEGIFRANCE_URL,
     ArreteMinisteriel,
     ArticleStatus,
     EnrichedString,
-    _find_references,
+    LegifranceArticle,
     Link,
     LinkReference,
     StructuredText,
-    _BASE_LEGIFRANCE_URL,
     _add_links_if_any,
-    LegifranceArticle,
+    _compute_proximity,
+    _delete_or_merge_articles,
     _extract_links,
+    _find_references,
+    _generate_article_title,
+    _group_articles_to_merge,
     _html_to_structured_text,
+    _remove_links,
+    _replace_weird_annexe_words,
+    _structure_text,
+    load_legifrance_text,
     remove_empty,
     remove_summaries,
-    transform_arrete_ministeriel,
-    _extract_cell_data,
-    load_legifrance_text,
-    _replace_weird_annexe_words,
-    _compute_proximity,
-    _group_articles_to_merge,
-    _delete_or_merge_articles,
-    _structure_text,
-    _remove_links,
-    _generate_article_title,
     split_alineas_in_sections,
+    transform_arrete_ministeriel,
 )
-from lib.texts_properties import count_sections, count_tables, count_articles_in_am, _extract_section_inconsistencies
+from lib.config import AM_DATA_FOLDER
+from lib.texts_properties import _extract_section_inconsistencies, count_articles_in_am, count_sections, count_tables
 
 
 def test_link_extraction():
@@ -118,19 +118,6 @@ def test_no_fail_in_structure_extraction():
         transform_arrete_ministeriel(
             load_legifrance_text(json.load(open(f'{AM_DATA_FOLDER}/legifrance_texts/{nor}.json')))
         )
-
-
-def test_cell_data_extraction():
-    input_ = (
-        "<br/>NIVEAU DE BRUIT AMBIANT EXISTANT \n      <br/>\n"
-        "    dans les zones à émergence réglementée \n      <br/>\n"
-        "    (incluant le bruit de l'installation)"
-    )
-    assert _extract_cell_data(input_).text == (
-        "NIVEAU DE BRUIT AMBIANT EXISTANT\n"
-        "dans les zones à émergence réglementée\n"
-        "(incluant le bruit de l'installation)"
-    )
 
 
 def test_weird_annexe_replacement():

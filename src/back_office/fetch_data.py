@@ -38,6 +38,15 @@ def _exectute_update_query(query: str, values: Tuple) -> None:
     connection.close()
 
 
+def _exectute_delete_query(query: str, values: Tuple) -> None:
+    connection = psycopg2.connect(config.storage.psql_dsn)
+    cursor = connection.cursor()
+    cursor.execute(query, values)
+    connection.commit()
+    cursor.close()
+    connection.close()
+
+
 def _recreate_with_removed_parameter(
     operation: AMOperation, parameter_rank: int, parametrization: Parametrization
 ) -> Parametrization:
@@ -149,6 +158,11 @@ def load_initial_am(am_id: str) -> Optional[ArreteMinisteriel]:
     if json_am:
         return _load_am_str(_ensure_one_variable(json_am))
     return None
+
+
+def delete_initial_am(am_id: str) -> None:
+    query = "DELETE FROM initial_am WHERE am_id = %s;"
+    _exectute_delete_query(query, (am_id,))
 
 
 def upsert_initial_am(am_id: str, am: ArreteMinisteriel) -> None:

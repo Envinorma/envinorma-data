@@ -1,14 +1,16 @@
 import json
 import re
 from collections import defaultdict
-from typing import Any, DefaultDict, Dict, List, Set, Optional, Tuple
+from typing import Any, DefaultDict, Dict, List, Optional, Set, Tuple
 
 import requests
 from bs4 import BeautifulSoup, Tag
 from tqdm import tqdm
 
-from lib.data import Hyperlink, Anchor
-from lib.config import AIDA_URL, AM_DATA_FOLDER
+from lib.config import AIDA_URL
+from lib.data import Anchor, Hyperlink, StructuredText
+from lib.parse_html import extract_text_elements
+from lib.structure_extraction import build_structured_text
 
 _NOR_REGEXP = r'[A-Z]{4}[0-9]{7}[A-Z]'
 
@@ -227,3 +229,13 @@ def scrap_all_anchors() -> None:
         except Exception as exc:  # pylint: disable=broad-except
             print(exc)
     json.dump(page_id_to_anchors_json, open('data/aida/hyperlinks/page_id_to_anchors.json', 'w'), ensure_ascii=False)
+
+
+def parse_aida_text(document_id: str) -> Optional[StructuredText]:
+    page_content = download_html(document_id)
+    soup = BeautifulSoup(page_content, 'html.parser')
+    content_div = soup.find('div', {'id': 'content-inner'})
+    if not content_div:
+        return None
+    elements = extract_text_elements(content_div)
+    return build_structured_text('', elements)
