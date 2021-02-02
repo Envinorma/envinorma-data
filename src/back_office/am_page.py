@@ -10,6 +10,7 @@ import dash_html_components as html
 from dash.dependencies import Input, Output
 from dash.development.base_component import Component
 from lib.am_to_markdown import extract_markdown_text
+from lib.config import EnvironmentType, config
 from lib.data import AMMetadata, ArreteMinisteriel, Ints, StructuredText, Table, am_to_text
 from lib.generate_final_am import AMVersions, generate_final_am
 from lib.parametrization import AlternativeSection, NonApplicationCondition, Parametrization, condition_to_str
@@ -541,9 +542,10 @@ def _update_am_status(clicked_button: str, am_id: str) -> None:
     else:
         raise NotImplementedError(f'Unknown button id {clicked_button}')
     upsert_am_status(am_id, new_status)
-    send_slack_notification(
-        f'AM {am_id} a désormais le statut {new_status.value}', SlackChannel.ENRICHMENT_NOTIFICATIONS
-    )
+    if config.environment.type == EnvironmentType.PROD:
+        send_slack_notification(
+            f'AM {am_id} a désormais le statut {new_status.value}', SlackChannel.ENRICHMENT_NOTIFICATIONS
+        )
     if clicked_button == _VALIDATE_PARAMETRIZATION:
         _generate_and_dump_am_version(am_id)
 

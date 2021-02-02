@@ -1,6 +1,7 @@
 import os
 from configparser import ConfigParser
 from dataclasses import dataclass
+from enum import Enum
 from functools import lru_cache
 
 
@@ -52,12 +53,31 @@ class SlackConfig:
         return cls(**{key: _get_var('slack', key) for key in cls.__annotations__})
 
 
+class EnvironmentType(Enum):
+    PROD = 'prod'
+    DEV = 'dev'
+
+
+@dataclass
+class EnvironmentConfig:
+    type: EnvironmentType
+
+    @classmethod
+    def default_load(cls) -> 'EnvironmentConfig':
+        try:
+            type_ = EnvironmentType(_get_var('environment', 'type'))
+        except KeyError:
+            type_ = EnvironmentType.PROD
+        return EnvironmentConfig(type=type_)
+
+
 @dataclass
 class Config:
     aida: AidaConfig
     legifrance: LegifranceConfig
     storage: StorageConfig
     slack: SlackConfig
+    environment: EnvironmentConfig
 
     @classmethod
     def default_load(cls) -> 'Config':
@@ -66,6 +86,7 @@ class Config:
             legifrance=LegifranceConfig.default_load(),
             storage=StorageConfig.default_load(),
             slack=SlackConfig.default_load(),
+            environment=EnvironmentConfig.default_load(),
         )
 
 
