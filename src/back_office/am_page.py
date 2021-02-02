@@ -21,6 +21,7 @@ from back_office.am_init_tab import am_init_tab
 from back_office.app_init import app
 from back_office.components import ButtonState, button, error_component, link_button
 from back_office.components.am_component import am_component
+from back_office.components.summary_component import summary_component
 from back_office.display_am import router as display_am_router
 from back_office.fetch_data import (
     load_am_status,
@@ -236,6 +237,16 @@ def _get_add_alternative_section_button(parent_page: str, status: AMStatus) -> C
     return html.Div(link_button('+ Nouveau', href, state), style={'margin-bottom': '35px'})
 
 
+def _get_am_component_with_toc(am: ArreteMinisteriel) -> Component:
+    return html.Div(
+        [
+            html.Div([summary_component(am_to_text(am), False)], className='col-3'),
+            html.Div(am_component(am, [], 5), className='col-9'),
+        ],
+        className='row',
+    )
+
+
 def _get_parametrization_summary(
     parent_page: str, status: AMStatus, parametrization: Parametrization, am: Optional[ArreteMinisteriel]
 ) -> Component:
@@ -252,7 +263,7 @@ def _get_parametrization_summary(
             _get_alternative_section_table(parametrization, am, parent_page),
             _get_add_alternative_section_button(parent_page, status),
             html.H4('Texte'),
-            am_component(am, [], 5),
+            _get_am_component_with_toc(am),
         ]
     )
 
