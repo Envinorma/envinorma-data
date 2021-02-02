@@ -10,6 +10,7 @@ from lib.parametric_am import (
     _apply_parameter_values_to_am,
     _change_value,
     _date_not_in_parametrization,
+    _deactivate_alineas,
     _extract_installation_date_criterion,
     _extract_interval_midpoints,
     _extract_parameters_from_parametrization,
@@ -19,9 +20,9 @@ from lib.parametric_am import (
     _generate_combinations,
     _generate_equal_option_dicts,
     _generate_options_dict,
-    is_satisfied,
     _mean,
     generate_all_am_versions,
+    is_satisfied,
 )
 from lib.parametrization import (
     AlternativeSection,
@@ -416,3 +417,24 @@ def test_extract_warnings():
 
 def _get_simple_text() -> StructuredText:
     return StructuredText(_str('Conditions d\'application'), [_str('al 1'), _str('al 2')], [], None)
+
+
+def test_deactivate_alineas():
+    nac = NonApplicationCondition(
+        EntityReference(SectionReference((0,)), None),
+        Littler(ParameterEnum.DATE_INSTALLATION.value, datetime(2021, 1, 1)),
+        ConditionSource('', EntityReference(SectionReference((1,)), None)),
+    )
+    res = _deactivate_alineas(_get_simple_text(), nac, {ParameterEnum.DATE_INSTALLATION.value: datetime(2020, 1, 1)})
+    assert not res.applicability.active
+    assert all([not al.active for al in res.outer_alineas])
+
+    nac = NonApplicationCondition(
+        EntityReference(SectionReference((0,)), [0]),
+        Littler(ParameterEnum.DATE_INSTALLATION.value, datetime(2021, 1, 1)),
+        ConditionSource('', EntityReference(SectionReference((1,)), None)),
+    )
+    res = _deactivate_alineas(_get_simple_text(), nac, {ParameterEnum.DATE_INSTALLATION.value: datetime(2020, 1, 1)})
+    assert res.applicability.active
+    assert not res.outer_alineas[0].active
+    assert res.outer_alineas[1].active

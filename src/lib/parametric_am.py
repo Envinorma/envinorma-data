@@ -20,7 +20,6 @@ from lib.parametrization import (
     Equal,
     Greater,
     Ints,
-    LeafCondition,
     Littler,
     NonApplicationCondition,
     OrCondition,
@@ -165,7 +164,7 @@ def _deactivate_alineas(
         ]
     else:
         new_outer_alineas = [replace(al, active=False) for al in text.outer_alineas]
-    text.applicability = Applicability(active=inactive_alineas is None, warnings=[warning])
+    text.applicability = Applicability(active=inactive_alineas is not None, warnings=[warning])
     text.sections = [_deactivate_child_section(section) for section in text.sections]
     text.outer_alineas = new_outer_alineas
     return text

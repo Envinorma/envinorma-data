@@ -101,25 +101,25 @@ def _manual_active_conditions(parameter_id: str, condition: LeafCondition) -> Op
     date_autorisation = ParameterEnum.DATE_AUTORISATION.value.id
     if parameter_id == date_autorisation:
         if isinstance(condition, Greater):
-            return 'elle a été autorisée après le ' + _date_to_human_str(condition.target)
+            return 'la date d\'autorisation est postérieure au ' + _date_to_human_str(condition.target)
         if isinstance(condition, Littler):
-            return 'elle a été autorisée avant le ' + _date_to_human_str(condition.target)
+            return 'la date d\'autorisation est antérieure au ' + _date_to_human_str(condition.target)
         if isinstance(condition, Range):
             lf_dt = _date_to_human_str(condition.left)
             rg_dt = _date_to_human_str(condition.right)
-            return 'elle a été autorisée entre le ' + lf_dt + ' et le ' + rg_dt
+            return 'la date d\'autorisation est postérieure au ' + lf_dt + ' et antérieure au ' + rg_dt
     regime = ParameterEnum.REGIME.value.id
 
     date_installation = ParameterEnum.DATE_INSTALLATION.value.id
     if parameter_id == date_installation:
         if isinstance(condition, Greater):
-            return 'elle a été mise en service après le ' + _date_to_human_str(condition.target)
+            return 'la date de mise en service est postérieure au ' + _date_to_human_str(condition.target)
         if isinstance(condition, Littler):
-            return 'elle a été mise en service avant le ' + _date_to_human_str(condition.target)
+            return 'la date de mise en service est antérieure au ' + _date_to_human_str(condition.target)
         if isinstance(condition, Range):
             lf_dt = _date_to_human_str(condition.left)
             rg_dt = _date_to_human_str(condition.right)
-            return 'elle a été mise en service entre le ' + lf_dt + ' et le ' + rg_dt
+            return 'la date de mise en service est entre le ' + lf_dt + ' et antérieure au ' + rg_dt
 
     if parameter_id == regime:
         if isinstance(condition, Equal):

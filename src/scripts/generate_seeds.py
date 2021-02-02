@@ -106,5 +106,5 @@ def _copy_all_files():
 
 
 if __name__ == '__main__':
-    _concatenate_and_dump_all_am()
-    # _copy_all_files()
+    # _concatenate_and_dump_all_am()
+    _copy_all_files()

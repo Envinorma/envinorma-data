@@ -233,4 +233,6 @@ def handle_all_am(
 
 if __name__ == '__main__':
     random.seed(0)  # to avoid having different ids
-    handle_all_am(True, True, None, True)
+    # am_cids = {'JORFTEXT000038358856', 'JORFTEXT000000369330', 'JORFTEXT000000552021', 'JORFTEXT000034429274'}
+    am_cids = None  # all_am
+    handle_all_am(True, True, am_cids, True)

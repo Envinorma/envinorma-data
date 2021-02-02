@@ -64,7 +64,10 @@ def test_generate_inactive_warning():
     condition_3 = Littler(parameter, date_2, True)
     condition_regime = Equal(parameter_regime, Regime.A)
 
-    exp = 'Ce paragraphe ne s’applique pas à cette installation car elle a été autorisée avant le 01/01/2019.'
+    exp = (
+        'Ce paragraphe ne s’applique pas à cette installation car '
+        'la date d\'autorisation est antérieure au 01/01/2019.'
+    )
     assert generate_inactive_warning(condition_3, {parameter: datetime(2016, 1, 1)}, True) == exp
     assert generate_inactive_warning(condition_3, {}, True) == exp
 
@@ -74,8 +77,8 @@ def test_generate_inactive_warning():
     assert generate_inactive_warning(OrCondition([condition_2, condition_regime]), val, False) == exp
 
     exp = (
-        'Ce paragraphe ne s’applique pas à cette installation car elle'
-        ' a été autorisée entre le 01/01/2018 et le 01/01/2019.'
+        'Ce paragraphe ne s’applique pas à cette installation car la'
+        ' date d\'autorisation est postérieure au 01/01/2018 et antérieure au 01/01/2019.'
     )
     assert generate_inactive_warning(condition_2, {}, True) == exp
     assert generate_inactive_warning(AndCondition([condition_2]), {}, True) == exp
@@ -85,7 +88,7 @@ def test_generate_inactive_warning():
 
     exp = (
         'Ce paragraphe ne s’applique pas à cette installation car '
-        'elle a été autorisée entre le 01/01/2018 et le 01/01/2019 et le régime est à autorisation.'
+        'la date d\'autorisation est postérieure au 01/01/2018 et antérieure au 01/01/2019 et le régime est à autorisation.'
     )
     val = {parameter_regime: Regime.E, parameter: datetime(2016, 1, 1)}
     assert generate_inactive_warning(AndCondition([condition_2, condition_regime]), val, True) == exp
@@ -93,7 +96,7 @@ def test_generate_inactive_warning():
 
     exp = (
         'Ce paragraphe ne s’applique pas à cette installation car '
-        'elle a été autorisée entre le 01/01/2018 et le 01/01/2019 et le régime est à autorisation.'
+        'la date d\'autorisation est postérieure au 01/01/2018 et antérieure au 01/01/2019 et le régime est à autorisation.'
     )
     val = {parameter_regime: Regime.A, parameter: datetime(2018, 1, 5)}
     assert generate_inactive_warning(OrCondition([condition_2, condition_regime]), val, True) == exp
@@ -108,7 +111,9 @@ def test_generate_modification_warning():
     condition_3 = Littler(parameter, date_2, True)
     condition_regime = Equal(parameter_regime, Regime.A)
 
-    exp = 'Ce paragraphe a été modifié pour cette installation car elle a été autorisée avant le 01/01/2019.'
+    exp = (
+        'Ce paragraphe a été modifié pour cette installation car la date d\'autorisation est antérieure au 01/01/2019.'
+    )
     assert generate_modification_warning(condition_3, {parameter: datetime(2016, 1, 1)}) == exp
     assert generate_modification_warning(condition_3, {}) == exp
 
@@ -118,8 +123,8 @@ def test_generate_modification_warning():
     assert generate_modification_warning(OrCondition([condition_2, condition_regime]), val) == exp
 
     exp = (
-        'Ce paragraphe a été modifié pour cette installation car elle'
-        ' a été autorisée entre le 01/01/2018 et le 01/01/2019.'
+        'Ce paragraphe a été modifié pour cette installation car la'
+        ' date d\'autorisation est postérieure au 01/01/2018 et antérieure au 01/01/2019.'
     )
     assert generate_modification_warning(condition_2, {}) == exp
     assert generate_modification_warning(AndCondition([condition_2]), {}) == exp
@@ -129,7 +134,7 @@ def test_generate_modification_warning():
 
     exp = (
         'Ce paragraphe a été modifié pour cette installation car'
-        ' elle a été autorisée entre le 01/01/2018 et le 01/01/2019 et le régime est à autorisation.'
+        ' la date d\'autorisation est postérieure au 01/01/2018 et antérieure au 01/01/2019 et le régime est à autorisation.'
     )
     val = {parameter_regime: Regime.E, parameter: datetime(2016, 1, 1)}
     assert generate_modification_warning(AndCondition([condition_2, condition_regime]), val) == exp
@@ -137,7 +142,7 @@ def test_generate_modification_warning():
 
     exp = (
         'Ce paragraphe a été modifié pour cette installation car'
-        ' elle a été autorisée entre le 01/01/2018 et le 01/01/2019 et le régime est à autorisation.'
+        ' la date d\'autorisation est postérieure au 01/01/2018 et antérieure au 01/01/2019 et le régime est à autorisation.'
     )
     val = {parameter_regime: Regime.A, parameter: datetime(2018, 1, 5)}
     assert generate_modification_warning(OrCondition([condition_2, condition_regime]), val) == exp
