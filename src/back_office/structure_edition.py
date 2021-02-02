@@ -105,8 +105,8 @@ def _fixed_footer(am_page: str) -> Component:
             'width': '80%',
             'text-align': 'center',
             'background-color': 'white',
-            'padding-bottom': '35px',
-            'padding-top': '35px',
+            'padding-bottom': '10px',
+            'padding-top': '10px',
         },
     )
 
@@ -116,6 +116,7 @@ def _get_instructions() -> Component:
         html.A(
             'Guide de structuration',
             href='https://www.notion.so/R-gles-de-structuration-c1ee7ecc6d79474097991595cba3471b',
+            target='_blank',
         ),
         className='alert alert-light',
         style={'margin-top': '30px'},

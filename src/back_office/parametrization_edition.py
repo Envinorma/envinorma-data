@@ -460,6 +460,7 @@ def _get_instructions() -> Component:
         html.A(
             'Guide de paramétrisation',
             href='https://www.notion.so/R-gles-de-param-trisation-47d8e5c4d3434d8691cbd9f59d556f0f',
+            target='_blank',
         ),
         className='alert alert-light',
     )
