@@ -36,7 +36,7 @@ def _element_to_component(element: TextElement) -> Component:
         return table_to_component(element, None)
     elif isinstance(element, Title):
         classname = f'H{element.level + 3}' if element.level <= 3 else 'H6'
-        return getattr(html, classname)('#' * element.level + ' ' + element.text)
+        return getattr(html, classname)('#' * element.level + ' ' + element.text, id=element.id)
     elif isinstance(element, str):
         return html.P(element)
     raise NotImplementedError(f'Not implemented for type {type(element)}')
@@ -392,9 +392,8 @@ def _make_title(line: str) -> Title:
 def _format_toc_line(title: Title) -> Component:
     trunc_title = get_truncated_str(title.text)
     trunc_title_component = html.Span(trunc_title) if title.level > 1 else html.B(trunc_title)
-    return html.Span(
-        [html.Span(title.level * '•' + ' ', style={'color': 'grey'}), trunc_title_component, html.Br()],
-        style={'margin-left': '5px'},
+    return html.A(
+        [html.Span(title.level * '•' + ' ', style={'color': 'grey'}), trunc_title_component], href=f'#{title.id}'
     )
 
 
