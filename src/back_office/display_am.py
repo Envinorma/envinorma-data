@@ -1,17 +1,28 @@
 import json
 import os
 from dataclasses import dataclass, field
-from typing import List, Optional, Tuple
+from typing import Any, Dict, List, Optional, Tuple
 from urllib.parse import unquote
 
+import dash_bootstrap_components as dbc
 import dash_html_components as html
+from dash.dependencies import Input, MATCH, Output, State
 from dash.development.base_component import Component
 from lib.data import Applicability, ArreteMinisteriel, EnrichedString, StructuredText
 from lib.paths import get_parametric_ams_folder
 
+from back_office.app_init import app
 from back_office.components.am_component import table_to_component
 from back_office.components.summary_component import summary_component
 from back_office.utils import AMOperation, RouteParsingError
+
+
+def _get_collapse_id(text_id: Optional[str] = None) -> Dict[str, Any]:
+    return {'type': 'display-am-collapse', 'text_id': text_id or MATCH}
+
+
+def _get_button_id(text_id: Optional[str] = None) -> Dict[str, Any]:
+    return {'type': 'display-am-previous-text', 'text_id': text_id or MATCH}
 
 
 def _parse_route(route: str) -> Tuple[str, str]:
@@ -109,10 +120,11 @@ def _warnings_to_components(warnings: List[str]) -> List[Component]:
     return [_warning_to_component(warning) for warning in warnings]
 
 
-def _title_component(title: str, text_id: str, depth: int) -> Component:
+def _title_component(title: str, text_id: str, depth: int, active: bool) -> Component:
+    className = 'inactive' if not active else ''
     if depth == 0:
-        return html.Div([html.H4(title, id=text_id), html.Hr()], style={'margin-top': '30px'})
-    return html.H5(title, id=text_id)
+        return html.Div([html.H4(title, id=text_id, className=className), html.Hr()], style={'margin-top': '30px'})
+    return html.H5(title, id=text_id, className=className)
 
 
 def _extract_lines(text: StructuredText) -> List[str]:
@@ -122,7 +134,14 @@ def _extract_lines(text: StructuredText) -> List[str]:
 
 
 def _previous_text_component(text: StructuredText) -> Component:
-    return html.Div([html.P(line, className='previous_version_alinea') for line in _extract_lines(text)])
+    component = html.Div([html.P(line, className='previous_version_alinea') for line in _extract_lines(text)])
+    collapse = dbc.Collapse(component, id=_get_collapse_id(text.id), is_open=True)
+    return html.Div(
+        [
+            html.Button('Version précédente', id=_get_button_id(text.id), className='btn btn-link'),
+            collapse,
+        ]
+    )
 
 
 def _text_component(text: StructuredText, depth: int, previous_version: Optional[StructuredText] = None) -> Component:
@@ -130,11 +149,11 @@ def _text_component(text: StructuredText, depth: int, previous_version: Optional
 
     return html.Div(
         [
-            _title_component(text.title.text, text.id, depth),
+            _title_component(text.title.text, text.id, depth, text.applicability.active),
             *_warnings_to_components(text.applicability.warnings),
-            previous_version_component,
             *_alineas_to_components(text.outer_alineas),
             *[_get_text_component(sec, depth + 1) for sec in text.sections],
+            previous_version_component,
         ]
     )
 
@@ -198,3 +217,12 @@ def router(pathname: str) -> Component:
     except RouteParsingError as exc:
         return html.P(f'404 - Page introuvable - {str(exc)}')
     return _make_page(am_id, filename)
+
+
+@app.callback(
+    Output(_get_collapse_id(), 'is_open'), Input(_get_button_id(), 'n_clicks'), State(_get_collapse_id(), 'is_open')
+)
+def _(n_clicks, is_open):
+    if n_clicks:
+        return not is_open
+    return False
