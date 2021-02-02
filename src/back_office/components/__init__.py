@@ -1,5 +1,5 @@
 from enum import Enum
-from typing import List, Optional, Union
+from typing import Dict, List, Optional, Union
 
 import dash_core_components as dcc
 import dash_html_components as html
@@ -26,7 +26,7 @@ class ButtonState(Enum):
     NORMAL_LIGHT = 4
 
 
-def button(text: str, state: ButtonState, id_: Optional[str] = None) -> html.Button:
+def button(text: str, state: ButtonState, id_: Optional[Union[str, Dict]] = None) -> html.Button:
     disabled = state not in (ButtonState.NORMAL, ButtonState.NORMAL_LINK, ButtonState.NORMAL_LIGHT)
     hidden = state == ButtonState.HIDDEN
     className = 'btn btn-primary'

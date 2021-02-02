@@ -6,8 +6,9 @@ from typing import Any, Dict, List, Optional, Set, Tuple, Union
 import dash_bootstrap_components as dbc
 import dash_core_components as dcc
 import dash_html_components as html
-from dash.dependencies import Input, Output
+from dash.dependencies import MATCH, Input, Output, State
 from dash.development.base_component import Component
+from dash.exceptions import PreventUpdate
 from lib.am_to_markdown import extract_markdown_text
 from lib.config import EnvironmentType, config
 from lib.data import AMMetadata, ArreteMinisteriel, Ints, StructuredText, Table, am_to_text
@@ -43,6 +44,18 @@ _INVALIDATE_PARAMETRIZATION = 'am-page-invalidate-parametrization'
 _LOADER = 'am-page-loading-output'
 
 
+def _modal_confirm_button_id(step: Optional[str] = None) -> Dict[str, Any]:
+    return {'type': 'am-page-modal-confirm-button', 'text_id': step or MATCH}
+
+
+def _modal_id(step: Optional[str] = None) -> Dict[str, Any]:
+    return {'type': 'am-page-modal', 'text_id': step or MATCH}
+
+
+def _modal_button_id(step: Optional[str] = None) -> Dict[str, Any]:
+    return {'type': 'am-page-modal-button', 'text_id': step or MATCH}
+
+
 def _extract_am_id_and_operation(pathname: str) -> Tuple[str, Optional[AMOperation], str]:
     pieces = pathname.split('/')[1:]
     if len(pieces) == 0:
@@ -62,22 +75,48 @@ def _get_am_initialization_buttons() -> Tuple[Optional[Component], Optional[Comp
     return (None, button('Valider le texte initial', id_=_VALIDATE_INITIALIZATION, state=ButtonState.NORMAL))
 
 
+def _get_confirmation_modal(modal_body: Union[str, Component], step: str) -> Component:
+    modal = dbc.Modal(
+        [
+            dbc.ModalHeader('Confirmation'),
+            dbc.ModalBody(modal_body),
+            dbc.ModalFooter(
+                html.Button('Confirmer', id=_modal_confirm_button_id(step), className='ml-auto btn btn-danger')
+            ),
+        ],
+        id=_modal_id(step),
+    )
+    return html.Div(
+        [button('Étape précédente', id_=_modal_button_id(step), state=ButtonState.NORMAL_LIGHT), modal],
+        style={'display': 'inline-block'},
+    )
+
+
 def _get_structure_validation_buttons() -> Tuple[Optional[Component], Optional[Component]]:
+    modal_content = (
+        'Êtes-vous sûr de vouloir retourner à la phase d\'initialisation du texte ? Ceci est '
+        'déconseillé lorsque l\'AM provient de Légifrance ou que la structure a déjà été modifiée.'
+    )
     return (
-        button('Étape précédente', id_=_INVALIDATE_INITIALIZATION, state=ButtonState.NORMAL_LIGHT),
+        _get_confirmation_modal(modal_content, 'structure'),
         button('Valider la structure', id_=_VALIDATE_STRUCTURE, state=ButtonState.NORMAL),
     )
 
 
 def _get_parametrization_edition_buttons() -> Tuple[Optional[Component], Optional[Component]]:
+    modal_content = (
+        'Êtes-vous sûr de vouloir retourner à la phase de structuration du texte ? Si des paramètres '
+        'ont déjà été renseignés, cela peut désaligner certains paramétrages.'
+    )
     return (
-        button('Étape précédente', id_=_INVALIDATE_STRUCTURE, state=ButtonState.NORMAL_LIGHT),
+        _get_confirmation_modal(modal_content, 'parametrization'),
         button('Valider la paramétrisation', id_=_VALIDATE_PARAMETRIZATION, state=ButtonState.NORMAL),
     )
 
 
 def _get_validated_buttons() -> Tuple[Optional[Component], Optional[Component]]:
-    return (button('Étape précédente', id_=_INVALIDATE_PARAMETRIZATION, state=ButtonState.NORMAL_LIGHT), None)
+    modal_content = 'Retourner à la paramétrisation ?'
+    return (_get_confirmation_modal(modal_content, 'validated'), None)
 
 
 def _inline_buttons(button_left: Optional[Component], button_right: Optional[Component]) -> List[Component]:
@@ -574,15 +613,15 @@ def _generate_and_dump_am_version(am_id: str) -> None:
 def _update_am_status(clicked_button: str, am_id: str) -> None:
     if clicked_button == _VALIDATE_INITIALIZATION:
         new_status = AMStatus.PENDING_STRUCTURE_VALIDATION
-    elif clicked_button == _INVALIDATE_INITIALIZATION:
+    elif clicked_button == _modal_confirm_button_id('structure'):
         new_status = AMStatus.PENDING_INITIALIZATION
     elif clicked_button == _VALIDATE_STRUCTURE:
         new_status = AMStatus.PENDING_PARAMETRIZATION
-    elif clicked_button == _INVALIDATE_STRUCTURE:
+    elif clicked_button == _modal_confirm_button_id('parametrization'):
         new_status = AMStatus.PENDING_STRUCTURE_VALIDATION
     elif clicked_button == _VALIDATE_PARAMETRIZATION:
         new_status = AMStatus.VALIDATED
-    elif clicked_button == _INVALIDATE_PARAMETRIZATION:
+    elif clicked_button == _modal_confirm_button_id('validated'):
         new_status = AMStatus.PENDING_PARAMETRIZATION
     else:
         raise NotImplementedError(f'Unknown button id {clicked_button}')
@@ -597,11 +636,11 @@ def _update_am_status(clicked_button: str, am_id: str) -> None:
 
 _BUTTON_IDS = [
     _VALIDATE_INITIALIZATION,
-    _INVALIDATE_INITIALIZATION,
+    _modal_confirm_button_id('structure'),
     _VALIDATE_STRUCTURE,
-    _INVALIDATE_STRUCTURE,
+    _modal_confirm_button_id('parametrization'),
     _VALIDATE_PARAMETRIZATION,
-    _INVALIDATE_PARAMETRIZATION,
+    _modal_confirm_button_id('validated'),
 ]
 _INPUTS = [Input(id_, 'n_clicks') for id_ in _BUTTON_IDS] + [
     Input('am-page-am-id', 'children'),
@@ -614,12 +653,25 @@ def _handle_click(*args):
     all_n_clicks = args[: len(_BUTTON_IDS)]
     am_id, current_page = args[len(_BUTTON_IDS) :]
     for id_, n_clicks in zip(_BUTTON_IDS, all_n_clicks):
-        if n_clicks >= 1:
+        if (n_clicks or 0) >= 1:
             try:
                 _update_am_status(id_, am_id)
             except Exception:  # pylint: disable = broad-except
                 return error_component(traceback.format_exc())
-    return _page_with_spinner(am_id, current_page)
+            return _page_with_spinner(am_id, current_page)
+    raise PreventUpdate
+
+
+@app.callback(
+    Output(_modal_id(), 'is_open'),
+    Input(_modal_button_id(), 'n_clicks'),
+    State(_modal_id(), 'is_open'),
+    prevent_initial_call=True,
+)
+def _toggle_modal(n_clicks, is_open):
+    if n_clicks:
+        return not is_open
+    return False
 
 
 def router(parent_page: str, route: str) -> Component:
