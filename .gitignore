@@ -7,3 +7,4 @@ tmp*
 src/lib/secrets.py
 src/scripts/s3ic.py
 config.ini
+backups

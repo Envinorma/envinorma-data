@@ -1,6 +1,9 @@
+import os
+from datetime import datetime
 from enum import Enum
 from typing import Any, List, Optional, Tuple
 
+from lib.config import EnvironmentType, config
 from lib.data import ArreteMinisteriel, Ints, StructuredText, load_am_data
 
 _AM = load_am_data()
@@ -118,3 +121,16 @@ def split_route(route: str) -> Tuple[str, str]:
 
 class RouteParsingError(Exception):
     pass
+
+
+def check_backups():
+    if config.environment.type == EnvironmentType.PROD:
+        return
+    files = os.listdir(__file__.replace('back_office/utils.py', 'backups'))
+    max_date: Optional[datetime] = max(
+        [datetime.strptime(file_.split('.')[0], '%Y-%m-%d-%H-%M') for file_ in files], default=None
+    )
+    if not max_date:
+        raise ValueError('No back_office db backups found : run one.')
+    if (datetime.now() - max_date).total_seconds() >= 25 * 3600:
+        raise ValueError(f'Last backup is too old, run one. (date: {max_date})')

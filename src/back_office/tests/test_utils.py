@@ -1,4 +1,4 @@
-from back_office.utils import AMStatus, get_section_title, get_traversed_titles, split_route
+from back_office.utils import AMStatus, check_backups, get_section_title, get_traversed_titles, split_route
 from lib.data import ArreteMinisteriel, EnrichedString, StructuredText
 
 
@@ -44,3 +44,7 @@ def test_split_route():
 def test_am_status_step():
     for element in AMStatus:
         assert isinstance(element.step(), int)
+
+
+def test_check_backups():
+    check_backups()
