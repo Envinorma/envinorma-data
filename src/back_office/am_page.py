@@ -324,7 +324,7 @@ def _build_diff_component(text_1: List[str], text_2: List[str]) -> Component:
 
 def _extract_text_lines(text: StructuredText, level: int = 0) -> List[str]:
     title_lines = ['#' * level + (' ' if level else '') + text.title.text.strip()]
-    alinena_lines = [al.text.strip() for al in text.outer_alineas]
+    alinena_lines = [line.strip() for al in text.outer_alineas for line in al.text.split('\n')]
     section_lines = [line for sec in text.sections for line in _extract_text_lines(sec, level + 1)]
     return title_lines + alinena_lines + section_lines
 
@@ -341,8 +341,8 @@ def _extract_nb_cells(table: Table) -> int:
 
 
 def _build_difference_in_tables_component(initial_am: ArreteMinisteriel, current_am: ArreteMinisteriel) -> Component:
-    initial_tables_nb_cells = map(_extract_nb_cells, _extract_tables(initial_am))
-    current_tables_nb_cells = map(_extract_nb_cells, _extract_tables(current_am))
+    initial_tables_nb_cells = list(map(_extract_nb_cells, _extract_tables(initial_am)))
+    current_tables_nb_cells = list(map(_extract_nb_cells, _extract_tables(current_am)))
     if initial_tables_nb_cells == current_tables_nb_cells:
         return html.Div()
     return html.Div(
@@ -362,7 +362,7 @@ def _build_am_diff_component(initial_am: ArreteMinisteriel, current_am: ArreteMi
     diff_lines = _build_diff_component(
         _extract_text_lines(am_to_text(initial_am)), _extract_text_lines(am_to_text(current_am))
     )
-    return html.Div([diff_lines])
+    return html.Div([diff_tables, diff_lines])
 
 
 def _get_structure_validation_diff(am_id: str, status: AMStatus, parent_page: str) -> Component:
