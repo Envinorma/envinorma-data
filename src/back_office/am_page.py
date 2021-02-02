@@ -409,6 +409,7 @@ def _get_structure_validation_diff(am_id: str, status: AMStatus, parent_page: st
     if not initial_am:
         return html.Div('AM introuvable.')
     current_am = load_structured_am(am_id)
+    button = _get_edit_structure_button(parent_page, status)
     edit_button = html.Div(
         _get_edit_structure_button(parent_page, status),
         style={
@@ -425,10 +426,17 @@ def _get_structure_validation_diff(am_id: str, status: AMStatus, parent_page: st
         },
     )
     if not current_am:
-        diff = html.Div('Pas de modifications de structuration.')
+        diff = html.Div(
+            ['Pas de modifications de structuration par rapport à l\'arrêté d\'origine.', html.Br(), button]
+        )
     else:
         diff = html.Div([_build_am_diff_component(initial_am, current_am)])
-    return html.Div([diff, edit_button])
+    am_to_display = current_am or initial_am
+
+    am_component = html.Div(
+        [html.Br(), html.H4('Version actuelle de l\'AM'), _get_am_component_with_toc(am_to_display)]
+    )
+    return html.Div([diff, am_component, edit_button])
 
 
 def _create_if_inexistent(folder: str) -> None:
