@@ -23,7 +23,6 @@ from back_office.utils import AMOperation, RouteParsingError, assert_str, get_tr
 
 _TOC_COMPONENT = 'structure-edition-toc'
 _TEXT_AREA_COMPONENT = 'structure-edition-text-area-component'
-_PREVIEW_BUTTON = 'structure-editition-preview-button'
 _FORM_OUTPUT = 'structure-edition-form-output'
 
 
@@ -66,7 +65,7 @@ def _get_toc_component(text: StructuredText) -> Component:
 
 def _submit_button() -> Component:
     return html.Button(
-        'Enregistrer',
+        'Enregistrer et continuer à éditer',
         id='submit-val-structure-edition',
         className='btn btn-primary center',
         n_clicks=0,
@@ -74,24 +73,13 @@ def _submit_button() -> Component:
     )
 
 
-def _preview_button() -> Component:
-    return html.Button(
-        'Actualiser le sommaire',
-        id=_PREVIEW_BUTTON,
-        className='btn btn-primary center',
-        n_clicks=0,
-        hidden=True,
-        style={'margin-right': '10px'},
-    )
-
-
 def _go_back_button(am_page: str) -> Component:
-    return dcc.Link(html.Button('Retour', className='btn btn-link center'), href=am_page)
+    return dcc.Link(html.Button('Quitter le mode édition', className='btn btn-link center'), href=am_page)
 
 
 def _footer_buttons(am_page: str) -> Component:
     style = {'display': 'inline-block'}
-    return html.Div([_preview_button(), _submit_button(), _go_back_button(am_page)], style=style)
+    return html.Div([_submit_button(), _go_back_button(am_page)], style=style)
 
 
 def _fixed_footer(am_page: str) -> Component:
@@ -423,12 +411,3 @@ def _parse_html_area_and_display_toc(html_str: str) -> Component:
 )
 def update_output(nb_clicks, am_id, state: Optional[str]):
     return _extract_form_value_and_save_text(nb_clicks, am_id, state)
-
-
-@app.callback(
-    Output(_TOC_COMPONENT, 'children'),
-    [Input(_PREVIEW_BUTTON, 'n_clicks'), Input(_TEXT_AREA_COMPONENT, 'value')],
-    prevent_initial_call=True,
-)
-def _(_, text_area_content):
-    return _parse_html_area_and_display_toc(text_area_content)
