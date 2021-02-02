@@ -5,6 +5,10 @@ from enum import Enum
 from functools import lru_cache
 
 
+class _ConfigError(Exception):
+    pass
+
+
 def _get_var(section: str, varname: str) -> str:
     env_key = f'{section}_{varname}'
     if env_key in os.environ:
@@ -13,7 +17,7 @@ def _get_var(section: str, varname: str) -> str:
     try:
         return config[section][varname]
     except KeyError:
-        raise ValueError(f'Variable {varname} must either be defined in config.ini or in environment.')
+        raise _ConfigError(f'Variable {varname} must either be defined in config.ini or in environment.')
 
 
 @dataclass
@@ -66,9 +70,9 @@ class EnvironmentConfig:
     def default_load(cls) -> 'EnvironmentConfig':
         try:
             type_ = EnvironmentType(_get_var('environment', 'type'))
-        except KeyError:
+        except _ConfigError:
             type_ = EnvironmentType.PROD
-        return EnvironmentConfig(type=type_)
+        return cls(type=type_)
 
 
 @dataclass
