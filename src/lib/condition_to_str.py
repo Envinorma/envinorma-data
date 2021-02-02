@@ -119,7 +119,7 @@ def _manual_active_conditions(parameter_id: str, condition: LeafCondition) -> Op
         if isinstance(condition, Range):
             lf_dt = _date_to_human_str(condition.left)
             rg_dt = _date_to_human_str(condition.right)
-            return 'la date de mise en service est entre le ' + lf_dt + ' et antérieure au ' + rg_dt
+            return 'la date de mise en service est postérieure au ' + lf_dt + ' et antérieure au ' + rg_dt
 
     if parameter_id == regime:
         if isinstance(condition, Equal):

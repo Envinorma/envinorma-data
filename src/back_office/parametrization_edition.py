@@ -8,6 +8,7 @@ import dash_core_components as dcc
 import dash_html_components as html
 from dash.dependencies import Input, Output, State
 from dash.development.base_component import Component
+from lib.condition_to_str import extract_parameters_from_condition
 from lib.data import ArreteMinisteriel, EnrichedString, Ints, Regime, StructuredText, am_to_text
 from lib.parametrization import (
     AlternativeSection,
@@ -277,7 +278,7 @@ def _ensure_mono_conditions(conditions: List[Condition]) -> List[_MonoCondition]
     return [_ensure_mono_condition(x) for x in conditions]
 
 
-def _simplify_condition(condition: Condition) -> Tuple[str, List[_MonoCondition]]:
+def _change_to_mono_conditions(condition: Condition) -> Tuple[str, List[_MonoCondition]]:
     if isinstance(condition, (Equal, Greater, Littler)):
         return _AND_ID, [condition]
     if isinstance(condition, Range):
@@ -296,7 +297,7 @@ def _simplify_condition(condition: Condition) -> Tuple[str, List[_MonoCondition]
 def _get_condition_form(default_condition: Optional[Condition]) -> Component:
     default_conditions: List[_MonoCondition] = []
     if default_condition:
-        default_merge, default_conditions = _simplify_condition(default_condition)
+        default_merge, default_conditions = _change_to_mono_conditions(default_condition)
     else:
         default_merge = _AND_ID
         default_conditions = [Littler(ParameterEnum.DATE_INSTALLATION.value, None)]
@@ -693,10 +694,82 @@ def _extract_condition(rank: int, parameter: str, operator: str, value_str: str)
     raise _FormHandlingError(f'La {rank+1}{"ère" if rank == 0 else "ème"} condition contient un opérateur inattendu.')
 
 
+def _assert_mono_condition(condition: Condition) -> _MonoCondition:
+    if not isinstance(condition, (Equal, Greater, Littler)):
+        raise ValueError(f'Expecting type _MonoCondition, got {type(condition)}')
+    return condition
+
+
+def _assert_greater_condition(condition: Condition) -> Greater:
+    if not isinstance(condition, Greater):
+        raise ValueError(f'Expecting type Greater, got {type(condition)}')
+    return condition
+
+
+def _assert_littler_condition(condition: Condition) -> Littler:
+    if not isinstance(condition, Littler):
+        raise ValueError(f'Expecting type Greater, got {type(condition)}')
+    return condition
+
+
+def _assert_strictly_below(small_candidate: Any, great_candidate: Any) -> None:
+    if isinstance(small_candidate, (datetime, date, float, int)):
+        if small_candidate >= great_candidate:
+            raise _FormHandlingError('Erreur dans les conditions: les deux conditions sont incompatibles.')
+
+
+def _check_compatibility_and_build_range(
+    parameter: Parameter, condition_1: _MonoCondition, condition_2: _MonoCondition
+) -> Condition:
+    if isinstance(condition_1, Equal) or isinstance(condition_2, Equal):
+        raise _FormHandlingError('Erreur dans les conditions. Elles sont soit redondantes, soit incompatibles.')
+    if isinstance(condition_1, Littler) and isinstance(condition_2, Littler):
+        raise _FormHandlingError('Erreur dans les conditions. Elles sont redondantes.')
+    if isinstance(condition_1, Greater) and isinstance(condition_2, Greater):
+        raise _FormHandlingError('Erreur dans les conditions. Elles sont redondantes.')
+    if isinstance(condition_1, Littler):
+        littler_condition = condition_1
+        greater_condition = _assert_greater_condition(condition_2)
+    else:
+        littler_condition = _assert_littler_condition(condition_2)
+        greater_condition = _assert_greater_condition(condition_1)
+    littler_target = littler_condition.target
+    greater_target = greater_condition.target
+    _assert_strictly_below(greater_target, littler_target)
+    return Range(parameter, greater_target, littler_target)
+
+
+def _try_building_range_condition(conditions: List[Condition]) -> Optional[Condition]:
+    _parameters = {param for cond in conditions for param in extract_parameters_from_condition(cond)}
+    if len(_parameters) != 1:
+        return None
+    if len(conditions) != 2:
+        return None
+    _parameter = list(_parameters)[0]
+    if _parameter == ParameterEnum.REGIME.value:
+        raise _FormHandlingError('Erreur dans les conditions: elles sont soit incompatibles, soit redondantes.')
+    condition_1 = _assert_mono_condition(conditions[0])
+    condition_2 = _assert_mono_condition(conditions[1])
+    return _check_compatibility_and_build_range(_parameter, condition_1, condition_2)
+
+
+def _simplify_condition(condition: Condition) -> Condition:
+    if isinstance(condition, (AndCondition, OrCondition)):
+        if len(condition.conditions) == 1:
+            return condition.conditions[0]
+        if len(condition.conditions) == 0:
+            raise _FormHandlingError('Au moins une condition est nécessaire !')
+    if isinstance(condition, AndCondition):
+        potential_range_condition = _try_building_range_condition(condition.conditions)
+        if potential_range_condition:
+            return potential_range_condition
+    return condition
+
+
 def _build_condition(conditions_raw: List[Tuple[str, str, str]], merge: str) -> Condition:
     condition_cls = _get_condition_cls(merge)
     conditions = [_extract_condition(i, *condition_raw) for i, condition_raw in enumerate(conditions_raw)]
-    return condition_cls(conditions)
+    return _simplify_condition(condition_cls(conditions))
 
 
 def _extract_alineas(text: str) -> List[EnrichedString]:
