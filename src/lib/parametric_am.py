@@ -302,9 +302,9 @@ def _extract_leaf_conditions(condition: Condition, parameter: Parameter) -> List
 
 def _extract_conditions_from_parametrization(parameter: Parameter, parametrization: Parametrization) -> List[Condition]:
     return [
-        cond
-        for app in parametrization.application_conditions
-        for cond in _extract_leaf_conditions(app.condition, parameter)
+        cd for ap in parametrization.application_conditions for cd in _extract_leaf_conditions(ap.condition, parameter)
+    ] + [
+        cd for as_ in parametrization.alternative_sections for cd in _extract_leaf_conditions(as_.condition, parameter)
     ]
 
 
