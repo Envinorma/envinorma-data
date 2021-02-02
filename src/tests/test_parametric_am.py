@@ -415,8 +415,8 @@ def test_extract_warnings():
     assert len(_extract_warnings([ref], {ref: base_text}, {ref: replace(base_text, section_list_size=10)})) == 1
 
 
-def _get_simple_text() -> StructuredText:
-    return StructuredText(_str('Conditions d\'application'), [_str('al 1'), _str('al 2')], [], None)
+def _get_simple_text(sections: Optional[List[StructuredText]] = None) -> StructuredText:
+    return StructuredText(_str('Conditions d\'application'), [_str('al 1'), _str('al 2')], sections or [], None)
 
 
 def test_deactivate_alineas():
@@ -438,3 +438,14 @@ def test_deactivate_alineas():
     assert res.applicability.active
     assert not res.outer_alineas[0].active
     assert res.outer_alineas[1].active
+
+    nac = NonApplicationCondition(
+        EntityReference(SectionReference((0,)), None),
+        Littler(ParameterEnum.DATE_INSTALLATION.value, datetime(2021, 1, 1)),
+        ConditionSource('', EntityReference(SectionReference((1,)), None)),
+    )
+    res = _deactivate_alineas(
+        _get_simple_text([_get_simple_text()]), nac, {ParameterEnum.DATE_INSTALLATION.value: datetime(2020, 1, 1)}
+    )
+    assert not res.applicability.active
+    assert not res.sections[0].applicability.active

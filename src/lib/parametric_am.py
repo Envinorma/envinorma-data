@@ -144,9 +144,13 @@ def _keep_satisfied_mofications(
     return satisfied, warnings
 
 
-def _deactivate_child_section(section: StructuredText) -> StructuredText:
+def _deactivate_child_section(section: StructuredText, all_inactive: bool) -> StructuredText:
     section = copy(section)
-    section.sections = [_deactivate_child_section(sec) for sec in section.sections]
+    if section.applicability:
+        section.applicability.active = not all_inactive
+    else:
+        section.applicability = Applicability(active=not all_inactive)
+    section.sections = [_deactivate_child_section(sec, all_inactive) for sec in section.sections]
     section.outer_alineas = [replace(al, active=False) for al in section.outer_alineas]
     return section
 
@@ -156,7 +160,8 @@ def _deactivate_alineas(
 ) -> StructuredText:
     text = copy(text)
     inactive_alineas = satisfied.targeted_entity.outer_alinea_indices
-    warning = generate_inactive_warning(satisfied.condition, parameter_values, all_alineas=inactive_alineas is None)
+    all_inactive = inactive_alineas is None
+    warning = generate_inactive_warning(satisfied.condition, parameter_values, all_alineas=all_inactive)
     if inactive_alineas is not None:
         inactive_alineas_set = set(inactive_alineas)
         new_outer_alineas = [
@@ -164,8 +169,8 @@ def _deactivate_alineas(
         ]
     else:
         new_outer_alineas = [replace(al, active=False) for al in text.outer_alineas]
-    text.applicability = Applicability(active=inactive_alineas is not None, warnings=[warning])
-    text.sections = [_deactivate_child_section(section) for section in text.sections]
+    text.applicability = Applicability(active=not all_inactive, warnings=[warning])
+    text.sections = [_deactivate_child_section(section, all_inactive=all_inactive) for section in text.sections]
     text.outer_alineas = new_outer_alineas
     return text
 
