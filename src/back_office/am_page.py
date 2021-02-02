@@ -1,7 +1,6 @@
 import difflib
 import os
 import traceback
-from time import sleep
 from typing import Any, Dict, List, Optional, Set, Tuple, Union
 
 import dash_bootstrap_components as dbc
@@ -21,6 +20,7 @@ from back_office.am_init_edition import router as am_init_router
 from back_office.am_init_tab import am_init_tab
 from back_office.app_init import app
 from back_office.components import ButtonState, button, error_component, link_button
+from back_office.components.am_component import am_component
 from back_office.display_am import router as display_am_router
 from back_office.fetch_data import (
     load_am_status,
@@ -31,7 +31,7 @@ from back_office.fetch_data import (
 )
 from back_office.parametrization_edition import router as parametrization_router
 from back_office.structure_edition import router as structure_router
-from back_office.utils import ID_TO_AM_MD, AMOperation, AMStatus, get_section_title
+from back_office.utils import ID_TO_AM_MD, AMOperation, AMStatus, get_traversed_titles, safe_get_section
 
 _VALIDATE_INITIALIZATION = 'am-page-validate-init'
 _INVALIDATE_INITIALIZATION = 'am-page-invalidate-initialization'
@@ -162,12 +162,36 @@ def _wrap_in_paragraphs(strs: List[str]) -> Component:
     return html.Div([html.P(str_) for str_ in strs])
 
 
+def _get_target_section_id(path: Ints, am: ArreteMinisteriel) -> Optional[str]:
+    if not path:
+        return None
+    section = safe_get_section(path, am)
+    if section:
+        return section.id
+    return None
+
+
+def _remove_last_word(sentence: str) -> str:
+    return ' '.join(sentence.split(' ')[:-1])
+
+
+def _shorten_text(title: str, max_len: int = 32) -> str:
+    if len(title) > max_len:
+        return _remove_last_word(title[:max_len]) + ' [...]'
+    return title
+
+
 def _get_section_title_or_error(path: Ints, am: ArreteMinisteriel) -> Component:
-    title = get_section_title(path, am)
+    titles = get_traversed_titles(path, am)
+    section_id = _get_target_section_id(path, am)
     style = {}
-    if title is None:
+    if titles is None:
         style = {'color': 'red'}
         title = 'Introuvable, ce paramètre doit être modifié.'
+    else:
+        shortened_titles = [_shorten_text(title) for title in titles]
+        joined_titles = ' / '.join(shortened_titles)
+        title = html.A(joined_titles, href=f'#{section_id}') if section_id else joined_titles
     return html.Span(title, style=style)
 
 
@@ -227,6 +251,8 @@ def _get_parametrization_summary(
             html.H4('Paragraphes alternatifs'),
             _get_alternative_section_table(parametrization, am, parent_page),
             _get_add_alternative_section_button(parent_page, status),
+            html.H4('Texte'),
+            am_component(am, [], 5),
         ]
     )
 

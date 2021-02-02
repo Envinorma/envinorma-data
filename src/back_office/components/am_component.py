@@ -53,7 +53,7 @@ def _title_to_component(title: Title, ontology: Optional[TopicOntology], smalles
     if title.id:
         title_component = cls_(title.text, id=title.id)
     else:
-        title_component = cls_(title.text, id=None)
+        title_component = cls_(title.text)
     if ontology and ontology.parse(title.text):
         return html.Div(title_component, style={'background-color': '#EEEEEE'})
     return title_component

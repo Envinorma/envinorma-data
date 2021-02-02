@@ -84,6 +84,25 @@ def get_section_title(path: Ints, am: ArreteMinisteriel) -> Optional[str]:
     return section.title.text
 
 
+def get_traversed_titles_rec(path: Ints, text: StructuredText) -> Optional[List[str]]:
+    if not path:
+        return [text.title.text]
+    if path[0] >= len(text.sections):
+        return None
+    titles = get_traversed_titles_rec(path[1:], text.sections[path[0]])
+    if titles is None:
+        return None
+    return [text.title.text] + titles
+
+
+def get_traversed_titles(path: Ints, am: ArreteMinisteriel) -> Optional[List[str]]:
+    if not path:
+        return ['Arrêté complet.']
+    if path[0] >= len(am.sections):
+        return None
+    return get_traversed_titles_rec(path[1:], am.sections[path[0]])
+
+
 def get_truncated_str(str_: str, _max_len: int = 80) -> str:
     truncated_str = str_[:_max_len]
     if len(str_) > _max_len:

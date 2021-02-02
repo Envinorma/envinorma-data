@@ -1,4 +1,4 @@
-from back_office.utils import AMStatus, get_section_title, split_route
+from back_office.utils import AMStatus, get_section_title, get_traversed_titles, split_route
 from lib.data import ArreteMinisteriel, EnrichedString, StructuredText
 
 
@@ -19,6 +19,17 @@ def test_get_section_title():
     assert get_section_title((0, 1), am) == 'Section 2'
     assert get_section_title((0, 0, 0), am) == 'Section 1.1'
     assert get_section_title((0, 0, 0, 1, 1), am) == None
+
+
+def test_get_traversed_titles():
+    am = ArreteMinisteriel(EnrichedString('AM'), [_get_simple_text()], [], '')
+    assert get_traversed_titles((), am) == ['Arrêté complet.']
+    assert get_traversed_titles((0,), am) == ['All sections']
+    assert get_traversed_titles((0, 0), am) == ['All sections', 'Section 1']
+    assert get_traversed_titles((0, 1), am) == ['All sections', 'Section 2']
+    assert get_traversed_titles((0, 2), am) is None
+    assert get_traversed_titles((0, 0, 0), am) == ['All sections', 'Section 1', 'Section 1.1']
+    assert get_traversed_titles((0, 0, 0, 1, 1), am) == None
 
 
 def test_split_route():
