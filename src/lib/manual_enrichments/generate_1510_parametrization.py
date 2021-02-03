@@ -698,4 +698,5 @@ def manual_1510_post_process(am: ArreteMinisteriel, version_descriptor: Tuple[st
     assert len(new_classements) == 1
     classement = new_classements[0]
     new_classements_with_alineas = [ClassementWithAlineas(classement.rubrique, classement.regime, [])]
-    return replace(am, classements=new_classements, classements_with_alineas=new_classements_with_alineas)
+    new_id = f'{am.id}_{regime}'  # to avoid having duplicate ids
+    return replace(am, classements=new_classements, classements_with_alineas=new_classements_with_alineas, id=new_id)
