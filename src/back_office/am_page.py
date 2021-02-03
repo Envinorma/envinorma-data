@@ -279,7 +279,7 @@ def _get_add_alternative_section_button(parent_page: str, status: AMStatus) -> C
 def _get_am_component_with_toc(am: ArreteMinisteriel) -> Component:
     return html.Div(
         [
-            html.Div([summary_component(am_to_text(am), False)], className='col-3'),
+            html.Div([summary_component(am_to_text(am), True)], className='col-3'),
             html.Div(am_component(am, [], 5), className='col-9'),
         ],
         className='row',
