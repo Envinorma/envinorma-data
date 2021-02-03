@@ -40,7 +40,7 @@ def _extract_text_elements_with_linebreaks(content: Any) -> List[TextElement]:
         return [content]
     if isinstance(content, bs4.Tag):
         if content.name in ('h1', 'h2', 'h3', 'h4', 'h5', 'h6'):
-            return [Title(' '.join(content.stripped_strings), level=int(content.name[1]))]
+            return [Title(' '.join(content.stripped_strings), level=int(content.name[1]), id=content.get('id'))]
         if content.name == 'br':
             return [Linebreak()]
         if content.name == 'table':

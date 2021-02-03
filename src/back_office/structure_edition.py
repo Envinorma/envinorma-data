@@ -1,7 +1,7 @@
 import re
 import traceback
 from dataclasses import replace
-from typing import Any, Dict, List, Optional, Union
+from typing import Any, Dict, List, Optional, Tuple, Union
 
 import dash_bootstrap_components as dbc
 import dash_core_components as dcc
@@ -373,10 +373,10 @@ def _count_prefix_hashtags(line: str) -> int:
     return len(line)
 
 
-def _make_title(line: str) -> Title:
+def _make_title(line: str, id_: Optional[str]) -> Title:
     nb_hashtags = _count_prefix_hashtags(line)
     trunc_title = line[nb_hashtags:].strip()
-    return Title(trunc_title, level=nb_hashtags)
+    return Title(trunc_title, level=nb_hashtags, id=id_)
 
 
 def _format_toc_line(title: Title) -> Component:
@@ -387,20 +387,20 @@ def _format_toc_line(title: Title) -> Component:
     )
 
 
-def _extract_lines(html: BeautifulSoup) -> List[str]:
+def _extract_lines_with_potential_id(html: BeautifulSoup) -> List[Tuple[str, Optional[str]]]:
     text_elements = extract_text_elements(html)
-    strs: List[str] = []
+    strs: List[Tuple[str, Optional[str]]] = []
     for element in text_elements:
         if isinstance(element, Title):
-            strs.append(element.text)
+            strs.append((element.text, element.id))
         elif isinstance(element, str):
-            strs.append(element)
+            strs.append((element, None))
     return strs
 
 
 def _parse_html_area_and_display_toc(html_str: str) -> Component:
-    lines = _extract_lines(BeautifulSoup(html_str, 'html.parser'))
-    formatted_lines = [_format_toc_line(_make_title(line)) for line in lines if line.startswith('#')]
+    lines_and_ids = _extract_lines_with_potential_id(BeautifulSoup(html_str, 'html.parser'))
+    formatted_lines = [_format_toc_line(_make_title(line, id_)) for line, id_ in lines_and_ids if line.startswith('#')]
     new_title_levels = html.P(formatted_lines)
     return html.P(new_title_levels)
 

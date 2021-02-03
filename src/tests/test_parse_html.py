@@ -1,7 +1,12 @@
 from lib.structure_extraction import Linebreak, Title
 from lib.data import Table
 from bs4 import BeautifulSoup
-from lib.parse_html import _extract_cell_data, extract_text_elements, merge_between_linebreaks
+from lib.parse_html import (
+    _extract_cell_data,
+    extract_text_elements,
+    merge_between_linebreaks,
+    _extract_text_elements_with_linebreaks,
+)
 
 
 def test_cell_data_extraction():
@@ -48,6 +53,9 @@ def test_extract_text_elements():
     assert title.text == 'Test'
     assert title.level == 1
 
+    res = extract_text_elements(_soup('<h1 id="a">Test</h1>'))
+    assert res == [Title('Test', 1, 'a')]
+
 
 def test_merge_between_linebreaks():
     assert merge_between_linebreaks([]) == []
@@ -60,3 +68,8 @@ def test_merge_between_linebreaks():
         'TEST',
     ]
     assert merge_between_linebreaks(['TEST\nTEST']) == ['TEST\nTEST']
+
+
+def test_extract_text_elements_with_linebreaks():
+    res = _extract_text_elements_with_linebreaks(_soup('<h1 id="a">Test</h1>'))
+    assert res == [Title('Test', level=1, id='a')]
