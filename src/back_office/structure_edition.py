@@ -411,3 +411,8 @@ def _parse_html_area_and_display_toc(html_str: str) -> Component:
 )
 def update_output(nb_clicks, am_id, state: Optional[str]):
     return _extract_form_value_and_save_text(nb_clicks, am_id, state)
+
+
+@app.callback(Output(_TOC_COMPONENT, 'children'), [Input(_TEXT_AREA_COMPONENT, 'value')], prevent_initial_call=True)
+def _(text_area_content):
+    return _parse_html_area_and_display_toc(text_area_content)
