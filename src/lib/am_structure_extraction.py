@@ -3,11 +3,10 @@ import json
 import os
 import random
 import traceback
-
 from collections import Counter
 from dataclasses import asdict, replace
 from math import sqrt
-from typing import Any, Dict, Iterable, List, Tuple, Optional, TypeVar, Union
+from typing import Any, Dict, Iterable, List, Optional, Tuple, TypeVar, Union
 
 import bs4
 from bs4 import BeautifulSoup
@@ -15,21 +14,20 @@ from tqdm import tqdm
 
 from lib.config import AM_DATA_FOLDER
 from lib.data import (
-    Link,
-    LinkReference,
+    ArreteMinisteriel,
+    ArticleStatus,
+    EnrichedString,
     LegifranceArticle,
     LegifranceSection,
     LegifranceText,
-    EnrichedString,
+    Link,
+    LinkReference,
     StructuredText,
-    ArreteMinisteriel,
-    Row,
-    Cell,
     Table,
     TableReference,
-    ArticleStatus,
     load_legifrance_text,
 )
+from lib.parse_html import extract_table
 from lib.structure_extraction import split_alineas_in_sections
 from lib.title_detection import NumberingPattern, detect_patterns_if_exists, is_mainly_upper, is_probably_title
 
@@ -156,34 +154,6 @@ def extract_alineas(html_text: str) -> List[str]:
         for tag in soup.find_all(tag_type):
             tag.unwrap()
     return [str(sstr) for sstr in BeautifulSoup(str(soup), 'html.parser').stripped_strings]
-
-
-def _extract_cell_data(cell: str) -> EnrichedString:
-    return _extract_links('\n'.join(remove_empty(cell.replace('<br />', '\n').replace('<br/>', '\n').split('\n'))))
-
-
-def _is_header(row: bs4.Tag) -> bool:
-    return row.find('th') is not None
-
-
-def _extract_row_data(row: bs4.Tag) -> Row:
-    cell_iterator = row.find_all('td' if row.find('td') else 'th')
-    res = [
-        Cell(_extract_cell_data(str(cell)), int(cell.get('colspan') or 1), int(cell.get('rowspan') or 1))
-        for cell in cell_iterator
-    ]
-    return Row(res, _is_header(row))
-
-
-def extract_table_from_soup(soup: BeautifulSoup) -> Table:
-    row_iterator = soup.find_all('tr')
-    table_data = [_extract_row_data(row) for row in row_iterator]
-    return Table(table_data)
-
-
-def extract_table(html: str) -> Table:
-    soup = BeautifulSoup(html, 'html.parser')
-    return extract_table_from_soup(soup)
 
 
 def _extract_placeholder_positions(text: str, placeholder: str) -> Tuple[str, List[int]]:
@@ -681,7 +651,7 @@ def transform_arrete_ministeriel(
     text_with_merged_articles = _clean_text_articles(input_text, keep_abrogated_articles)
     sections = _extract_sections(text_with_merged_articles.articles, text_with_merged_articles.sections, [])
     short_title = extract_short_title(input_text.title)
-    return ArreteMinisteriel(EnrichedString(text_with_merged_articles.title), sections, visa, short_title, None)
+    return ArreteMinisteriel(EnrichedString(text_with_merged_articles.title), sections, visa, short_title)
 
 
 def test(lf_text_filename: str) -> ArreteMinisteriel:

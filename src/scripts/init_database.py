@@ -3,6 +3,8 @@
 This script is meant to initialize and fill tables of "am" database for AM enrichment app. 
 It is meant to be run once and will probably not be run again.
 """
+import json
+import os
 from typing import Optional
 
 import psycopg2
@@ -13,12 +15,13 @@ from back_office.fetch_data import (
     upsert_structured_am,
 )
 from back_office.utils import ID_TO_AM_MD, AMStatus
-from lib.config import config
+from lib.config import AM_DATA_FOLDER, config
 from lib.data import ArreteMinisteriel
 from lib.parametrization import Parametrization
-
+from tqdm import tqdm
 
 _CONNECTION = psycopg2.connect(config.storage.psql_dsn)
+
 
 def _create_tables():
     commands = (
@@ -46,16 +49,18 @@ def _get_most_recent_filename(folder: str, with_default: bool = False) -> Option
     return dates[-1]
 
 
+def get_structured_text_wip_folder(am_id: str) -> str:
+    return os.path.join(AM_DATA_FOLDER, 'structured_texts', 'wip', am_id)
+
+
+def get_parametrization_wip_folder(am_id: str) -> str:
+    return os.path.join(AM_DATA_FOLDER, 'parametrizations', 'wip', am_id)
+
+
 def _fill_tables():
 
     for am_id in ID_TO_AM_MD:
         upsert_am_status(am_id, AMStatus.PENDING_STRUCTURE_VALIDATION)
-
-    import json
-    import os
-
-    from lib.paths import get_parametrization_wip_folder, get_structured_text_wip_folder
-    from tqdm import tqdm
 
     for am_id in tqdm(ID_TO_AM_MD):
         filename = get_structured_text_wip_folder(am_id) + '/default.json'

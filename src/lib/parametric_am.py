@@ -1,30 +1,35 @@
-from copy import copy, deepcopy
-from dataclasses import dataclass, replace
+from copy import copy
+from dataclasses import replace
 from datetime import datetime, timedelta
-from lib.texts_properties import compute_am_signatures
-from typing import Any, Dict, KeysView, List, Optional, Set, Tuple, Union
+from typing import Any, Dict, List, Optional, Set, Tuple, Union
 
+from lib.condition_to_str import (
+    extract_parameters_from_condition,
+    generate_inactive_warning,
+    generate_modification_warning,
+    generate_warning_missing_value,
+    is_satisfied,
+)
 from lib.data import Applicability, ArreteMinisteriel, DateCriterion, Regime, StructuredText, StructuredTextSignature
 from lib.parametrization import (
+    AlternativeSection,
+    AndCondition,
+    Combinations,
+    Condition,
+    ConditionType,
     Equal,
     Greater,
+    Ints,
     Littler,
-    AndCondition,
-    Range,
+    NonApplicationCondition,
     OrCondition,
-    ConditionType,
     Parameter,
     ParameterEnum,
     ParameterType,
     Parametrization,
-    AlternativeSection,
-    NonApplicationCondition,
-    Condition,
-    Ints,
-    LeafCondition,
-    Combinations,
-    condition_to_str,
+    Range,
 )
+from lib.texts_properties import compute_am_signatures
 
 
 def _generate_bool_condition(parameter_str: str) -> Equal:
@@ -81,205 +86,24 @@ def _check_parametrization(parametrization: Parametrization) -> None:
         _check_condition(sec.condition)
 
 
-def _extract_parameters_from_condition(condition: Condition) -> List[Parameter]:
-    if isinstance(condition, (OrCondition, AndCondition)):
-        return [param for cd in condition.conditions for param in _extract_parameters_from_condition(cd)]
-    return [condition.parameter]
-
-
-def _extract_parameters_from_parametrization(parametrization: Parametrization) -> Set[Parameter]:
-    application_conditions = {
-        cd
-        for app_cond in parametrization.application_conditions
-        for cd in _extract_parameters_from_condition(app_cond.condition)
-    }
-    alternative_sections = {
-        cd
-        for alt_sec in parametrization.alternative_sections
-        for cd in _extract_parameters_from_condition(alt_sec.condition)
-    }
-    return application_conditions.union(alternative_sections)
-
-
-def _any_parameter_is_undefined(condition: Condition, defined_parameters: KeysView[Parameter]) -> bool:
-    parameters = _extract_parameters_from_condition(condition)
-    return any([parameter not in defined_parameters for parameter in parameters])
-
-
-def _is_satisfied_range(condition: Range, parameter_value: Any) -> bool:
-    if condition.left_strict and condition.right_strict:
-        return condition.left < parameter_value < condition.right
-    if condition.left_strict and not condition.right_strict:
-        return condition.left < parameter_value <= condition.right
-    if not condition.left_strict and condition.right_strict:
-        return condition.left <= parameter_value < condition.right
-    if not condition.left_strict and not condition.right_strict:
-        return condition.left <= parameter_value <= condition.right
-    raise NotImplementedError()
-
-
-def _is_satisfied_leaf(condition: LeafCondition, parameter_values: Dict[Parameter, Any]) -> bool:
-    if condition.parameter not in parameter_values:
-        return False
-    value = parameter_values[condition.parameter]
-    if isinstance(condition, Littler):
-        return (value < condition.target) if condition.strict else (value <= condition.target)
-    if isinstance(condition, Greater):
-        return (value > condition.target) if condition.strict else (value >= condition.target)
-    if isinstance(condition, Equal):
-        return value == condition.target
-    if isinstance(condition, Range):
-        return _is_satisfied_range(condition, parameter_values[condition.parameter])
-    raise NotImplementedError(f'Condition {type(condition)} not implemented yet.')
-
-
-def _is_satisfied(condition: Condition, parameter_values: Dict[Parameter, Any]) -> bool:
-    if isinstance(condition, AndCondition):
-        return all([_is_satisfied(cd, parameter_values) for cd in condition.conditions])
-    if isinstance(condition, OrCondition):
-        return any([_is_satisfied(cd, parameter_values) for cd in condition.conditions])
-    return _is_satisfied_leaf(condition, parameter_values)
-
-
-def _generate_warning_missing_value(condition: Condition) -> str:
-    parameters = _extract_parameters_from_condition(condition)
-    if len(parameters) == 1:
-        parameter = list(parameters)[0]
-        return f'Ce paragraphe pourrait ne pas être applicable selon la valeur du paramètre {parameter.id}.'
-    ids = ', '.join([param.id for param in parameters])
-    return f'Ce paragraphe pourrait ne pas être applicable selon la valeur des paramètres suivants: {ids}.'
-
-
-def _generate_reason_active_leaf(condition: LeafCondition) -> str:
-    parameter = condition.parameter
-    if isinstance(condition, Equal):
-        return f'Le paramètre {parameter.id} est égal à {condition.target}'
-    if isinstance(condition, Greater):
-        return f'Le paramètre {parameter.id} est supérieur à {condition.target}'
-    if isinstance(condition, Littler):
-        return f'Le paramètre {parameter.id} est inférieur à {condition.target}'
-    if isinstance(condition, Range):
-        return f'Le paramètre {parameter.id} est entre {condition.left} et {condition.right}'
-    raise NotImplementedError(f'stringifying condition {type(condition)} is not implemented yet.')
-
-
-def _generate_reason_active(condition: Condition, parameter_values: Dict[Parameter, Any]) -> str:
-    if isinstance(condition, AndCondition):
-        str_ = [condition_to_str(subcondition) for subcondition in condition.conditions]
-        return 'Les conditions d\'application suivantes sont respectées: ' + ', '.join(str_)
-    if isinstance(condition, OrCondition):
-        fulfilled_conditions = [
-            condition_to_str(subcondition)
-            for subcondition in condition.conditions
-            if _is_satisfied(subcondition, parameter_values)
-        ]
-        if len(fulfilled_conditions) == 1:
-            return f'La condition d\'application suivante est respectée: {fulfilled_conditions[0]}'
-        return 'Les conditions d\'application suivantes sont respectées: ' + ', '.join(fulfilled_conditions)
-    return _generate_reason_active_leaf(condition)
-
-
-def _generate_reason_inactive_leaf(condition: LeafCondition) -> str:
-    parameter = condition.parameter
-    if isinstance(condition, Equal):
-        return f'Le paramètre {parameter.id} n\'est pas égal à {condition.target}'
-    if isinstance(condition, Greater):
-        return f'Le paramètre {parameter.id} est inférieur à {condition.target}'
-    if isinstance(condition, Littler):
-        return f'Le paramètre {parameter.id} est supérieur à {condition.target}'
-    if isinstance(condition, Range):
-        return f'Le paramètre {parameter.id} n\'est pas entre {condition.left} et {condition.right}'
-    raise NotImplementedError(f'stringifying condition {type(condition)} is not implemented yet.')
-
-
-def _generate_reason_inactive(condition: Condition, parameter_values: Dict[Parameter, Any]) -> str:
-    if isinstance(condition, AndCondition):
-        unfulfilled_conditions = [
-            condition_to_str(subcondition)
-            for subcondition in condition.conditions
-            if not _is_satisfied(subcondition, parameter_values)
-        ]
-        if len(unfulfilled_conditions) == 1:
-            return f'La condition d\'application suivante n\'est respectée: {unfulfilled_conditions[0]}'
-        return 'Les conditions d\'application suivantes ne sont pas respectées: ' + ', '.join(unfulfilled_conditions)
-    if isinstance(condition, OrCondition):
-        str_ = [condition_to_str(subcondition) for subcondition in condition.conditions]
-        if len(str_) == 1:
-            return f'La condition d\'application suivante n\'est respectée: {str_[0]}'
-        return 'Aucune des conditions d\'application suivantes ne sont pas respectées: ' + ', '.join(str_)
-    return _generate_reason_inactive_leaf(condition)
-
-
 def lower_first_letter(str_: str) -> str:
     return str_[0].lower() + str_[1:]
-
-
-def _merge_applicabilities(applicabilities: List[Applicability]) -> Applicability:
-    for applicability in applicabilities:
-        if not applicability.active:
-            if applicability.reason_inactive is None:
-                raise ValueError('reason_inactive must be defined when inactive.')
-            return Applicability(False, reason_inactive=applicability.reason_inactive)
-    warnings = [warn for app in applicabilities for warn in app.warnings]
-    return Applicability(True, None, False, warnings=warnings)
 
 
 def _build_alternative_text(
     text: StructuredText, alternative_section: AlternativeSection, parameter_values: Dict[Parameter, Any]
 ) -> StructuredText:
-    new_text = deepcopy(text)
-    new_text.title = alternative_section.new_text.title
-    new_text.sections = alternative_section.new_text.sections
-    new_text.outer_alineas = alternative_section.new_text.outer_alineas
+    new_text = copy(alternative_section.new_text)
     new_text.applicability = Applicability(
-        True,
-        None,
-        True,
-        alternative_section.description or _generate_reason_active(alternative_section.condition, parameter_values),
+        modified=True,
+        warnings=[generate_modification_warning(alternative_section.condition, parameter_values)],
+        previous_version=text,
     )
     return new_text
 
 
-def _compute_undefined_parameters_default_warnings(
-    condition: Condition, parameter_values: Dict[Parameter, Any]
-) -> List[str]:
-    all_parameters = _extract_parameters_from_condition(condition)
-    undefined_parameters = {parameter for parameter in all_parameters if parameter not in parameter_values}
-    return [f'Le paramètre {parameter} n\'est pas défini' for parameter in undefined_parameters]
-
-
-def _compute_sentence_end(parameter: Parameter) -> str:
-    if parameter == ParameterEnum.DATE_INSTALLATION.value:
-        return 'à la valeur de la date d\'installation'
-    if parameter == ParameterEnum.REGIME.value:
-        return 'au régime auquel est soumis l\'installation'
-    return f'à la valeur du paramètre {parameter.id}'
-
-
-def _compute_undefined_parameters_warnings_leaf(
-    condition: LeafCondition, parameter_values: Dict[Parameter, Any], for_applicability: bool
-) -> List[str]:
-    if condition.parameter not in parameter_values:
-        if for_applicability:
-            return [f'L\'applicabilité de ce paragraphe est conditionnée {_compute_sentence_end(condition.parameter)}.']
-
-        return [
-            f'Ce paragraphe peut être modifié. Cette modification est '
-            f'conditionnée {_compute_sentence_end(condition.parameter)}.'
-        ]
-    return []
-
-
-def _compute_undefined_parameters_warnings(
-    condition: Condition, parameter_values: Dict[Parameter, Any], for_applicability: bool
-) -> List[str]:
-    if isinstance(condition, (Range, Equal, Greater, Littler)):
-        return _compute_undefined_parameters_warnings_leaf(condition, parameter_values, for_applicability)
-    return _compute_undefined_parameters_default_warnings(condition, parameter_values)
-
-
 def _has_undefined_parameters(condition: Condition, parameter_values: Dict[Parameter, Any]) -> bool:
-    parameters = _extract_parameters_from_condition(condition)
+    parameters = extract_parameters_from_condition(condition)
     for parameter in parameters:
         if parameter not in parameter_values:
             return True
@@ -289,15 +113,9 @@ def _has_undefined_parameters(condition: Condition, parameter_values: Dict[Param
 def _compute_warnings(
     conditionned_element: Union[AlternativeSection, NonApplicationCondition], parameter_values: Dict[Parameter, Any]
 ) -> List[str]:
-    warnings: List[str] = []
     if _has_undefined_parameters(conditionned_element.condition, parameter_values):
-        if conditionned_element.description:
-            warnings.append(conditionned_element.description)
-        else:
-            warnings.extend(
-                _compute_undefined_parameters_warnings(conditionned_element.condition, parameter_values, False)
-            )
-    return warnings
+        return [generate_warning_missing_value(conditionned_element.condition, parameter_values)]
+    return []
 
 
 def _keep_satisfied_conditions(
@@ -306,7 +124,7 @@ def _keep_satisfied_conditions(
     satisfied: List[NonApplicationCondition] = []
     warnings: List[str] = []
     for na_condition in non_application_conditions:
-        if _is_satisfied(na_condition.condition, parameter_values):
+        if is_satisfied(na_condition.condition, parameter_values):
             satisfied.append(na_condition)
         else:
             warnings = _compute_warnings(na_condition, parameter_values)
@@ -319,48 +137,41 @@ def _keep_satisfied_mofications(
     satisfied: List[AlternativeSection] = []
     warnings: List[str] = []
     for alt in alternative_sections:
-        if _is_satisfied(alt.condition, parameter_values):
+        if is_satisfied(alt.condition, parameter_values):
             satisfied.append(alt)
         else:
             warnings = _compute_warnings(alt, parameter_values)
     return satisfied, warnings
 
 
-def _deactivate_child_section(section: StructuredText) -> StructuredText:
+def _deactivate_child_section(section: StructuredText, all_inactive: bool) -> StructuredText:
     section = copy(section)
-    section.sections = [_deactivate_child_section(sec) for sec in section.sections]
-    section.applicability = Applicability(False, None)
+    if section.applicability:
+        section.applicability.active = not all_inactive
+    else:
+        section.applicability = Applicability(active=not all_inactive)
+    section.sections = [_deactivate_child_section(sec, all_inactive) for sec in section.sections]
+    section.outer_alineas = [replace(al, active=False) for al in section.outer_alineas]
     return section
 
 
-def _generate_modification_str(nb_deletions: int) -> str:
-    if nb_deletions >= 2:
-        return f'({nb_deletions} alineas ne s\'appliquent pas.)'
-    return '(Un alinea ne s\'applique pas.)'
-
-
-def _text_without_alineas(text: StructuredText, alineas_to_delete: Set[int], description: str) -> StructuredText:
-    text.outer_alineas = [al for i, al in enumerate(text.outer_alineas) if i not in alineas_to_delete]
-    suffix = _generate_modification_str(len(alineas_to_delete))
-    modification_description = f'{description} {suffix}'
-    text.applicability = Applicability(True, None, True, modification_description)
-    return text
-
-
-def _build_filtered_text(
-    text: StructuredText, non_applicability_condition: NonApplicationCondition, parameter_values: Dict[Parameter, Any]
+def _deactivate_alineas(
+    text: StructuredText, satisfied: NonApplicationCondition, parameter_values: Dict[Parameter, Any]
 ) -> StructuredText:
     text = copy(text)
-    description = non_applicability_condition.description or _generate_reason_inactive(
-        non_applicability_condition.condition, parameter_values
-    )
-    if non_applicability_condition.targeted_entity.outer_alinea_indices:
-        return _text_without_alineas(
-            text, set(non_applicability_condition.targeted_entity.outer_alinea_indices), description
-        )
-
-    text.applicability = Applicability(False, description)
-    text.sections = [_deactivate_child_section(section) for section in text.sections]
+    inactive_alineas = satisfied.targeted_entity.outer_alinea_indices
+    all_inactive = inactive_alineas is None
+    warning = generate_inactive_warning(satisfied.condition, parameter_values, all_alineas=all_inactive)
+    if inactive_alineas is not None:
+        inactive_alineas_set = set(inactive_alineas)
+        new_outer_alineas = [
+            replace(al, active=i not in inactive_alineas_set) for i, al in enumerate(text.outer_alineas)
+        ]
+    else:
+        new_outer_alineas = [replace(al, active=False) for al in text.outer_alineas]
+    text.applicability = Applicability(active=not all_inactive, warnings=[warning])
+    text.sections = [_deactivate_child_section(section, all_inactive=all_inactive) for section in text.sections]
+    text.outer_alineas = new_outer_alineas
     return text
 
 
@@ -389,7 +200,7 @@ def _apply_satisfied_modificators(
                 f'Cannot handle more than 1 non-applicability conditions on one section. '
                 f'Here, {len(non_applicable_conditions)} conditions are applicable.'
             )
-        return _build_filtered_text(text, non_applicable_conditions[0], parameter_values)
+        return _deactivate_alineas(text, non_applicable_conditions[0], parameter_values)
     return text
 
 
@@ -408,17 +219,22 @@ def _apply_parameter_values_in_text(
             _apply_parameter_values_in_text(section, parametrization, parameter_values, path + (i,))
             for i, section in enumerate(text.sections)
         ]
-        text.applicability = Applicability(True)
+        text.applicability = Applicability()
     else:
         text = _apply_satisfied_modificators(text, na_conditions, alternative_sections, parameter_values)
 
-    text.applicability.warnings.extend(warnings_1 + warnings_2)
+    all_warnings = list(set(text.applicability.warnings + warnings_1 + warnings_2))
+    text.applicability.warnings = all_warnings
     return text
+
+
+def _generate_whole_text_reason_inactive(condition: Condition, parameter_values: Dict[Parameter, Any]) -> str:
+    return 'TODO'
 
 
 def _compute_whole_text_applicability(
     application_conditions: List[NonApplicationCondition], parameter_values: Dict[Parameter, Any]
-) -> Applicability:
+) -> Tuple[bool, Optional[str]]:
     na_conditions, warnings = _keep_satisfied_conditions(application_conditions, parameter_values)
     if len(na_conditions) > 1:
         raise ValueError(
@@ -426,13 +242,11 @@ def _compute_whole_text_applicability(
             f'Here, {len(na_conditions)} conditions are applicable.'
         )
     if not na_conditions:
-        return Applicability(True, warnings=warnings)
+        return True, '\n'.join(warnings) if warnings else None
     if application_conditions[0].targeted_entity.outer_alinea_indices:
         raise ValueError('Can only deactivate the whole AM, not particular alineas.')
-    description = na_conditions[0].description or _generate_reason_inactive(
-        na_conditions[0].condition, parameter_values
-    )
-    return Applicability(False, description)
+    description = _generate_whole_text_reason_inactive(na_conditions[0].condition, parameter_values)
+    return False, description
 
 
 def _date_to_str(date: datetime) -> str:
@@ -470,7 +284,7 @@ def _apply_parameter_values_to_am(
         _apply_parameter_values_in_text(section, parametrization, parameter_values, (i,))
         for i, section in enumerate(am.sections)
     ]
-    am.applicability = _compute_whole_text_applicability(
+    am.active, am.warning_inactive = _compute_whole_text_applicability(
         parametrization.path_to_conditions.get(tuple()) or [], parameter_values
     )
     return am
@@ -488,9 +302,9 @@ def _extract_leaf_conditions(condition: Condition, parameter: Parameter) -> List
 
 def _extract_conditions_from_parametrization(parameter: Parameter, parametrization: Parametrization) -> List[Condition]:
     return [
-        cond
-        for app in parametrization.application_conditions
-        for cond in _extract_leaf_conditions(app.condition, parameter)
+        cd for ap in parametrization.application_conditions for cd in _extract_leaf_conditions(ap.condition, parameter)
+    ] + [
+        cd for as_ in parametrization.alternative_sections for cd in _extract_leaf_conditions(as_.condition, parameter)
     ]
 
 
@@ -609,8 +423,24 @@ def _generate_options_dict(conditions: List[Condition]) -> Dict[str, Tuple[Param
 OptionsDict = Dict[str, Tuple[Parameter, Any]]
 
 
-def _generate_options_dicts(parametrization: Parametrization) -> List[OptionsDict]:
+def _extract_parameters_from_parametrization(parametrization: Parametrization) -> Set[Parameter]:
+    application_conditions = {
+        cd
+        for app_cond in parametrization.application_conditions
+        for cd in extract_parameters_from_condition(app_cond.condition)
+    }
+    alternative_sections = {
+        cd
+        for alt_sec in parametrization.alternative_sections
+        for cd in extract_parameters_from_condition(alt_sec.condition)
+    }
+    return application_conditions.union(alternative_sections)
+
+
+def _generate_options_dicts(parametrization: Parametrization, date_only: bool) -> List[OptionsDict]:
     parameters = _extract_parameters_from_parametrization(parametrization)
+    if date_only:
+        parameters = [param for param in parameters if param == ParameterEnum.DATE_INSTALLATION.value]
     options_dicts = []
     for parameter in parameters:
         conditions = _extract_conditions_from_parametrization(parameter, parametrization)
@@ -618,8 +448,8 @@ def _generate_options_dicts(parametrization: Parametrization) -> List[OptionsDic
     return options_dicts
 
 
-def _generate_exhaustive_combinations(parametrization: Parametrization) -> Combinations:
-    options_dicts = _generate_options_dicts(parametrization)
+def _generate_exhaustive_combinations(parametrization: Parametrization, date_only: bool) -> Combinations:
+    options_dicts = _generate_options_dicts(parametrization, date_only)
     if not options_dicts:
         return {}
     combinations = _generate_combinations(options_dicts)
@@ -629,10 +459,13 @@ def _generate_exhaustive_combinations(parametrization: Parametrization) -> Combi
 
 
 def generate_all_am_versions(
-    am: ArreteMinisteriel, parametrization: Parametrization, combinations: Optional[Combinations] = None
+    am: ArreteMinisteriel,
+    parametrization: Parametrization,
+    date_only: bool,
+    combinations: Optional[Combinations] = None,
 ) -> Dict[Tuple[str, ...], ArreteMinisteriel]:
     if combinations is None:
-        combinations = _generate_exhaustive_combinations(parametrization)
+        combinations = _generate_exhaustive_combinations(parametrization, date_only)
     if not combinations:
         return {tuple(): replace(am, unique_version=True)}
     return {

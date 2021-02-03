@@ -1,4 +1,5 @@
 import os
+from collections import Counter
 from typing import Dict, List
 
 import dash_core_components as dcc
@@ -29,7 +30,7 @@ _create_tmp_am_folder()
 def _get_page_heading() -> Component:
     src = '/assets/logo-envinorma.png'
     sticky_style = {
-        'padding': '.5em',
+        'padding': '.2em',
         'border-bottom': '1px solid rgba(0,0,0,.1)',
         'position': 'sticky',
         'top': 0,
@@ -37,10 +38,25 @@ def _get_page_heading() -> Component:
         'z-index': '1',
         'margin-bottom': '10px',
     }
-    return dcc.Link(
-        html.Div(html.Div(html.Img(src=src, style={'width': '30px'}), className='container'), style=sticky_style),
-        href='/',
+    nav = html.Span(
+        [
+            html.Span(
+                html.A('Arrêtés', href='/', className='nav-link', style={'color': 'grey', 'display': 'inline-block'})
+            ),
+            html.Span(
+                html.A(
+                    'Guide d\'enrichissement',
+                    href='https://www.notion.so/Guide-d-enrichissement-3874408245dc474ca8181a3d1d50f78e',
+                    className='nav-link',
+                    target="_blank",
+                    style={'color': 'grey', 'display': 'inline-block'},
+                )
+            ),
+        ],
+        style={'display': 'inline-block'},
     )
+    img = html.Img(src=src, style={'width': '30px', 'display': 'inline-block'})
+    return html.Div(html.Div([dcc.Link(img, href='/'), nav], className='container'), style=sticky_style)
 
 
 def _class_name_from_bool(bool_: bool) -> str:
@@ -64,8 +80,9 @@ def _get_row(rank: int, am_state: AMStatus, am_metadata: AMMetadata) -> Componen
         html.Td(str(am_metadata.nor)),
         html.Td(am_metadata.short_title),
         html.Td(_get_str_classements(am_metadata.classements)),
-        html.Td('', className=_class_name_from_bool(am_state != AMStatus.PENDING_STRUCTURE_VALIDATION)),
-        html.Td('', className=_class_name_from_bool(am_state == AMStatus.VALIDATED)),
+        html.Td('', className=_class_name_from_bool(am_state.step() >= 1)),
+        html.Td('', className=_class_name_from_bool(am_state.step() >= 2)),
+        html.Td('', className=_class_name_from_bool(am_state.step() >= 3)),
     ]
     return html.Tr(rows)
 
@@ -78,8 +95,9 @@ def _get_header() -> Component:
             html.Th('N° NOR'),
             html.Th('Nom'),
             html.Th('Classements'),
+            html.Th('Initialisé'),
             html.Th('Structuré'),
-            html.Th('Enrichi'),
+            html.Th('Paramétré'),
         ]
     )
 
@@ -97,8 +115,25 @@ def _build_am_table(id_to_state: Dict[str, AMStatus], id_to_am_metadata: Dict[st
     )
 
 
+def _build_recap(id_to_state: Dict[str, AMStatus]) -> Component:
+    counter = Counter([status.step() for status in id_to_state.values()])
+    txts = [
+        f'{len(id_to_state)} arrêtés',
+        f'{counter[1] + counter[2] + counter[3]} arrêtés initialisés',
+        f'{counter[2] + counter[3]} arrêtés structurés',
+        f'{counter[3]} arrêtés paramétrés',
+    ]
+    cols = [
+        html.Div(html.Div(html.Div(txt, className='card-body'), className='card text-center'), className='col-3')
+        for txt in txts
+    ]
+    return html.Div(cols, className='row', style={'margin-top': '20px', 'margin-bottom': '40px'})
+
+
 def _make_index_component(id_to_state: Dict[str, AMStatus], id_to_am_metadata: Dict[str, AMMetadata]) -> Component:
-    return html.Div([html.H3('Arrêtés ministériels.'), _build_am_table(id_to_state, id_to_am_metadata)])
+    return html.Div(
+        [html.H2('Arrêtés ministériels.'), _build_recap(id_to_state), _build_am_table(id_to_state, id_to_am_metadata)]
+    )
 
 
 def router(pathname: str) -> Component:

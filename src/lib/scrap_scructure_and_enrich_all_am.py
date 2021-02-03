@@ -143,7 +143,7 @@ def _handle_manual_enrichments(
     if dump_am:
         parametrization = add_am_signatures(parametrization, compute_am_signatures(am))
         write_json(parametrization.to_dict(), get_parametrization_filename(am_id))
-    all_versions = generate_all_am_versions(enriched_am, parametrization, get_manual_combinations(am_id))
+    all_versions = generate_all_am_versions(enriched_am, parametrization, True, get_manual_combinations(am_id))
     if dump_am:
         all_versions_with_summary = {
             name: get_manual_post_process(am_id)(add_summary(am_), name) for name, am_ in all_versions.items()
@@ -233,4 +233,6 @@ def handle_all_am(
 
 if __name__ == '__main__':
     random.seed(0)  # to avoid having different ids
-    handle_all_am(True, True, None, True)
+    # am_cids = {'JORFTEXT000038358856', 'JORFTEXT000000369330', 'JORFTEXT000000552021', 'JORFTEXT000034429274'}
+    am_cids = None  # all_am
+    handle_all_am(True, True, am_cids, True)

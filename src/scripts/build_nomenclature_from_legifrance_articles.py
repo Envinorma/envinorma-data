@@ -1,21 +1,30 @@
 import re
+from collections import Counter
 from dataclasses import dataclass
 from typing import List, Optional
+
 from bs4 import BeautifulSoup
-from tqdm import tqdm
-from collections import Counter
-from lib.data import Cell, EnrichedString, Nomenclature, Regime, Row, RubriqueSimpleThresholds, Table, is_increasing
-from lib.legifrance_API import get_article_by_id, get_legifrance_client
-from lib.am_structure_extraction import extract_table_from_soup
-from lib.utils import write_json
+from lib.config import AM_DATA_FOLDER
+from lib.data import (
+    Cell,
+    EnrichedString,
+    Nomenclature,
+    Regime,
+    Row,
+    RubriqueSimpleThresholds,
+    Table,
+    is_increasing,
+    load_am_data,
+)
 from lib.georisques_data import (
     GRClassementActivite,
     deduce_regime_if_possible,
     load_installations_with_classements_and_docs,
 )
-from lib.config import AM_DATA_FOLDER
-from lib.data import load_am_data
-
+from lib.legifrance_API import get_article_by_id, get_legifrance_client
+from lib.parse_html import extract_table_from_soup
+from lib.utils import write_json
+from tqdm import tqdm
 
 _ARTICLE_IDS = [
     'LEGIARTI000039330431',

@@ -3,13 +3,14 @@ from copy import copy
 from dataclasses import replace
 from datetime import datetime, timedelta
 from string import ascii_letters
-from typing import List
+from typing import List, Optional
 
 from lib.data import ArreteMinisteriel, EnrichedString, Regime, StructuredText, StructuredTextSignature
 from lib.parametric_am import (
     _apply_parameter_values_to_am,
     _change_value,
     _date_not_in_parametrization,
+    _deactivate_alineas,
     _extract_installation_date_criterion,
     _extract_interval_midpoints,
     _extract_parameters_from_parametrization,
@@ -19,10 +20,9 @@ from lib.parametric_am import (
     _generate_combinations,
     _generate_equal_option_dicts,
     _generate_options_dict,
-    _is_satisfied,
     _mean,
-    _text_without_alineas,
     generate_all_am_versions,
+    is_satisfied,
 )
 from lib.parametrization import (
     AlternativeSection,
@@ -153,18 +153,22 @@ def _random_enriched_string() -> EnrichedString:
     return EnrichedString(_random_string(), [], None)
 
 
+def _str(text: Optional[str] = None) -> EnrichedString:
+    return EnrichedString(text) if text else _random_enriched_string()
+
+
 def test_apply_parameter_values_to_am_whole_arrete():
     sections = [
-        StructuredText(_random_enriched_string(), [EnrichedString('Initial version 1')], [], None),
-        StructuredText(_random_enriched_string(), [EnrichedString('Initial version 2')], [], None),
+        StructuredText(_str(), [_str('Initial version 1')], [], None),
+        StructuredText(_str(), [_str('Initial version 2')], [], None),
         StructuredText(
-            EnrichedString('Conditions d\'application', []),
-            [EnrichedString('Cet arrete ne s\'applique qu\'aux nouvelles installations.')],
+            _str('Conditions d\'application'),
+            [_str('Cet arrete ne s\'applique qu\'aux nouvelles installations.')],
             [],
             None,
         ),
     ]
-    am = ArreteMinisteriel(_random_enriched_string(), sections, [], '', None)
+    am = ArreteMinisteriel(_str(), sections, [], '')
 
     parameter = Parameter('nouvelle-installation', ParameterType.BOOLEAN)
     is_installation_old = Equal(parameter, False)
@@ -175,53 +179,90 @@ def test_apply_parameter_values_to_am_whole_arrete():
     )
 
     new_am_1 = _apply_parameter_values_to_am(am, parametrization, {parameter: False})
-    assert not new_am_1.applicability.active
+    assert not new_am_1.active
+    assert new_am_1.warning_inactive is not None
 
     new_am_2 = _apply_parameter_values_to_am(am, parametrization, {parameter: True})
-    assert new_am_2.applicability.active
+    assert new_am_2.active
+    assert new_am_2.warning_inactive is None
 
     new_am_3 = _apply_parameter_values_to_am(am, parametrization, {})
-    assert len(new_am_3.applicability.warnings) == 1
+    assert new_am_3.active
+    assert new_am_3.warning_inactive is not None
+
+
+def _all_alineas_inactive(text: StructuredText) -> bool:
+    return all([not al.active for al in text.outer_alineas]) and all(
+        [_all_alineas_inactive(sec) for sec in text.sections]
+    )
+
+
+def _all_alineas_active(text: StructuredText) -> bool:
+    return all([al.active for al in text.outer_alineas]) and all([_all_alineas_active(sec) for sec in text.sections])
 
 
 def test_apply_parameter_values_to_am():
-    sections = [
-        StructuredText(EnrichedString('Art. 1', []), [EnrichedString('Initial version 1')], [], None),
-        StructuredText(EnrichedString('Art. 2', []), [EnrichedString('Initial version 2')], [], None),
-        StructuredText(
-            EnrichedString('Conditions d\'application', []),
-            [
-                EnrichedString('L\'article 1 ne s\'applique qu\'aux nouvelles installations'),
-                EnrichedString('Pour les installations nouvelles, l\'article 2 est remplacé par "version modifiée"'),
-            ],
-            [],
-            None,
-        ),
+    cd_alineas = [
+        _str('L\'article 1 ne s\'applique qu\'aux nouvelles installations'),
+        _str('Pour les installations nouvelles, l\'article 2 est remplacé par "version modifiée"'),
     ]
-    am = ArreteMinisteriel(_random_enriched_string(), sections, [], '', None)
+    sections = [
+        StructuredText(_str('Art. 1'), [_str('Initial version 1')], [], None),
+        StructuredText(_str('Art. 2'), [_str('Initial version 2')], [], None),
+        StructuredText(_str('Conditions d\'application'), cd_alineas, [], None),
+        StructuredText(_str('Art. 3'), [_str(), _str()], [], None),
+    ]
+    am = ArreteMinisteriel(_str(), sections, [], '')
 
     parameter = Parameter('nouvelle-installation', ParameterType.BOOLEAN)
     is_installation_old = Equal(parameter, False)
     is_installation_new = Equal(parameter, True)
     source = ConditionSource('', EntityReference(SectionReference((2,)), None, False))
-    new_text = StructuredText(EnrichedString('Art. 2', []), [EnrichedString('version modifiée')], [], None)
+    new_text = StructuredText(_str('Art. 2'), [_str('version modifiée')], [], None)
     parametrization = Parametrization(
-        [NonApplicationCondition(EntityReference(SectionReference((0,)), None), is_installation_old, source)],
+        [
+            NonApplicationCondition(EntityReference(SectionReference((0,)), None), is_installation_old, source),
+            NonApplicationCondition(EntityReference(SectionReference((3,)), [0]), is_installation_old, source),
+        ],
         [AlternativeSection(SectionReference((1,)), new_text, is_installation_new, source)],
     )
 
     new_am_1 = _apply_parameter_values_to_am(am, parametrization, {parameter: False})
-    assert not new_am_1.sections[0].applicability.active
+
+    assert _all_alineas_inactive(new_am_1.sections[0])
+    assert len(new_am_1.sections[0].applicability.warnings) == 1
+
     assert not new_am_1.sections[1].applicability.modified
+    assert len(new_am_1.sections[1].applicability.warnings) == 0
+
+    assert not new_am_1.sections[3].outer_alineas[0].active
+    assert new_am_1.sections[3].outer_alineas[1].active
+    assert len(new_am_1.sections[3].applicability.warnings) == 1
 
     new_am_2 = _apply_parameter_values_to_am(am, parametrization, {parameter: True})
-    assert new_am_2.sections[0].applicability.active
+
+    assert _all_alineas_active(new_am_2.sections[0])
+    assert len(new_am_2.sections[0].applicability.warnings) == 0
+
     assert new_am_2.sections[1].applicability.modified
+    assert len(new_am_2.sections[1].applicability.warnings) == 1
     assert new_am_2.sections[1].outer_alineas[0].text == 'version modifiée'
+    assert new_am_2.sections[1].applicability.previous_version is not None
+
+    assert new_am_2.sections[3].outer_alineas[0].active
+    assert new_am_2.sections[3].outer_alineas[1].active
+    assert len(new_am_2.sections[3].applicability.warnings) == 0
 
     new_am_3 = _apply_parameter_values_to_am(am, parametrization, {})
+    assert _all_alineas_active(new_am_3.sections[0])
     assert len(new_am_3.sections[0].applicability.warnings) == 1
+
+    assert not new_am_3.sections[1].applicability.modified
     assert len(new_am_3.sections[1].applicability.warnings) == 1
+
+    assert new_am_3.sections[3].outer_alineas[0].active
+    assert new_am_3.sections[3].outer_alineas[1].active
+    assert len(new_am_3.sections[3].applicability.warnings) == 1
 
 
 def test_extract_parameters_from_parametrization():
@@ -230,7 +271,7 @@ def test_extract_parameters_from_parametrization():
     parameter_2 = Parameter('nouvelle-installation', ParameterType.BOOLEAN)
     condition_2 = Equal(parameter_2, True)
     source = ConditionSource('', EntityReference(SectionReference((2,)), None, False))
-    new_text = StructuredText(EnrichedString('Art. 2', []), [EnrichedString('version modifiée')], [], None)
+    new_text = StructuredText(_str('Art. 2'), [_str('version modifiée')], [], None)
     parametrization = Parametrization(
         [NonApplicationCondition(EntityReference(SectionReference((0,)), None), condition_1, source)],
         [AlternativeSection(SectionReference((1,)), new_text, condition_2, source)],
@@ -247,7 +288,7 @@ def test_extract_parameters_from_parametrization_2():
     parameter_2 = Parameter('nouvelle-installation-2', ParameterType.BOOLEAN)
     condition_2 = Equal(parameter_2, True)
     source = ConditionSource('', EntityReference(SectionReference((2,)), None, False))
-    new_text = StructuredText(EnrichedString('Art. 2', []), [EnrichedString('version modifiée')], [], None)
+    new_text = StructuredText(_str('Art. 2'), [_str('version modifiée')], [], None)
     parametrization = Parametrization(
         [NonApplicationCondition(EntityReference(SectionReference((0,)), None), condition_1, source)],
         [AlternativeSection(SectionReference((1,)), new_text, condition_2, source)],
@@ -261,11 +302,11 @@ def test_extract_parameters_from_parametrization_2():
 
 def test_generate_all_am_versions():
     sections = [
-        StructuredText(EnrichedString('Art. 1', []), [EnrichedString('Initial version 1')], [], None),
-        StructuredText(EnrichedString('Art. 2', []), [EnrichedString('Initial version 2')], [], None),
-        StructuredText(EnrichedString('Art. 3', []), [EnrichedString('condition source')], [], None),
+        StructuredText(_str('Art. 1'), [_str('Initial version 1')], [], None),
+        StructuredText(_str('Art. 2'), [_str('Initial version 2')], [], None),
+        StructuredText(_str('Art. 3'), [_str('condition source')], [], None),
     ]
-    am = ArreteMinisteriel(_random_enriched_string(), sections, [], '', None)
+    am = ArreteMinisteriel(_str(), sections, [], '')
 
     parameter = Parameter('nouvelle-installation', ParameterType.BOOLEAN)
     condition = Equal(parameter, False)
@@ -274,17 +315,17 @@ def test_generate_all_am_versions():
         [NonApplicationCondition(EntityReference(SectionReference((0,)), None), condition, source)], []
     )
 
-    res = generate_all_am_versions(am, parametrization)
+    res = generate_all_am_versions(am, parametrization, False)
     assert len(res) == 3
     assert ('nouvelle-installation != False',) in res
     assert ('nouvelle-installation == False',) in res
     assert () in res
-    assert not res[('nouvelle-installation == False',)].sections[0].applicability.active
-    assert res[('nouvelle-installation != False',)].sections[0].applicability.active
-    assert res[()].sections[0].applicability.active
+    assert _all_alineas_inactive(res[('nouvelle-installation == False',)].sections[0])
+    assert _all_alineas_active(res[('nouvelle-installation != False',)].sections[0])
+    assert _all_alineas_active(res[()].sections[0])
     assert len(res[()].sections[0].applicability.warnings) == 1
 
-    res_2 = generate_all_am_versions(am, Parametrization([], []))
+    res_2 = generate_all_am_versions(am, Parametrization([], []), False)
     assert len(res_2) == 1
     assert tuple() in res_2
     assert res_2[()].sections[0].applicability is None
@@ -298,7 +339,7 @@ def test_extract_installation_date_criterion():
     condition_2 = Range(parameter, date_1, date_2, left_strict=False, right_strict=True)
     condition_3 = Littler(parameter, date_2, True)
     source = ConditionSource('', EntityReference(SectionReference((2,)), None, False))
-    new_text = StructuredText(EnrichedString('Art. 2', []), [EnrichedString('version modifiée')], [], None, None)
+    new_text = StructuredText(_str('Art. 2'), [_str('version modifiée')], [], None, None)
     parametrization = Parametrization(
         [
             NonApplicationCondition(EntityReference(SectionReference((0,)), None), condition_1, source),
@@ -330,14 +371,14 @@ def test_is_satisfied():
     condition_1 = Equal(param_1, Regime.A)
     condition_2 = Equal(param_1, Regime.E)
     condition_3 = Littler(param_2, 1, True)
-    assert not _is_satisfied(AndCondition([condition_1]), {})
-    assert _is_satisfied(AndCondition([condition_1]), {param_1: Regime.A})
-    assert _is_satisfied(OrCondition([condition_1, condition_2]), {param_1: Regime.A})
-    assert _is_satisfied(OrCondition([condition_1, condition_3]), {param_1: Regime.A})
-    assert not _is_satisfied(AndCondition([condition_1, condition_2]), {param_1: Regime.A})
-    assert _is_satisfied(AndCondition([condition_1, condition_3]), {param_1: Regime.A, param_2: 0.5})
-    assert _is_satisfied(OrCondition([condition_2, condition_3]), {param_1: Regime.E, param_2: 0.5})
-    assert not _is_satisfied(OrCondition([condition_1, condition_3]), {param_1: Regime.E, param_2: 5})
+    assert not is_satisfied(AndCondition([condition_1]), {})
+    assert is_satisfied(AndCondition([condition_1]), {param_1: Regime.A})
+    assert is_satisfied(OrCondition([condition_1, condition_2]), {param_1: Regime.A})
+    assert is_satisfied(OrCondition([condition_1, condition_3]), {param_1: Regime.A})
+    assert not is_satisfied(AndCondition([condition_1, condition_2]), {param_1: Regime.A})
+    assert is_satisfied(AndCondition([condition_1, condition_3]), {param_1: Regime.A, param_2: 0.5})
+    assert is_satisfied(OrCondition([condition_2, condition_3]), {param_1: Regime.E, param_2: 0.5})
+    assert not is_satisfied(OrCondition([condition_1, condition_3]), {param_1: Regime.E, param_2: 5})
 
 
 def test_date_not_in_parametrization():
@@ -374,23 +415,37 @@ def test_extract_warnings():
     assert len(_extract_warnings([ref], {ref: base_text}, {ref: replace(base_text, section_list_size=10)})) == 1
 
 
-def _get_simple_text() -> StructuredText:
-    return StructuredText(
-        EnrichedString('Conditions d\'application', []), [EnrichedString('al 1'), EnrichedString('al 2')], [], None
+def _get_simple_text(sections: Optional[List[StructuredText]] = None) -> StructuredText:
+    return StructuredText(_str('Conditions d\'application'), [_str('al 1'), _str('al 2')], sections or [], None)
+
+
+def test_deactivate_alineas():
+    nac = NonApplicationCondition(
+        EntityReference(SectionReference((0,)), None),
+        Littler(ParameterEnum.DATE_INSTALLATION.value, datetime(2021, 1, 1)),
+        ConditionSource('', EntityReference(SectionReference((1,)), None)),
     )
+    res = _deactivate_alineas(_get_simple_text(), nac, {ParameterEnum.DATE_INSTALLATION.value: datetime(2020, 1, 1)})
+    assert not res.applicability.active
+    assert all([not al.active for al in res.outer_alineas])
 
+    nac = NonApplicationCondition(
+        EntityReference(SectionReference((0,)), [0]),
+        Littler(ParameterEnum.DATE_INSTALLATION.value, datetime(2021, 1, 1)),
+        ConditionSource('', EntityReference(SectionReference((1,)), None)),
+    )
+    res = _deactivate_alineas(_get_simple_text(), nac, {ParameterEnum.DATE_INSTALLATION.value: datetime(2020, 1, 1)})
+    assert res.applicability.active
+    assert not res.outer_alineas[0].active
+    assert res.outer_alineas[1].active
 
-def test_text_without_alineas():
-    out = _text_without_alineas(_get_simple_text(), {1}, 'desc')
-    assert len(out.outer_alineas) == 1
-    assert out.applicability.active
-    assert not out.applicability.reason_inactive
-    assert out.applicability.modified
-    assert out.applicability.reason_modified == '''desc (Un alinea ne s'applique pas.)'''
-
-    out = _text_without_alineas(_get_simple_text(), {0, 1}, 'desc')
-    assert len(out.outer_alineas) == 0
-    assert out.applicability.active
-    assert not out.applicability.reason_inactive
-    assert out.applicability.modified
-    assert out.applicability.reason_modified == '''desc (2 alineas ne s'appliquent pas.)'''
+    nac = NonApplicationCondition(
+        EntityReference(SectionReference((0,)), None),
+        Littler(ParameterEnum.DATE_INSTALLATION.value, datetime(2021, 1, 1)),
+        ConditionSource('', EntityReference(SectionReference((1,)), None)),
+    )
+    res = _deactivate_alineas(
+        _get_simple_text([_get_simple_text()]), nac, {ParameterEnum.DATE_INSTALLATION.value: datetime(2020, 1, 1)}
+    )
+    assert not res.applicability.active
+    assert not res.sections[0].applicability.active

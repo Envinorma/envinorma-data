@@ -1,7 +1,12 @@
 import os
 from configparser import ConfigParser
 from dataclasses import dataclass
+from enum import Enum
 from functools import lru_cache
+
+
+class _ConfigError(Exception):
+    pass
 
 
 def _get_var(section: str, varname: str) -> str:
@@ -12,7 +17,7 @@ def _get_var(section: str, varname: str) -> str:
     try:
         return config[section][varname]
     except KeyError:
-        raise ValueError(f'Variable {varname} must either be defined in config.ini or in environment.')
+        raise _ConfigError(f'Variable {varname} must either be defined in config.ini or in environment.')
 
 
 @dataclass
@@ -44,10 +49,39 @@ class StorageConfig:
 
 
 @dataclass
+class SlackConfig:
+    enrichment_notification_url: str
+
+    @classmethod
+    def default_load(cls) -> 'SlackConfig':
+        return cls(**{key: _get_var('slack', key) for key in cls.__annotations__})
+
+
+class EnvironmentType(Enum):
+    PROD = 'prod'
+    DEV = 'dev'
+
+
+@dataclass
+class EnvironmentConfig:
+    type: EnvironmentType
+
+    @classmethod
+    def default_load(cls) -> 'EnvironmentConfig':
+        try:
+            type_ = EnvironmentType(_get_var('environment', 'type'))
+        except _ConfigError:
+            type_ = EnvironmentType.PROD
+        return cls(type=type_)
+
+
+@dataclass
 class Config:
     aida: AidaConfig
     legifrance: LegifranceConfig
     storage: StorageConfig
+    slack: SlackConfig
+    environment: EnvironmentConfig
 
     @classmethod
     def default_load(cls) -> 'Config':
@@ -55,6 +89,8 @@ class Config:
             aida=AidaConfig.default_load(),
             legifrance=LegifranceConfig.default_load(),
             storage=StorageConfig.default_load(),
+            slack=SlackConfig.default_load(),
+            environment=EnvironmentConfig.default_load(),
         )
 
 

@@ -202,7 +202,7 @@ Condition = Union[LeafCondition, AndCondition, OrCondition]
 
 def parameter_value_to_str(value: Any) -> str:
     if isinstance(value, datetime):
-        return value.strftime('%Y-%m-%d')
+        return value.strftime('%d/%m/%Y')
     return str(value)
 
 
@@ -378,6 +378,7 @@ class Parametrization:
 
 ParameterObject = Union[NonApplicationCondition, AlternativeSection]
 Combinations = Dict[Tuple[str, ...], Dict[Parameter, Any]]
+
 
 def _extract_text(text: StructuredText, depth: int) -> List[str]:
     lines: List[str] = []

@@ -8,6 +8,7 @@ import dash_core_components as dcc
 import dash_html_components as html
 from dash.dependencies import Input, Output, State
 from dash.development.base_component import Component
+from lib.condition_to_str import extract_parameters_from_condition
 from lib.data import ArreteMinisteriel, EnrichedString, Ints, Regime, StructuredText, am_to_text
 from lib.parametrization import (
     AlternativeSection,
@@ -55,10 +56,11 @@ from back_office.utils import (
 _Options = List[Dict[str, Any]]
 
 _AUTORISATION_DATE_FR = 'Date d\'autorisation'
+_INSTALLATION_DATE_FR = 'Date de mise en service'
 _CONDITION_VARIABLES = {
     'Régime': ParameterEnum.REGIME,
     _AUTORISATION_DATE_FR: ParameterEnum.DATE_AUTORISATION,
-    'Date de mise en service': ParameterEnum.DATE_INSTALLATION,
+    _INSTALLATION_DATE_FR: ParameterEnum.DATE_INSTALLATION,
 }
 _CONDITION_VARIABLE_OPTIONS = [{'label': condition, 'value': condition} for condition in _CONDITION_VARIABLES]
 _CONDITION_OPERATIONS = ['<', '=', '>=']
@@ -67,7 +69,6 @@ _CONDITION_OPERATION_OPTIONS = [{'label': condition, 'value': condition} for con
 _CONDITION_VARIABLE = 'param-edition-condition-parameter'
 _CONDITION_OPERATION = 'param-edition-condition-operation'
 _CONDITION_VALUE = 'param-edition-condition-value'
-_DESCRIPTION = 'param-edition-description'
 _SOURCE = 'param-edition-source'
 _TARGET_SECTION = 'param-edition-target-section'
 _TARGET_SECTION_STORE = 'param-edition-target-section-store'
@@ -131,7 +132,7 @@ def _get_str_target(value: Any, parameter_type: ParameterType) -> str:
 
 
 def _get_condition_component(rank: int, default_condition: Optional[_MonoCondition] = None) -> Component:
-    default_variable = _AUTORISATION_DATE_FR if not default_condition else _get_str_variable(default_condition)
+    default_variable = _INSTALLATION_DATE_FR if not default_condition else _get_str_variable(default_condition)
     default_operation = '=' if not default_condition else _get_str_operation(default_condition)
     default_target = (
         '' if not default_condition else _get_str_target(default_condition.target, default_condition.parameter.type)
@@ -183,16 +184,6 @@ def _get_main_title(operation: AMOperation, is_edition: bool, rank: int) -> Comp
         html.H4('Nouvelle condition de non-application')
         if operation == operation.ADD_CONDITION
         else html.H4('Nouveau paragraphe alternatif')
-    )
-
-
-def _get_description_help(operation: AMOperation) -> Component:
-    if operation == operation.ADD_CONDITION:
-        return html.P(
-            'Ex: "Ce paragraphe ne s\'applique pas aux installations à enregistrement installées avant le 01/01/2008."'
-        )
-    return html.P(
-        'Ex: "Ce paragraphe est modifié pour les installations à enregistrement installées avant le 01/01/2008."'
     )
 
 
@@ -287,7 +278,7 @@ def _ensure_mono_conditions(conditions: List[Condition]) -> List[_MonoCondition]
     return [_ensure_mono_condition(x) for x in conditions]
 
 
-def _simplify_condition(condition: Condition) -> Tuple[str, List[_MonoCondition]]:
+def _change_to_mono_conditions(condition: Condition) -> Tuple[str, List[_MonoCondition]]:
     if isinstance(condition, (Equal, Greater, Littler)):
         return _AND_ID, [condition]
     if isinstance(condition, Range):
@@ -306,10 +297,10 @@ def _simplify_condition(condition: Condition) -> Tuple[str, List[_MonoCondition]
 def _get_condition_form(default_condition: Optional[Condition]) -> Component:
     default_conditions: List[_MonoCondition] = []
     if default_condition:
-        default_merge, default_conditions = _simplify_condition(default_condition)
+        default_merge, default_conditions = _change_to_mono_conditions(default_condition)
     else:
         default_merge = _AND_ID
-        default_conditions = [Littler(ParameterEnum.DATE_AUTORISATION.value, None)]
+        default_conditions = [Littler(ParameterEnum.DATE_INSTALLATION.value, None)]
     dropdown_condition_merge = html.Div(
         [
             'Opération',
@@ -330,17 +321,6 @@ def _get_condition_form(default_condition: Optional[Condition]) -> Component:
     )
 
     return html.Div([html.H5('Condition'), dropdown_condition_merge, dropdown_nb_conditions, tooltip, conditions])
-
-
-def _get_description_form(operation: AMOperation, loaded_parameter: Optional[ParameterObject]) -> Component:
-    description_default_value = loaded_parameter.description if loaded_parameter else ''
-    return html.Div(
-        [
-            html.H5('Description (visible par l\'utilisateur)'),
-            _get_description_help(operation),
-            dcc.Textarea(value=description_default_value, className='form-control', id=_DESCRIPTION),
-        ]
-    )
 
 
 def _get_source_form(options: _Options, loaded_parameter: Optional[ParameterObject]) -> Component:
@@ -451,7 +431,6 @@ def _make_form(
         [
             _get_main_title(operation, is_edition=destination_rank != -1, rank=destination_rank),
             _get_delete_button(is_edition=destination_rank != -1),
-            _get_description_form(operation, loaded_parameter),
             _get_source_form(text_title_options, loaded_parameter),
             _get_target_section_block(operation, text_title_options, loaded_parameter, text),
             _get_new_section_form_from_default(loaded_parameter) if not _is_condition(operation) else html.Div(),
@@ -476,6 +455,17 @@ def _extract_paragraph_reference_dropdown_values(text: StructuredText) -> _Optio
     return [{'label': title, 'value': reference} for reference, title in title_references_and_values]
 
 
+def _get_instructions() -> Component:
+    return html.Div(
+        html.A(
+            'Guide de paramétrisation',
+            href='https://www.notion.so/R-gles-de-param-trisation-47d8e5c4d3434d8691cbd9f59d556f0f',
+            target='_blank',
+        ),
+        className='alert alert-light',
+    )
+
+
 def _structure_edition_component(
     text: StructuredText,
     operation: AMOperation,
@@ -484,7 +474,25 @@ def _structure_edition_component(
     destination_rank: int,
 ) -> Component:
     dropdown_values = _extract_paragraph_reference_dropdown_values(text)
-    return _make_form(dropdown_values, operation, parent_page, loaded_parameter, destination_rank, text)
+    return html.Div(
+        [
+            _get_instructions(),
+            _make_form(dropdown_values, operation, parent_page, loaded_parameter, destination_rank, text),
+        ]
+    )
+
+
+_EMPHASIZED_WORDS = [
+    'déclaration',
+    'enregistrement',
+    'autorisation',
+    'application',
+    'alinéa',
+    'installations existantes',
+    'appliquent',
+    'applicables',
+    'applicable',
+]
 
 
 def _get_main_component(
@@ -496,7 +504,7 @@ def _get_main_component(
 ) -> Component:
     text = am_to_text(am)
     border_style = {'padding': '10px', 'border': '1px solid rgba(0,0,0,.1)', 'border-radius': '5px'}
-    am_component_ = am_component(am, ['installations existantes', 'appliquent', 'applicables', 'applicable'])
+    am_component_ = am_component(am, emphasized_words=_EMPHASIZED_WORDS, first_level=3)
     cols = [
         html.Div(
             _structure_edition_component(text, operation, am_page, loaded_parameter, destination_rank),
@@ -527,7 +535,7 @@ def _build_page(
     ]
     page = _get_main_component(am, operation, am_page, destination_rank, loaded_parameter)
 
-    return html.Div([page, *hidden_components])
+    return html.Div([page, *hidden_components], className='parametrization_content')
 
 
 def _make_list(candidate: Optional[Union[List[Dict[str, Any]], Dict[str, Any]]]) -> List[Dict[str, Any]]:
@@ -618,7 +626,6 @@ def _dump_path(path: Ints) -> str:
 
 
 def _build_non_application_condition(
-    description: str,
     source: str,
     target_section: str,
     merge: str,
@@ -629,7 +636,7 @@ def _build_non_application_condition(
         EntityReference(SectionReference(_load_path(target_section)), _extract_alinea_indices(target_alineas)),
         _build_condition(conditions, merge),
         _build_source(source),
-        description,
+        description='',
     )
 
 
@@ -688,10 +695,82 @@ def _extract_condition(rank: int, parameter: str, operator: str, value_str: str)
     raise _FormHandlingError(f'La {rank+1}{"ère" if rank == 0 else "ème"} condition contient un opérateur inattendu.')
 
 
+def _assert_mono_condition(condition: Condition) -> _MonoCondition:
+    if not isinstance(condition, (Equal, Greater, Littler)):
+        raise ValueError(f'Expecting type _MonoCondition, got {type(condition)}')
+    return condition
+
+
+def _assert_greater_condition(condition: Condition) -> Greater:
+    if not isinstance(condition, Greater):
+        raise ValueError(f'Expecting type Greater, got {type(condition)}')
+    return condition
+
+
+def _assert_littler_condition(condition: Condition) -> Littler:
+    if not isinstance(condition, Littler):
+        raise ValueError(f'Expecting type Greater, got {type(condition)}')
+    return condition
+
+
+def _assert_strictly_below(small_candidate: Any, great_candidate: Any) -> None:
+    if isinstance(small_candidate, (datetime, date, float, int)):
+        if small_candidate >= great_candidate:
+            raise _FormHandlingError('Erreur dans les conditions: les deux conditions sont incompatibles.')
+
+
+def _check_compatibility_and_build_range(
+    parameter: Parameter, condition_1: _MonoCondition, condition_2: _MonoCondition
+) -> Condition:
+    if isinstance(condition_1, Equal) or isinstance(condition_2, Equal):
+        raise _FormHandlingError('Erreur dans les conditions. Elles sont soit redondantes, soit incompatibles.')
+    if isinstance(condition_1, Littler) and isinstance(condition_2, Littler):
+        raise _FormHandlingError('Erreur dans les conditions. Elles sont redondantes.')
+    if isinstance(condition_1, Greater) and isinstance(condition_2, Greater):
+        raise _FormHandlingError('Erreur dans les conditions. Elles sont redondantes.')
+    if isinstance(condition_1, Littler):
+        littler_condition = condition_1
+        greater_condition = _assert_greater_condition(condition_2)
+    else:
+        littler_condition = _assert_littler_condition(condition_2)
+        greater_condition = _assert_greater_condition(condition_1)
+    littler_target = littler_condition.target
+    greater_target = greater_condition.target
+    _assert_strictly_below(greater_target, littler_target)
+    return Range(parameter, greater_target, littler_target)
+
+
+def _try_building_range_condition(conditions: List[Condition]) -> Optional[Condition]:
+    _parameters = {param for cond in conditions for param in extract_parameters_from_condition(cond)}
+    if len(_parameters) != 1:
+        return None
+    if len(conditions) != 2:
+        return None
+    _parameter = list(_parameters)[0]
+    if _parameter == ParameterEnum.REGIME.value:
+        raise _FormHandlingError('Erreur dans les conditions: elles sont soit incompatibles, soit redondantes.')
+    condition_1 = _assert_mono_condition(conditions[0])
+    condition_2 = _assert_mono_condition(conditions[1])
+    return _check_compatibility_and_build_range(_parameter, condition_1, condition_2)
+
+
+def _simplify_condition(condition: Condition) -> Condition:
+    if isinstance(condition, (AndCondition, OrCondition)):
+        if len(condition.conditions) == 1:
+            return condition.conditions[0]
+        if len(condition.conditions) == 0:
+            raise _FormHandlingError('Au moins une condition est nécessaire !')
+    if isinstance(condition, AndCondition):
+        potential_range_condition = _try_building_range_condition(condition.conditions)
+        if potential_range_condition:
+            return potential_range_condition
+    return condition
+
+
 def _build_condition(conditions_raw: List[Tuple[str, str, str]], merge: str) -> Condition:
     condition_cls = _get_condition_cls(merge)
     conditions = [_extract_condition(i, *condition_raw) for i, condition_raw in enumerate(conditions_raw)]
-    return condition_cls(conditions)
+    return _simplify_condition(condition_cls(conditions))
 
 
 def _extract_alineas(text: str) -> List[EnrichedString]:
@@ -699,7 +778,6 @@ def _extract_alineas(text: str) -> List[EnrichedString]:
 
 
 def _build_alternative_section(
-    description: str,
     source: str,
     target_section: str,
     merge: str,
@@ -713,7 +791,7 @@ def _build_alternative_section(
         new_text,
         _build_condition(conditions, merge),
         _build_source(source),
-        description,
+        description='',
     )
 
 
@@ -740,9 +818,6 @@ def _extract_new_parameter_object(
     page_state: Dict[str, Any], operation: AMOperation, nb_alinea_options: int
 ) -> ParameterObject:
     id_to_value = _extract_id_to_value(page_state)
-    description = assert_str(_get_with_error(id_to_value, _DESCRIPTION))
-    if len(description) < _MIN_NB_CHARS:
-        raise _FormHandlingError(f'Le champ "Description" doit contenir au moins {_MIN_NB_CHARS} caractères.')
     source = _get_with_error(id_to_value, _SOURCE)
     if not source:
         raise _FormHandlingError('Le champ "Source" est obligatoire.')
@@ -758,12 +833,10 @@ def _extract_new_parameter_object(
         target_alineas = _get_with_error(id_to_value, _TARGET_ALINEAS)
         if len(set(target_alineas)) == nb_alinea_options:
             target_alineas = None
-        return _build_non_application_condition(description, source, target_section, merge, conditions, target_alineas)
+        return _build_non_application_condition(source, target_section, merge, conditions, target_alineas)
     if operation == operation.ADD_ALTERNATIVE_SECTION:
         new_text_title, new_text_content = _extract_new_text_parameters(id_to_value)
-        return _build_alternative_section(
-            description, source, target_section, merge, conditions, new_text_title, new_text_content
-        )
+        return _build_alternative_section(source, target_section, merge, conditions, new_text_title, new_text_content)
     raise NotImplementedError(f'Expecting operation not to be {operation.value}')
 
 

@@ -1,5 +1,6 @@
 import os
 from typing import Tuple
+
 from lib.config import AM_DATA_FOLDER
 
 
@@ -34,19 +35,3 @@ def create_folder_and_generate_parametric_filename(am_id: str, version_descripto
     if not os.path.exists(folder_name):
         os.makedirs(folder_name)
     return get_parametric_ams_folder(am_id) + '/' + generate_parametric_descriptor(version_descriptor) + '.json'
-
-
-def get_structured_text_filename(am_id: str) -> str:
-    return os.path.join(AM_DATA_FOLDER, 'structured_texts', am_id + '.json')
-
-
-def get_structured_text_wip_folder(am_id: str) -> str:
-    return os.path.join(AM_DATA_FOLDER, 'structured_texts', 'wip', am_id)
-
-
-def get_parametrization_wip_folder(am_id: str) -> str:
-    return os.path.join(AM_DATA_FOLDER, 'parametrizations', 'wip', am_id)
-
-
-def get_state_file(am_id: str) -> str:
-    return os.path.join(AM_DATA_FOLDER, 'states', am_id + '.json')

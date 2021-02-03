@@ -29,6 +29,38 @@ def _get_simple_text() -> StructuredText:
     )
 
 
+_TEXT_A = StructuredText(
+    title=EnrichedString(
+        text='6. Schématisation des différents types de joints mentionnés :', links=[], table=None, active=True
+    ),
+    outer_alineas=[
+        EnrichedString(text='Vous pouvez consulter les schémas dans le', links=[], table=None, active=True),
+        EnrichedString(text='JO\nn° 265 du 16/11/2010 texte numéro 21', links=[], table=None, active=True),
+    ],
+    sections=[],
+    applicability=None,
+    lf_id=None,
+    reference_str='Annexe 2 6.',
+    annotations=None,
+    id='0bEB0b14A96f',
+)
+_TEXT_B = StructuredText(
+    title=EnrichedString(
+        text='6. Schématisation des différents types de joints mentionnés :', links=[], table=None, active=True
+    ),
+    outer_alineas=[
+        EnrichedString(text='Vous pouvez consulter les schémas dans le', links=[], table=None, active=True),
+        EnrichedString(text='JO n° 265 du 16/11/2010 texte numéro 21', links=[], table=None, active=True),
+    ],
+    sections=[],
+    applicability=None,
+    lf_id=None,
+    reference_str=None,
+    annotations=None,
+    id='AA51E55feD6F',
+)
+
+
 def test_extract_text_lines():
     assert _extract_text_lines(_get_simple_text()) == [
         'AM',
@@ -41,6 +73,18 @@ def test_extract_text_lines():
     ]
     assert _extract_text_lines(StructuredText(EnrichedString(' A'), [], [], None)) == ['A']
     assert _extract_text_lines(StructuredText(EnrichedString(' A'), [EnrichedString('')], [], None)) == ['A', '']
+    assert _extract_text_lines(_TEXT_A) == [
+        '6. Schématisation des différents types de joints mentionnés :',
+        'Vous pouvez consulter les schémas dans le',
+        'JO',
+        'n° 265 du 16/11/2010 texte numéro 21',
+    ]
+
+    assert _extract_text_lines(_TEXT_B) == [
+        '6. Schématisation des différents types de joints mentionnés :',
+        'Vous pouvez consulter les schémas dans le',
+        'JO n° 265 du 16/11/2010 texte numéro 21',
+    ]
 
 
 def test_extract_char_positions():

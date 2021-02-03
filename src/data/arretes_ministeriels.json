@@ -4556,5 +4556,21 @@
         "state": "VIGUEUR",
         "short_title": "Arrêté du 03/08/18",
         "publication_date": 1533247200
+    },
+    {
+        "aida_page": "5619",
+        "page_name": "Faux Arrêté relatif aux tests",
+        "nor": "FAKE_NOR",
+        "classements": [
+            {
+                "regime": "E",
+                "rubrique": "5000",
+                "alinea": "A.2"
+            }
+        ],
+        "cid": "FAKE_CID",
+        "state": "VIGUEUR",
+        "short_title": "Faux Arrêté",
+        "publication_date": 1612195449
     }
 ]

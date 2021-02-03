@@ -5,6 +5,7 @@ from collections import Counter
 from copy import copy
 from dataclasses import dataclass, asdict, field
 from enum import Enum
+from string import ascii_letters
 from typing import List, Dict, Optional, Any, Tuple
 
 from lib.topics.patterns import TopicName
@@ -122,27 +123,52 @@ class EnrichedString:
     text: str
     links: List[Link] = field(default_factory=empty_link_list)
     table: Optional[Table] = None
+    active: Optional[bool] = True
 
-    @staticmethod
-    def from_dict(dict_: Dict[str, Any]) -> 'EnrichedString':
-        links = [load_link(link) for link in dict_['links']]
-        table = load_table(dict_['table']) if dict_['table'] else None
-        return EnrichedString(dict_['text'], links, table)
+    @classmethod
+    def from_dict(cls, dict_: Dict[str, Any]) -> 'EnrichedString':
+        dict_ = dict_.copy()
+        dict_['links'] = [load_link(link) for link in dict_['links']]
+        dict_['table'] = load_table(dict_['table']) if dict_['table'] else None
+        return cls(**dict_)
+
+
+def _random_string() -> str:
+    return ''.join([random.choice(ascii_letters) for _ in range(9)])
+
+
+def _random_enriched_string() -> EnrichedString:
+    return EnrichedString(_random_string(), [], None)
+
+
+def estr(text: Optional[str] = None) -> EnrichedString:
+    return EnrichedString(text) if text else _random_enriched_string()
 
 
 @dataclass
 class Applicability:
-    active: bool
-    reason_inactive: Optional[str] = None
+    active: bool = True
     modified: bool = False
-    reason_modified: Optional[str] = None
     warnings: List[str] = field(default_factory=list)
+    previous_version: Optional['StructuredText'] = None
+
+    def __post_init__(self):
+        if self.modified:
+            if not self.previous_version:
+                raise ValueError('when modified is True, previous_version must be provided.')
 
     def to_dict(self) -> Dict[str, Any]:
-        return asdict(self)
+        dict_ = asdict(self)
+        if self.previous_version:
+            dict_['previous_version'] = self.previous_version.to_dict()
+        return dict_
 
     @classmethod
     def from_dict(cls, dict_: Dict) -> 'Applicability':
+        dict_ = dict_.copy()
+        dict_['previous_version'] = (
+            StructuredText.from_dict(dict_['previous_version']) if dict_['previous_version'] else None
+        )
         return cls(**dict_)
 
 
@@ -180,6 +206,9 @@ class StructuredText:
     annotations: Optional[Annotations] = None
     id: str = field(default_factory=random_id)
 
+    def __post_init__(self):
+        assert isinstance(self.title, EnrichedString)
+
     def to_dict(self) -> Dict[str, Any]:
         res = asdict(self)
         res['sections'] = [se.to_dict() for se in self.sections]
@@ -190,8 +219,8 @@ class StructuredText:
     @classmethod
     def from_dict(cls, dict_: Dict[str, Any]):
         dict_ = dict_.copy()
-        dict_['title'] = load_enriched_string(dict_['title'])
-        dict_['outer_alineas'] = [load_enriched_string(al) for al in dict_['outer_alineas']]
+        dict_['title'] = EnrichedString.from_dict(dict_['title'])
+        dict_['outer_alineas'] = [EnrichedString.from_dict(al) for al in dict_['outer_alineas']]
         dict_['sections'] = [load_structured_text(sec) for sec in dict_['sections']]
         dict_['applicability'] = Applicability.from_dict(dict_['applicability']) if dict_.get('applicability') else None
         dict_['annotations'] = Annotations.from_dict(dict_['annotations']) if dict_.get('annotations') else None
@@ -308,7 +337,6 @@ class ArreteMinisteriel:
     sections: List[StructuredText]
     visa: List[EnrichedString]
     short_title: str
-    applicability: Optional[Applicability]
     installation_date_criterion: Optional[DateCriterion] = None
     aida_url: Optional[str] = None
     legifrance_url: Optional[str] = None
@@ -317,11 +345,12 @@ class ArreteMinisteriel:
     unique_version: bool = False
     summary: Optional[Summary] = None
     id: Optional[str] = field(default_factory=random_id)
+    active: bool = True
+    warning_inactive: Optional[str] = None
 
     def to_dict(self) -> Dict[str, Any]:
         res = asdict(self)
         res['sections'] = [section.to_dict() for section in self.sections]
-        res['applicability'] = self.applicability.to_dict() if self.applicability else None
         res['classements'] = [cl.to_dict() for cl in self.classements]
         res['classements_with_alineas'] = [cl.to_dict() for cl in self.classements_with_alineas]
         return res
@@ -329,10 +358,9 @@ class ArreteMinisteriel:
     @classmethod
     def from_dict(cls, dict_: Dict[str, Any]) -> 'ArreteMinisteriel':
         dict_ = dict_.copy()
-        dict_['title'] = load_enriched_string(dict_['title'])
+        dict_['title'] = EnrichedString.from_dict(dict_['title'])
         dict_['sections'] = [StructuredText.from_dict(sec) for sec in dict_['sections']]
-        dict_['visa'] = [load_enriched_string(vu) for vu in dict_['visa']]
-        dict_['applicability'] = Applicability.from_dict(dict_['applicability']) if dict_.get('applicability') else None
+        dict_['visa'] = [EnrichedString.from_dict(vu) for vu in dict_['visa']]
         dt_key = 'installation_date_criterion'
         dict_[dt_key] = DateCriterion.from_dict(dict_[dt_key]) if dict_.get(dt_key) else None
         classements = [Classement.from_dict(cl) for cl in dict_.get('classements') or []]
@@ -342,6 +370,8 @@ class ArreteMinisteriel:
         ]
         dict_['classements_with_alineas'] = list(sorted(classements_with_alineas, key=lambda x: x.regime.value))
         dict_['summary'] = Summary.from_dict(dict_['summary']) if dict_.get('summary') else None
+        if 'applicability' in dict_:  # keep during migration of schema
+            del dict_['applicability']
         return cls(**dict_)
 
 
@@ -350,7 +380,7 @@ def load_link(dict_: Dict[str, Any]) -> Link:
 
 
 def load_cell(dict_: Dict[str, Any]) -> Cell:
-    return Cell(load_enriched_string(dict_['content']), dict_['colspan'], dict_['rowspan'])
+    return Cell(EnrichedString.from_dict(dict_['content']), dict_['colspan'], dict_['rowspan'])
 
 
 def load_row(dict_: Dict[str, Any]) -> Row:
@@ -359,10 +389,6 @@ def load_row(dict_: Dict[str, Any]) -> Row:
 
 def load_table(dict_: Dict[str, Any]) -> Table:
     return Table.from_dict(dict_)
-
-
-def load_enriched_string(dict_: Dict[str, Any]) -> EnrichedString:
-    return EnrichedString.from_dict(dict_)
 
 
 def load_legifrance_article(dict_: Dict[str, Any]) -> LegifranceArticle:
@@ -687,7 +713,7 @@ class Nomenclature:
 
 
 def am_to_text(am: ArreteMinisteriel) -> StructuredText:
-    return StructuredText(am.title, [], am.sections, applicability=am.applicability)
+    return StructuredText(am.title, [], am.sections, Applicability())
 
 
 def add_title_default_numbering(text: StructuredText, prefix: str = '', rank: int = 0) -> StructuredText:
