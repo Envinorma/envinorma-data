@@ -132,5 +132,5 @@ def check_backups():
     )
     if not max_date:
         raise ValueError('No back_office db backups found : run one.')
-    if (datetime.now() - max_date).total_seconds() >= 25 * 3600:
+    if (datetime.now() - max_date).total_seconds() >= 20 * 3600:
         raise ValueError(f'Last backup is too old, run one. (date: {max_date})')

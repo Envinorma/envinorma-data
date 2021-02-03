@@ -10,6 +10,7 @@ import dash_html_components as html
 from bs4 import BeautifulSoup
 from dash.dependencies import Input, Output, State
 from dash.development.base_component import Component
+from dash.exceptions import PreventUpdate
 from lib.data import ArreteMinisteriel, EnrichedString, StructuredText, Table, am_to_text
 from lib.parse_html import extract_text_elements
 from lib.structure_extraction import TextElement, Title, build_structured_text, structured_text_to_text_elements
@@ -24,6 +25,10 @@ from back_office.utils import AMOperation, RouteParsingError, assert_str, get_tr
 _TOC_COMPONENT = 'structure-edition-toc'
 _TEXT_AREA_COMPONENT = 'structure-edition-text-area-component'
 _FORM_OUTPUT = 'structure-edition-form-output'
+_SAVE_BUTTON = 'structure-edition-submit-val'
+_SAVE_SUCCESS = 'structure-edition-save-success-store'
+_PATHNAME = 'structure-edition-pathname-store'
+_PAGE = 'structure-edition-page'
 
 
 def _text_to_elements(text: StructuredText) -> List[TextElement]:
@@ -66,7 +71,7 @@ def _get_toc_component(text: StructuredText) -> Component:
 def _submit_button() -> Component:
     return html.Button(
         'Enregistrer et continuer à éditer',
-        id='submit-val-structure-edition',
+        id=_SAVE_BUTTON,
         className='btn btn-primary center',
         n_clicks=0,
         style={'margin-right': '10px'},
@@ -121,12 +126,13 @@ def _get_main_row(text: StructuredText) -> Component:
     return html.Div(className='row', children=[first_column, second_column])
 
 
-def _make_am_structure_edition_component(am_id: str, am: ArreteMinisteriel) -> Component:
+def _make_am_structure_edition_component(pathname: str, am_id: str, am: ArreteMinisteriel) -> Component:
     components = [
         html.Div(className='row', children=_get_instructions()),
         _get_main_row(am_to_text(am)),
         _fixed_footer(build_am_page(am_id)),
         html.P(am_id, hidden=True, id='am-id-structure-edition'),
+        dcc.Store(data=pathname, id=_PATHNAME),
     ]
     return html.Div(components, style={'margin-bottom': '300px'})
 
@@ -145,7 +151,7 @@ def _parse_route(route: str) -> str:
     return am_id
 
 
-def router(pathname: str) -> Component:
+def _component(pathname) -> Component:
     try:
         am_id = _parse_route(pathname)
         am = load_structured_am(am_id) or load_initial_am(am_id)
@@ -153,7 +159,11 @@ def router(pathname: str) -> Component:
         return html.P(f'404 - Page introuvable - {str(exc)}')
     if not am:
         return html.P(f'404 - Arrêté {am_id} introuvable.')
-    return _make_am_structure_edition_component(am_id, am)
+    return _make_am_structure_edition_component(pathname, am_id, am)
+
+
+def router(pathname: str) -> Component:
+    return html.Div([html.Div(_component(pathname), id=_PAGE), dcc.Store(data=False, id=_SAVE_SUCCESS)])
 
 
 class _FormHandlingError(Exception):
@@ -334,19 +344,22 @@ def _parse_text_and_save_message(am_id: str, new_am: str) -> str:
     return f'Enregistrement réussi.'
 
 
-def _extract_form_value_and_save_text(nb_clicks: int, am_id: str, text_area_content: Optional[str]) -> Component:
+def _extract_form_value_and_save_text(
+    nb_clicks: int, am_id: str, text_area_content: Optional[str]
+) -> Tuple[Component, bool]:
     if nb_clicks == 0 or text_area_content is None:
-        return html.Div()
+        return html.Div(), False
     new_am = assert_str(text_area_content)
     try:
         success_message = _parse_text_and_save_message(am_id, new_am)
     except _FormHandlingError as exc:
-        return error_component(f'Erreur pendant l\'enregistrement. Détails de l\'erreur:\n{str(exc)}')
+        return error_component(f'Erreur pendant l\'enregistrement. Détails de l\'erreur:\n{str(exc)}'), False
     except Exception:  # pylint: disable=broad-except
-        return error_component(
+        component = error_component(
             f'Erreur inattendue pendant l\'enregistrement. Détails de l\'erreur:\n{traceback.format_exc()}'
         )
-    return success_component(success_message)
+        return component, False
+    return success_component(success_message), True
 
 
 def _extract_all_lines_one_element(element: Dict[str, Any]) -> List[str]:
@@ -407,11 +420,22 @@ def _parse_html_area_and_display_toc(html_str: str) -> Component:
 
 @app.callback(
     Output(_FORM_OUTPUT, 'children'),
-    [Input('submit-val-structure-edition', 'n_clicks'), Input('am-id-structure-edition', 'children')],
-    [State(_TEXT_AREA_COMPONENT, 'value')],
+    Output(_SAVE_SUCCESS, 'data'),
+    [Input(_SAVE_BUTTON, 'n_clicks'), Input('am-id-structure-edition', 'children')],
+    State(_TEXT_AREA_COMPONENT, 'value'),
+    prevent_initial_call=True,
 )
-def update_output(nb_clicks, am_id, state: Optional[str]):
+def _update_output(nb_clicks, am_id, state: Optional[str]) -> Tuple[Component, bool]:
     return _extract_form_value_and_save_text(nb_clicks, am_id, state)
+
+
+@app.callback(
+    Output(_PAGE, 'children'), Input(_SAVE_SUCCESS, 'data'), State(_PATHNAME, 'data'), prevent_initial_call=True
+)
+def _update_text_area(save_success: bool, pathname: str) -> Component:
+    if save_success:
+        return _component(pathname)
+    raise PreventUpdate
 
 
 @app.callback(Output(_TOC_COMPONENT, 'children'), [Input(_TEXT_AREA_COMPONENT, 'value')], prevent_initial_call=True)
