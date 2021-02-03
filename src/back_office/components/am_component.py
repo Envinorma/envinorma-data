@@ -1,6 +1,7 @@
 from typing import List, Optional, Tuple
 
 import dash_html_components as html
+from back_office.components import replace_line_breaks
 from dash.development.base_component import Component
 from lib.data import ArreteMinisteriel, Cell, Row, StructuredText, Table, am_to_text
 from lib.structure_extraction import TextElement, Title, structured_text_to_text_elements
@@ -13,7 +14,7 @@ def _cell_to_component(cell: Cell, ontology: Optional[TopicOntology], header: bo
     else:
         style = {}
     cls_ = html.Th if header else html.Td
-    return cls_(cell.content.text, colSpan=cell.colspan, rowSpan=cell.rowspan, style=style)
+    return cls_(replace_line_breaks(cell.content.text), colSpan=cell.colspan, rowSpan=cell.rowspan, style=style)
 
 
 def _row_to_component(row: Row, ontology: Optional[TopicOntology]) -> Component:
