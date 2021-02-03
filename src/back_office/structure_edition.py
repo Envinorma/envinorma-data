@@ -90,7 +90,8 @@ def _fixed_footer(am_page: str) -> Component:
         style={
             'position': 'fixed',
             'bottom': '0px',
-            'width': '80%',
+            'left': '0px',
+            'width': '100%',
             'text-align': 'center',
             'background-color': 'white',
             'padding-bottom': '10px',

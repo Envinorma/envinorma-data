@@ -48,6 +48,10 @@ def _modal_confirm_button_id(step: Optional[str] = None) -> Dict[str, Any]:
     return {'type': 'am-page-modal-confirm-button', 'text_id': step or MATCH}
 
 
+def _close_modal_button_id(step: Optional[str] = None) -> Dict[str, Any]:
+    return {'type': 'am-page-close-modal-button', 'text_id': step or MATCH}
+
+
 def _modal_id(step: Optional[str] = None) -> Dict[str, Any]:
     return {'type': 'am-page-modal', 'text_id': step or MATCH}
 
@@ -81,7 +85,10 @@ def _get_confirmation_modal(modal_body: Union[str, Component], step: str) -> Com
             dbc.ModalHeader('Confirmation'),
             dbc.ModalBody(modal_body),
             dbc.ModalFooter(
-                html.Button('Confirmer', id=_modal_confirm_button_id(step), className='ml-auto btn btn-danger')
+                [
+                    html.Button('Annuler', id=_close_modal_button_id(step), className='btn btn-light'),
+                    html.Button('Confirmer', id=_modal_confirm_button_id(step), className='ml-auto btn btn-danger'),
+                ]
             ),
         ],
         id=_modal_id(step),
@@ -152,17 +159,13 @@ def _get_buttons(am_status: AMStatus) -> Component:
 
 
 def _deduce_step_classname(rank: int, status: AMStatus) -> str:
-    return (
-        'list-group-item text-center flex-fill '
-        + (' list-group-item-secondary' if rank == status.step() else '')
-        + (' ' if rank < status.step() else '')
-    )
+    return 'breadcrumb-item' + (' ' if rank == status.step() else ' active') + (' ' if rank < status.step() else '')
 
 
 def _get_nav(status: AMStatus) -> Component:
-    texts = ['Initilisation', 'Structuration', 'Paramétrisation', 'Relecture']
+    texts = ['1. Initilisation', '2. Structuration', '3. Paramétrisation', '4. Relecture']
     lis = [html.Li(text, className=_deduce_step_classname(i, status)) for i, text in enumerate(texts)]
-    return html.Ul(className='list-group list-group-horizontal', children=lis, style={'margin-bottom': '30px'})
+    return html.Ol(className='breadcrumb', children=lis, style={'margin-bottom': '30px'})
 
 
 def _human_alinea_tuple(ints: Optional[List[int]]) -> str:
@@ -665,11 +668,12 @@ def _handle_click(*args):
 @app.callback(
     Output(_modal_id(), 'is_open'),
     Input(_modal_button_id(), 'n_clicks'),
+    Input(_close_modal_button_id(), 'n_clicks'),
     State(_modal_id(), 'is_open'),
     prevent_initial_call=True,
 )
-def _toggle_modal(n_clicks, is_open):
-    if n_clicks:
+def _toggle_modal(n_clicks, n_clicks_close, is_open):
+    if n_clicks or n_clicks_close:
         return not is_open
     return False
 
