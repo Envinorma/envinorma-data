@@ -27,6 +27,7 @@ from back_office.components.parametric_am_list import parametric_am_list_callbac
 from back_office.components.summary_component import summary_component
 from back_office.components.table import ExtendedComponent, table_component
 from back_office.fetch_data import (
+    delete_structured_am,
     load_am_status,
     load_initial_am,
     load_parametrization,
@@ -37,7 +38,7 @@ from back_office.parametrization_edition import router as parametrization_router
 from back_office.structure_edition import router as structure_router
 from back_office.utils import ID_TO_AM_MD, AMOperation, AMStatus, get_traversed_titles, safe_get_section
 
-_PREFIX = __file__.replace('.py', '').replace('_', '-')
+_PREFIX = __file__.split('/')[-1].replace('.py', '').replace('_', '-')
 _VALIDATE_INITIALIZATION = f'{_PREFIX}-validate-init'
 _VALIDATE_STRUCTURE = f'{_PREFIX}-validate-structure'
 _VALIDATE_PARAMETRIZATION = f'{_PREFIX}-validate-parametrization'
@@ -45,19 +46,19 @@ _LOADER = f'{_PREFIX}-loading-output'
 
 
 def _modal_confirm_button_id(step: Optional[str] = None) -> Dict[str, Any]:
-    return {'type': f'{_PREFIX}-modal-confirm-button', 'text_id': step or MATCH}
+    return {'type': f'{_PREFIX}-modal-confirm-button', 'step': step or MATCH}
 
 
 def _close_modal_button_id(step: Optional[str] = None) -> Dict[str, Any]:
-    return {'type': f'{_PREFIX}-close-modal-button', 'text_id': step or MATCH}
+    return {'type': f'{_PREFIX}-close-modal-button', 'step': step or MATCH}
 
 
 def _modal_id(step: Optional[str] = None) -> Dict[str, Any]:
-    return {'type': f'{_PREFIX}-modal', 'text_id': step or MATCH}
+    return {'type': f'{_PREFIX}-modal', 'step': step or MATCH}
 
 
 def _modal_button_id(step: Optional[str] = None) -> Dict[str, Any]:
-    return {'type': f'{_PREFIX}-modal-button', 'text_id': step or MATCH}
+    return {'type': f'{_PREFIX}-modal-button', 'step': step or MATCH}
 
 
 def _extract_am_id_and_operation(pathname: str) -> Tuple[str, Optional[AMOperation], str]:
@@ -78,7 +79,9 @@ def _get_am_initialization_buttons() -> Tuple[Optional[Component], Optional[Comp
     return (None, button('Valider le texte initial', id_=_VALIDATE_INITIALIZATION, state=ButtonState.NORMAL))
 
 
-def _get_confirmation_modal(modal_body: Union[str, Component], step: str) -> Component:
+def _get_confirmation_modal(
+    button_text: str, modal_body: Union[str, Component], step: str, className: str
+) -> Component:
     modal = dbc.Modal(
         [
             dbc.ModalHeader('Confirmation'),
@@ -93,9 +96,14 @@ def _get_confirmation_modal(modal_body: Union[str, Component], step: str) -> Com
         id=_modal_id(step),
     )
     return html.Div(
-        [button('Étape précédente', id_=_modal_button_id(step), state=ButtonState.NORMAL_LIGHT), modal],
+        [html.Button(button_text, id=_modal_button_id(step), className=className), modal],
         style={'display': 'inline-block'},
     )
+
+
+def _get_reset_structure_button() -> Component:
+    modal_content = 'Êtes-vous sûr de vouloir réinitialiser le texte ? Cette opération est irréversible.'
+    return _get_confirmation_modal('Réinitialiser le texte', modal_content, 'reset-structure', 'btn btn-danger')
 
 
 def _get_structure_validation_buttons(parent_page: str) -> Tuple[Optional[Component], Optional[Component]]:
@@ -103,15 +111,15 @@ def _get_structure_validation_buttons(parent_page: str) -> Tuple[Optional[Compon
         'Êtes-vous sûr de vouloir retourner à la phase d\'initialisation du texte ? Ceci est '
         'déconseillé lorsque l\'AM provient de Légifrance ou que la structure a déjà été modifiée.'
     )
+    validate_button = button('Valider la structure', id_=_VALIDATE_STRUCTURE, state=ButtonState.NORMAL)
     right_buttons = html.Div(
-        [
-            _get_edit_structure_button(parent_page),
-            ' ',
-            button('Valider la structure', id_=_VALIDATE_STRUCTURE, state=ButtonState.NORMAL),
-        ],
+        [_get_reset_structure_button(), ' ', _get_edit_structure_button(parent_page), ' ', validate_button],
         style={'display': 'inline-block'},
     )
-    return (_get_confirmation_modal(modal_content, 'structure'), right_buttons)
+    return (
+        _get_confirmation_modal('Étape précédente', modal_content, 'structure', 'btn btn-light'),
+        right_buttons,
+    )
 
 
 def _get_parametrization_edition_buttons() -> Tuple[Optional[Component], Optional[Component]]:
@@ -120,14 +128,14 @@ def _get_parametrization_edition_buttons() -> Tuple[Optional[Component], Optiona
         'ont déjà été renseignés, cela peut désaligner certains paramétrages.'
     )
     return (
-        _get_confirmation_modal(modal_content, 'parametrization'),
+        _get_confirmation_modal('Étape précédente', modal_content, 'parametrization', 'btn btn-light'),
         button('Valider le paramétrage', id_=_VALIDATE_PARAMETRIZATION, state=ButtonState.NORMAL),
     )
 
 
 def _get_validated_buttons() -> Tuple[Optional[Component], Optional[Component]]:
     modal_content = 'Retourner au paramétrage ?'
-    return (_get_confirmation_modal(modal_content, 'validated'), None)
+    return (_get_confirmation_modal('Étape précédente', modal_content, 'validated', 'btn btn-light'), None)
 
 
 def _inline_buttons(button_left: Optional[Component], button_right: Optional[Component]) -> List[Component]:
@@ -602,6 +610,7 @@ def _generate_and_dump_am_version(am_id: str) -> None:
 
 
 def _update_am_status(clicked_button: str, am_id: str) -> None:
+    new_status = None
     if clicked_button == _VALIDATE_INITIALIZATION:
         new_status = AMStatus.PENDING_STRUCTURE_VALIDATION
     elif clicked_button == _modal_confirm_button_id('structure'):
@@ -614,13 +623,16 @@ def _update_am_status(clicked_button: str, am_id: str) -> None:
         new_status = AMStatus.VALIDATED
     elif clicked_button == _modal_confirm_button_id('validated'):
         new_status = AMStatus.PENDING_PARAMETRIZATION
+    elif clicked_button == _modal_confirm_button_id('reset-structure'):
+        delete_structured_am(am_id)
     else:
         raise NotImplementedError(f'Unknown button id {clicked_button}')
-    upsert_am_status(am_id, new_status)
-    if config.environment.type == EnvironmentType.PROD:
-        send_slack_notification(
-            f'AM {am_id} a désormais le statut {new_status.value}', SlackChannel.ENRICHMENT_NOTIFICATIONS
-        )
+    if new_status:
+        upsert_am_status(am_id, new_status)
+        if config.environment.type == EnvironmentType.PROD:
+            send_slack_notification(
+                f'AM {am_id} a désormais le statut {new_status.value}', SlackChannel.ENRICHMENT_NOTIFICATIONS
+            )
     if clicked_button == _VALIDATE_PARAMETRIZATION:
         _generate_and_dump_am_version(am_id)
 
@@ -630,6 +642,7 @@ _BUTTON_IDS = [
     _modal_confirm_button_id('structure'),
     _VALIDATE_STRUCTURE,
     _modal_confirm_button_id('parametrization'),
+    _modal_confirm_button_id('reset-structure'),
     _VALIDATE_PARAMETRIZATION,
     _modal_confirm_button_id('validated'),
 ]
