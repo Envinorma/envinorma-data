@@ -26,7 +26,6 @@ from back_office.components.am_component import am_component
 from back_office.components.parametric_am_list import parametric_am_list_callbacks, parametric_am_list_component
 from back_office.components.summary_component import summary_component
 from back_office.components.table import ExtendedComponent, table_component
-from back_office.display_am import router as display_am_router
 from back_office.fetch_data import (
     load_am_status,
     load_initial_am,
@@ -556,8 +555,6 @@ def _get_subpage_content(route: str, operation_id: AMOperation) -> Component:
         return parametrization_router(route)
     if operation_id == AMOperation.EDIT_STRUCTURE:
         return structure_router(route)
-    if operation_id == AMOperation.DISPLAY_AM:
-        return display_am_router(route)
     raise NotImplementedError(f'Operation {operation_id} not handled')
 
 
@@ -573,8 +570,8 @@ def _page(am_id: str, current_page: str) -> Component:
         [
             _get_title_component(am_id, am_metadata, current_page),
             body,
-            html.P(am_id, hidden=True, id='f{_PREFIX}-am-id'),
-            html.P(current_page, hidden=True, id='f{_PREFIX}-current-page'),
+            html.P(am_id, hidden=True, id=f'{_PREFIX}-am-id'),
+            html.P(current_page, hidden=True, id=f'{_PREFIX}-current-page'),
         ]
     )
 
