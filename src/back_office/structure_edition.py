@@ -29,6 +29,7 @@ _SAVE_BUTTON = 'structure-edition-submit-val'
 _SAVE_SUCCESS = 'structure-edition-save-success-store'
 _PATHNAME = 'structure-edition-pathname-store'
 _PAGE = 'structure-edition-page'
+_AM_ID = 'structure-edition-am-id'
 
 
 def _text_to_elements(text: StructuredText) -> List[TextElement]:
@@ -46,15 +47,15 @@ def _element_to_component(element: TextElement) -> Component:
     raise NotImplementedError(f'Not implemented for type {type(element)}')
 
 
-def _prepare_editable_div_value(elements: List[TextElement]) -> List[Component]:
-    return [_element_to_component(el) for el in elements]
+def _prepare_editable_div_value(text: StructuredText) -> List[Component]:
+    text_elements = _text_to_elements(text)[1:]  # Don't modify main title.
+    return [_element_to_component(el) for el in text_elements]
 
 
 def _structure_edition_component(text: StructuredText) -> Component:
-    text_elements = _text_to_elements(text)[1:]  # Don't modify main title.
     return ded.EditableDiv(
         id=_TEXT_AREA_COMPONENT,
-        children=_prepare_editable_div_value(text_elements),
+        children=_prepare_editable_div_value(text),
         className='text',
         style={'padding': '10px', 'border': '1px solid rgba(0,0,0,.1)', 'border-radius': '5px'},
     )
@@ -131,7 +132,7 @@ def _make_am_structure_edition_component(pathname: str, am_id: str, am: ArreteMi
         html.Div(className='row', children=_get_instructions()),
         _get_main_row(am_to_text(am)),
         _fixed_footer(build_am_page(am_id)),
-        html.P(am_id, hidden=True, id='am-id-structure-edition'),
+        dcc.Store(data=am_id, id=_AM_ID),
         dcc.Store(data=pathname, id=_PATHNAME),
     ]
     return html.Div(components, style={'margin-bottom': '300px'})
@@ -421,7 +422,7 @@ def _parse_html_area_and_display_toc(html_str: str) -> Component:
 @app.callback(
     Output(_FORM_OUTPUT, 'children'),
     Output(_SAVE_SUCCESS, 'data'),
-    [Input(_SAVE_BUTTON, 'n_clicks'), Input('am-id-structure-edition', 'children')],
+    [Input(_SAVE_BUTTON, 'n_clicks'), Input(_AM_ID, 'data')],
     State(_TEXT_AREA_COMPONENT, 'value'),
     prevent_initial_call=True,
 )
@@ -429,13 +430,17 @@ def _update_output(nb_clicks, am_id, state: Optional[str]) -> Tuple[Component, b
     return _extract_form_value_and_save_text(nb_clicks, am_id, state)
 
 
-@app.callback(
-    Output(_PAGE, 'children'), Input(_SAVE_SUCCESS, 'data'), State(_PATHNAME, 'data'), prevent_initial_call=True
-)
-def _update_text_area(save_success: bool, pathname: str) -> Component:
-    if save_success:
-        return _component(pathname)
-    raise PreventUpdate
+# @app.callback(
+#     Output(_TEXT_AREA_COMPONENT, 'children'),
+#     Input(_SAVE_SUCCESS, 'data'),
+#     State(_AM_ID, 'data'),
+#     prevent_initial_call=True,
+# )
+# def _update_text_area(save_success: bool, am_id: str) -> List[Component]:
+#     if save_success:
+#         if (am := load_structured_am(am_id)) :
+#             return _prepare_editable_div_value(am_to_text(am))
+#     raise PreventUpdate
 
 
 @app.callback(Output(_TOC_COMPONENT, 'children'), [Input(_TEXT_AREA_COMPONENT, 'value')], prevent_initial_call=True)
