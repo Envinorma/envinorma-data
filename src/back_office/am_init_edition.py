@@ -100,7 +100,7 @@ def _am_loaders(am_id: str) -> Component:
     )
 
 
-def _parse_aida_page(page_id: str) -> Optional[ArreteMinisteriel]:
+def _parse_aida_page(page_id: str, am_id: str) -> Optional[ArreteMinisteriel]:
     text = parse_aida_text(page_id)
     if not text:
         return None
@@ -111,9 +111,15 @@ def _parse_aida_page(page_id: str) -> Optional[ArreteMinisteriel]:
         else:
             new_sections = section.sections
         return ArreteMinisteriel(
-            title=section.title, short_title=extract_short_title(section.title.text), sections=new_sections, visa=[]
+            title=section.title,
+            short_title=extract_short_title(section.title.text),
+            sections=new_sections,
+            visa=[],
+            id=am_id,
         )
-    return ArreteMinisteriel(title=EnrichedString('title'), short_title='short_tile', sections=[text], visa=[])
+    return ArreteMinisteriel(
+        title=EnrichedString('title'), short_title='short_tile', sections=[text], visa=[], id=am_id
+    )
 
 
 def _text_to_elements(text: StructuredText) -> List[TextElement]:
@@ -211,7 +217,7 @@ def _save_and_get_component(am_id: str, am: ArreteMinisteriel) -> Component:
 
 def _parse_aida_page_and_save_am(page_id: str, am_id: str) -> Component:
     try:
-        am = _parse_aida_page(page_id)
+        am = _parse_aida_page(page_id, am_id)
     except Exception:
         return error_component(f'Erreur inattendue: \n{traceback.format_exc()}')
     if not am:

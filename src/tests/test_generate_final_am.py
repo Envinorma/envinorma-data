@@ -178,6 +178,7 @@ _STRUCTURED_AM = ArreteMinisteriel(
     summary=None,
     active=True,
     warning_inactive=None,
+    id='FAKE_ID'
 )
 
 

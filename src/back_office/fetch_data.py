@@ -139,6 +139,11 @@ def load_structured_am(am_id: str) -> Optional[ArreteMinisteriel]:
     return None
 
 
+def delete_structured_am(am_id: str) -> None:
+    query = "DELETE FROM structured_am WHERE am_id = %s;"
+    _exectute_delete_query(query, (am_id,))
+
+
 def upsert_structured_am(am_id: str, am: ArreteMinisteriel) -> None:
     query = (
         'INSERT INTO structured_am(am_id, data) VALUES(%s, %s) ON CONFLICT (am_id)'

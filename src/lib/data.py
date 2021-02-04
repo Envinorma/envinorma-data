@@ -1,15 +1,16 @@
 import json
 import random
 import string
+import warnings
 from collections import Counter
 from copy import copy
-from dataclasses import dataclass, asdict, field
+from dataclasses import asdict, dataclass, field
 from enum import Enum
 from string import ascii_letters
-from typing import List, Dict, Optional, Any, Tuple
+from typing import Any, Dict, List, Optional, Tuple
 
-from lib.topics.patterns import TopicName
 from lib.config import AM_DATA_FOLDER
+from lib.topics.patterns import TopicName
 
 
 class ArticleStatus(Enum):
@@ -217,14 +218,14 @@ class StructuredText:
         return res
 
     @classmethod
-    def from_dict(cls, dict_: Dict[str, Any]):
+    def from_dict(cls, dict_: Dict[str, Any]) -> 'StructuredText':
         dict_ = dict_.copy()
         dict_['title'] = EnrichedString.from_dict(dict_['title'])
         dict_['outer_alineas'] = [EnrichedString.from_dict(al) for al in dict_['outer_alineas']]
-        dict_['sections'] = [load_structured_text(sec) for sec in dict_['sections']]
+        dict_['sections'] = [StructuredText.from_dict(sec) for sec in dict_['sections']]
         dict_['applicability'] = Applicability.from_dict(dict_['applicability']) if dict_.get('applicability') else None
         dict_['annotations'] = Annotations.from_dict(dict_['annotations']) if dict_.get('annotations') else None
-        return StructuredText(**dict_)
+        return cls(**dict_)
 
 
 @dataclass
@@ -331,6 +332,12 @@ class Summary:
         return Summary(**dict_)
 
 
+def _is_probably_cid(candidate: str) -> bool:
+    if 'FAKE' in candidate:
+        return True  # for avoiding warning for fake cids, which contain FAKE by convention
+    return candidate.startswith('JORFTEXT') or candidate.startswith('LEGITEXT')
+
+
 @dataclass
 class ArreteMinisteriel:
     title: EnrichedString
@@ -347,6 +354,10 @@ class ArreteMinisteriel:
     id: Optional[str] = field(default_factory=random_id)
     active: bool = True
     warning_inactive: Optional[str] = None
+
+    def __post_init__(self):
+        if not _is_probably_cid(self.id or ''):
+            warnings.warn(f'AM id does not look like a CID : {self.id} (title={self.title.text})')
 
     def to_dict(self) -> Dict[str, Any]:
         res = asdict(self)
@@ -395,14 +406,6 @@ def load_legifrance_article(dict_: Dict[str, Any]) -> LegifranceArticle:
     return LegifranceArticle(
         dict_['id'], dict_['content'], dict_['intOrdre'], dict_['num'], ArticleStatus(dict_['etat'])
     )
-
-
-def load_structured_text(dict_: Dict[str, Any]) -> StructuredText:
-    return StructuredText.from_dict(dict_)
-
-
-def load_arrete_ministeriel(dict_: Dict[str, Any]) -> ArreteMinisteriel:
-    return ArreteMinisteriel.from_dict(dict_)
 
 
 @dataclass

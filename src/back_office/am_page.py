@@ -121,12 +121,12 @@ def _get_parametrization_edition_buttons() -> Tuple[Optional[Component], Optiona
     )
     return (
         _get_confirmation_modal(modal_content, 'parametrization'),
-        button('Valider la paramétrisation', id_=_VALIDATE_PARAMETRIZATION, state=ButtonState.NORMAL),
+        button('Valider le paramétrage', id_=_VALIDATE_PARAMETRIZATION, state=ButtonState.NORMAL),
     )
 
 
 def _get_validated_buttons() -> Tuple[Optional[Component], Optional[Component]]:
-    modal_content = 'Retourner à la paramétrisation ?'
+    modal_content = 'Retourner au paramétrage ?'
     return (_get_confirmation_modal(modal_content, 'validated'), None)
 
 
@@ -167,7 +167,7 @@ def _deduce_step_classname(rank: int, status: AMStatus) -> str:
 
 
 def _get_nav(status: AMStatus) -> Component:
-    texts = ['1. Initilisation', '2. Structuration', '3. Paramétrisation', '4. Relecture']
+    texts = ['1. Initilisation', '2. Structuration', '3. Paramétrage', '4. Relecture']
     lis = [html.Li(text, className=_deduce_step_classname(i, status)) for i, text in enumerate(texts)]
     return html.Ol(className='breadcrumb', children=lis, style={'margin-bottom': '30px'})
 

@@ -168,7 +168,7 @@ def test_apply_parameter_values_to_am_whole_arrete():
             None,
         ),
     ]
-    am = ArreteMinisteriel(_str(), sections, [], '')
+    am = ArreteMinisteriel(_str(), sections, [], '', id='FAKE_ID')
 
     parameter = Parameter('nouvelle-installation', ParameterType.BOOLEAN)
     is_installation_old = Equal(parameter, False)
@@ -212,7 +212,7 @@ def test_apply_parameter_values_to_am():
         StructuredText(_str('Conditions d\'application'), cd_alineas, [], None),
         StructuredText(_str('Art. 3'), [_str(), _str()], [], None),
     ]
-    am = ArreteMinisteriel(_str(), sections, [], '')
+    am = ArreteMinisteriel(_str(), sections, [], '', id='FAKE_ID')
 
     parameter = Parameter('nouvelle-installation', ParameterType.BOOLEAN)
     is_installation_old = Equal(parameter, False)
@@ -306,7 +306,7 @@ def test_generate_all_am_versions():
         StructuredText(_str('Art. 2'), [_str('Initial version 2')], [], None),
         StructuredText(_str('Art. 3'), [_str('condition source')], [], None),
     ]
-    am = ArreteMinisteriel(_str(), sections, [], '')
+    am = ArreteMinisteriel(_str(), sections, [], '', id='FAKE_ID')
 
     parameter = Parameter('nouvelle-installation', ParameterType.BOOLEAN)
     condition = Equal(parameter, False)

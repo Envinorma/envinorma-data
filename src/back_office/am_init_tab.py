@@ -11,7 +11,7 @@ from back_office.app_init import app
 from back_office.components import ButtonState, link_button
 from back_office.components.am_component import am_component
 from back_office.components.summary_component import summary_component
-from back_office.fetch_data import delete_initial_am
+from back_office.fetch_data import delete_initial_am, delete_structured_am
 from back_office.routing import build_am_page
 from back_office.utils import AMOperation
 
@@ -90,10 +90,6 @@ def _toggle_modal(n1, n2, is_open):
     return is_open
 
 
-def _delete_initial_am(am_id: str) -> None:
-    delete_initial_am(am_id)
-
-
 @app.callback(
     Output(_DELETE_OUTPUT, 'children'),
     [Input(_CONFIRM_DELETE, 'n_clicks')],
@@ -102,6 +98,7 @@ def _delete_initial_am(am_id: str) -> None:
 )
 def _confirm_deletion(nb_clicks: Optional[int], am_id: str) -> Component:
     if nb_clicks:
-        _delete_initial_am(am_id)
+        delete_initial_am(am_id)
+        delete_structured_am(am_id)  # structured AM is deprecated when initial AM is deleted
         return dcc.Location(href=build_am_page(am_id) + '/' + AMOperation.INIT.value, id='am-init-tab-delete-redirect')
     return html.Div()

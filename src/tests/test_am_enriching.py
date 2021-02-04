@@ -20,17 +20,7 @@ from lib.am_enriching import (
     remove_sections,
 )
 from lib.config import AM_DATA_FOLDER
-from lib.data import (
-    ArreteMinisteriel,
-    Cell,
-    EnrichedString,
-    Hyperlink,
-    Link,
-    Row,
-    StructuredText,
-    Table,
-    load_arrete_ministeriel,
-)
+from lib.data import ArreteMinisteriel, Cell, EnrichedString, Hyperlink, Link, Row, StructuredText, Table
 from lib.topics.patterns import TopicName
 
 
@@ -38,7 +28,7 @@ def test_add_topics():
     sub_section_1 = StructuredText(EnrichedString('Section 1.1'), [], [], None)
     section_1 = StructuredText(EnrichedString('Section 1'), [], [sub_section_1], None)
     section_2 = StructuredText(EnrichedString('Section 2'), [], [], None)
-    am = ArreteMinisteriel(EnrichedString(''), [section_1, section_2], [], '')
+    am = ArreteMinisteriel(EnrichedString(''), [section_1, section_2], [], '', id='FAKE_ID')
 
     am_with_topics = add_topics(
         am, {(0,): TopicName.INCENDIE, (0, 0): TopicName.INCENDIE, (1,): TopicName.BRUIT_VIBRATIONS}
@@ -112,7 +102,7 @@ def test_add_references():
         StructuredText(EnrichedString('Article 18.1'), [], [], None, lf_article_id),
         StructuredText(EnrichedString('Article 1'), [], [], None, lf_article_id),
     ]
-    am = ArreteMinisteriel(EnrichedString(''), sections, [], '')
+    am = ArreteMinisteriel(EnrichedString(''), sections, [], '', id='FAKE_ID')
     am_with_references = add_references(am)
 
     assert am_with_references.sections[0].reference_str == 'Art. 1.'
@@ -129,7 +119,7 @@ def test_add_references():
 
 
 def test_add_references_2():
-    am = load_arrete_ministeriel(json.load(open('test_data/AM/minified_texts/DEVP1235896A.json')))
+    am = ArreteMinisteriel.from_dict(json.load(open('test_data/AM/minified_texts/DEVP1235896A.json')))
     expected = [
         ('Article 1', 'Art. 1'),
         ('Article 2', 'Art. 2'),
@@ -282,7 +272,7 @@ def test_no_fail_in_aida_links_addition():
         links_json = json.load(open(f'data/aida/hyperlinks/{nor}.json'))
         links = [Hyperlink(**link_doc) for link_doc in links_json]
         add_links_to_am(
-            load_arrete_ministeriel(json.load(open(f'{AM_DATA_FOLDER}/structured_texts/{nor}.json'))), links
+            ArreteMinisteriel.from_dict(json.load(open(f'{AM_DATA_FOLDER}/structured_texts/{nor}.json'))), links
         )
 
 
@@ -328,7 +318,7 @@ def test_remove_sections():
         StructuredText(EnrichedString('2. zefez'), [], [], None),
         StructuredText(EnrichedString('A. zefze'), [], [], None),
     ]
-    am = ArreteMinisteriel(EnrichedString(''), sections, [], '')
+    am = ArreteMinisteriel(EnrichedString(''), sections, [], '', id='FAKE_ID')
 
     am_1 = remove_sections(am, {(0,)})
     assert len(am_1.sections) == 2

@@ -19,6 +19,7 @@ from lib.data import (
     StructuredText,
     Table,
     TopicName,
+    _is_probably_cid,
     count_cells,
     group_classements_by_alineas,
     is_increasing,
@@ -75,7 +76,7 @@ def test_arrete_ministeriel():
         classements_with_alineas=[ClassementWithAlineas('1510', Regime.A, ['al', 'albis'])],
         unique_version=True,
         summary=None,
-        id='id',
+        id='JORFTEXTid',
         active=True,
         warning_inactive='warning',
     )
@@ -166,3 +167,13 @@ def test_group_classements_by_alineas():
     assert res[1].alineas == ['D']
     assert res[1].rubrique == '1510'
     assert res[1].regime == Regime.E
+
+
+def test_is_probably_cid():
+    assert _is_probably_cid('JORFTEXT')
+    assert _is_probably_cid('LEGITEXT')
+    assert _is_probably_cid('LEGITEXT34234')
+    assert _is_probably_cid('FAKE_CID')
+    assert _is_probably_cid('FAKETEXT0000324')
+    assert not _is_probably_cid('')
+    assert not _is_probably_cid('JORFTEX')

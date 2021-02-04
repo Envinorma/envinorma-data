@@ -190,7 +190,7 @@ def test_delete_or_merge_articles():
 
 def _get_am(filename: str) -> ArreteMinisteriel:
     raw_text = load_legifrance_text(json.load(open(filename)))
-    return transform_arrete_ministeriel(raw_text)
+    return transform_arrete_ministeriel(raw_text, am_id=f'FAKE_ID_{filename}')
 
 
 @pytest.mark.filterwarnings('ignore')

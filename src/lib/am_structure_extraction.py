@@ -645,63 +645,63 @@ def extract_short_title(input_title: str) -> str:
 
 
 def transform_arrete_ministeriel(
-    input_text: LegifranceText, keep_abrogated_articles: bool = False
+    input_text: LegifranceText, keep_abrogated_articles: bool = False, am_id: Optional[str] = None
 ) -> ArreteMinisteriel:
     visa = _extract_visa(input_text.visa)
     text_with_merged_articles = _clean_text_articles(input_text, keep_abrogated_articles)
     sections = _extract_sections(text_with_merged_articles.articles, text_with_merged_articles.sections, [])
     short_title = extract_short_title(input_text.title)
-    return ArreteMinisteriel(EnrichedString(text_with_merged_articles.title), sections, visa, short_title)
+    return ArreteMinisteriel(EnrichedString(text_with_merged_articles.title), sections, visa, short_title, id=am_id)
 
 
-def test(lf_text_filename: str) -> ArreteMinisteriel:
-    legifrance_text_json = json.load(open(lf_text_filename))
-    check_legifrance_dict(legifrance_text_json)
-    lf_text = load_legifrance_text(legifrance_text_json)
-    return transform_arrete_ministeriel(lf_text)
+# Delete after 15/02/21
+# def test(lf_text_filename: str) -> ArreteMinisteriel:
+#     legifrance_text_json = json.load(open(lf_text_filename))
+#     check_legifrance_dict(legifrance_text_json)
+#     lf_text = load_legifrance_text(legifrance_text_json)
+#     return transform_arrete_ministeriel(lf_text)
 
 
-def transform_and_write_test_am(filename: str, output_filename: Optional[str] = None):
-    if not output_filename:
-        raise ValueError()
-    res = test(filename)
-    json.dump(asdict(res), open(output_filename, 'w'), ensure_ascii=False)
+# def transform_and_write_test_am(filename: str, output_filename: Optional[str] = None):
+#     if not output_filename:
+#         raise ValueError()
+#     res = test(filename)
+#     json.dump(asdict(res), open(output_filename, 'w'), ensure_ascii=False)
 
 
-def transform_all_available_AM():
-    input_folder = f'{AM_DATA_FOLDER}/legifrance_texts'
-    output_folder = f'{AM_DATA_FOLDER}/structured_texts'
-    file_to_error = {}
-    for file_ in tqdm(os.listdir(input_folder)):
-        if file_[0] == '.':
-            continue
-        try:
-            transform_and_write_test_am(f'{input_folder}/{file_}', f'{output_folder}/{file_}')
-        except Exception as exc:  # pylint: disable=broad-except
-            print(str(exc))
-            file_to_error[file_] = traceback.format_exc()
+# def transform_all_available_AM():
+#     input_folder = f'{AM_DATA_FOLDER}/legifrance_texts'
+#     output_folder = f'{AM_DATA_FOLDER}/structured_texts'
+#     file_to_error = {}
+#     for file_ in tqdm(os.listdir(input_folder)):
+#         if file_[0] == '.':
+#             continue
+#         try:
+#             transform_and_write_test_am(f'{input_folder}/{file_}', f'{output_folder}/{file_}')
+#         except Exception as exc:  # pylint: disable=broad-except
+#             print(str(exc))
+#             file_to_error[file_] = traceback.format_exc()
+
+# def _check_all_legifrance_dicts() -> None:
+#     folder = f'{AM_DATA_FOLDER}/legifrance_texts'
+#     for file_ in tqdm(os.listdir(folder)):
+#         print(file_)
+#         try:
+#             check_legifrance_dict(json.load(open(f'{folder}/{file_}')))
+#         except AMStructurationError as exc:
+#             print(exc)
 
 
-def _check_all_legifrance_dicts() -> None:
-    folder = f'{AM_DATA_FOLDER}/legifrance_texts'
-    for file_ in tqdm(os.listdir(folder)):
-        print(file_)
-        try:
-            check_legifrance_dict(json.load(open(f'{folder}/{file_}')))
-        except AMStructurationError as exc:
-            print(exc)
-
-
-def _load_all_legifrance_texts() -> Dict[str, LegifranceText]:
-    folder = f'{AM_DATA_FOLDER}/legifrance_texts'
-    res: Dict[str, LegifranceText] = {}
-    for file_ in tqdm(os.listdir(folder)):
-        if file_[0] == '.':
-            continue
-        try:
-            text_json = json.load(open(f'{folder}/{file_}'))
-            check_legifrance_dict(text_json)
-            res[file_.split('.')[0]] = load_legifrance_text(text_json)
-        except AMStructurationError as exc:
-            print(file_, exc)
-    return res
+# def _load_all_legifrance_texts() -> Dict[str, LegifranceText]:
+#     folder = f'{AM_DATA_FOLDER}/legifrance_texts'
+#     res: Dict[str, LegifranceText] = {}
+#     for file_ in tqdm(os.listdir(folder)):
+#         if file_[0] == '.':
+#             continue
+#         try:
+#             text_json = json.load(open(f'{folder}/{file_}'))
+#             check_legifrance_dict(text_json)
+#             res[file_.split('.')[0]] = load_legifrance_text(text_json)
+#         except AMStructurationError as exc:
+#             print(file_, exc)
+#     return res

@@ -458,7 +458,7 @@ def _extract_paragraph_reference_dropdown_values(text: StructuredText) -> _Optio
 def _get_instructions() -> Component:
     return html.Div(
         html.A(
-            'Guide de paramétrisation',
+            'Guide de paramétrage',
             href='https://www.notion.so/R-gles-de-param-trisation-47d8e5c4d3434d8691cbd9f59d556f0f',
             target='_blank',
         ),
