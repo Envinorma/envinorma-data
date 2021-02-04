@@ -1,7 +1,7 @@
 from dataclasses import replace
 from typing import List, Optional
 
-from back_office.display_am import _extract_text_warnings
+from back_office.components.parametric_am import _extract_text_warnings
 from lib.data import Applicability, StructuredText, estr
 
 

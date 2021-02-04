@@ -46,7 +46,7 @@ def button(text: str, state: ButtonState, id_: Optional[Union[str, Dict]] = None
     return html.Button(text, disabled=disabled, className=className, n_clicks=0, hidden=hidden)
 
 
-def link_button(text: str, href: str, state: ButtonState) -> html.Button:
+def link_button(text: str, href: str, state: ButtonState) -> Component:
     if state not in (ButtonState.NORMAL, ButtonState.NORMAL_LINK):
         return button(text, state)
     return dcc.Link(button(text, state), href=href)

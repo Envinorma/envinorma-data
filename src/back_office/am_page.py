@@ -1,4 +1,5 @@
 import difflib
+import json
 import os
 import traceback
 from typing import Any, Dict, List, Optional, Set, Tuple, Union
@@ -22,7 +23,9 @@ from back_office.am_init_tab import am_init_tab
 from back_office.app_init import app
 from back_office.components import ButtonState, button, error_component, link_button
 from back_office.components.am_component import am_component
+from back_office.components.parametric_am_list import parametric_am_list_callbacks, parametric_am_list_component
 from back_office.components.summary_component import summary_component
+from back_office.components.table import ExtendedComponent, table_component
 from back_office.display_am import router as display_am_router
 from back_office.fetch_data import (
     load_am_status,
@@ -35,29 +38,27 @@ from back_office.parametrization_edition import router as parametrization_router
 from back_office.structure_edition import router as structure_router
 from back_office.utils import ID_TO_AM_MD, AMOperation, AMStatus, get_traversed_titles, safe_get_section
 
-_VALIDATE_INITIALIZATION = 'am-page-validate-init'
-_INVALIDATE_INITIALIZATION = 'am-page-invalidate-initialization'
-_VALIDATE_STRUCTURE = 'am-page-validate-structure'
-_INVALIDATE_STRUCTURE = 'am-page-invalidate-structure'
-_VALIDATE_PARAMETRIZATION = 'am-page-validate-parametrization'
-_INVALIDATE_PARAMETRIZATION = 'am-page-invalidate-parametrization'
-_LOADER = 'am-page-loading-output'
+_PREFIX = __file__.replace('.py', '').replace('_', '-')
+_VALIDATE_INITIALIZATION = f'{_PREFIX}-validate-init'
+_VALIDATE_STRUCTURE = f'{_PREFIX}-validate-structure'
+_VALIDATE_PARAMETRIZATION = f'{_PREFIX}-validate-parametrization'
+_LOADER = f'{_PREFIX}-loading-output'
 
 
 def _modal_confirm_button_id(step: Optional[str] = None) -> Dict[str, Any]:
-    return {'type': 'am-page-modal-confirm-button', 'text_id': step or MATCH}
+    return {'type': f'{_PREFIX}-modal-confirm-button', 'text_id': step or MATCH}
 
 
 def _close_modal_button_id(step: Optional[str] = None) -> Dict[str, Any]:
-    return {'type': 'am-page-close-modal-button', 'text_id': step or MATCH}
+    return {'type': f'{_PREFIX}-close-modal-button', 'text_id': step or MATCH}
 
 
 def _modal_id(step: Optional[str] = None) -> Dict[str, Any]:
-    return {'type': 'am-page-modal', 'text_id': step or MATCH}
+    return {'type': f'{_PREFIX}-modal', 'text_id': step or MATCH}
 
 
 def _modal_button_id(step: Optional[str] = None) -> Dict[str, Any]:
-    return {'type': 'am-page-modal-button', 'text_id': step or MATCH}
+    return {'type': f'{_PREFIX}-modal-button', 'text_id': step or MATCH}
 
 
 def _extract_am_id_and_operation(pathname: str) -> Tuple[str, Optional[AMOperation], str]:
@@ -180,7 +181,7 @@ def _human_alinea_tuple(ints: Optional[List[int]]) -> str:
 
 def _application_condition_to_row(
     non_application_condition: NonApplicationCondition, am: ArreteMinisteriel, rank: int, current_page: str
-) -> Component:
+) -> List[ExtendedComponent]:
     reference_str = _get_section_title_or_error(non_application_condition.targeted_entity.section.path, am)
     alineas = _human_alinea_tuple(non_application_condition.targeted_entity.outer_alinea_indices)
     condition = condition_to_str(non_application_condition.condition)
@@ -189,20 +190,16 @@ def _application_condition_to_row(
     edit = link_button('Éditer', href=href, state=ButtonState.NORMAL_LINK)
     href_copy = f'{current_page}/{AMOperation.ADD_CONDITION.value}/{rank}/copy'
     copy = link_button('Copier', href=href_copy, state=ButtonState.NORMAL_LINK)
-    cells = [rank, reference_str, alineas, condition, source, edit, copy]
-    return html.Tr([html.Td(cell) for cell in cells])
+    return [str(rank), reference_str, alineas, condition, source, edit, copy]
 
 
 def _get_non_application_table(parametrization: Parametrization, am: ArreteMinisteriel, current_page: str) -> Component:
-    header_names = ['#', 'Paragraphe visé', 'Alineas visés', 'Condition', 'Source', '', '']
-    header = html.Thead(html.Tr([html.Th(name) for name in header_names]))
-    body = html.Tbody(
-        [
-            _application_condition_to_row(row, am, rank, current_page)
-            for rank, row in enumerate(parametrization.application_conditions)
-        ]
-    )
-    return html.Table([header, body], className='table table-hover')
+    header = ['#', 'Paragraphe visé', 'Alineas visés', 'Condition', 'Source', '', '']
+    rows = [
+        _application_condition_to_row(row, am, rank, current_page)
+        for rank, row in enumerate(parametrization.application_conditions)
+    ]
+    return table_component([header], rows, 'table-hover')
 
 
 def _wrap_in_paragraphs(strs: List[str]) -> Component:
@@ -244,7 +241,7 @@ def _get_section_title_or_error(path: Ints, am: ArreteMinisteriel) -> Component:
 
 def _alternative_section_to_row(
     alternative_section: AlternativeSection, am: ArreteMinisteriel, rank: int, current_page: str
-) -> Component:
+) -> List[ExtendedComponent]:
     reference_str = _get_section_title_or_error(alternative_section.targeted_section.path, am)
     condition = condition_to_str(alternative_section.condition)
     source = _get_section_title_or_error(alternative_section.source.reference.section.path, am)
@@ -253,22 +250,18 @@ def _alternative_section_to_row(
     edit = link_button('Éditer', href=href, state=ButtonState.NORMAL_LINK)
     href_copy = f'{current_page}/{AMOperation.ADD_ALTERNATIVE_SECTION.value}/{rank}/copy'
     copy = link_button('Copier', href=href_copy, state=ButtonState.NORMAL_LINK)
-    cells = [rank, reference_str, condition, source, new_version, edit, copy]
-    return html.Tr([html.Td(cell) for cell in cells])
+    return [str(rank), reference_str, condition, source, new_version, edit, copy]
 
 
 def _get_alternative_section_table(
     parametrization: Parametrization, am: ArreteMinisteriel, current_page: str
 ) -> Component:
-    header_names = ['#', 'Paragraphe visé', 'Condition', 'Source', 'Nouvelle version', '', '']
-    header = html.Thead(html.Tr([html.Th(name) for name in header_names]))
-    body = html.Tbody(
-        [
-            _alternative_section_to_row(row, am, rank, current_page)
-            for rank, row in enumerate(parametrization.alternative_sections)
-        ]
-    )
-    return html.Table([header, body], className='table table-hover')
+    header = ['#', 'Paragraphe visé', 'Condition', 'Source', 'Nouvelle version', '', '']
+    rows = [
+        _alternative_section_to_row(row, am, rank, current_page)
+        for rank, row in enumerate(parametrization.alternative_sections)
+    ]
+    return table_component([header], rows, class_name='table-hover')
 
 
 def _get_add_condition_button(parent_page: str, status: AMStatus) -> Component:
@@ -475,24 +468,33 @@ def _create_if_inexistent(folder: str) -> None:
         os.mkdir(folder)
 
 
+def _load_am(path: str) -> ArreteMinisteriel:
+    return ArreteMinisteriel.from_dict(json.load(open(path)))
+
+
+def _load_parametric_ams(folder: str) -> Dict[str, ArreteMinisteriel]:
+    return {file_: _load_am(os.path.join(folder, file_)) for file_ in os.listdir(folder)}
+
+
 def _generate_versions_if_empty(am_id: str, folder: str) -> None:
     if os.listdir(folder):
         return
     _generate_and_dump_am_version(am_id)
 
 
-def _get_parametric_texts_list(am_id: str, page_url: str, am_status: AMStatus) -> Component:
+def _list_parametric_texts(am_id: str, page_url: str, am_status: AMStatus) -> Component:
+    if am_status != AMStatus.VALIDATED:
+        return html.Div()
     folder = get_parametric_ams_folder(am_id)
     _create_if_inexistent(folder)
-    if am_status == AMStatus.VALIDATED:
-        _generate_versions_if_empty(am_id, folder)
-    prefix_url = f'{page_url}/{AMOperation.DISPLAY_AM.value}'
-    lis = [html.Li(dcc.Link(file_, href=f'{prefix_url}/{file_}')) for file_ in sorted(os.listdir(folder))]
-    return html.Ul(lis)
+    _generate_versions_if_empty(am_id, folder)
+    filename_to_am = _load_parametric_ams(folder)
+    # prefix_url = f'{page_url}/{AMOperation.DISPLAY_AM.value}'
+    return parametric_am_list_component(filename_to_am, _PREFIX)
 
 
 def _final_parametric_texts_component(am_id: str, page_url: str, am_status: AMStatus) -> Component:
-    return html.Div([html.H3('Versions finales'), _get_parametric_texts_list(am_id, page_url, am_status)])
+    return html.Div([html.H3('Versions finales'), _list_parametric_texts(am_id, page_url, am_status)])
 
 
 def _get_final_parametric_texts_component(am_id: str, am_status: AMStatus, page_url: str) -> Component:
@@ -571,8 +573,8 @@ def _page(am_id: str, current_page: str) -> Component:
         [
             _get_title_component(am_id, am_metadata, current_page),
             body,
-            html.P(am_id, hidden=True, id='am-page-am-id'),
-            html.P(current_page, hidden=True, id='am-page-current-page'),
+            html.P(am_id, hidden=True, id='f{_PREFIX}-am-id'),
+            html.P(current_page, hidden=True, id='f{_PREFIX}-current-page'),
         ]
     )
 
@@ -635,8 +637,8 @@ _BUTTON_IDS = [
     _modal_confirm_button_id('validated'),
 ]
 _INPUTS = [Input(id_, 'n_clicks') for id_ in _BUTTON_IDS] + [
-    Input('am-page-am-id', 'children'),
-    Input('am-page-current-page', 'children'),
+    Input(f'{_PREFIX}-am-id', 'children'),
+    Input(f'{_PREFIX}-current-page', 'children'),
 ]
 
 
@@ -665,6 +667,9 @@ def _toggle_modal(n_clicks, n_clicks_close, is_open):
     if n_clicks or n_clicks_close:
         return not is_open
     return False
+
+
+parametric_am_list_callbacks(app, _PREFIX)
 
 
 def router(parent_page: str, route: str) -> Component:
