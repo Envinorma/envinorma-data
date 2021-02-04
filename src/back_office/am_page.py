@@ -69,10 +69,9 @@ def _extract_am_id_and_operation(pathname: str) -> Tuple[str, Optional[AMOperati
     return pieces[0], AMOperation(pieces[1]), '/'.join(pieces[2:])
 
 
-def _get_edit_structure_button(parent_page: str, am_status: AMStatus) -> Component:
+def _get_edit_structure_button(parent_page: str) -> Component:
     href = f'{parent_page}/{AMOperation.EDIT_STRUCTURE.value}'
-    state = ButtonState.NORMAL_LINK if am_status == am_status.PENDING_STRUCTURE_VALIDATION else ButtonState.HIDDEN
-    return link_button('Éditer', href, state)
+    return link_button('Éditer la structure', href, state=ButtonState.NORMAL_LINK)
 
 
 def _get_am_initialization_buttons() -> Tuple[Optional[Component], Optional[Component]]:
@@ -99,15 +98,20 @@ def _get_confirmation_modal(modal_body: Union[str, Component], step: str) -> Com
     )
 
 
-def _get_structure_validation_buttons() -> Tuple[Optional[Component], Optional[Component]]:
+def _get_structure_validation_buttons(parent_page: str) -> Tuple[Optional[Component], Optional[Component]]:
     modal_content = (
         'Êtes-vous sûr de vouloir retourner à la phase d\'initialisation du texte ? Ceci est '
         'déconseillé lorsque l\'AM provient de Légifrance ou que la structure a déjà été modifiée.'
     )
-    return (
-        _get_confirmation_modal(modal_content, 'structure'),
-        button('Valider la structure', id_=_VALIDATE_STRUCTURE, state=ButtonState.NORMAL),
+    right_buttons = html.Div(
+        [
+            _get_edit_structure_button(parent_page),
+            ' ',
+            button('Valider la structure', id_=_VALIDATE_STRUCTURE, state=ButtonState.NORMAL),
+        ],
+        style={'display': 'inline-block'},
     )
+    return (_get_confirmation_modal(modal_content, 'structure'), right_buttons)
 
 
 def _get_parametrization_edition_buttons() -> Tuple[Optional[Component], Optional[Component]]:
@@ -132,10 +136,10 @@ def _inline_buttons(button_left: Optional[Component], button_right: Optional[Com
     return [left, right]
 
 
-def _get_buttons(am_status: AMStatus) -> Component:
+def _get_buttons(am_status: AMStatus, parent_page: str) -> Component:
     successive_buttons = [
         _get_am_initialization_buttons(),
-        _get_structure_validation_buttons(),
+        _get_structure_validation_buttons(parent_page),
         _get_parametrization_edition_buttons(),
         _get_validated_buttons(),
     ]
@@ -451,22 +455,7 @@ def _get_structure_validation_diff(am_id: str, status: AMStatus, parent_page: st
     if not initial_am:
         return html.Div('AM introuvable.')
     current_am = load_structured_am(am_id)
-    button = _get_edit_structure_button(parent_page, status)
-    edit_button = html.Div(
-        _get_edit_structure_button(parent_page, status),
-        style={
-            'display': 'inline-block',
-            'position': 'fixed',
-            'bottom': '0px',
-            'left': '25%',
-            'z-index': '10',
-            'width': '50%',
-            'text-align': 'center',
-            'padding-bottom': '10px',
-            'padding-top': '10px',
-            'margin': 'auto',
-        },
-    )
+    button = _get_edit_structure_button(parent_page)
     if not current_am:
         diff = html.Div(
             ['Pas de modifications de structuration par rapport à l\'arrêté d\'origine.', html.Br(), button]
@@ -478,7 +467,7 @@ def _get_structure_validation_diff(am_id: str, status: AMStatus, parent_page: st
     am_component = html.Div(
         [html.Br(), html.H4('Version actuelle de l\'AM'), _get_am_component_with_toc(am_to_display)]
     )
-    return html.Div([diff, am_component, edit_button])
+    return html.Div([diff, am_component])
 
 
 def _create_if_inexistent(folder: str) -> None:
@@ -534,7 +523,7 @@ def _build_component_based_on_status(
             ],
             style={'margin-bottom': '100px'},
         ),
-        _get_buttons(am_status),
+        _get_buttons(am_status, parent_page),
     ]
     return html.Div(children)
 
