@@ -2,6 +2,7 @@ from typing import List, Optional, Tuple
 
 import dash_html_components as html
 from back_office.components import replace_line_breaks
+from back_office.components.summary_component import summary_component
 from dash.development.base_component import Component
 from lib.data import ArreteMinisteriel, Cell, Row, StructuredText, Table, am_to_text
 from lib.structure_extraction import TextElement, Title, structured_text_to_text_elements
@@ -89,3 +90,22 @@ def structured_text_component(text: StructuredText, emphasized_words: List[str],
 def am_component(am: ArreteMinisteriel, emphasized_words: List[str], first_level: int = 1) -> Component:
     text = am_to_text(am)
     return structured_text_component(text, emphasized_words, first_level)
+
+
+def am_with_summary_component(am: ArreteMinisteriel, height: int = 75, first_level: int = 1) -> Component:
+    return html.Div(
+        html.Div(
+            [
+                html.Div([summary_component(am_to_text(am), True)], className='col-3'),
+                html.Div(am_component(am, [], first_level), className='col-9'),
+            ],
+            className='row',
+        ),
+        style={
+            'position': 'sticky',
+            'top': '0px',
+            'bottom': '0',
+            'height': f'{height}vh',
+            'overflow-y': 'auto',
+        },
+    )

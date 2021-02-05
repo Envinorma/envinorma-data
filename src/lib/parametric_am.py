@@ -274,7 +274,7 @@ def _date_not_in_parametrization(parametrization: Parametrization) -> bool:
     return len(_extract_conditions_from_parametrization(ParameterEnum.DATE_INSTALLATION.value, parametrization)) == 0
 
 
-def _apply_parameter_values_to_am(
+def apply_parameter_values_to_am(
     am: ArreteMinisteriel, parametrization: Parametrization, parameter_values: Dict[Parameter, Any]
 ) -> ArreteMinisteriel:
     am = copy(am)
@@ -423,7 +423,7 @@ def _generate_options_dict(conditions: List[Condition]) -> Dict[str, Tuple[Param
 OptionsDict = Dict[str, Tuple[Parameter, Any]]
 
 
-def _extract_parameters_from_parametrization(parametrization: Parametrization) -> Set[Parameter]:
+def extract_parameters_from_parametrization(parametrization: Parametrization) -> Set[Parameter]:
     application_conditions = {
         cd
         for app_cond in parametrization.application_conditions
@@ -438,7 +438,7 @@ def _extract_parameters_from_parametrization(parametrization: Parametrization) -
 
 
 def _generate_options_dicts(parametrization: Parametrization, date_only: bool) -> List[OptionsDict]:
-    parameters = _extract_parameters_from_parametrization(parametrization)
+    parameters = extract_parameters_from_parametrization(parametrization)
     if date_only:
         parameters = [param for param in parameters if param == ParameterEnum.DATE_INSTALLATION.value]
     options_dicts = []
@@ -469,7 +469,7 @@ def generate_all_am_versions(
     if not combinations:
         return {tuple(): replace(am, unique_version=True)}
     return {
-        combination_name: _apply_parameter_values_to_am(am, parametrization, parameter_values)
+        combination_name: apply_parameter_values_to_am(am, parametrization, parameter_values)
         for combination_name, parameter_values in combinations.items()
     }
 

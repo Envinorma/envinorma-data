@@ -10,7 +10,8 @@ from lib.config import config
 from lib.data import AMMetadata, Classement
 
 # from back_office.ap_parsing import page as ap_parsing_page
-from back_office.am_page import router as am_page_router
+from back_office.am_page import router as edit_am_page_router
+from back_office.display_am import router as diplay_am_router
 from back_office.app_init import app
 from back_office.components import replace_line_breaks
 from back_office.fetch_data import load_all_am_statuses
@@ -77,7 +78,8 @@ def _get_str_classements(classements: List[Classement]) -> str:
 def _get_row(rank: int, am_state: AMStatus, am_metadata: AMMetadata, occurrences: int) -> Component:
     rows = [
         html.Td(rank),
-        html.Td(dcc.Link(am_metadata.cid, href=f'/arrete_ministeriel/{am_metadata.cid}')),
+        html.Td(dcc.Link(am_metadata.cid, href=f'/am/{am_metadata.cid}')),
+        html.Td(dcc.Link(html.Button('Éditer', className='btn btn-light btn-sm'), href=f'/edit_am/{am_metadata.cid}')),
         html.Td(str(am_metadata.nor)),
         html.Td(am_metadata.short_title),
         html.Td(_get_str_classements(am_metadata.classements)),
@@ -94,6 +96,7 @@ def _get_header() -> Component:
         [
             html.Th('#'),
             html.Th('N° CID'),
+            html.Th(''),
             html.Th('N° NOR'),
             html.Th('Nom'),
             html.Th('Classements'),
@@ -110,18 +113,11 @@ def _build_am_table(
 ) -> Component:
     header = _get_header()
     sorted_ids = sorted(id_to_am_metadata, key=lambda x: id_to_occurrences.get(x, 0), reverse=True)
-    return html.Table(
-        [
-            html.Thead(header),
-            html.Tbody(
-                [
-                    _get_row(rank, id_to_state[am_id], id_to_am_metadata[am_id], id_to_occurrences.get(am_id, 0))
-                    for rank, am_id in enumerate(sorted_ids)
-                ]
-            ),
-        ],
-        className='table table-hover',
-    )
+    rows = [
+        _get_row(rank, id_to_state[am_id], id_to_am_metadata[am_id], id_to_occurrences.get(am_id, 0))
+        for rank, am_id in enumerate(sorted_ids)
+    ]
+    return html.Table([html.Thead(header), html.Tbody(rows)], className='table')
 
 
 def _cumsum(values: List[int]) -> List[int]:
@@ -189,8 +185,10 @@ def router(pathname: str) -> Component:
         id_to_state = load_all_am_statuses()
         return _make_index_component(id_to_state, ID_TO_AM_MD, AM_ID_TO_NB_CLASSEMENTS_IDF)
     prefix, suffix = split_route(pathname)
-    if prefix == '/arrete_ministeriel':
-        return am_page_router(prefix, suffix)
+    if prefix == '/edit_am':
+        return edit_am_page_router(prefix, suffix)
+    if prefix == '/am':
+        return diplay_am_router(prefix, suffix.split('/')[-1])
     # if pathname == '/ap_parsing':
     #     return ap_parsing_page()
     return html.H3('404 error: Unknown path {}'.format(pathname))

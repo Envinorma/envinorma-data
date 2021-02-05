@@ -49,8 +49,9 @@ from back_office.utils import (
     assert_list,
     assert_str,
     get_section,
-    get_subsection,
     get_truncated_str,
+    safe_get_section,
+    safe_get_subsection,
 )
 
 _Options = List[Dict[str, Any]]
@@ -381,9 +382,13 @@ def _get_target_alineas_form(
     else:
         path = condition.targeted_entity.section.path
         alineas = condition.targeted_entity.outer_alinea_indices
-        target_section = get_subsection(path, text)
-        options = [{'label': al.text, 'value': i} for i, al in enumerate(target_section.outer_alineas)]
-        value = alineas if alineas else list(range(len(target_section.outer_alineas)))
+        target_section_alineas = section.outer_alineas if (section := safe_get_subsection(path, text)) else []
+        if target_section_alineas:
+            options = [{'label': al.text, 'value': i} for i, al in enumerate(target_section_alineas)]
+            value = alineas if alineas else list(range(len(target_section_alineas)))
+        else:
+            options = []
+            value = []
     return html.Div(
         [
             title,
@@ -905,7 +910,9 @@ def _build_new_text_component(str_path: Optional[str], am_id: str, operation_str
     if not am:
         return _get_new_section_form('', '')
     path = _load_path(str_path)
-    section = get_section(path, am)
+    section = safe_get_section(path, am)
+    if not section:
+        return _get_new_section_form('', '')
     title, content = _extract_title_and_content(section)
     return _get_new_section_form(title, content)
 

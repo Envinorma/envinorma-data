@@ -82,3 +82,23 @@ html {
   text-decoration: line-through;
   opacity: 0.4;
 }
+
+.DateInput_input {
+  padding: 5px;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji",
+    "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  font-weight: 300;
+}
+
+.SingleDatePickerInput__withBorder {
+  border-radius: 4px;
+  width: 100%;
+}
+.DateInput_input,
+.DateInput_input__focused {
+  border: none;
+}
+.SingleDatePicker {
+  width: 100%;
+}

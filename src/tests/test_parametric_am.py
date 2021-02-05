@@ -7,13 +7,13 @@ from typing import List, Optional
 
 from lib.data import ArreteMinisteriel, EnrichedString, Regime, StructuredText, StructuredTextSignature
 from lib.parametric_am import (
-    _apply_parameter_values_to_am,
+    apply_parameter_values_to_am,
     _change_value,
     _date_not_in_parametrization,
     _deactivate_alineas,
     _extract_installation_date_criterion,
     _extract_interval_midpoints,
-    _extract_parameters_from_parametrization,
+    extract_parameters_from_parametrization,
     _extract_sorted_targets,
     _extract_warning,
     _extract_warnings,
@@ -178,15 +178,15 @@ def test_apply_parameter_values_to_am_whole_arrete():
         [],
     )
 
-    new_am_1 = _apply_parameter_values_to_am(am, parametrization, {parameter: False})
+    new_am_1 = apply_parameter_values_to_am(am, parametrization, {parameter: False})
     assert not new_am_1.active
     assert new_am_1.warning_inactive is not None
 
-    new_am_2 = _apply_parameter_values_to_am(am, parametrization, {parameter: True})
+    new_am_2 = apply_parameter_values_to_am(am, parametrization, {parameter: True})
     assert new_am_2.active
     assert new_am_2.warning_inactive is None
 
-    new_am_3 = _apply_parameter_values_to_am(am, parametrization, {})
+    new_am_3 = apply_parameter_values_to_am(am, parametrization, {})
     assert new_am_3.active
     assert new_am_3.warning_inactive is not None
 
@@ -227,7 +227,7 @@ def test_apply_parameter_values_to_am():
         [AlternativeSection(SectionReference((1,)), new_text, is_installation_new, source)],
     )
 
-    new_am_1 = _apply_parameter_values_to_am(am, parametrization, {parameter: False})
+    new_am_1 = apply_parameter_values_to_am(am, parametrization, {parameter: False})
 
     assert _all_alineas_inactive(new_am_1.sections[0])
     assert len(new_am_1.sections[0].applicability.warnings) == 1
@@ -239,7 +239,7 @@ def test_apply_parameter_values_to_am():
     assert new_am_1.sections[3].outer_alineas[1].active
     assert len(new_am_1.sections[3].applicability.warnings) == 1
 
-    new_am_2 = _apply_parameter_values_to_am(am, parametrization, {parameter: True})
+    new_am_2 = apply_parameter_values_to_am(am, parametrization, {parameter: True})
 
     assert _all_alineas_active(new_am_2.sections[0])
     assert len(new_am_2.sections[0].applicability.warnings) == 0
@@ -253,7 +253,7 @@ def test_apply_parameter_values_to_am():
     assert new_am_2.sections[3].outer_alineas[1].active
     assert len(new_am_2.sections[3].applicability.warnings) == 0
 
-    new_am_3 = _apply_parameter_values_to_am(am, parametrization, {})
+    new_am_3 = apply_parameter_values_to_am(am, parametrization, {})
     assert _all_alineas_active(new_am_3.sections[0])
     assert len(new_am_3.sections[0].applicability.warnings) == 1
 
@@ -277,7 +277,7 @@ def test_extract_parameters_from_parametrization():
         [AlternativeSection(SectionReference((1,)), new_text, condition_2, source)],
     )
 
-    parameters = _extract_parameters_from_parametrization(parametrization)
+    parameters = extract_parameters_from_parametrization(parametrization)
     assert len(parameters) == 1
     assert list(parameters)[0].id == 'nouvelle-installation'
 
@@ -294,7 +294,7 @@ def test_extract_parameters_from_parametrization_2():
         [AlternativeSection(SectionReference((1,)), new_text, condition_2, source)],
     )
 
-    parameters = _extract_parameters_from_parametrization(parametrization)
+    parameters = extract_parameters_from_parametrization(parametrization)
     assert len(parameters) == 2
     assert copy(parameter_1) in parameters
     assert copy(parameter_2) in parameters

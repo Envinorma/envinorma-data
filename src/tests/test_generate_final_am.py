@@ -5,7 +5,7 @@ from lib.generate_final_am import _apply_parametrization
 from lib.parametric_am import (
     _extract_conditions_from_parametrization,
     _extract_leaf_conditions,
-    _extract_parameters_from_parametrization,
+    extract_parameters_from_parametrization,
     _generate_exhaustive_combinations,
     _generate_options_dicts,
     generate_all_am_versions,
@@ -178,7 +178,7 @@ _STRUCTURED_AM = ArreteMinisteriel(
     summary=None,
     active=True,
     warning_inactive=None,
-    id='FAKE_ID'
+    id='FAKE_ID',
 )
 
 
@@ -210,7 +210,7 @@ def test_generate_options_dicts():
 
 
 def test_extract_parameters_from_parametrization():
-    res = _extract_parameters_from_parametrization(_PARAMETRIZATION)
+    res = extract_parameters_from_parametrization(_PARAMETRIZATION)
     assert len(res) == 1
     assert list(res)[0] == _DATE
 
