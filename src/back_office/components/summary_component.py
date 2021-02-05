@@ -15,7 +15,7 @@ def _build_summary_line(title: Title, with_dots: bool) -> Component:
 
 
 def _extract_titles(text: StructuredText) -> List[Title]:
-    return [el for el in structured_text_to_text_elements(text, level=0) if isinstance(el, Title)]
+    return [el for el in structured_text_to_text_elements(text, level=0) if isinstance(el, Title) and el.level != 0]
 
 
 def _build_component(titles: List[Title], with_dots: bool) -> Component:

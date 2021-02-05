@@ -35,7 +35,7 @@ def _get_page_heading() -> Component:
         'position': 'sticky',
         'top': 0,
         'background-color': '#fff',
-        'z-index': '1',
+        'z-index': '10',
         'margin-bottom': '10px',
     }
     nav = html.Span(

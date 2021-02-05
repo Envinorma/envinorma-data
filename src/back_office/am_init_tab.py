@@ -57,15 +57,27 @@ def _buttons(am_page: str) -> Component:
     return html.Div([edit, delete], style=style)
 
 
-def _initial_am_component(am: ArreteMinisteriel, am_page: str) -> Component:
+def _get_am_row(am: ArreteMinisteriel) -> Component:
     am_row = html.Div(
         [
             html.Div([summary_component(am_to_text(am), False)], className='col-3'),
             html.Div(am_component(am, [], 3), className='col-9'),
         ],
         className='row',
+        style={'margin': '0px'},
     )
-    return html.Div([html.Div(id=_DELETE_OUTPUT), html.Div(id=_REDIRECT), am_row, _buttons(am_page)])
+    style = {
+        'position': 'sticky',
+        'top': '0px',
+        'bottom': '0',
+        'height': '70vh',
+        'overflow-y': 'auto',
+    }
+    return html.Div(am_row, style=style)
+
+
+def _initial_am_component(am: ArreteMinisteriel, am_page: str) -> Component:
+    return html.Div([html.Div(id=_DELETE_OUTPUT), html.Div(id=_REDIRECT), _get_am_row(am), _buttons(am_page)])
 
 
 def am_init_tab(am_id: str, am: Optional[ArreteMinisteriel], am_page: str) -> Component:

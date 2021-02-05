@@ -1,10 +1,10 @@
 .summary {
   position: sticky;
-  top: 170px;
+  top: 0px;
   border-left: 2px solid #007bff;
   font-size: 0.8em;
   bottom: 0;
-  height: 70vh;
+  height: 75vh;
   overflow-y: auto;
 }
 .summary a {
@@ -30,17 +30,11 @@
   display: none;
 }
 
-.am_nav {
-  background-color: #fff;
-  position: sticky;
-  top: 49px;
-  z-index: 2;
-}
-
 .am_title {
   background-color: #fff;
   position: fixed;
   top: 47px;
+  left: 0px;
   z-index: 3;
   padding-top: 5px;
   font-weight: 100;

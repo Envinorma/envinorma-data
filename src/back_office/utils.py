@@ -72,6 +72,10 @@ def safe_get_subsection(path: Ints, text: StructuredText) -> Optional[Structured
 
 
 def safe_get_section(path: Ints, am: ArreteMinisteriel) -> Optional[StructuredText]:
+    if not path or len(path) == 0:
+        return None
+    if path[0] >= len(am.sections):
+        return None
     return safe_get_subsection(path[1:], am.sections[path[0]])
 
 

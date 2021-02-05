@@ -1,4 +1,4 @@
-from typing import Any, Callable, Dict, List, Literal, Optional, Union
+from typing import Any, Callable, Dict, List, Optional
 
 import dash
 import dash_bootstrap_components as dbc
@@ -32,7 +32,7 @@ def _get_am_modal_generator(page_id: str) -> _AMModalGenerator:
                 dbc.ModalHeader(filename),
                 dbc.ModalBody(parametric_am_component(am, page_id)),
                 dbc.ModalFooter(
-                    [html.Button('Annuler', id=_close_modal_button_id(page_id, filename), className='btn btn-light')]
+                    [html.Button('Fermer', id=_close_modal_button_id(page_id, filename), className='btn btn-light')]
                 ),
             ],
             size='xl',
@@ -72,9 +72,9 @@ def parametric_am_list_callbacks(app: dash.Dash, page_id: str) -> None:
         prevent_initial_call=True,
     )
     def _toggle_modal(n_clicks, n_clicks_2, is_open):
-        if not n_clicks or n_clicks_2:
-            return False
-        return not is_open
+        if n_clicks or n_clicks_2:
+            return not is_open
+        return False
 
     parametric_am_callbacks(app, page_id)
 

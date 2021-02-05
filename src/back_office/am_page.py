@@ -43,6 +43,12 @@ _VALIDATE_INITIALIZATION = f'{_PREFIX}-validate-init'
 _VALIDATE_STRUCTURE = f'{_PREFIX}-validate-structure'
 _VALIDATE_PARAMETRIZATION = f'{_PREFIX}-validate-parametrization'
 _LOADER = f'{_PREFIX}-loading-output'
+_STRUCTURE_TABS_AM_TAB = _PREFIX + '-structure-tabs-am-tab'
+_STRUCTURE_TABS_DIFF_TAB = _PREFIX + '-structure-tabs-diff-tab'
+_STRUCTURE_TABS_AM = _PREFIX + '-structure-tabs-am'
+_STRUCTURE_TABS_DIFF = _PREFIX + '-structure-tabs-diff'
+_STRUCTURE_TABS_AM_TAB = _PREFIX + '-structure-tabs-am-tab'
+_STRUCTURE_TABS_DIFF_TAB = _PREFIX + '-structure-tabs-diff-tab'
 
 
 def _modal_confirm_button_id(step: Optional[str] = None) -> Dict[str, Any]:
@@ -170,16 +176,6 @@ def _get_buttons(am_status: AMStatus, parent_page: str) -> Component:
     )
 
 
-def _deduce_step_classname(rank: int, status: AMStatus) -> str:
-    return 'breadcrumb-item' + (' ' if rank == status.step() else ' active') + (' ' if rank < status.step() else '')
-
-
-def _get_nav(status: AMStatus) -> Component:
-    texts = ['1. Initilisation', '2. Structuration', '3. Paramétrage', '4. Relecture']
-    lis = [html.Li(text, className=_deduce_step_classname(i, status)) for i, text in enumerate(texts)]
-    return html.Ol(className='breadcrumb', children=lis, style={'margin-bottom': '30px'})
-
-
 def _human_alinea_tuple(ints: Optional[List[int]]) -> str:
     if not ints:
         return 'Tous'
@@ -290,6 +286,7 @@ def _get_am_component_with_toc(am: ArreteMinisteriel) -> Component:
             html.Div(am_component(am, [], 5), className='col-9'),
         ],
         className='row',
+        style={'margin': '0px'},
     )
 
 
@@ -310,7 +307,14 @@ def _get_parametrization_summary(
             _get_add_alternative_section_button(parent_page, status),
             html.H4('Texte'),
             _get_am_component_with_toc(am),
-        ]
+        ],
+        style={
+            'position': 'sticky',
+            'top': '0px',
+            'bottom': '0',
+            'height': '75vh',
+            'overflow-y': 'auto',
+        },
     )
 
 
@@ -402,7 +406,7 @@ def _build_diff_component(text_1: List[str], text_2: List[str]) -> Component:
     )
     if not components:
         return html.P('Pas de différences.')
-    return html.Div([html.H4('Liste des différences avec le texte d\'origine'), *components])
+    return html.Div(components)
 
 
 def _extract_text_lines(text: StructuredText, level: int = 0) -> List[str]:
@@ -448,26 +452,61 @@ def _build_am_diff_component(initial_am: ArreteMinisteriel, current_am: ArreteMi
     return html.Div([diff_tables, diff_lines])
 
 
-def _get_structure_validation_diff(am_id: str, status: AMStatus, parent_page: str) -> Component:
+def _structure_am_component(am: ArreteMinisteriel) -> Component:
+    style = {
+        'position': 'sticky',
+        'top': '0px',
+        'bottom': '0',
+        'height': '70vh',
+        'overflow-y': 'auto',
+    }
+    return html.Div(
+        [html.H4('Version actuelle de l\'AM'), html.Div([_get_am_component_with_toc(am)], style=style)],
+        hidden=False,
+        id=_STRUCTURE_TABS_AM,
+    )
+
+
+def _diff_tab_content(initial_am: ArreteMinisteriel, current_am: Optional[ArreteMinisteriel]) -> Component:
+    if not current_am:
+        child = 'Pas de modifications de structuration par rapport à l\'arrêté d\'origine.'
+    else:
+        child = _build_am_diff_component(initial_am, current_am)
+    return html.Div(
+        [html.H4('Liste des différences avec le texte d\'origine'), child], hidden=True, id=_STRUCTURE_TABS_DIFF
+    )
+
+
+def _nav(tab_title_and_ids: List[Tuple[str, str]]) -> Component:
+    tabs = [
+        html.A(title, href='#', id=id_, className='nav-link' + (' active' if i == 0 else ''))
+        for i, (title, id_) in enumerate(tab_title_and_ids)
+    ]
+    return html.Div([html.Div(tabs, className='nav flex-column nav-pills me-3')], className='d-flex align-items-start')
+
+
+def _structure_tabs(initial_am: ArreteMinisteriel, current_am: Optional[ArreteMinisteriel]) -> Component:
+    am_to_display = current_am or initial_am
+    tabs = [('AM', _STRUCTURE_TABS_AM_TAB), ('Diff', _STRUCTURE_TABS_DIFF_TAB)]
+    nav = _nav(tabs)
+    return html.Div(
+        [
+            html.Div(nav, className='col-1'),
+            html.Div(
+                [_diff_tab_content(initial_am, current_am), _structure_am_component(am_to_display)], className='col-11'
+            ),
+        ],
+        className='row',
+    )
+
+
+def _get_structure_validation_diff(am_id: str, status: AMStatus) -> Component:
     if status != status.PENDING_STRUCTURE_VALIDATION:
         return html.Div()
     initial_am = load_initial_am(am_id)
     if not initial_am:
         return html.Div('AM introuvable.')
-    current_am = load_structured_am(am_id)
-    button = _get_edit_structure_button(parent_page)
-    if not current_am:
-        diff = html.Div(
-            ['Pas de modifications de structuration par rapport à l\'arrêté d\'origine.', html.Br(), button]
-        )
-    else:
-        diff = html.Div([_build_am_diff_component(initial_am, current_am)])
-    am_to_display = current_am or initial_am
-
-    am_component = html.Div(
-        [html.Br(), html.H4('Version actuelle de l\'AM'), _get_am_component_with_toc(am_to_display)]
-    )
-    return html.Div([diff, am_component])
+    return _structure_tabs(initial_am, load_structured_am(am_id))
 
 
 def _create_if_inexistent(folder: str) -> None:
@@ -489,25 +528,22 @@ def _generate_versions_if_empty(am_id: str, folder: str) -> None:
     _generate_and_dump_am_version(am_id)
 
 
-def _list_parametric_texts(am_id: str, page_url: str, am_status: AMStatus) -> Component:
+def _list_parametric_texts(am_id: str, am_status: AMStatus) -> Component:
     if am_status != AMStatus.VALIDATED:
         return html.Div()
     folder = get_parametric_ams_folder(am_id)
     _create_if_inexistent(folder)
     _generate_versions_if_empty(am_id, folder)
     filename_to_am = _load_parametric_ams(folder)
-    # prefix_url = f'{page_url}/{AMOperation.DISPLAY_AM.value}'
     return parametric_am_list_component(filename_to_am, _PREFIX)
 
 
-def _final_parametric_texts_component(am_id: str, page_url: str, am_status: AMStatus) -> Component:
-    return html.Div([html.H3('Versions finales'), _list_parametric_texts(am_id, page_url, am_status)])
+def _final_parametric_texts_component(am_id: str, am_status: AMStatus) -> Component:
+    return html.Div([html.H3('Versions finales'), _list_parametric_texts(am_id, am_status)])
 
 
-def _get_final_parametric_texts_component(am_id: str, am_status: AMStatus, page_url: str) -> Component:
-    return html.Div(
-        [_final_parametric_texts_component(am_id, page_url, am_status)], hidden=am_status != AMStatus.VALIDATED
-    )
+def _get_final_parametric_texts_component(am_id: str, am_status: AMStatus) -> Component:
+    return html.Div([_final_parametric_texts_component(am_id, am_status)], hidden=am_status != AMStatus.VALIDATED)
 
 
 def _get_initial_am_component(
@@ -518,17 +554,20 @@ def _get_initial_am_component(
     return am_init_tab(am_id, am, am_page)
 
 
+def _deduce_step_classname(rank: int, status: AMStatus) -> str:
+    return 'breadcrumb-item' + (' ' if rank == status.step() else ' active') + (' ' if rank < status.step() else '')
+
+
 def _build_component_based_on_status(
     am_id: str, parent_page: str, am_status: AMStatus, parametrization: Parametrization, am: Optional[ArreteMinisteriel]
 ) -> Component:
     children = [
-        _get_nav(am_status),
         html.Div(
             [
                 _get_initial_am_component(am_id, am_status, am, parent_page),
-                _get_structure_validation_diff(am_id, am_status, parent_page),
+                _get_structure_validation_diff(am_id, am_status),
                 _get_parametrization_summary(parent_page, am_status, parametrization, am),
-                _get_final_parametric_texts_component(am_id, am_status, parent_page),
+                _get_final_parametric_texts_component(am_id, am_status),
             ],
             style={'margin-bottom': '100px'},
         ),
@@ -543,9 +582,24 @@ def _make_am_index_component(
     return _build_component_based_on_status(am_id, parent_page, am_status, parametrization, am)
 
 
-def _get_title_component(am_id: str, am_metadata: Optional[AMMetadata], parent_page: str) -> Component:
+def _get_nav(status: AMStatus) -> Component:
+    texts = ['1. Initilisation', '2. Structuration', '3. Paramétrage', '4. Relecture']
+    lis = [html.Li(text, className=_deduce_step_classname(i, status)) for i, text in enumerate(texts)]
+    return html.Ol(
+        className='breadcrumb',
+        children=lis,
+        style={'padding': '7px', 'padding-left': '15px', 'padding-right': '15px', 'font-weight': '300'},
+    )
+
+
+def _get_title_component(
+    am_id: str, am_metadata: Optional[AMMetadata], parent_page: str, am_status: AMStatus
+) -> Component:
+    nav = html.Div(_get_nav(am_status), className='col-6')
     am_id = (am_metadata.nor or am_metadata.cid) if am_metadata else am_id
-    return html.Div(dcc.Link(html.H2(f'Arrêté ministériel {am_id}'), href=parent_page), className='am_title')
+    am_backlink = html.Div(dcc.Link(html.H2(f'Arrêté ministériel {am_id}'), href=parent_page), className='col-6')
+    row = html.Div(html.Div([am_backlink, nav], className='row'), className='container')
+    return html.Div(row, className='am_title')
 
 
 def _get_body_component(
@@ -576,7 +630,7 @@ def _page(am_id: str, current_page: str) -> Component:
     )
     return html.Div(
         [
-            _get_title_component(am_id, am_metadata, current_page),
+            _get_title_component(am_id, am_metadata, current_page, am_status),
             body,
             html.P(am_id, hidden=True, id=f'{_PREFIX}-am-id'),
             html.P(current_page, hidden=True, id=f'{_PREFIX}-current-page'),
@@ -679,6 +733,22 @@ def _toggle_modal(n_clicks, n_clicks_close, is_open):
     return False
 
 
+@app.callback(
+    Output(_STRUCTURE_TABS_AM, 'hidden'),
+    Output(_STRUCTURE_TABS_DIFF, 'hidden'),
+    Output(_STRUCTURE_TABS_AM_TAB, 'className'),
+    Output(_STRUCTURE_TABS_DIFF_TAB, 'className'),
+    Input(_STRUCTURE_TABS_AM_TAB, 'n_clicks_timestamp'),
+    Input(_STRUCTURE_TABS_DIFF_TAB, 'n_clicks_timestamp'),
+    prevent_initial_call=True,
+)
+def _structure_tabs_click_handler(click_timestamp_am_tab, click_timestamp_diff_tab):
+    if (click_timestamp_am_tab or 0) > (click_timestamp_diff_tab or 0):
+        return False, True, 'nav-link active', 'nav-link'
+    else:
+        return True, False, 'nav-link', 'nav-link active'
+
+
 parametric_am_list_callbacks(app, _PREFIX)
 
 
@@ -689,6 +759,7 @@ def router(parent_page: str, route: str) -> Component:
     am_metadata = ID_TO_AM_MD[am_id]
     current_page = parent_page + '/' + am_id
     if operation_id:
+        am_status = load_am_status(am_id)
         subpage_component = _get_subpage_content(route, operation_id)
-        return html.Div([_get_title_component(am_id, am_metadata, current_page), subpage_component])
+        return html.Div([_get_title_component(am_id, am_metadata, current_page, am_status), subpage_component])
     return _page_with_spinner(am_id, current_page)

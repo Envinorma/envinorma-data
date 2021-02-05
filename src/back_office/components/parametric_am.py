@@ -118,8 +118,7 @@ def _main_component(am: ArreteMinisteriel, text: StructuredText, warnings: List[
             html.I(am.title.text),
             _warnings_component(warnings),
             _get_text_component(text, 0, page_id),
-        ],
-        style={'margin-top': '60px'},
+        ]
     )
 
 
