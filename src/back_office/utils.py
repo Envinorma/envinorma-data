@@ -1,3 +1,4 @@
+import json
 import os
 from datetime import datetime
 from enum import Enum
@@ -8,6 +9,9 @@ from lib.data import ArreteMinisteriel, Ints, StructuredText, load_am_data
 
 _AM = load_am_data()
 ID_TO_AM_MD = {am.cid: am for am in _AM.metadata if am.state != am.state.ABROGE}
+AM_ID_TO_NB_CLASSEMENTS_IDF = json.load(
+    open(__file__.replace('back_office/utils.py', 'data/am_id_to_nb_classements_idf.json'))
+)
 
 
 def assert_int(value: Any) -> int:

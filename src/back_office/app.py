@@ -1,6 +1,6 @@
 import os
 from collections import Counter
-from typing import Dict, List
+from typing import Any, Dict, List
 
 import dash_core_components as dcc
 import dash_html_components as html
@@ -12,8 +12,9 @@ from lib.data import AMMetadata, Classement
 # from back_office.ap_parsing import page as ap_parsing_page
 from back_office.am_page import router as am_page_router
 from back_office.app_init import app
+from back_office.components import replace_line_breaks
 from back_office.fetch_data import load_all_am_statuses
-from back_office.utils import ID_TO_AM_MD, AMStatus, split_route
+from back_office.utils import AM_ID_TO_NB_CLASSEMENTS_IDF, ID_TO_AM_MD, AMStatus, split_route
 
 
 def _create_tmp_am_folder():
@@ -73,13 +74,14 @@ def _get_str_classements(classements: List[Classement]) -> str:
     return ', '.join([_get_str_classement(classement) for classement in classements])
 
 
-def _get_row(rank: int, am_state: AMStatus, am_metadata: AMMetadata) -> Component:
+def _get_row(rank: int, am_state: AMStatus, am_metadata: AMMetadata, occurrences: int) -> Component:
     rows = [
         html.Td(rank),
         html.Td(dcc.Link(am_metadata.cid, href=f'/arrete_ministeriel/{am_metadata.cid}')),
         html.Td(str(am_metadata.nor)),
         html.Td(am_metadata.short_title),
         html.Td(_get_str_classements(am_metadata.classements)),
+        html.Td(occurrences),
         html.Td('', className=_class_name_from_bool(am_state.step() >= 1)),
         html.Td('', className=_class_name_from_bool(am_state.step() >= 2)),
         html.Td('', className=_class_name_from_bool(am_state.step() >= 3)),
@@ -95,6 +97,7 @@ def _get_header() -> Component:
             html.Th('N° NOR'),
             html.Th('Nom'),
             html.Th('Classements'),
+            html.Th('Nb classements IDF'),
             html.Th('Initialisé'),
             html.Th('Structuré'),
             html.Th('Paramétré'),
@@ -102,37 +105,80 @@ def _get_header() -> Component:
     )
 
 
-def _build_am_table(id_to_state: Dict[str, AMStatus], id_to_am_metadata: Dict[str, AMMetadata]) -> Component:
+def _build_am_table(
+    id_to_state: Dict[str, AMStatus], id_to_am_metadata: Dict[str, AMMetadata], id_to_occurrences: Dict[str, int]
+) -> Component:
     header = _get_header()
+    sorted_ids = sorted(id_to_am_metadata, key=lambda x: id_to_occurrences.get(x, 0), reverse=True)
     return html.Table(
         [
             html.Thead(header),
             html.Tbody(
-                [_get_row(rank, id_to_state[am_id], am) for rank, (am_id, am) in enumerate(id_to_am_metadata.items())]
+                [
+                    _get_row(rank, id_to_state[am_id], id_to_am_metadata[am_id], id_to_occurrences.get(am_id, 0))
+                    for rank, am_id in enumerate(sorted_ids)
+                ]
             ),
         ],
         className='table table-hover',
     )
 
 
-def _build_recap(id_to_state: Dict[str, AMStatus]) -> Component:
+def _cumsum(values: List[int]) -> List[int]:
+    res: List[int] = [0] * len(values)
+    for i, value in enumerate(values):
+        if i == 0:
+            res[i] == value
+        res[i] = res[i - 1] + value
+    return res
+
+
+def _count_step_cumulated_advancement(
+    id_to_state: Dict[str, AMStatus], id_to_occurrences: Dict[str, Any]
+) -> List[float]:
+    id_to_step = {id_: state.step() for id_, state in id_to_state.items()}
+    step_to_nb_occurrences = {}
+    for id_, step in id_to_step.items():
+        step_to_nb_occurrences[step] = step_to_nb_occurrences.get(step, 0) + id_to_occurrences.get(id_, 0)
+    cumsum = _cumsum([step_to_nb_occurrences.get(i, 0) for i in range(4)][::-1])[::-1]
+    total = sum(step_to_nb_occurrences.values())
+    return [x / total for x in cumsum]
+
+
+def _count_step_cumulated_nb_am(id_to_state: Dict[str, AMStatus]) -> List[int]:
     counter = Counter([status.step() for status in id_to_state.values()])
+    return [sum(counter.values()), counter[1] + counter[2] + counter[3], counter[2] + counter[3], counter[3]]
+
+
+def _build_recap(id_to_state: Dict[str, AMStatus], id_to_occurrences: Dict[str, Any]) -> Component:
+    step_cumulated_advancement = _count_step_cumulated_advancement(id_to_state, id_to_occurrences)
+    step_cumulated_nb_am = _count_step_cumulated_nb_am(id_to_state)
+
     txts = [
-        f'{len(id_to_state)} arrêtés',
-        f'{counter[1] + counter[2] + counter[3]} arrêtés initialisés',
-        f'{counter[2] + counter[3]} arrêtés structurés',
-        f'{counter[3]} arrêtés paramétrés',
+        f'{step_cumulated_nb_am[0]} arrêtés\n',
+        f'{step_cumulated_nb_am[1]} arrêtés initialisés\n({int(100*step_cumulated_advancement[1])}% des classements)',
+        f'{step_cumulated_nb_am[2]} arrêtés structurés\n({int(100*step_cumulated_advancement[2])}% des classements)',
+        f'{step_cumulated_nb_am[3]} arrêtés paramétrés\n({int(100*step_cumulated_advancement[3])}% des classements)',
     ]
     cols = [
-        html.Div(html.Div(html.Div(txt, className='card-body'), className='card text-center'), className='col-3')
+        html.Div(
+            html.Div(html.Div(replace_line_breaks(txt), className='card-body'), className='card text-center'),
+            className='col-3',
+        )
         for txt in txts
     ]
     return html.Div(cols, className='row', style={'margin-top': '20px', 'margin-bottom': '40px'})
 
 
-def _make_index_component(id_to_state: Dict[str, AMStatus], id_to_am_metadata: Dict[str, AMMetadata]) -> Component:
+def _make_index_component(
+    id_to_state: Dict[str, AMStatus], id_to_am_metadata: Dict[str, AMMetadata], id_to_occurrences: Dict[str, int]
+) -> Component:
     return html.Div(
-        [html.H2('Arrêtés ministériels.'), _build_recap(id_to_state), _build_am_table(id_to_state, id_to_am_metadata)]
+        [
+            html.H2('Arrêtés ministériels.'),
+            _build_recap(id_to_state, id_to_occurrences),
+            _build_am_table(id_to_state, id_to_am_metadata, id_to_occurrences),
+        ]
     )
 
 
@@ -141,7 +187,7 @@ def router(pathname: str) -> Component:
         raise ValueError(f'Expecting pathname to start with /, received {pathname}')
     if pathname == '/':
         id_to_state = load_all_am_statuses()
-        return _make_index_component(id_to_state, ID_TO_AM_MD)
+        return _make_index_component(id_to_state, ID_TO_AM_MD, AM_ID_TO_NB_CLASSEMENTS_IDF)
     prefix, suffix = split_route(pathname)
     if prefix == '/arrete_ministeriel':
         return am_page_router(prefix, suffix)
