@@ -75,11 +75,11 @@ def _text_component(
     text: StructuredText, depth: int, previous_version: Optional[StructuredText], page_id: str
 ) -> Component:
     previous_version_component = _previous_text_component(previous_version, page_id) if previous_version else html.Div()
-
+    applicability = text.applicability or Applicability()
     return html.Div(
         [
-            _title_component(text.title.text, text.id, depth, text.applicability.active),
-            *_warnings_to_components(text.applicability.warnings),
+            _title_component(text.title.text, text.id, depth, applicability.active),
+            *_warnings_to_components(applicability.warnings),
             *_alineas_to_components(text.outer_alineas),
             *[_get_text_component(sec, depth + 1, page_id) for sec in text.sections],
             previous_version_component,
@@ -88,7 +88,7 @@ def _text_component(
 
 
 def _get_text_component(text: StructuredText, depth: int, page_id: str) -> Component:
-    applicability = _ensure_applicability(text.applicability)
+    applicability = text.applicability or Applicability()
     if applicability.modified:
         if not applicability.previous_version:
             raise ValueError('Should not happen. Must have a previous_version when modified is True.')
@@ -134,7 +134,7 @@ def _component(am: ArreteMinisteriel, text: StructuredText, warnings: List[_Warn
 
 
 def _extract_text_warnings(text: StructuredText) -> List[_Warning]:
-    applicability = _ensure_applicability(text.applicability)
+    applicability = text.applicability or Applicability()
     if applicability.warnings:
         return [(applicability, text.id)]
     return [inap for sec in text.sections for inap in _extract_text_warnings(sec)]

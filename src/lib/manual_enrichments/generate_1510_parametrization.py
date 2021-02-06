@@ -453,7 +453,7 @@ def build_1510_parametrization() -> Parametrization:
     tuples_.append((condition_1, condition_source_A, not_applicable_1, new_articles_1, description_1))
 
     condition_2 = AndCondition([is_autorisation, is_between_2003_and_2017])
-    not_applicable_2 = [((8, 1, 2, 2), None), ((8, 1, 2, 3), None)]
+    not_applicable_2: List[Tuple[Ints, Optional[List[int]]]] = [((8, 1, 2, 2), None), ((8, 1, 2, 3), None)]
     new_articles_2 = {
         tuple((8, 1, 1, 0)): _build_alternative_2_I_for_autorisation(),
         tuple((8, 1, 2, 1)): _build_alternative_3_2_for_autorisation(),

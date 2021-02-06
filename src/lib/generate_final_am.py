@@ -23,7 +23,7 @@ def _apply_parametrization(
     am_id: str, am: Optional[ArreteMinisteriel], parametrization: Parametrization
 ) -> Optional[AMVersions]:
     if not am:
-        return
+        return None
     enriched_am = remove_null_applicabilities(am)
     manual_combinations = get_manual_combinations(am_id)  # For AM 1510 mainly, none otherwise
     all_versions = generate_all_am_versions(enriched_am, parametrization, True, manual_combinations)

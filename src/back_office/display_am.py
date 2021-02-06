@@ -14,7 +14,7 @@ from lib.parametrization import Parameter, ParameterEnum, ParameterType, Paramet
 
 from back_office.app_init import app
 from back_office.components import error_component
-from back_office.components.am_component import am_with_summary_component
+from back_office.components.parametric_am import parametric_am_component
 from back_office.fetch_data import load_initial_am, load_parametrization, load_structured_am
 from back_office.utils import ID_TO_AM_MD
 
@@ -34,7 +34,7 @@ def _input(parameter_id: Any) -> Dict[str, Any]:
 
 
 def _am_component(am: ArreteMinisteriel) -> Component:
-    return am_with_summary_component(am, height=92)
+    return parametric_am_component(am, _PREFIX)
 
 
 def _am_component_with_toc(am: ArreteMinisteriel) -> Component:
@@ -66,12 +66,11 @@ def _build_parameter_input(parameter: Parameter) -> Component:
     parameter_name = _extract_name(parameter)
     return html.Div(
         [
-            html.Div(html.Label(parameter_name, htmlFor=(id_ := random_id())), className='col-6'),
-            html.Div(_build_input(id_, parameter.type), className='col-6'),
+            html.Label(parameter_name, htmlFor=(id_ := random_id())),
+            _build_input(id_, parameter.type),
             dcc.Store(data=parameter.id, id=_store(parameter.id)),
         ],
-        className='row',
-        style={'margin-bottom': '10px'},
+        className='col-md-12',
     )
 
 
@@ -80,12 +79,13 @@ def _parametrization_form(parametrization: Parametrization) -> Component:
     if not parameters:
         return html.P('Pas de paramètres pour cet arrêté.')
     sorted_parameters = sorted(list(parameters), key=lambda x: x.id)
-    return html.Div(
+    return html.Form(
         [
-            html.Div([_build_parameter_input(parameter) for parameter in sorted_parameters], className='col-6'),
-            html.Div(id=_FORM_OUTPUT),
-            html.Button('Valider', className='btn btn-primary', id=_SUBMIT),
-        ]
+            *[_build_parameter_input(parameter) for parameter in sorted_parameters],
+            html.Div(id=_FORM_OUTPUT, style={'margin-top': '10px', 'margin-bottom': '10px'}),
+            html.Div(html.Button('Valider', className='btn btn-primary', id=_SUBMIT), className='col-12'),
+        ],
+        className='row g-3',
     )
 
 
@@ -98,10 +98,20 @@ def _parametrization_component(am_id: str) -> Component:
     return html.Div([html.H2('Paramétrage'), content])
 
 
+def _topic_component() -> Component:
+    return html.Div(html.H2('Topics'))
+
+
+def _parametrization_and_topic(am: ArreteMinisteriel) -> Component:
+    param = html.Div(_parametrization_component(am.id or ''), className='col-6')
+    topic = html.Div(_topic_component(), className='col-6')
+    return html.Div([param, topic], className='row')
+
+
 def _page(am: ArreteMinisteriel) -> Component:
     return html.Div(
         [
-            _parametrization_component(am.id or ''),
+            _parametrization_and_topic(am),
             html.H2('AM'),
             _am_component_with_toc(am),
             dcc.Store(data=am.id or '', id=_AM_ID),

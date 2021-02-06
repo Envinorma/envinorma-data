@@ -53,3 +53,21 @@ repos:
         verbose: true
         pass_filenames: false
         always_run: true
+      - id: pytest-mypy back_office
+        name: pytest-mypy back_office
+        stages: [commit]
+        language: system
+        entry: bash -c "cd src ; pytest --mypy-ignore-missing-imports back_office"
+        types: [python]
+        verbose: true
+        pass_filenames: false
+        always_run: true
+      - id: pytest-mypy lib
+        name: pytest-mypy lib
+        stages: [commit]
+        language: system
+        entry: bash -c "cd src ; pytest --mypy-ignore-missing-imports lib"
+        types: [python]
+        verbose: true
+        pass_filenames: false
+        always_run: true

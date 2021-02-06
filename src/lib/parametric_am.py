@@ -440,7 +440,7 @@ def extract_parameters_from_parametrization(parametrization: Parametrization) ->
 def _generate_options_dicts(parametrization: Parametrization, date_only: bool) -> List[OptionsDict]:
     parameters = extract_parameters_from_parametrization(parametrization)
     if date_only:
-        parameters = [param for param in parameters if param == ParameterEnum.DATE_INSTALLATION.value]
+        parameters = {param for param in parameters if param == ParameterEnum.DATE_INSTALLATION.value}
     options_dicts = []
     for parameter in parameters:
         conditions = _extract_conditions_from_parametrization(parameter, parametrization)

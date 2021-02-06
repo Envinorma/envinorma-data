@@ -1,6 +1,6 @@
 import os
 from collections import Counter
-from typing import Any, Dict, List
+from typing import Any, Dict, List, Union
 
 import dash_core_components as dcc
 import dash_html_components as html
@@ -71,19 +71,27 @@ def _get_str_classement(classement: Classement) -> str:
     return f'{classement.rubrique}-{classement.regime.value}'
 
 
-def _get_str_classements(classements: List[Classement]) -> str:
-    return ', '.join([_get_str_classement(classement) for classement in classements])
+def _get_str_classements(classements: List[Classement]) -> Component:
+    return html.Span(
+        ', '.join([_get_str_classement(classement) for classement in classements]), style={'font-size': '0.7em'}
+    )
+
+
+def _normal_td(content: Union[Component, str, int]) -> Component:
+    return html.Td(content, className='align-middle')
 
 
 def _get_row(rank: int, am_state: AMStatus, am_metadata: AMMetadata, occurrences: int) -> Component:
     rows = [
-        html.Td(rank),
-        html.Td(dcc.Link(am_metadata.cid, href=f'/am/{am_metadata.cid}')),
-        html.Td(dcc.Link(html.Button('Éditer', className='btn btn-light btn-sm'), href=f'/edit_am/{am_metadata.cid}')),
-        html.Td(str(am_metadata.nor)),
-        html.Td(am_metadata.short_title),
-        html.Td(_get_str_classements(am_metadata.classements)),
-        html.Td(occurrences),
+        _normal_td(rank),
+        _normal_td(dcc.Link(am_metadata.cid, href=f'/am/{am_metadata.cid}')),
+        _normal_td(
+            dcc.Link(html.Button('Éditer', className='btn btn-light btn-sm'), href=f'/edit_am/{am_metadata.cid}')
+        ),
+        _normal_td(str(am_metadata.nor)),
+        _normal_td(am_metadata.short_title),
+        _normal_td(_get_str_classements(am_metadata.classements)),
+        _normal_td(occurrences),
         html.Td('', className=_class_name_from_bool(am_state.step() >= 1)),
         html.Td('', className=_class_name_from_bool(am_state.step() >= 2)),
         html.Td('', className=_class_name_from_bool(am_state.step() >= 3)),
@@ -117,7 +125,7 @@ def _build_am_table(
         _get_row(rank, id_to_state[am_id], id_to_am_metadata[am_id], id_to_occurrences.get(am_id, 0))
         for rank, am_id in enumerate(sorted_ids)
     ]
-    return html.Table([html.Thead(header), html.Tbody(rows)], className='table')
+    return html.Table([html.Thead(header), html.Tbody(rows)], className='table table-sm')
 
 
 def _cumsum(values: List[int]) -> List[int]:
@@ -133,7 +141,7 @@ def _count_step_cumulated_advancement(
     id_to_state: Dict[str, AMStatus], id_to_occurrences: Dict[str, Any]
 ) -> List[float]:
     id_to_step = {id_: state.step() for id_, state in id_to_state.items()}
-    step_to_nb_occurrences = {}
+    step_to_nb_occurrences: Dict[int, int] = {}
     for id_, step in id_to_step.items():
         step_to_nb_occurrences[step] = step_to_nb_occurrences.get(step, 0) + id_to_occurrences.get(id_, 0)
     cumsum = _cumsum([step_to_nb_occurrences.get(i, 0) for i in range(4)][::-1])[::-1]
