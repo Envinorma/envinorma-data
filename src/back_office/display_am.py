@@ -79,7 +79,7 @@ def _parametrization_form(parametrization: Parametrization) -> Component:
     if not parameters:
         return html.P('Pas de paramètres pour cet arrêté.')
     sorted_parameters = sorted(list(parameters), key=lambda x: x.id)
-    return html.Form(
+    return html.Div(
         [
             *[_build_parameter_input(parameter) for parameter in sorted_parameters],
             html.Div(id=_FORM_OUTPUT, style={'margin-top': '10px', 'margin-bottom': '10px'}),
