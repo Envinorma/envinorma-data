@@ -113,7 +113,7 @@ def _parametrization_and_topic(am: ArreteMinisteriel) -> Component:
 
 
 def _page(am: ArreteMinisteriel) -> Component:
-    style = {'top': '0px', 'bottom': '0', 'height': '80vh', 'overflow-y': 'auto'}
+    style = {'height': '80vh', 'overflow-y': 'auto'}
     return html.Div(
         [
             _parametrization_and_topic(am),

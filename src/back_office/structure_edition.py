@@ -65,7 +65,7 @@ def _get_toc_component(text: StructuredText) -> Component:
     elements = _text_to_elements(text)
     initial_value = html.P([_format_toc_line(el) for el in elements if isinstance(el, Title) and el.level > 0])
     return html.Div(
-        dbc.Spinner(html.Div(initial_value, id=_TOC_COMPONENT)), className='summary', style={'height': '60vh'}
+        dbc.Spinner(html.Div(initial_value, id=_TOC_COMPONENT)), className='summary', style={'height': '70vh'}
     )
 
 
@@ -124,7 +124,9 @@ def _get_main_row(text: StructuredText) -> Component:
         className='col-9',
         children=[html.P(text.title.text), _structure_edition_component(text)],
     )
-    return html.Div(className='row', children=[first_column, second_column])
+    return html.Div(
+        className='row', children=[first_column, second_column], style={'height': '70vh', 'overflow-y': 'auto'}
+    )
 
 
 def _make_am_structure_edition_component(pathname: str, am_id: str, am: ArreteMinisteriel) -> Component:
@@ -135,7 +137,7 @@ def _make_am_structure_edition_component(pathname: str, am_id: str, am: ArreteMi
         dcc.Store(data=am_id, id=_AM_ID),
         dcc.Store(data=pathname, id=_PATHNAME),
     ]
-    return html.Div(components, style={'margin-bottom': '300px'})
+    return html.Div(components)
 
 
 def _parse_route(route: str) -> str:
