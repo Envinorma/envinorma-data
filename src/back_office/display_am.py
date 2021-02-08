@@ -83,7 +83,11 @@ def _parametrization_form(parametrization: Parametrization) -> Component:
         [
             *[_build_parameter_input(parameter) for parameter in sorted_parameters],
             html.Div(id=_FORM_OUTPUT, style={'margin-top': '10px', 'margin-bottom': '10px'}),
-            html.Div(html.Button('Valider', className='btn btn-primary', id=_SUBMIT), className='col-12'),
+            html.Div(
+                html.Button('Valider', className='btn btn-primary', id=_SUBMIT),
+                className='col-12',
+                style={'margin-top': '10px', 'margin-bottom': '10px'},
+            ),
         ],
         className='row g-3',
     )
@@ -109,11 +113,12 @@ def _parametrization_and_topic(am: ArreteMinisteriel) -> Component:
 
 
 def _page(am: ArreteMinisteriel) -> Component:
+    style = {'top': '0px', 'bottom': '0', 'height': '80vh', 'overflow-y': 'auto'}
     return html.Div(
         [
             _parametrization_and_topic(am),
             html.H2('AM'),
-            _am_component_with_toc(am),
+            html.Div(_am_component_with_toc(am), style=style),
             dcc.Store(data=am.id or '', id=_AM_ID),
         ]
     )

@@ -123,12 +123,13 @@ def _main_component(am: ArreteMinisteriel, text: StructuredText, warnings: List[
 
 
 def _component(am: ArreteMinisteriel, text: StructuredText, warnings: List[_Warning], page_id) -> Component:
-    summary = summary_component(text, False)
+    summary = summary_component(text, True)
     return html.Div(
         [
             html.Div(summary, className='col-3'),
             html.Div(_main_component(am, text, warnings, page_id), className='col-9'),
         ],
+        style={'margin': '0px'},
         className='row',
     )
 
