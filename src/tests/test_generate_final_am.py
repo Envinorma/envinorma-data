@@ -1,28 +1,25 @@
 from datetime import datetime
 
+from lib.conditions import AndCondition, ConditionType, Range, extract_leaf_conditions
 from lib.data import ArreteMinisteriel, Cell, EnrichedString, Row, StructuredText, Table
 from lib.generate_final_am import _apply_parametrization
 from lib.parametric_am import (
-    _extract_conditions_from_parametrization,
-    _extract_leaf_conditions,
-    extract_parameters_from_parametrization,
     _generate_exhaustive_combinations,
     _generate_options_dicts,
+    extract_parameters_from_parametrization,
     generate_all_am_versions,
 )
 from lib.parametrization import (
     AlternativeSection,
-    AndCondition,
     ConditionSource,
-    ConditionType,
     EntityReference,
-    Greater,
     Littler,
     NonApplicationCondition,
     Parameter,
     ParameterType,
     Parametrization,
     SectionReference,
+    extract_conditions_from_parametrization,
 )
 
 _DATE = Parameter(id='date-d-installation', type=ParameterType.DATE)
@@ -62,14 +59,7 @@ _PARAMETRIZATION = Parametrization(
                 id='d16d0fE7C7fc',
             ),
             condition=AndCondition(
-                conditions=[
-                    Littler(
-                        parameter=_DATE, target=datetime(2021, 1, 1, 0, 0), strict=True, type=ConditionType.LITTLER
-                    ),
-                    Greater(
-                        parameter=_DATE, target=datetime(2020, 1, 1, 0, 0), strict=False, type=ConditionType.GREATER
-                    ),
-                ],
+                conditions=[Range(parameter=_DATE, left=datetime(2020, 1, 1, 0, 0), right=datetime(2021, 1, 1, 0, 0))],
                 type=ConditionType.AND,
             ),
             source=ConditionSource(
@@ -216,13 +206,13 @@ def test_extract_parameters_from_parametrization():
 
 
 def test_extract_conditions_from_parametrization():
-    res = _extract_conditions_from_parametrization(_DATE, _PARAMETRIZATION)
-    assert len(res) == 3
+    res = extract_conditions_from_parametrization(_DATE, _PARAMETRIZATION)
+    assert len(res) == 2
 
 
 def test_extract_leaf_conditions():
-    res = _extract_leaf_conditions(_PARAMETRIZATION.application_conditions[0].condition, _DATE)
+    res = extract_leaf_conditions(_PARAMETRIZATION.application_conditions[0].condition, _DATE)
     assert len(res) == 1
 
-    res = _extract_leaf_conditions(_PARAMETRIZATION.alternative_sections[0].condition, _DATE)
-    assert len(res) == 2
+    res = extract_leaf_conditions(_PARAMETRIZATION.alternative_sections[0].condition, _DATE)
+    assert len(res) == 1

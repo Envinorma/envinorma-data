@@ -44,6 +44,10 @@ def _am_component_with_toc(am: ArreteMinisteriel) -> Component:
 def _extract_name(parameter: Parameter) -> str:
     if parameter == ParameterEnum.DATE_AUTORISATION.value:
         return 'Date d\'autorisation'
+    if parameter == ParameterEnum.DATE_ENREGISTREMENT.value:
+        return 'Date d\'enregistrement'
+    if parameter == ParameterEnum.DATE_DECLARATION.value:
+        return 'Date de déclaration'
     if parameter == ParameterEnum.DATE_INSTALLATION.value:
         return 'Date de mise en service'
     if parameter == ParameterEnum.REGIME.value:
@@ -146,10 +150,15 @@ def _extract_date(date_: str) -> datetime:
 
 
 def _extract_parameter_and_value(id_: str, date: Optional[str], value: Optional[str]) -> Tuple[Parameter, Any]:
-    if id_ == ParameterEnum.DATE_AUTORISATION.value.id:
-        return (ParameterEnum.DATE_AUTORISATION.value, _extract_date(date) if date else None)
-    if id_ == ParameterEnum.DATE_INSTALLATION.value.id:
-        return (ParameterEnum.DATE_INSTALLATION.value, _extract_date(date) if date else None)
+    date_params = (
+        ParameterEnum.DATE_AUTORISATION,
+        ParameterEnum.DATE_ENREGISTREMENT,
+        ParameterEnum.DATE_DECLARATION,
+        ParameterEnum.DATE_INSTALLATION,
+    )
+    for param in date_params:
+        if id_ == param.value.id:
+            return (param.value, _extract_date(date) if date else None)
     if id_ == ParameterEnum.REGIME.value.id:
         return (ParameterEnum.REGIME.value, Regime(value) if value else None)
     raise NotImplementedError()

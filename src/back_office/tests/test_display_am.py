@@ -1,4 +1,4 @@
-from lib.parametrization import ParameterEnum
+from lib.conditions import ParameterEnum
 from back_office.display_am import _extract_name, _build_parameter_input, _extract_parameter_and_value
 
 

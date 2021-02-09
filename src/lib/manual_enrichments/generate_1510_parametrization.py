@@ -1,25 +1,21 @@
 from dataclasses import replace
 from datetime import datetime
-from lib.parametrization import ConditionSource, EntityReference, SectionReference
 from typing import Dict, List, Optional, Tuple
 
+from lib.am_enriching import remove_sections
+from lib.conditions import AndCondition, Condition, Equal, Littler, OrCondition, Parameter, Range
 from lib.data import ArreteMinisteriel, ClassementWithAlineas, EnrichedString, Regime, StructuredText
 from lib.parametrization import (
     AlternativeSection,
-    AndCondition,
+    Combinations,
+    ConditionSource,
+    EntityReference,
     NonApplicationCondition,
-    Equal,
-    Littler,
-    OrCondition,
-    Condition,
-    Parameter,
     ParameterEnum,
     ParameterType,
     Parametrization,
-    Range,
-    Combinations,
+    SectionReference,
 )
-from lib.am_enriching import remove_sections
 
 
 def _build_simple_structured_text(title: str, alineas: List[str]) -> StructuredText:

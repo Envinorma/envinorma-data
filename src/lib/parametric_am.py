@@ -3,7 +3,8 @@ from dataclasses import replace
 from datetime import datetime, timedelta
 from typing import Any, Dict, List, Optional, Set, Tuple, Union
 
-from lib.condition_to_str import (
+from lib.conditions import (
+    ConditionType,
     extract_parameters_from_condition,
     generate_inactive_warning,
     generate_modification_warning,
@@ -13,35 +14,22 @@ from lib.condition_to_str import (
 from lib.data import Applicability, ArreteMinisteriel, DateCriterion, Regime, StructuredText, StructuredTextSignature
 from lib.parametrization import (
     AlternativeSection,
-    AndCondition,
     Combinations,
     Condition,
-    ConditionType,
     Equal,
     Greater,
     Ints,
+    LeafCondition,
     Littler,
     NonApplicationCondition,
-    OrCondition,
     Parameter,
     ParameterEnum,
     ParameterType,
     Parametrization,
     Range,
+    extract_conditions_from_parametrization,
 )
 from lib.texts_properties import compute_am_signatures
-
-
-def _generate_bool_condition(parameter_str: str) -> Equal:
-    return Equal(Parameter(parameter_str, ParameterType.BOOLEAN), True)
-
-
-def _check_application_conditions_are_disjoint(parametrization: Parametrization, raise_errors: bool):
-    raise NotImplementedError()
-
-
-def _check_parametrization_consistency(parametrization: Parametrization, raise_errors: bool) -> None:
-    _check_application_conditions_are_disjoint(parametrization, raise_errors)
 
 
 def _extract_section_titles(am: Union[StructuredText, ArreteMinisteriel], path: List[int]) -> Dict[int, str]:
@@ -59,31 +47,6 @@ def _extract_section(am: Union[StructuredText, ArreteMinisteriel], path: List[in
         return am
     sections = am.sections if isinstance(am, ArreteMinisteriel) else am.sections
     return _extract_section(sections[0], path[1:])
-
-
-def _check_condition(condition: Condition) -> None:
-    if isinstance(condition, Equal):
-        assert condition.type == ConditionType.EQUAL
-    if isinstance(condition, Greater):
-        assert condition.type == ConditionType.GREATER
-    if isinstance(condition, Littler):
-        assert condition.type == ConditionType.LITTLER
-    if isinstance(condition, Range):
-        assert condition.type == ConditionType.RANGE
-    if isinstance(condition, AndCondition):
-        assert condition.type == ConditionType.AND
-    if isinstance(condition, OrCondition):
-        assert condition.type == ConditionType.OR
-    if isinstance(condition, (AndCondition, OrCondition)):
-        for subcondition in condition.conditions:
-            _check_condition(subcondition)
-
-
-def _check_parametrization(parametrization: Parametrization) -> None:
-    for app in parametrization.application_conditions:
-        _check_condition(app.condition)
-    for sec in parametrization.alternative_sections:
-        _check_condition(sec.condition)
 
 
 def lower_first_letter(str_: str) -> str:
@@ -257,7 +220,7 @@ def _extract_installation_date_criterion(
     parametrization: Parametrization, parameter_values: Dict[Parameter, Any]
 ) -> Optional[DateCriterion]:
     targets = _extract_sorted_targets(
-        _extract_conditions_from_parametrization(ParameterEnum.DATE_INSTALLATION.value, parametrization), True
+        extract_conditions_from_parametrization(ParameterEnum.DATE_INSTALLATION.value, parametrization), True
     )
     if not targets or ParameterEnum.DATE_INSTALLATION.value not in parameter_values:
         return None
@@ -271,7 +234,7 @@ def _extract_installation_date_criterion(
 
 
 def _date_not_in_parametrization(parametrization: Parametrization) -> bool:
-    return len(_extract_conditions_from_parametrization(ParameterEnum.DATE_INSTALLATION.value, parametrization)) == 0
+    return len(extract_conditions_from_parametrization(ParameterEnum.DATE_INSTALLATION.value, parametrization)) == 0
 
 
 def apply_parameter_values_to_am(
@@ -288,24 +251,6 @@ def apply_parameter_values_to_am(
         parametrization.path_to_conditions.get(tuple()) or [], parameter_values
     )
     return am
-
-
-def _extract_leaf_conditions(condition: Condition, parameter: Parameter) -> List[Condition]:
-    if isinstance(condition, (OrCondition, AndCondition)):
-        return [
-            cond for search_cond in condition.conditions for cond in _extract_leaf_conditions(search_cond, parameter)
-        ]
-    if condition.parameter.id == parameter.id:
-        return [condition]
-    return []
-
-
-def _extract_conditions_from_parametrization(parameter: Parameter, parametrization: Parametrization) -> List[Condition]:
-    return [
-        cd for ap in parametrization.application_conditions for cd in _extract_leaf_conditions(ap.condition, parameter)
-    ] + [
-        cd for as_ in parametrization.alternative_sections for cd in _extract_leaf_conditions(as_.condition, parameter)
-    ]
 
 
 def _generate_combinations(
@@ -345,7 +290,7 @@ def _check_condition_is_right_strict(condition: Condition) -> None:
         raise ValueError(f'Unexpected type {type(condition)}')
 
 
-def _extract_sorted_targets(conditions: List[Condition], right_strict: bool) -> List[Any]:
+def _extract_sorted_targets(conditions: Union[List[Condition], List[LeafCondition]], right_strict: bool) -> List[Any]:
     targets: List[Any] = []
     for condition in conditions:
         if not isinstance(condition, (Littler, Greater, Range)):
@@ -374,7 +319,9 @@ def _extract_interval_midpoints(interval_sides: List[Any]) -> List[Any]:
     return [left] + midpoints + [right]
 
 
-def _generate_equal_option_dicts(conditions: List[Condition]) -> Dict[str, Tuple[Parameter, Any]]:
+def _generate_equal_option_dicts(
+    conditions: Union[List[Condition], List[LeafCondition]]
+) -> Dict[str, Tuple[Parameter, Any]]:
     condition = conditions[0]
     assert isinstance(condition, Equal)
     targets = list({cd.target for cd in conditions if isinstance(cd, Equal)})
@@ -405,7 +352,7 @@ def _compute_parameter_names(targets: List[Any], parameter: Parameter) -> List[s
     return [left_name] + mid_names + [right_name]
 
 
-def _generate_options_dict(conditions: List[Condition]) -> Dict[str, Tuple[Parameter, Any]]:
+def _generate_options_dict(conditions: Union[List[Condition], List[LeafCondition]]) -> Dict[str, Tuple[Parameter, Any]]:
     types = {condition.type for condition in conditions}
     if types == {ConditionType.EQUAL}:
         return _generate_equal_option_dicts(conditions)
@@ -443,7 +390,7 @@ def _generate_options_dicts(parametrization: Parametrization, date_only: bool) -
         parameters = {param for param in parameters if param == ParameterEnum.DATE_INSTALLATION.value}
     options_dicts = []
     for parameter in parameters:
-        conditions = _extract_conditions_from_parametrization(parameter, parametrization)
+        conditions = extract_conditions_from_parametrization(parameter, parametrization)
         options_dicts.append(_generate_options_dict(conditions))
     return options_dicts
 

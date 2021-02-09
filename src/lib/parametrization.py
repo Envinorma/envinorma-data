@@ -1,233 +1,26 @@
-from dataclasses import dataclass, asdict, field, replace
+import math
+import warnings
+from dataclasses import asdict, dataclass, field, replace
 from datetime import datetime
-from enum import Enum
-from typing import Dict, Any, List, Union, Tuple, Optional
+from typing import Any, Dict, List, Optional, Set, Tuple, Union
 
+from lib.conditions import (
+    Condition,
+    Equal,
+    Greater,
+    LeafCondition,
+    Littler,
+    Parameter,
+    ParameterEnum,
+    ParameterType,
+    Range,
+    check_condition,
+    condition_to_str,
+    extract_leaf_conditions,
+    extract_parameters_from_condition,
+    load_condition,
+)
 from lib.data import Regime, StructuredText, StructuredTextSignature
-
-
-class ParameterType(Enum):
-    DATE = 'DATE'
-    REGIME = 'REGIME'
-    BOOLEAN = 'BOOLEAN'
-
-
-@dataclass(eq=True, frozen=True)
-class Parameter:
-    id: str
-    type: ParameterType
-
-    def to_dict(self) -> Dict[str, Any]:
-        res = asdict(self)
-        res['type'] = self.type.value
-        return res
-
-    @classmethod
-    def from_dict(cls, dict_: Dict[str, Any]) -> 'Parameter':
-        return Parameter(dict_['id'], ParameterType(dict_['type']))
-
-
-class ParameterEnum(Enum):
-    DATE_AUTORISATION = Parameter('date-d-autorisation', ParameterType.DATE)
-    DATE_INSTALLATION = Parameter('date-d-installation', ParameterType.DATE)
-    REGIME = Parameter('regime', ParameterType.REGIME)
-
-
-class ConditionType(Enum):
-    EQUAL = 'EQUAL'
-    AND = 'AND'
-    OR = 'OR'
-    RANGE = 'RANGE'
-    GREATER = 'GREATER'
-    LITTLER = 'LITTLER'
-
-
-def load_condition(dict_: Dict[str, Any]) -> 'Condition':
-    type_ = ConditionType(dict_['type'])
-    if type_ == ConditionType.AND:
-        return AndCondition.from_dict(dict_)
-    if type_ == ConditionType.OR:
-        return OrCondition.from_dict(dict_)
-    if type_ == ConditionType.EQUAL:
-        return Equal.from_dict(dict_)
-    if type_ == ConditionType.GREATER:
-        return Greater.from_dict(dict_)
-    if type_ == ConditionType.LITTLER:
-        return Littler.from_dict(dict_)
-    if type_ == ConditionType.RANGE:
-        return Range.from_dict(dict_)
-    raise ValueError(f'Unknown condition type {type_}')
-
-
-@dataclass
-class AndCondition:
-    conditions: List['Condition']
-    type: ConditionType = ConditionType.AND
-
-    def to_dict(self) -> Dict[str, Any]:
-        res = asdict(self)
-        res['type'] = self.type.value
-        res['conditions'] = [cd.to_dict() for cd in self.conditions]
-        return res
-
-    @classmethod
-    def from_dict(cls, dict_: Dict[str, Any]) -> 'AndCondition':
-        return AndCondition([load_condition(cd) for cd in dict_['conditions']])
-
-
-@dataclass
-class OrCondition:
-    conditions: List['Condition']
-    type: ConditionType = ConditionType.OR
-
-    def to_dict(self) -> Dict[str, Any]:
-        res = asdict(self)
-        res['type'] = self.type.value
-        res['conditions'] = [cd.to_dict() for cd in self.conditions]
-        return res
-
-    @classmethod
-    def from_dict(cls, dict_: Dict[str, Any]) -> 'OrCondition':
-        return OrCondition([load_condition(cd) for cd in dict_['conditions']])
-
-
-def parameter_value_to_dict(value: Any, type_: ParameterType) -> Any:
-    if type_ == ParameterType.DATE:
-        return int(value.timestamp())
-    if type_ == ParameterType.REGIME:
-        return value.value
-    return value
-
-
-def load_target(json_value: Any, type_: ParameterType) -> Any:
-    if type_ == ParameterType.DATE:
-        return datetime.fromtimestamp(json_value)
-    if type_ == ParameterType.REGIME:
-        return Regime(json_value)
-    return json_value
-
-
-@dataclass
-class Littler:
-    parameter: Parameter
-    target: Any
-    strict: bool = True
-    type: ConditionType = ConditionType.LITTLER
-
-    def to_dict(self) -> Dict[str, Any]:
-        res = asdict(self)
-        res['type'] = self.type.value
-        res['parameter'] = self.parameter.to_dict()
-        res['target'] = parameter_value_to_dict(self.target, self.parameter.type)
-        return res
-
-    @classmethod
-    def from_dict(cls, dict_: Dict[str, Any]) -> 'Littler':
-        parameter = Parameter.from_dict(dict_['parameter'])
-        return Littler(parameter, load_target(dict_['target'], parameter.type), dict_['strict'])
-
-
-@dataclass
-class Greater:
-    parameter: Parameter
-    target: Any
-    strict: bool = False
-    type: ConditionType = ConditionType.GREATER
-
-    def to_dict(self) -> Dict[str, Any]:
-        res = asdict(self)
-        res['type'] = self.type.value
-        res['parameter'] = self.parameter.to_dict()
-        res['target'] = parameter_value_to_dict(self.target, self.parameter.type)
-        return res
-
-    @classmethod
-    def from_dict(cls, dict_: Dict[str, Any]) -> 'Greater':
-        parameter = Parameter.from_dict(dict_['parameter'])
-        return Greater(parameter, load_target(dict_['target'], parameter.type), dict_['strict'])
-
-
-@dataclass
-class Equal:
-    parameter: Parameter
-    target: Any
-    type: ConditionType = ConditionType.EQUAL
-
-    def to_dict(self) -> Dict[str, Any]:
-        res = asdict(self)
-        res['type'] = self.type.value
-        res['parameter'] = self.parameter.to_dict()
-        res['target'] = parameter_value_to_dict(self.target, self.parameter.type)
-        return res
-
-    @classmethod
-    def from_dict(cls, dict_: Dict[str, Any]) -> 'Equal':
-        parameter = Parameter.from_dict(dict_['parameter'])
-        return Equal(parameter, load_target(dict_['target'], parameter.type))
-
-
-@dataclass
-class Range:
-    parameter: Parameter
-    left: Any
-    right: Any
-    left_strict: bool = False
-    right_strict: bool = True
-    type: ConditionType = ConditionType.RANGE
-
-    def to_dict(self) -> Dict[str, Any]:
-        res = asdict(self)
-        res['type'] = self.type.value
-        res['parameter'] = self.parameter.to_dict()
-        res['left'] = parameter_value_to_dict(self.left, self.parameter.type)
-        res['right'] = parameter_value_to_dict(self.right, self.parameter.type)
-        return res
-
-    @classmethod
-    def from_dict(cls, dict_: Dict[str, Any]) -> 'Range':
-        parameter = Parameter.from_dict(dict_['parameter'])
-        return Range(
-            Parameter.from_dict(dict_['parameter']),
-            load_target(dict_['left'], parameter.type),
-            load_target(dict_['right'], parameter.type),
-            dict_['left_strict'],
-            dict_['right_strict'],
-        )
-
-
-LeafCondition = Union[Equal, Range, Greater, Littler]
-
-Condition = Union[LeafCondition, AndCondition, OrCondition]
-
-
-def parameter_value_to_str(value: Any) -> str:
-    if isinstance(value, datetime):
-        return value.strftime('%d/%m/%Y')
-    return str(value)
-
-
-def condition_to_str(condition: Condition) -> str:
-    if isinstance(condition, Equal):
-        return f'{condition.parameter.id} == {parameter_value_to_str(condition.target)}'
-    if isinstance(condition, Littler):
-        comp = '<' if condition.strict else '<='
-        return f'{condition.parameter.id} {comp} {parameter_value_to_str(condition.target)}'
-    if isinstance(condition, Greater):
-        comp = '>' if condition.strict else '>='
-        return f'{condition.parameter.id} {comp} {parameter_value_to_str(condition.target)}'
-    if isinstance(condition, Range):
-        left_comp = '<' if condition.left_strict else '<='
-        right_comp = '<' if condition.right_strict else '<='
-        return (
-            f'{parameter_value_to_str(condition.left)} {left_comp} {condition.parameter.id} '
-            f'{right_comp} {parameter_value_to_str(condition.right)}'
-        )
-    if isinstance(condition, AndCondition):
-        return '(' + ') and ('.join([condition_to_str(cd) for cd in condition.conditions]) + ')'
-    if isinstance(condition, OrCondition):
-        return '(' + ') and ('.join([condition_to_str(cd) for cd in condition.conditions]) + ')'
-    raise NotImplementedError(f'stringifying condition {condition} is not implemented yet.')
-
 
 Ints = Tuple[int, ...]
 
@@ -329,6 +122,133 @@ class AlternativeSection:
         )
 
 
+def extract_conditions_from_parametrization(
+    parameter: Parameter, parametrization: 'Parametrization'
+) -> List[LeafCondition]:
+    return [
+        cd for ap in parametrization.application_conditions for cd in extract_leaf_conditions(ap.condition, parameter)
+    ] + [cd for as_ in parametrization.alternative_sections for cd in extract_leaf_conditions(as_.condition, parameter)]
+
+
+class ParametrizationError(Exception):
+    pass
+
+
+def _check_parametrization(parametrization: 'Parametrization') -> None:
+    for app in parametrization.application_conditions:
+        check_condition(app.condition)
+    for sec in parametrization.alternative_sections:
+        check_condition(sec.condition)
+
+
+def _extract_all_paths(parametrization: 'Parametrization') -> Set[Ints]:
+    return set(parametrization.path_to_alternative_sections.keys()).union(
+        set(parametrization.path_to_conditions.keys())
+    )
+
+
+_DateRange = Tuple[Optional[datetime], Optional[datetime]]
+
+
+def _extract_date_range(condition: LeafCondition) -> _DateRange:
+    if isinstance(condition, Range):
+        return (condition.left, condition.right)
+    if isinstance(condition, Equal):
+        return (condition.target, condition.target)
+    if isinstance(condition, Littler):
+        return (None, condition.target)
+    if isinstance(condition, Greater):
+        return (condition.target, None)
+    raise NotImplementedError(type(condition))
+
+
+def _ranges_strictly_overlap(ranges: List[Tuple[float, float]]) -> bool:
+    sorted_ranges = sorted(ranges)
+    for ((x, y), (z, t)) in zip(sorted_ranges, sorted_ranges[1:]):
+        assert x <= y
+        assert z <= t
+        if y > z:
+            return True
+    return False
+
+
+def _date_ranges_strictly_overlap(ranges: List[_DateRange]) -> bool:
+    timestamp_ranges = [
+        (dt_left.timestamp() if dt_left else -math.inf, dt_right.timestamp() if dt_right else math.inf)
+        for dt_left, dt_right in ranges
+    ]
+    return _ranges_strictly_overlap(timestamp_ranges)
+
+
+def _check_date_conditions_are_incompatible(all_conditions: List[Condition], parameter: Parameter) -> None:
+    leaf_conditions = [leaf for cd in all_conditions for leaf in extract_leaf_conditions(cd, parameter)]
+    ranges: List[_DateRange] = []
+    for condition in leaf_conditions:
+        ranges.append(_extract_date_range(condition))
+    if _date_ranges_strictly_overlap(ranges):
+        raise ParametrizationError(
+            f'Date ranges overlap, they can be satisfy consequently, which can lead to'
+            f' ambiguities: {all_conditions}'
+        )
+
+
+def _check_regime_conditions_are_incompatible(all_conditions: List[Condition], parameter: Parameter) -> None:
+    leaf_conditions = [leaf for cd in all_conditions for leaf in extract_leaf_conditions(cd, parameter)]
+    targets: Set[Regime] = set()
+    for condition in leaf_conditions:
+        if not isinstance(condition, Equal):
+            raise ParametrizationError(f'Regime conditions must be "=" conditions, got {condition.type}')
+        if condition.target in targets:
+            raise ParametrizationError(f'Several conditions are simultaneously satisfiable : {all_conditions}')
+        targets.add(condition.target)
+
+
+def _check_bool_conditions_are_incompatible(all_conditions: List[Condition], parameter: Parameter) -> None:
+    leaf_conditions = [leaf for cd in all_conditions for leaf in extract_leaf_conditions(cd, parameter)]
+    targets: Set[bool] = set()
+    for condition in leaf_conditions:
+        if not isinstance(condition, Equal):
+            raise ParametrizationError(f'bool conditions must be "=" conditions, got {condition.type}')
+        if condition.target in targets:
+            raise ParametrizationError(f'Several conditions are simultaneously satisfiable : {all_conditions}')
+        targets.add(condition.target)
+
+
+def _check_conditions_are_incompatible(all_conditions: List[Condition], parameter: Parameter) -> None:
+    if parameter.type == ParameterType.DATE:
+        _check_date_conditions_are_incompatible(all_conditions, parameter)
+    elif parameter.type == ParameterType.REGIME:
+        _check_regime_conditions_are_incompatible(all_conditions, parameter)
+    elif parameter.type == ParameterType.BOOLEAN:
+        _check_bool_conditions_are_incompatible(all_conditions, parameter)
+    else:
+        raise NotImplementedError(parameter.type)
+
+
+def _check_consistency(
+    non_application_conditions: List[NonApplicationCondition], alternative_sections: List[AlternativeSection]
+) -> None:
+    all_conditions = [nac.condition for nac in non_application_conditions] + [
+        als.condition for als in alternative_sections
+    ]
+    if not all_conditions:
+        return None
+    all_parameters = {param for condition in all_conditions for param in extract_parameters_from_condition(condition)}
+    if len(all_parameters) >= 2:
+        return  # complicated and infrequent, not checked for now
+    if len(all_parameters) == 0:
+        raise ParametrizationError('There should be at least one parameter in conditions.')
+    _check_conditions_are_incompatible(all_conditions, list(all_parameters)[0])
+
+
+def check_parametrization_consistency(parametrization: 'Parametrization') -> None:
+    all_paths = _extract_all_paths(parametrization)
+    for path in all_paths:
+        _check_consistency(
+            parametrization.path_to_conditions.get(path, []), parametrization.path_to_alternative_sections.get(path, [])
+        )
+
+
 @dataclass
 class Parametrization:
     application_conditions: List[NonApplicationCondition]
@@ -351,6 +271,11 @@ class Parametrization:
             if path not in self.path_to_alternative_sections:
                 self.path_to_alternative_sections[path] = []
             self.path_to_alternative_sections[path].append(sec)
+        _check_parametrization(self)
+        try:
+            check_parametrization_consistency(self)
+        except ParametrizationError as exc:
+            warnings.warn(f'Parametrization error, will raise an exception in the future : {str(exc)}')
 
     def to_dict(self) -> Dict[str, Any]:
         res = asdict(self)

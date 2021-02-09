@@ -1,13 +1,20 @@
 from datetime import datetime
 
-from lib.condition_to_str import (
+from lib.conditions import (
+    AndCondition,
+    Equal,
+    Greater,
+    Littler,
+    OrCondition,
+    ParameterEnum,
+    Range,
     _merge_words,
+    _parameter_id_to_str,
     generate_inactive_warning,
     generate_modification_warning,
     generate_warning_missing_value,
 )
 from lib.data import Regime
-from lib.parametrization import AndCondition, Equal, Greater, Littler, OrCondition, ParameterEnum, Range
 
 
 def test_merge_words():
@@ -146,3 +153,9 @@ def test_generate_modification_warning():
     )
     val = {parameter_regime: Regime.A, parameter: datetime(2018, 1, 5)}
     assert generate_modification_warning(OrCondition([condition_2, condition_regime]), val) == exp
+
+
+def test_parameter_id_to_str():
+    for parameter in ParameterEnum:
+        res = _parameter_id_to_str(parameter.value.id)
+        assert not res.startswith('la valeur du paramètre')  # otherwise means no custom value was defined

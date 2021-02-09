@@ -11,7 +11,7 @@ from back_office.parametrization_edition import (
     _simplify_condition,
     _try_building_range_condition,
 )
-from lib.parametrization import AndCondition, Equal, Greater, Littler, OrCondition, ParameterEnum, Range
+from lib.conditions import AndCondition, Equal, Greater, Littler, OrCondition, ParameterEnum, Range
 
 
 def test_change_to_mono_conditions():

@@ -5,15 +5,25 @@ from datetime import datetime, timedelta
 from string import ascii_letters
 from typing import List, Optional
 
+from lib.conditions import (
+    AndCondition,
+    Condition,
+    Equal,
+    Greater,
+    Littler,
+    OrCondition,
+    Parameter,
+    ParameterEnum,
+    ParameterType,
+    Range,
+)
 from lib.data import ArreteMinisteriel, EnrichedString, Regime, StructuredText, StructuredTextSignature
 from lib.parametric_am import (
-    apply_parameter_values_to_am,
     _change_value,
     _date_not_in_parametrization,
     _deactivate_alineas,
     _extract_installation_date_criterion,
     _extract_interval_midpoints,
-    extract_parameters_from_parametrization,
     _extract_sorted_targets,
     _extract_warning,
     _extract_warnings,
@@ -21,27 +31,22 @@ from lib.parametric_am import (
     _generate_equal_option_dicts,
     _generate_options_dict,
     _mean,
+    apply_parameter_values_to_am,
+    extract_parameters_from_parametrization,
     generate_all_am_versions,
     is_satisfied,
 )
 from lib.parametrization import (
     AlternativeSection,
-    AndCondition,
-    Condition,
     ConditionSource,
     EntityReference,
-    Equal,
-    Greater,
-    Littler,
     NonApplicationCondition,
-    OrCondition,
-    Parameter,
-    ParameterEnum,
-    ParameterType,
     Parametrization,
-    Range,
     SectionReference,
 )
+
+_NAC = NonApplicationCondition
+_AS = AlternativeSection
 
 
 def test_mean():
@@ -174,7 +179,7 @@ def test_apply_parameter_values_to_am_whole_arrete():
     is_installation_old = Equal(parameter, False)
     source = ConditionSource('', EntityReference(SectionReference((2,)), None, False))
     parametrization = Parametrization(
-        [NonApplicationCondition(EntityReference(SectionReference(tuple()), None, True), is_installation_old, source)],
+        [_NAC(EntityReference(SectionReference(tuple()), None, True), is_installation_old, source)],
         [],
     )
 
@@ -221,10 +226,10 @@ def test_apply_parameter_values_to_am():
     new_text = StructuredText(_str('Art. 2'), [_str('version modifiée')], [], None)
     parametrization = Parametrization(
         [
-            NonApplicationCondition(EntityReference(SectionReference((0,)), None), is_installation_old, source),
-            NonApplicationCondition(EntityReference(SectionReference((3,)), [0]), is_installation_old, source),
+            _NAC(EntityReference(SectionReference((0,)), None), is_installation_old, source),
+            _NAC(EntityReference(SectionReference((3,)), [0]), is_installation_old, source),
         ],
-        [AlternativeSection(SectionReference((1,)), new_text, is_installation_new, source)],
+        [_AS(SectionReference((1,)), new_text, is_installation_new, source)],
     )
 
     new_am_1 = apply_parameter_values_to_am(am, parametrization, {parameter: False})
@@ -273,8 +278,8 @@ def test_extract_parameters_from_parametrization():
     source = ConditionSource('', EntityReference(SectionReference((2,)), None, False))
     new_text = StructuredText(_str('Art. 2'), [_str('version modifiée')], [], None)
     parametrization = Parametrization(
-        [NonApplicationCondition(EntityReference(SectionReference((0,)), None), condition_1, source)],
-        [AlternativeSection(SectionReference((1,)), new_text, condition_2, source)],
+        [_NAC(EntityReference(SectionReference((0,)), None), condition_1, source)],
+        [_AS(SectionReference((1,)), new_text, condition_2, source)],
     )
 
     parameters = extract_parameters_from_parametrization(parametrization)
@@ -290,8 +295,8 @@ def test_extract_parameters_from_parametrization_2():
     source = ConditionSource('', EntityReference(SectionReference((2,)), None, False))
     new_text = StructuredText(_str('Art. 2'), [_str('version modifiée')], [], None)
     parametrization = Parametrization(
-        [NonApplicationCondition(EntityReference(SectionReference((0,)), None), condition_1, source)],
-        [AlternativeSection(SectionReference((1,)), new_text, condition_2, source)],
+        [_NAC(EntityReference(SectionReference((0,)), None), condition_1, source)],
+        [_AS(SectionReference((1,)), new_text, condition_2, source)],
     )
 
     parameters = extract_parameters_from_parametrization(parametrization)
@@ -311,9 +316,7 @@ def test_generate_all_am_versions():
     parameter = Parameter('nouvelle-installation', ParameterType.BOOLEAN)
     condition = Equal(parameter, False)
     source = ConditionSource('', EntityReference(SectionReference((2,)), None, False))
-    parametrization = Parametrization(
-        [NonApplicationCondition(EntityReference(SectionReference((0,)), None), condition, source)], []
-    )
+    parametrization = Parametrization([_NAC(EntityReference(SectionReference((0,)), None), condition, source)], [])
 
     res = generate_all_am_versions(am, parametrization, False)
     assert len(res) == 3
@@ -342,10 +345,10 @@ def test_extract_installation_date_criterion():
     new_text = StructuredText(_str('Art. 2'), [_str('version modifiée')], [], None, None)
     parametrization = Parametrization(
         [
-            NonApplicationCondition(EntityReference(SectionReference((0,)), None), condition_1, source),
-            NonApplicationCondition(EntityReference(SectionReference((0,)), None), condition_3, source),
+            _NAC(EntityReference(SectionReference((0,)), None), condition_1, source),
+            _NAC(EntityReference(SectionReference((2,)), None), condition_3, source),
         ],
-        [AlternativeSection(SectionReference((1,)), new_text, condition_2, source)],
+        [_AS(SectionReference((1,)), new_text, condition_2, source)],
     )
 
     oldest = _extract_installation_date_criterion(parametrization, {parameter: date_1 - timedelta(1)})
@@ -383,9 +386,9 @@ def test_is_satisfied():
 
 def test_date_not_in_parametrization():
     assert _date_not_in_parametrization(Parametrization([], []))
-    nac = NonApplicationCondition(
+    nac = _NAC(
         EntityReference(SectionReference((1,)), None),
-        Equal(ParameterEnum.DATE_INSTALLATION.value, True),
+        Equal(ParameterEnum.DATE_INSTALLATION.value, datetime.now()),
         ConditionSource('', EntityReference(SectionReference((1,)), None)),
     )
     assert not _date_not_in_parametrization(Parametrization([nac], []))
@@ -420,7 +423,7 @@ def _get_simple_text(sections: Optional[List[StructuredText]] = None) -> Structu
 
 
 def test_deactivate_alineas():
-    nac = NonApplicationCondition(
+    nac = _NAC(
         EntityReference(SectionReference((0,)), None),
         Littler(ParameterEnum.DATE_INSTALLATION.value, datetime(2021, 1, 1)),
         ConditionSource('', EntityReference(SectionReference((1,)), None)),
@@ -429,7 +432,7 @@ def test_deactivate_alineas():
     assert not res.applicability.active
     assert all([not al.active for al in res.outer_alineas])
 
-    nac = NonApplicationCondition(
+    nac = _NAC(
         EntityReference(SectionReference((0,)), [0]),
         Littler(ParameterEnum.DATE_INSTALLATION.value, datetime(2021, 1, 1)),
         ConditionSource('', EntityReference(SectionReference((1,)), None)),
@@ -439,7 +442,7 @@ def test_deactivate_alineas():
     assert not res.outer_alineas[0].active
     assert res.outer_alineas[1].active
 
-    nac = NonApplicationCondition(
+    nac = _NAC(
         EntityReference(SectionReference((0,)), None),
         Littler(ParameterEnum.DATE_INSTALLATION.value, datetime(2021, 1, 1)),
         ConditionSource('', EntityReference(SectionReference((1,)), None)),

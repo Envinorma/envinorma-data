@@ -4,7 +4,12 @@ from typing import Any, Dict, List, Optional, Tuple
 import psycopg2
 from lib.config import config
 from lib.data import ArreteMinisteriel
-from lib.parametrization import NonApplicationCondition, ParameterObject, Parametrization
+from lib.parametrization import (
+    NonApplicationCondition,
+    ParameterObject,
+    Parametrization,
+    check_parametrization_consistency,
+)
 
 from back_office.utils import AMOperation, AMStatus
 
@@ -114,6 +119,7 @@ def _recreate_with_upserted_parameter(
 def upsert_parameter(am_id: str, new_parameter: ParameterObject, parameter_rank: int) -> None:
     previous_parametrization = _load_parametrization(am_id) or Parametrization([], [])
     parametrization = _recreate_with_upserted_parameter(new_parameter, parameter_rank, previous_parametrization)
+    check_parametrization_consistency(parametrization)
     _upsert_new_parametrization(am_id, parametrization)
 
 

@@ -8,25 +8,28 @@ import dash_core_components as dcc
 import dash_html_components as html
 from dash.dependencies import Input, Output, State
 from dash.development.base_component import Component
-from lib.condition_to_str import extract_parameters_from_condition
-from lib.data import ArreteMinisteriel, EnrichedString, Ints, Regime, StructuredText, am_to_text
-from lib.parametrization import (
-    AlternativeSection,
+from lib.conditions import (
     AndCondition,
     Condition,
-    ConditionSource,
-    EntityReference,
     Equal,
     Greater,
     Littler,
-    NonApplicationCondition,
     OrCondition,
     Parameter,
     ParameterEnum,
-    ParameterObject,
     ParameterType,
-    Parametrization,
     Range,
+    extract_parameters_from_condition,
+)
+from lib.data import ArreteMinisteriel, EnrichedString, Ints, Regime, StructuredText, am_to_text
+from lib.parametrization import (
+    AlternativeSection,
+    ConditionSource,
+    EntityReference,
+    NonApplicationCondition,
+    ParameterObject,
+    Parametrization,
+    ParametrizationError,
     SectionReference,
 )
 
@@ -57,10 +60,14 @@ from back_office.utils import (
 _Options = List[Dict[str, Any]]
 
 _AUTORISATION_DATE_FR = 'Date d\'autorisation'
+_DECLARATION_DATE_FR = 'Date de déclaration'
+_ENREGISTREMENT_DATE_FR = 'Date d\'enregistrement'
 _INSTALLATION_DATE_FR = 'Date de mise en service'
 _CONDITION_VARIABLES = {
     'Régime': ParameterEnum.REGIME,
     _AUTORISATION_DATE_FR: ParameterEnum.DATE_AUTORISATION,
+    _DECLARATION_DATE_FR: ParameterEnum.DATE_DECLARATION,
+    _ENREGISTREMENT_DATE_FR: ParameterEnum.DATE_ENREGISTREMENT,
     _INSTALLATION_DATE_FR: ParameterEnum.DATE_INSTALLATION,
 }
 _CONDITION_VARIABLE_OPTIONS = [{'label': condition, 'value': condition} for condition in _CONDITION_VARIABLES]
@@ -873,6 +880,11 @@ def _handle_submit(
         _extract_and_upsert_new_parameter(state, am_id, operation, parameter_rank, target_section_nb_alineas)
     except _FormHandlingError as exc:
         return error_component(f'Erreur dans le formulaire:\n{exc}')
+    except ParametrizationError as exc:
+        return error_component(
+            f'Erreur: la section visée est déjà visée par au moins une autre condition.'
+            f' Celle-ci est incompatible avec celle(s) déjà définie(s) :\n{exc}'
+        )
     except Exception:  # pylint: disable=broad-except
         return error_component(f'Unexpected error:\n{traceback.format_exc()}')
     return html.Div(
