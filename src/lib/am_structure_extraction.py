@@ -1,18 +1,13 @@
 import copy
-import json
-import os
 import random
-import traceback
 from collections import Counter
-from dataclasses import asdict, replace
+from dataclasses import replace
 from math import sqrt
 from typing import Any, Dict, Iterable, List, Optional, Tuple, TypeVar, Union
 
 import bs4
 from bs4 import BeautifulSoup
-from tqdm import tqdm
 
-from lib.config import AM_DATA_FOLDER
 from lib.data import (
     ArreteMinisteriel,
     ArticleStatus,
@@ -25,7 +20,6 @@ from lib.data import (
     StructuredText,
     Table,
     TableReference,
-    load_legifrance_text,
 )
 from lib.parse_html import extract_table
 from lib.structure_extraction import split_alineas_in_sections

@@ -4,7 +4,7 @@
   border-left: 2px solid #007bff;
   font-size: 0.8em;
   bottom: 0;
-  height: 75vh;
+  max-height: 75vh;
   overflow-y: auto;
 }
 .summary a {

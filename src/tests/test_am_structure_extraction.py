@@ -22,13 +22,13 @@ from lib.am_structure_extraction import (
     _remove_links,
     _replace_weird_annexe_words,
     _structure_text,
-    load_legifrance_text,
     remove_empty,
     remove_summaries,
     split_alineas_in_sections,
     transform_arrete_ministeriel,
 )
 from lib.config import AM_DATA_FOLDER
+from lib.data import load_legifrance_text
 from lib.texts_properties import _extract_section_inconsistencies, count_articles_in_am, count_sections, count_tables
 
 

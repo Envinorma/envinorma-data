@@ -20,7 +20,6 @@ from lib.am_structure_extraction import (
     AMStructurationError,
     ArreteMinisteriel,
     check_legifrance_dict,
-    load_legifrance_text,
     transform_arrete_ministeriel,
 )
 from lib.am_to_markdown import am_to_markdown
@@ -38,6 +37,7 @@ from lib.data import (
     add_metadata,
     check_am,
     load_am_data,
+    load_legifrance_text,
 )
 from lib.legifrance_API import get_current_loda_via_cid_response, get_legifrance_client
 from lib.manual_enrichments import (

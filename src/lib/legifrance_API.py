@@ -1,19 +1,21 @@
 import json
 import os
 from datetime import datetime
+from functools import lru_cache
 from typing import Dict, Optional
 
 import requests
 from requests_oauthlib import OAuth2Session
 from tqdm import tqdm
 
-from lib.config import LEGIFRANCE_CLIENT_SECRET, AM_DATA_FOLDER
+from lib.config import AM_DATA_FOLDER, LEGIFRANCE_CLIENT_SECRET
 
 _API_HOST = 'https://api.aife.economie.gouv.fr/dila/legifrance-beta/lf-engine-app'
 _TOKEN_URL = 'https://oauth.aife.economie.gouv.fr/api/oauth/token'
 _NOR_URL = f'{_API_HOST}/consult/getJoWithNor'
 
 
+@lru_cache
 def get_legifrance_client() -> OAuth2Session:
     secret = os.environ.get('CLIENT_SECRET', LEGIFRANCE_CLIENT_SECRET)
     if not secret:

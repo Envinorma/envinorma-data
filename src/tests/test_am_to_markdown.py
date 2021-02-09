@@ -1,26 +1,26 @@
-from lib.config import AM_DATA_FOLDER
-import pytest
 import json
 
-from lib.am_to_markdown import (
-    DataFormat,
-    Link,
-    _insert_links,
-    table_to_markdown,
-    _extract_sorted_links_to_display,
-    am_to_markdown,
-    extract_markdown_text,
-)
+import pytest
 from lib.am_structure_extraction import (
     ArticleStatus,
-    extract_table,
-    transform_arrete_ministeriel,
-    load_legifrance_text,
-    _structure_text,
     LegifranceArticle,
     LegifranceSection,
     _extract_sections,
+    _structure_text,
+    extract_table,
+    transform_arrete_ministeriel,
 )
+from lib.am_to_markdown import (
+    DataFormat,
+    Link,
+    _extract_sorted_links_to_display,
+    _insert_links,
+    am_to_markdown,
+    extract_markdown_text,
+    table_to_markdown,
+)
+from lib.config import AM_DATA_FOLDER
+from lib.data import load_legifrance_text
 
 
 def test_markdown_to_html():
