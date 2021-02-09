@@ -12,7 +12,7 @@ from lib.am_enriching import detect_and_add_topics
 from lib.data import ArreteMinisteriel, Regime, StructuredText, random_id
 from lib.parametric_am import apply_parameter_values_to_am, extract_parameters_from_parametrization
 from lib.parametrization import Parameter, ParameterEnum, ParameterType, Parametrization
-from lib.topics.patterns import Topic, TopicName
+from lib.topics.patterns import TopicName
 from lib.topics.topics import TOPIC_ONTOLOGY
 
 from back_office.app_init import app
