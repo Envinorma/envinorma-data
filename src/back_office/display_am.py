@@ -1,6 +1,6 @@
 import traceback
 from datetime import datetime
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any, Counter, Dict, List, Optional, Tuple
 
 import dash_bootstrap_components as dbc
 import dash_core_components as dcc
@@ -8,9 +8,12 @@ import dash_html_components as html
 from dash.dependencies import ALL, Input, Output, State
 from dash.development.base_component import Component
 from dash.exceptions import PreventUpdate
-from lib.data import ArreteMinisteriel, Regime, random_id
+from lib.am_enriching import detect_and_add_topics
+from lib.data import ArreteMinisteriel, Regime, StructuredText, random_id
 from lib.parametric_am import apply_parameter_values_to_am, extract_parameters_from_parametrization
 from lib.parametrization import Parameter, ParameterEnum, ParameterType, Parametrization
+from lib.topics.patterns import Topic, TopicName
+from lib.topics.topics import TOPIC_ONTOLOGY
 
 from back_office.app_init import app
 from back_office.components import error_component
@@ -106,18 +109,39 @@ def _parametrization_component(am_id: str) -> Component:
     return html.Div([html.H2('Paramétrage'), content])
 
 
-def _topic_component() -> Component:
-    return html.Div(html.H2('Topics'))
+def _extract_topics(text: StructuredText) -> List[TopicName]:
+    topic = ([ann.topic] if ann.topic else []) if (ann := text.annotations) else []
+    children_topics = [top for sec in text.sections for top in _extract_topics(sec)]
+    return topic + children_topics
+
+
+def _extract_topic_count(am: ArreteMinisteriel) -> Dict[TopicName, int]:
+    return Counter([topic for section in am.sections for topic in _extract_topics(section)])
+
+
+def _topic_button(topic: TopicName, count: int) -> Component:
+    text = f'{topic.value}  ({count})'
+    return html.Button(text, className='btn btn-primary btn-sm', style={'margin': '5px'})
+
+
+def _topic_buttons(topic_count: Dict[TopicName, int]) -> Component:
+    return html.Div([_topic_button(topic, count) for topic, count in sorted(topic_count.items(), key=lambda x: -x[1])])
+
+
+def _topic_component(am: ArreteMinisteriel) -> Component:
+    topic_count = _extract_topic_count(am)
+    return html.Div([html.H2('Topics'), _topic_buttons(topic_count)])
 
 
 def _parametrization_and_topic(am: ArreteMinisteriel) -> Component:
     param = html.Div(_parametrization_component(am.id or ''), className='col-6')
-    topic = html.Div(_topic_component(), className='col-6')
+    topic = html.Div(_topic_component(am), className='col-6')
     return html.Div([param, topic], className='row')
 
 
 def _page(am: ArreteMinisteriel) -> Component:
     style = {'height': '80vh', 'overflow-y': 'auto'}
+    am = detect_and_add_topics(am, TOPIC_ONTOLOGY)
     return html.Div(
         [
             _parametrization_and_topic(am),
@@ -181,7 +205,6 @@ def _extract_parameter_values(
     State(_input(ALL), 'date'),
     State(_input(ALL), 'value'),
     State(_AM_ID, 'data'),
-    prevent_initial_call=True,
 )
 def _apply_parameters(_, parameter_ids, parameter_dates, parameter_values, am_id):
     am = _load_am(am_id)
