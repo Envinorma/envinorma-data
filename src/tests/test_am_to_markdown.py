@@ -40,11 +40,7 @@ def test_markdown_to_html():
     table = extract_table(table_html)
     generated_html_table = table_to_markdown(table)
     assert generated_html_table == (
-        '<table><tr><th colspan="1" rowspan="1">A</th>'
-        '<th colspan="1" rowspan="1">B</th>'
-        '<th colspan="1" rowspan="1">C</th></tr>'
-        '<tr><td colspan="2" rowspan="1">D</td>'
-        '<td colspan="1" rowspan="1">F</td></tr></table>'
+        '<table><tr><th>A</th><th>B</th><th>C</th></tr><tr><td colspan="2">D</td><td>F</td></tr></table>'
     )
 
 
@@ -70,10 +66,10 @@ def test_markdown_to_html_with_rowspan():
     table = extract_table(table_html)
     generated_html_table = table_to_markdown(table)
     assert generated_html_table == (
-        '<table><tr><th colspan="1" rowspan="1">A</th><th colspan="1" rowspan="1">B</th>'
-        '<th colspan="1" rowspan="1">C</th></tr><tr><td colspan="1" rowspan="2">D</td>'
-        '<td colspan="1" rowspan="1">E</td><td colspan="1" rowspan="1">F</td></tr>'
-        '<tr><td colspan="1" rowspan="1">G</td><td colspan="1" rowspan="1">H</td></tr></table>'
+        '<table><tr><th>A</th><th>B</th>'
+        '<th>C</th></tr><tr><td rowspan="2">D</td>'
+        '<td>E</td><td>F</td></tr>'
+        '<tr><td>G</td><td>H</td></tr></table>'
     )
 
 

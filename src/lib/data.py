@@ -732,3 +732,39 @@ def extract_text_lines(text: StructuredText, level: int = 0) -> List[str]:
     alinena_lines = [line.strip() for al in text.outer_alineas for line in al.text.split('\n')]
     section_lines = [line for sec in text.sections for line in extract_text_lines(sec, level + 1)]
     return title_lines + alinena_lines + section_lines
+
+
+def _enriched_text_to_html(str_: EnrichedString, with_links: bool = False) -> str:
+    if with_links:
+        raise NotImplementedError()  # see am_to_markdown if required
+    else:
+        text = str_.text
+    return text.replace('\n', '<br/>')
+
+
+def _cell_to_html(cell: Cell, is_header: bool, with_links: bool = False) -> str:
+    tag = 'th' if is_header else 'td'
+    colspan_attr =  f' colspan="{cell.colspan}"' if cell.colspan != 1 else ''
+    rowspan_attr =  f' rowspan="{cell.rowspan}"' if cell.rowspan != 1 else ''
+    return (
+        f'<{tag}{colspan_attr}{rowspan_attr}>'
+        f'{_enriched_text_to_html(cell.content, with_links)}'
+        f'</{tag}>'
+    )
+
+
+def _cells_to_html(cells: List[Cell], is_header: bool, with_links: bool = False) -> str:
+    return ''.join([_cell_to_html(cell, is_header, with_links) for cell in cells])
+
+
+def _row_to_html(row: Row, with_links: bool = False) -> str:
+    return f'<tr>{_cells_to_html(row.cells, row.is_header, with_links)}</tr>'
+
+
+def _rows_to_html(rows: List[Row], with_links: bool = False) -> str:
+    return ''.join([_row_to_html(row, with_links) for row in rows])
+
+
+def table_to_html(table: Table, with_links: bool = False) -> str:
+    return f'<table>{_rows_to_html(table.rows, with_links)}</table>'
+

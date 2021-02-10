@@ -3,8 +3,6 @@ from typing import List, TypeVar
 
 from lib.data import (
     EnrichedString,
-    Cell,
-    Row,
     Table,
     Link,
     StructuredText,
@@ -13,41 +11,13 @@ from lib.data import (
     Classement,
     AMMetadata,
     get_text_defined_id,
+    table_to_html,
 )
 from lib.config import AIDA_URL
 
 
-def enriched_text_to_html(str_: EnrichedString, with_links: bool = False) -> str:
-    if with_links:
-        text = _insert_links(str_.text, str_.links, DataFormat.HTML)
-    else:
-        text = str_.text
-    return text.replace('\n', '<br/>')
-
-
-def cell_to_html(cell: Cell, is_header: bool, with_links: bool = False) -> str:
-    tag = 'th' if is_header else 'td'
-    return (
-        f'<{tag} colspan="{cell.colspan}" rowspan="{cell.rowspan}">'
-        f'{enriched_text_to_html(cell.content, with_links)}'
-        f'</{tag}>'
-    )
-
-
-def cells_to_html(cells: List[Cell], is_header: bool, with_links: bool = False) -> str:
-    return ''.join([cell_to_html(cell, is_header, with_links) for cell in cells])
-
-
-def row_to_html(row: Row, with_links: bool = False) -> str:
-    return f'<tr>{cells_to_html(row.cells, row.is_header, with_links)}</tr>'
-
-
-def rows_to_html(rows: List[Row], with_links: bool = False) -> str:
-    return ''.join([row_to_html(row, with_links) for row in rows])
-
-
 def table_to_markdown(table: Table, with_links: bool = False) -> str:  # html required for merging cells
-    return f'<table>{rows_to_html(table.rows, with_links)}</table>'
+    return table_to_html(table, with_links)
 
 
 def _extract_sorted_links_to_display(links: List[Link]) -> List[Link]:

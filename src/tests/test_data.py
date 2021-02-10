@@ -21,10 +21,12 @@ from lib.data import (
     TopicName,
     _is_probably_cid,
     count_cells,
+    estr,
     extract_text_lines,
     group_classements_by_alineas,
     is_increasing,
     load_am_data,
+    table_to_html,
 )
 
 
@@ -245,3 +247,17 @@ def test_extract_text_lines():
         'Vous pouvez consulter les schémas dans le',
         'JO n° 265 du 16/11/2010 texte numéro 21',
     ]
+
+
+def test_table_to_html():
+    res = table_to_html(Table([Row([Cell(estr('test'), 1, 1)], False)]))
+    assert res == '<table><tr><td>test</td></tr></table>'
+
+    res = table_to_html(Table([Row([Cell(estr('test'), 2, 1)], False)]))
+    assert res == '<table><tr><td colspan="2">test</td></tr></table>'
+
+    res = table_to_html(Table([Row([Cell(estr('test'), 1, 2)], False)]))
+    assert res == '<table><tr><td rowspan="2">test</td></tr></table>'
+
+    res = table_to_html(Table([Row([Cell(estr('test'), 1, 2)], True)]))
+    assert res == '<table><tr><th rowspan="2">test</th></tr></table>'

@@ -16,11 +16,11 @@ from lib.data import (
     AMMetadata,
     ArreteMinisteriel,
     EnrichedString,
-    Row,
     StructuredText,
     Table,
     am_to_text,
     load_legifrance_text,
+    table_to_html,
 )
 from lib.legifrance_API import LegifranceRequestError, get_current_loda_via_cid, get_legifrance_client
 from lib.parse_html import extract_text_elements
@@ -126,27 +126,13 @@ def _text_to_elements(text: StructuredText) -> List[TextElement]:
     return structured_text_to_text_elements(text, 0)
 
 
-def _cell(str_: str) -> str:
-    return f'<td>{str_}</td>'
-
-
-def _row_to_str(row: Row) -> str:
-    lines = ['<tr>', *[_cell(cell.content.text) for cell in row.cells], '</tr>']
-    return '\n'.join(lines)
-
-
-def _table_to_str(table: Table) -> str:
-    lines = ['<table>', *[_row_to_str(row) for row in table.rows], '</table>']
-    return '\n'.join(lines)
-
-
 def _element_to_str(element: TextElement) -> str:
     if isinstance(element, Title):
         return '#' * element.level + ' ' + element.text
     if isinstance(element, str):
         return element
     if isinstance(element, Table):
-        return _table_to_str(element)
+        return table_to_html(element)
     raise NotImplementedError(f'Not implemented for type {type(element)}')
 
 
