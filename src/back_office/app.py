@@ -8,13 +8,17 @@ from dash.dependencies import Input, Output
 from dash.development.base_component import Component
 from lib.config import config
 from lib.data import AMMetadata, Classement
+from werkzeug.exceptions import NotFound
+
+from back_office import compare
 
 # from back_office.ap_parsing import page as ap_parsing_page
 from back_office.am_page import router as edit_am_page_router
-from back_office.display_am import router as diplay_am_router
 from back_office.app_init import app
 from back_office.components import replace_line_breaks
+from back_office.display_am import router as diplay_am_router
 from back_office.fetch_data import load_all_am_statuses
+from back_office.routing import Endpoint, route
 from back_office.utils import AM_ID_TO_NB_CLASSEMENTS_IDF, ID_TO_AM_MD, AMStatus, split_route
 
 
@@ -29,6 +33,24 @@ def _create_tmp_am_folder():
 _create_tmp_am_folder()
 
 
+def _header_link(content: str, href: str, target: Optional[str] = None) -> Component:
+    style = {'color': 'grey', 'display': 'inline-block'}
+    return html.Span(html.A(content, href=href, className='nav-link', style=style, target=target))
+
+
+def _get_nav() -> Component:
+    guide_url = 'https://www.notion.so/Guide-d-enrichissement-3874408245dc474ca8181a3d1d50f78e'
+    nav = html.Span(
+        [
+            _header_link('Arrêtés', href='/'),
+            _header_link('Guide d\'enrichissement', href=guide_url, target='_blank'),
+            _header_link('Comparer', href='/compare/id/JORFTEXT000034429274/2020-01-20/2021-02-20'),
+        ],
+        style={'display': 'inline-block'},
+    )
+    return nav
+
+
 def _get_page_heading() -> Component:
     src = '/assets/logo-envinorma.png'
     sticky_style = {
@@ -40,25 +62,8 @@ def _get_page_heading() -> Component:
         'z-index': '10',
         'margin-bottom': '10px',
     }
-    nav = html.Span(
-        [
-            html.Span(
-                html.A('Arrêtés', href='/', className='nav-link', style={'color': 'grey', 'display': 'inline-block'})
-            ),
-            html.Span(
-                html.A(
-                    'Guide d\'enrichissement',
-                    href='https://www.notion.so/Guide-d-enrichissement-3874408245dc474ca8181a3d1d50f78e',
-                    className='nav-link',
-                    target="_blank",
-                    style={'color': 'grey', 'display': 'inline-block'},
-                )
-            ),
-        ],
-        style={'display': 'inline-block'},
-    )
     img = html.Img(src=src, style={'width': '30px', 'display': 'inline-block'})
-    return html.Div(html.Div([dcc.Link(img, href='/'), nav], className='container'), style=sticky_style)
+    return html.Div(html.Div([dcc.Link(img, href='/'), _get_nav()], className='container'), style=sticky_style)
 
 
 def _class_name_from_bool(bool_: bool) -> str:
@@ -198,9 +203,20 @@ def router(pathname: str) -> Component:
         return edit_am_page_router(prefix, suffix)
     if prefix == '/am':
         return diplay_am_router(prefix, suffix.split('/')[-1])
-    # if pathname == '/ap_parsing':
+    try:
+        endpoint, args = route(pathname)
+    except NotFound:
+        return html.H3('404 error: Unknown path {}'.format(pathname))
+    mapping = {
+        Endpoint.COMPARE: compare,
+        # Endpoint.PARSE_AP: ap_parsing_page
+    }
+    page = mapping.get(endpoint)
+    if not page:
+        return html.H3(f'404 error: Unknown path {pathname} (not implemented endpoint {endpoint})')
+    return page.layout(**args)  # type: ignore
+    # if endpoint == Endpoint.PARSE_AP:
     #     return ap_parsing_page()
-    return html.H3('404 error: Unknown path {}'.format(pathname))
 
 
 app.layout = html.Div(

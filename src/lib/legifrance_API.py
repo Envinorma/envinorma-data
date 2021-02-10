@@ -89,13 +89,21 @@ def search(nor: str, client: OAuth2Session) -> Dict:
 
 
 def get_current_loda_via_cid_response(cid: str, client: OAuth2Session) -> requests.Response:
-    json_ = {'date': int(datetime.now().timestamp()) * 1000, 'textId': cid}
-    url = _API_HOST + '/consult/lawDecree'
-    return client.post(url, json=json_)
+    return get_loda_via_cid_response(cid, datetime.now(), client)
 
 
 def get_current_loda_via_cid(cid: str, client: OAuth2Session) -> Dict:
     return _extract_response_content(get_current_loda_via_cid_response(cid, client))
+
+
+def get_loda_via_cid_response(cid: str, date: datetime, client: OAuth2Session) -> requests.Response:
+    json_ = {'date': int(date.timestamp()) * 1000, 'textId': cid}
+    url = _API_HOST + '/consult/lawDecree'
+    return client.post(url, json=json_)
+
+
+def get_loda_via_cid(cid: str, date: datetime, client: OAuth2Session) -> Dict:
+    return _extract_response_content(get_loda_via_cid_response(cid, date, client))
 
 
 def get_article_by_id(cid: str, client: OAuth2Session) -> Dict:

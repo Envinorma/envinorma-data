@@ -102,3 +102,9 @@ html {
 .SingleDatePicker {
   width: 100%;
 }
+
+.diff {
+  font-family: SFMono-Regular, Consolas, "Liberation Mono", Menlo, Courier,
+    monospace;
+  font-size: 0.7em;
+}

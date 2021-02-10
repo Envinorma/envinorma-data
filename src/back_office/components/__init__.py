@@ -1,5 +1,5 @@
 from enum import Enum
-from typing import Dict, List, Optional, Union
+from typing import Any, Dict, List, Optional, Set, Union
 
 import dash_core_components as dcc
 import dash_html_components as html
@@ -50,3 +50,31 @@ def link_button(text: str, href: str, state: ButtonState) -> Component:
     if state not in (ButtonState.NORMAL, ButtonState.NORMAL_LINK):
         return button(text, state)
     return dcc.Link(button(text, state), href=href)
+
+
+def surline_text(str_: str, positions_to_surline: Set[int], style: Dict[str, Any]) -> Union[Component, str]:
+    if not positions_to_surline:
+        return str_
+    surline = False
+    current_word = ''
+    components: List[Union[Component, str]] = []
+    for position, char in enumerate(str_):
+        if position in positions_to_surline:
+            if not surline:
+                components.append(current_word)
+                current_word = char
+                surline = True
+            else:
+                current_word += char
+        else:
+            if surline:
+                components.append(html.Span(current_word, style=style))
+                surline = False
+                current_word = char
+            else:
+                current_word += char
+    if surline:
+        components.append(html.Span(current_word, style=style))
+    else:
+        components.append(current_word)
+    return html.Span(components)

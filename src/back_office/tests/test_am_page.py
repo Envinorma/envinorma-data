@@ -1,6 +1,5 @@
 import dash_html_components as html
-from back_office.am_page import _diff_to_component, _diffline_is_special, _extract_char_positions, _surline_text
-from dash.development.base_component import Component
+from back_office.am_page import _diff_to_component, _diffline_is_special, _extract_char_positions
 
 
 def test_diff_to_component():
@@ -30,30 +29,3 @@ def test_diffline_is_special():
     assert _diffline_is_special('+')
     assert _diffline_is_special('-')
     assert _diffline_is_special('?')
-
-
-def test_surline_text():
-    assert _surline_text('', set(), {}) == ''
-    assert _surline_text('foo bar', set(), {}) == 'foo bar'
-
-    component = _surline_text('foo bar', {0, 1, 2}, {})
-    assert isinstance(component, Component)
-    assert len(component.children or []) == 3
-    assert (component.children or [])[0] == ''
-    assert isinstance((component.children or [])[1], html.Span)
-    assert (component.children or [])[2] == ' bar'
-
-    component = _surline_text('foo bar', {1, 2}, {})
-    assert isinstance(component, Component)
-    assert len(component.children or []) == 3
-    assert (component.children or [])[0] == 'f'
-    assert isinstance((component.children or [])[1], html.Span)
-    assert (component.children or [])[2] == ' bar'
-
-    component = _surline_text('foo bar', {1, 2, 6}, {})
-    assert isinstance(component, Component)
-    assert len(component.children or []) == 4
-    assert (component.children or [])[0] == 'f'
-    assert isinstance((component.children or [])[1], html.Span)
-    assert (component.children or [])[2] == ' ba'
-    assert isinstance((component.children or [])[3], html.Span)

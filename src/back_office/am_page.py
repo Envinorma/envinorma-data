@@ -21,7 +21,7 @@ from lib.utils import SlackChannel, send_slack_notification, write_json
 from back_office.am_init_edition import router as am_init_router
 from back_office.am_init_tab import am_init_tab
 from back_office.app_init import app
-from back_office.components import ButtonState, button, error_component, link_button
+from back_office.components import ButtonState, button, error_component, link_button, surline_text
 from back_office.components.am_component import am_component
 from back_office.components.parametric_am_list import parametric_am_list_callbacks, parametric_am_list_component
 from back_office.components.summary_component import summary_component
@@ -326,34 +326,6 @@ def _extract_char_positions(str_: str, char: str) -> Set[int]:
     return {i for i, ch in enumerate(str_) if ch == char}
 
 
-def _surline_text(str_: str, positions_to_surline: Set[int], style: Dict[str, Any]) -> Union[Component, str]:
-    if not positions_to_surline:
-        return str_
-    surline = False
-    current_word = ''
-    components: List[Union[Component, str]] = []
-    for position, char in enumerate(str_):
-        if position in positions_to_surline:
-            if not surline:
-                components.append(current_word)
-                current_word = char
-                surline = True
-            else:
-                current_word += char
-        else:
-            if surline:
-                components.append(html.Span(current_word, style=style))
-                surline = False
-                current_word = char
-            else:
-                current_word += char
-    if surline:
-        components.append(html.Span(current_word, style=style))
-    else:
-        components.append(current_word)
-    return html.Span(components)
-
-
 def _diffline_is_special(line: Optional[str]) -> bool:
     return bool(line and line[:1] in ('-', '+', '?'))
 
@@ -370,7 +342,7 @@ def _extract_diff_component(diff: str, next_diff: Optional[str]) -> Optional[Uni
     else:
         raise ValueError(f'Expecting diff to start with "+" or "-", received {diff[:1]}')
     to_surline = _extract_char_positions(next_diff, symbol) if next_diff and next_diff[0] == '?' else set()
-    rich_diff = _surline_text(diff, to_surline, {'background-color': strong_color})
+    rich_diff = surline_text(diff, to_surline, {'background-color': strong_color})
     return html.Span(rich_diff, style={'background-color': light_color})
 
 

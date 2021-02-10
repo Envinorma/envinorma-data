@@ -58,7 +58,7 @@ def _extract_name(parameter: Parameter) -> str:
     raise NotImplementedError(parameter)
 
 
-def _build_input(id_: str, parameter_type: ParameterType) -> str:
+def _build_input(id_: str, parameter_type: ParameterType) -> Component:
     if parameter_type == ParameterType.BOOLEAN:
         return dbc.Checklist(options=[{'label': '', 'value': 1}], switch=True, value=1, id=_input(id_))
     if parameter_type == ParameterType.DATE:
