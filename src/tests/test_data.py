@@ -21,6 +21,7 @@ from lib.data import (
     TopicName,
     _is_probably_cid,
     count_cells,
+    extract_text_lines,
     group_classements_by_alineas,
     is_increasing,
     load_am_data,
@@ -177,3 +178,70 @@ def test_is_probably_cid():
     assert _is_probably_cid('FAKETEXT0000324')
     assert not _is_probably_cid('')
     assert not _is_probably_cid('JORFTEX')
+
+
+def _get_simple_text() -> StructuredText:
+    sub_section_1 = StructuredText(EnrichedString('Section 1.1'), [], [], None)
+    section_1 = StructuredText(EnrichedString('Section 1'), [], [sub_section_1], None)
+    section_2 = StructuredText(EnrichedString('Section 2'), [EnrichedString('bar')], [], None)
+    return StructuredText(
+        EnrichedString('AM '), [EnrichedString('alinea'), EnrichedString('foo')], [section_1, section_2], None
+    )
+
+
+_TEXT_A = StructuredText(
+    title=EnrichedString(
+        text='6. Schématisation des différents types de joints mentionnés :', links=[], table=None, active=True
+    ),
+    outer_alineas=[
+        EnrichedString(text='Vous pouvez consulter les schémas dans le', links=[], table=None, active=True),
+        EnrichedString(text='JO\nn° 265 du 16/11/2010 texte numéro 21', links=[], table=None, active=True),
+    ],
+    sections=[],
+    applicability=None,
+    lf_id=None,
+    reference_str='Annexe 2 6.',
+    annotations=None,
+    id='0bEB0b14A96f',
+)
+_TEXT_B = StructuredText(
+    title=EnrichedString(
+        text='6. Schématisation des différents types de joints mentionnés :', links=[], table=None, active=True
+    ),
+    outer_alineas=[
+        EnrichedString(text='Vous pouvez consulter les schémas dans le', links=[], table=None, active=True),
+        EnrichedString(text='JO n° 265 du 16/11/2010 texte numéro 21', links=[], table=None, active=True),
+    ],
+    sections=[],
+    applicability=None,
+    lf_id=None,
+    reference_str=None,
+    annotations=None,
+    id='AA51E55feD6F',
+)
+
+
+def test_extract_text_lines():
+    assert extract_text_lines(_get_simple_text()) == [
+        'AM',
+        'alinea',
+        'foo',
+        '# Section 1',
+        '## Section 1.1',
+        '# Section 2',
+        'bar',
+    ]
+    assert extract_text_lines(StructuredText(EnrichedString(' A'), [], [], None)) == ['A']
+    assert extract_text_lines(StructuredText(EnrichedString(' A'), [EnrichedString('')], [], None)) == ['A', '']
+    assert extract_text_lines(_TEXT_A) == [
+        '6. Schématisation des différents types de joints mentionnés :',
+        'Vous pouvez consulter les schémas dans le',
+        'JO',
+        'n° 265 du 16/11/2010 texte numéro 21',
+    ]
+
+    assert extract_text_lines(_TEXT_B) == [
+        '6. Schématisation des différents types de joints mentionnés :',
+        'Vous pouvez consulter les schémas dans le',
+        'JO n° 265 du 16/11/2010 texte numéro 21',
+    ]

@@ -725,3 +725,10 @@ def add_title_default_numbering(text: StructuredText, prefix: str = '', rank: in
     text.title.text = f'{new_prefix} {text.title.text}'
     text.sections = [add_title_default_numbering(section, new_prefix, i) for i, section in enumerate(text.sections)]
     return text
+
+
+def extract_text_lines(text: StructuredText, level: int = 0) -> List[str]:
+    title_lines = ['#' * level + (' ' if level else '') + text.title.text.strip()]
+    alinena_lines = [line.strip() for al in text.outer_alineas for line in al.text.split('\n')]
+    section_lines = [line for sec in text.sections for line in extract_text_lines(sec, level + 1)]
+    return title_lines + alinena_lines + section_lines
