@@ -110,12 +110,25 @@ def _warnings_component(apps: List[_Warning]) -> Component:
     return html.Div([html.H4('Modifications', style={'margin-top': '30px'}), html.Hr(), list_])
 
 
+def _external_links(am: ArreteMinisteriel) -> Component:
+    if am.aida_url and am.legifrance_url:
+        return html.P(
+            [
+                html.A('Consulter sur AIDA', href=am.aida_url, target='_blank'),
+                html.A('Consulter sur Légifrance', href=am.legifrance_url, target='_blank', className='ml-3'),
+            ],
+            className='mb-5',
+        )
+    return html.Div()
+
+
 def _main_component(am: ArreteMinisteriel, text: StructuredText, warnings: List[_Warning], page_id: str) -> Component:
     if not am.active:
         return html.P('L\'arrêté n\'est pas applicable.')
     return html.Div(
         [
-            html.I(am.title.text),
+            html.P(html.I(am.title.text)),
+            _external_links(am),
             _warnings_component(warnings),
             _get_text_component(text, 0, page_id),
         ]
