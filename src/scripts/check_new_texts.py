@@ -1,11 +1,11 @@
-from datetime import datetime
 import random
+from datetime import datetime
 from typing import Dict, List, Optional, Tuple
 
 from back_office.fetch_data import load_initial_am
 from back_office.utils import ID_TO_AM_MD
 from lib.am_structure_extraction import transform_arrete_ministeriel
-from lib.data import ArreteMinisteriel, extract_text_lines, load_legifrance_text
+from lib.data import AMSource, ArreteMinisteriel, extract_text_lines, load_legifrance_text
 from lib.diff import AddedLine, ModifiedLine, RemovedLine, TextDifferences, UnchangedLine, build_text_differences
 from lib.legifrance_API import get_current_loda_via_cid, get_legifrance_client
 from tqdm import tqdm
@@ -69,13 +69,15 @@ def _write_diff_description(am_id_to_diff: Dict[str, TextDifferences]) -> None:
         for line in [am_id, f'ratio : {_compute_modification_ratio(diff)}']
     ]
     date_ = datetime.now().strftime('%Y-%m-%d-%H-%M')
-    filename = __file__.replace('script/check_new_texts.py', f'data/legifrance_diffs/{date_}.txt')
+    filename = __file__.replace('scripts/check_new_texts.py', f'data/legifrance_diffs/{date_}.txt')
     open(filename, 'w').write('\n'.join(lines))
 
 
 def run() -> None:
     changed = {}
-    for am_id in tqdm(ID_TO_AM_MD):
+    for am_id, md in tqdm(ID_TO_AM_MD.items()):
+        if md.source != AMSource.LEGIFRANCE:
+            continue
         am_id = str(am_id)
         try:
             am_has_changed, diff = _am_has_changed(am_id)

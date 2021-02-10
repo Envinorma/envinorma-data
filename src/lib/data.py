@@ -507,6 +507,11 @@ class AMState(Enum):
     ABROGE = 'ABROGE'
 
 
+class AMSource(Enum):
+    LEGIFRANCE = 'LEGIFRANCE'
+    AIDA = 'AIDA'
+
+
 @dataclass
 class AMMetadata:
     cid: str
@@ -516,6 +521,7 @@ class AMMetadata:
     classements: List[Classement]
     state: AMState
     publication_date: int
+    source: AMSource
     nor: Optional[str] = None
     id: str = field(init=False)
 
@@ -527,12 +533,14 @@ class AMMetadata:
         dict_ = dict_.copy()
         dict_['aida_page'] = str(dict_['aida_page'])
         dict_['state'] = AMState(dict_['state'])
+        dict_['source'] = AMSource(dict_['source'])
         dict_['classements'] = [Classement.from_dict(classement) for classement in dict_['classements']]
         return AMMetadata(**dict_)
 
     def to_dict(self) -> Dict[str, Any]:
         dict_ = asdict(self)
         dict_['state'] = self.state.value
+        dict_['source'] = self.source.value
         dict_['classements'] = [classement.to_dict() for classement in self.classements]
         return dict_
 
@@ -744,13 +752,9 @@ def _enriched_text_to_html(str_: EnrichedString, with_links: bool = False) -> st
 
 def _cell_to_html(cell: Cell, is_header: bool, with_links: bool = False) -> str:
     tag = 'th' if is_header else 'td'
-    colspan_attr =  f' colspan="{cell.colspan}"' if cell.colspan != 1 else ''
-    rowspan_attr =  f' rowspan="{cell.rowspan}"' if cell.rowspan != 1 else ''
-    return (
-        f'<{tag}{colspan_attr}{rowspan_attr}>'
-        f'{_enriched_text_to_html(cell.content, with_links)}'
-        f'</{tag}>'
-    )
+    colspan_attr = f' colspan="{cell.colspan}"' if cell.colspan != 1 else ''
+    rowspan_attr = f' rowspan="{cell.rowspan}"' if cell.rowspan != 1 else ''
+    return f'<{tag}{colspan_attr}{rowspan_attr}>' f'{_enriched_text_to_html(cell.content, with_links)}' f'</{tag}>'
 
 
 def _cells_to_html(cells: List[Cell], is_header: bool, with_links: bool = False) -> str:
@@ -767,4 +771,3 @@ def _rows_to_html(rows: List[Row], with_links: bool = False) -> str:
 
 def table_to_html(table: Table, with_links: bool = False) -> str:
     return f'<table>{_rows_to_html(table.rows, with_links)}</table>'
-
