@@ -93,5 +93,14 @@ def run() -> None:
         _pretty_print_diff(diff)
 
 
+def _dump_before_after(am_id: str):
+    envinorma_version = load_initial_am(am_id)
+    if not envinorma_version:
+        return
+    legifrance_version = _load_legifrance_version(am_id)
+    open('tmp_before.txt', 'w').write('\n'.join(_extract_lines(envinorma_version)))
+    open('tmp_after.txt', 'w').write('\n'.join(_extract_lines(legifrance_version)))
+
+
 if __name__ == '__main__':
     run()

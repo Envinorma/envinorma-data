@@ -1,6 +1,6 @@
 import os
 from collections import Counter
-from typing import Any, Dict, List, Union
+from typing import Any, Dict, List, Optional, Union
 
 import dash_core_components as dcc
 import dash_html_components as html
@@ -81,7 +81,8 @@ def _normal_td(content: Union[Component, str, int]) -> Component:
     return html.Td(content, className='align-middle')
 
 
-def _get_row(rank: int, am_state: AMStatus, am_metadata: AMMetadata, occurrences: int) -> Component:
+def _get_row(rank: int, am_state: Optional[AMStatus], am_metadata: AMMetadata, occurrences: int) -> Component:
+    am_step = am_state.step() if am_state else -1
     rows = [
         _normal_td(rank),
         _normal_td(dcc.Link(am_metadata.cid, href=f'/am/{am_metadata.cid}')),
@@ -92,11 +93,11 @@ def _get_row(rank: int, am_state: AMStatus, am_metadata: AMMetadata, occurrences
         _normal_td(am_metadata.short_title),
         _normal_td(_get_str_classements(am_metadata.classements)),
         _normal_td(occurrences),
-        html.Td('', className=_class_name_from_bool(am_state.step() >= 1)),
-        html.Td('', className=_class_name_from_bool(am_state.step() >= 2)),
-        html.Td('', className=_class_name_from_bool(am_state.step() >= 3)),
+        html.Td('', className=_class_name_from_bool(am_step >= 1)),
+        html.Td('', className=_class_name_from_bool(am_step >= 2)),
+        html.Td('', className=_class_name_from_bool(am_step >= 3)),
     ]
-    return html.Tr(rows)
+    return html.Tr(rows, className='table-danger' if not am_state else '')
 
 
 def _get_header() -> Component:
@@ -122,7 +123,7 @@ def _build_am_table(
     header = _get_header()
     sorted_ids = sorted(id_to_am_metadata, key=lambda x: id_to_occurrences.get(x, 0), reverse=True)
     rows = [
-        _get_row(rank, id_to_state[am_id], id_to_am_metadata[am_id], id_to_occurrences.get(am_id, 0))
+        _get_row(rank, id_to_state.get(am_id), id_to_am_metadata[am_id], id_to_occurrences.get(am_id, 0))
         for rank, am_id in enumerate(sorted_ids)
     ]
     return html.Table([html.Thead(header), html.Tbody(rows)], className='table table-sm')

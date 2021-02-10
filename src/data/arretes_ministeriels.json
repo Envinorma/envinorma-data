@@ -166,9 +166,77 @@
             }
         ],
         "cid": "JORFTEXT000026251890",
-        "state": "VIGUEUR",
+        "state": "ABROGE",
         "short_title": "Arrêté du 16/07/12",
         "publication_date": 1342389600,
+        "source": "LEGIFRANCE"
+    },
+    {
+        "aida_page": "43608",
+        "page_name": "Arrêté du 24/09/20 relatif au stockage en récipients mobiles de liquides inflammables, exploités au sein d'une installation classée pour la protection de l'environnement soumise à autorisation",
+        "nor": "TREP2021860A",
+        "classements": [
+            {
+                "regime": "A",
+                "rubrique": "1436"
+            },
+            {
+                "regime": "A",
+                "rubrique": "4330"
+            },
+            {
+                "regime": "A",
+                "rubrique": "4331"
+            },
+            {
+                "regime": "A",
+                "rubrique": "4510"
+            },
+            {
+                "regime": "A",
+                "rubrique": "4511"
+            },
+            {
+                "regime": "A",
+                "rubrique": "4722"
+            },
+            {
+                "regime": "A",
+                "rubrique": "4734"
+            },
+            {
+                "regime": "A",
+                "rubrique": "4742"
+            },
+            {
+                "regime": "A",
+                "rubrique": "4743"
+            },
+            {
+                "regime": "A",
+                "rubrique": "4744"
+            },
+            {
+                "regime": "A",
+                "rubrique": "4746"
+            },
+            {
+                "regime": "A",
+                "rubrique": "4747"
+            },
+            {
+                "regime": "A",
+                "rubrique": "4748"
+            },
+            {
+                "regime": "A",
+                "rubrique": "1432"
+            }
+        ],
+        "cid": "JORFTEXT000042364605",
+        "state": "VIGUEUR",
+        "short_title": "Arrêté du 24/09/20",
+        "publication_date": 1600898400,
         "source": "LEGIFRANCE"
     },
     {

@@ -229,7 +229,7 @@ def _fetch_legifrance_am(am_id: str) -> ArreteMinisteriel:
     text_json = get_current_loda_via_cid(am_id, client)
     legifrance_text = load_legifrance_text(text_json)
     random.seed(legifrance_text.title)
-    am = transform_arrete_ministeriel(legifrance_text)
+    am = transform_arrete_ministeriel(legifrance_text, am_id=am_id)
     am.id = am_id
     return am
 
