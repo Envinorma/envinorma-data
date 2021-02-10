@@ -4,7 +4,6 @@ from datetime import datetime
 from enum import Enum
 from typing import Any, List, Optional, Tuple
 
-from lib.config import EnvironmentType, config
 from lib.data import ArreteMinisteriel, Ints, StructuredText, load_am_data
 
 _AM = load_am_data()
@@ -131,8 +130,6 @@ class RouteParsingError(Exception):
 
 
 def check_backups():
-    if config.environment.type == EnvironmentType.PROD:
-        return
     files = os.listdir(__file__.replace('back_office/utils.py', 'backups'))
     max_date: Optional[datetime] = max(
         [datetime.strptime(file_.split('.')[0], '%Y-%m-%d-%H-%M') for file_ in files], default=None
@@ -141,3 +138,15 @@ def check_backups():
         raise ValueError('No back_office db backups found : run one.')
     if (datetime.now() - max_date).total_seconds() >= 20 * 3600:
         raise ValueError(f'Last backup is too old, run one. (date: {max_date})')
+
+
+def check_legifrance_diff_computed():
+    files = os.listdir(__file__.replace('back_office/utils.py', 'data/legifrance_diffs'))
+    max_date: Optional[datetime] = max(
+        [datetime.strptime(file_.split('.')[0], '%Y-%m-%d-%H-%M') for file_ in files], default=None
+    )
+    cmd = 'python3 scripts/check_new_texts.py'
+    if not max_date:
+        raise ValueError(f'No legifrance_diffs found : run one.\ncmd: {cmd}')
+    if (datetime.now() - max_date).total_seconds() >= 7 * 24 * 3600:
+        raise ValueError(f'Last legifrance_diffs computation is too old, run one. (date: {max_date})\ncmd: {cmd}')
