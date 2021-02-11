@@ -89,22 +89,48 @@ html {
     "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji",
     "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
   font-weight: 300;
+  font-size: inherit;
+  background-color: rgba(0, 0, 0, 0);
 }
 
 .SingleDatePickerInput__withBorder {
   border-radius: 4px;
   width: 100%;
+  background-color: rgba(0, 0, 0, 0);
 }
+
+.DateInput,
 .DateInput_input,
 .DateInput_input__focused {
   border: none;
+  background-color: rgba(0, 0, 0, 0);
+  font-family: inherit;
 }
 .SingleDatePicker {
   width: 100%;
+  background-color: rgba(0, 0, 0, 0);
+  font-family: inherit;
 }
 
 .diff {
   font-family: SFMono-Regular, Consolas, "Liberation Mono", Menlo, Courier,
     monospace;
   font-size: 0.7em;
+}
+
+.small-dropdown .dash-dropdown,
+.small-dropdown .Select,
+.small-dropdown .Select-multi-value-wrapper,
+.small-dropdown .Select-value,
+.small-dropdown .Select-value-label,
+.small-dropdown .Select--single > .Select-control .Select-value,
+.small-dropdown .Select-control {
+  height: 29px;
+  font-size: 0.97em;
+}
+
+.small-dropdown .Select-value,
+.small-dropdown .Select--single > .Select-control .Select-value,
+.small-dropdown .Select-value-label {
+  line-height: 28px;
 }

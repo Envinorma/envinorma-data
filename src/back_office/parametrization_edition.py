@@ -69,6 +69,8 @@ _CONDITION_VARIABLES = {
     _DECLARATION_DATE_FR: ParameterEnum.DATE_DECLARATION,
     _ENREGISTREMENT_DATE_FR: ParameterEnum.DATE_ENREGISTREMENT,
     _INSTALLATION_DATE_FR: ParameterEnum.DATE_INSTALLATION,
+    'Rubrique': ParameterEnum.RUBRIQUE,
+    'Quantité associée à la rubrique': ParameterEnum.RUBRIQUE_QUANTITY,
 }
 _CONDITION_VARIABLE_OPTIONS = [{'label': condition, 'value': condition} for condition in _CONDITION_VARIABLES]
 _CONDITION_OPERATIONS = ['<', '=', '>=']
@@ -136,6 +138,11 @@ def _get_str_target(value: Any, parameter_type: ParameterType) -> str:
         return _date_to_dmy(_ensure_date(value))
     if parameter_type == parameter_type.REGIME:
         return _ensure_regime(value).value
+    if parameter_type == parameter_type.REAL_NUMBER:
+        _ensure_float(value)
+        return value
+    if parameter_type == parameter_type.RUBRIQUE:
+        return _ensure_rubrique(value)
     raise ValueError(f'Unhandled parameter type: {parameter_type.value}')
 
 
@@ -151,24 +158,21 @@ def _get_condition_component(rank: int, default_condition: Optional[_MonoConditi
             options=_CONDITION_VARIABLE_OPTIONS,
             clearable=False,
             value=default_variable,
-            style={'width': '200px'},
+            style={'width': '195px', 'margin-right': '5px'},
+            optionHeight=50,
         ),
         dcc.Dropdown(
             id=f'{_CONDITION_OPERATION}_{rank}',
             options=_CONDITION_OPERATION_OPTIONS,
             clearable=False,
             value=default_operation,
-            style=dict(width='50px'),
+            style={'width': '45px', 'margin-right': '5px'},
         ),
         dcc.Input(
-            id=f'{_CONDITION_VALUE}_{rank}',
-            value=default_target,
-            type='text',
-            style={'height': '36px'},
-            className='form-control',
+            id=f'{_CONDITION_VALUE}_{rank}', value=default_target, type='text', className='form-control form-control-sm'
         ),
     ]
-    return html.Div(dropdown_conditions, style=dict(display='flex'))
+    return html.Div(dropdown_conditions, className='small-dropdown', style={'display': 'flex', 'margin-bottom': '5px'})
 
 
 def _get_condition_components(
@@ -673,6 +677,23 @@ def _parse_dmy(date_str: str) -> datetime:
         raise _FormHandlingError(f'Date mal formattée. Format attendu JJ/MM/AAAA. Reçu: "{date_str}"')
 
 
+def _ensure_float(candidate: str) -> float:
+    try:
+        return float(candidate)
+    except ValueError:
+        raise _FormHandlingError('Valeur incorrecte dans une condition, nombre attendu.')
+
+
+def _ensure_rubrique(candidate: str) -> str:
+    if len(candidate) != 4 or candidate[0] not in '1234':
+        raise _FormHandlingError('Rubrique incorrecte dans une condition, format attendu XXXX')
+    try:
+        int(candidate)
+    except ValueError:
+        raise _FormHandlingError('Rubrique incorrecte dans une condition, format attendu XXXX')
+    return candidate
+
+
 def _parse_regime(regime_str: str) -> Regime:
     try:
         return Regime(regime_str)
@@ -685,6 +706,10 @@ def _build_parameter_value(parameter_type: ParameterType, value_str: str) -> Any
         return _parse_dmy(value_str)
     if parameter_type == parameter_type.REGIME:
         return _parse_regime(value_str)
+    if parameter_type == parameter_type.REAL_NUMBER:
+        return _ensure_float(value_str)
+    if parameter_type == parameter_type.RUBRIQUE:
+        return _ensure_rubrique(value_str)
     raise _FormHandlingError(f'Ce type de paramètre n\'est pas géré: {parameter_type.value}')
 
 

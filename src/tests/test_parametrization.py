@@ -18,7 +18,7 @@ from lib.parametrization import (
     SectionReference,
     _check_conditions_are_incompatible,
     _check_date_conditions_are_incompatible,
-    _check_regime_conditions_are_incompatible,
+    _check_discrete_conditions_are_incompatible,
     _date_ranges_strictly_overlap,
     _extract_date_range,
     _ranges_strictly_overlap,
@@ -46,23 +46,23 @@ def test_check_conditions_are_incompatible():
         _check_conditions_are_incompatible([Equal(parameter.value, '')], parameter.value)
 
 
-def test_check_regime_conditions_are_incompatible():
+def test_check_discrete_conditions_are_incompatible():
     reg = ParameterEnum.REGIME.value
-    _check_regime_conditions_are_incompatible([Equal(reg, Regime.E)], reg)
-    _check_regime_conditions_are_incompatible([Equal(reg, Regime.E), Equal(reg, Regime.D)], reg)
-    _check_regime_conditions_are_incompatible([Equal(reg, Regime.E), Equal(reg, Regime.D), Equal(reg, Regime.A)], reg)
-    _check_regime_conditions_are_incompatible(
+    _check_discrete_conditions_are_incompatible([Equal(reg, Regime.E)], reg)
+    _check_discrete_conditions_are_incompatible([Equal(reg, Regime.E), Equal(reg, Regime.D)], reg)
+    _check_discrete_conditions_are_incompatible([Equal(reg, Regime.E), Equal(reg, Regime.D), Equal(reg, Regime.A)], reg)
+    _check_discrete_conditions_are_incompatible(
         [OrCondition([Equal(reg, Regime.E), Equal(reg, Regime.D), Equal(reg, Regime.A)])], reg
     )
 
     with pytest.raises(ParametrizationError):
-        _check_regime_conditions_are_incompatible([Equal(reg, Regime.E), Equal(reg, Regime.E)], reg)
+        _check_discrete_conditions_are_incompatible([Equal(reg, Regime.E), Equal(reg, Regime.E)], reg)
     with pytest.raises(ParametrizationError):
-        _check_regime_conditions_are_incompatible(
+        _check_discrete_conditions_are_incompatible(
             [OrCondition([Equal(reg, Regime.E), Equal(reg, Regime.D)]), Equal(reg, Regime.D)], reg
         )
     with pytest.raises(ParametrizationError):
-        _check_regime_conditions_are_incompatible(
+        _check_discrete_conditions_are_incompatible(
             [OrCondition([Littler(reg, Regime.E), Equal(reg, Regime.D)]), Equal(reg, Regime.A)], reg
         )
 

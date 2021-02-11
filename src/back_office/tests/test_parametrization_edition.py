@@ -3,6 +3,9 @@ from datetime import date
 import pytest
 from back_office.parametrization_edition import (
     _AND_ID,
+    _build_parameter_value,
+    _get_str_target,
+    _CONDITION_VARIABLES,
     _OR_ID,
     _assert_strictly_below,
     _change_to_mono_conditions,
@@ -161,3 +164,21 @@ def test_assert_strictly_below():
     with pytest.raises(_FormHandlingError):
         _assert_strictly_below(date(2020, 1, 1), date(2010, 1, 1))
     assert _assert_strictly_below(date(2010, 1, 1), date(2020, 1, 1)) is None
+
+
+def test_build_parameter_value():
+    for param in _CONDITION_VARIABLES.values():
+        try:
+            _build_parameter_value(param.value.type, '')
+        except Exception as exc:
+            if 'Ce type de paramètre' in str(exc):
+                raise exc
+
+
+def test_get_str_target():
+    for param in _CONDITION_VARIABLES.values():
+        try:
+            _get_str_target('test', param.value.type)
+        except Exception as exc:
+            if 'Unhandled parameter type' in str(exc):
+                raise exc

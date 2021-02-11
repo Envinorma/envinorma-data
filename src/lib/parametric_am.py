@@ -24,6 +24,7 @@ from lib.parametrization import (
     NonApplicationCondition,
     Parameter,
     ParameterEnum,
+    ParameterObject,
     ParameterType,
     Parametrization,
     Range,
@@ -73,11 +74,11 @@ def _has_undefined_parameters(condition: Condition, parameter_values: Dict[Param
     return False
 
 
-def _compute_warnings(
-    conditionned_element: Union[AlternativeSection, NonApplicationCondition], parameter_values: Dict[Parameter, Any]
-) -> List[str]:
-    if _has_undefined_parameters(conditionned_element.condition, parameter_values):
-        return [generate_warning_missing_value(conditionned_element.condition, parameter_values)]
+def _compute_warnings(parameter: ParameterObject, parameter_values: Dict[Parameter, Any]) -> List[str]:
+    if _has_undefined_parameters(parameter.condition, parameter_values):
+        modification = isinstance(parameter, AlternativeSection)
+        alineas = None if isinstance(parameter, AlternativeSection) else parameter.targeted_entity.outer_alinea_indices
+        return [generate_warning_missing_value(parameter.condition, parameter_values, alineas, modification)]
     return []
 
 

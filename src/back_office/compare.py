@@ -49,7 +49,13 @@ def _date_to_str(date_: datetime) -> str:
 
 def _date_picker(id_: str, initial_date: Optional[datetime]) -> Component:
     initial_value = _date_to_str(initial_date) if initial_date else None
-    return dcc.DatePickerSingle(style={'padding': '0px', 'width': '100%'}, id=id_, date=initial_value)
+    return dcc.DatePickerSingle(
+        style={'padding': '0px', 'width': '100%'},
+        id=id_,
+        date=initial_value,
+        display_format='DD/MM/YYYY',
+        placeholder=None,
+    )
 
 
 def _before_date(date: Optional[datetime]) -> Component:

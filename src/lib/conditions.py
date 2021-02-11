@@ -10,6 +10,11 @@ class ParameterType(Enum):
     DATE = 'DATE'
     REGIME = 'REGIME'
     BOOLEAN = 'BOOLEAN'
+    RUBRIQUE = 'RUBRIQUE'
+    REAL_NUMBER = 'REAL_NUMBER'
+
+    def __repr__(self):
+        return f'ParameterType("{self.value}")'
 
 
 @dataclass(eq=True, frozen=True)
@@ -33,6 +38,11 @@ class ParameterEnum(Enum):
     DATE_ENREGISTREMENT = Parameter('date-d-enregistrement', ParameterType.DATE)
     DATE_INSTALLATION = Parameter('date-d-installation', ParameterType.DATE)
     REGIME = Parameter('regime', ParameterType.REGIME)
+    RUBRIQUE = Parameter('rubrique', ParameterType.RUBRIQUE)
+    RUBRIQUE_QUANTITY = Parameter('quantite-rubrique', ParameterType.REAL_NUMBER)
+
+    def __repr__(self):
+        return f'ParameterEnum("{self.value}")'
 
 
 class ConditionType(Enum):
@@ -321,6 +331,10 @@ def _parameter_id_to_str(parameter_id: str) -> str:
         return 'la date de mise en service'
     if parameter_id == ParameterEnum.REGIME.value.id:
         return 'le régime'
+    if parameter_id == ParameterEnum.RUBRIQUE.value.id:
+        return 'la rubrique'
+    if parameter_id == ParameterEnum.RUBRIQUE_QUANTITY.value.id:
+        return 'la quantité associée à la rubrique'
     return f'la valeur du paramètre {parameter_id}'
 
 
@@ -332,26 +346,48 @@ def _merge_words(words: List[str]) -> str:
     return ', '.join(words[:-1]) + ' et ' + words[-1]
 
 
-def generate_warning_missing_value(condition: Condition, parameter_values: Dict[Parameter, Any]) -> str:
-    parameters = set(extract_parameters_from_condition(condition))
-    missing_parameters = sorted(
-        [_parameter_id_to_str(param.id) for param in parameters if param not in parameter_values]
+def _is_range_of_size_at_least_2(alineas: List[int]) -> bool:
+    return len(set(alineas)) == max(alineas) - min(alineas) + 1 and len(set(alineas)) >= 3
+
+
+def _alineas_prefix(alineas: List[int]) -> str:
+    if not alineas:
+        raise ValueError('Expecting at least one alinea.')
+    if _is_range_of_size_at_least_2(alineas):
+        return f'Les alinéas n°{min(alineas) + 1} à {max(alineas) + 1}'
+    str_alineas = [str(i + 1) for i in sorted(alineas)]
+    return f'Les alinéas n°{_merge_words(str_alineas)}'
+
+
+def _generate_prefix(alineas: Optional[List[int]], modification: bool) -> str:
+    if modification:
+        return 'Ce paragraphe pourrait être modifié'
+    if not alineas:
+        return 'Ce paragraphe pourrait ne pas être applicable'
+    if len(alineas) == 1:
+        return f'L\'alinéa n°{alineas[0] + 1} de ce paragraphe pourrait ne pas être applicable'
+    return f'{_alineas_prefix(alineas)} de ce paragraphe pourraient ne pas être applicables'
+
+
+def generate_warning_missing_value(
+    condition: Condition, parameter_values: Dict[Parameter, Any], alineas: Optional[List[int]], modification: bool
+) -> str:
+    # parameters = set(extract_parameters_from_condition(condition))
+    # missing_parameters = sorted(
+    #     [_parameter_id_to_str(param.id) for param in parameters if param not in parameter_values]
+    # )
+    # enumeration = _merge_words(missing_parameters)
+    return (
+        f'{_generate_prefix(alineas, modification)}. C\'est le cas '
+        f'pour les installations dont {_modification_warning(condition, parameter_values)}.'
     )
-    enumeration = _merge_words(missing_parameters)
-    return f'Ce paragraphe pourrait être modifié selon {enumeration} de l\'installation.'
-
-
-'''
-Modification to string
-'''
 
 
 def _manual_active_conditions(parameter_id: str, condition: LeafCondition) -> Optional[str]:
     for parameter in ParameterEnum:
         if parameter.value.type == ParameterType.DATE:
-            date_parameter_id = parameter.value.id
             prefix = _parameter_id_to_str(parameter_id)
-            if parameter_id == date_parameter_id:
+            if parameter_id == parameter.value.id:
                 if isinstance(condition, Greater):
                     return f'{prefix} est postérieure au ' + _date_to_human_str(condition.target)
                 if isinstance(condition, Littler):
@@ -361,8 +397,7 @@ def _manual_active_conditions(parameter_id: str, condition: LeafCondition) -> Op
                     rg_dt = _date_to_human_str(condition.right)
                     return f'{prefix} est postérieure au ' + lf_dt + ' et antérieure au ' + rg_dt
 
-    regime = ParameterEnum.REGIME.value.id
-    if parameter_id == regime:
+    if parameter_id == ParameterEnum.REGIME.value.id:
         if isinstance(condition, Equal):
             if condition.target == Regime.A:
                 regime_str = 'autorisation'
@@ -373,6 +408,20 @@ def _manual_active_conditions(parameter_id: str, condition: LeafCondition) -> Op
             else:
                 regime_str = condition.target.value
             return f'le régime est à {regime_str}'
+
+    if parameter_id == ParameterEnum.RUBRIQUE.value.id:
+        if isinstance(condition, Equal):
+            regime_str = condition.target
+            return f'la rubrique est {condition.target}'
+
+    if parameter_id == ParameterEnum.RUBRIQUE_QUANTITY.value.id:
+        prefix = 'la quantité associée à la rubrique'
+        if isinstance(condition, Greater):
+            return f'{prefix} est supérieure à {condition.target}'
+        if isinstance(condition, Littler):
+            return f'{prefix} est inférieure à {condition.target}'
+        if isinstance(condition, Range):
+            return f'{prefix} est comprise entre {condition.left} et {condition.right}'
     return None
 
 
@@ -395,17 +444,19 @@ def _warning_leaf(condition: LeafCondition) -> str:
     raise NotImplementedError(f'stringifying condition {type(condition)} is not implemented yet.')
 
 
-_LeafConditions = (Equal, Range, Greater, Littler)
+'''
+Modification to string
+'''
 
 
 def _ensure_leaf_condition(condition: Condition) -> LeafCondition:
-    if not isinstance(condition, _LeafConditions):
+    if not isinstance(condition, LeafConditions):
         raise ValueError(f'Expecting LeafCondition, got {type(condition)}')
     return condition
 
 
 def _stringify_all_conditions(conditions: List[Condition]) -> str:
-    if any([not isinstance(cond, _LeafConditions) for cond in conditions]):
+    if any([not isinstance(cond, LeafConditions) for cond in conditions]):
         str_ = [condition_to_str(subcondition) for subcondition in conditions]
         return 'les conditions d\'application suivantes sont remplies : ' + ', '.join(str_)
     return _merge_words([_warning_leaf(_ensure_leaf_condition(cond)) for cond in conditions])

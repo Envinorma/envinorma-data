@@ -55,6 +55,10 @@ def _extract_name(parameter: Parameter) -> str:
         return 'Date de mise en service'
     if parameter == ParameterEnum.REGIME.value:
         return 'Régime'
+    if parameter == ParameterEnum.RUBRIQUE.value:
+        return 'Rubrique'
+    if parameter == ParameterEnum.RUBRIQUE_QUANTITY.value:
+        return 'Quantité associée à la rubrique'
     raise NotImplementedError(parameter)
 
 
@@ -62,10 +66,16 @@ def _build_input(id_: str, parameter_type: ParameterType) -> Component:
     if parameter_type == ParameterType.BOOLEAN:
         return dbc.Checklist(options=[{'label': '', 'value': 1}], switch=True, value=1, id=_input(id_))
     if parameter_type == ParameterType.DATE:
-        return dcc.DatePickerSingle(style={'padding': '0px', 'width': '100%'}, id=_input(id_))
+        return dcc.DatePickerSingle(
+            style={'padding': '0px', 'width': '100%'}, id=_input(id_), placeholder=None, display_format='DD/MM/YYYY'
+        )
     if parameter_type == ParameterType.REGIME:
         options = [{'value': reg.value, 'label': reg.value} for reg in Regime]
         return dcc.Dropdown(options=options, id=_input(id_))
+    if parameter_type == ParameterType.RUBRIQUE:
+        return dcc.Input(id=_input(id_), className='form-control')
+    if parameter_type == ParameterType.REAL_NUMBER:
+        return dcc.Input(id=_input(id_), className='form-control')
     raise NotImplementedError(parameter_type)
 
 
@@ -89,7 +99,11 @@ def _parametrization_form(parametrization: Parametrization) -> Component:
     return html.Div(
         [
             *[_build_parameter_input(parameter) for parameter in sorted_parameters],
-            html.Div(id=_FORM_OUTPUT, style={'margin-top': '10px', 'margin-bottom': '10px'}),
+            html.Div(
+                id=_FORM_OUTPUT,
+                style={'margin-top': '10px', 'margin-bottom': '10px'},
+                className='col-12',
+            ),
             html.Div(
                 html.Button('Valider', className='btn btn-primary', id=_SUBMIT),
                 className='col-12',
@@ -173,6 +187,15 @@ def _extract_date(date_: str) -> datetime:
     return datetime.strptime(date_, '%Y-%m-%d')
 
 
+def _extract_float(value_str: Optional[str]) -> Optional[float]:
+    if not value_str:
+        return None
+    try:
+        return float(value_str)
+    except ValueError:
+        raise _FormError(f'Erreur dans le formulaire : nombre attendu,  {value_str} reçu')
+
+
 def _extract_parameter_and_value(id_: str, date: Optional[str], value: Optional[str]) -> Tuple[Parameter, Any]:
     date_params = (
         ParameterEnum.DATE_AUTORISATION,
@@ -185,6 +208,10 @@ def _extract_parameter_and_value(id_: str, date: Optional[str], value: Optional[
             return (param.value, _extract_date(date) if date else None)
     if id_ == ParameterEnum.REGIME.value.id:
         return (ParameterEnum.REGIME.value, Regime(value) if value else None)
+    if id_ == ParameterEnum.RUBRIQUE_QUANTITY.value.id:
+        return (ParameterEnum.RUBRIQUE_QUANTITY.value, _extract_float(value))
+    if id_ == ParameterEnum.RUBRIQUE.value.id:
+        return (ParameterEnum.RUBRIQUE.value, value if value else None)
     raise NotImplementedError()
 
 
@@ -216,6 +243,8 @@ def _apply_parameters(_, parameter_ids, parameter_dates, parameter_values, am_id
     try:
         parameter_values = _extract_parameter_values(parameter_ids, parameter_dates, parameter_values)
         am = apply_parameter_values_to_am(am, parametrization, parameter_values)
+    except _FormError as exc:
+        return html.Div(), error_component(str(exc))
     except Exception:
         return html.Div(), error_component(traceback.format_exc())
     return _am_component(am), html.Div()

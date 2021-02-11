@@ -187,17 +187,41 @@ def _check_date_conditions_are_incompatible(all_conditions: List[Condition], par
         ranges.append(_extract_date_range(condition))
     if _date_ranges_strictly_overlap(ranges):
         raise ParametrizationError(
-            f'Date ranges overlap, they can be satisfy consequently, which can lead to'
+            f'Date ranges overlap, they can be satisfy simultaneously, which can lead to'
             f' ambiguities: {all_conditions}'
         )
 
 
-def _check_regime_conditions_are_incompatible(all_conditions: List[Condition], parameter: Parameter) -> None:
+_Range = Tuple[float, float]
+
+
+def _extract_range(condition: LeafCondition) -> _Range:
+    if isinstance(condition, Range):
+        return (condition.left, condition.right)
+    if isinstance(condition, Equal):
+        return (condition.target, condition.target)
+    if isinstance(condition, Littler):
+        return (-math.inf, condition.target)
+    if isinstance(condition, Greater):
+        return (condition.target, math.inf)
+    raise NotImplementedError(type(condition))
+
+
+def _check_real_number_conditions_are_incompatible(all_conditions: List[Condition], parameter: Parameter) -> None:
     leaf_conditions = [leaf for cd in all_conditions for leaf in extract_leaf_conditions(cd, parameter)]
-    targets: Set[Regime] = set()
+    ranges = [_extract_range(condition) for condition in leaf_conditions]
+    if _ranges_strictly_overlap(ranges):
+        raise ParametrizationError(
+            f'Ranges overlap, they can be satisfy simultaneously, which can lead to' f' ambiguities: {all_conditions}'
+        )
+
+
+def _check_discrete_conditions_are_incompatible(all_conditions: List[Condition], parameter: Parameter) -> None:
+    leaf_conditions = [leaf for cd in all_conditions for leaf in extract_leaf_conditions(cd, parameter)]
+    targets: Set = set()
     for condition in leaf_conditions:
         if not isinstance(condition, Equal):
-            raise ParametrizationError(f'Regime conditions must be "=" conditions, got {condition.type}')
+            raise ParametrizationError(f'{parameter.id} conditions must be "=" conditions, got {condition.type}')
         if condition.target in targets:
             raise ParametrizationError(f'Several conditions are simultaneously satisfiable : {all_conditions}')
         targets.add(condition.target)
@@ -217,8 +241,12 @@ def _check_bool_conditions_are_incompatible(all_conditions: List[Condition], par
 def _check_conditions_are_incompatible(all_conditions: List[Condition], parameter: Parameter) -> None:
     if parameter.type == ParameterType.DATE:
         _check_date_conditions_are_incompatible(all_conditions, parameter)
+    elif parameter.type == ParameterType.REAL_NUMBER:
+        _check_real_number_conditions_are_incompatible(all_conditions, parameter)
     elif parameter.type == ParameterType.REGIME:
-        _check_regime_conditions_are_incompatible(all_conditions, parameter)
+        _check_discrete_conditions_are_incompatible(all_conditions, parameter)
+    elif parameter.type == ParameterType.RUBRIQUE:
+        _check_discrete_conditions_are_incompatible(all_conditions, parameter)
     elif parameter.type == ParameterType.BOOLEAN:
         _check_bool_conditions_are_incompatible(all_conditions, parameter)
     else:
