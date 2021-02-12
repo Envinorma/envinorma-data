@@ -203,3 +203,9 @@ def compute_am_diff(am_before: ArreteMinisteriel, am_after: ArreteMinisteriel) -
     lines_before = _extract_lines(am_before)
     lines_after = _extract_lines(am_after)
     return build_text_differences(lines_before, lines_after)
+
+
+def compute_text_diff(text_before: StructuredText, text_after: StructuredText) -> TextDifferences:
+    lines_before = extract_text_lines(text_before)
+    lines_after = extract_text_lines(text_after)
+    return build_text_differences(lines_before, lines_after)

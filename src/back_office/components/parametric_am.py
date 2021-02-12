@@ -5,7 +5,9 @@ import dash
 import dash_bootstrap_components as dbc
 import dash_html_components as html
 from back_office.components.am_component import table_to_component
+from back_office.components.diff import diff_component
 from back_office.components.summary_component import summary_component
+from back_office.utils import assert_str, compute_text_diff
 from dash.dependencies import MATCH, Input, Output, State
 from dash.development.base_component import Component
 from lib.data import Applicability, ArreteMinisteriel, EnrichedString, StructuredText
@@ -19,12 +21,6 @@ def _get_collapse_id(page_id: str, key: Optional[str]) -> Dict[str, Any]:
 
 def _get_button_id(page_id: str, key: Optional[str]) -> Dict[str, Any]:
     return {'type': f'{page_id}-param-am-previous-text', 'key': key or MATCH}
-
-
-def _ensure_applicability(applicability: Optional[Applicability]) -> Applicability:
-    if not applicability:
-        raise ValueError('applicability expected to exist')
-    return applicability
 
 
 def _alinea_to_component(alinea: EnrichedString) -> Component:
@@ -54,18 +50,19 @@ def _title_component(title: str, text_id: str, depth: int, active: bool) -> Comp
     return html.H5(title, id=text_id, className=className)
 
 
-def _extract_lines(text: StructuredText) -> List[str]:
-    alinea_lines = [al.text if not al.table else '*tableau*' for al in text.outer_alineas]
-    section_lines = [li for sec in text.sections for li in _extract_lines(sec)]
-    return [text.title.text] + alinea_lines + section_lines
+def _diff(text: StructuredText, previous_text: StructuredText) -> Component:
+    differences = compute_text_diff(previous_text, text)
+    return diff_component(differences, 'Version initiale', 'Version modifiée')
 
 
-def _previous_text_component(text: StructuredText, page_id: str) -> Component:
-    component = html.Div([html.P(line, className='previous_version_alinea') for line in _extract_lines(text)])
-    collapse = dbc.Collapse(component, id=_get_collapse_id(page_id, text.id), is_open=True)
+def _previous_text_component(text: StructuredText, previous_text: StructuredText, page_id: str) -> Component:
+    diff = html.Div(_diff(text, previous_text))
+    collapse = dbc.Collapse(diff, id=_get_collapse_id(page_id, assert_str(previous_text.id)), is_open=True)
     return html.Div(
         [
-            html.Button('Version précédente', id=_get_button_id(page_id, text.id), className='btn btn-link'),
+            html.Button(
+                'Version précédente', id=_get_button_id(page_id, assert_str(previous_text.id)), className='btn btn-link'
+            ),
             collapse,
         ]
     )
@@ -74,7 +71,9 @@ def _previous_text_component(text: StructuredText, page_id: str) -> Component:
 def _text_component(
     text: StructuredText, depth: int, previous_version: Optional[StructuredText], page_id: str
 ) -> Component:
-    previous_version_component = _previous_text_component(previous_version, page_id) if previous_version else html.Div()
+    previous_version_component = (
+        _previous_text_component(text, previous_version, page_id) if previous_version else html.Div()
+    )
     applicability = text.applicability or Applicability()
     return html.Div(
         [

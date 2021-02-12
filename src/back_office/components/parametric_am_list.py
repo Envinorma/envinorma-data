@@ -48,7 +48,6 @@ def _get_am_modal_generator(page_id: str) -> _AMModalGenerator:
 def _generate_am_row(
     filename: str, am: ArreteMinisteriel, _am_modal_generator: _AMModalGenerator
 ) -> List[ExtendedComponent]:
-    # link = dcc.Link(filename, href=f'{prefix_url}/{filename}')
     link = _am_modal_generator(filename, am)
     left_date = (dt.left_date or '') if (dt := am.installation_date_criterion) else ''
     right_date = (dt.right_date or '') if (dt := am.installation_date_criterion) else ''

@@ -18,7 +18,7 @@ from lib.topics.topics import TOPIC_ONTOLOGY
 from back_office import am_compare
 from back_office.app_init import app
 from back_office.components import error_component
-from back_office.components.parametric_am import parametric_am_component
+from back_office.components.parametric_am import parametric_am_callbacks, parametric_am_component
 from back_office.fetch_data import load_initial_am, load_parametrization, load_structured_am
 from back_office.utils import ID_TO_AM_MD
 
@@ -26,7 +26,7 @@ _PREFIX = __file__.split('/')[-1].replace('.py', '').replace('_', '-')
 _AM = _PREFIX + '-am'
 _SUBMIT = _PREFIX + '-submit'
 _AM_ID = _PREFIX + '-am-id'
-_FORM_OUTPUT = _PREFIX = '-form-output'
+_FORM_OUTPUT = _PREFIX + '-form-output'
 
 
 def _store(parameter_id: Any) -> Dict[str, Any]:
@@ -266,3 +266,6 @@ def _apply_parameters(_, parameter_ids, parameter_dates, parameter_values, am_id
     except Exception:
         return html.Div(), error_component(traceback.format_exc())
     return _am_component(am), html.Div()
+
+
+parametric_am_callbacks(app, _PREFIX)
