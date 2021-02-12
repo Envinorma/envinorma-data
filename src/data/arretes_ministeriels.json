@@ -1866,7 +1866,7 @@
         "state": "VIGUEUR",
         "short_title": "Arrêté du 04/08/14",
         "publication_date": 1407103200,
-        "source": "LEGIFRANCE"
+        "source": "AIDA"
     },
     {
         "aida_page": "35414",
@@ -4849,7 +4849,8 @@
             }
         ],
         "cid": "JORFTEXT000037284579",
-        "state": "VIGUEUR",
+        "state": "CACHE",
+        "reason_hidden": "Parce que cet AM est assez particulier : s'appliquer aux 2781 dans les 2910",
         "short_title": "Arrêté du 03/08/18",
         "publication_date": 1533247200,
         "source": "LEGIFRANCE"

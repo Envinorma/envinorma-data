@@ -20,7 +20,7 @@ from lib.diff import TextDifferences, build_text_differences
 from lib.legifrance_API import get_legifrance_client, get_loda_via_cid
 
 _AM = load_am_data()
-ID_TO_AM_MD = {am.cid: am for am in _AM.metadata if am.state != am.state.ABROGE}
+ID_TO_AM_MD = {am.cid: am for am in _AM.metadata if am.state == am.state.VIGUEUR}
 AM_ID_TO_NB_CLASSEMENTS_IDF = json.load(
     open(__file__.replace('back_office/utils.py', 'data/am_id_to_nb_classements_idf.json'))
 )

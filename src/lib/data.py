@@ -505,6 +505,7 @@ class AMStructurationLog:
 class AMState(Enum):
     VIGUEUR = 'VIGUEUR'
     ABROGE = 'ABROGE'
+    CACHE = 'CACHE'
 
 
 class AMSource(Enum):
@@ -523,6 +524,7 @@ class AMMetadata:
     publication_date: int
     source: AMSource
     nor: Optional[str] = None
+    reason_hidden: Optional[str] = None
     id: str = field(init=False)
 
     def __post_init__(self):
