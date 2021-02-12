@@ -1,5 +1,5 @@
-from dataclasses import dataclass, field
-from typing import Any, Dict, List, Optional, Tuple
+from dataclasses import dataclass, field, replace
+from typing import Any, Dict, List, Optional, Set, Tuple
 
 import dash
 import dash_bootstrap_components as dbc
@@ -11,6 +11,7 @@ from back_office.utils import assert_str, compute_text_diff
 from dash.dependencies import MATCH, Input, Output, State
 from dash.development.base_component import Component
 from lib.data import Applicability, ArreteMinisteriel, EnrichedString, StructuredText
+from lib.topics.patterns import TopicName
 
 _Warning = Tuple[Applicability, str]
 
@@ -68,31 +69,22 @@ def _previous_text_component(text: StructuredText, previous_text: StructuredText
     )
 
 
-def _text_component(
-    text: StructuredText, depth: int, previous_version: Optional[StructuredText], page_id: str
-) -> Component:
-    previous_version_component = (
-        _previous_text_component(text, previous_version, page_id) if previous_version else html.Div()
-    )
+def _text_component(text: StructuredText, depth: int, page_id: str) -> Component:
     applicability = text.applicability or Applicability()
+    previous_version_component = html.Div()
+    if applicability.modified:
+        if not applicability.previous_version:
+            raise ValueError('Should not happen. Must have a previous_version when modified is True.')
+        previous_version_component = _previous_text_component(text, applicability.previous_version, page_id)
     return html.Div(
         [
             _title_component(text.title.text, text.id, depth, applicability.active),
             *_warnings_to_components(applicability.warnings),
             *_alineas_to_components(text.outer_alineas),
-            *[_get_text_component(sec, depth + 1, page_id) for sec in text.sections],
+            *[_text_component(sec, depth + 1, page_id) for sec in text.sections],
             previous_version_component,
         ]
     )
-
-
-def _get_text_component(text: StructuredText, depth: int, page_id: str) -> Component:
-    applicability = text.applicability or Applicability()
-    if applicability.modified:
-        if not applicability.previous_version:
-            raise ValueError('Should not happen. Must have a previous_version when modified is True.')
-        return _text_component(text, depth, applicability.previous_version, page_id)
-    return _text_component(text, depth, None, page_id)
 
 
 def _li(app: Applicability, id_: str) -> Component:
@@ -129,12 +121,12 @@ def _main_component(am: ArreteMinisteriel, text: StructuredText, warnings: List[
             html.P(html.I(am.title.text)),
             _external_links(am),
             _warnings_component(warnings),
-            _get_text_component(text, 0, page_id),
+            _text_component(text, 0, page_id),
         ]
     )
 
 
-def _component(am: ArreteMinisteriel, text: StructuredText, warnings: List[_Warning], page_id) -> Component:
+def _component(am: ArreteMinisteriel, text: StructuredText, warnings: List[_Warning], page_id: str) -> Component:
     summary = summary_component(text, True)
     return html.Div(
         [
@@ -161,6 +153,7 @@ def _extract_warnings(am: Optional[ArreteMinisteriel]) -> List[_Warning]:
 
 @dataclass
 class _ComponentData:
+
     am: ArreteMinisteriel
     text: StructuredText = field(init=False)
     warnings: List[_Warning] = field(init=False)
@@ -168,6 +161,34 @@ class _ComponentData:
     def __post_init__(self):
         self.text = StructuredText(EnrichedString(self.am.short_title), [], self.am.sections, Applicability())
         self.warnings = _extract_warnings(self.am)
+
+
+def _extract_topic(text: StructuredText) -> Optional[TopicName]:
+    if not text.annotations:
+        return None
+    return text.annotations.topic
+
+
+def _filter_text(text: StructuredText, topics_to_keep: Set[TopicName]) -> Optional[StructuredText]:
+    if not text.sections:
+        return text if _extract_topic(text) in topics_to_keep else None
+    optional_sections = [_filter_text(sec, topics_to_keep) for sec in text.sections]
+    sections = [sec for sec in optional_sections if sec]
+    if not sections:
+        return None
+    return replace(text, sections=sections)
+
+
+def _filter_am(am: ArreteMinisteriel, topics_to_keep: Set[TopicName]) -> ArreteMinisteriel:
+    optional_sections = [_filter_text(sec, topics_to_keep) for sec in am.sections]
+    sections = [sec for sec in optional_sections if sec]
+    return replace(am, sections=sections)
+
+
+def _build_component_data(am: ArreteMinisteriel, topics_to_keep: Optional[Set[TopicName]]) -> _ComponentData:
+    if topics_to_keep is not None:
+        return _ComponentData(_filter_am(am, topics_to_keep))
+    return _ComponentData(am)
 
 
 def parametric_am_callbacks(app: dash.Dash, page_id: str) -> None:
@@ -183,6 +204,9 @@ def parametric_am_callbacks(app: dash.Dash, page_id: str) -> None:
         return False
 
 
-def parametric_am_component(am: ArreteMinisteriel, page_id: str) -> Component:
-    data = _ComponentData(am)
+def parametric_am_component(
+    am: ArreteMinisteriel, page_id: str, topics_to_keep: Optional[Set[TopicName]] = None
+) -> Component:
+
+    data = _build_component_data(am, topics_to_keep)
     return _component(data.am, data.text, data.warnings, page_id)

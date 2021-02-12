@@ -1,11 +1,11 @@
 import traceback
 from datetime import datetime
-from typing import Any, Counter, Dict, List, Optional, Tuple
+from typing import Any, Counter, Dict, List, Optional, Set, Tuple
 
 import dash_bootstrap_components as dbc
 import dash_core_components as dcc
 import dash_html_components as html
-from dash.dependencies import ALL, Input, Output, State
+from dash.dependencies import ALL, MATCH, Input, Output, State
 from dash.development.base_component import Component
 from dash.exceptions import PreventUpdate
 from lib.am_enriching import detect_and_add_topics
@@ -29,6 +29,12 @@ _AM_ID = _PREFIX + '-am-id'
 _FORM_OUTPUT = _PREFIX + '-form-output'
 
 
+def _topic_button_id(key: Any) -> Dict[str, Any]:
+    if not isinstance(key, str) and key not in (MATCH, ALL):
+        raise NotImplementedError(key)
+    return {'type': _PREFIX + '-topic-button', 'key': key}
+
+
 def _store(parameter_id: Any) -> Dict[str, Any]:
     return {'type': _PREFIX + '-store', 'key': parameter_id}
 
@@ -37,8 +43,8 @@ def _input(parameter_id: Any) -> Dict[str, Any]:
     return {'type': _PREFIX + '-input', 'key': parameter_id}
 
 
-def _am_component(am: ArreteMinisteriel) -> Component:
-    return parametric_am_component(am, _PREFIX)
+def _am_component(am: ArreteMinisteriel, topics: Optional[Set[TopicName]] = None) -> Component:
+    return parametric_am_component(am, _PREFIX, topics)
 
 
 def _am_component_with_toc(am: ArreteMinisteriel) -> Component:
@@ -134,9 +140,13 @@ def _extract_topic_count(am: ArreteMinisteriel) -> Dict[TopicName, int]:
     return Counter([topic for section in am.sections for topic in _extract_topics(section)])
 
 
+_ACTIVE_CLASS = 'btn btn-primary btn-sm'
+_INACTIVE_CLASS = 'btn btn-light btn-sm'
+
+
 def _topic_button(topic: TopicName, count: int) -> Component:
     text = f'{topic.value}  ({count})'
-    return html.Button(text, className='btn btn-primary btn-sm', style={'margin': '5px'})
+    return html.Button(text, className=_ACTIVE_CLASS, style={'margin': '5px'}, id=_topic_button_id(topic.value))
 
 
 def _topic_buttons(topic_count: Dict[TopicName, int]) -> Component:
@@ -246,12 +256,15 @@ def _extract_parameter_values(
     Output(_AM, 'children'),
     Output(_FORM_OUTPUT, 'children'),
     Input(_SUBMIT, 'n_clicks'),
+    Input(_topic_button_id(ALL), 'className'),
     State(_store(ALL), 'data'),
     State(_input(ALL), 'date'),
     State(_input(ALL), 'value'),
     State(_AM_ID, 'data'),
+    State(_topic_button_id(ALL), 'id'),
 )
-def _apply_parameters(_, parameter_ids, parameter_dates, parameter_values, am_id):
+def _apply_parameters(_, class_names, parameter_ids, parameter_dates, parameter_values, am_id, ids):
+    active_topics = {TopicName(id_['key']) for id_, cl in zip(ids, class_names) if cl == _ACTIVE_CLASS}
     am = _load_am(am_id)
     if not am:
         raise PreventUpdate
@@ -260,12 +273,24 @@ def _apply_parameters(_, parameter_ids, parameter_dates, parameter_values, am_id
         raise PreventUpdate
     try:
         parameter_values = _extract_parameter_values(parameter_ids, parameter_dates, parameter_values)
-        am = apply_parameter_values_to_am(am, parametrization, parameter_values)
+        am = detect_and_add_topics(apply_parameter_values_to_am(am, parametrization, parameter_values), TOPIC_ONTOLOGY)
     except _FormError as exc:
         return html.Div(), error_component(str(exc))
     except Exception:
         return html.Div(), error_component(traceback.format_exc())
-    return _am_component(am), html.Div()
+    return _am_component(am, active_topics), html.Div()
+
+
+@app.callback(
+    Output(_topic_button_id(MATCH), 'className'),
+    Input(_topic_button_id(MATCH), 'n_clicks'),
+    State(_topic_button_id(MATCH), 'className'),
+    prevent_initial_call=True,
+)
+def _toggle_button(_, class_name):
+    if class_name == _ACTIVE_CLASS:
+        return _INACTIVE_CLASS
+    return _ACTIVE_CLASS
 
 
 parametric_am_callbacks(app, _PREFIX)
