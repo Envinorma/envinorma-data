@@ -182,6 +182,9 @@ def _build_recap(id_to_state: Dict[str, AMStatus], id_to_occurrences: Dict[str, 
 def _make_index_component(
     id_to_state: Dict[str, AMStatus], id_to_am_metadata: Dict[str, AMMetadata], id_to_occurrences: Dict[str, int]
 ) -> Component:
+    displayed_ids = set(list(id_to_am_metadata))
+    id_to_state = {id_: state for id_, state in id_to_state.items() if id_ in displayed_ids}
+    id_to_occurrences = {id_: occ for id_, occ in id_to_occurrences.items() if id_ in displayed_ids}
     return html.Div(
         [
             html.H2('Arrêtés ministériels.'),

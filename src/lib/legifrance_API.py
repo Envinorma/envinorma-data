@@ -1,7 +1,7 @@
 import json
 import os
+import time
 from datetime import datetime
-from functools import lru_cache
 from typing import Dict, Optional
 
 import requests
@@ -15,8 +15,7 @@ _TOKEN_URL = 'https://oauth.aife.economie.gouv.fr/api/oauth/token'
 _NOR_URL = f'{_API_HOST}/consult/getJoWithNor'
 
 
-@lru_cache
-def get_legifrance_client() -> OAuth2Session:
+def _get_legifrance_client() -> OAuth2Session:
     secret = os.environ.get('CLIENT_SECRET', LEGIFRANCE_CLIENT_SECRET)
     if not secret:
         raise ValueError('Provide CLIENT_SECRET in environment variables')
@@ -30,6 +29,20 @@ def get_legifrance_client() -> OAuth2Session:
     token = response.json()
     client = OAuth2Session('a5b0a4be-9406-4481-925d-e1bfb784f691', token=token)
     return client
+
+
+_LAST_COMPUTE_TIME = time.time()
+HOUR = 60 * 60
+_RES: Optional[OAuth2Session] = None
+
+
+def get_legifrance_client() -> OAuth2Session:
+    global _RES, _LAST_COMPUTE_TIME
+    elapsed = time.time() - _LAST_COMPUTE_TIME
+    if not _RES or elapsed >= HOUR:
+        _LAST_COMPUTE_TIME = time.time()
+        _RES = _get_legifrance_client()
+    return _RES
 
 
 class LegifranceRequestError(Exception):
