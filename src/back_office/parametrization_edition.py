@@ -169,7 +169,10 @@ def _get_condition_component(rank: int, default_condition: Optional[_MonoConditi
             style={'width': '45px', 'margin-right': '5px'},
         ),
         dcc.Input(
-            id=f'{_CONDITION_VALUE}_{rank}', value=default_target, type='text', className='form-control form-control-sm'
+            id=f'{_CONDITION_VALUE}_{rank}',
+            value=str(default_target),
+            type='text',
+            className='form-control form-control-sm',
         ),
     ]
     return html.Div(dropdown_conditions, className='small-dropdown', style={'display': 'flex', 'margin-bottom': '5px'})
