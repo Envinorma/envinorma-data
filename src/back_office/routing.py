@@ -9,6 +9,7 @@ def build_am_page(am_id: str) -> str:
 
 class Endpoint(Enum):
     COMPARE = 'compare'
+    AM = 'am'
     EDIT_AM = 'edit_am'
     PARSE_AP = 'parse_ap'
 
@@ -18,7 +19,9 @@ ROUTER: MapAdapter = Map(
         Rule('/compare', endpoint=Endpoint.COMPARE),
         Rule('/compare/id/<am_id>', endpoint=Endpoint.COMPARE),
         Rule('/compare/id/<am_id>/<date_before>/<date_after>', endpoint=Endpoint.COMPARE),
-        Rule('/am/id/<id>/operation/<operation>', endpoint=Endpoint.EDIT_AM),
+        Rule('/am/<am_id>', endpoint=Endpoint.AM),
+        Rule('/am/<am_id>/compare/<compare_with>', endpoint=Endpoint.AM),
+        # Rule('/edit_am/id/<id>/operation/<operation>', endpoint=Endpoint.EDIT_AM),
     ]
 ).bind('')
 

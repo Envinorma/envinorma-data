@@ -10,13 +10,12 @@ from lib.config import config
 from lib.data import AMMetadata, Classement
 from werkzeug.exceptions import NotFound
 
-from back_office import compare
+from back_office import compare, display_am
 
 # from back_office.ap_parsing import page as ap_parsing_page
 from back_office.am_page import router as edit_am_page_router
 from back_office.app_init import app
 from back_office.components import replace_line_breaks
-from back_office.display_am import router as diplay_am_router
 from back_office.fetch_data import load_all_am_statuses
 from back_office.routing import Endpoint, route
 from back_office.utils import AM_ID_TO_NB_CLASSEMENTS_IDF, ID_TO_AM_MD, AMStatus, split_route
@@ -192,6 +191,13 @@ def _make_index_component(
     )
 
 
+_ENDPOINT_TO_PAGE = {
+    Endpoint.COMPARE: compare,
+    Endpoint.AM: display_am,
+    # Endpoint.PARSE_AP: ap_parsing_page
+}
+
+
 def router(pathname: str) -> Component:
     if not pathname.startswith('/'):
         raise ValueError(f'Expecting pathname to start with /, received {pathname}')
@@ -201,17 +207,12 @@ def router(pathname: str) -> Component:
     prefix, suffix = split_route(pathname)
     if prefix == '/edit_am':
         return edit_am_page_router(prefix, suffix)
-    if prefix == '/am':
-        return diplay_am_router(prefix, suffix.split('/')[-1])
     try:
         endpoint, args = route(pathname)
     except NotFound:
         return html.H3('404 error: Unknown path {}'.format(pathname))
-    mapping = {
-        Endpoint.COMPARE: compare,
-        # Endpoint.PARSE_AP: ap_parsing_page
-    }
-    page = mapping.get(endpoint)
+
+    page = _ENDPOINT_TO_PAGE.get(endpoint)
     if not page:
         return html.H3(f'404 error: Unknown path {pathname} (not implemented endpoint {endpoint})')
     return page.layout(**args)  # type: ignore

@@ -1,10 +1,23 @@
 import json
 import os
+import random
 from datetime import datetime
 from enum import Enum
 from typing import Any, List, Optional, Tuple
 
-from lib.data import ArreteMinisteriel, Ints, StructuredText, load_am_data
+from lib.aida import parse_aida_text
+from lib.am_structure_extraction import extract_short_title, transform_arrete_ministeriel
+from lib.data import (
+    ArreteMinisteriel,
+    EnrichedString,
+    Ints,
+    StructuredText,
+    extract_text_lines,
+    load_am_data,
+    load_legifrance_text,
+)
+from lib.diff import TextDifferences, build_text_differences
+from lib.legifrance_API import get_legifrance_client, get_loda_via_cid
 
 _AM = load_am_data()
 ID_TO_AM_MD = {am.cid: am for am in _AM.metadata if am.state != am.state.ABROGE}
@@ -150,3 +163,43 @@ def check_legifrance_diff_computed():
         raise ValueError(f'No legifrance_diffs found : run one.\ncmd: {cmd}')
     if (datetime.now() - max_date).total_seconds() >= 7 * 24 * 3600:
         raise ValueError(f'Last legifrance_diffs computation is too old, run one. (date: {max_date})\ncmd: {cmd}')
+
+
+def extract_aida_am(page_id: str, am_id: str) -> Optional[ArreteMinisteriel]:
+    text = parse_aida_text(page_id)
+    if not text:
+        return None
+    if len(text.sections) == 1:
+        section = text.sections[0]
+        if section.outer_alineas:
+            new_sections = [StructuredText(EnrichedString(''), section.outer_alineas, [], None)] + section.sections
+        else:
+            new_sections = section.sections
+        return ArreteMinisteriel(
+            title=section.title,
+            short_title=extract_short_title(section.title.text),
+            sections=new_sections,
+            visa=[],
+            id=am_id,
+        )
+    return ArreteMinisteriel(
+        title=EnrichedString('title'), short_title='short_tile', sections=[text], visa=[], id=am_id
+    )
+
+
+def extract_legifrance_am(am_id: str, date: Optional[datetime] = None) -> ArreteMinisteriel:
+    date = date or datetime.now()
+    client = get_legifrance_client()
+    legifrance_current_version = load_legifrance_text(get_loda_via_cid(am_id, date, client))
+    random.seed(legifrance_current_version.title)
+    return transform_arrete_ministeriel(legifrance_current_version, am_id=am_id)
+
+
+def _extract_lines(am: ArreteMinisteriel) -> List[str]:
+    return [line for section in am.sections for line in extract_text_lines(section, 0)]
+
+
+def compute_am_diff(am_before: ArreteMinisteriel, am_after: ArreteMinisteriel) -> TextDifferences:
+    lines_before = _extract_lines(am_before)
+    lines_after = _extract_lines(am_after)
+    return build_text_differences(lines_before, lines_after)

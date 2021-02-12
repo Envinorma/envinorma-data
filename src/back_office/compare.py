@@ -1,30 +1,18 @@
-import random
 import traceback
 from datetime import datetime
 from typing import List, Optional, Set, Tuple
 
-import dash_bootstrap_components as dbc
 import dash_core_components as dcc
 import dash_html_components as html
 from dash.dependencies import ALL, Input, Output, State
 from dash.development.base_component import Component
 from dash.exceptions import PreventUpdate
-from lib.am_structure_extraction import transform_arrete_ministeriel
-from lib.data import AMSource, ArreteMinisteriel, extract_text_lines, load_legifrance_text
-from lib.diff import (
-    AddedLine,
-    DiffLine,
-    Mask,
-    ModifiedLine,
-    RemovedLine,
-    TextDifferences,
-    UnchangedLine,
-    build_text_differences,
-)
-from lib.legifrance_API import LegifranceRequestError, get_legifrance_client, get_loda_via_cid
+from lib.legifrance_API import LegifranceRequestError
 
 from back_office.app_init import app
-from back_office.components import error_component, surline_text
+from back_office.components import error_component
+from back_office.components.diff import diff_component
+from back_office.utils import compute_am_diff, extract_legifrance_am
 
 _PREFIX = __file__.split('/')[-1].replace('.py', '').replace('_', '-')
 _DATE_BEFORE = f'{_PREFIX}-before-date'
@@ -82,57 +70,11 @@ def _am_id(am_id: Optional[str]) -> Component:
     )
 
 
-def _load_legifrance_version(am_id: str, date: datetime) -> ArreteMinisteriel:
-    client = get_legifrance_client()
-    legifrance_current_version = load_legifrance_text(get_loda_via_cid(am_id, date, client))
-    random.seed(legifrance_current_version.title)
-    return transform_arrete_ministeriel(legifrance_current_version, am_id=am_id)
-
-
-def _extract_lines(am: ArreteMinisteriel) -> List[str]:
-    return [line for section in am.sections for line in extract_text_lines(section, 0)]
-
-
-def _compute_am_diff(am_before: ArreteMinisteriel, am_after: ArreteMinisteriel) -> TextDifferences:
-    lines_before = _extract_lines(am_before)
-    lines_after = _extract_lines(am_after)
-    return build_text_differences(lines_before, lines_after)
-
-
-def _positions_to_surline(mask: Mask) -> Set[int]:
-    return {i for i, el in enumerate(mask.elements) if el != el.UNCHANGED}
-
-
-def _diff_rows(diff_line: DiffLine) -> List[html.Tr]:
-    if isinstance(diff_line, UnchangedLine):
-        return [html.Tr([html.Td(diff_line.content)] * 2)]
-    if isinstance(diff_line, AddedLine):
-        return [html.Tr([html.Td(''), html.Td(diff_line.content, className='table-success')])]
-    if isinstance(diff_line, RemovedLine):
-        return [html.Tr([html.Td(diff_line.content, className='table-danger'), html.Td('')])]
-    if isinstance(diff_line, ModifiedLine):
-        green = {'background-color': '#ff95a2'}
-        text_before = surline_text(diff_line.content_before, _positions_to_surline(diff_line.mask_before), green)
-        red = {'background-color': '#80da96'}
-        text_after = surline_text(diff_line.content_after, _positions_to_surline(diff_line.mask_after), red)
-        row_1 = html.Tr(
-            [html.Td(text_before, className='table-danger'), html.Td(text_after, className='table-success')]
-        )
-        return [row_1]
-    raise NotImplementedError(f'Unhandled type {diff_line}')
-
-
-def _diff_component(diff: TextDifferences) -> Component:
-    header: List[Component] = [html.Thead([html.Tr([html.Th('Version de référence'), html.Th('Version comparée')])])]
-    rows: List[Component] = [row for line in diff.diff_lines for row in _diff_rows(line)]
-    return html.Table(header + rows, className='table table-sm table-borderless diff')
-
-
 def _diff(am_id: str, date_before: datetime, date_after: datetime) -> Component:
-    am_before = _load_legifrance_version(am_id, date_before)
-    am_after = _load_legifrance_version(am_id, date_after)
-    diff = _compute_am_diff(am_before, am_after)
-    return _diff_component(diff)
+    am_before = extract_legifrance_am(am_id, date_before)
+    am_after = extract_legifrance_am(am_id, date_after)
+    diff = compute_am_diff(am_before, am_after)
+    return diff_component(diff, 'Version de référence', 'Version comparée')
 
 
 def _form(am_id: Optional[str], date_before_str: Optional[str], date_after_str: Optional[str]) -> Component:

@@ -4,7 +4,7 @@ import requests
 import random
 from typing import List
 from tqdm import tqdm
-from urllib.request import urlretrieve, HTTPError
+from urllib.request import urlretrieve, HTTPError  # type: ignore
 
 from lib.utils import write_json
 from lib.georisques_data import DocumentType, GRDocument, load_all_documents

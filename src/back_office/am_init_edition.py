@@ -1,4 +1,3 @@
-import random
 import traceback
 from dataclasses import replace
 from typing import List, Optional, Tuple
@@ -10,19 +9,9 @@ import dash_html_components as html
 from bs4 import BeautifulSoup
 from dash.dependencies import Input, Output, State
 from dash.development.base_component import Component
-from lib.aida import parse_aida_text
-from lib.am_structure_extraction import extract_short_title, transform_arrete_ministeriel
-from lib.data import (
-    AMMetadata,
-    ArreteMinisteriel,
-    EnrichedString,
-    StructuredText,
-    Table,
-    am_to_text,
-    load_legifrance_text,
-    table_to_html,
-)
-from lib.legifrance_API import LegifranceRequestError, get_current_loda_via_cid, get_legifrance_client
+from lib.am_structure_extraction import extract_short_title
+from lib.data import AMMetadata, ArreteMinisteriel, EnrichedString, StructuredText, Table, am_to_text, table_to_html
+from lib.legifrance_API import LegifranceRequestError
 from lib.parse_html import extract_text_elements
 from lib.structure_extraction import TextElement, Title, build_structured_text, structured_text_to_text_elements
 
@@ -30,12 +19,11 @@ from back_office.app_init import app
 from back_office.components import error_component, success_component
 from back_office.fetch_data import load_initial_am, upsert_initial_am
 from back_office.routing import build_am_page
-from back_office.utils import ID_TO_AM_MD, AMOperation, RouteParsingError
+from back_office.utils import ID_TO_AM_MD, AMOperation, RouteParsingError, extract_aida_am, extract_legifrance_am
 
 _AM_TITLE = 'am-init-am-title'
 _AM_CONTENT = 'am-init-am-content'
 _FORM = 'am-init-form'
-
 _AM_ID = 'am-init-am-id'
 _AIDA_DOC = 'am-init-aida-doc'
 _AIDA_SUBMIT = 'am-init-aida-submit'
@@ -62,7 +50,7 @@ def _parse_route(route: str) -> str:
 
 
 def _legifrance_form(am_id: str) -> Component:
-    fetch_from_aida = html.Div(
+    return html.Div(
         [
             dcc.Input(
                 id=_LEGIFRANCE_ID, value=am_id, className='form-control', style={'display': 'flex'}, disabled=True
@@ -71,7 +59,6 @@ def _legifrance_form(am_id: str) -> Component:
         ],
         className='input-group mb-3',
     )
-    return fetch_from_aida
 
 
 def _aida_form(am_metadata: AMMetadata) -> Component:
@@ -97,28 +84,6 @@ def _am_loaders(am_id: str) -> Component:
             dbc.Spinner(html.Div(), id=_LEGIFRANCE_FORM_OUTPUT),
         ],
         style={'margin-top': '80px'},
-    )
-
-
-def _parse_aida_page(page_id: str, am_id: str) -> Optional[ArreteMinisteriel]:
-    text = parse_aida_text(page_id)
-    if not text:
-        return None
-    if len(text.sections) == 1:
-        section = text.sections[0]
-        if section.outer_alineas:
-            new_sections = [StructuredText(EnrichedString(''), section.outer_alineas, [], None)] + section.sections
-        else:
-            new_sections = section.sections
-        return ArreteMinisteriel(
-            title=section.title,
-            short_title=extract_short_title(section.title.text),
-            sections=new_sections,
-            visa=[],
-            id=am_id,
-        )
-    return ArreteMinisteriel(
-        title=EnrichedString('title'), short_title='short_tile', sections=[text], visa=[], id=am_id
     )
 
 
@@ -203,7 +168,7 @@ def _save_and_get_component(am_id: str, am: ArreteMinisteriel) -> Component:
 
 def _parse_aida_page_and_save_am(page_id: str, am_id: str) -> Component:
     try:
-        am = _parse_aida_page(page_id, am_id)
+        am = extract_aida_am(page_id, am_id)
     except Exception:
         return error_component(f'Erreur inattendue: \n{traceback.format_exc()}')
     if not am:
@@ -224,19 +189,9 @@ def _build_am_from_aida(n_clicks, page_id, am_id: str) -> Component:
     return html.Div()
 
 
-def _fetch_legifrance_am(am_id: str) -> ArreteMinisteriel:
-    client = get_legifrance_client()
-    text_json = get_current_loda_via_cid(am_id, client)
-    legifrance_text = load_legifrance_text(text_json)
-    random.seed(legifrance_text.title)
-    am = transform_arrete_ministeriel(legifrance_text, am_id=am_id)
-    am.id = am_id
-    return am
-
-
 def _fetch_parse_and_save_legifrance_text(am_id: str) -> Component:
     try:
-        am = _fetch_legifrance_am(am_id)
+        am = extract_legifrance_am(am_id)
     except LegifranceRequestError as exc:
         return error_component(f'Erreur lors de la récupération du text: {exc}')
     except Exception:

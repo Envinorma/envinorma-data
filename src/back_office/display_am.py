@@ -15,6 +15,7 @@ from lib.parametrization import Parameter, ParameterEnum, ParameterType, Paramet
 from lib.topics.patterns import TopicName
 from lib.topics.topics import TOPIC_ONTOLOGY
 
+from back_office import am_compare
 from back_office.app_init import app
 from back_office.components import error_component
 from back_office.components.parametric_am import parametric_am_component
@@ -147,10 +148,25 @@ def _topic_component(am: ArreteMinisteriel) -> Component:
     return html.Div([html.H2('Topics'), _topic_buttons(topic_count)])
 
 
+def _link(text: str, href: str) -> Component:
+    return dcc.Link(html.Button(text, className='btn btn-link'), href=href)
+
+
+def _diff_component(am_id: str) -> Component:
+    return html.Div(
+        [
+            html.H2('Comparer'),
+            _link('Avec la version Légifrance', f'/am/{am_id}/compare/legifrance'),
+            _link('Avec la version AIDA', f'/am/{am_id}/compare/aida'),
+        ]
+    )
+
+
 def _parametrization_and_topic(am: ArreteMinisteriel) -> Component:
-    param = html.Div(_parametrization_component(am.id or ''), className='col-6')
+    param = html.Div(_parametrization_component(am.id or ''), className='col-3')
     topic = html.Div(_topic_component(am), className='col-6')
-    return html.Div([param, topic], className='row')
+    diff = html.Div(_diff_component(am.id or ''), className='col-3')
+    return html.Div([param, topic, diff], className='row')
 
 
 def _page(am: ArreteMinisteriel) -> Component:
@@ -170,7 +186,9 @@ def _load_am(am_id: str) -> Optional[ArreteMinisteriel]:
     return load_structured_am(am_id) or load_initial_am(am_id)
 
 
-def router(_: str, am_id: str) -> Component:
+def layout(am_id: str, compare_with: Optional[str] = None) -> Component:
+    if compare_with:
+        return am_compare.layout(am_id, compare_with)
     if am_id not in ID_TO_AM_MD:
         return html.Div('404 - AM inexistant.')
     am = _load_am(am_id)
