@@ -1,12 +1,13 @@
-from lib.structure_extraction import Linebreak, Title
-from lib.data import Table
 from bs4 import BeautifulSoup
+from lib.data import Table
 from lib.parse_html import (
     _extract_cell_data,
+    _extract_text_elements_with_linebreaks,
+    extract_table,
     extract_text_elements,
     merge_between_linebreaks,
-    _extract_text_elements_with_linebreaks,
 )
+from lib.structure_extraction import Linebreak, Title
 
 
 def test_cell_data_extraction():
@@ -73,3 +74,26 @@ def test_merge_between_linebreaks():
 def test_extract_text_elements_with_linebreaks():
     res = _extract_text_elements_with_linebreaks(_soup('<h1 id="a">Test</h1>'))
     assert res == [Title('Test', level=1, id='a')]
+
+
+def test_extract_table():
+    res = extract_table('<table><tr><td><a>test</a>test</td></tr></table>')
+    assert len(res.rows) == 1
+    assert len(res.rows[0].cells) == 1
+    assert res.rows[0].cells[0].content.text == 'testtest'
+    res = extract_table('<table><tr><td><a>testtest</a></td></tr></table>')
+    assert len(res.rows) == 1
+    assert len(res.rows[0].cells) == 1
+    assert res.rows[0].cells[0].content.text == 'testtest'
+    res = extract_table('<table><tr><td><p>test</p>test</td></tr></table>')
+    assert len(res.rows) == 1
+    assert len(res.rows[0].cells) == 1
+    assert res.rows[0].cells[0].content.text == 'test\ntest'
+    res = extract_table('<table><tr><td>test test</td></tr></table>')
+    assert len(res.rows) == 1
+    assert len(res.rows[0].cells) == 1
+    assert res.rows[0].cells[0].content.text == 'test test'
+
+
+def test_extract_cell_data():
+    _extract_cell_data(_soup('<a>test</a>test')).text == 'testtest'

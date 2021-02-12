@@ -7,8 +7,18 @@ from lib.data import Cell, EnrichedString, Row, Table
 from lib.structure_extraction import Linebreak, TextElement, Title
 
 
+def _ensure_str(element: TextElement) -> str:
+    if not isinstance(element, str):
+        raise ValueError(f'Expecting str, received {type(element)}')
+    return element
+
+
+def _ensure_strs_and_join(elements: List[TextElement]) -> str:
+    return '\n'.join([_ensure_str(x).strip() for x in elements])
+
+
 def _extract_cell_data(cell: bs4.Tag) -> EnrichedString:
-    return EnrichedString('\n'.join(cell.stripped_strings))
+    return EnrichedString(_ensure_strs_and_join(merge_between_linebreaks(_extract_text_elements_with_linebreaks(cell))))
 
 
 def _is_header(row: bs4.Tag) -> bool:
