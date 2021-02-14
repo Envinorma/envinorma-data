@@ -1,17 +1,13 @@
 '''
 Script for scraping Legifrance nomenclature
 '''
-
 import re
 from collections import Counter
 from dataclasses import dataclass
 from typing import List, Optional
 
 from bs4 import BeautifulSoup
-from legifrance.legifrance_API import get_article_by_id, get_legifrance_client
-from tqdm import tqdm
-
-from envinorma.config import AM_DATA_FOLDER
+from envinorma.config import AM_DATA_FOLDER, config
 from envinorma.data import (
     Cell,
     EnrichedString,
@@ -30,6 +26,8 @@ from envinorma.data_build.georisques_data import (
 )
 from envinorma.io.parse_html import extract_table_from_soup
 from envinorma.utils import write_json
+from legifrance.legifrance_API import get_article_by_id, get_legifrance_client
+from tqdm import tqdm
 
 _ARTICLE_IDS = [
     'LEGIARTI000039330431',
@@ -38,7 +36,8 @@ _ARTICLE_IDS = [
     'LEGIARTI000037531043',
     'LEGIARTI000039330429',
 ]
-_CLIENT = get_legifrance_client()
+_CLIENT = get_legifrance_client(config.legifrance.client_id, config.legifrance.client_secret)
+
 _ARTICLES = [get_article_by_id(id_, _CLIENT) for id_ in _ARTICLE_IDS]
 _HTML_CONTENTS = [BeautifulSoup(art['article']['texteHtml'], 'html.parser') for art in _ARTICLES]
 

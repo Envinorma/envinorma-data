@@ -32,6 +32,7 @@ class AidaConfig:
 @dataclass
 class LegifranceConfig:
     client_secret: str
+    client_id: str
 
     @classmethod
     def default_load(cls) -> 'LegifranceConfig':

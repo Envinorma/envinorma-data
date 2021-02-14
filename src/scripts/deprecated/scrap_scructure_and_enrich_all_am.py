@@ -13,7 +13,7 @@ from envinorma.am_enriching import (
     detect_and_add_topics,
     remove_null_applicabilities,
 )
-from envinorma.config import AM_DATA_FOLDER
+from envinorma.config import AM_DATA_FOLDER, config
 from envinorma.data import (
     AidaData,
     AMMetadata,
@@ -211,7 +211,7 @@ def handle_all_am(
     cid_to_log: _AMStructurationLogs = {}
     cid_to_am: _ArreteMinisteriels = {}
     cid_to_param: _ParametricAMs = {}
-    client = get_legifrance_client()
+    client = get_legifrance_client(config.legifrance.client_id, config.legifrance.client_secret)
     am_cids = am_cids or set()
     for metadata in tqdm(data.arretes_ministeriels.metadata, 'Processsing AM...'):
         metadata = _ensure_metadata(metadata)

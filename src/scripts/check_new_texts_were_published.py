@@ -15,6 +15,7 @@ from dash_text_components.diff import (
 )
 from envinorma.back_office.fetch_data import load_initial_am
 from envinorma.back_office.utils import ID_TO_AM_MD
+from envinorma.config import config
 from envinorma.data import AMSource, ArreteMinisteriel, extract_text_lines, load_legifrance_text
 from envinorma.structure.am_structure_extraction import transform_arrete_ministeriel
 from legifrance.legifrance_API import get_current_loda_via_cid, get_legifrance_client
@@ -22,7 +23,7 @@ from tqdm import tqdm
 
 
 def _load_legifrance_version(am_id: str) -> ArreteMinisteriel:
-    client = get_legifrance_client()
+    client = get_legifrance_client(config.legifrance.client_id, config.legifrance.client_secret)
     legifrance_current_version = load_legifrance_text(get_current_loda_via_cid(am_id, client))
     random.seed(legifrance_current_version.title)
     return transform_arrete_ministeriel(legifrance_current_version, am_id=am_id)

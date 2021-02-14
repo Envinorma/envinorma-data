@@ -2,16 +2,12 @@
 Script for generating 4 AM. Now deprecated.
 '''
 import json
-from envinorma.config import AM_DATA_FOLDER
 from typing import List
 
+from envinorma.config import AM_DATA_FOLDER, config
 from envinorma.data import ArreteMinisteriel
-from .scrap_scructure_and_enrich_all_am import (
-    AMMetadata,
-    handle_am,
-    load_data,
-    get_legifrance_client,
-)
+
+from .scrap_scructure_and_enrich_all_am import AMMetadata, get_legifrance_client, handle_am, load_data
 
 
 def _find_metadata_with_nor(metadata: List[AMMetadata], nor: str) -> AMMetadata:
@@ -24,7 +20,7 @@ def _find_metadata_with_nor(metadata: List[AMMetadata], nor: str) -> AMMetadata:
 def _generate_structured_am(nor: str) -> ArreteMinisteriel:
     data = load_data()
     metadata = _find_metadata_with_nor(data.arretes_ministeriels.metadata, nor)
-    handle_am(metadata, get_legifrance_client(), True)
+    handle_am(metadata, get_legifrance_client(config.legifrance.client_id, config.legifrance.client_secret), True)
     return ArreteMinisteriel.from_dict(json.load(open(f'{AM_DATA_FOLDER}/structured_texts/{nor}.json')))
 
 

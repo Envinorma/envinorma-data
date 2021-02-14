@@ -5,8 +5,9 @@ from datetime import datetime
 from enum import Enum
 from typing import Any, List, Optional, Tuple
 
+from dash_text_components.diff import TextDifferences, build_text_differences
 from envinorma.aida import parse_aida_text
-from envinorma.structure.am_structure_extraction import extract_short_title, transform_arrete_ministeriel
+from envinorma.config import config
 from envinorma.data import (
     ArreteMinisteriel,
     EnrichedString,
@@ -16,7 +17,7 @@ from envinorma.data import (
     load_am_data,
     load_legifrance_text,
 )
-from dash_text_components.diff import TextDifferences, build_text_differences
+from envinorma.structure.am_structure_extraction import extract_short_title, transform_arrete_ministeriel
 from legifrance.legifrance_API import get_legifrance_client, get_loda_via_cid
 
 _AM = load_am_data()
@@ -189,7 +190,7 @@ def extract_aida_am(page_id: str, am_id: str) -> Optional[ArreteMinisteriel]:
 
 def extract_legifrance_am(am_id: str, date: Optional[datetime] = None) -> ArreteMinisteriel:
     date = date or datetime.now()
-    client = get_legifrance_client()
+    client = get_legifrance_client(config.legifrance.client_id, config.legifrance.client_secret)
     legifrance_current_version = load_legifrance_text(get_loda_via_cid(am_id, date, client))
     random.seed(legifrance_current_version.title)
     return transform_arrete_ministeriel(legifrance_current_version, am_id=am_id)
