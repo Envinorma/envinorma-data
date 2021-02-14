@@ -4,7 +4,7 @@ import os
 from typing import Any, Dict, List, Tuple, Union
 
 from bs4 import BeautifulSoup
-from envinorma.io.am_to_markdown import extract_markdown_text
+from envinorma.io.markdown import extract_markdown_text
 from envinorma.io.docx import build_structured_text_from_docx_xml, empty_soup, extract_headers, get_docx_xml
 
 # _DOCUMENTS_FOLDER = '/Users/remidelbouys/EnviNorma/brouillons/data/icpe_documents'

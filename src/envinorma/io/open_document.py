@@ -446,7 +446,7 @@ def write_new_document(input_filename: str, new_document_xml: str, new_filename:
 
 
 if __name__ == '__main__':
-    from envinorma.io.am_to_markdown import extract_markdown_text
+    from envinorma.io.markdown import extract_markdown_text
 
     _DOC_NAME = 'AP_DDAE_12_2014vcorrigee_cle84ed7d'  # '2020-06-11-AUTO 2001-AP AUTORISATION-Projet_AP_VF'
 

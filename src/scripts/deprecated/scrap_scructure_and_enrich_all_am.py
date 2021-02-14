@@ -37,7 +37,7 @@ from envinorma.data_build.manual_enrichments import (
     get_manual_parametrization,
     get_manual_post_process,
 )
-from envinorma.io.am_to_markdown import am_to_markdown
+from envinorma.io.markdown import am_to_markdown
 from envinorma.parametrization import Parametrization, add_am_signatures
 from envinorma.parametrization.parametric_am import check_parametrization_is_still_valid, generate_all_am_versions
 from envinorma.paths import (

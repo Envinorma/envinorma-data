@@ -748,7 +748,7 @@ def extract_text_lines(text: StructuredText, level: int = 0) -> List[str]:
 
 def _enriched_text_to_html(str_: EnrichedString, with_links: bool = False) -> str:
     if with_links:
-        raise NotImplementedError()  # see am_to_markdown if required
+        raise NotImplementedError()  # see markdown if required
     else:
         text = str_.text
     return text.replace('\n', '<br/>')

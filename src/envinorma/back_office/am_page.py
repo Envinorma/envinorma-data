@@ -35,7 +35,7 @@ from envinorma.back_office.structure_edition import router as structure_router
 from envinorma.back_office.utils import ID_TO_AM_MD, AMOperation, AMStatus, get_traversed_titles, safe_get_section
 from envinorma.config import EnvironmentType, config
 from envinorma.data import AMMetadata, ArreteMinisteriel, Ints, StructuredText, Table, am_to_text, extract_text_lines
-from envinorma.io.am_to_markdown import extract_markdown_text
+from envinorma.io.markdown import extract_markdown_text
 from envinorma.parametrization import AlternativeSection, NonApplicationCondition, Parametrization, condition_to_str
 from envinorma.paths import create_folder_and_generate_parametric_filename, get_parametric_ams_folder
 from envinorma.utils import SlackChannel, send_slack_notification, write_json

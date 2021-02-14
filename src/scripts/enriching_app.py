@@ -14,7 +14,7 @@ from tqdm import tqdm
 from envinorma.am_enriching import _remove_table_html
 from envinorma.config import AM_DATA_FOLDER
 from envinorma.data import ArreteMinisteriel, EnrichedString, StructuredText, load_am_data
-from envinorma.io.am_to_markdown import extract_markdown_text
+from envinorma.io.markdown import extract_markdown_text
 from envinorma.io.open_document import load_and_transform, structured_text_to_odt_file, structured_text_to_odt_xml
 
 _DOC_NAME = '2020-06-11-AUTO 2001-AP AUTORISATION-Projet_AP_VF'

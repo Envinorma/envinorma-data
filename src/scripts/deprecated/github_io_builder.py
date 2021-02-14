@@ -25,7 +25,7 @@ from envinorma.data import (
     get_text_defined_id,
 )
 from .scrap_scructure_and_enrich_all_am import handle_all_am
-from envinorma.io.am_to_markdown import am_to_markdown, generate_text_md
+from envinorma.io.markdown import am_to_markdown, generate_text_md
 from envinorma.parametrization import Parametrization, parametrization_to_markdown
 from tqdm import tqdm
 

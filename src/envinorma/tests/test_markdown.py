@@ -3,7 +3,7 @@ import json
 import pytest
 from envinorma.config import AM_DATA_FOLDER
 from envinorma.data import load_legifrance_text
-from envinorma.io.am_to_markdown import (
+from envinorma.io.markdown import (
     DataFormat,
     Link,
     _extract_sorted_links_to_display,
