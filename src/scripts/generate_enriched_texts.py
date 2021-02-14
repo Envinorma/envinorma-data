@@ -6,7 +6,7 @@ from typing import Optional
 
 from envinorma.back_office.generate_final_am import AMVersions, generate_final_am
 from envinorma.back_office.utils import ID_TO_AM_MD
-from envinorma.paths import create_folder_and_generate_parametric_filename
+from envinorma.config import create_folder_and_generate_parametric_filename
 from envinorma.utils import write_json
 
 TEST_ID = 'JORFTEXT000023081678'

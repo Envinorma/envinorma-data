@@ -40,14 +40,7 @@ from envinorma.data_build.manual_enrichments import (
 from envinorma.io.markdown import am_to_markdown
 from envinorma.parametrization import Parametrization, add_am_signatures
 from envinorma.parametrization.parametric_am import check_parametrization_is_still_valid, generate_all_am_versions
-from envinorma.paths import (
-    create_folder_and_generate_parametric_filename,
-    generate_parametric_descriptor,
-    get_enriched_am_filename,
-    get_legifrance_filename,
-    get_parametrization_filename,
-    get_structured_am_filename,
-)
+from envinorma.config import create_folder_and_generate_parametric_filename, generate_parametric_descriptor
 from envinorma.structure.am_structure_extraction import (
     AMStructurationError,
     check_legifrance_dict,
@@ -59,6 +52,22 @@ from envinorma.utils import write_json
 from legifrance.legifrance_API import get_current_loda_via_cid_response, get_legifrance_client
 from requests_oauthlib import OAuth2Session
 from tqdm import tqdm
+
+
+def get_enriched_am_filename(am_id: str) -> str:
+    return f'{AM_DATA_FOLDER}/enriched_texts/{am_id}.json'
+
+
+def get_parametrization_filename(am_id: str) -> str:
+    return os.path.join(AM_DATA_FOLDER, 'parametrizations', am_id + '.json')
+
+
+def get_structured_am_filename(am_id: str) -> str:
+    return f'{AM_DATA_FOLDER}/structured_texts/{am_id}.json'
+
+
+def get_legifrance_filename(am_id: str) -> str:
+    return f'{AM_DATA_FOLDER}/legifrance_texts/{am_id}.json'
 
 
 def parse_aida_title_date(date_str: str) -> int:
