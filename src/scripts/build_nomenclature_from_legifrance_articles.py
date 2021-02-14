@@ -1,11 +1,18 @@
+'''
+Script for scraping Legifrance nomenclature
+'''
+
 import re
 from collections import Counter
 from dataclasses import dataclass
 from typing import List, Optional
 
 from bs4 import BeautifulSoup
-from lib.config import AM_DATA_FOLDER
-from lib.data import (
+from legifrance.legifrance_API import get_article_by_id, get_legifrance_client
+from tqdm import tqdm
+
+from envinorma.config import AM_DATA_FOLDER
+from envinorma.data import (
     Cell,
     EnrichedString,
     Nomenclature,
@@ -16,15 +23,13 @@ from lib.data import (
     is_increasing,
     load_am_data,
 )
-from lib.georisques_data import (
+from envinorma.data_build.georisques_data import (
     GRClassementActivite,
     deduce_regime_if_possible,
     load_installations_with_classements_and_docs,
 )
-from lib.legifrance_API import get_article_by_id, get_legifrance_client
-from lib.parse_html import extract_table_from_soup
-from lib.utils import write_json
-from tqdm import tqdm
+from envinorma.io.parse_html import extract_table_from_soup
+from envinorma.utils import write_json
 
 _ARTICLE_IDS = [
     'LEGIARTI000039330431',

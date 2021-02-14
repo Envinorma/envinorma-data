@@ -1,15 +1,21 @@
-import random
+'''
+Script for testing io of open document.
+TODO: use to define unit tests or deprecate
+'''
+
 import json
 import os
+import random
 from typing import List
-from lib.scrap_scructure_and_enrich_all_am import load_data
-from lib.am_to_markdown import extract_markdown_text
+
 from bs4 import BeautifulSoup
-from lib.open_document import get_odt_xml, load_and_transform, structured_text_to_odt_file, structured_text_to_odt_xml
-from lib.am_enriching import _remove_table_html
-from lib.data import ArreteMinisteriel, Cell, EnrichedString, Row, StructuredText, Table
-from lib.config import AM_DATA_FOLDER
 from tqdm import tqdm
+
+from envinorma.am_enriching import _remove_table_html
+from envinorma.config import AM_DATA_FOLDER
+from envinorma.data import ArreteMinisteriel, EnrichedString, StructuredText, load_am_data
+from envinorma.io.am_to_markdown import extract_markdown_text
+from envinorma.io.open_document import load_and_transform, structured_text_to_odt_file, structured_text_to_odt_xml
 
 _DOC_NAME = '2020-06-11-AUTO 2001-AP AUTORISATION-Projet_AP_VF'
 
@@ -36,8 +42,8 @@ PARAMETRIC_TEXTS_FOLDER = AM_DATA_FOLDER + '/parametric_texts'
 
 
 def _get_am_files() -> List[str]:
-    data = load_data()
-    all_folders = [md.nor or md.cid for md in data.arretes_ministeriels.metadata if md.state == md.state.VIGUEUR]
+    data = load_am_data()
+    all_folders = [md.nor or md.cid for md in data.metadata if md.state == md.state.VIGUEUR]
     folders_to_copy = [fd for fd in all_folders if _exists(PARAMETRIC_TEXTS_FOLDER + '/' + fd)]
     res = []
     for folder in tqdm(folders_to_copy):

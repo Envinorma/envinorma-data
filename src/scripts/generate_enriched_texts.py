@@ -1,9 +1,13 @@
+'''
+Script for generating all versions of a specific AM using its
+structured version and its parametrization.
+'''
 from typing import Optional
 
-from lib.data import AMMetadata, load_am_data
-from lib.paths import create_folder_and_generate_parametric_filename
-from lib.utils import write_json
-from lib.generate_final_am import AMVersions, generate_final_am
+from envinorma.back_office.generate_final_am import AMVersions, generate_final_am
+from envinorma.back_office.utils import ID_TO_AM_MD
+from envinorma.paths import create_folder_and_generate_parametric_filename
+from envinorma.utils import write_json
 
 TEST_ID = 'JORFTEXT000023081678'
 
@@ -16,16 +20,10 @@ def _dump(am_id: str, versions: Optional[AMVersions]) -> None:
         write_json(version.to_dict(), filename)
 
 
-def _get_am_metadata(am_id: str) -> AMMetadata:
-    ams = load_am_data()
-    for metadata in ams.metadata:
-        if metadata.cid == am_id:
-            return metadata
-    raise ValueError(f'AM {am_id} not found.')
-
-
 def handle_am(am_id: str) -> None:
-    metadata = _get_am_metadata(am_id)
+    metadata = ID_TO_AM_MD.get(am_id)
+    if not metadata:
+        raise ValueError(f'AM {am_id} not found.')
     final_am = generate_final_am(metadata)
     _dump(am_id, final_am.am_versions)
 

@@ -1,13 +1,17 @@
-import os
+'''
+Script for retrieving the list of ICPE documents
+'''
 import json
-import requests
+import os
 import random
 from typing import List
-from tqdm import tqdm
-from urllib.request import urlretrieve, HTTPError  # type: ignore
+from urllib.request import HTTPError, urlretrieve  # type: ignore
 
-from lib.utils import write_json
-from lib.georisques_data import DocumentType, GRDocument, load_all_documents
+import requests
+from tqdm import tqdm
+
+from envinorma.data_build.georisques_data import DocumentType, GRDocument, load_all_documents
+from envinorma.utils import write_json
 
 _DATA_FOLDER = '/Users/remidelbouys/EnviNorma/brouillons/data'
 _DOCUMENTS_FOLDER = '/Users/remidelbouys/EnviNorma/brouillons/data/icpe_documents'

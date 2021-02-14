@@ -4,8 +4,7 @@
 src/.vscode
 src/.coverage
 tmp*
-src/lib/secrets.py
 src/scripts/s3ic.py
 config.ini
 backups
-classements.csv
+*.DS_Store

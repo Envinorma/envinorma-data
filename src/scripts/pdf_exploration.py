@@ -1,29 +1,11 @@
-from dataclasses import dataclass
-from lib.am_to_markdown import extract_markdown_text
-from lib.structure_extraction import TextElement, Title, build_structured_text
-from lib.data import StructuredText, Table
+'''Draft script for exploration of pdf tools'''
+
 import os
-from lib.pdf import pdf_to_docx
 from typing import Any, Dict, List, Tuple, Union
-import bs4
+
 from bs4 import BeautifulSoup
-from lib.docx import (
-    _copy_soup,
-    _replace_small_tables,
-    build_structured_text_from_docx_xml,
-    empty_soup,
-    extract_all_word_styles,
-    extract_headers,
-    extract_styles_to_nb_letters,
-    extract_table,
-    extract_w_tag_style,
-    get_docx_xml,
-    write_new_document,
-    write_xml,
-    _guess_body_font_size,
-    _is_body,
-)
-from zipfile import ZipFile
+from envinorma.io.am_to_markdown import extract_markdown_text
+from envinorma.io.docx import build_structured_text_from_docx_xml, empty_soup, extract_headers, get_docx_xml
 
 # _DOCUMENTS_FOLDER = '/Users/remidelbouys/EnviNorma/brouillons/data/icpe_documents'
 # _NB_CHARS = {

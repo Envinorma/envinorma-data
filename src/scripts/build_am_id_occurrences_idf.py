@@ -1,8 +1,12 @@
+'''Build file data/am_id_to_nb_classements_idf.json containing the number of occurrences 
+of each AM among IDF installations.
+'''
+
 from collections import Counter
 from typing import Dict, List
 
 import pandas
-from back_office.utils import ID_TO_AM_MD
+from envinorma.back_office.utils import ID_TO_AM_MD
 
 
 def _load_classement_to_am() -> Dict[str, List[str]]:
@@ -18,7 +22,7 @@ def _load_classement_to_am() -> Dict[str, List[str]]:
 
 def run():
     classement_to_ams = _load_classement_to_am()
-    dataframe = pandas.read_csv('classements.csv', dtype=str)
+    dataframe = pandas.read_csv('backups/classements.csv', dtype=str)  # type: ignore
     rubriques = dataframe.rubrique
     regimes = dataframe.regime
 
