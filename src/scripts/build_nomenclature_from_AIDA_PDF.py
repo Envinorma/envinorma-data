@@ -1,13 +1,19 @@
+'''
+Script for scrapping PDF nomenclature
+'''
+
 import os
 from dataclasses import dataclass
 from typing import List, Optional
+
 import bs4
-from lib.docx import write_xml, extract_table
-from lib.data import Regime, Row, Cell
 from bs4 import BeautifulSoup
-from pdf2docx import parse
 from docx import Document  # type: ignore
+from pdf2docx import parse
 from tqdm import tqdm
+
+from envinorma.data import Cell, Regime, Row
+from envinorma.io.docx import extract_table, write_xml
 
 if __name__ == '__main__':
     _FOLDER_NAME = '/Users/remidelbouys/Downloads'

@@ -1,13 +1,18 @@
+'''
+Script for generating csv of classements
+'''
+
 from datetime import date
 from enum import Enum
-from typing import Any, Dict, List, Optional, Set, Tuple
+from typing import Any, Dict, List, Optional, Tuple
 
 import pandas
-from lib.data import Regime
-from lib.georisques_data import load_idf_installation_ids
-from scripts.s3ic import ClassementType, fetch_records
 from pydantic import BaseModel
 from tqdm import tqdm
+
+from envinorma.data import Regime
+from envinorma.data_build.georisques_data import load_idf_installation_ids
+from scripts.s3ic import ClassementType, fetch_records
 
 
 class State(Enum):

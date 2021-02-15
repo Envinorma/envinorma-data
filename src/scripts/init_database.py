@@ -8,16 +8,16 @@ import os
 from typing import Optional
 
 import psycopg2
-from back_office.fetch_data import (
+from envinorma.back_office.fetch_data import (
     _upsert_new_parametrization,
     upsert_am_status,
     upsert_initial_am,
     upsert_structured_am,
 )
-from back_office.utils import ID_TO_AM_MD, AMStatus
-from lib.config import AM_DATA_FOLDER, config
-from lib.data import ArreteMinisteriel
-from lib.parametrization import Parametrization
+from envinorma.back_office.utils import ID_TO_AM_MD, AMStatus
+from envinorma.config import AM_DATA_FOLDER, config
+from envinorma.data import ArreteMinisteriel
+from envinorma.parametrization import Parametrization
 from tqdm import tqdm
 
 _CONNECTION = psycopg2.connect(config.storage.psql_dsn)
