@@ -2,6 +2,8 @@ import json
 import random
 
 import pytest
+from envinorma.config import AM_DATA_FOLDER
+from envinorma.data import LegifranceSection, LegifranceText, load_legifrance_text
 from envinorma.structure.am_structure_extraction import (
     _BASE_LEGIFRANCE_URL,
     ArreteMinisteriel,
@@ -19,6 +21,7 @@ from envinorma.structure.am_structure_extraction import (
     _generate_article_title,
     _group_articles_to_merge,
     _html_to_structured_text,
+    _remove_abrogated,
     _remove_links,
     _replace_weird_annexe_words,
     _structure_text,
@@ -27,8 +30,6 @@ from envinorma.structure.am_structure_extraction import (
     split_alineas_in_sections,
     transform_arrete_ministeriel,
 )
-from envinorma.config import AM_DATA_FOLDER
-from envinorma.data import load_legifrance_text
 from envinorma.structure.texts_properties import (
     _extract_section_inconsistencies,
     count_articles_in_am,
@@ -356,3 +357,38 @@ def test_split_alineas_in_sections():
     assert sections[0] == lines[1:3]
     assert sections[1] == [lines[3]]
     assert sections[2] == lines[4:]
+
+
+def test_remove_abrogated():
+    empty_text = LegifranceText('visa', 'title', [], [])
+    assert _remove_abrogated(empty_text) == empty_text
+
+    empty_section = LegifranceSection(0, 'visa', [], [], ArticleStatus.ABROGE)
+    assert _remove_abrogated(empty_section) == empty_section
+
+    empty_section = LegifranceSection(0, 'visa', [], [], ArticleStatus.ABROGE)
+    text = LegifranceText('visa', 'title', [], [empty_section])
+    assert _remove_abrogated(text) == empty_text
+
+    article = LegifranceArticle('id', 'content', 0, '1er', ArticleStatus.ABROGE)
+    empty_section = LegifranceSection(0, 'visa', [], [], ArticleStatus.ABROGE)
+    text = LegifranceText('visa', 'title', [article], [empty_section])
+    assert _remove_abrogated(text) == empty_text
+
+    article = LegifranceArticle('id', 'content', 0, '1er', ArticleStatus.VIGUEUR)
+    empty_section = LegifranceSection(0, 'visa', [], [], ArticleStatus.ABROGE)
+    text = LegifranceText('visa', 'title', [article], [empty_section])
+    assert _remove_abrogated(text) == LegifranceText('visa', 'title', [article], [])
+
+    article = LegifranceArticle('id', 'content', 0, '1er', ArticleStatus.VIGUEUR)
+    empty_section = LegifranceSection(0, 'visa', [], [], ArticleStatus.VIGUEUR)
+    text = LegifranceText('visa', 'title', [article], [empty_section])
+    assert _remove_abrogated(text) == LegifranceText('visa', 'title', [article], [empty_section])
+
+    article = LegifranceArticle('id', 'content', 0, '1er', ArticleStatus.VIGUEUR)
+    section = LegifranceSection(0, 'visa', [], [], ArticleStatus.ABROGE)
+    section_2 = LegifranceSection(0, 'visa', [article], [section], ArticleStatus.VIGUEUR)
+    text = LegifranceText('visa', 'title', [article], [section_2])
+    assert _remove_abrogated(text) == LegifranceText(
+        'visa', 'title', [article], [LegifranceSection(0, 'visa', [article], [], ArticleStatus.VIGUEUR)]
+    )

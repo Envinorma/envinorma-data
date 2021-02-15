@@ -1,21 +1,44 @@
-![Envinorma Logo](https://raw.githubusercontent.com/Envinorma/envinorma.github.io/main/favicon.ico)
+![Envinorma Logo](assets/favicon.ico)
 
 # Envinorma
 
-Envinorma is a project which aims at helping people find applicable regulations to non-nuclear industries ([ICPE](https://fr.wikipedia.org/wiki/Installation_class%C3%A9e_pour_la_protection_de_l'environnement)).
+Envinorma is a project which aims at helping people find applicable regulations to French non-nuclear industries ([ICPE](https://fr.wikipedia.org/wiki/Installation_class%C3%A9e_pour_la_protection_de_l'environnement)).
 
-This repository contains utils for manipulating texts called Arrêtés Ministériels (AM) and Arrêtés Préfectoraux (AP).
+Read the [project description](https://entrepreneur-interet-general.etalab.gouv.fr/defis/2020/envinorma.html) on the EIG Program website.
 
-It generates the source code of:
+This repository contains utils for manipulating texts called _Arrêtés Ministériels_ (AM) and _Arrêtés Préfectoraux_ (AP).
 
-- [https://envinorma.github.io/](https://envinorma.github.io/) which gathers main Arrêtes Ministériels and displays enriched versions of the texts
-- [https://envinorma-dashboard.herokuapp.com/](https://envinorma-dashboard.herokuapp.com/) which gathers statistics on open data about ICPE and this project
+# Features
 
-It also features:
+## envinorma/data.py
 
-- A library for automatic structuration of regulation texts, based on title detection
-- A library for detecting paragraph topics in a structured text
-- A script for transforming an .odt document into a structured text
-- A library for handling enriched texts: texts that are containing metadata, among which a parametrization that rules the applicability of paragraphs
-- A small wrapper for LegifranceAPI
-- A script for generating diffs between versions of a text depending on parameter values for parametrization checking via github UI, _e.g._: [https://github.com/Envinorma/arretes_ministeriels/compare/565eeb1f48caed785afe6d356e6a3116fd337fe1...e78dbfd5cd7a5c0f090eecb081dc52f8c5819663](https://github.com/Envinorma/arretes_ministeriels/compare/565eeb1f48caed785afe6d356e6a3116fd337fe1...e78dbfd5cd7a5c0f090eecb081dc52f8c5819663)
+Data classes, among which StructuredText, the proposed structure for representing regulation texts with, compatible with features like parametrization and topic detection.
+
+## envinorma/io
+
+Utils for parsing and generating StructuredText instances from/to .docx file, .odt file, html, markdown.
+
+## envinorma/structure
+
+A set of functions for automatic detection of text structure, mainly based on title detection.
+
+## envinorma/topics
+
+An ontology and a parser for topic detection in StructuredTexts.
+
+## envinorma/parametrization
+
+Algorithm for managing the parametrization layer of StructuredText instances.
+
+## envinorma/back_office
+
+Web app for managing the database of AM, manually structuring, parametrization layer declaration and enriching AM.
+[Back office screenshot](assets/back_office_screenshot.png)
+
+## envinorma/dashboard
+
+Dash app for ICPE data exploration, deployed here [https://envinorma-dashboard.herokuapp.com/](https://envinorma-dashboard.herokuapp.com/) which gathers statistics on open data about ICPE and this project
+
+## legifrance/
+
+A wrapper for Legifrance API.
