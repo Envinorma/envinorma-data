@@ -10,17 +10,19 @@ _TOKEN_URL = 'https://oauth.aife.economie.gouv.fr/api/oauth/token'
 _NOR_URL = f'{_API_HOST}/consult/getJoWithNor'
 
 
-def _get_legifrance_client(client_secret: str, client_id: str) -> OAuth2Session:
+def _get_legifrance_client(client_id: str, client_secret: str) -> OAuth2Session:
     data = {
         'grant_type': 'client_credentials',
         'client_id': client_id,
-        'client_client_secret': client_secret,
+        'client_secret': client_secret,
         'scope': 'openid',
     }
     response = requests.post(_TOKEN_URL, data=data)
-    token = response.json()
-    client = OAuth2Session(client_id, token=token)
-    return client
+    if 200 <= response.status_code < 300:
+        token = response.json()
+        client = OAuth2Session(client_id, token=token)
+        return client
+    raise LegifranceRequestError(f'Error when retrieving token: {response.json()}')
 
 
 _LAST_COMPUTE_TIME = time.time()
@@ -28,12 +30,12 @@ HOUR = 60 * 60
 _RES: Optional[OAuth2Session] = None
 
 
-def get_legifrance_client(client_secret: str, client_id: str) -> OAuth2Session:
+def get_legifrance_client(client_id: str, client_secret: str) -> OAuth2Session:
     global _RES, _LAST_COMPUTE_TIME
     elapsed = time.time() - _LAST_COMPUTE_TIME
     if not _RES or elapsed >= HOUR:
         _LAST_COMPUTE_TIME = time.time()
-        _RES = _get_legifrance_client(client_secret, client_id)
+        _RES = _get_legifrance_client(client_id, client_secret)
     return _RES
 
 
