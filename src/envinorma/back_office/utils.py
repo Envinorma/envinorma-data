@@ -210,3 +210,8 @@ def compute_text_diff(text_before: StructuredText, text_after: StructuredText) -
     lines_before = extract_text_lines(text_before)
     lines_after = extract_text_lines(text_after)
     return build_text_differences(lines_before, lines_after)
+
+
+def generate_id(filename: str, suffix: str) -> str:
+    prefix = filename.split('/')[-1].replace('.py', '').replace('_', '-')
+    return prefix + '-' + suffix

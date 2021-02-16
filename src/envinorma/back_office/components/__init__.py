@@ -11,11 +11,19 @@ def replace_line_breaks(message: str) -> List[Union[str, Component]]:
 
 
 def error_component(message: str) -> Component:
-    return html.Div(replace_line_breaks(message), className='alert alert-danger')
+    return html.Div(
+        replace_line_breaks(message),
+        className='alert alert-danger',
+        style={'margin-top': '5px', 'margin-bottom': '5px'},
+    )
 
 
 def success_component(message: str) -> Component:
-    return html.Div(replace_line_breaks(message), className='alert alert-success')
+    return html.Div(
+        replace_line_breaks(message),
+        className='alert alert-success',
+        style={'margin-top': '5px', 'margin-bottom': '5px'},
+    )
 
 
 class ButtonState(Enum):

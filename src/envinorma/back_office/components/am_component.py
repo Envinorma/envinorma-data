@@ -92,20 +92,13 @@ def am_component(am: ArreteMinisteriel, emphasized_words: List[str], first_level
     return structured_text_component(text, emphasized_words, first_level)
 
 
-def am_with_summary_component(am: ArreteMinisteriel, height: int = 75, first_level: int = 1) -> Component:
+def summary_and_content(content: Component, summary: Component, height: int = 75) -> Component:
+    style = {'max-height': f'{height}vh', 'overflow-y': 'auto'}
     return html.Div(
-        html.Div(
-            [
-                html.Div([summary_component(am_to_text(am), True)], className='col-3'),
-                html.Div(am_component(am, [], first_level), className='col-9'),
-            ],
-            className='row',
-        ),
-        style={
-            'position': 'sticky',
-            'top': '0px',
-            'bottom': '0',
-            'height': f'{height}vh',
-            'overflow-y': 'auto',
-        },
+        html.Div([html.Div(summary, className='col-3'), html.Div(content, className='col-9')], className='row'),
+        style=style,
     )
+
+
+def am_with_summary_component(am: ArreteMinisteriel, height: int = 75, first_level: int = 1) -> Component:
+    return summary_and_content(am_component(am, [], first_level), summary_component(am_to_text(am), True), height)

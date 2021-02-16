@@ -8,3 +8,6 @@ src/scripts/s3ic.py
 config.ini
 backups
 *.DS_Store
+
+# data
+*actes.json

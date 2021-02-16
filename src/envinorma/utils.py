@@ -3,7 +3,7 @@ import random
 import string
 import traceback
 from enum import Enum
-from typing import Dict, List, Union
+from typing import Dict, List, Optional, TypeVar, Union
 
 import requests
 
@@ -45,3 +45,12 @@ def send_slack_notification(message: str, channel: SlackChannel) -> None:
     if not (200 <= answer.status_code < 300):
         print('Error with status code', answer.status_code)
         print(answer.content.decode())
+
+
+T = TypeVar('T')
+
+
+def ensure_not_none(candidate: Optional[T]) -> T:
+    if not candidate:
+        raise ValueError('Expecting non None argument')
+    return candidate

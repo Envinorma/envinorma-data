@@ -1,6 +1,6 @@
 '''
 Script for testing io of open document.
-TODO: use to define unit tests or deprecate
+TO DO: use to define unit tests or deprecate
 '''
 
 import json

@@ -133,6 +133,10 @@ class EnrichedString:
         dict_['table'] = load_table(dict_['table']) if dict_['table'] else None
         return cls(**dict_)
 
+    def to_dict(self, dict_: Dict[str, Any]) -> Dict[str, Any]:
+        dict_ = asdict(self)
+        return dict_
+
 
 def _random_string() -> str:
     return ''.join([random.choice(ascii_letters) for _ in range(9)])

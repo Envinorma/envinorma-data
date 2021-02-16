@@ -56,7 +56,7 @@ def _extract_text_elements_with_linebreaks(content: Any) -> List[TextElement]:
             return [extract_table_from_soup(content)]
         children = [element for tag in content.children for element in _extract_text_elements_with_linebreaks(tag)]
         if content.name in ('p', 'div'):
-            children.append(Linebreak())
+            children = [Linebreak(), *children, Linebreak()]
         return children
     if content is None:
         return []

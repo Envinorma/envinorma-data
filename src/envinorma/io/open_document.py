@@ -3,8 +3,10 @@ import random
 import shutil
 import string
 import tempfile
+import traceback
+from dataclasses import dataclass, field
 from enum import Enum
-from typing import Any, Callable, List, Optional
+from typing import Any, Callable, Dict, List, Optional
 from zipfile import ZipFile
 
 import bs4
@@ -75,8 +77,16 @@ def _remove_last_line_break(str_: str) -> str:
     return str_
 
 
+def _ensure_not_navigable_string(candidate: Any) -> str:
+    if isinstance(candidate, bs4.NavigableString) or not isinstance(candidate, str):
+        raise ValueError(f'Expecting str, not {type(candidate)}')
+    return candidate
+
+
 def _extract_string_from_tags(tags: List[Any]) -> str:
-    return _remove_last_line_break(''.join([_extract_string_from_tag(tag) for tag in tags]))
+    return _ensure_not_navigable_string(
+        _remove_last_line_break(''.join([_extract_string_from_tag(tag) for tag in tags]))
+    )
 
 
 def _extract_cell(tag: Any) -> Optional[Cell]:
@@ -188,7 +198,7 @@ def _merge_children(all_elements: List[List[TextElement]], can_be_merged_list: L
 
 def _extract_flattened_elements(tag: Any, group_children: bool = False) -> List[TextElement]:
     if isinstance(tag, bs4.NavigableString):
-        return [tag]
+        return [str(tag)]
     if not isinstance(tag, bs4.Tag):
         raise ValueError(f'Expecting tag as input, received element of type {type(tag)}')
     tags_to_skip_with_line_break = (
@@ -443,6 +453,43 @@ def write_new_document(input_filename: str, new_document_xml: str, new_filename:
         for filename in filenames:
             docx.write(os.path.join(tmp_dir, filename), filename)
     shutil.rmtree(tmp_dir)
+
+
+@dataclass
+class _APMetadata:
+    nb_sections: int
+
+
+def _compute_nb_sections(text: StructuredText) -> int:
+    return len(text.sections) + sum([_compute_nb_sections(sec) for sec in text.sections])
+
+
+def _extract_metadata(text: StructuredText) -> _APMetadata:
+    return _APMetadata(_compute_nb_sections(text))
+
+
+@dataclass
+class ODTExtractedText:
+    text: Optional[StructuredText]
+    error: Optional[str]
+    metadata: Optional[_APMetadata] = field(init=False)
+
+    def __post_init__(self):
+        self.metadata = None if not self.text else _extract_metadata(self.text)
+
+    @classmethod
+    def from_dict(cls, dict_: Dict[str, Any]) -> 'ODTExtractedText':
+        return cls(text=StructuredText.from_dict(dict_['text']) if dict_['text'] else None, error=dict_['error'])
+
+    def to_dict(self) -> Dict[str, Any]:
+        return {'text': self.text.to_dict() if self.text else None, 'error': self.error}
+
+
+def extract_text_and_metadata(filename: str) -> ODTExtractedText:
+    try:
+        return ODTExtractedText(load_and_transform(filename), None)
+    except Exception:
+        return ODTExtractedText(None, traceback.format_exc())
 
 
 if __name__ == '__main__':
