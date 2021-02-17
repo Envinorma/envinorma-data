@@ -38,8 +38,6 @@ def _create_tables():
 
 
 def _get_most_recent_filename(folder: str, with_default: bool = False) -> Optional[str]:
-    import os
-
     files = os.listdir(folder)
     dates = list(sorted([file_ for file_ in files if file_ != 'default.json']))
     if not dates:
