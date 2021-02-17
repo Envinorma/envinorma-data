@@ -42,7 +42,7 @@ def _get_nav() -> Component:
         [
             _header_link('Arrêtés', href='/'),
             _header_link('Guide d\'enrichissement', href=guide_url, target='_blank'),
-            _header_link('Comparer', href='/compare/id/JORFTEXT000034429274/2020-01-20/2021-02-20'),
+            _header_link('Historique Légifrance', href='/compare/id/JORFTEXT000034429274/2020-01-20/2021-02-20'),
         ],
         style={'display': 'inline-block'},
     )

@@ -1,16 +1,16 @@
-from ap_exploration.data import Prescription, PrescriptionStatus
 import pytest
-from envinorma.data import Cell, EnrichedString, Row
+from ap_exploration.data import Prescription, PrescriptionStatus
 from ap_exploration.pages.ap.add_prescriptions import (
     _elements_to_prescription,
     _ensure_tables_or_strs,
     _extract_elements_from_soup,
     _extract_prescriptions,
-    _split_between_prescription_marks,
     _PrescriptionBeginMark,
+    _split_between_prescription_marks,
 )
 from bs4 import BeautifulSoup
-from envinorma.structure import Linebreak, Title, Table
+from envinorma.data import Cell, EnrichedString, Row
+from envinorma.structure import Linebreak, Table, Title
 
 
 def _soup(x: str) -> BeautifulSoup:

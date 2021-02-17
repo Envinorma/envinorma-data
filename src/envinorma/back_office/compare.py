@@ -2,6 +2,7 @@ import traceback
 from datetime import datetime
 from typing import List, Optional, Set, Tuple
 
+import dash_bootstrap_components as dbc
 import dash_core_components as dcc
 import dash_html_components as html
 from dash.dependencies import ALL, Input, Output, State
@@ -126,5 +127,9 @@ def layout(
     am_id: Optional[str] = None, date_before: Optional[str] = None, date_after: Optional[str] = None
 ) -> Component:
     return html.Div(
-        [html.H3(f'Comparer deux versions d\'un arrêté.'), _form(am_id, date_before, date_after), html.Div(id=_DIFF)]
+        [
+            html.H3(f'Comparer deux versions d\'un arrêté.'),
+            _form(am_id, date_before, date_after),
+            dbc.Spinner(html.Div(id=_DIFF)),
+        ]
     )

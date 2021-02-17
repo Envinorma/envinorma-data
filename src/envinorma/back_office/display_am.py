@@ -104,7 +104,13 @@ def _build_parameter_input(parameter: Parameter) -> Component:
 def _parametrization_form(parametrization: Parametrization) -> Component:
     parameters = extract_parameters_from_parametrization(parametrization)
     if not parameters:
-        return html.P('Pas de paramètres pour cet arrêté.')
+        return html.P(
+            [
+                'Pas de paramètres pour cet arrêté.',
+                html.Button(id=_SUBMIT, hidden=True),  # avoid dash error for missing ID
+                html.Div(id=_FORM_OUTPUT, hidden=True),  # avoid dash error for missing ID
+            ]
+        )
     sorted_parameters = sorted(list(parameters), key=lambda x: x.id)
     return html.Div(
         [
