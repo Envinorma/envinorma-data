@@ -69,6 +69,10 @@ def fetch_ap_prescriptions(ap_id: str) -> List[Prescription]:
     return [Prescription.from_dict(x) for x in json.load(open(filename))]
 
 
+def fetch_aps_prescriptions(ap_ids: List[str]) -> List[Prescription]:
+    return [prescription for ap_id in ap_ids for prescription in fetch_ap_prescriptions(ap_id)]
+
+
 def replace_prescriptions(ap_id: str, new_prescriptions: List[Prescription]) -> None:
     filename = _prescription_filename(ap_id)
     if len(filename) > 100:

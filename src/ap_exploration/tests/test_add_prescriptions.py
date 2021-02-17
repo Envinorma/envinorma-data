@@ -1,4 +1,4 @@
-from ap_exploration.data import Prescription
+from ap_exploration.data import Prescription, PrescriptionStatus
 import pytest
 from envinorma.data import Cell, EnrichedString, Row
 from ap_exploration.pages.ap.add_prescriptions import (
@@ -55,11 +55,15 @@ def test_ensure_tables_or_strs():
 
 
 def test_elements_to_prescription():
-    assert _elements_to_prescription('', [Table([])]) == Prescription('', '', [Table([])])
-    assert _elements_to_prescription('', []) == Prescription('', '', [])
-    assert _elements_to_prescription('id', ['title', Table([])]) == Prescription('id', 'title', [Table([])])
+    assert _elements_to_prescription('', [Table([])]) == Prescription(
+        '', '', [Table([])], PrescriptionStatus.EN_VIGUEUR
+    )
+    assert _elements_to_prescription('', []) == Prescription('', '', [], PrescriptionStatus.EN_VIGUEUR)
+    assert _elements_to_prescription('id', ['title', Table([])]) == Prescription(
+        'id', 'title', [Table([])], PrescriptionStatus.EN_VIGUEUR
+    )
     assert _elements_to_prescription('id', ['title', Table([]), 'hola']) == Prescription(
-        'id', 'title', [Table([]), 'hola']
+        'id', 'title', [Table([]), 'hola'], PrescriptionStatus.EN_VIGUEUR
     )
 
 
@@ -82,6 +86,6 @@ def test_extract_prescriptions():
     res = _extract_prescriptions(
         'id', '<span class="hola">hihi</span><h1 id="a">Test</h1><span class="badge">hihi</span>title'
     )
-    assert res == [Prescription('id', 'title', [])]
+    assert res == [Prescription('id', 'title', [], PrescriptionStatus.EN_VIGUEUR)]
     res = _extract_prescriptions('id', 'TST<span class="badge">hihi</span>title<p>a</p>b<a>c</a>')
-    assert res == [Prescription('id', 'title', ['a', 'bc'])]
+    assert res == [Prescription('id', 'title', ['a', 'bc'], PrescriptionStatus.EN_VIGUEUR)]

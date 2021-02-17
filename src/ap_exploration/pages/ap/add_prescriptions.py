@@ -9,7 +9,7 @@ import dash_bootstrap_components as dbc
 import dash_core_components as dcc
 import dash_editable_div as ded
 import dash_html_components as html
-from ap_exploration.data import Prescription
+from ap_exploration.data import Acte, Prescription, PrescriptionStatus
 from ap_exploration.db import add_prescriptions, fetch_acte
 from ap_exploration.db.ap_sample import AP_FOLDER, APS
 from ap_exploration.routing import APOperation, Endpoint
@@ -38,17 +38,6 @@ def _href(acte_id: str) -> str:
     return f'/{Endpoint.AP}/id/{acte_id}/{APOperation.EDIT_PRESCRIPTIONS}'
 
 
-def _ap_layout(ap_id: str) -> Component:
-    ap = fetch_acte(ap_id)
-    return html.Div(
-        [
-            html.H1(ap.reference_acte or ap.type.value),
-            html.P(ap.date_acte),
-            dcc.Link(html.Button('Editer les prescriptions', className='btn btn-primary'), href=_href(ap_id)),
-        ]
-    )
-
-
 def _dropdown() -> Component:
     options = [{'label': x, 'value': x} for x in APS]
     return dcc.Dropdown(id=_FILE_DROPDOWN, options=options)
@@ -58,16 +47,24 @@ def _save_button() -> Component:
     return html.Button('Enregistrer', id=_SAVE_BUTTON, className='btn btn-primary', style={'margin-top': '5px'})
 
 
+def _acte_href(acte_id: str) -> str:
+    return f'/{Endpoint.AP}/id/{acte_id}'
+
+
+def _back_to_actes(ap: Acte) -> Component:
+    return dcc.Link(f'< retour', href=_acte_href(ap.id))
+
+
 def _layout(ap_id: str) -> Component:
     ap = fetch_acte(ap_id)
     return html.Div(
         [
             html.H1(ap.reference_acte or ap.type.value),
-            html.P(ap.date_acte),
+            _back_to_actes(ap),
+            html.H4('Charger un document'),
             _dropdown(),
             html.Div(id=_TEXT_AREA),
             html.Div(id=_SAVE_OUTPUT),
-            _save_button(),
             dcc.Store(id=_AP_ID, data=ap_id),
         ]
     )
@@ -95,10 +92,15 @@ def _prebuild_prescriptions(text: StructuredText) -> List[ExtendedComponent]:
 
 
 def _create_editable_text(text: StructuredText) -> Component:
-    return ded.EditableDiv(
-        _prebuild_prescriptions(text),
-        id=_EDITABLE_DIV,
-        style={'padding': '10px', 'border': '1px solid rgba(0,0,0,.1)', 'border-radius': '5px'},
+    return html.Div(
+        [
+            ded.EditableDiv(
+                _prebuild_prescriptions(text),
+                id=_EDITABLE_DIV,
+                style={'padding': '10px', 'border': '1px solid rgba(0,0,0,.1)', 'border-radius': '5px'},
+            ),
+            _save_button(),
+        ]
     )
 
 
@@ -156,11 +158,11 @@ def _ensure_tables_or_strs(elements: List[TextElement]) -> None:
 def _elements_to_prescription(ap_id: str, elements: List[TextElement]) -> Prescription:
     _ensure_tables_or_strs(elements)
     if not elements:
-        return Prescription(ap_id=ap_id, title='', content=[])
+        return Prescription(ap_id=ap_id, title='', content=[], status=PrescriptionStatus.EN_VIGUEUR)
     first_element = elements[0]
     title = first_element if isinstance(first_element, str) else ''
     content = elements[1:] if isinstance(first_element, str) else elements  # first line is kept if not used as title
-    return Prescription(ap_id=ap_id, title=title, content=content)
+    return Prescription(ap_id=ap_id, title=title, content=content, status=PrescriptionStatus.EN_VIGUEUR)
 
 
 def _split_between_prescription_marks(elements: List[_TextElement]) -> List[List[TextElement]]:

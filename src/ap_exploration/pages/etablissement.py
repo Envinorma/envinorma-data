@@ -3,12 +3,20 @@ from typing import Any, Callable, Dict, List, Optional, Tuple, TypeVar, Union
 import dash_bootstrap_components as dbc
 import dash_core_components as dcc
 import dash_html_components as html
-from ap_exploration.data import Acte, ActeState, ActeType, Etablissement
-from ap_exploration.db import fetch_etablissement, fetch_etablissement_actes, fetch_etablissement_to_actes
+from ap_exploration.data import Acte, ActeState, ActeType, Etablissement, Prescription, PrescriptionStatus
+from ap_exploration.db import (
+    fetch_aps_prescriptions,
+    fetch_etablissement,
+    fetch_etablissement_actes,
+    fetch_etablissement_to_actes,
+)
 from ap_exploration.routing import Endpoint
 from dash.dependencies import Input, Output
 from dash.development.base_component import Component
+from envinorma.back_office.components.am_component import table_to_component
 from envinorma.back_office.components.table import ExtendedComponent, table_component
+from envinorma.data import Table
+from envinorma.structure import TextElement
 
 
 def _href(etablissement_id: str) -> str:
@@ -26,7 +34,8 @@ def _text_row(etablissement: Etablissement, nb_actes: int) -> List[Union[str, Co
 def _etablissement_list() -> Component:
     headers = [['ID', 'Nom', 'Nb actes']]
     etab_to_actes = fetch_etablissement_to_actes()
-    rows = [_text_row(etablissement, len(actes)) for etablissement, actes in etab_to_actes.items()]
+    tuples = sorted(etab_to_actes.items(), key=lambda x: x[0].code_s3ic != '0065.06689')
+    rows = [_text_row(etablissement, len(actes)) for etablissement, actes in tuples]
     return table_component(headers, rows)
 
 
@@ -86,10 +95,60 @@ def _etablissement_actes(actes: List[Acte]) -> Component:
     return table_component(headers, rows, 'table-sm')
 
 
+def _prescription_status(status: PrescriptionStatus) -> Component:
+    return html.Span(status.value, className='badge badge-success')
+
+
+def _ap_date(ap: Acte) -> Component:
+    name = f'{ap.type.short()} du {ap.date_acte}' if ap.date_acte else ap.type.short()
+    return html.Span(name, className='badge badge-primary')
+
+
+def _element_to_component(element: TextElement) -> ExtendedComponent:
+    if isinstance(element, Table):
+        return table_to_component(element, None)
+    if isinstance(element, str):
+        return html.P(element)
+    raise NotImplementedError(type(element))
+
+
+def _prescription(prescription: Prescription, ap: Optional[Acte]) -> Component:
+    return html.Div(
+        [
+            html.P([_ap_date(ap) if ap else html.Div(), ' ', _prescription_status(prescription.status)]),
+            html.H4(prescription.title),
+            *[_element_to_component(element) for element in prescription.content],
+        ],
+        style={
+            'padding': '10px',
+            'border': '1px solid rgba(0,0,0,.1)',
+            'border-radius': '5px',
+            'margin-bottom': '10px',
+        },
+    )
+
+
+def _prescriptions_list(prescriptions: List[Prescription], actes: Dict[str, Acte]) -> Component:
+    return html.Div([_prescription(prescription, actes.get(prescription.ap_id)) for prescription in prescriptions])
+
+
+def _prescriptions(prescriptions: List[Prescription], actes: Dict[str, Acte]) -> Component:
+    table = _prescriptions_list(prescriptions, actes) if prescriptions else html.P('Pas de prescriptions.')
+    return html.Div([html.H3('Liste des prescriptions'), table])
+
+
 def _etablissement(etablissement_id: str) -> Component:
     etablissement = fetch_etablissement(etablissement_id)
     actes = fetch_etablissement_actes(etablissement_id)
-    return html.Div([html.H1(etablissement.nom_usuel), html.P(etablissement.code_s3ic), _etablissement_actes(actes)])
+    acte_id_to_acte = {acte.id: acte for acte in actes}
+    prescriptions = fetch_aps_prescriptions(list(acte_id_to_acte))
+    return html.Div(
+        [
+            html.H1([etablissement.nom_usuel, ' - ', etablissement.code_s3ic]),
+            _etablissement_actes(actes),
+            _prescriptions(prescriptions, acte_id_to_acte),
+        ]
+    )
 
 
 def _layout(etablissement_id: Optional[str] = None) -> Component:

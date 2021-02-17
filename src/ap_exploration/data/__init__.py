@@ -6,23 +6,41 @@ from typing import Any, Dict, List, Optional
 from envinorma.structure import TextElement, TextElements, load_text_element
 
 
+class PrescriptionStatus(Enum):
+    EN_VIGUEUR = 'En vigueur'
+    MODIFIEE = 'Modifiée'
+    SUPPRIMEE = 'Supprimée'
+
+    def __repr__(self) -> str:
+        return self.value
+
+    def __str__(self) -> str:
+        return self.value
+
+
 @dataclass
 class Prescription:
     ap_id: str
     title: str
     content: List[TextElement]
+    status: PrescriptionStatus
+    modifier_ap_id: Optional[str] = None
+    reason_modified: Optional[str] = None
 
     def __post_init__(self):
         for element in self.content:
             assert isinstance(element, TextElements)
 
     def to_dict(self) -> Dict[str, Any]:
-        return asdict(self)
+        res = asdict(self)
+        res['status'] = self.status.value
+        return res
 
     @classmethod
     def from_dict(cls, dict_: Dict[str, Any]) -> 'Prescription':
         dict_ = dict_.copy()
         dict_['content'] = [load_text_element(element) for element in dict_['content']]
+        dict_['status'] = PrescriptionStatus(dict_['status'])
         return cls(**dict_)
 
 
