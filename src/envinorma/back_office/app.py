@@ -40,7 +40,7 @@ def _get_nav() -> Component:
     guide_url = 'https://www.notion.so/Guide-d-enrichissement-3874408245dc474ca8181a3d1d50f78e'
     nav = html.Span(
         [
-            _header_link('Arrêtés', href='/'),
+            _header_link('Liste des arrêtés', href='/'),
             _header_link('Guide d\'enrichissement', href=guide_url, target='_blank'),
             _header_link('Historique Légifrance', href='/compare/id/JORFTEXT000034429274/2020-01-20/2021-02-20'),
         ],
@@ -95,6 +95,7 @@ def _get_row(rank: int, am_state: Optional[AMStatus], am_metadata: AMMetadata, o
         _normal_td(str(am_metadata.nor)),
         _normal_td(am_metadata.short_title),
         _normal_td(_get_str_classements(am_metadata.classements)),
+        _normal_td(am_metadata.source.value),
         _normal_td(occurrences),
         html.Td('', className=_class_name_from_bool(am_step >= 1)),
         html.Td('', className=_class_name_from_bool(am_step >= 2)),
@@ -112,7 +113,8 @@ def _get_header() -> Component:
             html.Th('N° NOR'),
             html.Th('Nom'),
             html.Th('Classements'),
-            html.Th('Nb classements IDF'),
+            html.Th('Source'),
+            html.Th('Nb cls IDF'),
             html.Th('Initialisé'),
             html.Th('Structuré'),
             html.Th('Paramétré'),
