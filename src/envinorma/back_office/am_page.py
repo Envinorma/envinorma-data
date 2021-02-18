@@ -201,10 +201,12 @@ def _human_alinea_tuple(ints: Optional[List[int]]) -> str:
 def _application_condition_to_row(
     non_application_condition: NonApplicationCondition, am: ArreteMinisteriel, rank: int, current_page: str
 ) -> List[ExtendedComponent]:
-    reference_str = _get_section_title_or_error(non_application_condition.targeted_entity.section.path, am)
+    target_section = non_application_condition.targeted_entity.section
+    reference_str = _get_section_title_or_error(target_section.path, am, target_section.titles_sequence)
     alineas = _human_alinea_tuple(non_application_condition.targeted_entity.outer_alinea_indices)
     condition = condition_to_str(non_application_condition.condition)
-    source = _get_section_title_or_error(non_application_condition.source.reference.section.path, am)
+    source_section = non_application_condition.source.reference.section
+    source = _get_section_title_or_error(source_section.path, am, source_section.titles_sequence)
     href = f'{current_page}/{AMOperation.ADD_CONDITION.value}/{rank}'
     edit = link_button('Éditer', href=href, state=ButtonState.NORMAL_LINK)
     href_copy = f'{current_page}/{AMOperation.ADD_CONDITION.value}/{rank}/copy'
@@ -218,11 +220,7 @@ def _get_non_application_table(parametrization: Parametrization, am: ArreteMinis
         _application_condition_to_row(row, am, rank, current_page)
         for rank, row in enumerate(parametrization.application_conditions)
     ]
-    return table_component([header], rows, 'table-hover')
-
-
-def _wrap_in_paragraphs(strs: List[str]) -> Component:
-    return html.Div([html.P(str_) for str_ in strs])
+    return table_component([header], rows, 'table-sm')
 
 
 def _get_target_section_id(path: Ints, am: ArreteMinisteriel) -> Optional[str]:
@@ -244,27 +242,46 @@ def _shorten_text(title: str, max_len: int = 32) -> str:
     return title
 
 
-def _get_section_title_or_error(path: Ints, am: ArreteMinisteriel) -> Component:
+def _get_section_title_or_error(path: Ints, am: ArreteMinisteriel, titles_sequence: Optional[List[str]]) -> Component:
     titles = get_traversed_titles(path, am)
     section_id = _get_target_section_id(path, am)
     style = {}
     if titles is None:
         style = {'color': 'red'}
-        title = 'Introuvable, ce paramètre doit être modifié.'
+        title = f'Introuvable, ce paramètre doit être modifié. (Titres précédents: {titles_sequence})'
     else:
         shortened_titles = [_shorten_text(title) for title in titles]
         joined_titles = ' / '.join(shortened_titles)
         title = html.A(joined_titles, href=f'#{section_id}') if section_id else joined_titles
-    return html.Span(title, style=style)
+    return html.Div(html.Span(title, style={**style, 'font-size': '0.8em'}), style={'width': '250px'})
+
+
+def _wrap_in_paragraphs(strs: List[str]) -> Component:
+    return html.Div([html.P(str_) for str_ in strs])
+
+
+def _constrain(component: Component) -> Component:
+    style = {
+        'display': 'inline-block',
+        'max-height': '100px',
+        'min-width': '250px',
+        'max-width': '250px',
+        'font-size': '0.8em',
+        'overflow-x': 'auto',
+        'overflow-y': 'auto',
+    }
+    return html.Div(component, style=style)
 
 
 def _alternative_section_to_row(
     alternative_section: AlternativeSection, am: ArreteMinisteriel, rank: int, current_page: str
 ) -> List[ExtendedComponent]:
-    reference_str = _get_section_title_or_error(alternative_section.targeted_section.path, am)
+    target_section = alternative_section.targeted_section
+    reference_str = _get_section_title_or_error(target_section.path, am, target_section.titles_sequence)
     condition = condition_to_str(alternative_section.condition)
-    source = _get_section_title_or_error(alternative_section.source.reference.section.path, am)
-    new_version = _wrap_in_paragraphs(extract_markdown_text(alternative_section.new_text, level=1))
+    source_section = alternative_section.source.reference.section
+    source = _get_section_title_or_error(source_section.path, am, source_section.titles_sequence)
+    new_version = _constrain(_wrap_in_paragraphs(extract_markdown_text(alternative_section.new_text, level=1)))
     href = f'{current_page}/{AMOperation.ADD_ALTERNATIVE_SECTION.value}/{rank}'
     edit = link_button('Éditer', href=href, state=ButtonState.NORMAL_LINK)
     href_copy = f'{current_page}/{AMOperation.ADD_ALTERNATIVE_SECTION.value}/{rank}/copy'
@@ -280,7 +297,7 @@ def _get_alternative_section_table(
         _alternative_section_to_row(row, am, rank, current_page)
         for rank, row in enumerate(parametrization.alternative_sections)
     ]
-    return table_component([header], rows, class_name='table-hover')
+    return table_component([header], rows, class_name='table-sm')
 
 
 def _get_add_condition_button(parent_page: str, status: AMStatus) -> Component:
@@ -703,6 +720,8 @@ def _update_am_status(clicked_button: str, am_id: str) -> None:
         _handle_validate_parametrization(am_id)
     if clicked_button == _VALIDATE_STRUCTURE:
         _handle_validate_structure(am_id)
+    if clicked_button == _modal_confirm_button_id('parametrization'):
+        _add_titles_sequences(am_id)
 
 
 _BUTTON_IDS = [

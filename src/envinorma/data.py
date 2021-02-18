@@ -741,11 +741,16 @@ def add_title_default_numbering(text: StructuredText, prefix: str = '', rank: in
     return text
 
 
+def _extract_alineas_lines(alinea: EnrichedString) -> List[str]:
+    if alinea.table:
+        html = table_to_html(alinea.table)
+        return html.replace('>', '>\n').split('\n')
+    return alinea.text.split('\n')
+
+
 def extract_text_lines(text: StructuredText, level: int = 0) -> List[str]:
     title_lines = ['#' * level + (' ' if level else '') + text.title.text.strip()]
-    alinea_lines = [
-        line.strip() for al in text.outer_alineas for line in (al.text.split('\n') if not al.table else ['*tableau*'])
-    ]
+    alinea_lines = [line.strip() for al in text.outer_alineas for line in _extract_alineas_lines(al)]
     section_lines = [line for sec in text.sections for line in extract_text_lines(sec, level + 1)]
     return title_lines + alinea_lines + section_lines
 
