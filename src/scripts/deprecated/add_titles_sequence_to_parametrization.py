@@ -1,3 +1,7 @@
+'''
+Script for manually adding title sequences to parametrization.
+Deprecated now: this feature is fully integrated in the back office.
+'''
 import argparse
 from envinorma.parametrization import add_titles_sequences
 from envinorma.back_office.fetch_data import (
