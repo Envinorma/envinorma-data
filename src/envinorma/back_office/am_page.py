@@ -2,6 +2,7 @@ import difflib
 import json
 import os
 import traceback
+import warnings
 from typing import Any, Dict, List, Optional, Set, Tuple, Union
 
 import dash_bootstrap_components as dbc
@@ -28,6 +29,7 @@ from envinorma.back_office.fetch_data import (
     load_parametrization,
     load_structured_am,
     upsert_am_status,
+    upsert_new_parametrization,
 )
 from envinorma.back_office.generate_final_am import AMVersions, generate_final_am
 from envinorma.back_office.parametrization_edition import router as parametrization_router
@@ -41,7 +43,15 @@ from envinorma.config import (
 )
 from envinorma.data import AMMetadata, ArreteMinisteriel, Ints, StructuredText, Table, am_to_text, extract_text_lines
 from envinorma.io.markdown import extract_markdown_text
-from envinorma.parametrization import AlternativeSection, NonApplicationCondition, Parametrization, condition_to_str
+from envinorma.parametrization import (
+    AlternativeSection,
+    NonApplicationCondition,
+    Parametrization,
+    UndefinedTitlesSequencesError,
+    add_titles_sequences,
+    condition_to_str,
+    regenerate_paths,
+)
 from envinorma.utils import SlackChannel, send_slack_notification, write_json
 
 _PREFIX = __file__.split('/')[-1].replace('.py', '').replace('_', '-')
@@ -634,6 +644,37 @@ def _generate_and_dump_am_version(am_id: str) -> None:
     _dump_am_versions(am_id, final_am.am_versions)
 
 
+def _add_titles_sequences(am_id: str) -> None:
+    try:
+        parametrization = load_parametrization(am_id)
+        am = load_structured_am(am_id) or load_initial_am(am_id)
+        if am and parametrization:
+            new_parametrization = add_titles_sequences(parametrization, am)
+            upsert_new_parametrization(am_id, new_parametrization)
+    except Exception:
+        warnings.warn(f'Error during titles sequence addition:\n{traceback.format_exc()}')
+
+
+def _handle_validate_parametrization(am_id: str) -> None:
+    _generate_and_dump_am_version(am_id)
+    _add_titles_sequences(am_id)
+
+
+def _handle_validate_structure(am_id: str) -> None:
+    parametrization = load_parametrization(am_id)
+    if not parametrization:
+        return  # parametrization has no risk to be deprecated in this case
+    am = load_structured_am(am_id) or load_initial_am(am_id)
+    if not am:
+        warnings.warn('Should not happen, structure can be validated only for existing texts.')
+        return
+    try:
+        new_parametrization = regenerate_paths(parametrization, am)
+    except UndefinedTitlesSequencesError:
+        return
+    upsert_new_parametrization(am_id, new_parametrization)
+
+
 def _update_am_status(clicked_button: str, am_id: str) -> None:
     new_status = None
     if clicked_button == _VALIDATE_INITIALIZATION:
@@ -659,7 +700,9 @@ def _update_am_status(clicked_button: str, am_id: str) -> None:
                 f'AM {am_id} a désormais le statut {new_status.value}', SlackChannel.ENRICHMENT_NOTIFICATIONS
             )
     if clicked_button == _VALIDATE_PARAMETRIZATION:
-        _generate_and_dump_am_version(am_id)
+        _handle_validate_parametrization(am_id)
+    if clicked_button == _VALIDATE_STRUCTURE:
+        _handle_validate_structure(am_id)
 
 
 _BUTTON_IDS = [

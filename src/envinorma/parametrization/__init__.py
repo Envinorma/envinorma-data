@@ -1,9 +1,12 @@
 import math
+import sys
 import warnings
+from copy import deepcopy
 from dataclasses import asdict, dataclass, field, replace
 from datetime import datetime
-from typing import Any, Dict, List, Optional, Set, Tuple, Union
+from typing import Any, Dict, List, Optional, Set, Tuple, TypeVar, Union
 
+from envinorma.data import ArreteMinisteriel, StructuredText, StructuredTextSignature
 from envinorma.parametrization.conditions import (
     Condition,
     Equal,
@@ -20,7 +23,6 @@ from envinorma.parametrization.conditions import (
     extract_parameters_from_condition,
     load_condition,
 )
-from envinorma.data import StructuredText, StructuredTextSignature
 
 Ints = Tuple[int, ...]
 
@@ -28,13 +30,14 @@ Ints = Tuple[int, ...]
 @dataclass
 class SectionReference:
     path: Ints
+    titles_sequence: Optional[List[str]] = None
 
     def to_dict(self) -> Dict[str, Any]:
         return asdict(self)
 
     @classmethod
     def from_dict(cls, dict_: Dict[str, Any]) -> 'SectionReference':
-        return SectionReference(tuple(dict_['path']))
+        return cls(tuple(dict_['path']), dict_.get('titles_sequence'))
 
 
 @dataclass
@@ -445,3 +448,97 @@ def add_am_signatures(
     parametrization: Parametrization, signatures: Dict[Ints, StructuredTextSignature]
 ) -> Parametrization:
     return replace(parametrization, signatures=signatures)
+
+
+def extract_titles_sequence(text: Union[ArreteMinisteriel, StructuredText], path: Ints) -> List[str]:
+    if not path:
+        return []
+    if path[0] >= len(text.sections):
+        raise ValueError(f'Path is not compatible with this text.')
+    return [text.sections[path[0]].title.text] + extract_titles_sequence(text.sections[path[0]], path[1:])
+
+
+def add_titles_sequences_section(obj: SectionReference, am: ArreteMinisteriel) -> SectionReference:
+    return replace(obj, titles_sequence=extract_titles_sequence(am, obj.path))
+
+
+def add_titles_sequences_non_application_condition(
+    obj: NonApplicationCondition, am: ArreteMinisteriel
+) -> NonApplicationCondition:
+    new_source = deepcopy(obj)
+    new_source.source.reference.section = add_titles_sequences_section(new_source.source.reference.section, am)
+    new_source.targeted_entity.section = add_titles_sequences_section(new_source.targeted_entity.section, am)
+    return new_source
+
+
+def add_titles_sequences_alternative_section(obj: AlternativeSection, am: ArreteMinisteriel) -> AlternativeSection:
+    new_source = deepcopy(obj)
+    new_source.source.reference.section = add_titles_sequences_section(new_source.source.reference.section, am)
+    new_source.targeted_section = add_titles_sequences_section(new_source.targeted_section, am)
+    return new_source
+
+
+def add_titles_sequences(parametrization: Parametrization, am: ArreteMinisteriel) -> Parametrization:
+    return replace(
+        parametrization,
+        application_conditions=[
+            add_titles_sequences_non_application_condition(x, am) for x in parametrization.application_conditions
+        ],
+        alternative_sections=[
+            add_titles_sequences_alternative_section(x, am) for x in parametrization.alternative_sections
+        ],
+    )
+
+
+class SectionNotFoundWarning(Warning):
+    pass
+
+
+def _extract_paths(text: Union[ArreteMinisteriel, StructuredText], titles_sequence: List[str]) -> Ints:
+    if not titles_sequence:
+        return ()
+    for i, section in enumerate(text.sections):
+        if section.title.text == titles_sequence[0]:
+            return (i,) + _extract_paths(section, titles_sequence[1:])
+    warnings.warn(
+        SectionNotFoundWarning(f'Title {titles_sequence[0]} not found among sections, replacing path with (inf,).')
+    )
+    return (sys.maxsize,)
+
+
+class UndefinedTitlesSequencesError(Exception):
+    pass
+
+
+def regenerate_paths_section(obj: SectionReference, am: ArreteMinisteriel) -> SectionReference:
+    if obj.titles_sequence is None:
+        raise UndefinedTitlesSequencesError('Titles sequences need to be defined')
+    return replace(obj, path=_extract_paths(am, obj.titles_sequence))
+
+
+def regenerate_paths_non_application_condition(
+    obj: NonApplicationCondition, am: ArreteMinisteriel
+) -> NonApplicationCondition:
+    new_source = deepcopy(obj)
+    new_source.source.reference.section = regenerate_paths_section(new_source.source.reference.section, am)
+    new_source.targeted_entity.section = regenerate_paths_section(new_source.targeted_entity.section, am)
+    return new_source
+
+
+def regenerate_paths_alternative_section(obj: AlternativeSection, am: ArreteMinisteriel) -> AlternativeSection:
+    new_source = deepcopy(obj)
+    new_source.source.reference.section = regenerate_paths_section(new_source.source.reference.section, am)
+    new_source.targeted_section = regenerate_paths_section(new_source.targeted_section, am)
+    return new_source
+
+
+def regenerate_paths(parametrization: Parametrization, am: ArreteMinisteriel) -> Parametrization:
+    return replace(
+        parametrization,
+        application_conditions=[
+            regenerate_paths_non_application_condition(x, am) for x in parametrization.application_conditions
+        ],
+        alternative_sections=[
+            regenerate_paths_alternative_section(x, am) for x in parametrization.alternative_sections
+        ],
+    )

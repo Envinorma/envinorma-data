@@ -53,7 +53,6 @@ from envinorma.parametrization.conditions import (
     ParameterEnum,
     ParameterType,
     Range,
-    extract_parameters_from_condition,
 )
 
 _Options = List[Dict[str, Any]]
@@ -285,28 +284,32 @@ def _get_condition_tooltip() -> Component:
 def _ensure_mono_condition(condition: Condition) -> _MonoCondition:
     if isinstance(condition, (Equal, Greater, Littler)):
         return condition
-    raise ValueError(f'Unexpected condition type {type(condition)}')
+    raise ValueError(f'Unexpected condition type : expecting type _MonoCondition, got {type(condition)}')
 
 
 def _ensure_mono_conditions(conditions: List[Condition]) -> List[_MonoCondition]:
     return [_ensure_mono_condition(x) for x in conditions]
 
 
-def _change_to_mono_conditions(condition: Condition) -> Tuple[str, List[_MonoCondition]]:
+def _make_mono_conditions(condition: Condition) -> List[_MonoCondition]:
     if isinstance(condition, (Equal, Greater, Littler)):
-        return _AND_ID, [condition]
+        return [condition]
     if isinstance(condition, Range):
-        conditions = _ensure_mono_conditions(
-            [
-                Littler(condition.parameter, condition.right, condition.right_strict),
-                Greater(condition.parameter, condition.left, condition.left_strict),
-            ]
-        )
-        return _AND_ID, conditions
+        return [
+            Littler(condition.parameter, condition.right, condition.right_strict),
+            Greater(condition.parameter, condition.left, condition.left_strict),
+        ]
+    raise ValueError(f'Unexpected condition type {type(condition)}')
+
+
+def _change_to_mono_conditions(condition: Condition) -> Tuple[str, List[_MonoCondition]]:
+    if isinstance(condition, (Equal, Greater, Littler, Range)):
+        return _AND_ID, _make_mono_conditions(condition)
+    if isinstance(condition, AndCondition):
+        children_mono_conditions = [cd for child in condition.conditions for cd in _make_mono_conditions(child)]
+        return _AND_ID, children_mono_conditions
     if isinstance(condition, (AndCondition, OrCondition)):
-        mono_conditions = _ensure_mono_conditions(condition.conditions)
-        merge = _AND_ID if isinstance(condition, AndCondition) else _OR_ID
-        return merge, mono_conditions
+        return _OR_ID, _ensure_mono_conditions(condition.conditions)
     raise NotImplementedError(f'Unhandled condition {type(condition)}')
 
 
@@ -736,12 +739,6 @@ def _extract_condition(rank: int, parameter: str, operator: str, value_str: str)
     raise _FormHandlingError(f'La {rank+1}{"ère" if rank == 0 else "ème"} condition contient un opérateur inattendu.')
 
 
-def _assert_mono_condition(condition: Condition) -> _MonoCondition:
-    if not isinstance(condition, (Equal, Greater, Littler)):
-        raise ValueError(f'Expecting type _MonoCondition, got {type(condition)}')
-    return condition
-
-
 def _assert_greater_condition(condition: Condition) -> Greater:
     if not isinstance(condition, Greater):
         raise ValueError(f'Expecting type Greater, got {type(condition)}')
@@ -762,7 +759,7 @@ def _assert_strictly_below(small_candidate: Any, great_candidate: Any) -> None:
 
 def _check_compatibility_and_build_range(
     parameter: Parameter, condition_1: _MonoCondition, condition_2: _MonoCondition
-) -> Condition:
+) -> Range:
     if isinstance(condition_1, Equal) or isinstance(condition_2, Equal):
         raise _FormHandlingError('Erreur dans les conditions. Elles sont soit redondantes, soit incompatibles.')
     if isinstance(condition_1, Littler) and isinstance(condition_2, Littler):
@@ -781,18 +778,39 @@ def _check_compatibility_and_build_range(
     return Range(parameter, greater_target, littler_target)
 
 
-def _try_building_range_condition(conditions: List[Condition]) -> Optional[Condition]:
-    _parameters = {param for cond in conditions for param in extract_parameters_from_condition(cond)}
-    if len(_parameters) != 1:
-        return None
-    if len(conditions) != 2:
-        return None
-    _parameter = list(_parameters)[0]
-    if _parameter == ParameterEnum.REGIME.value:
+def _extract_parameter_to_conditions(conditions: List[_MonoCondition]) -> Dict[Parameter, List[_MonoCondition]]:
+    res: Dict[Parameter, List[_MonoCondition]] = {}
+    for condition in conditions:
+        if condition.parameter not in res:
+            res[condition.parameter] = []
+        res[condition.parameter].append(condition)
+    return res
+
+
+class _NotSimplifiableError(Exception):
+    pass
+
+
+def _simplify_mono_conditions(parameter: Parameter, conditions: List[_MonoCondition]) -> Union[_MonoCondition, Range]:
+    if len(conditions) >= 3 or len(conditions) == 0:
+        raise _NotSimplifiableError()
+    if len(conditions) == 1:
+        return conditions[0]
+    if parameter.type not in (ParameterType.DATE, ParameterType.REAL_NUMBER):
         raise _FormHandlingError('Erreur dans les conditions: elles sont soit incompatibles, soit redondantes.')
-    condition_1 = _assert_mono_condition(conditions[0])
-    condition_2 = _assert_mono_condition(conditions[1])
-    return _check_compatibility_and_build_range(_parameter, condition_1, condition_2)
+    return _check_compatibility_and_build_range(parameter, conditions[0], conditions[1])
+
+
+def _try_building_range_condition(conditions: List[Condition]) -> Optional[Condition]:
+    if not conditions:
+        return None
+    mono_conditions = _ensure_mono_conditions(conditions)
+    parameter_to_conditions = _extract_parameter_to_conditions(mono_conditions)
+    try:
+        new_conditions = [_simplify_mono_conditions(param, cds) for param, cds in parameter_to_conditions.items()]
+    except _NotSimplifiableError:
+        return None
+    return AndCondition([*new_conditions]) if len(new_conditions) != 1 else new_conditions[0]
 
 
 def _simplify_condition(condition: Condition) -> Condition:

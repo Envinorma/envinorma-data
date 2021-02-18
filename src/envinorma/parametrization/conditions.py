@@ -264,7 +264,7 @@ def condition_to_str(condition: Condition) -> str:
     if isinstance(condition, AndCondition):
         return '(' + ') and ('.join([condition_to_str(cd) for cd in condition.conditions]) + ')'
     if isinstance(condition, OrCondition):
-        return '(' + ') and ('.join([condition_to_str(cd) for cd in condition.conditions]) + ')'
+        return '(' + ') or ('.join([condition_to_str(cd) for cd in condition.conditions]) + ')'
     raise NotImplementedError(f'stringifying condition {condition} is not implemented yet.')
 
 

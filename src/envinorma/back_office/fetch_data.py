@@ -71,10 +71,10 @@ def remove_parameter(am_id: str, operation: AMOperation, parameter_rank: int) ->
     if not previous_parametrization:
         raise ValueError('Expecting a non null parametrization.')
     parametrization = _recreate_with_removed_parameter(operation, parameter_rank, previous_parametrization)
-    _upsert_new_parametrization(am_id, parametrization)
+    upsert_new_parametrization(am_id, parametrization)
 
 
-def _upsert_new_parametrization(am_id: str, parametrization: Parametrization) -> None:
+def upsert_new_parametrization(am_id: str, parametrization: Parametrization) -> None:
     data = json.dumps(parametrization.to_dict())
     query = (
         'INSERT INTO parametrization(am_id, data) VALUES(%s, %s) ON CONFLICT (am_id)'
@@ -119,7 +119,7 @@ def upsert_parameter(am_id: str, new_parameter: ParameterObject, parameter_rank:
     previous_parametrization = _load_parametrization(am_id) or Parametrization([], [])
     parametrization = _recreate_with_upserted_parameter(new_parameter, parameter_rank, previous_parametrization)
     check_parametrization_consistency(parametrization)
-    _upsert_new_parametrization(am_id, parametrization)
+    upsert_new_parametrization(am_id, parametrization)
 
 
 def _ensure_one_variable(res: List[Tuple]) -> Any:

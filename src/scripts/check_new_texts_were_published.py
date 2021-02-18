@@ -1,6 +1,7 @@
 '''
 Script for detecting differences between remote texts and envinorma texts.
 '''
+import pathlib
 import random
 from datetime import datetime
 from typing import Dict, List, Optional, Tuple
@@ -80,8 +81,8 @@ def _write_diff_description(am_id_to_diff: Dict[str, TextDifferences]) -> None:
         for line in [am_id, f'ratio : {_compute_modification_ratio(diff)}']
     ]
     date_ = datetime.now().strftime('%Y-%m-%d-%H-%M')
-    filename = __file__.replace('scripts/check_new_texts.py', f'data/legifrance_diffs/{date_}.txt')
-    open(filename, 'w').write('\n'.join(lines))
+    destination = pathlib.Path(__file__).parent.parent.joinpath(f'data/legifrance_diffs/{date_}.txt')
+    open(destination, 'w').write('\n'.join(lines))
 
 
 def run() -> None:

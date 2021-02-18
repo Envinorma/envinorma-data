@@ -159,7 +159,7 @@ def check_legifrance_diff_computed():
     max_date: Optional[datetime] = max(
         [datetime.strptime(file_.split('.')[0], '%Y-%m-%d-%H-%M') for file_ in files], default=None
     )
-    cmd = 'python3 scripts/check_new_texts.py'
+    cmd = 'python3 scripts/check_new_texts_were_published.py'
     if not max_date:
         raise ValueError(f'No legifrance_diffs found : run one.\ncmd: {cmd}')
     if (datetime.now() - max_date).total_seconds() >= 7 * 24 * 3600:
