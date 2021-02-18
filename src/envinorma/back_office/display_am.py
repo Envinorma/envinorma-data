@@ -9,21 +9,20 @@ from dash.dependencies import ALL, MATCH, Input, Output, State
 from dash.development.base_component import Component
 from dash.exceptions import PreventUpdate
 from envinorma.am_enriching import detect_and_add_topics
-from envinorma.data import ArreteMinisteriel, Regime, StructuredText, random_id
-from envinorma.parametrization.parametric_am import (
-    apply_parameter_values_to_am,
-    extract_parameters_from_parametrization,
-)
-from envinorma.parametrization import Parameter, ParameterEnum, ParameterType, Parametrization
-from envinorma.topics.patterns import TopicName
-from envinorma.topics.topics import TOPIC_ONTOLOGY
-
 from envinorma.back_office import am_compare
 from envinorma.back_office.app_init import app
 from envinorma.back_office.components import error_component
 from envinorma.back_office.components.parametric_am import parametric_am_callbacks, parametric_am_component
 from envinorma.back_office.fetch_data import load_initial_am, load_parametrization, load_structured_am
 from envinorma.back_office.utils import ID_TO_AM_MD
+from envinorma.data import ArreteMinisteriel, Regime, StructuredText, random_id
+from envinorma.parametrization import Parameter, ParameterEnum, ParameterType, Parametrization
+from envinorma.parametrization.parametric_am import (
+    apply_parameter_values_to_am,
+    extract_parameters_from_parametrization,
+)
+from envinorma.topics.patterns import TopicName
+from envinorma.topics.topics import TOPIC_ONTOLOGY
 
 _PREFIX = __file__.split('/')[-1].replace('.py', '').replace('_', '-')
 _AM = _PREFIX + '-am'
@@ -149,13 +148,9 @@ def _extract_topic_count(am: ArreteMinisteriel) -> Dict[TopicName, int]:
     return Counter([topic for section in am.sections for topic in _extract_topics(section)])
 
 
-_ACTIVE_CLASS = 'btn btn-primary btn-sm'
-_INACTIVE_CLASS = 'btn btn-light btn-sm'
-
-
 def _topic_button(topic: TopicName, count: int) -> Component:
     text = f'{topic.value}  ({count})'
-    return html.Button(text, className=_ACTIVE_CLASS, style={'margin': '5px'}, id=_topic_button_id(topic.value))
+    return html.Button(text, className='btn btn-light btn-sm', disabled=True, style={'margin': '5px'})
 
 
 def _topic_buttons(topic_count: Dict[TopicName, int]) -> Component:
@@ -265,15 +260,13 @@ def _extract_parameter_values(
     Output(_AM, 'children'),
     Output(_FORM_OUTPUT, 'children'),
     Input(_SUBMIT, 'n_clicks'),
-    Input(_topic_button_id(ALL), 'className'),
     State(_store(ALL), 'data'),
     State(_input(ALL), 'date'),
     State(_input(ALL), 'value'),
     State(_AM_ID, 'data'),
-    State(_topic_button_id(ALL), 'id'),
 )
-def _apply_parameters(_, class_names, parameter_ids, parameter_dates, parameter_values, am_id, ids):
-    active_topics = {TopicName(id_['key']) for id_, cl in zip(ids, class_names) if cl == _ACTIVE_CLASS}
+def _apply_parameters(_, parameter_ids, parameter_dates, parameter_values, am_id):
+    active_topics = None
     am = _load_am(am_id)
     if not am:
         raise PreventUpdate
@@ -282,24 +275,12 @@ def _apply_parameters(_, class_names, parameter_ids, parameter_dates, parameter_
         raise PreventUpdate
     try:
         parameter_values = _extract_parameter_values(parameter_ids, parameter_dates, parameter_values)
-        am = detect_and_add_topics(apply_parameter_values_to_am(am, parametrization, parameter_values), TOPIC_ONTOLOGY)
+        am = apply_parameter_values_to_am(am, parametrization, parameter_values)
     except _FormError as exc:
         return html.Div(), error_component(str(exc))
     except Exception:
         return html.Div(), error_component(traceback.format_exc())
     return _am_component(am, active_topics), html.Div()
-
-
-@app.callback(
-    Output(_topic_button_id(MATCH), 'className'),
-    Input(_topic_button_id(MATCH), 'n_clicks'),
-    State(_topic_button_id(MATCH), 'className'),
-    prevent_initial_call=True,
-)
-def _toggle_button(_, class_name):
-    if class_name == _ACTIVE_CLASS:
-        return _INACTIVE_CLASS
-    return _ACTIVE_CLASS
 
 
 parametric_am_callbacks(app, _PREFIX)
