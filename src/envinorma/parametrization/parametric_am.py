@@ -170,6 +170,7 @@ def _apply_satisfied_modificators(
             raise ValueError(
                 f'Cannot handle more than 1 non-applicability conditions on one section. '
                 f'Here, {len(non_applicable_conditions)} conditions are applicable.'
+                f'\n{parameter_values}\n{text}'
             )
         return _deactivate_alineas(text, non_applicable_conditions[0], parameter_values)
     return text

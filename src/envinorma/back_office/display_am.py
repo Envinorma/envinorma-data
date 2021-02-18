@@ -15,7 +15,7 @@ from envinorma.back_office.components import error_component
 from envinorma.back_office.components.parametric_am import parametric_am_callbacks, parametric_am_component
 from envinorma.back_office.fetch_data import load_initial_am, load_parametrization, load_structured_am
 from envinorma.back_office.utils import ID_TO_AM_MD
-from envinorma.data import ArreteMinisteriel, Regime, StructuredText, random_id
+from envinorma.data import ArreteMinisteriel, Regime, StructuredText, add_metadata, random_id
 from envinorma.parametrization import Parameter, ParameterEnum, ParameterType, Parametrization
 from envinorma.parametrization.parametric_am import (
     apply_parameter_values_to_am,
@@ -46,6 +46,8 @@ def _input(parameter_id: Any) -> Dict[str, Any]:
 
 
 def _am_component(am: ArreteMinisteriel, topics: Optional[Set[TopicName]] = None) -> Component:
+    if not am.legifrance_url:
+        am = add_metadata(am, ID_TO_AM_MD[am.id or ''])
     return parametric_am_component(am, _PREFIX, topics)
 
 

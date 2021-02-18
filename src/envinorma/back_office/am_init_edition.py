@@ -26,6 +26,7 @@ from envinorma.data import (
     EnrichedString,
     StructuredText,
     Table,
+    add_metadata,
     am_to_text,
     table_to_html,
 )
@@ -168,7 +169,8 @@ def _make_page(am_id: str) -> Component:
 
 def _save_and_get_component(am_id: str, am: ArreteMinisteriel) -> Component:
     try:
-        upsert_initial_am(am_id, am)
+        am_metadata = ID_TO_AM_MD[am_id]
+        upsert_initial_am(am_id, add_metadata(am, am_metadata))
     except Exception:
         return error_component(f'Erreur inattendue lors de l\'enregristrement de l\'AM: \n{traceback.format_exc()}')
     return html.Div(
