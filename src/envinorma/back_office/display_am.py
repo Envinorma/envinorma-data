@@ -159,7 +159,7 @@ def _topic_buttons(topic_count: Dict[TopicName, int]) -> Component:
 
 def _topic_component(am: ArreteMinisteriel) -> Component:
     topic_count = _extract_topic_count(am)
-    return html.Div([html.H2('Topics'), _topic_buttons(topic_count)])
+    return html.Div([html.H2('Thêmes'), _topic_buttons(topic_count)])
 
 
 def _link(text: str, href: str) -> Component:
