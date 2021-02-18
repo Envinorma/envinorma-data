@@ -204,7 +204,7 @@ def _application_condition_to_row(
     target_section = non_application_condition.targeted_entity.section
     reference_str = _get_section_title_or_error(target_section.path, am, target_section.titles_sequence)
     alineas = _human_alinea_tuple(non_application_condition.targeted_entity.outer_alinea_indices)
-    condition = condition_to_str(non_application_condition.condition)
+    condition = _small(condition_to_str(non_application_condition.condition))
     source_section = non_application_condition.source.reference.section
     source = _get_section_title_or_error(source_section.path, am, source_section.titles_sequence)
     href = f'{current_page}/{AMOperation.ADD_CONDITION.value}/{rank}'
@@ -260,6 +260,10 @@ def _wrap_in_paragraphs(strs: List[str]) -> Component:
     return html.Div([html.P(str_) for str_ in strs])
 
 
+def _small(text: str) -> Component:
+    return html.Span(text, style={'font-size': '0.8em'})
+
+
 def _constrain(component: Component) -> Component:
     style = {
         'display': 'inline-block',
@@ -278,7 +282,7 @@ def _alternative_section_to_row(
 ) -> List[ExtendedComponent]:
     target_section = alternative_section.targeted_section
     reference_str = _get_section_title_or_error(target_section.path, am, target_section.titles_sequence)
-    condition = condition_to_str(alternative_section.condition)
+    condition = _small(condition_to_str(alternative_section.condition))
     source_section = alternative_section.source.reference.section
     source = _get_section_title_or_error(source_section.path, am, source_section.titles_sequence)
     new_version = _constrain(_wrap_in_paragraphs(extract_markdown_text(alternative_section.new_text, level=1)))
