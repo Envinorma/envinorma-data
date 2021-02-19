@@ -151,11 +151,21 @@ def _extract_font_size_occurrences(style_occurrences: Dict[Style, int]) -> Dict[
     return res
 
 
+class DocxError(Exception):
+    pass
+
+
+class DocxNoTextError(DocxError):
+    pass
+
+
 def _guess_body_font_size(soup: BeautifulSoup) -> int:
     font_size_occurrences = _extract_font_size_occurrences(extract_styles_to_nb_letters(soup))
     if not font_size_occurrences:
         strings = '\n'.join(list(soup.stripped_strings))
-        raise ValueError(f'Need at least one style tag (rPr) in soup.\nZone: {strings[:280]}\nSoup{str(soup)[:280]}')
+        raise DocxNoTextError(
+            f'Need at least one style tag (rPr) in soup.\nZone: {strings[:280]}\nSoup{str(soup)[:280]}'
+        )
     return sorted(font_size_occurrences.items(), key=lambda x: x[1])[-1][0]
 
 

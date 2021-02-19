@@ -7,6 +7,7 @@ import pytest
 from bs4 import BeautifulSoup, Tag
 from envinorma.data import Cell, EnrichedString, Row, Table
 from envinorma.io.docx import (
+    DocxNoTextError,
     Style,
     _build_table_with_correct_rowspan,
     _check_is_tag,
@@ -412,7 +413,7 @@ def test_guess_body_font_size():
 
     xml = '<w></w>'
     soup = BeautifulSoup(xml, 'lxml-xml')
-    with pytest.raises(ValueError):
+    with pytest.raises(DocxNoTextError):
         _guess_body_font_size(soup)
 
 

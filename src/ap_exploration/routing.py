@@ -7,6 +7,7 @@ from werkzeug.routing import Map, MapAdapter, Rule
 class Endpoint(Enum):
     AP_ODT = 'ap_odt'
     AP_PDF = 'ap_pdf'
+    AP_IMAGE = 'ap_image'
     ETABLISSEMENT = 'etablissement'
     INDEX = 'index'
     AP = 'ap'
@@ -38,6 +39,7 @@ ROUTER: MapAdapter = Map(
         Rule(f'/{Endpoint.AP}/id/<ap_id>', endpoint=Endpoint.AP),
         Rule(f'/{Endpoint.AP}/id/<ap_id>/<operation>', endpoint=Endpoint.AP),
         Rule(f'/{Endpoint.AP_PDF}', endpoint=Endpoint.AP_PDF),
+        Rule(f'/{Endpoint.AP_IMAGE}', endpoint=Endpoint.AP_IMAGE),
     ]
 ).bind('')
 

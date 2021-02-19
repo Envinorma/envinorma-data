@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Any, Dict, Optional
 
 import pdfplumber
 from pdf2docx import parse
@@ -9,9 +9,11 @@ from envinorma.io.docx import build_structured_text_from_docx_xml, get_docx_xml
 from envinorma.utils import random_string
 
 
-def pdf_to_docx(filename: str, output_filename: Optional[str] = None) -> None:
+def pdf_to_docx(
+    filename: str, output_filename: Optional[str] = None, start_page: int = 0, end_page: Optional[int] = None, **kwargs
+) -> None:
     output_filename = output_filename or filename.replace('.pdf', '.docx')
-    parse(filename, output_filename)
+    parse(filename, output_filename, start_page, end_page, **kwargs)
 
 
 def _count_nb_characters(filename: str) -> int:
