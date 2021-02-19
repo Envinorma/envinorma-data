@@ -190,7 +190,7 @@ def _check_date_conditions_are_incompatible(all_conditions: List[Condition], par
         ranges.append(_extract_date_range(condition))
     if _date_ranges_strictly_overlap(ranges):
         raise ParametrizationError(
-            f'Date ranges overlap, they can be satisfy simultaneously, which can lead to'
+            f'Date ranges overlap, they can be satisfied simultaneously, which can lead to'
             f' ambiguities: {all_conditions}'
         )
 
@@ -215,7 +215,7 @@ def _check_real_number_conditions_are_incompatible(all_conditions: List[Conditio
     ranges = [_extract_range(condition) for condition in leaf_conditions]
     if _ranges_strictly_overlap(ranges):
         raise ParametrizationError(
-            f'Ranges overlap, they can be satisfy simultaneously, which can lead to' f' ambiguities: {all_conditions}'
+            f'Ranges overlap, they can be satisfied simultaneously, which can lead to' f' ambiguities: {all_conditions}'
         )
 
 

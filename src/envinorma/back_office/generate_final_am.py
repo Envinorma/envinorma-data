@@ -18,7 +18,7 @@ from envinorma.topics.topics import TOPIC_ONTOLOGY
 AMVersions = Dict[Tuple[str, ...], ArreteMinisteriel]
 
 
-def _apply_parametrization(
+def apply_parametrization(
     am_id: str, am: Optional[ArreteMinisteriel], parametrization: Parametrization
 ) -> Optional[AMVersions]:
     if not am:
@@ -56,5 +56,5 @@ def generate_final_am(metadata: AMMetadata) -> FinalAM:
         raise ValueError('Expecting one AM to proceed.')
     am = _enrich_am(am, metadata)
     parametrization = load_parametrization(cid) or Parametrization([], [])
-    am_versions = _apply_parametrization(cid, am, parametrization)
+    am_versions = apply_parametrization(cid, am, parametrization)
     return FinalAM(base_am=am, am_versions=am_versions)

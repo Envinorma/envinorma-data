@@ -136,6 +136,12 @@ def load_parametrization(am_id: str) -> Optional[Parametrization]:
     return None
 
 
+def load_all_parametrizations() -> Dict[str, Parametrization]:
+    query = 'SELECT am_id, data FROM parametrization;'
+    tuples = _exectute_select_query(query, ())
+    return {am_id: Parametrization.from_dict(json.loads(json_)) for am_id, json_ in tuples or {}}
+
+
 def load_structured_am(am_id: str) -> Optional[ArreteMinisteriel]:
     query = 'SELECT data FROM structured_am WHERE am_id = %s;'
     json_am = _exectute_select_query(query, (am_id,))
