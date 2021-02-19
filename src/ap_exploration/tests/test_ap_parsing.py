@@ -1,4 +1,4 @@
-from envinorma.back_office.ap_parsing import _generate_new_filename, _extension
+from ap_exploration.pages.ap_pdf import _generate_new_filename, _extension
 
 
 def test_generate_new_filename():

@@ -11,7 +11,6 @@ class Endpoint(Enum):
     COMPARE = 'compare'
     AM = 'am'
     EDIT_AM = 'edit_am'
-    PARSE_AP = 'parse_ap'
 
 
 ROUTER: MapAdapter = Map(

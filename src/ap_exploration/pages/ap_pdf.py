@@ -2,13 +2,12 @@ import base64
 import traceback
 from dataclasses import dataclass
 from typing import Optional
-
+import dash
 import dash_bootstrap_components as dbc
 import dash_core_components as dcc
 import dash_html_components as html
 from dash.dependencies import Input, Output, State
 from dash.development.base_component import Component
-from envinorma.back_office.app_init import app
 from envinorma.back_office.components import error_component
 from envinorma.back_office.components.am_component import structured_text_component
 from envinorma.back_office.components.summary_component import summary_component
@@ -18,6 +17,7 @@ from envinorma.io.docx import get_docx_xml_soup
 from envinorma.io.open_document import load_and_transform as parse_odt
 from envinorma.pdf import pdf_to_docx
 from envinorma.utils import random_string
+from ap_exploration.routing import Page
 
 _UPLOAD = 'ap-parsing-upload-data'
 _FILENAME_PDF = 'ap-parsing-filename-pdf'
@@ -25,7 +25,7 @@ _FILENAME_NOT_PDF = 'ap-parsing-filename-not-pdf'
 _LOADER = 'ap-parsing-loader'
 
 
-def page() -> Component:
+def _page() -> Component:
     style = {
         'width': '100%',
         'height': '60px',
@@ -133,22 +133,23 @@ def _parse_contents(filename: str) -> Component:
     return _build_parsed_content_component(file_data)
 
 
-@app.callback(Output(_FILENAME_PDF, 'data'), Input(_UPLOAD, 'contents'), State(_UPLOAD, 'filename'))
-def save_file(contents, name):
-    if contents:
-        return _save_file(contents, name)
-    return None
+def _add_callbacks(app: dash.Dash):
+    @app.callback(Output(_FILENAME_PDF, 'data'), Input(_UPLOAD, 'contents'), State(_UPLOAD, 'filename'))
+    def save_file(contents, name):
+        if contents:
+            return _save_file(contents, name)
+        return None
 
+    @app.callback(Output(_FILENAME_NOT_PDF, 'data'), Input(_FILENAME_PDF, 'data'))
+    def handle_new_pdf_filename(filename):
+        if filename:
+            return _transform_pdf_if_necessary(filename)
+        return None
 
-@app.callback(Output(_FILENAME_NOT_PDF, 'data'), Input(_FILENAME_PDF, 'data'))
-def handle_new_pdf_filename(filename):
-    if filename:
-        return _transform_pdf_if_necessary(filename)
-    return None
+    @app.callback(Output(_LOADER, 'children'), Input(_FILENAME_NOT_PDF, 'data'))
+    def handle_new_not_pdf_filename(filename):
+        if filename:
+            return _parse_contents(filename)
+        return html.Div()
 
-
-@app.callback(Output(_LOADER, 'children'), Input(_FILENAME_NOT_PDF, 'data'))
-def handle_new_not_pdf_filename(filename):
-    if filename:
-        return _parse_contents(filename)
-    return html.Div()
+page: Page = (_page, _add_callbacks)

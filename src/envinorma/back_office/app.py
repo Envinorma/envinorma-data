@@ -8,7 +8,6 @@ from dash.dependencies import Input, Output
 from dash.development.base_component import Component
 from envinorma.back_office import compare, display_am
 
-# from envinorma.back_office.ap_parsing import page as ap_parsing_page
 from envinorma.back_office.am_page import router as edit_am_page_router
 from envinorma.back_office.app_init import app
 from envinorma.back_office.components import replace_line_breaks
@@ -195,11 +194,7 @@ def _make_index_component(
     )
 
 
-_ENDPOINT_TO_PAGE = {
-    Endpoint.COMPARE: compare,
-    Endpoint.AM: display_am,
-    # Endpoint.PARSE_AP: ap_parsing_page
-}
+_ENDPOINT_TO_PAGE = {Endpoint.COMPARE: compare, Endpoint.AM: display_am}
 
 
 def router(pathname: str) -> Component:
@@ -220,8 +215,6 @@ def router(pathname: str) -> Component:
     if not page:
         return html.H3(f'404 error: Unknown path {pathname} (not implemented endpoint {endpoint})')
     return page.layout(**args)  # type: ignore
-    # if endpoint == Endpoint.PARSE_AP:
-    #     return ap_parsing_page()
 
 
 app.layout = html.Div(

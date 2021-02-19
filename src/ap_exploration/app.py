@@ -7,9 +7,10 @@ import dash_html_components as html
 from dash.dependencies import Input, Output
 from dash.development.base_component import Component
 
-from ap_exploration.pages.ap_odt import page as ap_odt_page
-from ap_exploration.pages.etablissement import page as etablissement_page
 from ap_exploration.pages.ap import page as ap_page
+from ap_exploration.pages.ap_odt import page as ap_odt_page
+from ap_exploration.pages.ap_pdf import page as ap_pdf_page
+from ap_exploration.pages.etablissement import page as etablissement_page
 from ap_exploration.routing import ROUTER, Endpoint, Page
 
 
@@ -22,6 +23,7 @@ def _get_nav() -> Component:
     nav = html.Span(
         [
             _header_link('Accueil', href='/'),
+            _header_link('AP .pdf', href=f'/{Endpoint.AP_PDF}'),
             _header_link('AP .odt', href=f'/{Endpoint.AP_ODT}'),
             _header_link('Etablissements', href=f'/{Endpoint.ETABLISSEMENT}'),
         ],
@@ -71,6 +73,7 @@ def _index_layout() -> Component:
 
 _ENDPOINT_TO_PAGE: Dict[Endpoint, Page] = {
     Endpoint.AP_ODT: ap_odt_page,
+    Endpoint.AP_PDF: ap_pdf_page,
     Endpoint.INDEX: (_index_layout, None),
     Endpoint.ETABLISSEMENT: etablissement_page,
     Endpoint.AP: ap_page,
