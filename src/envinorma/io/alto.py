@@ -106,7 +106,7 @@ class AltoString:
     hpos: float
     vpos: float
     content: str
-    wc: float
+    confidence: float
     alternatives: List[AltoAlternative]
 
     @classmethod
@@ -117,7 +117,7 @@ class AltoString:
             hpos=assert_float(soup.get('HPOS')),
             vpos=assert_float(soup.get('VPOS')),
             content=assert_str(soup.get('CONTENT')),
-            wc=assert_float(soup.get('WC')),
+            confidence=assert_float(soup.get('WC')),
             alternatives=[AltoAlternative.from_soup(child) for child in soup.children if not _is_empty(child)],
         )
 

@@ -44,6 +44,10 @@ def _decode(content: Union[str, bytes]) -> str:
     return content.decode() if isinstance(content, bytes) else content
 
 
+def _tesseract(page: Any) -> str:
+    return _decode(pytesseract.image_to_alto_xml(page, lang='fra'))  # config='user_words_file words'
+
+
 def _ocr_with_memo(filename: str) -> List[AltoFile]:
     alto_filename = _change_extension_pdf_to_alto(filename)
     if os.path.exists(alto_filename):
@@ -51,7 +55,7 @@ def _ocr_with_memo(filename: str) -> List[AltoFile]:
     print('Converting to image.')
     pages = pdf2image.convert_from_path(filename)
     print('OCRing.')
-    xmls = [_decode(pytesseract.image_to_alto_xml(page)) for page in tqdm(pages)]
+    xmls = [_tesseract(page) for page in tqdm(pages)]
     json.dump(xmls, open(alto_filename, 'w'))
     files = [AltoFile.from_xml(xml) for xml in xmls]
     return files
