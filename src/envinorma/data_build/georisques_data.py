@@ -349,7 +349,7 @@ def load_idf_installation_ids() -> Set[str]:
     return idf_ids
 
 
-_GR_DOC_BASE_URL = 'http://documents.installationsclassees.developpement-durable.gouv.fr/commun'
+GR_DOC_BASE_URL = 'http://documents.installationsclassees.developpement-durable.gouv.fr/commun'
 
 
 def _rowify_doc(id_: str, ap: GRDocument) -> Dict[str, Any]:
@@ -357,7 +357,7 @@ def _rowify_doc(id_: str, ap: GRDocument) -> Dict[str, Any]:
         'installation_s3ic_id': id_,
         'description': ap.description_doc,
         'date': ap.date_doc,
-        'url': f'{_GR_DOC_BASE_URL}/{ap.url_doc}',
+        'url': f'{GR_DOC_BASE_URL}/{ap.url_doc}',
     }
 
 
