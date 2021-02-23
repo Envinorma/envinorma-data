@@ -1,5 +1,6 @@
 import pytest
-from ap_exploration.pages.ap_image import _seems_georisques_document_id, _generate_output_filename
+from ap_exploration.pages.ap_image import _generate_output_filename, _seems_georisques_document_id
+from ap_exploration.pages.ap_image.alto_to_html import _is_article_number
 from ap_exploration.pages.ap_image.process import _remove_pdf_extension
 
 
@@ -27,3 +28,14 @@ def test_remove_pdf_extension():
         _remove_pdf_extension('eifohzeoif.df')
     with pytest.raises(ValueError):
         _remove_pdf_extension('')
+
+
+def test_is_article_number():
+    assert _is_article_number('1.3')
+    assert _is_article_number('1')
+    assert _is_article_number('10')
+    assert _is_article_number('18')
+    assert not _is_article_number('.')
+    assert not _is_article_number('')
+    assert not _is_article_number('1A')
+    assert not _is_article_number('123"')

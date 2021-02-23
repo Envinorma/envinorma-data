@@ -1,4 +1,9 @@
 from typing import Callable, List
+
+import dash_html_components as html
+from dash.development.base_component import Component
+from envinorma.back_office.components.am_component import structured_text_component
+from envinorma.data import StructuredText
 from envinorma.io.alto import (
     AltoComposedBlock,
     AltoPage,
@@ -10,9 +15,7 @@ from envinorma.io.alto import (
     extract_strings,
     extract_text_blocks,
 )
-import dash_html_components as html
-from dash.development.base_component import Component
-
+from envinorma.structure import TextElement, Title, build_structured_text, structured_text_to_text_elements
 
 Sizer = Callable[[float, bool], str]
 
@@ -160,3 +163,54 @@ def alto_page_to_grouped_paragraphs(page: AltoPage) -> Component:
 def alto_pages_to_paragraphs(pages: List[AltoPage]) -> Component:
     paragraphs = [_extract_block_text(block) for page in pages for block in extract_text_blocks(page)]
     return html.Div([html.P(paragraph) for paragraph in paragraphs])
+
+
+def _is_article_number(word: str) -> bool:
+    if word in ('1er', '1°°', '1"°', '1°"', '1°”', '1”°'):
+        return True
+    if not word or len(set(word) - {'.', ',', '-', '—'}) == 0:
+        return False
+    return len(set(word) - set('0123456789S.,-—')) == 0
+
+
+def _is_title_first_word(word: str) -> bool:
+    return word.lower() in ('titre', 'chapitre', 'article')
+
+
+def _is_title(line: str) -> bool:
+    words = line.split()
+    return len(words) >= 2 and _is_title_first_word(words[0]) and _is_article_number(words[1])
+
+
+def _to_element(line: str) -> TextElement:
+    if _is_title(line):
+        return Title(line, level=1)
+    return line
+
+
+def _group_lines(lines: List[AltoTextLine]) -> List[str]:
+    strs = [' '.join([string.content for string in line.strings if isinstance(string, AltoString)]) for line in lines]
+    groups: List[List[str]] = [[]]
+    for str_ in strs:
+        if _is_title(str_):
+            groups.extend([[str_], []])
+        else:
+            groups[-1].append(str_)
+    return [' '.join(group) for group in groups if group]
+
+
+def _extract_text_elements(pages: List[AltoPage]) -> List[TextElement]:
+    paragraphs = [
+        line for page in pages for block in extract_text_blocks(page) for line in _group_lines(block.text_lines)
+    ]
+    return [_to_element(paragraph) for paragraph in paragraphs]
+
+
+def _extract_structured_text(pages: List[AltoPage]) -> StructuredText:
+    text_elements = _extract_text_elements(pages)
+    return build_structured_text('', text_elements)
+
+
+def alto_pages_to_structured_text(pages: List[AltoPage]) -> Component:
+    structured_text = _extract_structured_text(pages)
+    return structured_text_component(structured_text, [], 3)

@@ -19,12 +19,6 @@ def _ensure_one_page_and_get_it(alto: AltoFile) -> AltoPage:
     return alto.layout.pages[0]
 
 
-def _change_extension_to_alto(filename: str) -> str:
-    if len(filename.split('.')) != 2:
-        raise ValueError(f'{filename} must have only one dot.')
-    return filename.split('.')[0] + '.alto'
-
-
 def _decode(content: Union[str, bytes]) -> str:
     return content.decode() if isinstance(content, bytes) else content
 
@@ -33,23 +27,17 @@ def _tesseract(page: Any) -> str:
     return _decode(pytesseract.image_to_alto_xml(page, lang='fra'))  # config='user_words_file words'
 
 
-def _ocr_with_memo(filename: str) -> List[AltoFile]:
-    alto_filename = _change_extension_to_alto(filename)
-    if os.path.exists(alto_filename):
-        return [AltoFile.from_xml(xml) for xml in json.load(open(alto_filename))]
-    print('Converting to image.')
-    pages = pdf2image.convert_from_path(filename)
-    print('OCRing.')
-    xmls = [_tesseract(page) for page in tqdm(pages)]
-    json.dump(xmls, open(alto_filename, 'w'))
-    files = [AltoFile.from_xml(xml) for xml in xmls]
-    return files
-
-
 def _remove_pdf_extension(filename: str) -> str:
     if not filename.endswith('.pdf'):
         raise ValueError(f'Expecting pdf file, got {filename}')
     return filename[:-4]
+
+
+def _ocr(filename: str):
+    print('Converting to image.')
+    pages = pdf2image.convert_from_path(filename)
+    print('OCRing.')
+    return [pytesseract.image_to_alto_xml(page, lang='fra') for page in tqdm(pages)]
 
 
 def _nb_page_filename(filename: str) -> str:

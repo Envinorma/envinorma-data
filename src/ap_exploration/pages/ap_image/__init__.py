@@ -16,6 +16,7 @@ from ap_exploration.pages.ap_image.alto_to_html import (
     alto_page_to_grouped_paragraphs,
     alto_page_to_html,
     alto_pages_to_paragraphs,
+    alto_pages_to_structured_text,
 )
 from ap_exploration.pages.ap_image.process import extract_alto_pages, load_step, start_process
 from ap_exploration.routing import Page
@@ -79,12 +80,8 @@ def _button() -> Component:
 
 
 def _progress() -> Component:
-    return html.Div(
-        dbc.Progress(value=0, id=_PROGRESS_BAR, striped=True, animated=True, style={'height': '25px'}),
-        hidden=True,
-        id=_PROGRESS_BAR_WRAPPER,
-        className='mt-3 mb-3',
-    )
+    progress = dbc.Progress(value=5, id=_PROGRESS_BAR, striped=True, animated=True, style={'height': '25px'})
+    return html.Div(progress, hidden=True, id=_PROGRESS_BAR_WRAPPER, className='mt-3 mb-3')
 
 
 def _card(content: Component, title: str) -> Component:
@@ -180,7 +177,7 @@ def _raw_text(pages: List[AltoPage]) -> Component:
 
 
 def _structured_text(pages: List[AltoPage]) -> Component:
-    return html.Div()
+    return alto_pages_to_structured_text(pages)
 
 
 def _top_margin(component: Component) -> Component:
@@ -288,10 +285,9 @@ def _add_callbacks(app: dash.Dash):
     def _process_file(_, filename, progress_is_hidden):
         ctx = dash.callback_context
         filename_trigger = _filename_trigger(ctx.triggered)
-        print(filename_trigger, progress_is_hidden)
         if filename_trigger and progress_is_hidden:
             start_process(filename)
-            return dash.no_update, 'OCR en cours.', 0, False
+            return dash.no_update, 'OCR en cours.', 5, False
         if not filename_trigger and not progress_is_hidden:
             step = load_step(filename)
             if step.done:
