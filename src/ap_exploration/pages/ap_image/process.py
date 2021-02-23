@@ -65,8 +65,11 @@ def _create_if_inexistent(folder_name: str) -> None:
         os.mkdir(folder_name)
 
 
+MAX_NB_PAGES = 8
+
+
 def _dump_pages_and_nb_pages(filename: str) -> int:
-    pages = pdf2image.convert_from_path(filename)
+    pages = pdf2image.convert_from_path(filename)[:MAX_NB_PAGES]
     _create_if_inexistent(_remove_pdf_extension(filename))
     for page_nb, page in enumerate(pages):
         path = _raw_page_filename(filename, page_nb)
