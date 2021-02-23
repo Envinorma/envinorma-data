@@ -14,7 +14,9 @@ _PRESCRIPTION_FOLDER = os.path.join(AP_FOLDER, 'prescriptions')
 def _load_actes() -> List[Acte]:
     here = pathlib.Path(__file__)
     filename = here.parent.joinpath('actes.json')
-    return [Acte.from_dict(x) for x in json.load(open(filename))]
+    if os.path.exists(filename):
+        return [Acte.from_dict(x) for x in json.load(open(filename))]
+    return []
 
 
 def _contains_recent_act(acts: List[Acte]) -> bool:

@@ -490,15 +490,3 @@ def extract_text_and_metadata(filename: str) -> ODTExtractedText:
         return ODTExtractedText(load_and_transform(filename), None)
     except Exception:
         return ODTExtractedText(None, traceback.format_exc())
-
-
-if __name__ == '__main__':
-    from envinorma.io.markdown import extract_markdown_text
-
-    _DOC_NAME = 'AP_DDAE_12_2014vcorrigee_cle84ed7d'  # '2020-06-11-AUTO 2001-AP AUTORISATION-Projet_AP_VF'
-
-    FILENAME = f'/Users/remidelbouys/EnviNorma/brouillons/data/icpe_ap_odt/{_DOC_NAME}.odt'
-    TEXT = load_and_transform(FILENAME, True)
-    open(f'/Users/remidelbouys/EnviNorma/envinorma.github.io/{_DOC_NAME}.md', 'w').write(
-        '\n\n'.join(extract_markdown_text(TEXT, 1))
-    )

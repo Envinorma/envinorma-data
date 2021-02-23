@@ -150,7 +150,7 @@ def load_step(filename: str) -> OCRProcessingStep:
 
 
 def _process_file(filename: str) -> None:
-    step = OCRProcessingStep(None, 0, False)
+    step = OCRProcessingStep(None, 0.05, False)
     while not step.done:
         print(f'Advancement: {step.advancement*100}%')
         step = _process_next_step(filename)
@@ -167,9 +167,21 @@ def extract_alto_pages(filename: str) -> List[AltoPage]:
     return [_ensure_one_page_and_get_it(AltoFile.from_xml(page)) for page in pages]
 
 
+def _get_src_file() -> str:
+    to_replace = '/ap_exploration/pages/ap_image/process.py'
+    if not __file__.endswith(to_replace):
+        raise ValueError(f'Expecting __file__ to end with {to_replace}, got {__file__}')
+    return __file__.replace(to_replace, '')
+
+
+_SRC_FILE = _get_src_file()
+
+
 def start_process(filename: str) -> None:
     cmd = ['python3', __file__, '--filename', filename]
-    subprocess.Popen(cmd)
+    env = os.environ.copy()
+    env['PYTHONPATH'] = _SRC_FILE + ':' + env['PYTHONPATH']
+    subprocess.Popen(cmd, env=env)
 
 
 if __name__ == '__main__':

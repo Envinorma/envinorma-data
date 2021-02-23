@@ -25,6 +25,7 @@ from dash.development.base_component import Component
 from dash.exceptions import PreventUpdate
 from envinorma.back_office.components import error_component
 from envinorma.back_office.utils import generate_id
+from envinorma.config import config
 from envinorma.data_build.georisques_data import GR_DOC_BASE_URL
 from envinorma.io.alto import AltoPage
 
@@ -38,8 +39,8 @@ _LOADER = generate_id(__file__, 'loader')
 _DROPDOWN = generate_id(__file__, 'dropdown')
 _BUTTON = generate_id(__file__, 'button')
 _OCR_OUTPUT = generate_id(__file__, 'ocr-output')
-_PDF_AP_FOLDER = '/Users/remidelbouys/EnviNorma/ap_sample/pdf_image_workspace'
 _DOC_IDS = load_ap_georisques_url()
+_PDF_AP_FOLDER = config.storage.ap_data_folder
 
 
 def _page_tab_id(page_number: Any) -> Dict[str, Any]:

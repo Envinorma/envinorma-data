@@ -1,3 +1,4 @@
+import os
 from typing import Dict, Optional
 
 import dash
@@ -6,13 +7,32 @@ import dash_core_components as dcc
 import dash_html_components as html
 from dash.dependencies import Input, Output
 from dash.development.base_component import Component
+from envinorma.config import config
 
 from ap_exploration.pages.ap import page as ap_page
+from ap_exploration.pages.ap_image import download_document
+from ap_exploration.pages.ap_image import page as ap_image_page
 from ap_exploration.pages.ap_odt import page as ap_odt_page
 from ap_exploration.pages.ap_pdf import page as ap_pdf_page
 from ap_exploration.pages.etablissement import page as etablissement_page
-from ap_exploration.pages.ap_image import page as ap_image_page
 from ap_exploration.routing import ROUTER, Endpoint, Page
+
+_PDF_AP_FOLDER = config.storage.ap_data_folder
+_FRA_TESS_DATA_URL = 'https://github.com/tesseract-ocr/tessdata/raw/master/fra.traineddata'
+_TESSDATA_PREFIX = config.storage.tessdata
+
+if not os.path.exists(_PDF_AP_FOLDER):
+    os.mkdir(_PDF_AP_FOLDER)
+
+
+def _download_fra_tessdata_if_inexistent():
+    filename = os.path.join(_TESSDATA_PREFIX, 'fra.traineddata')
+    if not os.path.exists(filename):
+        print('Downloading fra.traineddata.')
+        download_document(_FRA_TESS_DATA_URL, filename)
+
+
+_download_fra_tessdata_if_inexistent()
 
 
 def _header_link(content: str, href: str, target: Optional[str] = None) -> Component:

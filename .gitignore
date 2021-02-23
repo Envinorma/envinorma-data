@@ -5,7 +5,7 @@ src/.vscode
 src/.coverage
 tmp*
 src/scripts/s3ic.py
-config.ini
+*config.ini
 backups
 *.DS_Store
 

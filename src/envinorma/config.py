@@ -44,6 +44,8 @@ class LegifranceConfig:
 class StorageConfig:
     am_data_folder: str
     psql_dsn: str
+    ap_data_folder: str
+    tessdata: str
 
     @classmethod
     def default_load(cls) -> 'StorageConfig':
