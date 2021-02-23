@@ -1,11 +1,15 @@
-import pickle
-import os
+import argparse
 import json
+import os
+import pickle
+import subprocess
+from dataclasses import asdict, dataclass
 from typing import Any, Callable, Dict, List, Optional, Tuple, Union
 
 import pdf2image
 import pytesseract
 from envinorma.io.alto import AltoFile, AltoPage
+from envinorma.utils import write_json
 from tqdm import tqdm
 
 
@@ -107,27 +111,81 @@ def _generate_alto_file(nb_pages: int, filename: str) -> None:
         json.dump(page_contents, file_)
 
 
-def process_next_step(filename: str) -> Tuple[Optional[str], float]:
+@dataclass
+class OCRProcessingStep:
+    messsage: Optional[str]
+    advancement: float
+    done: bool
+
+    def __post_init__(self) -> None:
+        assert 0 <= self.advancement <= 1
+
+    def to_dict(self) -> Dict[str, Any]:
+        return asdict(self)
+
+    @classmethod
+    def from_dict(cls, dict_: Dict[str, Any]) -> 'OCRProcessingStep':
+        return cls(**dict_)
+
+
+def _process_next_step(filename: str) -> OCRProcessingStep:
     nb_pages = _load_nb_page(filename)
     if nb_pages is None:
         nb_pages = _dump_pages_and_nb_pages(filename)
-        return f'OCR on page 1/{nb_pages}', 0.1
+        return OCRProcessingStep(f'OCR on page 1/{nb_pages}', 0.1, False)
     for page_nb in range(nb_pages):
         alto_page_filename = _alto_page_filename(filename, page_nb)
         if os.path.exists(alto_page_filename):
             continue
         _ocr_page(_raw_page_filename(filename, page_nb), alto_page_filename)
-        return f'OCR on page {page_nb + 2}/{nb_pages}', 0.1 + 0.9 * (page_nb + 1) / nb_pages
+        return OCRProcessingStep(f'OCR on page {page_nb + 2}/{nb_pages}', 0.1 + 0.9 * (page_nb + 1) / nb_pages, False)
     if not os.path.exists(_final_alto_file(filename)):
         _generate_alto_file(nb_pages, filename)
-    return None, 1.0
+    return OCRProcessingStep(None, 1.0, True)
+
+
+def _step_filename(filename: str) -> str:
+    return os.path.join(_remove_pdf_extension(filename), 'step.json')
+
+
+def _dump_step(filename: str, step: OCRProcessingStep) -> None:
+    step_filename = _step_filename(filename)
+    write_json(step.to_dict(), step_filename)
+
+
+def load_step(filename: str) -> OCRProcessingStep:
+    step_filename = _step_filename(filename)
+    if not os.path.exists(step_filename):
+        return OCRProcessingStep(None, 0, False)
+    with open(step_filename) as file_:
+        return OCRProcessingStep.from_dict(json.load(file_))
+
+
+def _process_file(filename: str) -> None:
+    step = OCRProcessingStep(None, 0, False)
+    while not step.done:
+        print(f'Advancement: {step.advancement*100}%')
+        step = _process_next_step(filename)
+        _dump_step(filename, step)
 
 
 def extract_alto_pages(filename: str) -> List[AltoPage]:
-    done, adv = process_next_step(filename)
-    while done is not None:
-        print(f'Advancement: {adv*100}%')
-        done, adv = process_next_step(filename)
+    step = _process_next_step(filename)
+    while not step.done:
+        print(f'Advancement: {step.advancement*100}%')
+        step = _process_next_step(filename)
     with open(_final_alto_file(filename)) as file_:
         pages = json.load(file_)
     return [_ensure_one_page_and_get_it(AltoFile.from_xml(page)) for page in pages]
+
+
+def start_process(filename: str) -> None:
+    cmd = ['python3', __file__, '--filename', filename]
+    subprocess.Popen(cmd)
+
+
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--filename', required=True)
+    args = parser.parse_args()
+    _process_file(args.filename)

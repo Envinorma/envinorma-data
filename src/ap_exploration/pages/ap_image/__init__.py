@@ -17,9 +17,9 @@ from ap_exploration.pages.ap_image.alto_to_html import (
     alto_page_to_html,
     alto_pages_to_paragraphs,
 )
-from ap_exploration.pages.ap_image.process import extract_alto_pages, process_next_step
+from ap_exploration.pages.ap_image.process import extract_alto_pages, load_step, start_process
 from ap_exploration.routing import Page
-from dash.dependencies import ALL, Input, Output, State
+from dash.dependencies import Input, Output, State
 from dash.development.base_component import Component
 from dash.exceptions import PreventUpdate
 from envinorma.back_office.components import error_component
@@ -28,6 +28,8 @@ from envinorma.data_build.georisques_data import GR_DOC_BASE_URL
 from envinorma.io.alto import AltoPage
 
 _UPLOAD = generate_id(__file__, 'upload-data')
+_FILENAME_DONE = generate_id(__file__, 'filename-alto')
+_INTERVAL = generate_id(__file__, 'interval')
 _FILENAME_PDF = generate_id(__file__, 'filename-pdf')
 _PROGRESS_BAR = generate_id(__file__, 'progress-bar')
 _PROGRESS_BAR_WRAPPER = generate_id(__file__, 'progress-bar-wrapper')
@@ -78,9 +80,10 @@ def _button() -> Component:
 
 def _progress() -> Component:
     return html.Div(
-        dbc.Progress(value=0, id=_PROGRESS_BAR, striped=True, animated=True),
+        dbc.Progress(value=0, id=_PROGRESS_BAR, striped=True, animated=True, style={'height': '25px'}),
         hidden=True,
         id=_PROGRESS_BAR_WRAPPER,
+        className='mt-3 mb-3',
     )
 
 
@@ -105,7 +108,8 @@ def _page() -> Component:
             _upload_row(),
             _progress(),
             dcc.Store(id=_FILENAME_PDF),
-            *[dcc.Store(id=f'{_FILENAME_PDF}_{i}') for i in range(10)],
+            dcc.Store(id=_FILENAME_DONE),
+            dcc.Interval(id=_INTERVAL, interval=2000),
             html.Div('', id=_OCR_OUTPUT),
             html.Div(dbc.Spinner(html.Div(), id=_LOADER)),
         ]
@@ -266,7 +270,36 @@ def _add_callbacks(app: dash.Dash):
             return _download_random_document()
         raise ValueError(f'Unknown trigger {trigger_id}')
 
-    @app.callback(Output(_LOADER, 'children'), Output(_OCR_OUTPUT, 'children'), Input(_FILENAME_PDF, 'data'))
+    def _filename_trigger(triggered: List[Dict[str, Any]]) -> bool:
+        if len(triggered) != 1:
+            raise ValueError(f'Expecting one trigger, got {len(triggered)}')
+        return _FILENAME_PDF in (triggered[0].get('prop_id') or '')
+
+    @app.callback(
+        Output(_FILENAME_DONE, 'data'),
+        Output(_PROGRESS_BAR, 'children'),
+        Output(_PROGRESS_BAR, 'value'),
+        Output(_PROGRESS_BAR_WRAPPER, 'hidden'),
+        Input(_INTERVAL, 'n_intervals'),
+        Input(_FILENAME_PDF, 'data'),
+        State(_PROGRESS_BAR_WRAPPER, 'hidden'),
+        prevent_initial_call=True,
+    )
+    def _process_file(_, filename, progress_is_hidden):
+        ctx = dash.callback_context
+        filename_trigger = _filename_trigger(ctx.triggered)
+        print(filename_trigger, progress_is_hidden)
+        if filename_trigger and progress_is_hidden:
+            start_process(filename)
+            return dash.no_update, 'OCR en cours.', 0, False
+        if not filename_trigger and not progress_is_hidden:
+            step = load_step(filename)
+            if step.done:
+                return filename, 'Done.', 100, True
+            return dash.no_update, step.messsage, int(step.advancement * 100), False
+        raise PreventUpdate
+
+    @app.callback(Output(_LOADER, 'children'), Output(_OCR_OUTPUT, 'children'), Input(_FILENAME_DONE, 'data'))
     def handle_new_pdf_filename(filename):
         if filename:
             try:
@@ -275,23 +308,6 @@ def _add_callbacks(app: dash.Dash):
                 print(traceback.format_exc())
                 return html.Div(), error_component(traceback.format_exc())
         raise PreventUpdate
-
-    # def _extract_key(triggered: Dict[str, Any]) -> int:
-    #     nb_dots = len((triggered.get('prop_id') or '').split('.'))
-    #     if nb_dots != 2:
-    #         raise ValueError(
-    #             'Expecting dict of the form {\'prop_id\': \'{"key":4,"type":"type"}.n_clicks\', \'value\': 1},'
-    #             f' prop_id having exactly one dot, got {triggered}'
-    #         )
-    #     return json.loads(triggered['prop_id'].split('.')[0])['key']
-
-    # @app.callback(Output(_page_id(ALL), 'hidden'), Input(_page_tab_id(ALL), 'n_clicks'))
-    # def select_page(n_clicks):
-    #     ctx = dash.callback_context
-    #     if not ctx.triggered:
-    #         raise PreventUpdate
-    #     key = _extract_key(ctx.triggered[0])
-    #     return [i != key for i in range(len(n_clicks))]
 
 
 page: Page = (_page, _add_callbacks)
