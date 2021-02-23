@@ -269,9 +269,9 @@ def _add_callbacks(app: dash.Dash):
         raise ValueError(f'Unknown trigger {trigger_id}')
 
     def _filename_trigger(triggered: List[Dict[str, Any]]) -> bool:
-        if len(triggered) != 1:
-            raise ValueError(f'Expecting one trigger, got {len(triggered)}')
-        return _FILENAME_PDF in (triggered[0].get('prop_id') or '')
+        if len(triggered) == 0:
+            raise ValueError(f'Expecting at least one trigger, got {len(triggered)}')
+        return any([_FILENAME_PDF in (trig.get('prop_id') or '') for trig in triggered])
 
     @app.callback(
         Output(_FILENAME_DONE, 'data'),
