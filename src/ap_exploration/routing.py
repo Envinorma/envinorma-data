@@ -11,6 +11,7 @@ class Endpoint(Enum):
     ETABLISSEMENT = 'etablissement'
     INDEX = 'index'
     AP = 'ap'
+    TMP = 'tmp'
 
     def __repr__(self):
         return self.value
@@ -40,6 +41,7 @@ ROUTER: MapAdapter = Map(
         Rule(f'/{Endpoint.AP}/id/<ap_id>/<operation>', endpoint=Endpoint.AP),
         Rule(f'/{Endpoint.AP_PDF}', endpoint=Endpoint.AP_PDF),
         Rule(f'/{Endpoint.AP_IMAGE}', endpoint=Endpoint.AP_IMAGE),
+        Rule(f'/{Endpoint.TMP}', endpoint=Endpoint.TMP),
     ]
 ).bind('')
 

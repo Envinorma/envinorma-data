@@ -15,7 +15,7 @@ from envinorma.io.alto import (
     extract_strings,
     extract_text_blocks,
 )
-from envinorma.structure import TextElement, Title, build_structured_text, structured_text_to_text_elements
+from envinorma.structure import TextElement, Title, build_structured_text
 
 Sizer = Callable[[float, bool], str]
 

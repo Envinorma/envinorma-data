@@ -12,6 +12,7 @@ from envinorma.config import config
 from ap_exploration.pages.ap import page as ap_page
 from ap_exploration.pages.ap_image import download_document
 from ap_exploration.pages.ap_image import page as ap_image_page
+from ap_exploration.pages.temp_page import page as temp_page
 from ap_exploration.pages.ap_odt import page as ap_odt_page
 from ap_exploration.pages.ap_pdf import page as ap_pdf_page
 from ap_exploration.pages.etablissement import page as etablissement_page
@@ -100,6 +101,7 @@ _ENDPOINT_TO_PAGE: Dict[Endpoint, Page] = {
     Endpoint.ETABLISSEMENT: etablissement_page,
     Endpoint.AP: ap_page,
     Endpoint.AP_IMAGE: ap_image_page,
+    Endpoint.TMP: temp_page,
 }
 
 
