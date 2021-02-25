@@ -38,8 +38,9 @@ class Contour:
             raise ValueError(f'{self} is not correct')
 
 
-def _build_contour(points) -> Contour:
-    return Contour(points[0][0][0], points[2][0][0], points[0][0][1], points[1][0][1])
+def _build_contour(contour) -> Contour:
+    x, y, w, h = cv2.boundingRect(contour)
+    return Contour(x, x + w, y, y + h)
 
 
 def _get_vertical_lines(img: np.ndarray):
@@ -57,7 +58,10 @@ def _get_horizontal_lines(img: np.ndarray):
 
 
 def _is_empty(contour: Contour) -> bool:
-    return contour.x_0 >= contour.x_1 - 1 or contour.y_0 >= contour.y_1 - 1
+    return (
+        abs(contour.x_0 - contour.x_1) <= 4 * _PROXIMITY_THRESHOLD
+        or abs(contour.y_0 - contour.y_1) <= 4 * _PROXIMITY_THRESHOLD
+    )
 
 
 def _extract_contours(img: np.ndarray) -> List[Contour]:
@@ -67,7 +71,7 @@ def _extract_contours(img: np.ndarray) -> List[Contour]:
     img_vh = cv2.erode(~img_vh, kernel, iterations=2)
     _, img_vh = cv2.threshold(img_vh, 128, 255, cv2.THRESH_BINARY | cv2.THRESH_OTSU)
     contours, _ = cv2.findContours(img_vh, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
-    built_contours = [_build_contour(contour) for contour in contours]
+    built_contours = [_build_contour(contour) for contour in contours if len(contour) == 4]
     return [ct for ct in built_contours if not _is_empty(ct) and not _is_full_page(ct, img)]
 
 
@@ -107,7 +111,7 @@ def _is_full_page(contour: Contour, img: np.ndarray) -> bool:
 
 def _extract_cells(img: np.ndarray) -> List[DetectedCell]:
     contours = _extract_contours(img)
-    strings = [_extract_string(img, ct) for ct in tqdm(contours)]
+    strings = [_extract_string(img, ct) for ct in tqdm(contours, leave=False)]
     return [DetectedCell(text, contour) for text, contour in list(zip(strings, contours))]
 
 
@@ -327,5 +331,18 @@ if __name__ == '__main__':
     # )
     # _save_image(_RAW_FILENAME, _FILENAME)
     _FILENAME = 'tmpimage.png'
-    image, tables = extract_and_remove_tables(_load_image(_FILENAME))
+    input_image = _load_image(_FILENAME)
+    image, tables = extract_and_remove_tables(input_image)
+
     cv2.imwrite('test.png', image)
+    input_image = _load_image(_FILENAME)
+
+    for table in tables:
+        input_image = cv2.rectangle(
+            input_image,
+            (table.v_pos, table.h_pos),
+            (table.v_pos + table.width, table.h_pos + table.height),
+            (0, 0, 0),
+            4,
+        )
+    cv2.imwrite('test2.png', input_image)
