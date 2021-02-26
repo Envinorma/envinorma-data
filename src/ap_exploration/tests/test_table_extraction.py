@@ -1,4 +1,5 @@
 from typing import List
+
 import pytest
 from ap_exploration.pages.ap_image.table_extraction import (
     Contour,
@@ -14,7 +15,6 @@ from ap_exploration.pages.ap_image.table_extraction import (
     _extract_rowspan,
     _find_fuzzy_rank,
     _get_highest_ascendant,
-    _group_elements,
     _group_ints,
     _left_line,
     _lines_are_neighbor,
@@ -23,6 +23,7 @@ from ap_exploration.pages.ap_image.table_extraction import (
     _revert_dict,
     _right_line,
     _upper_line,
+    group_by_proximity,
 )
 from envinorma.data import Cell, Row, Table, estr
 
@@ -111,24 +112,24 @@ def _sort(list_: List[List[int]]) -> List[List[int]]:
     return list(sorted([sorted(x) for x in list_], key=lambda x: min(x)))
 
 
-def test_group_elements():
-    res = _group_elements([0, 1, 2, 3, 4, 5, 6, 100, 200, 1000, 1001, 1002], _are_close)
+def test_group_by_proximity():
+    res = group_by_proximity([0, 1, 2, 3, 4, 5, 6, 100, 200, 1000, 1001, 1002], _are_close)
     assert res == [[0, 1, 2, 3, 4, 5, 6], [100], [200], [1000, 1001, 1002]]
 
-    res = _group_elements([0, 2, 3, 100, 1001, 6, 1000, 4, 1, 5, 1002, 200], _are_close)
+    res = group_by_proximity([0, 2, 3, 100, 1001, 6, 1000, 4, 1, 5, 1002, 200], _are_close)
     assert _sort(res) == _sort([[0, 1, 2, 3, 4, 5, 6], [100], [200], [1000, 1001, 1002]])
 
-    res = _group_elements([5, 0, 200, 1001, 6, 100, 1002, 1000, 1, 2, 4, 3], _are_close)
+    res = group_by_proximity([5, 0, 200, 1001, 6, 100, 1002, 1000, 1, 2, 4, 3], _are_close)
     assert _sort(res) == _sort([[0, 1, 2, 3, 4, 5, 6], [100], [200], [1000, 1001, 1002]])
 
-    res = _group_elements([0, 0, 0, 0], _are_close)
+    res = group_by_proximity([0, 0, 0, 0], _are_close)
     assert res == [[0, 0, 0, 0]]
 
     # all ints are neighbors -> one cluster
-    assert _group_elements(list(range(50)), _are_close) == [list(range(50))]
+    assert group_by_proximity(list(range(50)), _are_close) == [list(range(50))]
 
     # no ints are neighbors -> 50 clusters
-    assert _group_elements([x * 100 for x in range(50)], _are_close) == [[x * 100] for x in range(50)]
+    assert group_by_proximity([x * 100 for x in range(50)], _are_close) == [[x * 100] for x in range(50)]
 
 
 def test_mean():
@@ -317,7 +318,7 @@ def test_group_cells_2():
             contour=Contour(x_0=279, x_1=904, y_0=242, y_1=680),
         ),
     ]
-    groups = _group_elements(res, _are_neighbor)
+    groups = group_by_proximity(res, _are_neighbor)
     for cell in res:
         for group in groups:
             if cell in group:

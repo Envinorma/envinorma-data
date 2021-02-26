@@ -8,6 +8,7 @@ from typing import Any, Callable, Dict, List, Optional, Tuple, Union
 
 import pdf2image
 import pytesseract
+from ap_exploration.pages.ap_image.table_extraction import LocatedTable
 from envinorma.io.alto import AltoFile, AltoPage
 from envinorma.utils import write_json
 from tqdm import tqdm
@@ -40,16 +41,39 @@ def _ocr(filename: str):
     return [pytesseract.image_to_alto_xml(page, lang='fra') for page in tqdm(pages)]
 
 
-def _nb_page_filename(filename: str) -> str:
+def _nb_pages_filename(filename: str) -> str:
     return os.path.join(_remove_pdf_extension(filename), 'nb_pages.json')
 
 
 def _load_nb_page(filename: str) -> Optional[int]:
-    nb_page_filename = _nb_page_filename(filename)
-    if os.path.exists(nb_page_filename):
-        with open(nb_page_filename) as file_:
+    nb_pages_filename = _nb_pages_filename(filename)
+    if os.path.exists(nb_pages_filename):
+        with open(nb_pages_filename) as file_:
             return json.load(file_)
     return None
+
+
+def _table_filename(filename: str, page_number: int) -> str:
+    return os.path.join(_remove_pdf_extension(filename), f'page_{page_number}_tables.json')
+
+
+def _load_tables(nb_pages: int, pdf_filename: str) -> List[LocatedTable]:
+    return [
+        LocatedTable.from_dict(x)
+        for page_nb in range(nb_pages)
+        for x in json.load(open(_table_filename(pdf_filename, page_nb)))
+    ]
+
+
+def load_pages_and_tables(pdf_filename: str) -> Tuple[List[AltoPage], List[LocatedTable]]:
+    nb_pages = _load_nb_page(pdf_filename)
+    if nb_pages is None:
+        raise ValueError('Nb pages not found.')
+    with open(_final_alto_file(pdf_filename)) as file_:
+        pages = json.load(file_)
+    pages = [_ensure_one_page_and_get_it(AltoFile.from_xml(page)) for page in pages]
+    tables = _load_tables(nb_pages, pdf_filename)
+    return pages, tables
 
 
 def _raw_page_filename(filename: str, page_number: int) -> str:
@@ -75,7 +99,7 @@ def _dump_pages_and_nb_pages(filename: str) -> int:
         path = _raw_page_filename(filename, page_nb)
         with open(path, 'wb') as file_:
             pickle.dump(page, file_)
-    json.dump(len(pages), open(_nb_page_filename(filename), 'w'))
+    json.dump(len(pages), open(_nb_pages_filename(filename), 'w'))
     return len(pages)
 
 

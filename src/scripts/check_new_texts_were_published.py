@@ -30,8 +30,16 @@ def _load_legifrance_version(am_id: str) -> ArreteMinisteriel:
     return transform_arrete_ministeriel(legifrance_current_version, am_id=am_id)
 
 
+def _clean_line(line: str) -> str:
+    return line.replace('<br/>', '')
+
+
+def _remove_empty(lines: List[str]) -> List[str]:
+    return [line for line in lines if line]
+
+
 def _extract_lines(am: ArreteMinisteriel) -> List[str]:
-    return [line for section in am.sections for line in extract_text_lines(section, 0)]
+    return _remove_empty([_clean_line(line) for section in am.sections for line in extract_text_lines(section, 0)])
 
 
 def _compute_am_diff(am_before: ArreteMinisteriel, am_after: ArreteMinisteriel) -> TextDifferences:

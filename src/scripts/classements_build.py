@@ -169,7 +169,7 @@ def _extract_regime(regime: Optional[DetailedRegime]) -> Optional[str]:
     if not regime:
         return None
     if regime == DetailedRegime.NC:
-        return None
+        return 'NC'
     if regime in (DetailedRegime.D, DetailedRegime.DC):
         return 'D'
     if regime == DetailedRegime.A:

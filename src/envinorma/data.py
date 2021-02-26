@@ -741,10 +741,14 @@ def add_title_default_numbering(text: StructuredText, prefix: str = '', rank: in
     return text
 
 
+def _split_html_in_lines(html: str) -> List[str]:
+    html = html.replace('<br/>', '').replace('>', '>\n').replace('<', '\n<')
+    return [x.strip() for x in html.split('\n')]
+
+
 def _extract_alineas_lines(alinea: EnrichedString) -> List[str]:
     if alinea.table:
-        html = table_to_html(alinea.table)
-        return html.replace('>', '>\n').split('\n')
+        return _split_html_in_lines(table_to_html(alinea.table))
     return alinea.text.split('\n')
 
 

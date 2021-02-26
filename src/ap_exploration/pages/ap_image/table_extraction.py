@@ -186,7 +186,7 @@ def _build_groups(element_to_parent: Dict[int, int]) -> List[List[int]]:
     return list(_revert_dict(element_to_group).values())
 
 
-def _group_elements(elements: List[T], are_neighbors: Callable[[T, T], bool]) -> List[List[T]]:
+def group_by_proximity(elements: List[T], are_neighbors: Callable[[T, T], bool]) -> List[List[T]]:
     if not elements:
         return []
     element_to_group: Dict[int, int] = {}
@@ -216,7 +216,7 @@ def _mean(ints: List[int]) -> int:
 
 
 def _group_ints(ints: List[int]) -> List[int]:
-    groups = _group_elements(ints, _are_close)
+    groups = group_by_proximity(ints, _are_close)
     return [int(_mean(group)) for group in groups]
 
 
@@ -320,7 +320,7 @@ def _hide_tables(image: np.ndarray, tables: List[LocatedTable]) -> np.ndarray:
 
 def extract_and_remove_tables(image: np.ndarray) -> Tuple[np.ndarray, List[LocatedTable]]:
     cells = _extract_cells(image)
-    grouped_cells = _group_elements(cells, _are_neighbor)
+    grouped_cells = group_by_proximity(cells, _are_neighbor)
     tables = [_build_table(group) for group in grouped_cells]
     return _hide_tables(image, tables), tables
 
