@@ -1,6 +1,7 @@
 from datetime import datetime
 
 from envinorma.back_office.generate_final_am import apply_parametrization
+from envinorma.back_office.utils import ID_TO_AM_MD
 from envinorma.data import ArreteMinisteriel, Cell, EnrichedString, Row, StructuredText, Table
 from envinorma.parametrization import (
     AlternativeSection,
@@ -173,7 +174,7 @@ _STRUCTURED_AM = ArreteMinisteriel(
 
 
 def test_apply_parametrization():
-    res = apply_parametrization('FACE_CID', _STRUCTURED_AM, _PARAMETRIZATION)
+    res = apply_parametrization('FACE_CID', _STRUCTURED_AM, _PARAMETRIZATION, ID_TO_AM_MD['FAKE_CID'])
     assert res and len(res) == 4
 
 

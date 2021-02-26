@@ -2,6 +2,7 @@ import json
 import random
 import string
 import traceback
+from datetime import datetime
 from enum import Enum
 from typing import Dict, List, Optional, TypeVar, Union
 
@@ -54,3 +55,11 @@ def ensure_not_none(candidate: Optional[T]) -> T:
     if not candidate:
         raise ValueError('Expecting non None argument')
     return candidate
+
+
+def date_to_str(date: datetime) -> str:
+    return date.strftime('%Y-%m-%d')
+
+
+def str_to_date(date_str: str) -> datetime:
+    return datetime.strptime(date_str, '%Y-%m-%d')

@@ -11,6 +11,7 @@ from typing import Any, Dict, List, Optional, Tuple
 
 from envinorma.config import AM_DATA_FOLDER
 from envinorma.topics.patterns import TopicName
+from envinorma.utils import str_to_date
 
 
 class ArticleStatus(Enum):
@@ -91,12 +92,24 @@ class Cell:
     colspan: int
     rowspan: int
 
+    @classmethod
+    def from_dict(cls, dict_: Dict) -> 'Cell':
+        dict_ = dict_.copy()
+        dict_['content'] = EnrichedString.from_dict(dict_['content'])
+        return cls(**dict_)
+
 
 @dataclass
 class Row:
     cells: List[Cell]
     is_header: bool
     text_in_inspection_sheet: Optional[str] = None
+
+    @classmethod
+    def from_dict(cls, dict_: Dict) -> 'Row':
+        dict_ = dict_.copy()
+        dict_['cells'] = [Cell.from_dict(cell) for cell in dict_['cells']]
+        return cls(**dict_)
 
 
 @dataclass
@@ -108,7 +121,7 @@ class Table:
 
     @classmethod
     def from_dict(cls, dict_: Dict) -> 'Table':
-        return Table([load_row(row) for row in dict_['rows']])
+        return cls([Row.from_dict(row) for row in dict_['rows']])
 
 
 def count_cells(table: Table) -> int:
@@ -130,7 +143,7 @@ class EnrichedString:
     def from_dict(cls, dict_: Dict[str, Any]) -> 'EnrichedString':
         dict_ = dict_.copy()
         dict_['links'] = [load_link(link) for link in dict_['links']]
-        dict_['table'] = load_table(dict_['table']) if dict_['table'] else None
+        dict_['table'] = Table.from_dict(dict_['table']) if dict_['table'] else None
         return cls(**dict_)
 
     def to_dict(self, dict_: Dict[str, Any]) -> Dict[str, Any]:
@@ -236,6 +249,12 @@ class StructuredText:
 class DateCriterion:
     left_date: Optional[str]
     right_date: Optional[str]
+
+    def __post_init__(self) -> None:
+        if self.left_date:
+            str_to_date(self.left_date)
+        if self.right_date:
+            str_to_date(self.right_date)
 
     @classmethod
     def from_dict(cls, dict_: Dict[str, Any]) -> 'DateCriterion':
@@ -392,18 +411,6 @@ class ArreteMinisteriel:
 
 def load_link(dict_: Dict[str, Any]) -> Link:
     return Link(dict_['target'], dict_['position'], dict_['content_size'])
-
-
-def load_cell(dict_: Dict[str, Any]) -> Cell:
-    return Cell(EnrichedString.from_dict(dict_['content']), dict_['colspan'], dict_['rowspan'])
-
-
-def load_row(dict_: Dict[str, Any]) -> Row:
-    return Row([load_cell(cell) for cell in dict_['cells']], dict_['is_header'])
-
-
-def load_table(dict_: Dict[str, Any]) -> Table:
-    return Table.from_dict(dict_)
 
 
 def load_legifrance_article(dict_: Dict[str, Any]) -> LegifranceArticle:

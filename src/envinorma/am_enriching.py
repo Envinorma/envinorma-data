@@ -170,9 +170,9 @@ def _extract_annexe_prefix(title: str) -> Optional[str]:
 
 
 def _extract_special_prefix(title: str) -> Optional[str]:
-    if title.lower()[:7] == 'article':
+    if title.lower().startswith('article'):
         return _extract_article_prefix(title)
-    if title.lower()[:6] == 'annexe':
+    if title.lower().startswith('annexe'):
         return _extract_annexe_prefix(title)
     return None
 
@@ -210,40 +210,65 @@ def _are_consecutive_verbose_numbering(str_1: str, str_2: str) -> bool:
 def _is_prefix(candidate: Optional[str], long_word: Optional[str]) -> bool:
     if not candidate or not long_word:
         return False
+    if candidate.lower().startswith('annexe') and long_word.lower().startswith('annexe'):
+        return True
     candidate_strip = candidate.replace(' ', '')
     long_word_strip = long_word.replace(' ', '')
     return _are_consecutive_verbose_numbering(candidate_strip, long_word_strip)
 
 
 _PREFIX_SEPARATOR = ' '
+_ANNEXE_OR_ARTICLE = ('annexe', 'article')
 
 
-def _merge_prefix_list(prefixes: List[Optional[str]]) -> str:
-    if len(prefixes) == 0:
-        raise ValueError('should have at least one prefix')
+def _annexe_or_article(title: str) -> bool:
+    for prefix in _ANNEXE_OR_ARTICLE:
+        if title.lower().startswith(prefix):
+            return True
+    return False
+
+
+def _cut_before_annexe_or_article(titles: List[str]) -> List[str]:
+    for i, title in enumerate(titles):
+        if _annexe_or_article(title):
+            return titles[i:]
+    return []
+
+
+def _remove_empty(elements: List[str]) -> List[str]:
+    return [el for el in elements if el]
+
+
+def _merge_prefixes(prefixes: List[Optional[str]]) -> str:
     if len(prefixes) == 1:
-        return prefixes[0] or '?'
+        return prefixes[0] or ''
     if _is_prefix(prefixes[0], prefixes[1]):
-        return _merge_prefix_list(prefixes[1:])
-    return (prefixes[0] or '?') + _PREFIX_SEPARATOR + _merge_prefix_list(prefixes[1:])
+        return _merge_prefixes(prefixes[1:])
+    to_merge = _remove_empty([prefixes[0] or '', _merge_prefixes(prefixes[1:])])
+    return _PREFIX_SEPARATOR.join(to_merge)
 
 
-def add_references_in_section(section: StructuredText, previous_prefixes: List[Optional[str]]) -> StructuredText:
-    result = copy(section)
-    del section
-    if previous_prefixes or result.lf_id:
-        prefixes = previous_prefixes + [_extract_prefix(result.title.text)]
-        result.reference_str = _merge_prefix_list(prefixes)
-    else:
-        prefixes = []
-    result.sections = [add_references_in_section(subsection, prefixes) for subsection in result.sections]
-    return result
+def _merge_titles(titles: List[str]) -> str:
+    if len(titles) == 0:
+        raise ValueError('should have at least one prefix')
+    filtered_titles = _cut_before_annexe_or_article(titles)
+    if len(filtered_titles) == 0:
+        return ''
+    prefixes = [_extract_prefix(title) for title in filtered_titles]
+    return _merge_prefixes(prefixes)
+
+
+def _add_references_in_section(text: StructuredText, titles: List[str]) -> StructuredText:
+    titles = titles + [text.title.text]
+    return replace(
+        text,
+        reference_str=_merge_titles(titles),
+        sections=[_add_references_in_section(section, titles) for section in text.sections],
+    )
 
 
 def add_references(am: ArreteMinisteriel) -> ArreteMinisteriel:
-    result = copy(am)
-    result.sections = [add_references_in_section(section, []) for section in am.sections]
-    return result
+    return replace(am, sections=[_add_references_in_section(section, []) for section in am.sections])
 
 
 def _extract_titles_and_reference_pairs_from_section(text: StructuredText) -> List[Tuple[str, str]]:
@@ -369,13 +394,13 @@ def add_inspection_sheet_in_table_rows(string: EnrichedString) -> EnrichedString
     if not table:
         return string
     headers = _extract_headers(table.rows)
-    table.rows = [
+    new_rows = [
         replace(row, text_in_inspection_sheet=_build_text_for_inspection_sheet(headers, row))
         if not row.is_header
         else row
         for row in table.rows
     ]
-    return replace(string, table=table)
+    return replace(string, table=replace(table, rows=new_rows))
 
 
 def add_table_inspection_sheet_data_in_section(section: StructuredText) -> StructuredText:
@@ -386,9 +411,7 @@ def add_table_inspection_sheet_data_in_section(section: StructuredText) -> Struc
 
 
 def add_table_inspection_sheet_data(am: ArreteMinisteriel) -> ArreteMinisteriel:
-    am = copy(am)
-    am.sections = [add_table_inspection_sheet_data_in_section(subsection) for subsection in am.sections]
-    return am
+    return replace(am, sections=[add_table_inspection_sheet_data_in_section(subsection) for subsection in am.sections])
 
 
 def _remove_html(str_: str) -> str:

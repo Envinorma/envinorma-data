@@ -2,6 +2,7 @@
 Script for generating csv of classements
 '''
 
+import os
 from datetime import date
 from enum import Enum
 from typing import Any, Dict, List, Optional, Tuple
@@ -165,9 +166,12 @@ def load_all_classements() -> List[DetailedClassement]:
     return _check_output([_make_safe(record) for record in unfiltered_records])
 
 
-def _extract_regime(regime: Optional[DetailedRegime]) -> Optional[str]:
+_UNKNOWN_REGIME = 'unknown'
+
+
+def _extract_regime(regime: Optional[DetailedRegime]) -> str:
     if not regime:
-        return None
+        return _UNKNOWN_REGIME
     if regime == DetailedRegime.NC:
         return 'NC'
     if regime in (DetailedRegime.D, DetailedRegime.DC):
@@ -176,7 +180,7 @@ def _extract_regime(regime: Optional[DetailedRegime]) -> Optional[str]:
         return 'A'
     if regime == DetailedRegime.E:
         return 'E'
-    return None
+    return _UNKNOWN_REGIME
 
 
 def _classement_to_row(classement: DetailedClassement) -> Tuple:
@@ -217,13 +221,15 @@ def _build_dataframe(classements: List[DetailedClassement]) -> pandas.DataFrame:
     return pandas.DataFrame(rows, columns=keys).drop_duplicates()
 
 
-def dump_all_active_classements() -> None:
+def dump_all_active_classements(output_filename: str) -> None:
     classements = load_all_classements()
     idf_ids = load_idf_installation_ids()
     active_classements = [cl for cl in classements if cl.s3ic_id in idf_ids and cl.state == State.EN_FONCTIONNEMENT]
     dataframe = _build_dataframe(active_classements)
-    dataframe.to_csv('classements.csv')
+    dataframe.to_csv(output_filename)
 
 
 if __name__ == '__main__':
-    dump_all_active_classements()
+    _OUTPUT_FOLDER = '/Users/remidelbouys/EnviNorma/envinorma-web/db/seeds'
+    _FILENAME = 'classements_idf.csv'
+    dump_all_active_classements(os.path.join(_OUTPUT_FOLDER, _FILENAME))

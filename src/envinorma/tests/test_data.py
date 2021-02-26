@@ -72,7 +72,7 @@ def test_arrete_ministeriel():
         [_NODE_SECTION],
         [_ENRICHED_STRING_LINKS],
         'short_title',
-        DateCriterion('2020/07/23', '2021/07/23'),
+        DateCriterion('2020-07-23', '2021-07-23'),
         'aida',
         'legifrance',
         classements=[Classement('1510', Regime.A, 'al')],

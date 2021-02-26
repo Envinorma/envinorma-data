@@ -38,6 +38,7 @@ from envinorma.parametrization.conditions import (
     is_satisfied,
 )
 from envinorma.structure.texts_properties import compute_am_signatures
+from envinorma.utils import date_to_str
 
 
 def _extract_section_titles(am: Union[StructuredText, ArreteMinisteriel], path: List[int]) -> Dict[int, str]:
@@ -227,10 +228,6 @@ def _compute_whole_text_applicability(
     return False, description
 
 
-def _date_to_str(date: datetime) -> str:
-    return date.strftime('%Y-%m-%d')
-
-
 def _extract_installation_date_criterion(
     parametrization: Parametrization, parameter_values: Dict[Parameter, Any]
 ) -> Optional[DateCriterion]:
@@ -241,11 +238,11 @@ def _extract_installation_date_criterion(
         return None
     value = parameter_values[ParameterEnum.DATE_INSTALLATION.value]
     if value < targets[0]:
-        return DateCriterion(None, _date_to_str(targets[0]))
+        return DateCriterion(None, date_to_str(targets[0]))
     for date_before, date_after in zip(targets, targets[1:]):
         if value < date_after:
-            return DateCriterion(_date_to_str(date_before), _date_to_str(date_after))
-    return DateCriterion(_date_to_str(targets[-1]), None)
+            return DateCriterion(date_to_str(date_before), date_to_str(date_after))
+    return DateCriterion(date_to_str(targets[-1]), None)
 
 
 def _date_not_in_parametrization(parametrization: Parametrization) -> bool:

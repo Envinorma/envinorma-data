@@ -1,12 +1,15 @@
 import json
+from typing import List
 
 import pytest
 from envinorma.am_enriching import (
+    _extract_prefix,
     _extract_special_prefix,
     _extract_summary_elements,
     _is_prefix,
     _is_probably_section_number,
-    _merge_prefix_list,
+    _merge_prefixes,
+    _merge_titles,
     _remove_html,
     _remove_last_word,
     _shorten_summary_text,
@@ -20,7 +23,7 @@ from envinorma.am_enriching import (
     remove_sections,
 )
 from envinorma.config import AM_DATA_FOLDER
-from envinorma.data import ArreteMinisteriel, Cell, EnrichedString, Hyperlink, Link, Row, StructuredText, Table
+from envinorma.data import ArreteMinisteriel, Cell, EnrichedString, Hyperlink, Link, Row, StructuredText, Table, estr
 from envinorma.topics.patterns import TopicName
 
 
@@ -58,6 +61,14 @@ def test_extract_special_prefix():
     assert _extract_special_prefix('Bonjour') is None
 
 
+def test_extract_prefix():
+    assert _extract_prefix('Article 9') == 'Art. 9'
+    assert _extract_prefix('Article 9.3') == 'Art. 9.3'
+    assert _extract_prefix('9.3. Pollution') == '9.3.'
+    assert _extract_prefix('9. 3. Pollution') == '9.3.'
+    assert _extract_prefix('Dispositions') is None
+
+
 def test_is_probably_section_number():
     assert _is_probably_section_number('I.')
     assert _is_probably_section_number('1.1.')
@@ -79,28 +90,142 @@ def test_is_prefix():
 
 
 def test_merge_prefix_list():
-    assert _merge_prefix_list(['1.', '2.', '3.', '4.']) == '1. 2. 3. 4.'
-    assert _merge_prefix_list(['1.', '1.1.', '1.1.1.']) == '1.1.1.'
-    assert _merge_prefix_list(['Art. 1.', '2.', '2. 1.']) == 'Art. 1. 2. 1.'
-    assert _merge_prefix_list(['Section II', 'Chapitre 4', 'Art. 10']) == 'Section II Chapitre 4 Art. 10'
+    assert _merge_prefixes(['1.', '2.', '3.', '4.']) == '1. 2. 3. 4.'
+    assert _merge_prefixes(['1.', '1.1.', '1.1.1.']) == '1.1.1.'
+    assert _merge_prefixes(['Art. 1.', '2.', '2. 1.']) == 'Art. 1. 2. 1.'
+    assert _merge_prefixes(['Annexe II', 'a)']) == 'Annexe II a)'
+    assert _merge_prefixes(['Section II', 'Chapitre 4', 'Art. 10']) == 'Section II Chapitre 4 Art. 10'
+
+
+def test_merge_titles():
+    tuples = [
+        (
+            [
+                'TITRE III : RÉSERVOIRS DE STOCKAGE ET POSTES DE CHARGEMENT/DÉCHARGEMENT',
+                'Chapitre Ier : Réservoirs et équipements associés.',
+                'Article 4',
+            ],
+            'Art. 4',
+        ),
+        (
+            ["Chapitre III : Emissions dans l'eau", 'Section 3 : Collecte et rejet des effluents', 'Article 29'],
+            'Art. 29',
+        ),
+        (
+            [
+                "Annexe II - ANNEXE À L'ARRÊTÉ DU 29 MAI 2000 AUX PRESCRIPTIONS GÉNÉRALES APPLIC"
+                "ABLES AUX INSTALLATIONS CLASSÉES POUR LA PROTECTION DE L'ENVIRONNEMENT"
+                " SOUMISES À DÉCLARATION SOUS LA RUBRIQUE N° 2925"
+            ],
+            'Annexe II',
+        ),
+        (
+            [
+                'Chapitre II : Prévention des accidents et des pollutions',
+                'Section 2 : Dispositions constructives',
+                'Article 12',
+                'I. ― Accessibilité :',
+            ],
+            'Art. 12 I.',
+        ),
+        (["Chapitre III : Prélèvement et consommation d'eau.", 'Article 21'], 'Art. 21'),
+        (['Article 4'], 'Art. 4'),
+        (['Annexes', 'Annexe I', '4. Risques', '4.1. Localisation des risques'], 'Annexe I 4.1.'),
+        (
+            [
+                'Titre II : PRÉVENTION DE LA POLLUTION ATMOSPHÉRIQUE',
+                "Chapitre V : Surveillance des rejets atmosphériques et de l'impact sur l'environnement",
+                'Section 3 : Conditions de respect des valeurs limites',
+            ],
+            '',
+        ),
+        (
+            [
+                'Annexe I : Prescriptions générales applicables aux installations classées pour la protection de l’environnement soumises à déclaration sous la rubrique n° 2560',
+                '2.Implantation - aménagement',
+                '2.4.Comportement au feu des locaux',
+                '2.4.4.Désenfumage',
+            ],
+            'Annexe I',
+        ),
+        (
+            [
+                'Annexe I : Prescriptions générales applicables et faisant l’objet du contrôle périodique applicables aux installations classées soumises à déclaration sous la rubrique n°2930',
+                '1. Dispositions générales',
+                "1.7. Cessation d'activité",
+            ],
+            'Annexe I 1.7.',
+        ),
+        (["Chapitre IV : Émissions dans l'eau et les sols"], ''),
+        (
+            [
+                'Annexes',
+                'Annexe I',
+                '2. Implantation aménagement',
+                '2.4. Comportement au feu des bâtiments',
+                '2.4.1. Réaction au feu',
+            ],
+            'Annexe I 2.4.1.',
+        ),
+        (
+            ['Annexe', '1. Dispositions générales', "1.5. Déclaration d'accident ou de pollution accidentelle"],
+            'Annexe 1.5.',
+        ),
+        (['Annexes'], 'Annexe'),
+        (
+            [
+                'Annexes',
+                'Annexe I - PRESCRIPTIONS GÉNÉRALES APPLICABLES AUX INSTALLATIONS CLASSÉES SOUMISES À DÉCLARATION SOUS LA RUBRIQUE N° 2921',
+                '8. Bruit et vibrations',
+                '8.3. Vibrations',
+            ],
+            'Annexe I 8.3.',
+        ),
+        (["TITRE VIII : RISQUES INDUSTRIELS LORS D'UN DYSFONCTIONNEMENT DE L'INSTALLATION.", 'Article 50'], 'Art. 50'),
+        (
+            ['Chapitre VII : Bruit et vibrations', 'Article 7.3 - Vibrations.', '7.3.2. Sources impulsionnelles :'],
+            'Art. 7.3 7.3.2.',
+        ),
+        (['Annexe I', '7. Déchets'], 'Annexe I 7.'),
+        (
+            [
+                'Annexes',
+                "Annexe II - PRESCRIPTIONS GÉNÉRALES APPLICABLES AUX INSTALLATIONS CLASSÉES POUR LA PROTECTION DE L'ENVIRONNEMENT SOUMISES À LA RUBRIQUE 1510",
+                '1. Dispositions générales',
+                '1.8. Dispositions générales pour les installations soumises à déclaration',
+                '1.8.3. Contenu de la déclaration',
+            ],
+            'Annexe II 1.8.3.',
+        ),
+        (['Article 4'], 'Art. 4'),
+        (
+            [
+                'Annexe I : Prescriptions générales et faisant l’objet du contrôle périodique applicables aux installations classées soumises à déclaration sous la rubrique 2940',
+                '5. Eau',
+                '5.6 . Interdiction des rejets en nappe',
+            ],
+            'Annexe I 5.',
+        ),
+    ]
+    for titles, expected in tuples:
+        assert _merge_titles(titles) == expected
 
 
 def test_add_references():
     sub_sub_sections = [
-        StructuredText(EnrichedString('1.1. azeaze'), [], [], None, None),
-        StructuredText(EnrichedString('1. 2. azeaze'), [], [], None, None),
+        StructuredText(estr('1.1. azeaze'), [], [], None, None),
+        StructuredText(estr('1. 2. azeaze'), [], [], None, None),
     ]
-    sub_sections = [StructuredText(EnrichedString('1. azeaze'), [], sub_sub_sections, None, None)]
-    lf_article_id = 'article_id'
+    sub_sections = [StructuredText(estr('1. azeaze'), [], sub_sub_sections, None, None)]
     sections = [
-        StructuredText(EnrichedString('Article 1. efzefz'), [], sub_sections, None, lf_article_id),
-        StructuredText(EnrichedString('2. zefez'), [], [], None, lf_article_id),
-        StructuredText(EnrichedString('A. zefze'), [], [], None, lf_article_id),
-        StructuredText(EnrichedString('a) zefze'), [], [], None, lf_article_id),
-        StructuredText(EnrichedString('V. zefze'), [], [], None, lf_article_id),
-        StructuredText(EnrichedString('ANNEXE I zefze'), [], [], None, lf_article_id),
-        StructuredText(EnrichedString('Article 18.1'), [], [], None, lf_article_id),
-        StructuredText(EnrichedString('Article 1'), [], [], None, lf_article_id),
+        StructuredText(estr('Article 1. efzefz'), [], sub_sections, None),
+        StructuredText(estr('2. zefez'), [], [], None),
+        StructuredText(estr('A. zefze'), [], [], None),
+        StructuredText(estr('a) zefze'), [], [], None),
+        StructuredText(estr('V. zefze'), [], [], None),
+        StructuredText(estr('ANNEXE I zefze'), [], [], None),
+        StructuredText(estr('Article 18.1'), [], [], None),
+        StructuredText(estr('Article 1'), [], [], None),
     ]
     am = ArreteMinisteriel(EnrichedString(''), sections, [], '', id='FAKE_ID')
     am_with_references = add_references(am)
@@ -109,10 +234,10 @@ def test_add_references():
     assert am_with_references.sections[0].sections[0].reference_str == 'Art. 1. 1.'
     assert am_with_references.sections[0].sections[0].sections[0].reference_str == 'Art. 1. 1.1.'
     assert am_with_references.sections[0].sections[0].sections[1].reference_str == 'Art. 1. 1.2.'
-    assert am_with_references.sections[1].reference_str == '2.'
-    assert am_with_references.sections[2].reference_str == 'A.'
-    assert am_with_references.sections[3].reference_str == 'a)'
-    assert am_with_references.sections[4].reference_str == 'V.'
+    assert am_with_references.sections[1].reference_str == ''
+    assert am_with_references.sections[2].reference_str == ''
+    assert am_with_references.sections[3].reference_str == ''
+    assert am_with_references.sections[4].reference_str == ''
     assert am_with_references.sections[5].reference_str == 'Annexe I'
     assert am_with_references.sections[6].reference_str == 'Art. 18.1'
     assert am_with_references.sections[7].reference_str == 'Art. 1'
@@ -220,7 +345,7 @@ def test_add_references_2():
         ('Article 59', 'Art. 59'),
         ('Chapitre IX : Exécution', ''),
         ('Article 60', 'Art. 60'),
-        ('Annexes', ''),
+        ('Annexes', 'Annexe'),
         ('Article Annexe I', 'Annexe I'),
         ('1. Définitions.', 'Annexe I 1.'),
         ('1.1. Niveau de pression acoustique continu équivalent pondéré A " court ", LAeq, t.', 'Annexe I 1.1.'),
