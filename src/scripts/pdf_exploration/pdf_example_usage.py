@@ -1,3 +1,8 @@
+'''
+Possible entry point for processing copiable pdf
+'''
+
+
 from typing import Optional
 
 from envinorma.io.markdown import extract_markdown_text

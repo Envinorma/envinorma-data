@@ -29,7 +29,7 @@ def _load_data() -> List[Tuple[List[AltoPage], List[LocatedTable]]]:
 
 
 _DATA = _load_data()[:100]
-_GROUPS = [_find_main_title(pages) for pages, _ in tqdm(_DATA)]
+_GROUPS = [_find_main_title(pages) for pages, _ in tqdm(_DATA, 'Finding main titles')]
 
 
 def _draw_box(box: Box, sizer: Sizer) -> Component:
@@ -62,7 +62,7 @@ def _comp(id_: str, page: AltoPage, boxes: List[Box]) -> Component:
 
 
 def _component() -> Component:
-    return html.Div([_comp(id_, page, boxes) for id_, (page, boxes) in zip(_DOC_IDS, _GROUPS)])
+    return html.Div([_comp(id_, page, boxes) for id_, (page, boxes, _) in zip(_DOC_IDS, _GROUPS)])
 
 
 def _add_callbacks(app: dash.Dash) -> None:

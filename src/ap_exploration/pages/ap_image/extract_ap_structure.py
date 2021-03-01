@@ -1,14 +1,13 @@
-from dataclasses import dataclass
-from scipy.spatial import Rectangle
-
 import os
 import string
+from dataclasses import dataclass
 from typing import Callable, List, Optional, Tuple, TypeVar, Union
 
 from ap_exploration.pages.ap_image.process import load_pages_and_tables
 from ap_exploration.pages.ap_image.table_extraction import LocatedTable, group_by_proximity
 from envinorma.config import config
 from envinorma.io.alto import AltoPage, AltoString, AltoTextLine, extract_lines
+from scipy.spatial import Rectangle
 from textdistance import levenshtein
 from tqdm import tqdm
 from unidecode import unidecode
@@ -44,7 +43,7 @@ def _is_arrete_line(line: AltoTextLine, page_rank: int, page_height: float, page
     if not _is_in_the_center(line, page_width):
         return False
     strings = _extract_strings(line)
-    clean_words = _keep_alphanumeric(_ensure_str(unidecode(''.join(strings)).lower()))
+    clean_words = _keep_alphanumeric(_lower_unicode(''.join(strings)))
     if clean_words == 'arrete':
         if page_rank != 0:
             return True
@@ -109,14 +108,19 @@ def _extract_strings(line: AltoTextLine) -> List[str]:
     return [x.content for x in line.strings if isinstance(x, AltoString)]
 
 
+def _is_levenshtein_close(word: str, distance: int, target_words: List[str]) -> bool:
+    word = _lower_unicode(word)
+    for cd in target_words:
+        if levenshtein(word, cd) <= distance:
+            return True
+    return False
+
+
 _ENVIRONMENT_STRS = ['environnement', 'l\'environnement']
 
 
 def _is_environnement(str_: str) -> bool:
-    for cd in _ENVIRONMENT_STRS:
-        if levenshtein(str_.lower(), cd) <= 2:
-            return True
-    return False
+    return _is_levenshtein_close(str_, 2, _ENVIRONMENT_STRS)
 
 
 def _is_first_visa_line(line: AltoTextLine) -> bool:
@@ -124,15 +128,12 @@ def _is_first_visa_line(line: AltoTextLine) -> bool:
     before_environment = _keep_before_match(strings, _is_environnement)
     if before_environment is None:
         return False
-    merged = _ensure_str(unidecode(''.join(before_environment)).lower())
+    merged = _lower_unicode(''.join(before_environment))
     return levenshtein(_keep_alphanumeric(merged), 'vulecodedelenvironnement') <= 4
 
 
 def _is_ordre(str_: str) -> bool:
-    for word in ('ordre', 'l\'ordre'):
-        if levenshtein(unidecode(str_).lower(), word) <= 2:
-            return True
-    return False
+    return _is_levenshtein_close(str_, 2, ['ordre', 'l\'ordre'])
 
 
 def _is_last_intro_line(line: AltoTextLine) -> bool:
@@ -140,7 +141,7 @@ def _is_last_intro_line(line: AltoTextLine) -> bool:
     after_ordre = _keep_after_match(strings, _is_ordre)
     if after_ordre is None:
         return False
-    merged = _ensure_str(unidecode(''.join(after_ordre)).lower())
+    merged = _lower_unicode(''.join(after_ordre))
     return levenshtein(_keep_alphanumeric(merged), 'ordrenationaldumerite') <= 4
 
 
@@ -191,7 +192,116 @@ def _bounding_box(strings: List[AltoString]) -> Box:
     )
 
 
-def _find_main_title(pages: List[AltoPage]) -> Tuple[AltoPage, List[Box]]:
+def _extract_sentence(group: List[AltoString]) -> str:
+    return ' '.join([x.content for x in group])
+
+
+@dataclass
+class APIntro:
+    title: List[str]
+    marianne: List[str]
+    prefet: List[str]
+    bureau: List[str]
+    visa: List[str]
+    other: List[str]
+
+
+_TITLE_WORDS = [
+    'arrete prefectoral',
+    'prescriptions relatives',
+    'autorisation d\'exploitation',
+    'portant',
+    'arrete complementaire',
+    'prescriptions complementaires',
+    'autorisant',
+    'imposant des prescriptions',
+    'modifiant le',
+]
+
+
+def _is_title(group: List[str]) -> bool:
+    str_ = _lower_unicode(' '.join(group))
+    return any([word in str_ for word in _TITLE_WORDS])
+
+
+_BUREAU_WORDS = [
+    'direction regionale',
+    'direction departementale',
+    'direction des actions',
+    'direction des collectivites',
+    'service des procedures',
+    'bureau de l\'urbanisme',
+    'direction des libertes',
+    'direction de la coordination',
+    'bureau de l\'environnement',
+    'bureau des politiques',
+    'direction de l\'environnement',
+    'direction de',
+    'bureau de',
+]
+
+
+def _lower_unicode(str_: str) -> str:
+    return _ensure_str(unidecode(str_).lower())
+
+
+def _is_bureau(group: List[str]) -> bool:
+    str_ = _lower_unicode(' '.join(group))
+    return any([word in str_ for word in _BUREAU_WORDS])
+
+
+_MARIANNE_WORDS = ['liberte', 'egalite', 'fraternite', 'republique', 'francaise']
+
+
+def _is_marianne(group: List[str]) -> bool:
+    return sum([_is_levenshtein_close(word, 2, _MARIANNE_WORDS) for word in group]) >= 2
+
+
+_PREFET_WORDS = ['prefet de', 'prefete de', 'prefecture de', 'le prefet', 'la prefete']
+
+
+def _is_prefet(group: List[str]) -> bool:
+    sentence = _lower_unicode(' '.join(group))
+    return any([sentence.startswith(word) for word in _PREFET_WORDS]) or _is_levenshtein_close(group[0], 2, ['prefet'])
+
+
+_VISA_WORDS = [
+    'la directive',
+    'vu la directive',
+    'vu les',
+    'vu la',
+    'vu',
+    'l\'arrete ministeriel',
+    'l\'instruction technique',
+]
+
+
+def _is_visa(group: List[str]) -> bool:
+    sentence = _lower_unicode(' '.join(group))
+    return any([sentence.startswith(word) for word in _VISA_WORDS])
+
+
+def _classify(groups: List[List[AltoString]]) -> APIntro:
+    strings = [[x.content for x in xs] for xs in groups]
+    res = APIntro([], [], [], [], [], [])
+    for group in strings:
+        sentence = ' '.join(group)
+        if _is_title(group):
+            res.title.append(sentence)
+        elif _is_marianne(group):
+            res.marianne.append(sentence)
+        elif _is_prefet(group):
+            res.prefet.append(sentence)
+        elif _is_bureau(group):
+            res.bureau.append(sentence)
+        elif _is_visa(group):
+            res.visa.append(sentence)
+        else:
+            res.other.append(sentence)
+    return res
+
+
+def _find_main_title(pages: List[AltoPage]) -> Tuple[AltoPage, List[Box], APIntro]:
     if not pages:
         raise ValueError('Expecting at least one page.')
     intro_lines = _extract_intro_lines(pages[0])
@@ -199,13 +309,14 @@ def _find_main_title(pages: List[AltoPage]) -> Tuple[AltoPage, List[Box]]:
         [str_ for line in intro_lines for str_ in line.strings if isinstance(str_, AltoString)]
     )
     bounding_boxes = [_bounding_box(group) for group in groups]
-    return pages[0], bounding_boxes
+    # sentences = [_extract_sentence(group) for group in groups]
+    return pages[0], bounding_boxes, _classify(groups)
     # return '\n'.join([' '.join(_extract_strings(line)) for line in intro_lines])
 
 
 if __name__ == '__main__':
-    import random
     import pickle
+    import random
 
     _PDF_AP_FOLDER = config.storage.ap_data_folder
     _DOC_IDS = [os.path.join(_PDF_AP_FOLDER, x) for x in os.listdir(_PDF_AP_FOLDER) if x.endswith('.pdf')][:110]
@@ -219,3 +330,12 @@ if __name__ == '__main__':
 
     res = [_find_main_title(pages) for pages, _ in tqdm(pages_and_tables)]
     all_str = [(doc_id.split('/')[-1], strs) for doc_id, strs in zip(_DOC_IDS, res)]
+    filename, (_, _, intro) = random.choice(all_str)
+    for _, _, intro in res:
+        print('\n\t'.join(intro.other))
+    print('TITLE\n\t', '\n\t'.join(intro.title))
+    print('MARIANNE\n\t', '\n\t'.join(intro.marianne))
+    print('PREFET\n\t', '\n\t'.join(intro.prefet))
+    print('BUREAU\n\t', '\n\t'.join(intro.bureau))
+    print('VISA\n\t', '\n\t'.join(intro.visa))
+    print('OTHER\n\t', '\n\t'.join(intro.other))
