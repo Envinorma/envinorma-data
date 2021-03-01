@@ -5,12 +5,13 @@ from typing import List, Optional, Set, Tuple
 import dash_bootstrap_components as dbc
 import dash_core_components as dcc
 import dash_html_components as html
+from dash import Dash
 from dash.dependencies import ALL, Input, Output, State
 from dash.development.base_component import Component
 from dash.exceptions import PreventUpdate
-from envinorma.back_office.app_init import app
 from envinorma.back_office.components import error_component
 from envinorma.back_office.components.diff import diff_component
+from envinorma.back_office.routing import Page
 from envinorma.back_office.utils import compute_am_diff, extract_legifrance_am
 from legifrance.legifrance_API import LegifranceRequestError
 
@@ -101,26 +102,27 @@ def _safe_handle_submit(am_id: Optional[str], date_before: Optional[str], date_a
     return _diff(am_id, _extract_date(date_before), _extract_date(date_after))
 
 
-@app.callback(
-    Output(_FORM_OUTPUT, 'children'),
-    Output(_DIFF, 'children'),
-    Input(_SUBMIT, 'n_clicks'),
-    State(_AM_ID, 'value'),
-    State(_DATE_BEFORE, 'date'),
-    State(_DATE_AFTER, 'date'),
-)
-def _handle_sumbit(n_clicks, am_id, date_before, date_after) -> Tuple[Component, Component]:
-    if not n_clicks:
-        if not (am_id and date_before and date_after):  # parameters defined in URL
-            raise PreventUpdate
-    try:
-        return html.Div(), _safe_handle_submit(am_id, date_before, date_after)
-    except _FormError as exc:
-        return error_component(f'Erreur dans le formulaire: {str(exc)}'), html.Div()
-    except LegifranceRequestError as exc:
-        return error_component(f'Erreur dans l\'API Légifrance: {str(exc)}'), html.Div()
-    except Exception:
-        return error_component(f'Erreur inattendue:\n{traceback.format_exc()}'), html.Div()
+def _callbacks(app: Dash) -> None:
+    @app.callback(
+        Output(_FORM_OUTPUT, 'children'),
+        Output(_DIFF, 'children'),
+        Input(_SUBMIT, 'n_clicks'),
+        State(_AM_ID, 'value'),
+        State(_DATE_BEFORE, 'date'),
+        State(_DATE_AFTER, 'date'),
+    )
+    def _handle_sumbit(n_clicks, am_id, date_before, date_after) -> Tuple[Component, Component]:
+        if not n_clicks:
+            if not (am_id and date_before and date_after):  # parameters defined in URL
+                raise PreventUpdate
+        try:
+            return html.Div(), _safe_handle_submit(am_id, date_before, date_after)
+        except _FormError as exc:
+            return error_component(f'Erreur dans le formulaire: {str(exc)}'), html.Div()
+        except LegifranceRequestError as exc:
+            return error_component(f'Erreur dans l\'API Légifrance: {str(exc)}'), html.Div()
+        except Exception:
+            return error_component(f'Erreur inattendue:\n{traceback.format_exc()}'), html.Div()
 
 
 def layout(
@@ -133,3 +135,6 @@ def layout(
             dbc.Spinner(html.Div(id=_DIFF)),
         ]
     )
+
+
+PAGE = Page(layout, _callbacks)

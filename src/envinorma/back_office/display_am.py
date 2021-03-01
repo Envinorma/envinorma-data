@@ -5,16 +5,17 @@ from typing import Any, Counter, Dict, List, Optional, Set, Tuple
 import dash_bootstrap_components as dbc
 import dash_core_components as dcc
 import dash_html_components as html
+from dash import Dash
 from dash.dependencies import ALL, MATCH, Input, Output, State
 from dash.development.base_component import Component
 from dash.exceptions import PreventUpdate
 from envinorma.am_enriching import detect_and_add_topics
 from envinorma.back_office import am_compare
-from envinorma.back_office.app_init import app
 from envinorma.back_office.components import error_component
 from envinorma.back_office.components.parametric_am import parametric_am_callbacks, parametric_am_component
 from envinorma.back_office.fetch_data import load_initial_am, load_parametrization, load_structured_am
-from envinorma.back_office.utils import ID_TO_AM_MD
+from envinorma.back_office.routing import Page
+from envinorma.back_office.utils import ID_TO_AM_MD, get_current_user
 from envinorma.data import ArreteMinisteriel, Regime, StructuredText, add_metadata, random_id
 from envinorma.parametrization import Parameter, ParameterEnum, ParameterType, Parametrization
 from envinorma.parametrization.parametric_am import (
@@ -178,11 +179,28 @@ def _diff_component(am_id: str) -> Component:
     )
 
 
+def _edit_component(am: ArreteMinisteriel) -> Component:
+    alert = (
+        dbc.Alert('Cet arrêté peut être modifié, restructuré ou paramétré par toute personne.')
+        if not get_current_user().is_authenticated
+        else html.Div()
+    )
+    return html.Div(
+        [
+            html.H2('Éditer'),
+            alert,
+            dcc.Link(dbc.Button('Éditer', color='success'), href=f'/edit_am/{am.id}'),
+        ]
+    )
+
+
 def _parametrization_and_topic(am: ArreteMinisteriel) -> Component:
-    param = html.Div(_parametrization_component(am.id or ''), className='col-3')
-    topic = html.Div(_topic_component(am), className='col-6')
-    diff = html.Div(_diff_component(am.id or ''), className='col-3')
-    return html.Div([param, topic, diff], className='row')
+    columns = [
+        html.Div(_parametrization_component(am.id or ''), className='col-4'),
+        html.Div(_diff_component(am.id or ''), className='col-4'),
+        html.Div(_edit_component(am), className='col-4'),
+    ]
+    return html.Div(columns, className='row')
 
 
 def _page(am: ArreteMinisteriel) -> Component:
@@ -191,7 +209,6 @@ def _page(am: ArreteMinisteriel) -> Component:
     return html.Div(
         [
             _parametrization_and_topic(am),
-            html.H2('AM'),
             html.Div(_am_component_with_toc(am), style=style),
             dcc.Store(data=am.id or '', id=_AM_ID),
         ]
@@ -202,7 +219,7 @@ def _load_am(am_id: str) -> Optional[ArreteMinisteriel]:
     return load_structured_am(am_id) or load_initial_am(am_id)
 
 
-def layout(am_id: str, compare_with: Optional[str] = None) -> Component:
+def _layout(am_id: str, compare_with: Optional[str] = None) -> Component:
     if compare_with:
         return am_compare.layout(am_id, compare_with)
     if am_id not in ID_TO_AM_MD:
@@ -258,31 +275,34 @@ def _extract_parameter_values(
     return {key: value for key, value in values_with_none.items() if value is not None}
 
 
-@app.callback(
-    Output(_AM, 'children'),
-    Output(_FORM_OUTPUT, 'children'),
-    Input(_SUBMIT, 'n_clicks'),
-    State(_store(ALL), 'data'),
-    State(_input(ALL), 'date'),
-    State(_input(ALL), 'value'),
-    State(_AM_ID, 'data'),
-)
-def _apply_parameters(_, parameter_ids, parameter_dates, parameter_values, am_id):
-    active_topics = None
-    am = _load_am(am_id)
-    if not am:
-        raise PreventUpdate
-    parametrization = load_parametrization(am_id)
-    if not parametrization:
-        raise PreventUpdate
-    try:
-        parameter_values = _extract_parameter_values(parameter_ids, parameter_dates, parameter_values)
-        am = apply_parameter_values_to_am(am, parametrization, parameter_values)
-    except _FormError as exc:
-        return html.Div(), error_component(str(exc))
-    except Exception:
-        return html.Div(), error_component(traceback.format_exc())
-    return _am_component(am, active_topics), html.Div()
+def _callbacks(app: Dash) -> None:
+    @app.callback(
+        Output(_AM, 'children'),
+        Output(_FORM_OUTPUT, 'children'),
+        Input(_SUBMIT, 'n_clicks'),
+        State(_store(ALL), 'data'),
+        State(_input(ALL), 'date'),
+        State(_input(ALL), 'value'),
+        State(_AM_ID, 'data'),
+    )
+    def _apply_parameters(_, parameter_ids, parameter_dates, parameter_values, am_id):
+        active_topics = None
+        am = _load_am(am_id)
+        if not am:
+            raise PreventUpdate
+        parametrization = load_parametrization(am_id)
+        if not parametrization:
+            raise PreventUpdate
+        try:
+            parameter_values = _extract_parameter_values(parameter_ids, parameter_dates, parameter_values)
+            am = apply_parameter_values_to_am(am, parametrization, parameter_values)
+        except _FormError as exc:
+            return html.Div(), error_component(str(exc))
+        except Exception:
+            return html.Div(), error_component(traceback.format_exc())
+        return _am_component(am, active_topics), html.Div()
+
+    parametric_am_callbacks(app, _PREFIX)
 
 
-parametric_am_callbacks(app, _PREFIX)
+PAGE = Page(_layout, _callbacks)

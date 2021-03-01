@@ -1,21 +1,21 @@
 import os
-from collections import Counter
 from typing import Any, Dict, List, Optional, Union
 
 import dash_core_components as dcc
 import dash_html_components as html
 from dash.dependencies import Input, Output
 from dash.development.base_component import Component
-from envinorma.back_office import compare, display_am
-
 from envinorma.back_office.am_page import router as edit_am_page_router
 from envinorma.back_office.app_init import app
-from envinorma.back_office.components import replace_line_breaks
-from envinorma.back_office.fetch_data import load_all_am_statuses
-from envinorma.back_office.routing import Endpoint, route
-from envinorma.back_office.utils import AM_ID_TO_NB_CLASSEMENTS_IDF, ID_TO_AM_MD, AMStatus, split_route
+from envinorma.back_office.compare import PAGE as compare_page
+from envinorma.back_office.display_am import PAGE as display_am_page
+from envinorma.back_office.pages.login import PAGE as login_page
+from envinorma.back_office.pages.logout import PAGE as logout_page
+from envinorma.back_office.pages.index import PAGE as index_page
+from envinorma.back_office.routing import ROUTER, Endpoint, Page
+from envinorma.back_office.utils import UNIQUE_USER, get_current_user, split_route
 from envinorma.config import config
-from envinorma.data import AMMetadata, Classement
+from flask_login import LoginManager
 from werkzeug.exceptions import NotFound
 
 
@@ -30,9 +30,9 @@ def _create_tmp_am_folder():
 _create_tmp_am_folder()
 
 
-def _header_link(content: str, href: str, target: Optional[str] = None) -> Component:
+def _header_link(content: str, href: str, target: Optional[str] = None, hidden: bool = False) -> Component:
     style = {'color': 'grey', 'display': 'inline-block'}
-    return html.Span(html.A(content, href=href, className='nav-link', style=style, target=target))
+    return html.Span(html.A(content, href=href, className='nav-link', style=style, target=target), hidden=hidden)
 
 
 def _get_nav() -> Component:
@@ -42,6 +42,7 @@ def _get_nav() -> Component:
             _header_link('Liste des arrêtés', href='/'),
             _header_link('Guide d\'enrichissement', href=guide_url, target='_blank'),
             _header_link('Historique Légifrance', href='/compare/id/JORFTEXT000034429274/2020-01-20/2021-02-20'),
+            _header_link('Se déconnecter', href=f'/{Endpoint.LOGOUT}', hidden=not get_current_user().is_authenticated),
         ],
         style={'display': 'inline-block'},
     )
@@ -63,170 +64,58 @@ def _get_page_heading() -> Component:
     return html.Div(html.Div([dcc.Link(img, href='/'), _get_nav()], className='container'), style=sticky_style)
 
 
-def _class_name_from_bool(bool_: bool) -> str:
-    return 'table-success' if bool_ else 'table-danger'
+_ENDPOINT_TO_PAGE: Dict[Endpoint, Page] = {
+    Endpoint.COMPARE: compare_page,
+    Endpoint.AM: display_am_page,
+    Endpoint.LOGIN: login_page,
+    Endpoint.LOGOUT: logout_page,
+    Endpoint.INDEX: index_page,
+}
 
 
-def _get_str_classement(classement: Classement) -> str:
-    if classement.alinea:
-        return f'{classement.rubrique}-{classement.regime.value}-al.{classement.alinea}'
-    return f'{classement.rubrique}-{classement.regime.value}'
-
-
-def _get_str_classements(classements: List[Classement]) -> Component:
-    return html.Span(
-        ', '.join([_get_str_classement(classement) for classement in classements]), style={'font-size': '0.7em'}
-    )
-
-
-def _normal_td(content: Union[Component, str, int]) -> Component:
-    return html.Td(content, className='align-middle')
-
-
-def _get_row(rank: int, am_state: Optional[AMStatus], am_metadata: AMMetadata, occurrences: int) -> Component:
-    am_step = am_state.step() if am_state else -1
-    rows = [
-        _normal_td(rank),
-        _normal_td(dcc.Link(am_metadata.cid, href=f'/am/{am_metadata.cid}')),
-        _normal_td(
-            dcc.Link(html.Button('Éditer', className='btn btn-light btn-sm'), href=f'/edit_am/{am_metadata.cid}')
-        ),
-        _normal_td(str(am_metadata.nor)),
-        _normal_td(am_metadata.short_title),
-        _normal_td(_get_str_classements(am_metadata.classements)),
-        _normal_td(am_metadata.source.value),
-        _normal_td(occurrences),
-        html.Td('', className=_class_name_from_bool(am_step >= 1)),
-        html.Td('', className=_class_name_from_bool(am_step >= 2)),
-        html.Td('', className=_class_name_from_bool(am_step >= 3)),
-    ]
-    return html.Tr(rows, className='table-danger' if not am_state else '')
-
-
-def _get_header() -> Component:
-    return html.Tr(
-        [
-            html.Th('#'),
-            html.Th('N° CID'),
-            html.Th(''),
-            html.Th('N° NOR'),
-            html.Th('Nom'),
-            html.Th('Classements'),
-            html.Th('Source'),
-            html.Th('Nb cls IDF'),
-            html.Th('Initialisé'),
-            html.Th('Structuré'),
-            html.Th('Paramétré'),
-        ]
-    )
-
-
-def _build_am_table(
-    id_to_state: Dict[str, AMStatus], id_to_am_metadata: Dict[str, AMMetadata], id_to_occurrences: Dict[str, int]
-) -> Component:
-    header = _get_header()
-    sorted_ids = sorted(id_to_am_metadata, key=lambda x: id_to_occurrences.get(x, 0), reverse=True)
-    rows = [
-        _get_row(rank, id_to_state.get(am_id), id_to_am_metadata[am_id], id_to_occurrences.get(am_id, 0))
-        for rank, am_id in enumerate(sorted_ids)
-    ]
-    return html.Table([html.Thead(header), html.Tbody(rows)], className='table table-sm')
-
-
-def _cumsum(values: List[int]) -> List[int]:
-    res: List[int] = [0] * len(values)
-    for i, value in enumerate(values):
-        if i == 0:
-            res[i] == value
-        res[i] = res[i - 1] + value
-    return res
-
-
-def _count_step_cumulated_advancement(
-    id_to_state: Dict[str, AMStatus], id_to_occurrences: Dict[str, Any]
-) -> List[float]:
-    id_to_step = {id_: state.step() for id_, state in id_to_state.items()}
-    step_to_nb_occurrences: Dict[int, int] = {}
-    for id_, step in id_to_step.items():
-        step_to_nb_occurrences[step] = step_to_nb_occurrences.get(step, 0) + id_to_occurrences.get(id_, 0)
-    cumsum = _cumsum([step_to_nb_occurrences.get(i, 0) for i in range(4)][::-1])[::-1]
-    total = sum(step_to_nb_occurrences.values())
-    return [x / total for x in cumsum]
-
-
-def _count_step_cumulated_nb_am(id_to_state: Dict[str, AMStatus]) -> List[int]:
-    counter = Counter([status.step() for status in id_to_state.values()])
-    return [sum(counter.values()), counter[1] + counter[2] + counter[3], counter[2] + counter[3], counter[3]]
-
-
-def _build_recap(id_to_state: Dict[str, AMStatus], id_to_occurrences: Dict[str, Any]) -> Component:
-    step_cumulated_advancement = _count_step_cumulated_advancement(id_to_state, id_to_occurrences)
-    step_cumulated_nb_am = _count_step_cumulated_nb_am(id_to_state)
-
-    txts = [
-        f'{step_cumulated_nb_am[0]} arrêtés\n',
-        f'{step_cumulated_nb_am[1]} arrêtés initialisés\n({int(100*step_cumulated_advancement[1])}% des classements)',
-        f'{step_cumulated_nb_am[2]} arrêtés structurés\n({int(100*step_cumulated_advancement[2])}% des classements)',
-        f'{step_cumulated_nb_am[3]} arrêtés paramétrés\n({int(100*step_cumulated_advancement[3])}% des classements)',
-    ]
-    cols = [
-        html.Div(
-            html.Div(html.Div(replace_line_breaks(txt), className='card-body'), className='card text-center'),
-            className='col-3',
-        )
-        for txt in txts
-    ]
-    return html.Div(cols, className='row', style={'margin-top': '20px', 'margin-bottom': '40px'})
-
-
-def _make_index_component(
-    id_to_state: Dict[str, AMStatus], id_to_am_metadata: Dict[str, AMMetadata], id_to_occurrences: Dict[str, int]
-) -> Component:
-    displayed_ids = set(list(id_to_am_metadata))
-    id_to_state = {id_: state for id_, state in id_to_state.items() if id_ in displayed_ids}
-    id_to_occurrences = {id_: occ for id_, occ in id_to_occurrences.items() if id_ in displayed_ids}
-    return html.Div(
-        [
-            html.H2('Arrêtés ministériels.'),
-            _build_recap(id_to_state, id_to_occurrences),
-            _build_am_table(id_to_state, id_to_am_metadata, id_to_occurrences),
-        ]
-    )
-
-
-_ENDPOINT_TO_PAGE = {Endpoint.COMPARE: compare, Endpoint.AM: display_am}
+def _route(pathname: str) -> Component:
+    endpoint, kwargs = ROUTER.match(pathname)
+    return _ENDPOINT_TO_PAGE[endpoint].layout(**kwargs)
 
 
 def router(pathname: str) -> Component:
     if not pathname.startswith('/'):
         raise ValueError(f'Expecting pathname to start with /, received {pathname}')
-    if pathname == '/':
-        id_to_state = load_all_am_statuses()
-        return _make_index_component(id_to_state, ID_TO_AM_MD, AM_ID_TO_NB_CLASSEMENTS_IDF)
     prefix, suffix = split_route(pathname)
     if prefix == '/edit_am':
+        if not get_current_user().is_authenticated:
+            return dcc.Location(pathname='/login', id='login-redirect')
         return edit_am_page_router(prefix, suffix)
     try:
-        endpoint, args = route(pathname)
+        return _route(pathname)
     except NotFound:
         return html.H3('404 error: Unknown path {}'.format(pathname))
-
-    page = _ENDPOINT_TO_PAGE.get(endpoint)
-    if not page:
-        return html.H3(f'404 error: Unknown path {pathname} (not implemented endpoint {endpoint})')
-    return page.layout(**args)  # type: ignore
-
-
-app.layout = html.Div(
-    [dcc.Location(id='url', refresh=False), _get_page_heading(), html.Div(id='page-content', className='container')],
-    id='layout',
-)
 
 
 @app.callback(Output('page-content', 'children'), [Input('url', 'pathname')])
 def display_page(pathname: str):
-    return router(pathname)
+    return html.Div([_get_page_heading(), html.Div(router(pathname), className='container')])
 
+
+for _page in _ENDPOINT_TO_PAGE.values():
+    if _page.callbacks_adder:
+        _page.callbacks_adder(app)
+
+login_manager = LoginManager()
+login_manager.init_app(app.server)
+login_manager.login_view = '/login'  # type: ignore
+app.server.secret_key = config.login.secret_key
+
+
+@login_manager.user_loader
+def load_user(_):
+    return UNIQUE_USER
+
+
+app.layout = html.Div(
+    [dcc.Location(id='url', refresh=False), html.Div(id='page-content')],
+    id='layout',
+)
 
 APP = app.server  # for gunicorn deployment
 

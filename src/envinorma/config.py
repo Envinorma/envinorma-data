@@ -80,12 +80,24 @@ class EnvironmentConfig:
 
 
 @dataclass
+class LoginConfig:
+    username: str
+    password: str
+    secret_key: str
+
+    @classmethod
+    def default_load(cls) -> 'LoginConfig':
+        return cls(**{key: _get_var('login', key) for key in cls.__annotations__})
+
+
+@dataclass
 class Config:
     aida: AidaConfig
     legifrance: LegifranceConfig
     storage: StorageConfig
     slack: SlackConfig
     environment: EnvironmentConfig
+    login: LoginConfig
 
     @classmethod
     def default_load(cls) -> 'Config':
@@ -95,6 +107,7 @@ class Config:
             storage=StorageConfig.default_load(),
             slack=SlackConfig.default_load(),
             environment=EnvironmentConfig.default_load(),
+            login=LoginConfig.default_load(),
         )
 
 

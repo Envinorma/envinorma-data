@@ -1,6 +1,7 @@
 import json
 import os
 import random
+from dataclasses import dataclass
 from datetime import datetime
 from enum import Enum
 from typing import Any, List, Optional, Tuple
@@ -18,6 +19,7 @@ from envinorma.data import (
     load_legifrance_text,
 )
 from envinorma.structure.am_structure_extraction import extract_short_title, transform_arrete_ministeriel
+from flask_login import current_user
 from legifrance.legifrance_API import get_legifrance_client, get_loda_via_cid
 
 _AM = load_am_data()
@@ -215,3 +217,39 @@ def compute_text_diff(text_before: StructuredText, text_after: StructuredText) -
 def generate_id(filename: str, suffix: str) -> str:
     prefix = filename.split('/')[-1].replace('.py', '').replace('_', '-')
     return prefix + '-' + suffix
+
+
+@dataclass
+class User:
+    username: str
+    password: str
+    active: bool = True
+    authenticated: bool = True
+    anonymous: bool = False
+
+    def get_id(self) -> str:
+        return self.username
+
+    @property
+    def is_active(self):
+        return self.active
+
+    @property
+    def is_authenticated(self):
+        return self.authenticated
+
+    @property
+    def is_anonymous(self):
+        return self.anonymous
+
+
+UNIQUE_USER = User(config.login.username, config.login.password)
+ANONYMOUS_USER = User('anonymous', '', False, False, True)
+
+
+def _assert_user_or_none(candidate: Any) -> Optional[User]:
+    return candidate  # hack for typing
+
+
+def get_current_user() -> User:
+    return _assert_user_or_none(current_user) or ANONYMOUS_USER

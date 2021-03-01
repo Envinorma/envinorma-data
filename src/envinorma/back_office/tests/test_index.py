@@ -1,5 +1,5 @@
 from envinorma.back_office.utils import AMStatus
-from envinorma.back_office.app import _cumsum, _count_step_cumulated_advancement
+from envinorma.back_office.pages.index import _cumsum, _count_step_cumulated_advancement
 
 
 def test_cumsum():
