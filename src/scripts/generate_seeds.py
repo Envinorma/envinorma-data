@@ -7,6 +7,7 @@ import math
 import os
 from typing import Any, Dict, List, Optional, Tuple
 
+import pandas as pd
 from envinorma.back_office.fetch_data import (
     load_all_am_statuses,
     load_all_initial_am,
@@ -214,7 +215,20 @@ def _check_seeds() -> None:
         _check_enriched_am_group(am_versions)
 
 
+def write_classements_csv() -> None:
+    tuples = []
+    keys = ['rubrique', 'regime', 'alinea']
+    for am in ID_TO_AM_MD.values():
+        for cl in am.classements:
+            if cl.state == cl.state.ACTIVE:
+                tp = tuple([getattr(cl, key) if key != 'regime' else cl.regime.value for key in keys])
+                tuples.append(tp)
+    filename = os.path.join(_OUTPUT_FOLDER, 'unique_classements.csv')
+    pd.DataFrame(tuples, columns=keys).sort_values(by=['rubrique', 'regime']).reset_index()[keys].to_csv(filename)
+
+
 def run():
+    write_classements_csv()
     parametrizations = load_all_parametrizations()
     statuses = load_all_am_statuses()
     id_to_am = _load_id_to_text()
