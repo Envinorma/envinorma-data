@@ -4,20 +4,17 @@ from typing import Any, Callable, Dict, List, Optional, Tuple, Union
 
 from bs4 import BeautifulSoup
 from envinorma.data import (
-    AMProperties,
     ArreteMinisteriel,
     ArticleStatus,
     EnrichedString,
     LegifranceArticle,
     LegifranceSection,
     LegifranceText,
-    LegifranceTextProperties,
     StructuredText,
     StructuredTextSignature,
     Table,
-    TextProperties,
-    TitleInconsistency,
 )
+from envinorma.data.properties import LegifranceTextProperties, AMProperties, TextProperties, TitleInconsistency
 from envinorma.structure.am_structure_extraction import keep_visa_string, split_in_non_empty_html_line
 from envinorma.structure.title_detection import (
     NUMBERING_PATTERNS,

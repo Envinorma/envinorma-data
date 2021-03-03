@@ -20,7 +20,6 @@ from envinorma.data import (
     Table,
     TopicName,
     _is_probably_cid,
-    count_cells,
     estr,
     extract_text_lines,
     group_classements_by_alineas,
@@ -122,14 +121,6 @@ def test_am_list():
         if most_common[1] != 1:
             raise ValueError(most_common)
         assert most_common[1] == 1
-
-
-def test_count_cells():
-    assert count_cells(Table([])) == 0
-    assert count_cells(Table([Row([], True)])) == 0
-    cells = [Cell(EnrichedString(''), 1, 1)]
-    assert count_cells(Table([Row(cells, True)])) == 1
-    assert count_cells(Table([Row(cells, True)] * 3)) == 3
 
 
 def test_group_classements_by_alineas():

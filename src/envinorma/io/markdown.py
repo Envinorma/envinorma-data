@@ -4,7 +4,6 @@ from typing import List, TypeVar
 from envinorma.config import AIDA_URL
 from envinorma.data import (
     AMMetadata,
-    AMStructurationLog,
     ArreteMinisteriel,
     Classement,
     EnrichedString,
@@ -119,17 +118,7 @@ def classement_to_md(classements: List[Classement]) -> str:
 _LEGIFRANCE_URL = 'https://www.legifrance.gouv.fr/jorf/id/{}'
 
 
-def log_to_md(log: AMStructurationLog) -> str:
-    if log.legifrance_api_error:
-        return 'erreur-lf-api'
-    if log.legifrance_text_format_error:
-        return 'erreur-structure-entrante'
-    if log.structuration_error:
-        return 'erreur-structuration'
-    return 'pas-d-erreur'
-
-
-def generate_text_md(text: AMMetadata, log: AMStructurationLog) -> str:
+def generate_text_md(text: AMMetadata) -> str:
     page_name = get_text_defined_id(text)
     table = classement_to_md(text.classements)
     return '\n\n'.join(
@@ -138,7 +127,6 @@ def generate_text_md(text: AMMetadata, log: AMStructurationLog) -> str:
             f'Etat: {text.state.value}',
             f'NOR: {text.nor or "non défini"}',
             f'CID: {text.cid}',
-            f'Statut de structuration: {log_to_md(log)}',
             f'_{page_name.strip()}_',
             f'- [sur Légifrance]({_LEGIFRANCE_URL.format(text.cid)})',
             f'- [sur AIDA]({AIDA_URL.format(text.aida_page)})',

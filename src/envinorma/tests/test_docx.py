@@ -12,6 +12,7 @@ from envinorma.io.docx import (
     _build_table_with_correct_rowspan,
     _check_is_tag,
     _copy_soup,
+    _count_cells,
     _extract_bold,
     _extract_bool_property_value,
     _extract_color,
@@ -495,3 +496,11 @@ def test_build_structured_text_from_docx_xml():
     assert res.sections[0].title.text == 'Article 6.2.3. Auto surveillance des niveaux sonores'
     assert len(res.sections[1].sections) == 0
     assert res.sections[1].title.text == 'Chapitre 6.3 – Vibrations'
+
+
+def test_count_cells():
+    assert _count_cells(Table([])) == 0
+    assert _count_cells(Table([Row([], True)])) == 0
+    cells = [Cell(EnrichedString(''), 1, 1)]
+    assert _count_cells(Table([Row(cells, True)])) == 1
+    assert _count_cells(Table([Row(cells, True)] * 3)) == 3

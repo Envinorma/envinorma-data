@@ -10,7 +10,7 @@ from zipfile import ZipFile
 
 import bs4
 from bs4 import BeautifulSoup
-from envinorma.data import Cell, EnrichedString, Row, StructuredText, Table, count_cells
+from envinorma.data import Cell, EnrichedString, Row, StructuredText, Table
 from envinorma.structure import TextElement, Title, build_structured_text
 from envinorma.utils import random_string
 
@@ -477,9 +477,13 @@ def _cleanup_table_cells(table: Table) -> Table:
     return Table([_cleanup_row_cells(row) for row in table.rows])
 
 
+def _count_cells(table: Table) -> int:
+    return sum([len(row.cells) for row in table.rows])
+
+
 def _safely_extract_table(tag: bs4.Tag, min_nb_cells: int) -> Table:
     table = _cleanup_table_cells(extract_table(tag))
-    nb_cells = count_cells(table)
+    nb_cells = _count_cells(table)
     if nb_cells < min_nb_cells:
         raise ValueError(f'Unexpected number of cells {nb_cells}. Expecting at least {min_nb_cells}')
     return table
