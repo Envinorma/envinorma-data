@@ -59,7 +59,7 @@ def _ap_content(text: StructuredText) -> Component:
 
 def _ap(ap_id: str) -> Component:
     filename, ap_ = _DB[int(ap_id)]
-    ap = ensure_not_none(ap_.text)
+    ap: StructuredText = ensure_not_none(ap_.text)
     return html.Div([html.H1(filename), _ap_content(ap)])
 
 

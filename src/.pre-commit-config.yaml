@@ -23,3 +23,12 @@ repos:
         verbose: true
         pass_filenames: false
         always_run: true
+      - id: pytest-mypy ap_exploration
+        name: pytest-mypy ap_exploration
+        stages: [commit]
+        language: system
+        entry: bash -c "cd src ; pytest --mypy-ignore-missing-imports ap_exploration"
+        types: [python]
+        verbose: true
+        pass_filenames: false
+        always_run: true

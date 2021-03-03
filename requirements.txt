@@ -12,6 +12,7 @@ pdf2image==1.14.0
 psycopg2-binary==2.8.6
 pydantic==1.7.3
 lxml==4.6.2
+opencv-python-headless==4.2.0.32
 pdf2docx==0.5.1
 pdfplumber==0.5.25
 pytesseract==0.3.7

@@ -1,3 +1,4 @@
+import zipfile
 import json
 import os
 import shutil
@@ -12,6 +13,25 @@ from envinorma.io.alto import AltoFile, AltoPage
 from envinorma.utils import write_json
 
 _AP_FOLDER = config.storage.ap_data_folder
+
+
+def _get_ap_zip_path() -> str:
+    to_replace = 'ap_exploration/db/ap.py'
+    if to_replace not in __file__:
+        raise ValueError(f'Expecting {to_replace} to be in {__file__}')
+    return __file__.replace(to_replace, 'ap_exploration/db/ap.zip')
+
+
+def _unzip_ap_folder_if_empty():
+    path = _get_ap_zip_path()
+    if not os.listdir(_AP_FOLDER):
+        with zipfile.ZipFile(path, 'r') as zip_ref:
+            zip_ref.extractall(_AP_FOLDER)
+            for child in os.listdir(os.path.join(_AP_FOLDER, 'seed')):
+                shutil.copytree(os.path.join(_AP_FOLDER, 'seed', child), os.path.join(_AP_FOLDER, child))
+
+
+_unzip_ap_folder_if_empty()
 
 
 def _get_ap_sample_path() -> str:
@@ -104,6 +124,10 @@ def _step_path(document_id: str) -> str:
     return os.path.join(_document_folder(document_id), 'step.json')
 
 
+def _ap_extraction_step_path(document_id: str) -> str:
+    return os.path.join(_document_folder(document_id), 'ap_step.json')
+
+
 def input_pdf_path(document_id: str) -> str:
     return os.path.join(_document_folder(document_id), 'in.pdf')
 
@@ -134,15 +158,15 @@ def dump_processing_step(step: OCRProcessingStep, document_id: str):
 
 
 def load_ap_extraction_step(document_id: str) -> APExtractionStep:
-    return APExtractionStep.from_dict(_load_json(_step_path(document_id)))
+    return APExtractionStep.from_dict(_load_json(_ap_extraction_step_path(document_id)))
 
 
 def has_ap_extraction_step(document_id: str) -> bool:
-    return os.path.exists(_step_path(document_id))
+    return os.path.exists(_ap_extraction_step_path(document_id))
 
 
 def dump_ap_extraction_step(step: APExtractionStep, document_id: str):
-    return write_json(step.to_dict(), _step_path(document_id))
+    return write_json(step.to_dict(), _ap_extraction_step_path(document_id))
 
 
 def load_alto_pages_xml(document_id: str) -> List[str]:
@@ -186,8 +210,20 @@ def download_document(url: str, output_filename: str) -> None:
             shutil.copyfileobj(req.raw, f)
 
 
+def _pdf_exists(document_id: str) -> bool:
+    return os.path.exists(os.path.join(_AP_FOLDER, document_id, 'in.pdf'))
+
+
 def load_document_ids() -> List[str]:
-    return [x for x in os.listdir(_AP_FOLDER) if os.path.isdir(os.path.join(_AP_FOLDER, x))]
+    return [x for x in os.listdir(_AP_FOLDER) if _pdf_exists(x)]
+
+
+def _ap_exists(document_id: str) -> bool:
+    return os.path.exists(os.path.join(_AP_FOLDER, document_id, 'ap.json'))
+
+
+def load_document_ids_having_ap() -> List[str]:
+    return [x for x in os.listdir(_AP_FOLDER) if _ap_exists(x)]
 
 
 def save_document(document_id: str, content: bytes) -> None:

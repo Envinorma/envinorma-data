@@ -50,7 +50,7 @@ def _build_tmp_file() -> str:
 
 
 def _extract_page_content(filename: str, page_rank: int) -> _PageContent:
-    page = convert_from_path(filename, first_page=page_rank, last_page=page_rank)[0]
+    page = convert_from_path(filename, first_page=page_rank + 1, last_page=page_rank + 1)[0]
     file_ = _build_tmp_file() + '.png'
     page.save(file_)
     img = cv2.imread(file_, 0)
@@ -170,7 +170,7 @@ def _build_visa(elements: List[_LocElement], intro_visa: List[str]) -> List[str]
 
 
 def _is_article_number(word: str) -> bool:
-    if word in ('1er', '1°°', '1"°', '1°"', '1°”', '1”°'):
+    if word in ('1er', '1°°', '1"°', '1°"', '1°”', '1”°', 'Ier', '1""'):
         return True
     if not word or len(set(word) - {'.', ',', '-', '—'}) == 0:
         return False

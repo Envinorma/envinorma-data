@@ -74,7 +74,7 @@ def _acte_row(acte: Acte) -> List[Any]:
 
 
 def _sort_acts(actes: List[Acte]) -> List[Acte]:
-    return sorted(actes, key=lambda x: x.date_acte if x.date_acte else -1)
+    return list(sorted(actes, key=lambda x: x.date_acte.toordinal() if x.date_acte else -1))
 
 
 def _etablissement_actes(actes: List[Acte]) -> Component:

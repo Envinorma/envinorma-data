@@ -180,6 +180,10 @@ def _load_or_init_step(document_id: str) -> OCRProcessingStep:
     return step
 
 
+def _job_is_done(document_id: str) -> bool:
+    return _load_or_init_step(document_id).done
+
+
 def _add_callbacks(app: dash.Dash):
     @app.callback(
         Output(_DOCUMENT_ID, 'data'),
@@ -222,7 +226,8 @@ def _add_callbacks(app: dash.Dash):
         ctx = dash.callback_context
         filename_trigger = _filename_trigger(ctx.triggered)
         if filename_trigger and progress_is_hidden:
-            start_simple_ocr_process(filename)
+            if not _job_is_done(filename):
+                start_simple_ocr_process(filename)
             return dash.no_update, 'OCR en cours.', 5, False
         if not filename_trigger and not progress_is_hidden:
             step = _load_or_init_step(filename)

@@ -9,9 +9,10 @@ from dash.dependencies import Input, Output
 from dash.development.base_component import Component
 from envinorma.config import config
 
+from ap_exploration.db.ap import download_document
 from ap_exploration.pages.ap import page as ap_page
 from ap_exploration.pages.ap_image import page as ap_image_page
-from ap_exploration.pages.ap_image_v2 import page as ap_image_v2_page
+from ap_exploration.pages.ap_image.v2 import page as ap_image_v2_page
 from ap_exploration.pages.ap_odt import page as ap_odt_page
 from ap_exploration.pages.ap_pdf import page as ap_pdf_page
 from ap_exploration.pages.etablissement import page as etablissement_page

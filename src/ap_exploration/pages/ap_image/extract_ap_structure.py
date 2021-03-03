@@ -257,16 +257,16 @@ def _classify(groups: List[List[AltoString]]) -> APIntro:
     return res
 
 
-def _remove_lines_in_block(block: AltoComposedBlock, line_ids: Set[int]) -> AltoComposedBlock:
+def _remove_lines_in_block(block: AltoComposedBlock, lines: Set[AltoTextLine]) -> AltoComposedBlock:
     text_blocks = [
-        replace(tb, text_lines=[line for line in tb.text_lines if id(line) not in line_ids]) for tb in block.text_blocks
+        replace(tb, text_lines=[line for line in tb.text_lines if line not in lines]) for tb in block.text_blocks
     ]
     return replace(block, text_blocks=text_blocks)
 
 
-def _remove_lines(page: AltoPage, line_ids: Set[int]) -> AltoPage:
+def _remove_lines(page: AltoPage, lines: Set[AltoTextLine]) -> AltoPage:
     print_spaces = [
-        replace(space, composed_blocks=[_remove_lines_in_block(bk, line_ids) for bk in space.composed_blocks])
+        replace(space, composed_blocks=[_remove_lines_in_block(bk, lines) for bk in space.composed_blocks])
         for space in page.print_spaces
     ]
     return replace(page, print_spaces=print_spaces)
@@ -277,4 +277,4 @@ def extract_ap_intro(first_page: AltoPage) -> Tuple[APIntro, AltoPage]:
     groups = _merge_strings_by_proximity(
         [str_ for line in intro_lines for str_ in line.strings if isinstance(str_, AltoString)]
     )
-    return _classify(groups), _remove_lines(first_page, {id(line) for line in intro_lines})
+    return _classify(groups), _remove_lines(first_page, set(intro_lines))

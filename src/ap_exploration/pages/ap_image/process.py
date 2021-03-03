@@ -36,7 +36,7 @@ def _build_tmp_file() -> str:
 
 
 def _ocr_page(path: str, page_nb: int) -> str:
-    page = convert_from_path(path, first_page=page_nb, last_page=page_nb)[0]
+    page = convert_from_path(path, first_page=page_nb + 1, last_page=page_nb + 1)[0]
     file_ = _build_tmp_file() + '.png'
     page.save(file_)
     page = _tesseract(file_)

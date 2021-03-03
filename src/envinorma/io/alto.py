@@ -164,6 +164,9 @@ class AltoTextLine:
             strings=[_load_string_or_sp(child) for child in soup.children if not _is_empty(child)],
         )
 
+    def __hash__(self) -> int:
+        return hash((self.height, self.width, self.hpos, self.height, tuple(self.extract_strings())))
+
     def extract_strings(self) -> List[str]:
         return [str_.content for str_ in self.strings if isinstance(str_, AltoString)]
 

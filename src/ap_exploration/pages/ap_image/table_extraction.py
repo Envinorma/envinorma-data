@@ -9,17 +9,8 @@ from envinorma.data import Cell, Row, Table, estr
 from tqdm import tqdm
 
 
-def _save_image(input_filename: str, output_filename: str) -> None:
-    raw = pickle.load(open(input_filename, 'rb'))
-    raw.save(output_filename)
-
-
-def _load_image(filename: str) -> np.ndarray:
-    return cv2.imread(filename, 0)
-
-
 def _invert_image(img: np.ndarray) -> np.ndarray:
-    _, img_bin = cv2.threshold(img, 128, 255, cv2.THRESH_BINARY | cv2.THRESH_OTSU)
+    _, img_bin = cv2.threshold(img, 200, 255, cv2.THRESH_BINARY)  # | cv2.THRESH_OTSU)
     img_bin = 255 - img_bin
     return img_bin
 
@@ -68,9 +59,12 @@ def _extract_contours(img: np.ndarray) -> List[Contour]:
     img_bin = _invert_image(img)
     img_vh = cv2.addWeighted(_get_vertical_lines(img_bin), 0.5, _get_horizontal_lines(img_bin), 0.5, 0.0)
     kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (2, 2))
-    img_vh = cv2.erode(~img_vh, kernel, iterations=2)
-    _, img_vh = cv2.threshold(img_vh, 128, 255, cv2.THRESH_BINARY | cv2.THRESH_OTSU)
-    contours, _ = cv2.findContours(img_vh, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+    img_vh_2 = cv2.erode(~img_vh, kernel, iterations=2)
+    _, img_vh_3 = cv2.threshold(img_vh_2, 128, 255, cv2.THRESH_BINARY | cv2.THRESH_OTSU)
+    contours, _ = cv2.findContours(img_vh_3, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+    # img_debug = cv2.drawContours(img.copy(), contours, -1, (0, 0, 0), 4)
+    # concat = cv2.vconcat([img, img_bin, img_vh, img_vh_2, img_vh_3, img_debug])
+    # cv2.imwrite('test3.png', concat)
     built_contours = [_build_contour(contour) for contour in contours if len(contour) == 4]
     return [ct for ct in built_contours if not _is_empty(ct) and not _is_full_page(ct, img)]
 
@@ -111,7 +105,7 @@ def _is_full_page(contour: Contour, img: np.ndarray) -> bool:
 
 def _extract_cells(img: np.ndarray) -> List[DetectedCell]:
     contours = _extract_contours(img)
-    strings = [_extract_string(img, ct) for ct in tqdm(contours, leave=False)]
+    strings = [_extract_string(img, ct) for ct in tqdm(contours, leave=False, desc='Parsing table cells.')]
     return [DetectedCell(text, contour) for text, contour in list(zip(strings, contours))]
 
 
@@ -302,10 +296,10 @@ def _build_table(cells: List[DetectedCell]) -> LocatedTable:
     ]
     return LocatedTable(
         Table(rows=final_rows),
-        min(horizontal_borders),
-        min(vertical_borders),
-        _radius(horizontal_borders),
-        _radius(vertical_borders),
+        v_pos=min(horizontal_borders),
+        h_pos=min(vertical_borders),
+        width=_radius(vertical_borders),
+        height=_radius(horizontal_borders),
     )
 
 
@@ -313,7 +307,7 @@ def _hide_tables(image: np.ndarray, tables: List[LocatedTable]) -> np.ndarray:
     color = (255, 255, 255)
     for table in tables:
         cv2.rectangle(
-            image, (table.v_pos, table.h_pos), (table.v_pos + table.width, table.h_pos + table.height), color, -1
+            image, (table.h_pos, table.v_pos), (table.h_pos + table.width, table.v_pos + table.height), color, -1
         )
     return image
 
@@ -326,23 +320,32 @@ def extract_and_remove_tables(image: np.ndarray) -> Tuple[np.ndarray, List[Locat
 
 
 if __name__ == '__main__':
-    # _RAW_FILENAME = (
-    #     '/Users/remidelbouys/EnviNorma/ap_sample/pdf_image_workspace/M_a_c7a060116b444950963b1bf23a52ffca/page_2.raw'
-    # )
+    _RAW_FILENAME = (
+        '/Users/remidelbouys/EnviNorma/ap_sample/pdf_image_workspace/Z_7_8a8d18be65e763f00165e76dcb250007/in.pdf'
+    )
+    from pdf2image import convert_from_path
+
+    page = convert_from_path(_RAW_FILENAME, first_page=2, last_page=2)[0]
+    file_ = 'tmp.png'
+    page.save(file_)
+    img = cv2.imread(file_, 0)
+    img_without_tables, tables = extract_and_remove_tables(img)
+    cv2.imwrite('tmp2.png', img_without_tables)
+
     # _save_image(_RAW_FILENAME, _FILENAME)
-    _FILENAME = 'tmpimage.png'
-    input_image = _load_image(_FILENAME)
-    image, tables = extract_and_remove_tables(input_image)
+    # _FILENAME = 'tmpimage.png'
+    # input_image = _load_image(_FILENAME)
+    # image, tables = extract_and_remove_tables(input_image)
 
-    cv2.imwrite('test.png', image)
-    input_image = _load_image(_FILENAME)
+    # cv2.imwrite('test.png', image)
+    # input_image = _load_image(_FILENAME)
 
-    for table in tables:
-        input_image = cv2.rectangle(
-            input_image,
-            (table.v_pos, table.h_pos),
-            (table.v_pos + table.width, table.h_pos + table.height),
-            (0, 0, 0),
-            4,
-        )
-    cv2.imwrite('test2.png', input_image)
+    # for table in tables:
+    #     input_image = cv2.rectangle(
+    #         input_image,
+    #         (table.v_pos, table.h_pos),
+    #         (table.v_pos + table.width, table.h_pos + table.height),
+    #         (0, 0, 0),
+    #         4,
+    #     )
+    # cv2.imwrite('test2.png', input_image)
