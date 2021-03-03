@@ -10,20 +10,16 @@ from dash.development.base_component import Component
 from envinorma.config import config
 
 from ap_exploration.pages.ap import page as ap_page
-from ap_exploration.pages.ap_image import download_document
 from ap_exploration.pages.ap_image import page as ap_image_page
-from ap_exploration.pages.temp_page import page as temp_page
+from ap_exploration.pages.ap_image_v2 import page as ap_image_v2_page
 from ap_exploration.pages.ap_odt import page as ap_odt_page
 from ap_exploration.pages.ap_pdf import page as ap_pdf_page
 from ap_exploration.pages.etablissement import page as etablissement_page
+from ap_exploration.pages.temp_page import page as temp_page
 from ap_exploration.routing import ROUTER, Endpoint, Page
 
-_PDF_AP_FOLDER = config.storage.ap_data_folder
 _FRA_TESS_DATA_URL = 'https://github.com/tesseract-ocr/tessdata/raw/master/fra.traineddata'
 _TESSDATA_PREFIX = config.storage.tessdata
-
-if not os.path.exists(_PDF_AP_FOLDER):
-    os.mkdir(_PDF_AP_FOLDER)
 
 
 def _download_fra_tessdata_if_inexistent():
@@ -46,6 +42,7 @@ def _get_nav() -> Component:
         [
             _header_link('Accueil', href='/'),
             _header_link('AP image', href=f'/{Endpoint.AP_IMAGE}'),
+            _header_link('AP image V2', href=f'/{Endpoint.AP_IMAGE_V2}'),
             _header_link('AP pdf', href=f'/{Endpoint.AP_PDF}'),
             _header_link('AP odt', href=f'/{Endpoint.AP_ODT}'),
             _header_link('Etablissements', href=f'/{Endpoint.ETABLISSEMENT}'),
@@ -101,6 +98,7 @@ _ENDPOINT_TO_PAGE: Dict[Endpoint, Page] = {
     Endpoint.ETABLISSEMENT: etablissement_page,
     Endpoint.AP: ap_page,
     Endpoint.AP_IMAGE: ap_image_page,
+    Endpoint.AP_IMAGE_V2: ap_image_v2_page,
     Endpoint.TMP: temp_page,
 }
 

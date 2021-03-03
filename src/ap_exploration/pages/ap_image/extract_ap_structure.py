@@ -1,20 +1,12 @@
-import os
 import string
-from dataclasses import dataclass
-from typing import Callable, List, Optional, Tuple, TypeVar, Union
+from dataclasses import dataclass, replace
+from typing import Callable, List, Optional, Set, Tuple, TypeVar, Union
 
-from ap_exploration.pages.ap_image.process import load_pages_and_tables
-from ap_exploration.pages.ap_image.table_extraction import LocatedTable, group_by_proximity
-from envinorma.config import config
-from envinorma.io.alto import AltoPage, AltoString, AltoTextLine, extract_lines
+from ap_exploration.pages.ap_image.table_extraction import group_by_proximity
+from envinorma.io.alto import AltoComposedBlock, AltoPage, AltoString, AltoTextLine, extract_lines
 from scipy.spatial import Rectangle
 from textdistance import levenshtein
-from tqdm import tqdm
 from unidecode import unidecode
-
-
-def _load_pages_and_tables(folder: str) -> Tuple[List[AltoPage], List[LocatedTable]]:
-    return load_pages_and_tables(folder + '.pdf')
 
 
 def _ensure_str(str_: Union[str, bytes]) -> str:
@@ -23,41 +15,15 @@ def _ensure_str(str_: Union[str, bytes]) -> str:
     return str_
 
 
+def lower_unicode(str_: str) -> str:
+    return _ensure_str(unidecode(str_).lower())
+
+
 _ALPHANUMERIC = set(string.ascii_lowercase + string.digits)
 
 
-def _keep_alphanumeric(str_: str) -> str:
+def keep_alphanumeric(str_: str) -> str:
     return ''.join([x for x in str_ if x in str_ if x in _ALPHANUMERIC])
-
-
-def _line_in_upper_third(line: AltoTextLine, page_height: float) -> bool:
-    bottom = line.vpos + line.height
-    return bottom <= page_height / 3
-
-
-def _is_in_the_center(line: AltoTextLine, page_width: float) -> bool:
-    return line.hpos >= 0.25 * page_width and line.hpos + line.width <= 0.75 * page_width
-
-
-def _is_arrete_line(line: AltoTextLine, page_rank: int, page_height: float, page_width: float) -> bool:
-    if not _is_in_the_center(line, page_width):
-        return False
-    strings = _extract_strings(line)
-    clean_words = _keep_alphanumeric(_lower_unicode(''.join(strings)))
-    if clean_words == 'arrete':
-        if page_rank != 0:
-            return True
-        return not _line_in_upper_third(line, page_height)  # in this case, it is probably the doc title
-    return False
-
-
-def find_arrete_word(pages: List[AltoPage]) -> List[AltoTextLine]:
-    return [
-        line
-        for page_rank, page in enumerate(pages[:4])
-        for line in extract_lines(page)
-        if _is_arrete_line(line, page_rank, page.height, page.width)
-    ]
 
 
 def _is_in_margin(str_: AltoString, page_height: float, page_width: float) -> bool:
@@ -104,12 +70,8 @@ def _keep_after_match(lines: List[T], criterion: Callable[[T], bool]) -> Optiona
     return None
 
 
-def _extract_strings(line: AltoTextLine) -> List[str]:
-    return [x.content for x in line.strings if isinstance(x, AltoString)]
-
-
 def _is_levenshtein_close(word: str, distance: int, target_words: List[str]) -> bool:
-    word = _lower_unicode(word)
+    word = lower_unicode(word)
     for cd in target_words:
         if levenshtein(word, cd) <= distance:
             return True
@@ -124,12 +86,11 @@ def _is_environnement(str_: str) -> bool:
 
 
 def _is_first_visa_line(line: AltoTextLine) -> bool:
-    strings = _extract_strings(line)
-    before_environment = _keep_before_match(strings, _is_environnement)
+    before_environment = _keep_before_match(line.extract_strings(), _is_environnement)
     if before_environment is None:
         return False
-    merged = _lower_unicode(''.join(before_environment))
-    return levenshtein(_keep_alphanumeric(merged), 'vulecodedelenvironnement') <= 4
+    merged = lower_unicode(''.join(before_environment))
+    return levenshtein(keep_alphanumeric(merged), 'vulecodedelenvironnement') <= 4
 
 
 def _is_ordre(str_: str) -> bool:
@@ -137,12 +98,11 @@ def _is_ordre(str_: str) -> bool:
 
 
 def _is_last_intro_line(line: AltoTextLine) -> bool:
-    strings = _extract_strings(line)
-    after_ordre = _keep_after_match(strings, _is_ordre)
+    after_ordre = _keep_after_match(line.extract_strings(), _is_ordre)
     if after_ordre is None:
         return False
-    merged = _lower_unicode(''.join(after_ordre))
-    return levenshtein(_keep_alphanumeric(merged), 'ordrenationaldumerite') <= 4
+    merged = lower_unicode(''.join(after_ordre))
+    return levenshtein(keep_alphanumeric(merged), 'ordrenationaldumerite') <= 4
 
 
 def _extract_intro_lines(page: AltoPage) -> List[AltoTextLine]:
@@ -220,7 +180,7 @@ _TITLE_WORDS = [
 
 
 def _is_title(group: List[str]) -> bool:
-    str_ = _lower_unicode(' '.join(group))
+    str_ = lower_unicode(' '.join(group))
     return any([word in str_ for word in _TITLE_WORDS])
 
 
@@ -241,12 +201,8 @@ _BUREAU_WORDS = [
 ]
 
 
-def _lower_unicode(str_: str) -> str:
-    return _ensure_str(unidecode(str_).lower())
-
-
 def _is_bureau(group: List[str]) -> bool:
-    str_ = _lower_unicode(' '.join(group))
+    str_ = lower_unicode(' '.join(group))
     return any([word in str_ for word in _BUREAU_WORDS])
 
 
@@ -261,7 +217,7 @@ _PREFET_WORDS = ['prefet de', 'prefete de', 'prefecture de', 'le prefet', 'la pr
 
 
 def _is_prefet(group: List[str]) -> bool:
-    sentence = _lower_unicode(' '.join(group))
+    sentence = lower_unicode(' '.join(group))
     return any([sentence.startswith(word) for word in _PREFET_WORDS]) or _is_levenshtein_close(group[0], 2, ['prefet'])
 
 
@@ -277,7 +233,7 @@ _VISA_WORDS = [
 
 
 def _is_visa(group: List[str]) -> bool:
-    sentence = _lower_unicode(' '.join(group))
+    sentence = lower_unicode(' '.join(group))
     return any([sentence.startswith(word) for word in _VISA_WORDS])
 
 
@@ -301,41 +257,24 @@ def _classify(groups: List[List[AltoString]]) -> APIntro:
     return res
 
 
-def _find_main_title(pages: List[AltoPage]) -> Tuple[AltoPage, List[Box], APIntro]:
-    if not pages:
-        raise ValueError('Expecting at least one page.')
-    intro_lines = _extract_intro_lines(pages[0])
+def _remove_lines_in_block(block: AltoComposedBlock, line_ids: Set[int]) -> AltoComposedBlock:
+    text_blocks = [
+        replace(tb, text_lines=[line for line in tb.text_lines if id(line) not in line_ids]) for tb in block.text_blocks
+    ]
+    return replace(block, text_blocks=text_blocks)
+
+
+def _remove_lines(page: AltoPage, line_ids: Set[int]) -> AltoPage:
+    print_spaces = [
+        replace(space, composed_blocks=[_remove_lines_in_block(bk, line_ids) for bk in space.composed_blocks])
+        for space in page.print_spaces
+    ]
+    return replace(page, print_spaces=print_spaces)
+
+
+def extract_ap_intro(first_page: AltoPage) -> Tuple[APIntro, AltoPage]:
+    intro_lines = _extract_intro_lines(first_page)
     groups = _merge_strings_by_proximity(
         [str_ for line in intro_lines for str_ in line.strings if isinstance(str_, AltoString)]
     )
-    bounding_boxes = [_bounding_box(group) for group in groups]
-    # sentences = [_extract_sentence(group) for group in groups]
-    return pages[0], bounding_boxes, _classify(groups)
-    # return '\n'.join([' '.join(_extract_strings(line)) for line in intro_lines])
-
-
-if __name__ == '__main__':
-    import pickle
-    import random
-
-    _PDF_AP_FOLDER = config.storage.ap_data_folder
-    _DOC_IDS = [os.path.join(_PDF_AP_FOLDER, x) for x in os.listdir(_PDF_AP_FOLDER) if x.endswith('.pdf')][:110]
-
-    file_ = 'tmp.pickle'
-    if not os.path.exists(file_):
-        pages_and_tables = [_load_pages_and_tables(filename[:-4]) for filename in tqdm(_DOC_IDS)]
-        pickle.dump(pages_and_tables, open(file_, 'wb'))
-    else:
-        pages_and_tables = pickle.load(open(file_, 'rb'))
-
-    res = [_find_main_title(pages) for pages, _ in tqdm(pages_and_tables)]
-    all_str = [(doc_id.split('/')[-1], strs) for doc_id, strs in zip(_DOC_IDS, res)]
-    filename, (_, _, intro) = random.choice(all_str)
-    for _, _, intro in res:
-        print('\n\t'.join(intro.other))
-    print('TITLE\n\t', '\n\t'.join(intro.title))
-    print('MARIANNE\n\t', '\n\t'.join(intro.marianne))
-    print('PREFET\n\t', '\n\t'.join(intro.prefet))
-    print('BUREAU\n\t', '\n\t'.join(intro.bureau))
-    print('VISA\n\t', '\n\t'.join(intro.visa))
-    print('OTHER\n\t', '\n\t'.join(intro.other))
+    return _classify(groups), _remove_lines(first_page, {id(line) for line in intro_lines})

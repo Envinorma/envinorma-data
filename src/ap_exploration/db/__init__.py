@@ -85,8 +85,3 @@ def replace_prescriptions(ap_id: str, new_prescriptions: List[Prescription]) -> 
 
 def add_prescriptions(ap_id: str, new_prescriptions: List[Prescription]) -> None:
     replace_prescriptions(ap_id, fetch_ap_prescriptions(ap_id) + new_prescriptions)
-
-
-def load_ap_georisques_url() -> List[str]:
-    path = pathlib.Path(__file__).parent.joinpath('gr_ap_sample.json')
-    return json.load(open(path))

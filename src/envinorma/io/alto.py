@@ -164,6 +164,9 @@ class AltoTextLine:
             strings=[_load_string_or_sp(child) for child in soup.children if not _is_empty(child)],
         )
 
+    def extract_strings(self) -> List[str]:
+        return [str_.content for str_ in self.strings if isinstance(str_, AltoString)]
+
 
 @dataclass
 class AltoTextBlock:
@@ -185,6 +188,9 @@ class AltoTextBlock:
             vpos=assert_float(soup.get('VPOS')),
             text_lines=[AltoTextLine.from_soup(child) for child in soup.children if not _is_empty(child)],
         )
+
+    def extract_string_lines(self) -> List[str]:
+        return [' '.join(line.extract_strings()) for line in self.text_lines]
 
 
 @dataclass

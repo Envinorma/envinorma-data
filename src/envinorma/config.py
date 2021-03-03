@@ -140,3 +140,7 @@ def create_folder_and_generate_parametric_filename(am_id: str, version_descripto
     if not os.path.exists(folder_name):
         os.makedirs(folder_name)
     return get_parametric_ams_folder(am_id) + '/' + generate_parametric_descriptor(version_descriptor) + '.json'
+
+
+if not os.path.exists(config.storage.ap_data_folder):
+    os.mkdir(config.storage.ap_data_folder)

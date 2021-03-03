@@ -8,6 +8,7 @@ class Endpoint(Enum):
     AP_ODT = 'ap_odt'
     AP_PDF = 'ap_pdf'
     AP_IMAGE = 'ap_image'
+    AP_IMAGE_V2 = 'ap_image_v2'
     ETABLISSEMENT = 'etablissement'
     INDEX = 'index'
     AP = 'ap'
@@ -41,6 +42,7 @@ ROUTER: MapAdapter = Map(
         Rule(f'/{Endpoint.AP}/id/<ap_id>/<operation>', endpoint=Endpoint.AP),
         Rule(f'/{Endpoint.AP_PDF}', endpoint=Endpoint.AP_PDF),
         Rule(f'/{Endpoint.AP_IMAGE}', endpoint=Endpoint.AP_IMAGE),
+        Rule(f'/{Endpoint.AP_IMAGE_V2}', endpoint=Endpoint.AP_IMAGE_V2),
         Rule(f'/{Endpoint.TMP}', endpoint=Endpoint.TMP),
     ]
 ).bind('')
