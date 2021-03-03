@@ -18,3 +18,5 @@ pdfplumber==0.5.25
 pytesseract==0.3.7
 requests==2.25.1
 requests-oauthlib==1.3.0
+scipy==1.6.1
+textdistance==4.2.1
