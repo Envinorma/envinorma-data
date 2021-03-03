@@ -73,6 +73,7 @@ app = dash.Dash(
     external_stylesheets=[dbc.themes.BOOTSTRAP, __file__.replace('ap_exploration.py', 'assets/cpstyle.css')],
     suppress_callback_exceptions=True,
     title='AP Exploration - Envinorma',
+    update_title=None,
 )
 
 
