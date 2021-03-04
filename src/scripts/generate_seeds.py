@@ -196,7 +196,24 @@ def _load_enriched_am_list() -> Dict[str, ArreteMinisteriel]:
     }
 
 
+def _check_classement_csv() -> None:
+    filename = os.path.join(_OUTPUT_FOLDER, 'unique_classements.csv')
+    csv = pd.read_csv(filename)
+    expected_keys = ['regime', 'rubrique', 'alinea']
+    for key in expected_keys:
+        if key not in csv.keys():
+            raise ValueError(f'Expecting key {key} in {csv.keys()}')
+    nb_rows = csv.shape[0]
+    nb_rows_no_repeat = csv.groupby(['rubrique', 'regime']).count().shape[0]
+    if nb_rows != nb_rows_no_repeat:
+        raise ValueError(
+            f'Expecting {nb_rows} and {nb_rows_no_repeat} to be equal. It is not, '
+            'so there are repeated couples in dataframe.'
+        )
+
+
 def _check_seeds() -> None:
+    _check_classement_csv()
     am_list = _load_am_list()
     for am in tqdm(am_list, 'Checking AMs'):
         _check_am(am)
@@ -215,7 +232,7 @@ def _check_seeds() -> None:
         _check_enriched_am_group(am_versions)
 
 
-def write_classements_csv() -> None:
+def _write_classements_csv() -> None:
     tuples = []
     keys = ['rubrique', 'regime', 'alinea']
     for am in ID_TO_AM_MD.values():
@@ -223,12 +240,14 @@ def write_classements_csv() -> None:
             if cl.state == cl.state.ACTIVE:
                 tp = tuple([getattr(cl, key) if key != 'regime' else cl.regime.value for key in keys])
                 tuples.append(tp)
+    unique = pd.DataFrame(tuples, columns=keys).groupby(['rubrique', 'regime']).first()
+    final_csv = unique.sort_values(by=['rubrique', 'regime']).reset_index()[keys]
     filename = os.path.join(_OUTPUT_FOLDER, 'unique_classements.csv')
-    pd.DataFrame(tuples, columns=keys).sort_values(by=['rubrique', 'regime']).reset_index()[keys].to_csv(filename)
+    final_csv.to_csv(filename)
 
 
-def run():
-    write_classements_csv()
+def _generate_seeds() -> None:
+    _write_classements_csv()
     parametrizations = load_all_parametrizations()
     statuses = load_all_am_statuses()
     id_to_am = _load_id_to_text()
@@ -239,6 +258,10 @@ def run():
             if id_ in _1510_IDS:
                 all_ams.extend(_load_1510_am_no_date())
     write_json(all_ams, _AM_LIST, pretty=False)
+
+
+def run():
+    _generate_seeds()
     _check_seeds()
 
 
