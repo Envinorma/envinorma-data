@@ -69,6 +69,8 @@ def _extract_name(parameter: Parameter) -> str:
         return 'Régime'
     if parameter == ParameterEnum.RUBRIQUE.value:
         return 'Rubrique'
+    if parameter == ParameterEnum.ALINEA.value:
+        return 'Alinéa'
     if parameter == ParameterEnum.RUBRIQUE_QUANTITY.value:
         return 'Quantité associée à la rubrique'
     raise NotImplementedError(parameter)
@@ -87,6 +89,8 @@ def _build_input(id_: str, parameter_type: ParameterType) -> Component:
     if parameter_type == ParameterType.RUBRIQUE:
         return dcc.Input(id=_input(id_), className='form-control')
     if parameter_type == ParameterType.REAL_NUMBER:
+        return dcc.Input(id=_input(id_), className='form-control')
+    if parameter_type == ParameterType.STRING:
         return dcc.Input(id=_input(id_), className='form-control')
     raise NotImplementedError(parameter_type)
 
@@ -263,6 +267,8 @@ def _extract_parameter_and_value(id_: str, date: Optional[str], value: Optional[
         return (ParameterEnum.RUBRIQUE_QUANTITY.value, _extract_float(value))
     if id_ == ParameterEnum.RUBRIQUE.value.id:
         return (ParameterEnum.RUBRIQUE.value, value if value else None)
+    if id_ == ParameterEnum.ALINEA.value.id:
+        return (ParameterEnum.ALINEA.value, value if value else None)
     raise NotImplementedError()
 
 

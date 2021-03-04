@@ -494,6 +494,14 @@ def get_text_defined_id(text: AMMetadata) -> str:
 Ints = Tuple[int, ...]
 
 
+def dump_path(path: Ints) -> str:
+    return json.dumps(path)
+
+
+def load_path(path_str: str) -> Ints:
+    return tuple(json.loads(path_str))
+
+
 @dataclass
 class StructuredTextSignature:
     section_reference: Ints
@@ -618,3 +626,13 @@ def extract_text_lines(text: StructuredText, level: int = 0) -> List[str]:
     alinea_lines = [line.strip() for al in text.outer_alineas for line in _extract_alineas_lines(al)]
     section_lines = [line for sec in text.sections for line in extract_text_lines(sec, level + 1)]
     return title_lines + alinea_lines + section_lines
+
+
+def ensure_rubrique(candidate: str) -> str:
+    if len(candidate) != 4 or candidate[0] not in '1234':
+        raise ValueError(f'Incorrect rubrique value, got {candidate}')
+    try:
+        int(candidate)
+    except ValueError:
+        raise ValueError(f'Incorrect rubrique value, got {candidate}')
+    return candidate

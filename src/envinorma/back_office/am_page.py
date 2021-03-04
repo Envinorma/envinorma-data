@@ -32,7 +32,7 @@ from envinorma.back_office.fetch_data import (
     upsert_new_parametrization,
 )
 from envinorma.back_office.generate_final_am import AMVersions, generate_final_am
-from envinorma.back_office.parametrization_edition import router as parametrization_router
+from envinorma.back_office.pages.parametrization_edition import router as parametrization_router
 from envinorma.back_office.structure_edition import router as structure_router
 from envinorma.back_office.utils import ID_TO_AM_MD, AMOperation, AMStatus, get_traversed_titles, safe_get_section
 from envinorma.config import (

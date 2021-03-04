@@ -248,6 +248,8 @@ def _check_conditions_are_incompatible(all_conditions: List[Condition], paramete
         _check_real_number_conditions_are_incompatible(all_conditions, parameter)
     elif parameter.type == ParameterType.REGIME:
         _check_discrete_conditions_are_incompatible(all_conditions, parameter)
+    elif parameter.type == ParameterType.STRING:
+        _check_discrete_conditions_are_incompatible(all_conditions, parameter)
     elif parameter.type == ParameterType.RUBRIQUE:
         _check_discrete_conditions_are_incompatible(all_conditions, parameter)
     elif parameter.type == ParameterType.BOOLEAN:

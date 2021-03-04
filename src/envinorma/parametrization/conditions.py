@@ -12,6 +12,7 @@ class ParameterType(Enum):
     BOOLEAN = 'BOOLEAN'
     RUBRIQUE = 'RUBRIQUE'
     REAL_NUMBER = 'REAL_NUMBER'
+    STRING = 'STRING'
 
     def __repr__(self):
         return f'ParameterType("{self.value}")'
@@ -40,6 +41,7 @@ class ParameterEnum(Enum):
     REGIME = Parameter('regime', ParameterType.REGIME)
     RUBRIQUE = Parameter('rubrique', ParameterType.RUBRIQUE)
     RUBRIQUE_QUANTITY = Parameter('quantite-rubrique', ParameterType.REAL_NUMBER)
+    ALINEA = Parameter('alinea', ParameterType.STRING)
 
     def __repr__(self):
         return f'ParameterEnum("{self.value}")'
@@ -216,6 +218,19 @@ Condition = Union[LeafCondition, AndCondition, OrCondition]
 MergeConditions = (AndCondition, OrCondition)
 MergeCondition = Union[AndCondition, OrCondition]
 
+MonoConditions = (Equal, Greater, Littler)
+MonoCondition = Union[Equal, Greater, Littler]
+
+
+def ensure_mono_condition(condition: Condition) -> MonoCondition:
+    if isinstance(condition, (Equal, Greater, Littler)):
+        return condition
+    raise ValueError(f'Unexpected condition type : expecting type MonoCondition, got {type(condition)}')
+
+
+def ensure_mono_conditions(conditions: List[Condition]) -> List[MonoCondition]:
+    return [ensure_mono_condition(x) for x in conditions]
+
 
 def check_condition(condition: Condition) -> None:
     if isinstance(condition, Equal):
@@ -333,6 +348,8 @@ def _parameter_id_to_str(parameter_id: str) -> str:
         return 'le régime'
     if parameter_id == ParameterEnum.RUBRIQUE.value.id:
         return 'la rubrique'
+    if parameter_id == ParameterEnum.ALINEA.value.id:
+        return 'l\'alinéa'
     if parameter_id == ParameterEnum.RUBRIQUE_QUANTITY.value.id:
         return 'la quantité associée à la rubrique'
     return f'la valeur du paramètre {parameter_id}'
@@ -413,6 +430,11 @@ def _manual_active_conditions(parameter_id: str, condition: LeafCondition) -> Op
         if isinstance(condition, Equal):
             regime_str = condition.target
             return f'la rubrique est {condition.target}'
+
+    if parameter_id == ParameterEnum.ALINEA.value.id:
+        if isinstance(condition, Equal):
+            regime_str = condition.target
+            return f'l\'alinéa est {condition.target}'
 
     if parameter_id == ParameterEnum.RUBRIQUE_QUANTITY.value.id:
         prefix = 'la quantité associée à la rubrique'

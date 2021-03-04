@@ -14,7 +14,7 @@ if __name__ == '__main__':
     main_dest = f'{docs}/ap_app'
     destination_folder = f'{main_dest}/src'
     rmtree(destination_folder)
-    ignore = ignore_patterns('backups/*', '*__pycache__*', '*.DS_Store', '*.mypy_cache*', '*AM.zip')
+    ignore = ignore_patterns('backups/*', '*__pycache__*', '*.DS_Store', '*.mypy_cache*', '*AM.zip', 'venv')
     copytree(source_folder, destination_folder, ignore=ignore)
     shutil.copyfile(f'{source_folder}/ap_exploration/Procfile', f'{main_dest}/Procfile')
     shutil.copyfile(f'{source_folder}/ap_exploration/Aptfile', f'{main_dest}/Aptfile')
