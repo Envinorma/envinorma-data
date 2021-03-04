@@ -427,6 +427,7 @@ def _build_aida_url(page: str) -> str:
 
 def add_metadata(am: ArreteMinisteriel, metadata: AMMetadata) -> ArreteMinisteriel:
     am = copy(am)
+    am.short_title = metadata.short_title
     am.legifrance_url = _build_legifrance_url(metadata.cid)
     am.aida_url = _build_aida_url(metadata.aida_page)
     am.classements = metadata.classements

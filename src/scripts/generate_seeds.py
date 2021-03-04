@@ -5,6 +5,7 @@ Download last versions of AM and send them to envinorma-web
 import json
 import math
 import os
+import re
 from typing import Any, Dict, List, Optional, Tuple
 
 import pandas as pd
@@ -19,7 +20,7 @@ from envinorma.back_office.utils import ID_TO_AM_MD, AMStatus
 from envinorma.config import generate_parametric_descriptor
 from envinorma.data import ArreteMinisteriel, DateCriterion, StructuredText, Table
 from envinorma.parametrization import Parametrization
-from envinorma.utils import date_to_str, ensure_not_none, str_to_date, write_json
+from envinorma.utils import ensure_not_none, str_to_date, write_json
 from tqdm import tqdm
 
 _OUTPUT_FOLDER = 'seeds'
@@ -171,6 +172,12 @@ def _check_enriched_am_group(ams: Dict[str, ArreteMinisteriel]) -> None:
         raise
 
 
+def _check_short_title(title: str) -> None:
+    pattern = r'Arrêté du [0-9]{2}/[0-9]{2}/[0-9]{2}'
+    if not re.match(pattern, title):
+        raise ValueError(f'Expecting am.short_title (={title}) to follow pattern, which is not the case.')
+
+
 @print_input_id
 def _check_am(am: ArreteMinisteriel) -> None:
     if am.id in _1510_IDS:
@@ -183,6 +190,7 @@ def _check_am(am: ArreteMinisteriel) -> None:
     assert am.aida_url is not None
     _check_references(am)
     _check_table_extraction(am)
+    _check_short_title(am.short_title)
 
 
 def _load_am_list() -> List[ArreteMinisteriel]:
