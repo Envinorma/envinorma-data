@@ -153,3 +153,40 @@ def load_text_element(json_: Any) -> TextElement:
     if json_:
         raise ValueError(f'Expected empty dict, got {json_}')
     return Linebreak()
+
+
+def _count_nb_cols_in_each_row(table: Table) -> List[int]:
+    nb_cols_in_each_row: List[int] = [0] * len(table.rows)
+    for row_rank, row in enumerate(table.rows):
+        for cell in row.cells:
+            nb_cols_in_each_row[row_rank] += cell.colspan
+            for i in range(1, cell.rowspan):
+                if row_rank + i < len(nb_cols_in_each_row):
+                    nb_cols_in_each_row[row_rank + i] += cell.colspan
+    return nb_cols_in_each_row
+
+
+def _find_next_index_none(start_index: int, list_: List[Optional[str]]) -> Optional[int]:
+    while start_index < len(list_) and list_[start_index] is not None:
+        start_index += 1
+    if start_index >= len(list_):
+        return None
+    return start_index
+
+
+def table_to_list(table: Table) -> List[List[str]]:
+    nb_cols_in_each_row = _count_nb_cols_in_each_row(table)
+    rows: List[List[Optional[str]]] = [[None for _ in range(size)] for size in nb_cols_in_each_row]
+    for row_rank, row in enumerate(table.rows):
+        dest_row = rows[row_rank]
+        col_index: int = 0
+        for cell in row.cells:
+            new_col_index = _find_next_index_none(col_index, dest_row)
+            if new_col_index is None:
+                break
+            col_index = new_col_index
+            for i in range(cell.rowspan):
+                if row_rank + i < len(rows):
+                    for j in range(cell.colspan):
+                        rows[row_rank + i][col_index + j] = cell.content.text
+    return [[x or '' for x in xs] for xs in rows]
