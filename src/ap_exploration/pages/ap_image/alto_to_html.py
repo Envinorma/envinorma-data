@@ -4,6 +4,7 @@ import dash_html_components as html
 from dash.development.base_component import Component
 from envinorma.back_office.components.am_component import structured_text_component
 from envinorma.data import StructuredText
+from envinorma.data.text_elements import TextElement, Title
 from envinorma.io.alto import (
     AltoComposedBlock,
     AltoPage,
@@ -15,7 +16,7 @@ from envinorma.io.alto import (
     extract_strings,
     extract_text_blocks,
 )
-from envinorma.structure import TextElement, Title, build_structured_text
+from envinorma.structure import build_structured_text
 
 Sizer = Callable[[float, bool], str]
 

@@ -1,7 +1,7 @@
 from dataclasses import asdict, dataclass
 from typing import Any, Dict, List
 
-from envinorma.structure import TextElement, load_text_element
+from envinorma.data.text_elements import TextElement, load_text_element
 
 
 @dataclass

@@ -1,7 +1,7 @@
-from dataclasses import asdict, dataclass
 from typing import Any, Dict, List, Optional, Tuple, TypeVar, Union
 
 from envinorma.data import EnrichedString, StructuredText, Table
+from envinorma.data.text_elements import Linebreak, TextElement, Title
 
 TP = TypeVar('TP')
 
@@ -20,41 +20,6 @@ def split_alineas_in_sections(alineas: List[TP], matches: List[bool]) -> Tuple[L
     other_matches = [first_match + 1 + idx for idx, match in enumerate(matches[first_match + 1 :]) if match]
     sections = [alineas[a:b] for a, b in zip([first_match] + other_matches, other_matches + [len(matches)])]
     return (outer_alineas, sections)
-
-
-@dataclass(eq=True)
-class Linebreak:
-    pass
-
-
-@dataclass
-class Title:
-    text: str
-    level: int
-    id: Optional[str] = None
-
-    def to_dict(self) -> Dict[str, Any]:
-        return asdict(self)
-
-    @classmethod
-    def from_dict(cls, dict_: Dict[str, Any]) -> 'Title':
-        return cls(**dict_)
-
-
-TextElement = Union[Table, str, Title, Linebreak]
-TextElements = (Table, str, Title, Linebreak)
-
-
-def load_text_element(json_: Any) -> TextElement:
-    if isinstance(json_, str):
-        return json_
-    if 'rows' in json_:
-        return Table.from_dict(json_)
-    if 'level' in json_:
-        return Title.from_dict(json_)
-    if json_:
-        raise ValueError(f'Expected empty dict, got {json_}')
-    return Linebreak()
 
 
 def _has_a_title(alineas: List[TextElement]) -> bool:

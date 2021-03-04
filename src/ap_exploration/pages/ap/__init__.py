@@ -12,8 +12,7 @@ from dash.dependencies import Input, Output, State
 from dash.development.base_component import Component
 from envinorma.back_office.components.am_component import table_to_component
 from envinorma.back_office.components.table import ExtendedComponent, table_component
-from envinorma.data import Table
-from envinorma.structure import TextElement
+from envinorma.data.text_elements import TextElement, Table
 
 
 def _href(acte_id: str) -> str:

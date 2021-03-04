@@ -5,7 +5,8 @@ from dash.development.base_component import Component
 from envinorma.back_office.components import replace_line_breaks
 from envinorma.back_office.components.summary_component import summary_component
 from envinorma.data import ArreteMinisteriel, Cell, Row, StructuredText, Table, am_to_text
-from envinorma.structure import TextElement, Title, structured_text_to_text_elements
+from envinorma.data.text_elements import TextElement, Title
+from envinorma.structure import structured_text_to_text_elements
 from envinorma.topics.topics import TopicOntology
 
 

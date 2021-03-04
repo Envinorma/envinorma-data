@@ -12,8 +12,8 @@ from envinorma.back_office.structure_edition import (
     _keep_non_empty,
     _replace_tables,
 )
-from envinorma.data import EnrichedString, StructuredText, Table
-from envinorma.structure import Title
+from envinorma.data import StructuredText
+from envinorma.data.text_elements import EnrichedString, Table, Title
 
 
 def _get_simple_text() -> StructuredText:

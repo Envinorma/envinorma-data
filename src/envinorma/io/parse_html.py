@@ -2,8 +2,7 @@ from typing import Any, List, Union
 
 import bs4
 from bs4 import BeautifulSoup
-from envinorma.data import Cell, EnrichedString, Row, Table
-from envinorma.structure import Linebreak, TextElement, Title
+from envinorma.data.text_elements import Cell, EnrichedString, Linebreak, Row, Table, TextElement, Title
 
 
 def _ensure_str(element: TextElement) -> str:

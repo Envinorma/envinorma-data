@@ -17,8 +17,9 @@ from envinorma.back_office.fetch_data import load_initial_am, load_structured_am
 from envinorma.back_office.routing import build_am_page
 from envinorma.back_office.utils import AMOperation, RouteParsingError, assert_str, get_truncated_str
 from envinorma.data import ArreteMinisteriel, EnrichedString, StructuredText, Table, am_to_text
+from envinorma.data.text_elements import TextElement, Title
 from envinorma.io.parse_html import extract_text_elements
-from envinorma.structure import TextElement, Title, build_structured_text, structured_text_to_text_elements
+from envinorma.structure import build_structured_text, structured_text_to_text_elements
 
 _TOC_COMPONENT = 'structure-edition-toc'
 _TEXT_AREA_COMPONENT = 'structure-edition-text-area-component'

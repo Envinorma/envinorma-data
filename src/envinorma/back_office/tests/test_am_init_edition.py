@@ -1,5 +1,4 @@
-from envinorma.structure import Title
-from envinorma.data import Table
+from envinorma.data.text_elements import Table, Title
 from envinorma.back_office.am_init_edition import _extract_elements, _extract_structured_text
 
 

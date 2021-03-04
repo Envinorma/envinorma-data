@@ -3,7 +3,7 @@ from datetime import date
 from enum import Enum
 from typing import Any, Dict, List, Optional
 
-from envinorma.structure import TextElement, TextElements, load_text_element
+from envinorma.data.text_elements import TextElement, TextElements, load_text_element
 
 
 class PrescriptionStatus(Enum):

@@ -20,10 +20,11 @@ from envinorma.back_office.components import error_component
 from envinorma.back_office.components.am_component import table_to_component
 from envinorma.back_office.components.table import ExtendedComponent
 from envinorma.back_office.utils import generate_id
-from envinorma.data import StructuredText, Table
+from envinorma.data import StructuredText
+from envinorma.data.text_elements import Linebreak, Table, TextElement, Title
 from envinorma.io.open_document import extract_text_and_metadata
 from envinorma.io.parse_html import extract_table_from_soup, merge_between_linebreaks
-from envinorma.structure import Linebreak, TextElement, Title, structured_text_to_text_elements
+from envinorma.structure import structured_text_to_text_elements
 
 _FILE_DROPDOWN = generate_id(__file__, 'file-dropdown')
 _TEXT_AREA = generate_id(__file__, 'text-area')

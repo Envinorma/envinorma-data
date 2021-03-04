@@ -10,7 +10,7 @@ from ap_exploration.pages.ap.add_prescriptions import (
 )
 from bs4 import BeautifulSoup
 from envinorma.data import Cell, EnrichedString, Row
-from envinorma.structure import Linebreak, Table, Title
+from envinorma.data.text_elements import Linebreak, Table, Title
 
 
 def _soup(x: str) -> BeautifulSoup:

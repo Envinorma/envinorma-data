@@ -1,6 +1,6 @@
 import random
 from string import ascii_letters
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List, Optional, Union
 from dataclasses import asdict, dataclass, field
 
 
@@ -118,3 +118,38 @@ def _rows_to_html(rows: List[Row], with_links: bool = False) -> str:
 
 def table_to_html(table: Table, with_links: bool = False) -> str:
     return f'<table>{_rows_to_html(table.rows, with_links)}</table>'
+
+
+@dataclass(eq=True)
+class Linebreak:
+    pass
+
+
+@dataclass
+class Title:
+    text: str
+    level: int
+    id: Optional[str] = None
+
+    def to_dict(self) -> Dict[str, Any]:
+        return asdict(self)
+
+    @classmethod
+    def from_dict(cls, dict_: Dict[str, Any]) -> 'Title':
+        return cls(**dict_)
+
+
+TextElement = Union[Table, str, Title, Linebreak]
+TextElements = (Table, str, Title, Linebreak)
+
+
+def load_text_element(json_: Any) -> TextElement:
+    if isinstance(json_, str):
+        return json_
+    if 'rows' in json_:
+        return Table.from_dict(json_)
+    if 'level' in json_:
+        return Title.from_dict(json_)
+    if json_:
+        raise ValueError(f'Expected empty dict, got {json_}')
+    return Linebreak()

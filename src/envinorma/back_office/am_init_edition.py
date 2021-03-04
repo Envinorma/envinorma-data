@@ -31,7 +31,8 @@ from envinorma.data import (
     table_to_html,
 )
 from envinorma.io.parse_html import extract_text_elements
-from envinorma.structure import TextElement, Title, build_structured_text, structured_text_to_text_elements
+from envinorma.data.text_elements import TextElement, Title
+from envinorma.structure import build_structured_text, structured_text_to_text_elements
 from envinorma.structure.am_structure_extraction import extract_short_title
 from legifrance.legifrance_API import LegifranceRequestError
 
