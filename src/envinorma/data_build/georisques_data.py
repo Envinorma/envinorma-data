@@ -6,9 +6,9 @@ from datetime import date, datetime
 from enum import Enum
 from typing import Any, Dict, List, Optional, Set, Tuple
 
+import pandas
 from envinorma.data import Nomenclature, Regime, RubriqueSimpleThresholds
 from envinorma.utils import write_json
-from pandas import DataFrame
 from tqdm import tqdm
 
 
@@ -199,6 +199,14 @@ class GeorisquesInstallation:
     classements: Optional[List[GRClassement]] = None
     documents: Optional[List[GRDocument]] = None
 
+    def __post_init__(self) -> None:
+        assert len(self.num_dep) <= 4
+        assert isinstance(self.s3ic_id, str)
+        if self.last_inspection:
+            if not isinstance(self.last_inspection, (date, datetime)):
+                print(self.last_inspection)
+            assert isinstance(self.last_inspection, (date, datetime))
+
     @staticmethod
     def from_georisques_dict(dict_: Dict[str, Any]) -> 'GeorisquesInstallation':
         return GeorisquesInstallation(
@@ -235,6 +243,45 @@ class GeorisquesInstallation:
         if self.documents:
             res['documents'] = [cl.to_dict() for cl in self.documents]
         return res
+
+
+def _dataframe_row_to_installation(row: Tuple) -> GeorisquesInstallation:
+    (
+        s3ic_id,
+        num_dep,
+        region,
+        department,
+        city,
+        name,
+        lat,
+        lon,
+        last_inspection,
+        regime,
+        seveso,
+        family,
+        active,
+        code_postal,
+        code_insee,
+        code_naf,
+    ) = row
+    return GeorisquesInstallation(
+        s3ic_id=s3ic_id,
+        num_dep=num_dep,
+        region=region,
+        department=department,
+        city=city,
+        name=name,
+        lat=lat,
+        lon=lon,
+        last_inspection=date.fromisoformat(last_inspection) if last_inspection else None,
+        regime=GRIdRegime(regime),
+        seveso=Seveso(seveso),
+        family=InstallationFamily(family),
+        active=ActivityStatus(active),
+        code_postal=code_postal,
+        code_insee=code_insee,
+        code_naf=code_naf,
+    )
 
 
 def _compute_regime(value: float, rubrique: RubriqueSimpleThresholds) -> Regime:
@@ -321,10 +368,16 @@ def _clean_dict(dict_: Dict[str, Any]) -> Dict[str, Any]:
 
 
 def _dump_installations_csv(installations: List[GeorisquesInstallation], sample: bool) -> None:
-    data_frame = DataFrame([_clean_dict(it.to_dict()) for it in installations], dtype='str')
+    data_frame = pandas.DataFrame([_clean_dict(it.to_dict()) for it in installations], dtype='str')
     filename_suffix = '_sample' if sample else ''
     print(f'Dumping {len(data_frame)} installations.')
     data_frame.to_csv(f'installations{filename_suffix}.csv')
+
+
+def check_installations_csv(filename: str) -> None:
+    dataframe = pandas.read_csv(filename, dtype='str', index_col='Unnamed: 0', na_values=None).fillna('')
+    for row in dataframe.to_numpy():
+        _dataframe_row_to_installation(row)
 
 
 def _dump_classements_csv(installations: List[GeorisquesInstallation], sample: bool) -> None:
@@ -336,7 +389,7 @@ def _dump_classements_csv(installations: List[GeorisquesInstallation], sample: b
             dict_ = item.to_dict()
             dict_['s3ic_id'] = installation.s3ic_id
             dicts.append(dict_)
-    data_frame = DataFrame(dicts, dtype='str')
+    data_frame = pandas.DataFrame(dicts, dtype='str')
     print(f'Dumping {len(data_frame)} classements.')
     filename_suffix = '_sample' if sample else ''
     data_frame.to_csv(f'classements{filename_suffix}.csv')
@@ -361,9 +414,9 @@ def _rowify_doc(id_: str, ap: GRDocument) -> Dict[str, Any]:
     }
 
 
-def _build_aps_dataframe(installation_ids_and_aps: List[Tuple[str, GRDocument]]) -> DataFrame:
+def _build_aps_dataframe(installation_ids_and_aps: List[Tuple[str, GRDocument]]) -> pandas.DataFrame:
     dicts = [_rowify_doc(id, ap) for id, ap in installation_ids_and_aps]
-    return DataFrame(dicts)
+    return pandas.DataFrame(dicts)
 
 
 def _dump_idf_aps() -> None:
@@ -388,7 +441,7 @@ def _dump_documents_csv(installations: List[GeorisquesInstallation], sample: boo
             dict_ = doc.to_dict()
             dict_['installation_id'] = installation.s3ic_id
             dicts.append(dict_)
-    data_frame = DataFrame(dicts, dtype='str')
+    data_frame = pandas.DataFrame(dicts, dtype='str')
     filename_suffix = '_sample' if sample else ''
     print(f'Dumping {len(data_frame)} documents.')
     data_frame.to_csv(f'documents{filename_suffix}.csv')

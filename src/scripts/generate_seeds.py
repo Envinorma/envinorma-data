@@ -6,6 +6,7 @@ import json
 import math
 import os
 import re
+from scripts.classements_build import check_classement_csv
 from typing import Any, Dict, List, Optional, Tuple
 
 import pandas as pd
@@ -19,6 +20,7 @@ from envinorma.back_office.generate_final_am import AMVersions, apply_parametriz
 from envinorma.back_office.utils import ID_TO_AM_MD, AMStatus
 from envinorma.config import generate_parametric_descriptor
 from envinorma.data import ArreteMinisteriel, DateCriterion, StructuredText, Table
+from envinorma.data_build.georisques_data import check_installations_csv
 from envinorma.parametrization import Parametrization
 from envinorma.utils import ensure_not_none, str_to_date, write_json
 from tqdm import tqdm
@@ -28,6 +30,9 @@ _OUTPUT_FOLDER = '/Users/remidelbouys/EnviNorma/envinorma-web/db/seeds'
 _ENRICHED_OUTPUT_FOLDER = os.path.join(_OUTPUT_FOLDER, 'enriched_arretes')
 _AM_LIST = os.path.join(_OUTPUT_FOLDER, 'am_list.json')
 _1510_IDS = ('DEVP1706393A', 'JORFTEXT000034429274')
+_CLASSEMENTS_FILENAME = os.path.join(_OUTPUT_FOLDER, 'classements_idf.csv')
+_UNIQUE_CLASSEMENTS_FILENAME = os.path.join(_OUTPUT_FOLDER, 'unique_classements.csv')
+_INSTALLATIONS_FILENAME = os.path.join(_OUTPUT_FOLDER, 'installations_idf.csv')
 
 
 def _dump_am_versions(am_id: str, versions: AMVersions) -> None:
@@ -204,8 +209,7 @@ def _load_enriched_am_list() -> Dict[str, ArreteMinisteriel]:
     }
 
 
-def _check_classement_csv() -> None:
-    filename = os.path.join(_OUTPUT_FOLDER, 'unique_classements.csv')
+def _check_unique_classements_csv(filename: str) -> None:
     csv = pd.read_csv(filename)
     expected_keys = ['regime', 'rubrique', 'alinea']
     for key in expected_keys:
@@ -221,7 +225,9 @@ def _check_classement_csv() -> None:
 
 
 def _check_seeds() -> None:
-    _check_classement_csv()
+    _check_unique_classements_csv(_UNIQUE_CLASSEMENTS_FILENAME)
+    check_classement_csv(_CLASSEMENTS_FILENAME)
+    check_installations_csv(_INSTALLATIONS_FILENAME)
     am_list = _load_am_list()
     for am in tqdm(am_list, 'Checking AMs'):
         _check_am(am)
@@ -240,7 +246,7 @@ def _check_seeds() -> None:
         _check_enriched_am_group(am_versions)
 
 
-def _write_classements_csv() -> None:
+def _write_classements_csv(filename: str) -> None:
     tuples = []
     keys = ['rubrique', 'regime', 'alinea']
     for am in ID_TO_AM_MD.values():
@@ -250,12 +256,11 @@ def _write_classements_csv() -> None:
                 tuples.append(tp)
     unique = pd.DataFrame(tuples, columns=keys).groupby(['rubrique', 'regime']).first()
     final_csv = unique.sort_values(by=['rubrique', 'regime']).reset_index()[keys]
-    filename = os.path.join(_OUTPUT_FOLDER, 'unique_classements.csv')
     final_csv.to_csv(filename)
 
 
 def _generate_seeds() -> None:
-    _write_classements_csv()
+    _write_classements_csv(_UNIQUE_CLASSEMENTS_FILENAME)
     parametrizations = load_all_parametrizations()
     statuses = load_all_am_statuses()
     id_to_am = _load_id_to_text()

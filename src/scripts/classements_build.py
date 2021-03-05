@@ -23,6 +23,9 @@ class State(Enum):
     REPRISE = 'Reprise'
 
 
+_UNKNOWN_REGIME = 'unknown'
+
+
 class DetailedRegime(Enum):
     NC = 'NC'
     D = 'D'
@@ -33,6 +36,7 @@ class DetailedRegime(Enum):
     _2 = '2'
     _3 = '3'
     E = 'E'
+    UNKNOWN = _UNKNOWN_REGIME
 
     def to_regime(self) -> Optional[Regime]:
         try:
@@ -166,9 +170,6 @@ def load_all_classements() -> List[DetailedClassement]:
     return _check_output([_make_safe(record) for record in unfiltered_records])
 
 
-_UNKNOWN_REGIME = 'unknown'
-
-
 def _extract_regime(regime: Optional[DetailedRegime]) -> str:
     if not regime:
         return _UNKNOWN_REGIME
@@ -197,6 +198,37 @@ def _classement_to_row(classement: DetailedClassement) -> Tuple:
         classement.activite,
         classement.volume,
         classement.unit,
+    )
+
+
+def _row_to_classement(classement: Tuple) -> DetailedClassement:
+    (
+        s3ic_id,
+        rubrique,
+        regime,
+        alinea,
+        date_autorisation,
+        state,
+        regime_acte,
+        alinea_acte,
+        rubrique_acte,
+        activite,
+        volume,
+        unit,
+    ) = classement
+    return DetailedClassement(
+        s3ic_id=s3ic_id,
+        rubrique=rubrique,
+        regime=DetailedRegime(regime) if regime else DetailedRegime.UNKNOWN,
+        alinea=alinea,
+        date_autorisation=date_autorisation or None,
+        state=State(state) if state else None,
+        regime_acte=DetailedRegime(regime_acte) if regime_acte else DetailedRegime.UNKNOWN,
+        alinea_acte=alinea_acte,
+        rubrique_acte=rubrique_acte,
+        activite=activite,
+        volume=volume,
+        unit=unit,
     )
 
 
@@ -229,7 +261,16 @@ def dump_all_active_classements(output_filename: str) -> None:
     dataframe.to_csv(output_filename)
 
 
+def check_classement_csv(filename: str) -> None:
+    dataframe = pandas.read_csv(
+        filename, dtype='str', index_col='Unnamed: 0', na_values=None, parse_dates=['date_autorisation']
+    ).fillna('')
+    for row in dataframe.to_numpy():
+        _row_to_classement(row)
+
+
 if __name__ == '__main__':
     _OUTPUT_FOLDER = '/Users/remidelbouys/EnviNorma/envinorma-web/db/seeds'
     _FILENAME = 'classements_idf.csv'
     dump_all_active_classements(os.path.join(_OUTPUT_FOLDER, _FILENAME))
+    check_classement_csv(os.path.join(_OUTPUT_FOLDER, _FILENAME))
