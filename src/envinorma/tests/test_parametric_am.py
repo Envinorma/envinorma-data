@@ -5,7 +5,14 @@ from datetime import datetime, timedelta
 from string import ascii_letters
 from typing import List, Optional
 
-from envinorma.data import ArreteMinisteriel, EnrichedString, Regime, StructuredText, StructuredTextSignature
+from envinorma.data import (
+    Applicability,
+    ArreteMinisteriel,
+    EnrichedString,
+    Regime,
+    StructuredText,
+    StructuredTextSignature,
+)
 from envinorma.parametrization import (
     AlternativeSection,
     ConditionSource,
@@ -331,7 +338,8 @@ def test_generate_all_am_versions():
     res_2 = generate_all_am_versions(am, Parametrization([], []), False)
     assert len(res_2) == 1
     assert tuple() in res_2
-    assert res_2[()].sections[0].applicability is None
+    exp = Applicability(active=True, modified=False, warnings=[], previous_version=None)
+    assert res_2[()].sections[0].applicability == exp
 
 
 def test_extract_installation_date_criterion():

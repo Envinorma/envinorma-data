@@ -426,7 +426,7 @@ def generate_all_am_versions(
     if combinations is None:
         combinations = _generate_exhaustive_combinations(parametrization, date_only)
     if not combinations:
-        return {tuple(): replace(am, unique_version=True)}
+        return {tuple(): replace(apply_parameter_values_to_am(am, parametrization, {}), unique_version=True)}
     return {
         combination_name: apply_parameter_values_to_am(am, parametrization, parameter_values)
         for combination_name, parameter_values in combinations.items()
