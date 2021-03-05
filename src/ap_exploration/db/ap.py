@@ -227,6 +227,7 @@ def load_document_ids_having_ap() -> List[str]:
 
 
 def save_document(document_id: str, content: bytes) -> None:
+    _create_folder_if_inexistent(_document_folder(document_id))
     path = input_pdf_path(document_id)
     with open(path, 'wb') as file_:
         file_.write(content)
