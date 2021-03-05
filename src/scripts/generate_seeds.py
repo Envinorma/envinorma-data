@@ -177,9 +177,14 @@ def _check_enriched_am_group(ams: Dict[str, ArreteMinisteriel]) -> None:
         raise
 
 
+_MONTHS = r'(janvier|février|mars|avril|mai|juin|juillet|août|septembre|octobre|novembre|décembre)'
+_PATTERN = rf'Arrêté du (1er|[0-9]*) ' + _MONTHS + ' [0-9]{4}'
+
+
 def _check_short_title(title: str) -> None:
-    pattern = r'Arrêté du [0-9]{2}/[0-9]{2}/[0-9]{2}'
-    if not re.match(pattern, title):
+    if title == 'Faux Arrêté':
+        return
+    if not re.match(_PATTERN, title):
         raise ValueError(f'Expecting am.short_title (={title}) to follow pattern, which is not the case.')
 
 

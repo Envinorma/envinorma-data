@@ -39,7 +39,7 @@ def table_to_component(table: Table, ontology: Optional[TopicOntology]) -> Compo
             html.Thead([_row_to_component(row, ontology) for row in header_rows]),
             html.Tbody([_row_to_component(row, ontology) for row in body_rows]),
         ],
-        className='table',
+        className='table table-bordered',
     )
 
 

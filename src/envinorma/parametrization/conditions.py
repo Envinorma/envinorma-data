@@ -434,7 +434,7 @@ def _manual_active_conditions(parameter_id: str, condition: LeafCondition) -> Op
     if parameter_id == ParameterEnum.ALINEA.value.id:
         if isinstance(condition, Equal):
             regime_str = condition.target
-            return f'l\'alinéa est {condition.target}'
+            return f'l\'alinéa de classement est l\'alinéa {condition.target}'
 
     if parameter_id == ParameterEnum.RUBRIQUE_QUANTITY.value.id:
         prefix = 'la quantité associée à la rubrique'
