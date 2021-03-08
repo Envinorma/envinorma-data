@@ -270,7 +270,7 @@ def _generate_seeds() -> None:
     statuses = load_all_am_statuses()
     id_to_am = _load_id_to_text()
     all_ams = [am.to_dict() for am_id, am in id_to_am.items() if am_id not in _1510_IDS]
-    for id_ in tqdm(ID_TO_AM_MD):
+    for id_ in tqdm(ID_TO_AM_MD, 'Enriching AM.'):
         if statuses[id_] == AMStatus.VALIDATED:
             _copy_enriched_am(id_, id_to_am[id_], parametrizations[id_])
             if id_ in _1510_IDS:
