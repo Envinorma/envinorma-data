@@ -1,7 +1,9 @@
 import base64
+import os
 import random
 import traceback
 from typing import Any, Dict, List, Optional
+from urllib.parse import quote
 
 import dash
 import dash_bootstrap_components as dbc
@@ -10,13 +12,13 @@ import dash_html_components as html
 from ap_exploration.db.ap import (
     SAMPLE_DOC_IDS,
     APExtractionStep,
+    ap_odt_path,
     download_georisques_document,
     dump_ap_extraction_step,
     georisques_full_url,
     has_ap_extraction_step,
     load_ap,
     load_ap_extraction_step,
-    load_document_ids,
     load_document_ids_having_ap,
     save_document,
     seems_georisques_document_id,
@@ -74,12 +76,27 @@ def _handle_uploaded_file(contents: str, filename: str) -> str:
     return document_id
 
 
+def _georisques_link_row(document_id: str) -> Component:
+    link = html.A('Lien vers le document géorisques', href=georisques_full_url(document_id), target='_blank')
+    return html.Button(link, className='btn btn-link mb-3 mt-3')
+
+
+def _docx_button(document_id: str) -> Component:
+    path = ap_odt_path(document_id)
+    if not os.path.exists(path):
+        return html.Span()
+    return html.Button(_download_link('Télécharger la version odt', path), className='btn btn-link mb-3 mt-3')
+
+
+def _links_row(document_id: str) -> Component:
+    return html.Div([_georisques_link_row(document_id), _docx_button(document_id)])
+
+
 def _load_and_display_ap(document_id: str) -> Component:
     ap = load_ap(document_id)
     children = []
     if seems_georisques_document_id(document_id):
-        link = html.A('Lien vers le document géorisques', href=georisques_full_url(document_id), target='_blank')
-        children.append(html.Button(link, className='btn btn-link mb-3 mt-3'))
+        children.append(_links_row(document_id))
     children.append(ap_component(ap, _VISA_MODAL, _VISA_BUTTON, _VISA_TRIGGER))
     return html.Div(children)
 
@@ -100,6 +117,11 @@ def _load_or_init_step(document_id: str) -> APExtractionStep:
 
 def _job_is_done(document_id: str) -> bool:
     return _load_or_init_step(document_id).done
+
+
+def _download_link(content: str, path: str) -> Component:
+    print(path)
+    return html.A(content, href=f'/download/{quote(path, safe="")}')
 
 
 def _add_callbacks(app: dash.Dash):

@@ -18,4 +18,4 @@ class ArretePrefectoral:
     def from_dict(cls, dict_: Dict[str, Any]) -> 'ArretePrefectoral':
         dict_ = dict_.copy()
         dict_['content'] = [load_text_element(el) for el in dict_['content']]
-        return ArretePrefectoral(**dict_)
+        return cls(**dict_)

@@ -11,6 +11,7 @@ from ap_exploration.db.ap import (
     OCRProcessingStep,
     dump_alto_pages_xml,
     dump_ap,
+    dump_ap_odt,
     dump_ap_extraction_step,
     dump_processing_step,
     input_pdf_path,
@@ -78,6 +79,8 @@ def extract_ap_from_file(document_id: str) -> None:
     input_path = input_pdf_path(document_id)
     ap = build(document_id, input_path, _callback)
     dump_ap(ap, document_id)
+    dump_ap_extraction_step(APExtractionStep('Saving AP.', 0.99, False), document_id)
+    dump_ap_odt(ap, document_id)
     dump_ap_extraction_step(APExtractionStep(None, 1.0, True), document_id)
 
 

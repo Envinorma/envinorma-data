@@ -1,15 +1,17 @@
-import zipfile
 import json
 import os
 import shutil
+import zipfile
 from dataclasses import asdict, dataclass
 from typing import Any, Dict, List, Optional
 
 import requests
 from ap_exploration.models import ArretePrefectoral
 from envinorma.config import config
+from envinorma.data.text_elements import Title
 from envinorma.data_build.georisques_data import GR_DOC_BASE_URL
 from envinorma.io.alto import AltoFile, AltoPage
+from envinorma.io.open_document import elements_to_open_document
 from envinorma.utils import write_json
 
 _AP_FOLDER = config.storage.ap_data_folder
@@ -140,6 +142,10 @@ def _get_ap_path(document_id: str) -> str:
     return os.path.join(_document_folder(document_id), 'ap.json')
 
 
+def ap_odt_path(document_id: str) -> str:
+    return os.path.join(_document_folder(document_id), 'ap.odt')
+
+
 def _load_json(path: str):
     with open(path, 'r') as file_:
         return json.load(file_)
@@ -239,3 +245,12 @@ def dump_ap(ap: ArretePrefectoral, document_id: str):
 
 def load_ap(document_id: str) -> ArretePrefectoral:
     return ArretePrefectoral.from_dict(_load_json(_get_ap_path(document_id)))
+
+
+def _ap_to_odt_file(ap: ArretePrefectoral, filename: str) -> None:
+    all_text_elements = [Title(ap.title, 1), *ap.visas_considerant, *ap.content]
+    elements_to_open_document(all_text_elements).write(filename)
+
+
+def dump_ap_odt(ap: ArretePrefectoral, document_id: str):
+    return _ap_to_odt_file(ap, ap_odt_path(document_id))

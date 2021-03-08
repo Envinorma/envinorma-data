@@ -1,5 +1,6 @@
 import os
 from typing import Dict, Optional
+from urllib.parse import unquote
 
 import dash
 import dash_bootstrap_components as dbc
@@ -8,6 +9,7 @@ import dash_html_components as html
 from dash.dependencies import Input, Output
 from dash.development.base_component import Component
 from envinorma.config import config
+from flask.helpers import send_file
 
 from ap_exploration.db.ap import download_document
 from ap_exploration.pages.ap import page as ap_page
@@ -113,6 +115,11 @@ def _route(pathname: str) -> Component:
 @app.callback(Output('page-content', 'children'), [Input('url', 'pathname')])
 def display_page(pathname: str):
     return _route(pathname)
+
+
+@app.server.route('/download/<path:path>')
+def _download(path: str):
+    return send_file(unquote(path), as_attachment=True)
 
 
 for _, _add_callbacks in _ENDPOINT_TO_PAGE.values():

@@ -420,7 +420,7 @@ def _get_soup_modifier(element: TextElement) -> Callable[[BeautifulSoup], bs4.Pa
     raise NotImplementedError(f'Not implemented for type {type(element)}')
 
 
-def _build_open_document(elements: List[TextElement]) -> str:
+def _elements_to_open_document_content_xml(elements: List[TextElement]) -> str:
     empty_tree = _generate_empty_tree()
     soup = BeautifulSoup(empty_tree, 'lxml-xml')
     tag = _check_tag(soup.find('office:text'))
@@ -431,7 +431,19 @@ def _build_open_document(elements: List[TextElement]) -> str:
 
 def structured_text_to_odt_xml(text: StructuredText) -> str:
     elements = structured_text_to_text_elements(text, 0)
-    return _build_open_document(elements)
+    return _elements_to_open_document_content_xml(elements)
+
+
+@dataclass
+class OpenDocument:
+    content_xml: str
+
+    def write(self, filename: str) -> None:
+        write_new_document('test_data/simple_document.odt', self.content_xml, filename)
+
+
+def elements_to_open_document(elements: List[TextElement]) -> OpenDocument:
+    return OpenDocument(_elements_to_open_document_content_xml(elements))
 
 
 def _generate_tmp_filename() -> str:

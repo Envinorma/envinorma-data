@@ -4,10 +4,11 @@ import random
 import bs4
 from bs4 import BeautifulSoup
 from envinorma.data import Cell, EnrichedString, Row, StructuredText, Table
+from envinorma.data.text_elements import Title
 from envinorma.io.open_document import (
-    _build_open_document,
     _build_structured_text_from_soup,
     _check_tag,
+    _elements_to_open_document_content_xml,
     _extract_cell,
     _extract_cells,
     _extract_flattened_elements,
@@ -25,7 +26,6 @@ from envinorma.io.open_document import (
     structured_text_to_text_elements,
     write_new_document,
 )
-from envinorma.data.text_elements import Title
 
 _XML_PREFIX = '''<?xml version="1.0" encoding="utf-8"?>
 <office:document-content office:version="1.2" xmlns:chart="urn:oasis:names:tc:opendocument:xmlns:chart:1.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dom="http://www.w3.org/2001/xml-events" xmlns:dr3d="urn:oasis:names:tc:opendocument:xmlns:dr3d:1.0" xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0" xmlns:field="urn:openoffice:names:experimental:ooo-ms-interop:xmlns:field:1.0" xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0" xmlns:form="urn:oasis:names:tc:opendocument:xmlns:form:1.0" xmlns:grddl="http://www.w3.org/2003/g/data-view#" xmlns:math="http://www.w3.org/1998/Math/MathML" xmlns:meta="urn:oasis:names:tc:opendocument:xmlns:meta:1.0" xmlns:number="urn:oasis:names:tc:opendocument:xmlns:datastyle:1.0" xmlns:of="urn:oasis:names:tc:opendocument:xmlns:of:1.2" xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:ooo="http://openoffice.org/2004/office" xmlns:oooc="http://openoffice.org/2004/calc" xmlns:ooow="http://openoffice.org/2004/writer" xmlns:rpt="http://openoffice.org/2005/report" xmlns:script="urn:oasis:names:tc:opendocument:xmlns:script:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0" xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0" xmlns:tableooo="http://openoffice.org/2009/table" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:textooo="http://openoffice.org/2013/office" xmlns:xforms="http://www.w3.org/2002/xforms" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><office:scripts/><office:font-face-decls/><office:body><office:text>'''
@@ -443,9 +443,9 @@ def test_structured_text_to_text_elements():
     assert isinstance(text_elements[4], Title)
 
 
-def test_build_open_document():
+def test_elements_to_open_document_content_xml():
     text_elements = structured_text_to_text_elements(_get_simple_text())
-    odt = _build_open_document(text_elements)
+    odt = _elements_to_open_document_content_xml(text_elements)
     soup = BeautifulSoup(odt, 'lxml-xml')
     assert len(list(soup.find_all('table'))) == 1
     assert len(list(soup.find_all('h'))) == 2
