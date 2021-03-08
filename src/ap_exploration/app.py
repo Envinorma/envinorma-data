@@ -70,7 +70,7 @@ def _get_page_heading() -> Component:
 
 app = dash.Dash(
     __name__,
-    external_stylesheets=[dbc.themes.BOOTSTRAP, __file__.replace('ap_exploration.py', 'assets/cpstyle.css')],
+    external_stylesheets=[dbc.themes.BOOTSTRAP, __file__.replace('app.py', 'assets/cpstyle.css')],
     suppress_callback_exceptions=True,
     title='AP Exploration - Envinorma',
     update_title=None,

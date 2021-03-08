@@ -2,7 +2,6 @@
 Script for generating repo for ap-envinorma.herokuapp.com
 '''
 
-import os
 import shutil
 from shutil import copytree, ignore_patterns, rmtree
 
@@ -21,3 +20,4 @@ if __name__ == '__main__':
     shutil.copyfile(f'{main_repo}/requirements.txt', f'{main_dest}/requirements.txt')
     shutil.copyfile(f'{main_repo}/runtime.txt', f'{main_dest}/runtime.txt')
     shutil.copyfile(f'{main_repo}/.gitignore', f'{main_dest}/.gitignore')
+    shutil.copyfile(f'{main_repo}/assets/favicon.ico', f'{main_dest}/assets/favicon.ico')
