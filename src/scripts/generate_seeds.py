@@ -33,6 +33,7 @@ _1510_IDS = ('DEVP1706393A', 'JORFTEXT000034429274')
 _CLASSEMENTS_FILENAME = os.path.join(_OUTPUT_FOLDER, 'classements_idf.csv')
 _UNIQUE_CLASSEMENTS_FILENAME = os.path.join(_OUTPUT_FOLDER, 'unique_classements.csv')
 _INSTALLATIONS_FILENAME = os.path.join(_OUTPUT_FOLDER, 'installations_idf.csv')
+_ID_TO_AM_MD = {id_: md for id_, md in ID_TO_AM_MD.items() if not id_.startswith('FAKE')}
 
 
 def _dump_am_versions(am_id: str, versions: AMVersions) -> None:
@@ -43,7 +44,7 @@ def _dump_am_versions(am_id: str, versions: AMVersions) -> None:
 
 
 def _copy_enriched_am(id_: str, am: ArreteMinisteriel, parametrization: Parametrization) -> None:
-    versions = apply_parametrization(id_, am, parametrization, ID_TO_AM_MD[id_])
+    versions = apply_parametrization(id_, am, parametrization, _ID_TO_AM_MD[id_])
     if versions:
         _dump_am_versions(id_, versions)
 
@@ -58,7 +59,7 @@ def _load_id_to_text() -> Dict[str, ArreteMinisteriel]:
         id_: ensure_not_none(
             enrich_am(ensure_not_none(id_to_structured_text.get(id_) or id_to_initial_text.get(id_)), md)
         )
-        for id_, md in tqdm(ID_TO_AM_MD.items(), 'Building AM list.')
+        for id_, md in tqdm(_ID_TO_AM_MD.items(), 'Building AM list.')
     }
 
 
@@ -254,7 +255,7 @@ def _check_seeds() -> None:
 def _write_classements_csv(filename: str) -> None:
     tuples = []
     keys = ['rubrique', 'regime', 'alinea']
-    for am in ID_TO_AM_MD.values():
+    for am in _ID_TO_AM_MD.values():
         for cl in am.classements:
             if cl.state == cl.state.ACTIVE:
                 tp = tuple([getattr(cl, key) if key != 'regime' else cl.regime.value for key in keys])
@@ -270,7 +271,7 @@ def _generate_seeds() -> None:
     statuses = load_all_am_statuses()
     id_to_am = _load_id_to_text()
     all_ams = [am.to_dict() for am_id, am in id_to_am.items() if am_id not in _1510_IDS]
-    for id_ in tqdm(ID_TO_AM_MD, 'Enriching AM.'):
+    for id_ in tqdm(_ID_TO_AM_MD, 'Enriching AM.'):
         if statuses[id_] == AMStatus.VALIDATED:
             _copy_enriched_am(id_, id_to_am[id_], parametrizations[id_])
             if id_ in _1510_IDS:

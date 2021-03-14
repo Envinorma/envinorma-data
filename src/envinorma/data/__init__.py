@@ -177,7 +177,7 @@ class DateCriterion:
         dict_ = dict_.copy()
         dict_['left_date'] = dict_.get('left_date')
         dict_['right_date'] = dict_.get('right_date')
-        return DateCriterion(**dict_)
+        return cls(**dict_)
 
 
 class Regime(Enum):
