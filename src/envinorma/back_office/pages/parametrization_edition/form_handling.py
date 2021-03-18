@@ -235,7 +235,7 @@ def _check_and_build_new_text(title: str, content: str) -> StructuredText:
 
 def _build_new_text(new_text_title: Optional[str], new_text_content: Optional[str]) -> Optional[StructuredText]:
     if not new_text_title:
-        assert new_text_content is None, f'{new_text_title} and {new_text_content} must be simultaneously None'
+        assert not new_text_content, f'{new_text_title} and {new_text_content} must be simultaneously None'
         return None
     assert new_text_content is not None, f'new_text_content must not be None'
     return _check_and_build_new_text(new_text_title, new_text_content)

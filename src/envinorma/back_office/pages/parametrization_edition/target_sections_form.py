@@ -53,7 +53,7 @@ def _target_alineas_form(
     title = html.H6('Alineas visés')
     if not _is_condition(operation):
         return html.Div(
-            [title, dcc.Checklist(options=[], id=page_ids.target_alineas(rank))],
+            [title, dbc.Checklist(options=[], id=page_ids.target_alineas(rank))],
             hidden=True,
         )
     condition = _ensure_optional_condition(loaded_parameter)
@@ -75,7 +75,7 @@ def _target_alineas_form(
     return html.Div(
         [
             title,
-            dcc.Checklist(options=options, value=value, id=page_ids.target_alineas(rank)),
+            dbc.Checklist(options=options, value=value, id=page_ids.target_alineas(rank)),
         ]
     )
 
