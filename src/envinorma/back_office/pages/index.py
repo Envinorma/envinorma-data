@@ -4,6 +4,7 @@ from typing import Any, Dict, List, Optional, Union
 import dash_core_components as dcc
 import dash_html_components as html
 from dash.development.base_component import Component
+
 from envinorma.back_office.components import replace_line_breaks
 from envinorma.back_office.fetch_data import load_all_am_statuses
 from envinorma.back_office.routing import Page

@@ -6,8 +6,8 @@ from envinorma.data.text_elements import (
     Table,
     _count_nb_cols_in_each_row,
     _find_next_index_none,
-    table_to_list,
     estr,
+    table_to_list,
 )
 
 

@@ -1,6 +1,7 @@
 from typing import List
 
 from bs4 import BeautifulSoup
+
 from envinorma.back_office.structure_edition import (
     _TABLE_MARK,
     _count_prefix_hashtags,

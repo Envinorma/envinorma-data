@@ -1,4 +1,5 @@
 import math
+
 from scripts.generate_seeds import _is_a_partition
 
 

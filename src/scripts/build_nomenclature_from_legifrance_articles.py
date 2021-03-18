@@ -7,6 +7,8 @@ from dataclasses import dataclass
 from typing import List, Optional
 
 from bs4 import BeautifulSoup
+from tqdm import tqdm
+
 from envinorma.config import AM_DATA_FOLDER, config
 from envinorma.data import (
     Cell,
@@ -27,7 +29,6 @@ from envinorma.data_build.georisques_data import (
 from envinorma.io.parse_html import extract_table_from_soup
 from envinorma.utils import write_json
 from legifrance.legifrance_API import get_article_by_id, get_legifrance_client
-from tqdm import tqdm
 
 _ARTICLE_IDS = [
     'LEGIARTI000039330431',

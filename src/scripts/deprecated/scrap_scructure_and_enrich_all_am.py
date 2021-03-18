@@ -6,6 +6,9 @@ from datetime import datetime
 from typing import Any, Dict, List, Optional, Set, Tuple
 from warnings import warn
 
+from requests_oauthlib import OAuth2Session
+from tqdm import tqdm
+
 from envinorma.am_enriching import (
     add_references,
     add_summary,
@@ -13,7 +16,12 @@ from envinorma.am_enriching import (
     detect_and_add_topics,
     remove_null_applicabilities,
 )
-from envinorma.config import AM_DATA_FOLDER, config
+from envinorma.config import (
+    AM_DATA_FOLDER,
+    config,
+    create_folder_and_generate_parametric_filename,
+    generate_parametric_descriptor,
+)
 from envinorma.data import (
     AidaData,
     AMMetadata,
@@ -40,7 +48,6 @@ from envinorma.data_build.manual_enrichments import (
 from envinorma.io.markdown import am_to_markdown
 from envinorma.parametrization import Parametrization, add_am_signatures
 from envinorma.parametrization.parametric_am import check_parametrization_is_still_valid, generate_all_am_versions
-from envinorma.config import create_folder_and_generate_parametric_filename, generate_parametric_descriptor
 from envinorma.structure.am_structure_extraction import (
     AMStructurationError,
     check_legifrance_dict,
@@ -50,8 +57,6 @@ from envinorma.structure.texts_properties import compute_am_diffs, compute_am_si
 from envinorma.topics.topics import TOPIC_ONTOLOGY
 from envinorma.utils import write_json
 from legifrance.legifrance_API import get_current_loda_via_cid_response, get_legifrance_client
-from requests_oauthlib import OAuth2Session
-from tqdm import tqdm
 
 
 def get_enriched_am_filename(am_id: str) -> str:

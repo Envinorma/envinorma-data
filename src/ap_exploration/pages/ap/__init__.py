@@ -4,15 +4,16 @@ import dash
 import dash_bootstrap_components as dbc
 import dash_core_components as dcc
 import dash_html_components as html
+from dash.dependencies import Input, Output, State
+from dash.development.base_component import Component
+
 from ap_exploration.data import Acte, ActeState, Etablissement, Prescription, PrescriptionStatus
 from ap_exploration.db import fetch_acte, fetch_ap_prescriptions
 from ap_exploration.pages.ap.add_prescriptions import page as add_prescriptions_page
 from ap_exploration.routing import APOperation, Endpoint
-from dash.dependencies import Input, Output, State
-from dash.development.base_component import Component
 from envinorma.back_office.components.am_component import table_to_component
 from envinorma.back_office.components.table import ExtendedComponent, table_component
-from envinorma.data.text_elements import TextElement, Table
+from envinorma.data.text_elements import Table, TextElement
 
 
 def _href(acte_id: str) -> str:

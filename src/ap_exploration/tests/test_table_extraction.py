@@ -1,6 +1,7 @@
 from typing import List
 
 import pytest
+
 from ap_exploration.pages.ap_image.table_extraction import (
     Contour,
     DetectedCell,

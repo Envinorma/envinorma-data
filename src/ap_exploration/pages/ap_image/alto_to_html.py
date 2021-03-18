@@ -2,6 +2,7 @@ from typing import Callable, List
 
 import dash_html_components as html
 from dash.development.base_component import Component
+
 from envinorma.back_office.components.am_component import structured_text_component
 from envinorma.data import StructuredText
 from envinorma.data.text_elements import TextElement, Title

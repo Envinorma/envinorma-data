@@ -2,11 +2,12 @@ import string
 from dataclasses import dataclass, replace
 from typing import Callable, List, Optional, Set, Tuple, TypeVar, Union
 
-from ap_exploration.pages.ap_image.table_extraction import group_by_proximity
-from envinorma.io.alto import AltoComposedBlock, AltoPage, AltoString, AltoTextLine, extract_lines
 from scipy.spatial import Rectangle
 from textdistance import levenshtein
 from unidecode import unidecode
+
+from ap_exploration.pages.ap_image.table_extraction import group_by_proximity
+from envinorma.io.alto import AltoComposedBlock, AltoPage, AltoString, AltoTextLine, extract_lines
 
 
 def _ensure_str(str_: Union[str, bytes]) -> str:

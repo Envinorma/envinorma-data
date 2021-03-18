@@ -1,6 +1,7 @@
 from datetime import date
 
 import pytest
+
 from scripts.classements_build import (
     DetailedClassement,
     DetailedRegime,

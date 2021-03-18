@@ -9,13 +9,14 @@ import dash_bootstrap_components as dbc
 import dash_core_components as dcc
 import dash_editable_div as ded
 import dash_html_components as html
+from dash.dependencies import Input, Output, State
+from dash.development.base_component import Component
+from dash.exceptions import PreventUpdate
+
 from ap_exploration.data import Acte, Prescription, PrescriptionStatus
 from ap_exploration.db import add_prescriptions, fetch_acte
 from ap_exploration.db.ap_sample import AP_FOLDER, APS
 from ap_exploration.routing import APOperation, Endpoint
-from dash.dependencies import Input, Output, State
-from dash.development.base_component import Component
-from dash.exceptions import PreventUpdate
 from envinorma.back_office.components import error_component
 from envinorma.back_office.components.am_component import table_to_component
 from envinorma.back_office.components.table import ExtendedComponent

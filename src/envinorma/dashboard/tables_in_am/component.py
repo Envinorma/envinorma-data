@@ -6,8 +6,9 @@ import dash_table
 import plotly.express as px
 from dash.dash import Dash
 from dash.dependencies import Input, Output
-from .data import TablesDataset
+
 from ..utils import apply_filter, apply_sort, build_data_file_name, generate_dropdown, random_id
+from .data import TablesDataset
 
 DATAFRAME = TablesDataset.load_csv(build_data_file_name(__file__))
 

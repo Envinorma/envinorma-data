@@ -7,6 +7,7 @@ from typing import Any, Dict, Iterable, List, Optional, Tuple, TypeVar, Union
 
 import bs4
 from bs4 import BeautifulSoup
+
 from envinorma.data import (
     ArreteMinisteriel,
     ArticleStatus,

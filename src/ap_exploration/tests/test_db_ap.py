@@ -1,4 +1,4 @@
-from ap_exploration.db.ap import georisques_url_to_document_id, georisques_document_id_to_url
+from ap_exploration.db.ap import georisques_document_id_to_url, georisques_url_to_document_id
 
 
 def test_georisques_url_to_document_id() -> None:

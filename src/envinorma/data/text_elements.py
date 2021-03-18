@@ -1,7 +1,7 @@
 import random
+from dataclasses import asdict, dataclass, field
 from string import ascii_letters
 from typing import Any, Dict, List, Optional, Union
-from dataclasses import asdict, dataclass, field
 
 
 @dataclass

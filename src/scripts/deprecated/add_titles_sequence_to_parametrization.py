@@ -3,13 +3,14 @@ Script for manually adding title sequences to parametrization.
 Deprecated now: this feature is fully integrated in the back office.
 '''
 import argparse
-from envinorma.parametrization import add_titles_sequences
+
 from envinorma.back_office.fetch_data import (
     load_initial_am,
-    upsert_new_parametrization,
     load_parametrization,
     load_structured_am,
+    upsert_new_parametrization,
 )
+from envinorma.parametrization import add_titles_sequences
 
 
 def run(am_id: str):

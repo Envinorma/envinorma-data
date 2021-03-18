@@ -9,6 +9,7 @@ from dash import Dash
 from dash.dependencies import ALL, Input, Output, State
 from dash.development.base_component import Component
 from dash.exceptions import PreventUpdate
+
 from envinorma.back_office.components import error_component
 from envinorma.back_office.components.diff import diff_component
 from envinorma.back_office.routing import Page

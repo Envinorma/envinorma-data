@@ -2,6 +2,7 @@ from typing import List
 
 import dash_html_components as html
 from dash.development.base_component import Component
+
 from envinorma.back_office.utils import get_truncated_str
 from envinorma.data import StructuredText
 from envinorma.structure import Title, structured_text_to_text_elements

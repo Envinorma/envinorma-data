@@ -4,12 +4,13 @@ from typing import Any, Dict, List, Optional, Set, Tuple
 import dash
 import dash_bootstrap_components as dbc
 import dash_html_components as html
+from dash.dependencies import MATCH, Input, Output, State
+from dash.development.base_component import Component
+
 from envinorma.back_office.components.am_component import table_to_component
 from envinorma.back_office.components.diff import diff_component
 from envinorma.back_office.components.summary_component import summary_component
 from envinorma.back_office.utils import assert_str, compute_text_diff
-from dash.dependencies import MATCH, Input, Output, State
-from dash.development.base_component import Component
 from envinorma.data import Applicability, ArreteMinisteriel, EnrichedString, StructuredText
 from envinorma.topics.patterns import TopicName
 

@@ -2,6 +2,7 @@ from typing import Union
 
 import dash_html_components as html
 from dash.development.base_component import Component
+
 from envinorma.back_office.components.am_component import (
     _get_html_heading_classname,
     _split_in_header_and_body_rows,

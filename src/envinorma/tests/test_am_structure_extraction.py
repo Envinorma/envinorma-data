@@ -2,6 +2,7 @@ import json
 import random
 
 import pytest
+
 from envinorma.config import AM_DATA_FOLDER
 from envinorma.data import LegifranceSection, LegifranceText, load_legifrance_text
 from envinorma.structure.am_structure_extraction import (

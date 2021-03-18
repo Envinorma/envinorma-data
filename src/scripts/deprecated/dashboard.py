@@ -4,6 +4,7 @@ from envinorma.am_enriching import extract_topics
 from envinorma.data import ArreteMinisteriel, StructuredText
 from envinorma.topics.patterns import TopicName
 from envinorma.topics.topics import TOPIC_ONTOLOGY
+
 from .scrap_scructure_and_enrich_all_am import handle_all_am
 
 

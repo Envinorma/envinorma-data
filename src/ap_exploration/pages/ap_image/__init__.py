@@ -7,6 +7,10 @@ import dash
 import dash_bootstrap_components as dbc
 import dash_core_components as dcc
 import dash_html_components as html
+from dash.dependencies import Input, Output, State
+from dash.development.base_component import Component
+from dash.exceptions import PreventUpdate
+
 from ap_exploration.db.ap import (
     SAMPLE_DOC_IDS,
     OCRProcessingStep,
@@ -30,9 +34,6 @@ from ap_exploration.pages.ap_image.alto_to_html import (
 from ap_exploration.pages.ap_image.components.upload_row import upload_row
 from ap_exploration.pages.ap_image.process import start_simple_ocr_process
 from ap_exploration.routing import Page
-from dash.dependencies import Input, Output, State
-from dash.development.base_component import Component
-from dash.exceptions import PreventUpdate
 from envinorma.back_office.components import error_component
 from envinorma.back_office.utils import generate_id
 from envinorma.io.alto import AltoPage

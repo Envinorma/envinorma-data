@@ -1,6 +1,7 @@
 import json
 
 import pytest
+
 from envinorma.config import AM_DATA_FOLDER
 from envinorma.data import load_legifrance_text
 from envinorma.io.markdown import (

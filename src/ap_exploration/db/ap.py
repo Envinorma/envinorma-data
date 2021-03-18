@@ -6,6 +6,7 @@ from dataclasses import asdict, dataclass
 from typing import Any, Dict, List, Optional
 
 import requests
+
 from ap_exploration.models import ArretePrefectoral
 from envinorma.config import config
 from envinorma.data.text_elements import Title

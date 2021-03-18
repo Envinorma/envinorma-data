@@ -7,11 +7,12 @@ import os
 from dataclasses import asdict, dataclass
 from typing import Any, Callable, Dict, List
 
+from git import Repo
+from git.objects.commit import Commit
+
 from envinorma.config import AM_DATA_FOLDER
 from envinorma.data import ArreteMinisteriel
 from envinorma.utils import write_json
-from git import Repo
-from git.objects.commit import Commit
 
 _AM_DIFF_REPO_PATH = '/Users/remidelbouys/EnviNorma/arretes_ministeriels'
 

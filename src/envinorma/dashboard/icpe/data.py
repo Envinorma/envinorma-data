@@ -1,7 +1,8 @@
-import pandas
 from dataclasses import asdict, dataclass, field
 from datetime import date
 from typing import Any, Dict, List, Optional
+
+import pandas
 
 
 @dataclass

@@ -5,15 +5,16 @@ from dataclasses import dataclass
 from typing import Any, Callable, Dict, Generic, List, Optional, Tuple, TypeVar, Union
 
 import cv2
+from pdf2image import convert_from_path, pdfinfo_from_path
+from pytesseract.pytesseract import run_tesseract
+from tqdm import tqdm
+
 from ap_exploration.models import ArretePrefectoral
 from ap_exploration.pages.ap_image.extract_ap_structure import extract_ap_intro, keep_alphanumeric, lower_unicode
 from ap_exploration.pages.ap_image.table_extraction import LocatedTable, extract_and_remove_tables
 from envinorma.data import Row, Table
 from envinorma.data.text_elements import TextElement, Title
 from envinorma.io.alto import AltoFile, AltoPage, AltoTextBlock, AltoTextLine, extract_lines, extract_text_blocks
-from pdf2image import convert_from_path, pdfinfo_from_path
-from pytesseract.pytesseract import run_tesseract
-from tqdm import tqdm
 
 _AdvancementCallback = Callable[[float], None]
 

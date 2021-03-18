@@ -3,9 +3,10 @@ Temporary script: download and transform a set of PDF documents to get the alto 
 '''
 import os
 
+from tqdm import tqdm
+
 from ap_exploration.db.ap import SAMPLE_DOC_IDS, download_document, georisques_full_url, input_pdf_path
 from ap_exploration.pages.ap_image.process import simple_ocr_on_file
-from tqdm import tqdm
 
 for doc_id in tqdm(SAMPLE_DOC_IDS, 'Downloading Géorisques documents'):
     output_filename = input_pdf_path(doc_id)

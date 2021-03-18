@@ -1,8 +1,8 @@
 import json
-from typing import List, Set, Tuple, Union, Dict
+from typing import Dict, List, Set, Tuple, Union
+
 from envinorma.data import EnrichedString
 from envinorma.topics.patterns import TopicName
-
 
 LABELS = {
     0: {TopicName.BRUIT_VIBRATIONS},

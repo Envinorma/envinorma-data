@@ -14,7 +14,6 @@ from envinorma.parametrization import AlternativeSection, NonApplicationConditio
 from . import page_ids
 from .form import form
 
-
 _EMPHASIZED_WORDS = [
     'déclaration',
     'enregistrement',

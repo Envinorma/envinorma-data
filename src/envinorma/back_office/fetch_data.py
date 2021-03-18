@@ -2,7 +2,8 @@ import json
 from typing import Any, Dict, List, Optional, Tuple
 
 import psycopg2
-from envinorma.back_office.utils import AMOperation, AMStatus, ID_TO_AM_MD
+
+from envinorma.back_office.utils import ID_TO_AM_MD, AMOperation, AMStatus
 from envinorma.config import config
 from envinorma.data import ArreteMinisteriel
 from envinorma.parametrization import (

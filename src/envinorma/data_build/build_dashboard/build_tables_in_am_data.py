@@ -1,7 +1,7 @@
+from envinorma.back_office.fetch_data import load_all_structured_am
+from envinorma.dashboard.tables_in_am.data import TablesDataset, TableStat
 from envinorma.data import Table
 from envinorma.structure.texts_properties import extract_tables
-from envinorma.dashboard.tables_in_am.data import TablesDataset, TableStat
-from envinorma.back_office.fetch_data import load_all_structured_am
 
 
 def _extract_max_nb_cols(table: Table) -> int:

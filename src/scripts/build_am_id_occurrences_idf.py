@@ -6,6 +6,7 @@ from collections import Counter
 from typing import Dict, List
 
 import pandas
+
 from envinorma.back_office.utils import ID_TO_AM_MD
 
 

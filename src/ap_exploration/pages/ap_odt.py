@@ -5,17 +5,18 @@ from typing import Any, Callable, Dict, List, Optional, Tuple, TypeVar, Union
 import dash_bootstrap_components as dbc
 import dash_core_components as dcc
 import dash_html_components as html
-from ap_exploration.db.ap_sample import AP_FOLDER, APS
-from ap_exploration.routing import Endpoint
 from dash.dependencies import Input, Output
 from dash.development.base_component import Component
+from tqdm import tqdm
+
+from ap_exploration.db.ap_sample import AP_FOLDER, APS
+from ap_exploration.routing import Endpoint
 from envinorma.back_office.components.am_component import structured_text_component, summary_and_content
 from envinorma.back_office.components.summary_component import summary_component
 from envinorma.back_office.components.table import table_component
 from envinorma.data import StructuredText
 from envinorma.io.open_document import ODTExtractedText, extract_text_and_metadata
 from envinorma.utils import ensure_not_none
-from tqdm import tqdm
 
 _DB_FILENAME = 'tmp_ap_db.json'
 

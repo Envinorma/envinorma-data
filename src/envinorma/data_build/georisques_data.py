@@ -7,9 +7,10 @@ from enum import Enum
 from typing import Any, Dict, List, Optional, Set, Tuple
 
 import pandas
+from tqdm import tqdm
+
 from envinorma.data import Nomenclature, Regime, RubriqueSimpleThresholds
 from envinorma.utils import write_json
-from tqdm import tqdm
 
 
 class Seveso(Enum):

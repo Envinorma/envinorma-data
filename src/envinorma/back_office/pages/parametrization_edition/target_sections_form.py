@@ -1,5 +1,4 @@
 from dataclasses import dataclass
-import json
 from typing import Any, Dict, List, Optional, Tuple, Union, cast
 
 import dash

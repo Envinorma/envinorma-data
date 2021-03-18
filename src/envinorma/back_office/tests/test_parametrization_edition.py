@@ -2,6 +2,14 @@ from datetime import date
 
 import pytest
 
+from envinorma.back_office.pages.parametrization_edition.condition_form import (
+    _AND_ID,
+    _CONDITION_VARIABLES,
+    _OR_ID,
+    _change_to_mono_conditions,
+    _get_str_target,
+    _make_mono_conditions,
+)
 from envinorma.parametrization.conditions import (
     AndCondition,
     Equal,
@@ -10,15 +18,6 @@ from envinorma.parametrization.conditions import (
     OrCondition,
     ParameterEnum,
     Range,
-)
-
-from envinorma.back_office.pages.parametrization_edition.condition_form import (
-    _AND_ID,
-    _CONDITION_VARIABLES,
-    _OR_ID,
-    _change_to_mono_conditions,
-    _get_str_target,
-    _make_mono_conditions,
 )
 
 

@@ -2,6 +2,7 @@ from typing import List, Optional, Tuple
 
 import dash_html_components as html
 from dash.development.base_component import Component
+
 from envinorma.back_office.components import replace_line_breaks
 from envinorma.back_office.components.summary_component import summary_component
 from envinorma.data import ArreteMinisteriel, Cell, Row, StructuredText, Table, am_to_text

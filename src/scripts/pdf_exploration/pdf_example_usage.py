@@ -5,8 +5,8 @@ Possible entry point for processing copiable pdf
 
 from typing import Optional
 
-from envinorma.io.markdown import extract_markdown_text
 from envinorma.io.docx import build_structured_text_from_docx_xml, get_docx_xml
+from envinorma.io.markdown import extract_markdown_text
 from envinorma.pdf import pdf_to_docx
 
 

@@ -1,12 +1,12 @@
-import pickle
 from dataclasses import asdict, dataclass
 from typing import Any, Callable, Dict, List, Tuple, TypeVar, Union
 
 import cv2
 import numpy as np
 import pytesseract
-from envinorma.data import Cell, Row, Table, estr
 from tqdm import tqdm
+
+from envinorma.data import Cell, Row, Table, estr
 
 
 def _invert_image(img: np.ndarray) -> np.ndarray:

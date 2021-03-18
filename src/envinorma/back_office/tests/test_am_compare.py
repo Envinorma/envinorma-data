@@ -1,4 +1,4 @@
-from envinorma.back_office.am_compare import _component_builder, CompareWith
+from envinorma.back_office.am_compare import CompareWith, _component_builder
 
 
 def test_component_builder():

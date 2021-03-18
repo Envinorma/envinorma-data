@@ -5,7 +5,6 @@ import dash_core_components as dcc
 import dash_html_components as html
 from dash.dependencies import Input, Output, State
 from dash.development.base_component import Component
-from envinorma.data import ArreteMinisteriel, am_to_text
 
 from envinorma.back_office.app_init import app
 from envinorma.back_office.components import ButtonState, link_button
@@ -14,6 +13,7 @@ from envinorma.back_office.components.summary_component import summary_component
 from envinorma.back_office.fetch_data import delete_initial_am, delete_structured_am
 from envinorma.back_office.routing import build_am_page
 from envinorma.back_office.utils import AMOperation
+from envinorma.data import ArreteMinisteriel, am_to_text
 
 _DELETE_BUTTON = 'am-init-tab-delete-button'
 _DELETE_OUTPUT = 'am-init-tab-delete-output'

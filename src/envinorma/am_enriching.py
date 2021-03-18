@@ -1,4 +1,3 @@
-from envinorma.data.text_elements import table_to_list
 import re
 from copy import copy
 from dataclasses import replace
@@ -20,6 +19,7 @@ from envinorma.data import (
     SummaryElement,
     Table,
 )
+from envinorma.data.text_elements import table_to_list
 from envinorma.structure.title_detection import (
     NUMBERING_PATTERNS,
     ROMAN_PATTERN,

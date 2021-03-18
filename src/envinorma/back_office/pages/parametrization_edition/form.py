@@ -16,8 +16,8 @@ from envinorma.back_office.utils import AMOperation, get_truncated_str
 from envinorma.data import Ints, StructuredText, dump_path
 from envinorma.parametrization import ParameterObject, ParametrizationError
 
-from .condition_form import ConditionFormValues, condition_form
 from . import page_ids
+from .condition_form import ConditionFormValues, condition_form
 from .form_handling import FormHandlingError, extract_and_upsert_new_parameter
 from .target_sections_form import DropdownOptions, TargetSectionFormValues, target_section_form
 
