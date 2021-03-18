@@ -9,11 +9,12 @@ from dash import Dash
 from dash.dependencies import ALL, MATCH, Input, Output, State
 from dash.development.base_component import Component
 from dash.exceptions import PreventUpdate
+
 from envinorma.am_enriching import detect_and_add_topics
 from envinorma.back_office import am_compare
 from envinorma.back_office.components import error_component
 from envinorma.back_office.components.parametric_am import parametric_am_callbacks, parametric_am_component
-from envinorma.back_office.fetch_data import load_initial_am, load_parametrization, load_structured_am
+from envinorma.back_office.fetch_data import load_most_advanced_am, load_parametrization
 from envinorma.back_office.routing import Page
 from envinorma.back_office.utils import ID_TO_AM_MD, get_current_user
 from envinorma.data import ArreteMinisteriel, Regime, StructuredText, add_metadata, random_id
@@ -220,7 +221,7 @@ def _page(am: ArreteMinisteriel) -> Component:
 
 
 def _load_am(am_id: str) -> Optional[ArreteMinisteriel]:
-    return load_structured_am(am_id) or load_initial_am(am_id)
+    return load_most_advanced_am(am_id)
 
 
 def _layout(am_id: str, compare_with: Optional[str] = None) -> Component:

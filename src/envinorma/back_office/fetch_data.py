@@ -190,6 +190,10 @@ def upsert_initial_am(am_id: str, am: ArreteMinisteriel) -> None:
     _exectute_update_query(query, (am_id, data, data, am_id))
 
 
+def load_most_advanced_am(am_id: str) -> Optional[ArreteMinisteriel]:
+    return load_structured_am(am_id) or load_initial_am(am_id)
+
+
 def load_am_status(am_id: str) -> AMStatus:
     query = 'SELECT status FROM am_status WHERE am_id = %s;'
     status = _ensure_one_variable(_exectute_select_query(query, (am_id,)))

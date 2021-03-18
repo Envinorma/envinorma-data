@@ -1,7 +1,8 @@
 from datetime import date
 
 import pytest
-from envinorma.back_office.pages.parametrization_edition import _get_str_target, page_ids
+
+from envinorma.back_office.pages.parametrization_edition import page_ids
 from envinorma.back_office.pages.parametrization_edition.form_handling import (
     FormHandlingError,
     _assert_strictly_below,
@@ -182,15 +183,6 @@ def test_build_parameter_value():
             _build_parameter_value(param.value.type, '')
         except Exception as exc:
             if 'Ce type de paramètre' in str(exc):
-                raise exc
-
-
-def test_get_str_target():
-    for param in page_ids.CONDITION_VARIABLES.values():
-        try:
-            _get_str_target('test', param.value.type)
-        except Exception as exc:
-            if 'Unhandled parameter type' in str(exc):
                 raise exc
 
 

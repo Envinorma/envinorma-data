@@ -164,7 +164,7 @@ def check_legifrance_diff_computed():
     cmd = 'python3 scripts/check_new_texts_were_published.py'
     if not max_date:
         raise ValueError(f'No legifrance_diffs found : run one.\ncmd: {cmd}')
-    if (datetime.now() - max_date).total_seconds() >= 10 * 24 * 3600:
+    if (datetime.now() - max_date).total_seconds() >= 12 * 24 * 3600:
         raise ValueError(f'Last legifrance_diffs computation is too old, run one. (date: {max_date})\ncmd: {cmd}')
 
 

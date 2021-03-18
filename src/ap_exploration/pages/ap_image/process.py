@@ -64,7 +64,7 @@ def simple_ocr_on_file(document_id: str) -> None:
     for page_nb in tqdm(range(nb_pages), 'Performing OCR.'):
         result.append(_ocr_page(input_path, page_nb))
         msg = f'Performing OCR on page {page_nb + 2}/{nb_pages}'
-        _ocr_step_callback(document_id)(OCRProcessingStep(msg, 0.1 + 0.9 * (page_nb + 1) / nb_pages, False))
+        _ocr_step_callback(document_id)(OCRProcessingStep(msg, min(1, 0.1 + 0.9 * (page_nb + 1) / nb_pages), False))
     dump_alto_pages_xml(result, document_id)
     _ocr_step_callback(document_id)(OCRProcessingStep(None, 1.0, True))
 

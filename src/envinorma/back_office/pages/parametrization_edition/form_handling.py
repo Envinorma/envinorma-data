@@ -1,10 +1,13 @@
+from dataclasses import dataclass
 from datetime import date, datetime
-from typing import Any, Dict, List, Optional, Tuple, Type, Union
+from typing import Any, Dict, List, Optional, Type, Union, cast
 
-from envinorma.back_office.fetch_data import upsert_parameter
+from envinorma.back_office.fetch_data import load_most_advanced_am, upsert_parameter
 from envinorma.back_office.pages.parametrization_edition import page_ids
-from envinorma.back_office.utils import AMOperation, assert_int, assert_list, assert_str
-from envinorma.data import Regime, StructuredText, ensure_rubrique, load_path
+from envinorma.back_office.pages.parametrization_edition.condition_form import ConditionFormValues
+from envinorma.back_office.pages.parametrization_edition.target_sections_form import TargetSectionFormValues
+from envinorma.back_office.utils import AMOperation, safe_get_section
+from envinorma.data import ArreteMinisteriel, Regime, StructuredText, ensure_rubrique, load_path
 from envinorma.data.text_elements import EnrichedString
 from envinorma.parametrization import (
     AlternativeSection,
@@ -24,102 +27,13 @@ from envinorma.parametrization.conditions import (
     OrCondition,
     Parameter,
     ParameterType,
-    Range, ensure_mono_conditions,
+    Range,
+    ensure_mono_conditions,
 )
 
 
 class FormHandlingError(Exception):
     pass
-
-
-def _make_list(candidate: Optional[Union[List[Dict[str, Any]], Dict[str, Any]]]) -> List[Dict[str, Any]]:
-    if not candidate:
-        return []
-    if isinstance(candidate, list):
-        return candidate
-    return [candidate]
-
-
-def _extract_dropdown_values(components: List[Dict[str, Any]]) -> List[Optional[int]]:
-    res: List[Optional[int]] = []
-    for component in components:
-        if isinstance(component, str):
-            continue
-        assert isinstance(component, dict)
-        if component['type'] == 'Dropdown':
-            res.append(component['props'].get('value'))
-        else:
-            res.extend(_extract_dropdown_values(_make_list(component['props'].get('children'))))
-    return res
-
-
-def _remove_str(elements: List[Union[str, Dict[str, Any]]]) -> List[Dict[str, Any]]:
-    return [el for el in elements if not isinstance(el, str)]
-
-
-def _extract_non_str_children(page_state: Dict[str, Any]) -> List[Dict[str, Any]]:
-    child_or_children = page_state.get('props', {}).get('children')
-    if not child_or_children:
-        return []
-    if isinstance(child_or_children, dict):
-        return [child_or_children]
-    if isinstance(child_or_children, list):
-        return _remove_str(child_or_children)
-    return []
-
-
-def _extract_components_with_id(page_state: Dict[str, Any]) -> List[Dict[str, Any]]:
-    children = _extract_non_str_children(page_state)
-    shallow = [child for child in children if child.get('props', {}).get('id')]
-    return shallow + [dc for child in children for dc in _extract_components_with_id(child)]
-
-
-def _extract_id_to_value(page_state: Dict[str, Any]) -> Dict[str, Any]:
-    children = _extract_components_with_id(page_state)
-    return {child['props']['id']: child['props'].get('value') for child in children}
-
-
-def _get_with_error(dict_: Dict[str, Any], key: str) -> Any:
-    if key not in dict_:
-        raise ValueError(f'Expecting key {key} in dict_. Existing keys: {list(dict_.keys())}')
-    return dict_[key]
-
-
-def _extract_conditions(nb_conditions: int, id_to_value: Dict[str, Any]) -> List[Tuple[str, str, str]]:
-    return [
-        (
-            assert_str(_get_with_error(id_to_value, f'{page_ids.CONDITION_VARIABLE}_{i}')),
-            assert_str(_get_with_error(id_to_value, f'{page_ids.CONDITION_OPERATION}_{i}')),
-            assert_str(_get_with_error(id_to_value, f'{page_ids.CONDITION_VALUE}_{i}')),
-        )
-        for i in range(nb_conditions)
-    ]
-
-
-def _build_source(source_str: str) -> ConditionSource:
-    return ConditionSource('', EntityReference(SectionReference(load_path(source_str)), None))
-
-
-def _extract_alinea_indices(target_alineas: Optional[List[int]]) -> Optional[List[int]]:
-    if target_alineas is None:
-        return None
-    assert_list(target_alineas)
-    return [assert_int(x) for x in target_alineas]
-
-
-def _build_non_application_condition(
-    source: str,
-    target_section: str,
-    merge: str,
-    conditions: List[Tuple[str, str, str]],
-    target_alineas: Optional[List[int]],
-) -> NonApplicationCondition:
-    return NonApplicationCondition(
-        EntityReference(SectionReference(load_path(target_section)), _extract_alinea_indices(target_alineas)),
-        _build_condition(conditions, merge),
-        _build_source(source),
-        description='',
-    )
 
 
 def _get_condition_cls(merge: str) -> Union[Type[AndCondition], Type[OrCondition]]:
@@ -284,85 +198,152 @@ def _simplify_condition(condition: Condition) -> Condition:
     return condition
 
 
-def _build_condition(conditions_raw: List[Tuple[str, str, str]], merge: str) -> Condition:
-    condition_cls = _get_condition_cls(merge)
+def _build_sourceVNEWW(source_str: str) -> ConditionSource:
+    return ConditionSource('', EntityReference(SectionReference(load_path(source_str)), None))
+
+
+def _build_conditionVNEWWW(condition_form_values: ConditionFormValues) -> Condition:
+    condition_cls = _get_condition_cls(condition_form_values.merge)
+    conditions_raw = zip(
+        condition_form_values.parameters, condition_form_values.operations, condition_form_values.values
+    )
     conditions = [_extract_condition(i, *condition_raw) for i, condition_raw in enumerate(conditions_raw)]
     return _simplify_condition(condition_cls(conditions))
+
+
+@dataclass
+class _Modification:
+    target_section: SectionReference
+    target_alineas: Optional[List[int]]
+    new_text: Optional[StructuredText]
 
 
 def _extract_alineas(text: str) -> List[EnrichedString]:
     return [EnrichedString(line) for line in text.split('\n')]
 
 
-def _build_alternative_section(
-    source: str,
-    target_section: str,
-    merge: str,
-    conditions: List[Tuple[str, str, str]],
-    new_text_title: str,
-    new_text_content: str,
-) -> AlternativeSection:
-    new_text = StructuredText(EnrichedString(new_text_title), _extract_alineas(new_text_content), [], None)
-    return AlternativeSection(
-        SectionReference(load_path(target_section)),
-        new_text,
-        _build_condition(conditions, merge),
-        _build_source(source),
-        description='',
-    )
-
-
 _MIN_NB_CHARS = 1
 
 
-def _extract_new_text_parameters(id_to_value: Dict[str, str]) -> Tuple[str, str]:
-    new_text_title = _get_with_error(id_to_value, page_ids.NEW_TEXT_TITLE)
-    if len(new_text_title or '') < _MIN_NB_CHARS:
+def _check_and_build_new_text(title: str, content: str) -> StructuredText:
+    if len(title or '') < _MIN_NB_CHARS:
         raise FormHandlingError(f'Le champ "Titre" doit contenir au moins {_MIN_NB_CHARS} caractères.')
-    new_text_content = _get_with_error(id_to_value, page_ids.NEW_TEXT_CONTENT)
-    if len(new_text_content or '') < _MIN_NB_CHARS:
+    if len(content or '') < _MIN_NB_CHARS:
         raise FormHandlingError(f'Le champ "Contenu du paragraphe" doit contenir au moins {_MIN_NB_CHARS} caractères.')
-    return new_text_title, new_text_content
+    return StructuredText(EnrichedString(title), _extract_alineas(content), [], None)
 
 
-def _count_alineas_in_section(text_dict: Dict[str, Any]) -> int:
-    if not text_dict:
-        return 0
-    return len(StructuredText.from_dict(text_dict).outer_alineas)
+def _build_new_text(new_text_title: Optional[str], new_text_content: Optional[str]) -> Optional[StructuredText]:
+    if not new_text_title:
+        assert new_text_content is None, f'{new_text_title} and {new_text_content} must be simultaneously None'
+        return None
+    assert new_text_content is not None, f'new_text_content must not be None'
+    return _check_and_build_new_text(new_text_title, new_text_content)
 
 
-def _extract_new_parameter_object(
-    page_state: Dict[str, Any], operation: AMOperation, nb_alinea_options: int
+def _simplify_alineas(
+    am: ArreteMinisteriel, section: SectionReference, target_alineas: Optional[List[int]]
+) -> Optional[List[int]]:
+    if not target_alineas:
+        return None
+    target_section = safe_get_section(section.path, am)
+    if target_section is None:
+        raise FormHandlingError('La section visée est introuvable dans l\'arrêté')
+    if len(set(target_alineas)) == len(target_section.outer_alineas):
+        return None
+    return target_alineas
+
+
+def _build_target_versionVNEWW(
+    am: ArreteMinisteriel,
+    new_text_title: Optional[str],
+    new_text_content: Optional[str],
+    target_section: str,
+    target_alineas: Optional[List[int]],
+) -> _Modification:
+    section = SectionReference(load_path(target_section))
+    simplified_target_alineas = _simplify_alineas(am, section, target_alineas)
+    new_text = _build_new_text(new_text_title, new_text_content)
+    return _Modification(section, simplified_target_alineas, new_text)
+
+
+def _build_target_versionsVNEWW(am: ArreteMinisteriel, form_values: TargetSectionFormValues) -> List[_Modification]:
+    new_texts_titles = form_values.new_texts_titles or len(form_values.target_sections) * [None]
+    new_texts_contents = form_values.new_texts_contents or len(form_values.target_sections) * [None]
+    target_sections = form_values.target_sections
+    target_alineas = form_values.target_alineas or len(form_values.target_sections) * [None]
+    return [
+        _build_target_versionVNEWW(am, title, content, section, alineas)
+        for title, content, section, alineas in zip(
+            new_texts_titles, new_texts_contents, target_sections, target_alineas
+        )
+    ]
+
+
+def _build_non_application_conditionVNEWWW(
+    condition: Condition, source: ConditionSource, modification: _Modification
+) -> NonApplicationCondition:
+    targeted_entity = EntityReference(modification.target_section, outer_alinea_indices=modification.target_alineas)
+    return NonApplicationCondition(targeted_entity=targeted_entity, condition=condition, source=source)
+
+
+def _build_parameter_object(
+    condition: Condition, source: ConditionSource, modification: _Modification
 ) -> ParameterObject:
-    id_to_value = _extract_id_to_value(page_state)
-    source = _get_with_error(id_to_value, page_ids.SOURCE)
-    if not source:
-        raise FormHandlingError('Le champ "Source" est obligatoire.')
-    target_section = _get_with_error(id_to_value, page_ids.TARGET_SECTION)
-    if not target_section:
-        raise FormHandlingError('Le champ "Paragraphe visé" est obligatoire.')
-    merge = _get_with_error(id_to_value, page_ids.CONDITION_MERGE)
-    nb_conditions = int(_get_with_error(id_to_value, page_ids.NB_CONDITIONS))
-    if nb_conditions == 0:
-        raise FormHandlingError('Il doit y avoir au moins une condition.')
-    conditions = _extract_conditions(nb_conditions, id_to_value)
-    if operation == operation.ADD_CONDITION:
-        target_alineas = _get_with_error(id_to_value, page_ids.TARGET_ALINEAS)
-        if len(set(target_alineas)) == nb_alinea_options:
-            target_alineas = None
-        return _build_non_application_condition(source, target_section, merge, conditions, target_alineas)
-    if operation == operation.ADD_ALTERNATIVE_SECTION:
-        new_text_title, new_text_content = _extract_new_text_parameters(id_to_value)
-        return _build_alternative_section(source, target_section, merge, conditions, new_text_title, new_text_content)
-    raise NotImplementedError(f'Expecting operation not to be {operation.value}')
+    if modification.new_text:
+        return AlternativeSection(
+            targeted_section=modification.target_section,
+            new_text=modification.new_text,
+            condition=condition,
+            source=source,
+        )
+    return _build_non_application_conditionVNEWWW(condition, source, modification)
+
+
+def _extract_new_parameter_objectsVNEWWWW(
+    am: ArreteMinisteriel,
+    source_str: str,
+    target_section_form_values: TargetSectionFormValues,
+    condition_form_values: ConditionFormValues,
+) -> List[ParameterObject]:
+    condition = _build_conditionVNEWWW(condition_form_values)
+    target_versions = _build_target_versionsVNEWW(am, target_section_form_values)
+    source = _build_sourceVNEWW(source_str)
+    return [_build_parameter_object(condition, source, target_version) for target_version in target_versions]
+
+
+def _check_consistency(operation: AMOperation, parameters: List[ParameterObject]) -> None:
+    for parameter in parameters:
+        if operation == AMOperation.ADD_CONDITION:
+            assert isinstance(
+                parameter, NonApplicationCondition
+            ), f'Expect NonApplicationCondition, got {type(parameter)}'
+        elif operation == AMOperation.ADD_ALTERNATIVE_SECTION:
+            assert isinstance(parameter, AlternativeSection), f'Expect AlternativeSection, got {type(parameter)}'
+        else:
+            raise ValueError(f'Unexpected operation {operation}')
 
 
 def extract_and_upsert_new_parameter(
-    page_state: Dict[str, Any], am_id: str, operation: AMOperation, parameter_rank: int, nb_alinea_options: int
+    operation: AMOperation,
+    am_id: str,
+    parameter_rank: int,
+    source_str: str,
+    target_section_form_values: TargetSectionFormValues,
+    condition_form_values: ConditionFormValues,
 ) -> None:
-    new_parameter = _extract_new_parameter_object(page_state, operation, nb_alinea_options)
-    upsert_parameter(am_id, new_parameter, parameter_rank)
+    am = load_most_advanced_am(am_id)
+    if not am:
+        raise ValueError(f'AM with id {am_id} not found!')
+    new_parameters = _extract_new_parameter_objectsVNEWWWW(
+        am, source_str, target_section_form_values, condition_form_values
+    )
+    _check_consistency(operation, new_parameters)
+    _upsert_parameters(am_id, new_parameters, parameter_rank)
 
 
-def extract_selected_section_nb_alineas(target_text_dict: Dict[str, Any], loaded_nb_alineas: int) -> int:
-    return _count_alineas_in_section(target_text_dict) or loaded_nb_alineas
+def _upsert_parameters(am_id: str, new_parameters: List[ParameterObject], parameter_rank: int):
+    if parameter_rank != -1 and len(new_parameters) != 1:
+        raise ValueError('Must have only one parameter when updating a specific parameter..')
+    for parameter in new_parameters:
+        upsert_parameter(am_id, parameter, parameter_rank)

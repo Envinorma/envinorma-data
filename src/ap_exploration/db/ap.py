@@ -134,6 +134,10 @@ def input_pdf_path(document_id: str) -> str:
     return os.path.join(_document_folder(document_id), 'in.pdf')
 
 
+def svg_path(document_id: str) -> str:
+    return os.path.join(_document_folder(document_id), 'out.svg')
+
+
 def alto_xml_path(document_id: str) -> str:
     return os.path.join(_document_folder(document_id), 'out.xml')
 
