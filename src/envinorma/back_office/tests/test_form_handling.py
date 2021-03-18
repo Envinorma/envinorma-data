@@ -1,21 +1,34 @@
-from datetime import date
+from datetime import date, datetime
 
 import pytest
 
 from envinorma.back_office.pages.parametrization_edition import page_ids
+from envinorma.back_office.pages.parametrization_edition.condition_form import _AND_ID, ConditionFormValues
 from envinorma.back_office.pages.parametrization_edition.form_handling import (
     FormHandlingError,
     _assert_strictly_below,
+    _build_condition,
+    _build_new_text,
     _build_parameter_value,
+    _build_section_reference,
+    _build_source,
+    _build_target_versions,
     _check_compatibility_and_build_range,
     _extract_parameter_to_conditions,
+    _Modification,
     _NotSimplifiableError,
+    _simplify_alineas,
     _simplify_condition,
     _simplify_mono_conditions,
     _try_building_range_condition,
 )
+from envinorma.back_office.pages.parametrization_edition.target_sections_form import TargetSectionFormValues
+from envinorma.data import ArreteMinisteriel, Regime, StructuredText, dump_path
+from envinorma.data.text_elements import estr
+from envinorma.parametrization import ConditionSource, EntityReference, SectionReference
 from envinorma.parametrization.conditions import (
     AndCondition,
+    Condition,
     Equal,
     Greater,
     Littler,
@@ -202,3 +215,88 @@ def test_extract_parameter_to_conditions():
     assert res == {_date: [Greater(_date, d1)]}
     res = _extract_parameter_to_conditions([])
     assert res == {}
+
+
+def _get_am() -> ArreteMinisteriel:
+    subsections = [StructuredText(estr(''), [estr('al1.1.1'), estr('al1.1.2')], [], None)]
+    sections = [StructuredText(estr(''), [estr('al1.1'), estr('al1.2')], subsections, None)]
+    return ArreteMinisteriel(estr(''), sections, [], '', id='JORFTEXT')
+
+
+def test_simplify_alineas():
+    am = _get_am()
+    assert _simplify_alineas(am, SectionReference((0,)), None) is None
+    assert _simplify_alineas(am, SectionReference((0,)), [0, 1]) is None
+    assert _simplify_alineas(am, SectionReference((0,)), [0]) == [0]
+    assert _simplify_alineas(am, SectionReference((0, 0)), [0]) == [0]
+    assert _simplify_alineas(am, SectionReference((0, 0)), [0, 1]) is None
+
+
+def test_build_target_versions():
+    am = _get_am()
+    form_values = TargetSectionFormValues([], [], [], [])
+    assert _build_target_versions(am, form_values) == []
+
+    form_values = TargetSectionFormValues(['title'], ['content'], [dump_path((0, 0))], [])
+    text = StructuredText(estr('title'), [estr('content')], [], None)
+    modif = _Modification(SectionReference((0, 0)), None, text)
+    res = _build_target_versions(am, form_values)
+    modif.new_text.id = res[0].new_text.id
+    assert res == [modif]
+
+    form_values = TargetSectionFormValues([], [], [dump_path((0, 0))], [[0, 1]])
+    modif = _Modification(SectionReference((0, 0)), None, None)
+    assert _build_target_versions(am, form_values) == [modif]
+
+    form_values = TargetSectionFormValues([], [], [dump_path((0, 0))], [[0]])
+    modif = _Modification(SectionReference((0, 0)), [0], None)
+    assert _build_target_versions(am, form_values) == [modif]
+
+    form_values = TargetSectionFormValues([], [], [dump_path((0,))], [[0]])
+    modif = _Modification(SectionReference((0,)), [0], None)
+    assert _build_target_versions(am, form_values) == [modif]
+
+
+def test_build_new_text():
+    assert _build_new_text(None, None) is None
+    assert _build_new_text('', '') is None
+    with pytest.raises(FormHandlingError):
+        _build_new_text('aa', '')
+    with pytest.raises(FormHandlingError):
+        _build_new_text('', 'bb')
+    with pytest.raises(FormHandlingError):
+        _build_new_text('aa', None)
+    with pytest.raises(FormHandlingError):
+        _build_new_text(None, 'bb')
+    assert _build_new_text('aa', 'bb').title.text == 'aa'
+    assert _build_new_text('aa', 'bb').outer_alineas == [estr('bb')]
+
+
+def test_build_condition():
+    with pytest.raises(FormHandlingError):
+        assert _build_condition(ConditionFormValues([], [], [], _AND_ID))
+
+    res = Equal(ParameterEnum.DATE_DECLARATION.value, datetime(2020, 1, 1))
+    assert _build_condition(ConditionFormValues(['Date de déclaration'], ['='], ['01/01/2020'], _AND_ID)) == res
+
+    res = Range(ParameterEnum.DATE_DECLARATION.value, datetime(2020, 1, 1), datetime(2020, 1, 31))
+    form_values = ConditionFormValues(['Date de déclaration'] * 2, ['>=', '<'], ['01/01/2020', '31/01/2020'], _AND_ID)
+    assert _build_condition(form_values) == res
+
+    cd_1 = Equal(ParameterEnum.DATE_DECLARATION.value, datetime(2020, 1, 1))
+    cd_2 = Equal(ParameterEnum.REGIME.value, Regime.A)
+    res = AndCondition([cd_1, cd_2])
+    form_values = ConditionFormValues(['Date de déclaration', 'Régime'], ['=', '='], ['01/01/2020', 'A'], _AND_ID)
+    assert _build_condition(form_values) == res
+
+
+def test_build_source():
+    with pytest.raises(FormHandlingError):
+        _build_source('')
+    assert _build_source('[1, 2]') == ConditionSource('', EntityReference(SectionReference((1, 2)), None))
+
+
+def test_build_section_reference():
+    with pytest.raises(FormHandlingError):
+        _build_section_reference('')
+    assert _build_section_reference('[1, 2, 3]') == SectionReference((1, 2, 3))

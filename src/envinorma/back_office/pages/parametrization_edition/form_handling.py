@@ -198,15 +198,19 @@ def _simplify_condition(condition: Condition) -> Condition:
     return condition
 
 
-def _build_sourceVNEWW(source_str: str) -> ConditionSource:
+def _build_source(source_str: str) -> ConditionSource:
+    if not source_str:
+        raise FormHandlingError('Le champ source doit être renseigné.')
     return ConditionSource('', EntityReference(SectionReference(load_path(source_str)), None))
 
 
-def _build_conditionVNEWWW(condition_form_values: ConditionFormValues) -> Condition:
+def _build_condition(condition_form_values: ConditionFormValues) -> Condition:
     condition_cls = _get_condition_cls(condition_form_values.merge)
-    conditions_raw = zip(
-        condition_form_values.parameters, condition_form_values.operations, condition_form_values.values
+    conditions_raw = list(
+        zip(condition_form_values.parameters, condition_form_values.operations, condition_form_values.values)
     )
+    if len(conditions_raw) == 0:
+        raise FormHandlingError('Au moins une condition est nécessaire !')
     conditions = [_extract_condition(i, *condition_raw) for i, condition_raw in enumerate(conditions_raw)]
     return _simplify_condition(condition_cls(conditions))
 
@@ -234,11 +238,13 @@ def _check_and_build_new_text(title: str, content: str) -> StructuredText:
 
 
 def _build_new_text(new_text_title: Optional[str], new_text_content: Optional[str]) -> Optional[StructuredText]:
-    if not new_text_title:
-        assert not new_text_content, f'{new_text_title} and {new_text_content} must be simultaneously None'
+    if not new_text_title and not new_text_content:
         return None
-    assert new_text_content is not None, f'new_text_content must not be None'
-    return _check_and_build_new_text(new_text_title, new_text_content)
+    if new_text_title and not new_text_content:
+        raise FormHandlingError(f'Le champ "Contenu du paragraphe" doit être défini.')
+    if new_text_content and not new_text_title:
+        raise FormHandlingError(f'Le champ "Titre" doit être défini.')
+    return _check_and_build_new_text(new_text_title or '', new_text_content or '')
 
 
 def _simplify_alineas(
@@ -254,33 +260,39 @@ def _simplify_alineas(
     return target_alineas
 
 
-def _build_target_versionVNEWW(
+def _build_section_reference(target_section: str) -> SectionReference:
+    if not target_section:
+        raise FormHandlingError(f'Le champ "Titre" des "Paragraphes visés" doit être renseigné.')
+    return SectionReference(load_path(target_section))
+
+
+def _build_target_version(
     am: ArreteMinisteriel,
     new_text_title: Optional[str],
     new_text_content: Optional[str],
     target_section: str,
     target_alineas: Optional[List[int]],
 ) -> _Modification:
-    section = SectionReference(load_path(target_section))
+    section = _build_section_reference(target_section)
     simplified_target_alineas = _simplify_alineas(am, section, target_alineas)
     new_text = _build_new_text(new_text_title, new_text_content)
     return _Modification(section, simplified_target_alineas, new_text)
 
 
-def _build_target_versionsVNEWW(am: ArreteMinisteriel, form_values: TargetSectionFormValues) -> List[_Modification]:
+def _build_target_versions(am: ArreteMinisteriel, form_values: TargetSectionFormValues) -> List[_Modification]:
     new_texts_titles = form_values.new_texts_titles or len(form_values.target_sections) * [None]
     new_texts_contents = form_values.new_texts_contents or len(form_values.target_sections) * [None]
     target_sections = form_values.target_sections
     target_alineas = form_values.target_alineas or len(form_values.target_sections) * [None]
     return [
-        _build_target_versionVNEWW(am, title, content, section, alineas)
+        _build_target_version(am, title, content, section, alineas)
         for title, content, section, alineas in zip(
             new_texts_titles, new_texts_contents, target_sections, target_alineas
         )
     ]
 
 
-def _build_non_application_conditionVNEWWW(
+def _build_non_application_condition(
     condition: Condition, source: ConditionSource, modification: _Modification
 ) -> NonApplicationCondition:
     targeted_entity = EntityReference(modification.target_section, outer_alinea_indices=modification.target_alineas)
@@ -297,18 +309,18 @@ def _build_parameter_object(
             condition=condition,
             source=source,
         )
-    return _build_non_application_conditionVNEWWW(condition, source, modification)
+    return _build_non_application_condition(condition, source, modification)
 
 
-def _extract_new_parameter_objectsVNEWWWW(
+def _extract_new_parameter_objects(
     am: ArreteMinisteriel,
     source_str: str,
     target_section_form_values: TargetSectionFormValues,
     condition_form_values: ConditionFormValues,
 ) -> List[ParameterObject]:
-    condition = _build_conditionVNEWWW(condition_form_values)
-    target_versions = _build_target_versionsVNEWW(am, target_section_form_values)
-    source = _build_sourceVNEWW(source_str)
+    condition = _build_condition(condition_form_values)
+    target_versions = _build_target_versions(am, target_section_form_values)
+    source = _build_source(source_str)
     return [_build_parameter_object(condition, source, target_version) for target_version in target_versions]
 
 
@@ -335,9 +347,7 @@ def extract_and_upsert_new_parameter(
     am = load_most_advanced_am(am_id)
     if not am:
         raise ValueError(f'AM with id {am_id} not found!')
-    new_parameters = _extract_new_parameter_objectsVNEWWWW(
-        am, source_str, target_section_form_values, condition_form_values
-    )
+    new_parameters = _extract_new_parameter_objects(am, source_str, target_section_form_values, condition_form_values)
     _check_consistency(operation, new_parameters)
     _upsert_parameters(am_id, new_parameters, parameter_rank)
 
