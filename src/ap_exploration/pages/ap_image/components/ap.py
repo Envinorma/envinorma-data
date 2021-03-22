@@ -6,8 +6,9 @@ from typing import Any, Dict, List, Optional
 import dash_bootstrap_components as dbc
 import dash_core_components as dcc
 import dash_html_components as html
-from ap_exploration.pages.ap_image.build_ap import ArretePrefectoral
 from dash.development.base_component import Component
+
+from ap_exploration.pages.ap_image.build_ap import ArretePrefectoral
 from envinorma.back_office.components.am_component import table_to_component
 from envinorma.back_office.utils import get_truncated_str
 from envinorma.data import Table

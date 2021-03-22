@@ -1,6 +1,5 @@
 import dash
 import dash_html_components as html
-
 from dashboard.classements import component as component_classements
 from dashboard.icpe import component as component_icpe
 from dashboard.tables_in_am import component as component_am_tables

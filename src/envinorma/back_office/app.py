@@ -5,18 +5,19 @@ import dash_core_components as dcc
 import dash_html_components as html
 from dash.dependencies import Input, Output
 from dash.development.base_component import Component
+from flask_login import LoginManager
+from werkzeug.exceptions import NotFound
+
 from envinorma.back_office.am_page import router as edit_am_page_router
 from envinorma.back_office.app_init import app
 from envinorma.back_office.compare import PAGE as compare_page
 from envinorma.back_office.display_am import PAGE as display_am_page
+from envinorma.back_office.pages.index import PAGE as index_page
 from envinorma.back_office.pages.login import PAGE as login_page
 from envinorma.back_office.pages.logout import PAGE as logout_page
-from envinorma.back_office.pages.index import PAGE as index_page
 from envinorma.back_office.routing import ROUTER, Endpoint, Page
 from envinorma.back_office.utils import UNIQUE_USER, get_current_user, split_route
 from envinorma.config import config
-from flask_login import LoginManager
-from werkzeug.exceptions import NotFound
 
 
 def _create_tmp_am_folder():

@@ -8,16 +8,18 @@ import dash
 import dash_bootstrap_components as dbc
 import dash_core_components as dcc
 import dash_html_components as html
-from ap_exploration.routing import Page
 from dash.dependencies import Input, Output, State
 from dash.development.base_component import Component
 from dash.exceptions import PreventUpdate
+
+from ap_exploration.routing import Page
 from envinorma.back_office.components import replace_line_breaks
 from envinorma.back_office.components.am_component import structured_text_component
 from envinorma.back_office.components.summary_component import summary_component
 from envinorma.back_office.utils import generate_id
 from envinorma.data import StructuredText, add_title_default_numbering
-from envinorma.io.docx import DocxNoTextError, extract_text_from_file as parse_docx
+from envinorma.io.docx import DocxNoTextError
+from envinorma.io.docx import extract_text_from_file as parse_docx
 from envinorma.io.docx import get_docx_xml_soup
 from envinorma.io.open_document import load_and_transform as parse_odt
 from envinorma.pdf import pdf_to_docx

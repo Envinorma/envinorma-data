@@ -6,10 +6,11 @@ import json
 import math
 import os
 import re
-from scripts.classements_build import check_classement_csv
 from typing import Any, Dict, List, Optional, Tuple
 
 import pandas as pd
+from tqdm import tqdm
+
 from envinorma.back_office.fetch_data import (
     load_all_am_statuses,
     load_all_initial_am,
@@ -23,7 +24,7 @@ from envinorma.data import ArreteMinisteriel, DateCriterion, StructuredText, Tab
 from envinorma.data_build.georisques_data import check_installations_csv
 from envinorma.parametrization import Parametrization
 from envinorma.utils import ensure_not_none, str_to_date, write_json
-from tqdm import tqdm
+from scripts.classements_build import check_classement_csv
 
 _OUTPUT_FOLDER = 'seeds'
 _OUTPUT_FOLDER = '/Users/remidelbouys/EnviNorma/envinorma-web/db/seeds'

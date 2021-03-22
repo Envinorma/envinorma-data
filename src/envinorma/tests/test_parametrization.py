@@ -4,6 +4,7 @@ from string import ascii_letters
 from typing import Optional
 
 import pytest
+
 from envinorma.data import ArreteMinisteriel, EnrichedString, Regime, StructuredText, estr
 from envinorma.parametrization import (
     AlternativeSection,

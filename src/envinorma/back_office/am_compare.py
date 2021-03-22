@@ -6,14 +6,14 @@ import dash_core_components as dcc
 import dash_html_components as html
 from dash.dependencies import Input, Output
 from dash.development.base_component import Component
-from envinorma.data import AMMetadata, ArreteMinisteriel
-from legifrance.legifrance_API import LegifranceRequestError
 
 from envinorma.back_office.app_init import app
 from envinorma.back_office.components import error_component
 from envinorma.back_office.components.diff import diff_component
-from envinorma.back_office.fetch_data import load_initial_am, load_structured_am
+from envinorma.back_office.fetch_data import load_most_advanced_am
 from envinorma.back_office.utils import ID_TO_AM_MD, compute_am_diff, extract_aida_am, extract_legifrance_am
+from envinorma.data import AMMetadata, ArreteMinisteriel
+from legifrance.legifrance_API import LegifranceRequestError
 
 _PREFIX = __file__.split('/')[-1].replace('.py', '').replace('_', '-')
 _ARGS = _PREFIX + '-args'
@@ -23,10 +23,6 @@ _SPINNER = _PREFIX + '-spinner'
 class CompareWith(Enum):
     AIDA = 'aida'
     LEGIFRANCE = 'legifrance'
-
-
-def _load_am(am_id: str) -> Optional[ArreteMinisteriel]:
-    return load_structured_am(am_id) or load_initial_am(am_id)
 
 
 def _md(am: ArreteMinisteriel) -> Optional[AMMetadata]:
@@ -72,7 +68,7 @@ def _build_component(am_id: str, compare_with_str: str) -> Component:
         compare_with = CompareWith(compare_with_str)
     except ValueError:
         return error_component(f'Unhandled comparision with {compare_with_str}')
-    am = _load_am(am_id)
+    am = load_most_advanced_am(am_id)
     if not am:
         return error_component(f'AM with id {am_id} not found')
     try:

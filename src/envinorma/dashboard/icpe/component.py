@@ -7,9 +7,10 @@ import dash_table
 import plotly.express as px
 from dash.dash import Dash
 from dash.dependencies import Input, Output
-from .data import ICPEDataset
-from ..utils import apply_filter, apply_sort, build_data_file_name, generate_dropdown, random_id
 from plotly.graph_objects import Figure
+
+from ..utils import apply_filter, apply_sort, build_data_file_name, generate_dropdown, random_id
+from .data import ICPEDataset
 
 _DATAFRAME = ICPEDataset.load_csv(build_data_file_name(__file__))
 _FRENCH_DEPARTMENTS = json.load(open(__file__.replace('icpe/component.py', 'assets/maps/french_departments.geojson')))

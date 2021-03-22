@@ -6,9 +6,10 @@ import dash_table
 import plotly.express as px
 from dash.dash import Dash
 from dash.dependencies import Input, Output
-from .data import RubriquesDataset
-from ..utils import apply_filter, apply_sort, build_data_file_name, random_id
 from plotly.graph_objects import Figure
+
+from ..utils import apply_filter, apply_sort, build_data_file_name, random_id
+from .data import RubriquesDataset
 
 _DATAFRAME = RubriquesDataset.load_csv(build_data_file_name(__file__))
 _DATAFRAME = _DATAFRAME.loc[_DATAFRAME.year.apply(lambda x: 1950 <= x <= 2030)]

@@ -1,6 +1,7 @@
-import dash
 from enum import Enum
 from typing import Any, Callable, Optional, Tuple
+
+import dash
 from werkzeug.routing import Map, MapAdapter, Rule
 
 

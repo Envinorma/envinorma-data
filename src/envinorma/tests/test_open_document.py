@@ -3,6 +3,7 @@ import random
 
 import bs4
 from bs4 import BeautifulSoup
+
 from envinorma.data import Cell, EnrichedString, Row, StructuredText, Table
 from envinorma.data.text_elements import Title
 from envinorma.io.open_document import (

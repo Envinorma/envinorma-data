@@ -11,7 +11,6 @@ from envinorma.am_enriching import (
 )
 from envinorma.back_office.fetch_data import load_initial_am, load_parametrization, load_structured_am
 from envinorma.data import AMMetadata, ArreteMinisteriel, ClassementWithAlineas, DateCriterion, Regime, add_metadata
-
 from envinorma.parametrization import Combinations, Parametrization
 from envinorma.parametrization.conditions import ParameterEnum
 from envinorma.parametrization.parametric_am import generate_all_am_versions

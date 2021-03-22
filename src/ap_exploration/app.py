@@ -8,7 +8,6 @@ import dash_core_components as dcc
 import dash_html_components as html
 from dash.dependencies import Input, Output
 from dash.development.base_component import Component
-from envinorma.config import config
 from flask.helpers import send_file
 
 from ap_exploration.db.ap import download_document
@@ -20,6 +19,7 @@ from ap_exploration.pages.ap_pdf import page as ap_pdf_page
 from ap_exploration.pages.etablissement import page as etablissement_page
 from ap_exploration.pages.temp_page import page as temp_page
 from ap_exploration.routing import ROUTER, Endpoint, Page
+from envinorma.config import config
 
 _FRA_TESS_DATA_URL = 'https://github.com/tesseract-ocr/tessdata/raw/master/fra.traineddata'
 _TESSDATA_PREFIX = config.storage.tessdata

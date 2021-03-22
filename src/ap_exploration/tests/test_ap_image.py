@@ -1,4 +1,3 @@
-import pytest
 from ap_exploration.db.ap import seems_georisques_document_id
 from ap_exploration.pages.ap_image.alto_to_html import _is_article_number
 

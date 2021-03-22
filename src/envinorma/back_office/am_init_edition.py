@@ -9,6 +9,7 @@ import dash_html_components as html
 from bs4 import BeautifulSoup
 from dash.dependencies import Input, Output, State
 from dash.development.base_component import Component
+
 from envinorma.back_office.app_init import app
 from envinorma.back_office.components import error_component, success_component
 from envinorma.back_office.fetch_data import load_initial_am, upsert_initial_am
@@ -30,8 +31,8 @@ from envinorma.data import (
     am_to_text,
     table_to_html,
 )
-from envinorma.io.parse_html import extract_text_elements
 from envinorma.data.text_elements import TextElement, Title
+from envinorma.io.parse_html import extract_text_elements
 from envinorma.structure import build_structured_text, structured_text_to_text_elements
 from envinorma.structure.am_structure_extraction import extract_short_title
 from legifrance.legifrance_API import LegifranceRequestError

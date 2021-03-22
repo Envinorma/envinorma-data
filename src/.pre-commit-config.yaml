@@ -5,6 +5,24 @@
 repos:
   - repo: local
     hooks:
+      - id: black
+        name: black
+        stages: [commit]
+        language: system
+        entry: bash -c "black . --check --exclude venv -S -l 120"
+        types: [python]
+        verbose: true
+        pass_filenames: false
+        always_run: true
+      - id: isort
+        name: isort
+        stages: [commit]
+        language: system
+        entry: bash -c "isort . --profile black --check -l 120"
+        types: [python]
+        verbose: true
+        pass_filenames: false
+        always_run: true
       - id: pytest
         name: pytest
         stages: [commit]
@@ -14,20 +32,11 @@ repos:
         verbose: true
         pass_filenames: false
         always_run: true
-      - id: pytest-mypy envinorma
-        name: pytest-mypy envinorma
+      - id: pytest-mypy
+        name: pytest-mypy
         stages: [commit]
         language: system
-        entry: bash -c "cd src ; pytest --mypy-ignore-missing-imports envinorma"
-        types: [python]
-        verbose: true
-        pass_filenames: false
-        always_run: true
-      - id: pytest-mypy ap_exploration
-        name: pytest-mypy ap_exploration
-        stages: [commit]
-        language: system
-        entry: bash -c "cd src ; pytest --mypy-ignore-missing-imports ap_exploration"
+        entry: bash -c "cd src ; pytest --mypy-ignore-missing-imports --ignore=venv --ignore scripts ."
         types: [python]
         verbose: true
         pass_filenames: false

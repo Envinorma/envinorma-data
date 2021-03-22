@@ -1,4 +1,5 @@
 import dash_html_components as html
+
 from envinorma.back_office.am_page import _diff_to_component, _diffline_is_special, _extract_char_positions
 
 

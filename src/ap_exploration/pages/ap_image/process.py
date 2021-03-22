@@ -6,19 +6,20 @@ import subprocess
 from typing import Any, Callable, List, Union
 
 import pytesseract
+from pdf2image import convert_from_path, pdfinfo_from_path
+from tqdm import tqdm
+
 from ap_exploration.db.ap import (
     APExtractionStep,
     OCRProcessingStep,
     dump_alto_pages_xml,
     dump_ap,
-    dump_ap_odt,
     dump_ap_extraction_step,
+    dump_ap_odt,
     dump_processing_step,
     input_pdf_path,
 )
 from ap_exploration.pages.ap_image.build_ap import build
-from pdf2image import convert_from_path, pdfinfo_from_path
-from tqdm import tqdm
 
 _SIMPLE_OCR = 'simple_ocr'
 _AP_EXTRACTION = 'ap_extraction'
@@ -64,7 +65,7 @@ def simple_ocr_on_file(document_id: str) -> None:
     for page_nb in tqdm(range(nb_pages), 'Performing OCR.'):
         result.append(_ocr_page(input_path, page_nb))
         msg = f'Performing OCR on page {page_nb + 2}/{nb_pages}'
-        _ocr_step_callback(document_id)(OCRProcessingStep(msg, 0.1 + 0.9 * (page_nb + 1) / nb_pages, False))
+        _ocr_step_callback(document_id)(OCRProcessingStep(msg, min(1, 0.1 + 0.9 * (page_nb + 1) / nb_pages), False))
     dump_alto_pages_xml(result, document_id)
     _ocr_step_callback(document_id)(OCRProcessingStep(None, 1.0, True))
 

@@ -1,5 +1,5 @@
-from envinorma.io.alto import AltoComposedBlock, AltoPage, AltoPrintSpace, AltoString, AltoTextBlock, AltoTextLine
 from ap_exploration.pages.ap_image.extract_ap_structure import _remove_lines
+from envinorma.io.alto import AltoComposedBlock, AltoPage, AltoPrintSpace, AltoString, AltoTextBlock, AltoTextLine
 
 
 def _str(text: str) -> AltoString:

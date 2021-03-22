@@ -6,6 +6,8 @@ from datetime import datetime
 from enum import Enum
 from typing import Any, List, Optional, Tuple
 
+from flask_login import current_user
+
 from dash_text_components.diff import TextDifferences, build_text_differences
 from envinorma.aida import parse_aida_text
 from envinorma.config import config
@@ -19,7 +21,6 @@ from envinorma.data import (
     load_legifrance_text,
 )
 from envinorma.structure.am_structure_extraction import extract_short_title, transform_arrete_ministeriel
-from flask_login import current_user
 from legifrance.legifrance_API import get_legifrance_client, get_loda_via_cid
 
 _AM = load_am_data()
@@ -164,7 +165,7 @@ def check_legifrance_diff_computed():
     cmd = 'python3 scripts/check_new_texts_were_published.py'
     if not max_date:
         raise ValueError(f'No legifrance_diffs found : run one.\ncmd: {cmd}')
-    if (datetime.now() - max_date).total_seconds() >= 10 * 24 * 3600:
+    if (datetime.now() - max_date).total_seconds() >= 12 * 24 * 3600:
         raise ValueError(f'Last legifrance_diffs computation is too old, run one. (date: {max_date})\ncmd: {cmd}')
 
 

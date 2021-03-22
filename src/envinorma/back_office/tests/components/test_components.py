@@ -1,6 +1,6 @@
 import dash_html_components as html
-
 from dash.development.base_component import Component
+
 from envinorma.back_office.components import surline_text
 
 

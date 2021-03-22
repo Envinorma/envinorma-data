@@ -8,6 +8,8 @@ import random
 from collections import Counter
 from typing import Dict, List, Optional, Set
 
+from tqdm import tqdm
+
 from envinorma.aida import transform_aida_links_to_github_markdown_links
 from envinorma.am_enriching import add_links_to_am
 from envinorma.data import (
@@ -24,12 +26,11 @@ from envinorma.data import (
     check_am,
     get_text_defined_id,
 )
-from .scrap_scructure_and_enrich_all_am import handle_all_am
 from envinorma.io.markdown import am_to_markdown, generate_text_md
 from envinorma.parametrization import Parametrization, parametrization_to_markdown
-from tqdm import tqdm
-
 from scripts.deprecated.git_diffs_generator import AMCommits, compute_and_dump_am_git_diffs, get_am_commits_filename
+
+from .scrap_scructure_and_enrich_all_am import handle_all_am
 
 
 def _score(log: AMStructurationLog) -> int:

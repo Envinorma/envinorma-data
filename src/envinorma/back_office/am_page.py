@@ -11,6 +11,7 @@ import dash_html_components as html
 from dash.dependencies import MATCH, Input, Output, State
 from dash.development.base_component import Component
 from dash.exceptions import PreventUpdate
+
 from envinorma.back_office.am_init_edition import router as am_init_router
 from envinorma.back_office.am_init_tab import am_init_tab
 from envinorma.back_office.app_init import app
@@ -26,6 +27,7 @@ from envinorma.back_office.fetch_data import (
     delete_structured_am,
     load_am_status,
     load_initial_am,
+    load_most_advanced_am,
     load_parametrization,
     load_structured_am,
     upsert_am_status,
@@ -625,7 +627,7 @@ def _get_subpage_content(route: str, operation_id: AMOperation) -> Component:
 def _page(am_id: str, current_page: str) -> Component:
     am_metadata = ID_TO_AM_MD.get(am_id)
     am_status = load_am_status(am_id)
-    am = load_structured_am(am_id) or load_initial_am(am_id)  # Fetch initial AM if no parametrization ever done.
+    am = load_most_advanced_am(am_id)  # Fetch initial AM if no parametrization ever done.
     parametrization = load_parametrization(am_id) or Parametrization([], [])
     body = html.Div(
         _get_body_component(am_id, current_page, am, am_status, parametrization), className='am_page_content'
@@ -668,7 +670,7 @@ def _generate_and_dump_am_version(am_id: str) -> None:
 def _add_titles_sequences(am_id: str) -> None:
     try:
         parametrization = load_parametrization(am_id)
-        am = load_structured_am(am_id) or load_initial_am(am_id)
+        am = load_most_advanced_am(am_id)
         if am and parametrization:
             new_parametrization = add_titles_sequences(parametrization, am)
             upsert_new_parametrization(am_id, new_parametrization)
@@ -685,7 +687,7 @@ def _handle_validate_structure(am_id: str) -> None:
     parametrization = load_parametrization(am_id)
     if not parametrization:
         return  # parametrization has no risk to be deprecated in this case
-    am = load_structured_am(am_id) or load_initial_am(am_id)
+    am = load_most_advanced_am(am_id)
     if not am:
         warnings.warn('Should not happen, structure can be validated only for existing texts.')
         return

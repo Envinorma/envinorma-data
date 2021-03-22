@@ -5,7 +5,6 @@ Script for generating repo for ap-envinorma.herokuapp.com
 import shutil
 from shutil import copytree, ignore_patterns, rmtree
 
-
 if __name__ == '__main__':
     docs = '/Users/remidelbouys/EnviNorma'
     main_repo = f'{docs}/envinorma'

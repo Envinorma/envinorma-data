@@ -1,6 +1,7 @@
-import pandas
 from dataclasses import asdict, dataclass
 from typing import Any, Dict, List
+
+import pandas
 
 
 @dataclass

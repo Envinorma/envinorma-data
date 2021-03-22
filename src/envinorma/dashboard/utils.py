@@ -1,8 +1,9 @@
 import random
 import string
+from typing import Any, Dict, List, Optional, Tuple, Union
+
 import dash_core_components as dcc
 from pandas import DataFrame
-from typing import Any, List, Dict, Optional, Tuple, Union
 
 
 def check_same_lengths(lists: List[List[Any]]) -> None:

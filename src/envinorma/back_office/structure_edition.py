@@ -10,10 +10,11 @@ import dash_html_components as html
 from bs4 import BeautifulSoup
 from dash.dependencies import Input, Output, State
 from dash.development.base_component import Component
+
 from envinorma.back_office.app_init import app
 from envinorma.back_office.components import error_component, success_component
 from envinorma.back_office.components.am_component import table_to_component
-from envinorma.back_office.fetch_data import load_initial_am, load_structured_am, upsert_structured_am
+from envinorma.back_office.fetch_data import load_most_advanced_am, upsert_structured_am
 from envinorma.back_office.routing import build_am_page
 from envinorma.back_office.utils import AMOperation, RouteParsingError, assert_str, get_truncated_str
 from envinorma.data import ArreteMinisteriel, EnrichedString, StructuredText, Table, am_to_text
@@ -156,7 +157,7 @@ def _parse_route(route: str) -> str:
 def _component(pathname) -> Component:
     try:
         am_id = _parse_route(pathname)
-        am = load_structured_am(am_id) or load_initial_am(am_id)
+        am = load_most_advanced_am(am_id)
     except RouteParsingError as exc:
         return html.P(f'404 - Page introuvable - {str(exc)}')
     if not am:
@@ -332,7 +333,7 @@ def _create_new_text(previous_text: StructuredText, new_am_str: str) -> Structur
 
 
 def _structure_text(am_id: str, new_am: str) -> ArreteMinisteriel:
-    previous_am_version = load_structured_am(am_id) or load_initial_am(am_id)
+    previous_am_version = load_most_advanced_am(am_id)
     if not previous_am_version:
         raise _FormHandlingError(f'am with id {am_id} not found, which should not happen')
     previous_text = am_to_text(previous_am_version)

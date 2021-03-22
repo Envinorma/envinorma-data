@@ -2,7 +2,8 @@ import json
 from typing import Any, Dict, List, Optional, Tuple
 
 import psycopg2
-from envinorma.back_office.utils import AMOperation, AMStatus, ID_TO_AM_MD
+
+from envinorma.back_office.utils import ID_TO_AM_MD, AMOperation, AMStatus
 from envinorma.config import config
 from envinorma.data import ArreteMinisteriel
 from envinorma.parametrization import (
@@ -188,6 +189,10 @@ def upsert_initial_am(am_id: str, am: ArreteMinisteriel) -> None:
     )
     data = json.dumps(am.to_dict())
     _exectute_update_query(query, (am_id, data, data, am_id))
+
+
+def load_most_advanced_am(am_id: str) -> Optional[ArreteMinisteriel]:
+    return load_structured_am(am_id) or load_initial_am(am_id)
 
 
 def load_am_status(am_id: str) -> AMStatus:

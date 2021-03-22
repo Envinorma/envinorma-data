@@ -1,7 +1,8 @@
 from datetime import date
 
 import pytest
-from envinorma.back_office.pages.parametrization_edition import (
+
+from envinorma.back_office.pages.parametrization_edition.condition_form import (
     _AND_ID,
     _CONDITION_VARIABLES,
     _OR_ID,

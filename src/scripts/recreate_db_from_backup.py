@@ -1,14 +1,15 @@
 """
 Empty database and recreates it from most recent available backup.
 """
-import subprocess
 import os
+import pathlib
+import subprocess
+from datetime import datetime
 from typing import Optional
 
-import pathlib
 import psycopg2
+
 from envinorma.config import AM_DATA_FOLDER, config
-from datetime import datetime
 
 _CONNECTION = psycopg2.connect(config.storage.psql_dsn)
 

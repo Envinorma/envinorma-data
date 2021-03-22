@@ -1,5 +1,6 @@
 import pytest
-from ap_exploration.pages.ap_pdf import _generate_new_filename, _change_extension_pdf_to_docx
+
+from ap_exploration.pages.ap_pdf import _change_extension_pdf_to_docx, _generate_new_filename
 
 
 def test_generate_new_filename():

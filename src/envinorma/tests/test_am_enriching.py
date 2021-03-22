@@ -2,6 +2,7 @@ import json
 from typing import List
 
 import pytest
+
 from envinorma.am_enriching import (
     _extract_prefix,
     _extract_special_prefix,

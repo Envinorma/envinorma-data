@@ -8,10 +8,11 @@ import shutil
 from shutil import copyfile
 from typing import List, Optional, Tuple
 
+from tqdm import tqdm
+
 from envinorma.config import AM_DATA_FOLDER
 from envinorma.data import ArreteMinisteriel, load_am_data
 from envinorma.utils import write_json
-from tqdm import tqdm
 
 
 def _get_input_path(filename: str) -> str:

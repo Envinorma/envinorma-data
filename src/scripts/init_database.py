@@ -8,17 +8,18 @@ import os
 from typing import Optional
 
 import psycopg2
+from tqdm import tqdm
+
 from envinorma.back_office.fetch_data import (
-    _upsert_new_parametrization,
     upsert_am_status,
     upsert_initial_am,
+    upsert_new_parametrization,
     upsert_structured_am,
 )
 from envinorma.back_office.utils import ID_TO_AM_MD, AMStatus
 from envinorma.config import AM_DATA_FOLDER, config
 from envinorma.data import ArreteMinisteriel
 from envinorma.parametrization import Parametrization
-from tqdm import tqdm
 
 _CONNECTION = psycopg2.connect(config.storage.psql_dsn)
 
@@ -74,7 +75,7 @@ def _fill_tables():
         filename = _get_most_recent_filename(get_parametrization_wip_folder(am_id), with_default=True)
         if filename:
             print('parametrization: ', filename)
-            _upsert_new_parametrization(
+            upsert_new_parametrization(
                 am_id,
                 Parametrization.from_dict(json.load(open(get_parametrization_wip_folder(am_id) + '/' + filename))),
             )

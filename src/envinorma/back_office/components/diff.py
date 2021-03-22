@@ -2,6 +2,7 @@ from typing import List, Optional, Set
 
 import dash_html_components as html
 from dash.development.base_component import Component
+
 from dash_text_components.diff import (
     AddedLine,
     DiffLine,

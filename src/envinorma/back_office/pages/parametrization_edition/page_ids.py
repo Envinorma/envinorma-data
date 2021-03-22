@@ -1,18 +1,67 @@
+from typing import Any, Dict
+
 from envinorma.parametrization.conditions import ParameterEnum
 
-CONDITION_VARIABLE = 'param-edition-condition-parameter'
-CONDITION_OPERATION = 'param-edition-condition-operation'
-CONDITION_VALUE = 'param-edition-condition-value'
+
+def new_text(rank: int) -> Dict[str, Any]:
+    return {'id': 'param-edition-new-text', 'rank': rank}
+
+
+def new_text_title(rank: int) -> Dict[str, Any]:
+    return {'id': 'param-edition-new-text-title', 'rank': rank}
+
+
+def new_text_content(rank: int) -> Dict[str, Any]:
+    return {'id': 'param-edition-new-text-content', 'rank': rank}
+
+
+def target_section(rank: int) -> Dict[str, Any]:
+    return {'id': 'param-edition-target-section', 'rank': rank}
+
+
+def target_section_store(rank: int) -> Dict[str, Any]:
+    return {'id': 'param-edition-target-section-store', 'rank': rank}
+
+
+def target_alineas(rank: int) -> Dict[str, Any]:
+    return {'id': 'param-edition-target-alineas', 'rank': rank}
+
+
+def delete_block_button(rank: int) -> Dict[str, Any]:
+    return {'id': 'param-edition-delete-block-button', 'rank': rank}
+
+
+def delete_condition_button(rank: int) -> Dict[str, Any]:
+    return {'id': 'param-edition-delete-condition-button', 'rank': rank}
+
+
+def target_section_block(rank: int) -> Dict[str, Any]:
+    return {'id': 'param-edition-target-section-block', 'rank': rank}
+
+
+def condition_parameter(rank: int) -> Dict[str, Any]:
+    return {'id': 'param-edition-condition-parameter', 'rank': rank}
+
+
+def condition_operation(rank: int) -> Dict[str, Any]:
+    return {'id': 'param-edition-condition-operation', 'rank': rank}
+
+
+def condition_value(rank: int) -> Dict[str, Any]:
+    return {'id': 'param-edition-condition-value', 'rank': rank}
+
+
+def condition_block(rank: int) -> Dict[str, Any]:
+    return {'id': 'param-edition-condition-block', 'rank': rank}
+
+
+DROPDOWN_OPTIONS = 'param-edition-dropdown-options'
+TARGET_BLOCKS = 'param-edition-target-blocks'
+ADD_TARGET_BLOCK = 'param-edition-add-target-block'
 SOURCE = 'param-edition-source'
-TARGET_SECTION = 'param-edition-target-section'
-TARGET_SECTION_STORE = 'param-edition-target-section-store'
-TARGET_ALINEAS = 'param-edition-target-alineas'
-LOADED_NB_ALINEAS = 'param-edition-loaded-nb-alineas'
 CONDITION_MERGE = 'param-edition-condition-merge'
-NB_CONDITIONS = 'param-edition-nb-conditions'
-NEW_TEXT = 'param-edition-new-text'
-NEW_TEXT_TITLE = 'param-edition-new-text-title'
-NEW_TEXT_CONTENT = 'param-edition-new-text-content'
+ADD_CONDITION_BLOCK = 'param-edition-add-condition-block'
+CONDITION_BLOCKS = 'param-edition-condition-blocks'
 AM_ID = 'param-edition-am-id'
 PARAMETER_RANK = 'param-edition-param-rank'
 AM_OPERATION = 'param-edition-am-operation'

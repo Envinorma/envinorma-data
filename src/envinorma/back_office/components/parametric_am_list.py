@@ -5,6 +5,7 @@ import dash_bootstrap_components as dbc
 import dash_html_components as html
 from dash.dependencies import MATCH, Input, Output, State
 from dash.development.base_component import Component
+
 from envinorma.back_office.components.parametric_am import parametric_am_callbacks, parametric_am_component
 from envinorma.back_office.components.table import ExtendedComponent, table_component
 from envinorma.data import ArreteMinisteriel

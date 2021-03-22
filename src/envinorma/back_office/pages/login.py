@@ -4,10 +4,10 @@ import dash_html_components as html
 from dash import Dash, no_update
 from dash.dependencies import Input, Output, State
 from dash.development.base_component import Component
-from envinorma.back_office.routing import Page
-from envinorma.back_office.utils import UNIQUE_USER, generate_id
 from flask_login import login_user
 
+from envinorma.back_office.routing import Page
+from envinorma.back_office.utils import UNIQUE_USER, generate_id
 
 _LOGIN_URL = generate_id(__file__, 'login-url')
 _LOGIN_ALERT = generate_id(__file__, 'login-alert')

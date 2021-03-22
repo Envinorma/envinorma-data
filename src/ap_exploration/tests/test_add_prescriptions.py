@@ -1,4 +1,6 @@
 import pytest
+from bs4 import BeautifulSoup
+
 from ap_exploration.data import Prescription, PrescriptionStatus
 from ap_exploration.pages.ap.add_prescriptions import (
     _elements_to_prescription,
@@ -8,7 +10,6 @@ from ap_exploration.pages.ap.add_prescriptions import (
     _PrescriptionBeginMark,
     _split_between_prescription_marks,
 )
-from bs4 import BeautifulSoup
 from envinorma.data import Cell, EnrichedString, Row
 from envinorma.data.text_elements import Linebreak, Table, Title
 

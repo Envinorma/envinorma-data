@@ -6,6 +6,7 @@ from dataclasses import asdict, dataclass
 from typing import Any, Dict, List, Optional
 
 import requests
+
 from ap_exploration.models import ArretePrefectoral
 from envinorma.config import config
 from envinorma.data.text_elements import Title
@@ -132,6 +133,10 @@ def _ap_extraction_step_path(document_id: str) -> str:
 
 def input_pdf_path(document_id: str) -> str:
     return os.path.join(_document_folder(document_id), 'in.pdf')
+
+
+def svg_path(document_id: str) -> str:
+    return os.path.join(_document_folder(document_id), 'out.svg')
 
 
 def alto_xml_path(document_id: str) -> str:
