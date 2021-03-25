@@ -1,4 +1,3 @@
-import math
 from datetime import date
 from typing import Any, List, Set, cast
 
@@ -40,11 +39,17 @@ def _rename_classements_columns(classements: pd.DataFrame) -> pd.DataFrame:
     return classements.rename(columns=cast(Any, column_mapping))
 
 
+def _simplify_regime(regime: str) -> str:
+    return DetailedRegime(regime).to_simple_regime()
+
+
 def _modify_and_keep_final_classements_cols(classements: pd.DataFrame) -> pd.DataFrame:
     classements = classements.copy()
     date_keys = ['date_autorisation', 'date_mise_en_service', 'last_substantial_modif_date']
     for key in date_keys:
         classements[key] = classements[key].apply(lambda x: date.fromisoformat(x) if not isinstance(x, float) else None)
+    classements['regime'] = classements['regime'].apply(_simplify_regime)
+    classements['regime_acte'] = classements['regime_acte'].apply(_simplify_regime)
     active_classements = classements[classements.state == State.EN_FONCTIONNEMENT.value]
     return cast(pd.DataFrame, active_classements)
 
@@ -85,20 +90,20 @@ def build_classements_csv() -> None:
     print(f'classements dataset all has {classements.shape[0]} rows')
 
 
-def _dump_classements(classements: List[DetailedClassement], filename: str) -> None:
-    json_ = [classement.to_dict() for classement in tqdm(classements, 'Dumping classements')]
-    write_json(json_, filename, pretty=False)
+def load_classements_csv(dataset: Dataset) -> pd.DataFrame:
+    return pd.read_csv(dataset_filename(dataset, 'classements'), dtype='str')
 
 
-def _filter_and_dump(all_classements: List[DetailedClassement], dataset: Dataset) -> None:
+def _filter_and_dump(all_classements: pd.DataFrame, dataset: Dataset) -> None:
     installation_ids = load_installation_ids(dataset)
-    classements = [classement for classement in all_classements if classement.s3ic_id in installation_ids]
-    assert len(classements) >= 1000, f'Expecting >= 1000 classements, got {len(classements)}'
-    _dump_classements(classements, dataset_filename(dataset, 'classements'))
-    print(f'classements dataset {dataset} has {len(classements)} rows')
+    filtered_df = all_classements[all_classements.s3ic_id.apply(lambda x: x in installation_ids)]
+    nb_rows = filtered_df.shape[0]
+    assert nb_rows >= 1000, f'Expecting >= 1000 classements, got {nb_rows}'
+    filtered_df.to_csv(dataset_filename(dataset, 'classements'))
+    print(f'classements dataset {dataset} has {nb_rows} rows')
 
 
 def build_all_classement_datasets() -> None:
-    all_classements = load_classements('all')
+    all_classements = load_classements_csv('all')
     _filter_and_dump(all_classements, 'sample')
     _filter_and_dump(all_classements, 'idf')

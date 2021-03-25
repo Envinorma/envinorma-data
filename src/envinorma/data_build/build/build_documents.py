@@ -68,12 +68,13 @@ def download_georisques_documents(dataset: Dataset = 'all') -> None:
     filenames = [f'{folder}/{batch_id}.json' for batch_id in range(len(batches))]
     for filename, batch_ in tqdm(list(zip(filenames, batches)), 'Downloading document batches'):
         _download_if_inexistent(filename, batch_)
-    _combine_and_dump(filenames, dataset_filename(dataset, 'documents'))
+    _combine_and_dump(filenames, dataset_filename(dataset, 'documents', 'json'))
 
 
 def _filter_and_dump(all_documents: List[Document], dataset: Dataset) -> None:
-    docs = [doc for doc in all_documents if doc.s3ic_id in load_installation_ids(dataset)]
-    _dump_docs(docs, dataset_filename(dataset, 'documents'))
+    doc_ids = load_installation_ids(dataset)
+    docs = [doc for doc in all_documents if doc.s3ic_id in doc_ids]
+    _dump_docs(docs, dataset_filename(dataset, 'documents', 'json'))
     print(f'documents dataset {dataset} has {len(docs)} rows')
 
 

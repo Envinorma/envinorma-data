@@ -1,3 +1,4 @@
+import json
 from datetime import date
 from typing import Any, Dict, List, Set, cast
 
@@ -49,16 +50,8 @@ def load_classements(dataset: Dataset) -> List[DetailedClassement]:
     ]
 
 
-def _dataframe_record_to_document(record: Dict[str, Any]) -> Document:
-    return Document.from_dict(**record)
-
-
 def load_documents(dataset: Dataset) -> List[Document]:
-    dataframe = pandas.read_csv(dataset_filename(dataset, 'documents'), dtype='str')
-    return [
-        _dataframe_record_to_document(cast(Dict, record))
-        for record in tqdm(dataframe.to_dict(orient='records'), 'Loading documents', leave=False)
-    ]
+    return [Document.from_dict(doc) for doc in json.load(open(dataset_filename(dataset, 'documents', 'json')))]
 
 
 def _dataframe_record_to_ap(record: Dict[str, Any]) -> Document:

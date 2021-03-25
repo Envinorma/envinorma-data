@@ -55,7 +55,17 @@ def _row_to_classement(record: Dict[str, Any]) -> DetailedClassement:
     key_dates = ['date_autorisation', 'date_mise_en_service', 'last_substantial_modif_date']
     for key in key_dates:
         record[key] = record[key] or None
-    return DetailedClassement(**record)
+    classement = DetailedClassement(**record)
+    simple_regimes = (
+        classement.regime.A,
+        classement.regime.E,
+        classement.regime.D,
+        classement.regime.NC,
+        classement.regime.UNKNOWN,
+    )
+    assert classement.regime in (simple_regimes)
+    assert classement.regime_acte in (simple_regimes)
+    return classement
 
 
 def check_classements_csv(filename: str) -> None:

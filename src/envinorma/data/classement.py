@@ -36,6 +36,13 @@ class DetailedRegime(Enum):
         except ValueError:
             return None
 
+    def to_simple_regime(self) -> str:
+        if self.value in ('A', 'E', 'D', 'NC'):
+            return self.value
+        if self == self.DC:
+            return 'D'
+        return DetailedRegime.UNKNOWN.value
+
     def __repr__(self) -> str:
         return self.value
 
