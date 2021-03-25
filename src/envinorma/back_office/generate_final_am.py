@@ -10,6 +10,7 @@ from envinorma.am_enriching import (
     remove_null_applicabilities,
 )
 from envinorma.back_office.fetch_data import load_initial_am, load_parametrization, load_structured_am
+from envinorma.back_office.utils import AM1510_IDS
 from envinorma.data import AMMetadata, ArreteMinisteriel, ClassementWithAlineas, DateCriterion, Regime, add_metadata
 from envinorma.parametrization import Combinations, Parametrization
 from envinorma.parametrization.conditions import ParameterEnum
@@ -17,8 +18,6 @@ from envinorma.parametrization.parametric_am import generate_all_am_versions
 from envinorma.topics.topics import TOPIC_ONTOLOGY
 
 AMVersions = Dict[Tuple[str, ...], ArreteMinisteriel]
-
-_1510_IDS = ('DEVP1706393A', 'JORFTEXT000034429274')
 
 
 def _get_1510_date_criterion(name: Tuple[str, ...]) -> Optional[DateCriterion]:
@@ -61,7 +60,7 @@ def _manual_1510_post_process(
 
 
 def _extract_regime(am_id: str, name: Tuple[str, ...]) -> Optional[str]:
-    if am_id in _1510_IDS:  # Hack for this very special AM
+    if am_id in AM1510_IDS:  # Hack for this very special AM
         assert name[0][:4] == 'reg_'
         return name[0][4]
     return None
@@ -70,7 +69,7 @@ def _extract_regime(am_id: str, name: Tuple[str, ...]) -> Optional[str]:
 def _post_process(
     am_id: str, am: ArreteMinisteriel, regime_str: Optional[str], name: Tuple[str, ...]
 ) -> ArreteMinisteriel:
-    if am_id in _1510_IDS:  # Hack for this very special AM
+    if am_id in AM1510_IDS:  # Hack for this very special AM
         if regime_str is None:
             raise ValueError('Cannot add 1510 metadata: need regime but got None.')
         am = _manual_1510_post_process(am, regime_str, name)
@@ -98,7 +97,7 @@ def _generate_1510_combinations() -> Combinations:
 
 
 def _get_manual_combinations(am_id: str) -> Optional[Combinations]:
-    if am_id in _1510_IDS:
+    if am_id in AM1510_IDS:
         return _generate_1510_combinations()
     return None
 

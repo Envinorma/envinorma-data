@@ -10,7 +10,7 @@ import requests
 from ap_exploration.models import ArretePrefectoral
 from envinorma.config import config
 from envinorma.data.text_elements import Title
-from envinorma.data_build.georisques_data import GR_DOC_BASE_URL
+from envinorma.data_build.filenames import GEORISQUES_DOWNLOAD_URL
 from envinorma.io.alto import AltoFile, AltoPage
 from envinorma.io.open_document import elements_to_open_document
 from envinorma.utils import write_json
@@ -69,7 +69,7 @@ def georisques_document_id_to_url(document_id: str) -> str:
 
 
 def georisques_full_url(document_id: str) -> str:
-    return GR_DOC_BASE_URL + '/' + georisques_document_id_to_url(document_id)
+    return GEORISQUES_DOWNLOAD_URL + '/' + georisques_document_id_to_url(document_id)
 
 
 def seems_georisques_document_id(document_id: str) -> bool:

@@ -1,6 +1,6 @@
 import math
 
-from scripts.generate_seeds import _is_a_partition
+from envinorma.data_build.validate.check_am import _is_a_partition
 
 
 def test_is_partition():

@@ -21,11 +21,8 @@ from envinorma.data import (
     is_increasing,
     load_am_data,
 )
-from envinorma.data_build.georisques_data import (
-    GRClassementActivite,
-    deduce_regime_if_possible,
-    load_installations_with_classements_and_docs,
-)
+from envinorma.data.load import load_classements, load_installations
+from envinorma.data_build.georisques_data import GRClassementActivite, deduce_regime_if_possible
 from envinorma.io.parse_html import extract_table_from_soup
 from envinorma.utils import write_json
 from legifrance.legifrance_API import get_article_by_id, get_legifrance_client
@@ -322,8 +319,9 @@ def _is_simple(code: str) -> bool:
     return False
 
 
-_INSTALLATIONS = load_installations_with_classements_and_docs()
-_SIMPLE_CLASSEMENTS = [cl for ins in _INSTALLATIONS for cl in ins.classements if _is_simple(cl.code_nomenclature)]
+_INSTALLATIONS = load_installations('all')
+_CLASSEMENTS = load_classements('all')
+_SIMPLE_CLASSEMENTS = [cl for cl in _CLASSEMENTS if _is_simple(cl.code_nomenclature)]
 _SIMPLE_ACTIVE_CLASSEMENTS = [cl for cl in _SIMPLE_CLASSEMENTS if cl.etat_activite == GRClassementActivite.ACTIVE]
 
 

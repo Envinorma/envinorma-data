@@ -3,9 +3,9 @@ script for building data necessary for dashboard-envinorma.herokuapp.py
 '''
 from typing import Callable, Dict
 
-from envinorma.data_build.build_dashboard.build_classements_data import build as classements_build
-from envinorma.data_build.build_dashboard.build_icpe_data import build as icpe_build
-from envinorma.data_build.build_dashboard.build_tables_in_am_data import build as tables_in_am_build
+from envinorma.build_dashboard.build_classements_data import build as classements_build
+from envinorma.build_dashboard.build_icpe_data import build as icpe_build
+from envinorma.build_dashboard.build_tables_in_am_data import build as tables_in_am_build
 
 if __name__ == '__main__':
     output_folder = __file__.replace('data_build/build_dashboard/__init__.py', 'dashboard/{}/data.csv')
