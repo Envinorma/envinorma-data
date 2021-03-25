@@ -23,6 +23,12 @@ def _build_aps_dataframe(aps: List[Document]) -> pandas.DataFrame:
 
 def dump_aps(dataset: Dataset) -> None:
     aps = [doc for doc in load_documents(dataset) if doc.type == DocumentType.AP]
-    print(f'Found {len(aps)} AP.')
+    print(f'Found {len(aps)} AP for dataset {dataset}.')
     dataframe = _build_aps_dataframe(aps)
     dataframe.to_csv(dataset_filename(dataset, 'aps'))
+
+
+def dump_ap_datasets() -> None:
+    dump_aps('all')
+    dump_aps('idf')
+    dump_aps('sample')

@@ -14,3 +14,4 @@ venv
 # data
 *actes.json
 seeds
+src/docs_dl_batches*

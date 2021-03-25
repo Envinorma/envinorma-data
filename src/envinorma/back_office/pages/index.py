@@ -8,7 +8,7 @@ from dash.development.base_component import Component
 from envinorma.back_office.components import replace_line_breaks
 from envinorma.back_office.fetch_data import load_all_am_statuses
 from envinorma.back_office.routing import Page
-from envinorma.back_office.utils import AM_ID_TO_NB_CLASSEMENTS_IDF, ID_TO_AM_MD, AMStatus
+from envinorma.back_office.utils import AM_ID_TO_NB_CLASSEMENTS, ID_TO_AM_MD, AMStatus
 from envinorma.data import AMMetadata, Classement
 
 
@@ -143,7 +143,7 @@ def _make_index_component(
 
 def _layout() -> Component:
     id_to_state = load_all_am_statuses()
-    return _make_index_component(id_to_state, ID_TO_AM_MD, AM_ID_TO_NB_CLASSEMENTS_IDF)
+    return _make_index_component(id_to_state, ID_TO_AM_MD, AM_ID_TO_NB_CLASSEMENTS)
 
 
 PAGE = Page(_layout, None)

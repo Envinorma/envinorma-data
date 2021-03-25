@@ -1,13 +1,12 @@
-'''Build file data/am_id_to_nb_classements_idf.json containing the number of occurrences 
-of each AM among IDF installations.
+'''Build file data/am_id_to_nb_classements.json containing the number of occurrences 
+of each AM among all active installations.
 '''
 
 from collections import Counter
 from typing import Dict, List
 
-import pandas
-
 from envinorma.back_office.utils import ID_TO_AM_MD
+from envinorma.data.load import load_classements
 
 
 def _load_classement_to_am() -> Dict[str, List[str]]:
@@ -23,12 +22,9 @@ def _load_classement_to_am() -> Dict[str, List[str]]:
 
 def run():
     classement_to_ams = _load_classement_to_am()
-    dataframe = pandas.read_csv('backups/classements.csv', dtype=str)  # type: ignore
-    rubriques = dataframe.rubrique
-    regimes = dataframe.regime
-
-    classements = [f'{rub}-{reg}' for rub, reg in zip(rubriques, regimes)]
-    return Counter([am_id for cl in classements for am_id in classement_to_ams.get(cl) or [None]])
+    classements = load_classements('all')
+    keys = [f'{cl.rubrique}-{cl.regime.value}' for cl in classements]
+    return Counter([am_id for cl in keys for am_id in classement_to_ams.get(cl) or [None]])
 
 
 if __name__ == '__main__':

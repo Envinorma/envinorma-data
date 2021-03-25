@@ -3,9 +3,10 @@ Download last versions of AM and send them to envinorma-web
 '''
 
 from envinorma.data_build.build.build_ams import generate_ams
-from envinorma.data_build.build.build_classements import build_classements_csv
+from envinorma.data_build.build.build_aps import dump_ap_datasets, dump_aps
+from envinorma.data_build.build.build_classements import build_all_classement_datasets, build_classements_csv
 from envinorma.data_build.build.build_documents import build_all_document_datasets, download_georisques_documents
-from envinorma.data_build.build.build_installations import build_installations_csv
+from envinorma.data_build.build.build_installations import build_all_installations_datasets, build_installations_csv
 from envinorma.data_build.filenames import (
     AM_LIST_FILENAME,
     ENRICHED_OUTPUT_FOLDER,
@@ -26,11 +27,14 @@ def _check_seeds() -> None:
 
 
 def run():
-    generate_ams()
-    build_classements_csv()
-    build_installations_csv()
+    # generate_ams()
+    # build_installations_csv()
+    # build_all_installations_datasets()
+    # build_classements_csv()
+    # build_all_classement_datasets()
     download_georisques_documents()
     build_all_document_datasets()
+    dump_ap_datasets()
     _check_seeds()
 
 

@@ -10,6 +10,7 @@ class Seveso(Enum):
     NON_SEVESO = 'NS'
     SEUIL_HAUT = 'SH'
     SEUIL_BAS = 'SB'
+    AS = 'AS'
     EMPTY = ''
 
 
@@ -27,6 +28,7 @@ class ActivityStatus(Enum):
     CESSATION_DECLAREE = 'Cessation déclarée'
     A_L_ARRET = 'A l\'arrêt'
     RECOLEMENT_FAIT = 'Récolement fait'
+    EMPTY = ''
 
 
 @dataclass

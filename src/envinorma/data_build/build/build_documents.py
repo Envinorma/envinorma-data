@@ -10,32 +10,39 @@ from envinorma.data.load import load_installation_ids, load_documents
 from envinorma.data_build.filenames import GEORISQUES_URL, Dataset, dataset_filename
 from envinorma.utils import batch, write_json
 
-_BAR_FORMAT = '{l_bar}{r_bar}'
+
+def _no_docs(dicts: List[Dict]) -> bool:
+    return len(dicts) == 1 and all([x is None for x in dicts[0].values()])
 
 
 def _download_batch(s3ic_ids: List[str]) -> List[Document]:
     res: List[Document] = []
-    for id_ in tqdm(s3ic_ids, bar_format=_BAR_FORMAT, desc='Fetching document references'):
+    for id_ in tqdm(s3ic_ids, desc='Fetching document references', leave=False):
         remote_id = id_.replace('.', '-')
         response = requests.get(f'{GEORISQUES_URL}/installations/etablissement/{remote_id}/texte')
         try:
             dicts = response.json()
+            if _no_docs(dicts):
+                continue
             docs = [Document.from_georisques_dict(dict_, id_) for dict_ in dicts]
             res.extend(docs)
-        except Exception:  # pylint: disable=broad-except
-            print(id_, response.content.decode())
+        except Exception as exc:  # pylint: disable=broad-except
+            print(id_, str(exc), response.content.decode())
     return res
 
 
 def _dump_docs(docs: List[Document], filename: str) -> None:
     json_ = [doc.to_dict() for doc in docs]
     write_json(json_, filename, pretty=False)
+    print(f'Downloaded {len(docs)} documents in batch {filename}')
 
 
 def _download_if_inexistent(filename: str, s3ic_ids: List[str]) -> None:
     if not os.path.exists(filename):
         docs = _download_batch(s3ic_ids)
         _dump_docs(docs, filename)
+        return
+    print(f'Batch {filename} exists')
 
 
 def _load_batch(filename: str) -> Dict[str, List[Dict]]:
@@ -59,7 +66,7 @@ def download_georisques_documents(dataset: Dataset = 'all') -> None:
     _create_if_inexistent(folder)
     batches = batch(s3ic_ids, 1000)
     filenames = [f'{folder}/{batch_id}.json' for batch_id in range(len(batches))]
-    for filename, batch_ in tqdm(zip(filenames, batches), 'Downloading document batches'):
+    for filename, batch_ in tqdm(list(zip(filenames, batches)), 'Downloading document batches'):
         _download_if_inexistent(filename, batch_)
     _combine_and_dump(filenames, dataset_filename(dataset, 'documents'))
 
@@ -67,6 +74,7 @@ def download_georisques_documents(dataset: Dataset = 'all') -> None:
 def _filter_and_dump(all_documents: List[Document], dataset: Dataset) -> None:
     docs = [doc for doc in all_documents if doc.s3ic_id in load_installation_ids(dataset)]
     _dump_docs(docs, dataset_filename(dataset, 'documents'))
+    print(f'documents dataset {dataset} has {len(docs)} rows')
 
 
 def build_all_document_datasets() -> None:

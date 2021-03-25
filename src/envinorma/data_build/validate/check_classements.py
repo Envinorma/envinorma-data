@@ -2,7 +2,7 @@
 Script for generating csv of classements
 '''
 
-from typing import List, Optional, Tuple
+from typing import Any, Dict, List, Optional, Tuple
 
 import pandas
 
@@ -26,21 +26,16 @@ def _is_4xxx(rubrique: Optional[str]) -> bool:
 
 
 def _check_void(classement: DetailedClassement) -> None:
-    assert classement.rubrique == '47xx'
-    assert classement.regime == DetailedRegime.NC
-    assert classement.alinea is None
-    assert classement.date_autorisation is None
-    assert classement.regime_acte is None
-    assert classement.alinea_acte is None
-    assert classement.rubrique_acte == '47xx'
-    assert classement.activite is None
-    assert classement.volume == ''
-    assert classement.unit == ''
-
-
-def _check_no_volume(classement: DetailedClassement) -> None:
-    assert classement.unit == ''
-    assert classement.volume == ''
+    assert classement.rubrique == '47xx', classement
+    assert classement.regime == DetailedRegime.NC, classement
+    assert not classement.alinea, classement
+    assert not classement.date_autorisation, classement
+    assert classement.regime_acte == DetailedRegime.NC, classement
+    assert not classement.alinea_acte, classement
+    assert classement.rubrique_acte == '47xx', classement
+    assert not classement.activite, classement
+    assert classement.volume == '', classement
+    assert classement.unit == '', classement
 
 
 def _check_classement_is_safe(classement: DetailedClassement) -> None:
@@ -48,10 +43,6 @@ def _check_classement_is_safe(classement: DetailedClassement) -> None:
         _check_void(classement)
     if _is_47xx(classement.rubrique_acte):
         _check_void(classement)
-    if _is_4xxx(classement.rubrique):
-        _check_no_volume(classement)
-    if _is_4xxx(classement.rubrique_acte):
-        _check_no_volume(classement)
 
 
 def _check_output(classements: List[DetailedClassement]) -> List[DetailedClassement]:
@@ -60,40 +51,16 @@ def _check_output(classements: List[DetailedClassement]) -> List[DetailedClassem
     return classements
 
 
-def _row_to_classement(classement: Tuple) -> DetailedClassement:
-    (
-        s3ic_id,
-        rubrique,
-        regime,
-        alinea,
-        date_autorisation,
-        state,
-        regime_acte,
-        alinea_acte,
-        rubrique_acte,
-        activite,
-        volume,
-        unit,
-    ) = classement
-    return DetailedClassement(
-        s3ic_id=s3ic_id,
-        rubrique=rubrique,
-        regime=DetailedRegime(regime) if regime else DetailedRegime.UNKNOWN,
-        alinea=alinea,
-        date_autorisation=date_autorisation or None,
-        state=State(state) if state else None,
-        regime_acte=DetailedRegime(regime_acte) if regime_acte else DetailedRegime.UNKNOWN,
-        alinea_acte=alinea_acte,
-        rubrique_acte=rubrique_acte,
-        activite=activite,
-        volume=volume,
-        unit=unit,
-    )
+def _row_to_classement(record: Dict[str, Any]) -> DetailedClassement:
+    key_dates = ['date_autorisation', 'date_mise_en_service', 'last_substantial_modif_date']
+    for key in key_dates:
+        record[key] = record[key] or None
+    return DetailedClassement(**record)
 
 
 def check_classements_csv(filename: str) -> None:
     dataframe = pandas.read_csv(
         filename, dtype='str', index_col='Unnamed: 0', na_values=None, parse_dates=['date_autorisation']
     ).fillna('')
-    classements = [_row_to_classement(row) for row in dataframe.to_numpy()]
+    classements = [_row_to_classement(record) for record in dataframe.to_dict(orient='records')]
     _check_output(classements)

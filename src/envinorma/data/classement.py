@@ -1,6 +1,7 @@
+import json
 from datetime import date
 from enum import Enum
-from typing import Optional
+from typing import Any, Dict, Optional
 
 from pydantic import BaseModel
 
@@ -35,6 +36,12 @@ class DetailedRegime(Enum):
         except ValueError:
             return None
 
+    def __repr__(self) -> str:
+        return self.value
+
+    def __str__(self) -> str:
+        return self.value
+
 
 class DetailedClassement(BaseModel):
     s3ic_id: str
@@ -51,3 +58,6 @@ class DetailedClassement(BaseModel):
     unit: Optional[str]
     date_mise_en_service: Optional[date] = None
     last_substantial_modif_date: Optional[date] = None
+
+    def to_dict(self) -> Dict[str, Any]:
+        return json.loads(self.json())

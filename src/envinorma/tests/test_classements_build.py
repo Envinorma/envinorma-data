@@ -50,7 +50,7 @@ def test_check_classement_is_safe():
             alinea=None,
             date_autorisation=None,
             state=None,
-            regime_acte=None,
+            regime_acte=DetailedRegime.NC,
             alinea_acte=None,
             rubrique_acte='47xx',
             activite=None,
@@ -97,7 +97,7 @@ def test_check_classement_is_safe():
         _check_classement_is_safe(
             DetailedClassement(
                 s3ic_id='0065.12345',
-                rubrique='4029',
+                rubrique='47xx',
                 regime=DetailedRegime.A,
                 alinea='1.',
                 date_autorisation=date.today(),

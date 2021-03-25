@@ -39,7 +39,10 @@ def _dataframe_record_to_classement(record: Dict[str, Any]) -> DetailedClassemen
 
 
 def load_classements(dataset: Dataset) -> List[DetailedClassement]:
-    dataframe = pandas.read_csv(dataset_filename(dataset, 'classements'), dtype='str')
+    filename = dataset_filename(dataset, 'classements')
+    dataframe_with_nan = pandas.read_csv(filename, dtype='str', index_col='Unnamed: 0', na_values=None)
+    dataframe = dataframe_with_nan.where(pandas.notnull(dataframe_with_nan), None)
+    dataframe['volume'] = dataframe.volume.apply(lambda x: x or '')
     return [
         _dataframe_record_to_classement(cast(Dict, record))
         for record in tqdm(dataframe.to_dict(orient='records'), 'Loading classements', leave=False)

@@ -13,7 +13,7 @@ def _dataframe_record_to_installation(record: Dict[str, Any]) -> Installation:
     record['regime'] = Regime(record['regime'])
     record['seveso'] = Seveso(record['seveso'])
     record['family'] = InstallationFamily(record['family'])
-    record['active'] = ActivityStatus(record['family'])
+    record['active'] = ActivityStatus(record['active'])
     return Installation(**record)
 
 
