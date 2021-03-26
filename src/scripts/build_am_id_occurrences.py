@@ -23,8 +23,8 @@ def _load_classement_to_am() -> Dict[str, List[str]]:
 def run():
     classement_to_ams = _load_classement_to_am()
     classements = load_classements('all')
-    keys = [f'{cl.rubrique}-{cl.regime.value}' for cl in classements]
-    return Counter([am_id for cl in keys for am_id in classement_to_ams.get(cl) or [None]])
+    keys = [f'{cl.rubrique}-{cl.regime.to_simple_regime()}' for cl in classements]
+    print(Counter([am_id for cl in keys for am_id in classement_to_ams.get(cl) or [None]]))
 
 
 if __name__ == '__main__':

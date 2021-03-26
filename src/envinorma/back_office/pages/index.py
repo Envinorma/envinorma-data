@@ -60,7 +60,7 @@ def _get_header() -> Component:
             _th('Nom'),
             _th('Classements'),
             _th('Source'),
-            _th('Nb cls IDF'),
+            _th('Occs.'),
             _th('Initialisé'),
             _th('Structuré'),
             _th('Paramétré'),
