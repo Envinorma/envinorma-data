@@ -25,9 +25,9 @@ from legifrance.legifrance_API import get_legifrance_client, get_loda_via_cid
 
 _AM = load_am_data()
 ID_TO_AM_MD = {am.cid: am for am in _AM.metadata if am.state == am.state.VIGUEUR}
-AM_ID_TO_NB_CLASSEMENTS_IDF = json.load(
-    open(__file__.replace('envinorma/back_office/utils.py', 'data/am_id_to_nb_classements_idf.json'))
-)
+AM1510_IDS = ('DEVP1706393A', 'JORFTEXT000034429274')
+_OCCS_FILENAME = __file__.replace('envinorma/back_office/utils.py', 'data/am_id_to_nb_classements.json')
+AM_ID_TO_NB_CLASSEMENTS = json.load(open(_OCCS_FILENAME))
 
 
 def assert_int(value: Any) -> int:

@@ -8,7 +8,10 @@ src/scripts/s3ic.py
 *config.ini
 backups
 *.DS_Store
+src/venv
+venv
 
 # data
 *actes.json
 seeds
+src/docs_dl_batches*

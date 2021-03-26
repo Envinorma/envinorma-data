@@ -1,16 +1,12 @@
+import json
 from datetime import date
 
+import pandas
 import pytest
 
-from scripts.classements_build import (
-    DetailedClassement,
-    DetailedRegime,
-    State,
-    _build_dataframe,
-    _check_classement_is_safe,
-    _is_4xxx,
-    _is_47xx,
-)
+from envinorma.data.classement import DetailedClassement, DetailedRegime, State
+from envinorma.data_build.build.build_classements import _check_classements
+from envinorma.data_build.validate.check_classements import _check_classement_is_safe, _is_4xxx, _is_47xx
 
 
 def test_is_47xx():
@@ -48,7 +44,7 @@ def test_check_classement_is_safe():
             alinea=None,
             date_autorisation=None,
             state=None,
-            regime_acte=None,
+            regime_acte=DetailedRegime.NC,
             alinea_acte=None,
             rubrique_acte='47xx',
             activite=None,
@@ -95,7 +91,7 @@ def test_check_classement_is_safe():
         _check_classement_is_safe(
             DetailedClassement(
                 s3ic_id='0065.12345',
-                rubrique='4029',
+                rubrique='47xx',
                 regime=DetailedRegime.A,
                 alinea='1.',
                 date_autorisation=date.today(),
@@ -111,8 +107,8 @@ def test_check_classement_is_safe():
 
 
 def test_build_dataframe():
-    res = _build_dataframe(
-        [
+    records = [
+        json.loads(
             DetailedClassement(
                 s3ic_id='0065.12345',
                 rubrique='4029',
@@ -126,19 +122,8 @@ def test_build_dataframe():
                 activite='',
                 volume='',
                 unit='2',
-            )
-        ]
-    )
-    record = res.to_dict('records')[0]
-    assert record['s3ic_id'] == '0065.12345'
-    assert record['rubrique'] == '4029'
-    assert record['regime'] == 'A'
-    assert record['alinea'] == '1.'
-    assert record['date_autorisation'] == date.today()
-    assert record['state'] == State.EN_FONCTIONNEMENT.value
-    assert record['regime_acte'] == 'A'
-    assert record['alinea_acte'] == ''
-    assert record['rubrique_acte'] == '3019'
-    assert record['activite'] == ''
-    assert record['volume'] == ''
-    assert record['unit'] == '2'
+            ).json()
+        )
+    ]
+    res = pandas.DataFrame.from_records(records)
+    _check_classements(res)
