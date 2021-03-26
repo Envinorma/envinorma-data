@@ -1,12 +1,8 @@
-'''
-Script for generating csv of classements
-'''
-
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any, Dict, List, Optional
 
 import pandas
 
-from envinorma.data.classement import DetailedClassement, DetailedRegime, State
+from envinorma.data.classement import DetailedClassement, DetailedRegime
 
 
 def _is_47xx(rubrique: Optional[str]) -> bool:

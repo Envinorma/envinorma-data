@@ -76,6 +76,7 @@ def _filter_and_dump(all_documents: List[Document], dataset: Dataset) -> None:
     docs = [doc for doc in all_documents if doc.s3ic_id in doc_ids]
     _dump_docs(docs, dataset_filename(dataset, 'documents', 'json'))
     print(f'documents dataset {dataset} has {len(docs)} rows')
+    assert len(docs) >= 100, f'Expecting >= 100 docs, got {len(docs)}'
 
 
 def build_all_document_datasets() -> None:

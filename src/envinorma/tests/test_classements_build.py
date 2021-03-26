@@ -4,15 +4,9 @@ from datetime import date
 import pandas
 import pytest
 
+from envinorma.data.classement import DetailedClassement, DetailedRegime, State
 from envinorma.data_build.build.build_classements import _check_classements
-from envinorma.data_build.validate.check_classements import (
-    DetailedClassement,
-    DetailedRegime,
-    State,
-    _check_classement_is_safe,
-    _is_4xxx,
-    _is_47xx,
-)
+from envinorma.data_build.validate.check_classements import _check_classement_is_safe, _is_4xxx, _is_47xx
 
 
 def test_is_47xx():
