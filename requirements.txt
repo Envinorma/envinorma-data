@@ -11,7 +11,7 @@ gunicorn==20.0.4
 pdf2image==1.14.0
 psycopg2-binary==2.8.6
 pydantic==1.7.3
-lxml==4.6.2
+lxml==4.6.3
 opencv-python-headless==4.5.1.48
 pdf2docx==0.5.1
 pdfplumber==0.5.25
