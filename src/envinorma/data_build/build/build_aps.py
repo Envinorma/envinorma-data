@@ -4,7 +4,7 @@ import pandas
 
 from envinorma.data.document import Document, DocumentType
 from envinorma.data.load import load_documents
-from envinorma.data_build.filenames import GEORISQUES_DOWNLOAD_URL, Dataset, dataset_filename
+from envinorma.data_build.filenames import Dataset, dataset_filename
 
 
 def _rowify_ap(ap: Document) -> Dict[str, Any]:
@@ -13,7 +13,7 @@ def _rowify_ap(ap: Document) -> Dict[str, Any]:
         'installation_s3ic_id': ap.s3ic_id,
         'description': ap.description,
         'date': ap.date,
-        'url': f'{GEORISQUES_DOWNLOAD_URL}/{ap.url}',
+        'georisques_id': ap.url[:-4],
     }
 
 

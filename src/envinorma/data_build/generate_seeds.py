@@ -15,6 +15,7 @@ from envinorma.data_build.filenames import (
 )
 from envinorma.data_build.validate.check_am import check_ams
 from envinorma.data_build.validate.check_classements import check_classements_csv
+from envinorma.data_build.validate.check_documents import check_documents_csv
 from envinorma.data_build.validate.check_installations import check_installations_csv
 from envinorma.data_build.validate.check_unique_classements import check_unique_classements_csv
 
@@ -23,11 +24,12 @@ def _check_seeds() -> None:
     check_unique_classements_csv(UNIQUE_CLASSEMENTS_FILENAME)
     check_classements_csv(dataset_filename('all', 'classements'))
     check_installations_csv(dataset_filename('all', 'installations'))
+    check_documents_csv(dataset_filename('all', 'aps'))
     check_ams(AM_LIST_FILENAME, ENRICHED_OUTPUT_FOLDER)
 
 
 def run():
-    # generate_ams()
+    generate_ams()
     # build_installations_csv()
     # build_all_installations_datasets()
     # build_classements_csv()
