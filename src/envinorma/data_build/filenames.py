@@ -8,11 +8,16 @@ AM_LIST_FILENAME = os.path.join(_ENVINORMA_WEB_SEED_FOLDER, 'am_list.json')
 UNIQUE_CLASSEMENTS_FILENAME = os.path.join(_ENVINORMA_WEB_SEED_FOLDER, 'unique_classements.csv')
 Dataset = Literal['all', 'idf', 'sample']
 DataType = Literal['classements', 'installations', 'documents', 'aps']
+AMDataType = Literal['arretes', 'sections', 'alineas']
 Extension = Literal['csv', 'json']
 
 
-def dataset_filename(dataset: Dataset, datatype: DataType, extenstion: Extension = 'csv') -> str:
-    return os.path.join(_ENVINORMA_WEB_SEED_FOLDER, f'{datatype}_{dataset}.{extenstion}')
+def dataset_filename(dataset: Dataset, datatype: DataType, extension: Extension = 'csv') -> str:
+    return os.path.join(_ENVINORMA_WEB_SEED_FOLDER, f'{datatype}_{dataset}.{extension}')
+
+
+def am_dataset_filename(datatype: AMDataType, extension: Extension = 'csv') -> str:
+    return os.path.join(_ENVINORMA_WEB_SEED_FOLDER, f'{datatype}.{extension}')
 
 
 GEORISQUES_URL = 'https://www.georisques.gouv.fr/webappReport/ws'

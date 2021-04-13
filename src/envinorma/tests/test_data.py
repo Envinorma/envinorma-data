@@ -19,11 +19,11 @@ from envinorma.data import (
     StructuredText,
     Table,
     TopicName,
-    _is_probably_cid,
     estr,
     extract_text_lines,
     group_classements_by_alineas,
     is_increasing,
+    is_probably_cid,
     load_am_data,
     table_to_html,
 )
@@ -164,13 +164,13 @@ def test_group_classements_by_alineas():
 
 
 def test_is_probably_cid():
-    assert _is_probably_cid('JORFTEXT')
-    assert _is_probably_cid('LEGITEXT')
-    assert _is_probably_cid('LEGITEXT34234')
-    assert _is_probably_cid('FAKE_CID')
-    assert _is_probably_cid('FAKETEXT0000324')
-    assert not _is_probably_cid('')
-    assert not _is_probably_cid('JORFTEX')
+    assert is_probably_cid('JORFTEXT')
+    assert is_probably_cid('LEGITEXT')
+    assert is_probably_cid('LEGITEXT34234')
+    assert is_probably_cid('FAKE_CID')
+    assert is_probably_cid('FAKETEXT0000324')
+    assert not is_probably_cid('')
+    assert not is_probably_cid('JORFTEX')
 
 
 def _get_simple_text() -> StructuredText:

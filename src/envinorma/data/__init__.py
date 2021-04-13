@@ -1,5 +1,6 @@
 import json
 import random
+import re
 import string
 import warnings
 from collections import Counter
@@ -271,10 +272,21 @@ class Summary:
         return Summary(**dict_)
 
 
-def _is_probably_cid(candidate: str) -> bool:
+def is_probably_cid(candidate: str) -> bool:
     if 'FAKE' in candidate:
         return True  # for avoiding warning for fake cids, which contain FAKE by convention
     return candidate.startswith('JORFTEXT') or candidate.startswith('LEGITEXT')
+
+
+_MONTHS = r'(janvier|février|mars|avril|mai|juin|juillet|août|septembre|octobre|novembre|décembre)'
+_PATTERN = rf'Arrêté du (1er|[0-9]*) ' + _MONTHS + ' [0-9]{4}'
+
+
+def check_short_title(title: str) -> None:
+    if title == 'Faux Arrêté':
+        return
+    if not re.match(_PATTERN, title):
+        raise ValueError(f'Expecting am.short_title (={title}) to follow pattern, which is not the case.')
 
 
 @dataclass
@@ -295,7 +307,7 @@ class ArreteMinisteriel:
     warning_inactive: Optional[str] = None
 
     def __post_init__(self):
-        if not _is_probably_cid(self.id or ''):
+        if not is_probably_cid(self.id or ''):
             warnings.warn(f'AM id does not look like a CID : {self.id} (title={self.title.text})')
 
     def to_dict(self) -> Dict[str, Any]:
