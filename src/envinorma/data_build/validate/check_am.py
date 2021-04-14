@@ -1,7 +1,4 @@
-import json
 import math
-import os
-import re
 from typing import Dict, List, Optional, Tuple
 
 from tqdm import tqdm
@@ -9,6 +6,7 @@ from tqdm import tqdm
 from envinorma.back_office.utils import AM1510_IDS
 from envinorma.data import ArreteMinisteriel, DateCriterion, StructuredText, check_short_title
 from envinorma.data.text_elements import Table
+from envinorma.data_build.load import load_am_list, load_enriched_am_groups
 from envinorma.utils import str_to_date
 
 
@@ -135,31 +133,25 @@ def _check_am(am: ArreteMinisteriel) -> None:
     check_short_title(am.short_title)
 
 
-def _load_am_list(am_list_filename: str) -> List[ArreteMinisteriel]:
-    return [ArreteMinisteriel.from_dict(x) for x in json.load(open(am_list_filename))]
-
-
-def _load_enriched_am_list(enriched_output_folder: str) -> Dict[str, ArreteMinisteriel]:
-    return {
-        file_: ArreteMinisteriel.from_dict(json.load(open(os.path.join(enriched_output_folder, file_))))
-        for file_ in os.listdir(enriched_output_folder)
-    }
-
-
-def check_ams(am_list_filename: str, enriched_output_folder: str) -> None:
-    am_list = _load_am_list(am_list_filename)
+def _check_unenriched_ams(am_list_filename: str) -> None:
+    am_list = load_am_list(am_list_filename)
     for am in tqdm(am_list, 'Checking AMs'):
         _check_am(am)
     all_ids = {am.id for am in am_list}
     assert 'JORFTEXT000034429274_A' in all_ids
     assert 'JORFTEXT000034429274_E' in all_ids
     assert 'JORFTEXT000034429274_D' in all_ids
-    enriched_am = _load_enriched_am_list(enriched_output_folder)
-    id_to_versions: Dict[str, Dict[str, ArreteMinisteriel]] = {}
-    for version_name, am in tqdm(enriched_am.items(), 'Checking enriched AMs'):
+
+
+def _check_enriched_ams(enriched_output_folder: str) -> None:
+    enriched_am_groups = load_enriched_am_groups(enriched_output_folder)
+    all_ams = [am for ams in enriched_am_groups.values() for am in ams.values()]
+    for am in tqdm(all_ams, 'Checking enriched AMs'):
         _check_am(am)
-        if am.id not in id_to_versions:
-            id_to_versions[am.id or ''] = {}
-        id_to_versions[am.id or ''][version_name] = am
-    for am_versions in tqdm(id_to_versions.values(), 'Checking enriched AM groups'):
+    for am_versions in tqdm(enriched_am_groups.values(), 'Checking enriched AM groups'):
         _check_enriched_am_group(am_versions)
+
+
+def check_ams(am_list_filename: str, enriched_output_folder: str) -> None:
+    _check_unenriched_ams(am_list_filename)
+    _check_enriched_ams(enriched_output_folder)

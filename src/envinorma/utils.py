@@ -58,7 +58,7 @@ T = TypeVar('T')
 
 
 def ensure_not_none(candidate: Optional[T]) -> T:
-    if not candidate:
+    if candidate is None:
         raise ValueError('Expecting non None argument')
     return candidate
 

@@ -32,8 +32,8 @@ def _check_seeds() -> None:
 
 
 def run():
-    generate_ams()
-    build_flat_ams()
+    # generate_ams()
+    build_flat_ams(AM_LIST_FILENAME, ENRICHED_OUTPUT_FOLDER)
     # build_installations_csv()
     # build_all_installations_datasets()
     # build_classements_csv()
@@ -42,7 +42,7 @@ def run():
     # download_georisques_documents()
     # build_all_document_datasets()
     # dump_ap_datasets()
-    _check_seeds()
+    # _check_seeds()
 
 
 if __name__ == '__main__':
