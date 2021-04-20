@@ -171,6 +171,5 @@ def build_flat_ams(am_list_filename: str, enriched_output_folder: str) -> None:
             for rank, (_, am) in enumerate(sorted(am_group.items()))
         ],
     ]
-    ams_with_characteristics = [x for x in ams_with_characteristics if x[0].id == 'JORFTEXT000042344843']
     all_elements = [_build_flat_elements(*am) for am in tqdm(ams_with_characteristics, 'Building flat AMs')]
     _dump_flat_elements(all_elements)
