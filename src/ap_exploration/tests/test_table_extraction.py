@@ -179,10 +179,25 @@ def test_extract_rowspan():
     assert _extract_rowspan(Contour(100, 200, 100, 301), [0, 100, 200, 300]) == 2
 
 
+def _remove_ids_table(table: Table) -> Table:
+    for row in table.rows:
+        for cell in row.cells:
+            cell.content.id = ''
+    return table
+
+
+def _remove_ids_located_table(table: LocatedTable) -> LocatedTable:
+    for row in table.table.rows:
+        for cell in row.cells:
+            cell.content.id = ''
+    return table
+
+
 def test_build_table():
     cell = Cell(estr('a'), 1, 1)
     row = Row([cell], False)
-    assert _build_table([DetectedCell('a', Contour(100, 200, 0, 100))]).table == Table([row])
+    res = _remove_ids_table(_build_table([DetectedCell('a', Contour(100, 200, 0, 100))]).table)
+    assert res == _remove_ids_table(Table([row]))
 
     cells = [
         DetectedCell('a', Contour(0, 100, 0, 100)),
@@ -194,7 +209,9 @@ def test_build_table():
         Row([Cell(estr('a'), 1, 1), Cell(estr('c'), 1, 1)], False),
         Row([Cell(estr('b'), 1, 1), Cell(estr('d'), 1, 1)], False),
     ]
-    assert _build_table(cells) == LocatedTable(Table(rows), 0, 0, 200, 200)
+    assert _remove_ids_located_table(_build_table(cells)) == _remove_ids_located_table(
+        LocatedTable(Table(rows), 0, 0, 200, 200)
+    )
 
     cells = [
         DetectedCell('a', Contour(0, 101, 0, 100)),
@@ -206,7 +223,7 @@ def test_build_table():
         Row([Cell(estr('a'), 1, 1), Cell(estr('c'), 1, 1)], False),
         Row([Cell(estr('b'), 1, 1), Cell(estr('d'), 1, 1)], False),
     ]
-    assert _build_table(cells).table == Table(rows)
+    assert _remove_ids_table(_build_table(cells).table) == _remove_ids_table(Table(rows))
 
     cells = [
         DetectedCell('a', Contour(0, 101, 0, 100)),
@@ -217,7 +234,7 @@ def test_build_table():
         Row([Cell(estr('a'), 1, 1), Cell(estr('c'), 1, 1)], False),
         Row([Cell(estr('b'), 2, 1)], False),
     ]
-    assert _build_table(cells).table == Table(rows)
+    assert _remove_ids_table(_build_table(cells).table) == _remove_ids_table(Table(rows))
 
 
 def test_group_cells_2():

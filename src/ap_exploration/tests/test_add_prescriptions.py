@@ -18,28 +18,39 @@ def _soup(x: str) -> BeautifulSoup:
     return BeautifulSoup(x, 'html.parser')
 
 
+def _remove_ids(obj):
+    if isinstance(obj, list):
+        for el in obj:
+            _remove_ids(el)
+    if isinstance(obj, Table):
+        for row in obj.rows:
+            for cell in row.cells:
+                cell.content.id = ''
+    return obj
+
+
 def test_extract_elements_from_soup():
     assert _extract_elements_from_soup(_soup('')) == []
     assert _extract_elements_from_soup(_soup('\n')) == ['\n']
     res = _extract_elements_from_soup(_soup('\n<table><tr><td></td></tr></table>'))
-    assert res == ['\n', Table([Row([Cell(EnrichedString(''), 1, 1)], False)])]
+    assert _remove_ids(res) == _remove_ids(['\n', Table([Row([Cell(EnrichedString(''), 1, 1)], False)])])
 
     res = _extract_elements_from_soup(_soup('Test\n<table><tr><td></td></tr></table>'))
-    assert res == ['Test\n', Table([Row([Cell(EnrichedString(''), 1, 1)], False)])]
+    assert _remove_ids(res) == _remove_ids(['Test\n', Table([Row([Cell(EnrichedString(''), 1, 1)], False)])])
 
     res = _extract_elements_from_soup(_soup('Test\nTest'))
-    assert res == ['Test\nTest']
+    assert _remove_ids(res) == _remove_ids(['Test\nTest'])
 
     res = _extract_elements_from_soup(_soup('Test\nTest\n<h1>Test</h1>'))
-    assert res == ['Test\nTest\n', Linebreak(), 'Test', Linebreak()]
+    assert _remove_ids(res) == _remove_ids(['Test\nTest\n', Linebreak(), 'Test', Linebreak()])
 
     res = _extract_elements_from_soup(_soup('<h1 id="a">Test</h1>'))
-    assert res == [Linebreak(), 'Test', Linebreak()]
+    assert _remove_ids(res) == _remove_ids([Linebreak(), 'Test', Linebreak()])
 
     res = _extract_elements_from_soup(
         _soup('<span class="hola">hihi</span><h1 id="a">Test</h1><span class="badge">hihi</span>')
     )
-    assert res == ['hihi', Linebreak(), 'Test', Linebreak(), _PrescriptionBeginMark()]
+    assert _remove_ids(res) == _remove_ids(['hihi', Linebreak(), 'Test', Linebreak(), _PrescriptionBeginMark()])
 
 
 def test_ensure_tables_or_strs():

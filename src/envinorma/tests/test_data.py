@@ -33,43 +33,45 @@ def _random_string() -> str:
     return ''.join([random.choice(ascii_letters) for _ in range(9)])
 
 
-def _random_enriched_string() -> EnrichedString:
-    return EnrichedString(_random_string(), [], None)
-
-
 def _str(text: Optional[str] = None) -> EnrichedString:
-    return EnrichedString(text) if text else _random_enriched_string()
+    return EnrichedString(text or _random_string())
 
 
-_TABLE = Table([Row([Cell(EnrichedString('bonjour'), 1, 1)], True)])
-_ENRICHED_STRING_TABLE = EnrichedString('', [], copy(_TABLE))
-_ENRICHED_STRING_LINKS = EnrichedString('abc', [Link('abc', 0, 3)], None)
-_ENRICHED_STRING_SIMPLE = EnrichedString('abc', [], None)
-_LEAF_SECTION = StructuredText(
-    copy(_ENRICHED_STRING_SIMPLE),
-    [copy(_ENRICHED_STRING_SIMPLE)],
-    [],
-    Applicability(True, True, ['beware'], StructuredText(_str(), [], [], None)),
-    'lf_id',
-    'ref',
-    Annotations(TopicName.AIR_ODEURS, True, 'guide'),
-)
-_NODE_SECTION = StructuredText(
-    copy(_ENRICHED_STRING_SIMPLE),
-    [copy(_ENRICHED_STRING_SIMPLE), copy(_ENRICHED_STRING_TABLE)],
-    [_LEAF_SECTION],
-    None,
-    None,
-    'ref',
-    Annotations(None, True, None),
-)
+def _table() -> Table:
+    return Table([Row([Cell(EnrichedString('bonjour'), 1, 1)], True)])
+
+
+def _enriched_string_table() -> EnrichedString:
+    return EnrichedString('', [], _table())
+
+
+def _enriched_string_links() -> EnrichedString:
+    return EnrichedString('abc', [Link('abc', 0, 4)], None)
+
+
+def _leaf_section() -> StructuredText:
+    app = Applicability(True, True, ['beware'], StructuredText(_str('abc'), [], [], None))
+    annotations = Annotations(TopicName.AIR_ODEURS, True, 'guide')
+    return StructuredText(_str('abc'), [_str('abc')], [], app, 'lf_id', 'ref', annotations)
+
+
+def _node_section() -> StructuredText:
+    return StructuredText(
+        _str('abc'),
+        [_str('abc'), _enriched_string_table()],
+        [_leaf_section()],
+        None,
+        None,
+        'ref',
+        Annotations(None, True, None),
+    )
 
 
 def test_arrete_ministeriel():
     am = ArreteMinisteriel(
-        _ENRICHED_STRING_SIMPLE,
-        [_NODE_SECTION],
-        [_ENRICHED_STRING_LINKS],
+        _str('abc'),
+        [_node_section()],
+        [_enriched_string_links()],
         'short_title',
         DateCriterion('2020-07-23', '2021-07-23'),
         'aida',
@@ -88,15 +90,15 @@ def test_arrete_ministeriel():
 
 
 def test_structured_text():
-    dict_ = _NODE_SECTION.to_dict()
+    dict_ = _node_section().to_dict()
     new_dict = StructuredText.from_dict(dict_).to_dict()
     assert new_dict == dict_
 
 
 def test_table():
-    dict_ = _TABLE.to_dict()
-    new_dict = Table.from_dict(dict_).to_dict()
-    assert new_dict == dict_
+    table_dict = _table().to_dict()
+    new_dict = Table.from_dict(table_dict).to_dict()
+    assert table_dict == new_dict
 
 
 def test_is_increasing():
@@ -174,12 +176,10 @@ def test_is_probably_cid():
 
 
 def _get_simple_text() -> StructuredText:
-    sub_section_1 = StructuredText(EnrichedString('Section 1.1'), [], [], None)
-    section_1 = StructuredText(EnrichedString('Section 1'), [], [sub_section_1], None)
-    section_2 = StructuredText(EnrichedString('Section 2'), [EnrichedString('bar')], [], None)
-    return StructuredText(
-        EnrichedString('AM '), [EnrichedString('alinea'), EnrichedString('foo')], [section_1, section_2], None
-    )
+    sub_section_1 = StructuredText(_str('Section 1.1'), [], [], None)
+    section_1 = StructuredText(_str('Section 1'), [], [sub_section_1], None)
+    section_2 = StructuredText(_str('Section 2'), [_str('bar')], [], None)
+    return StructuredText(_str('AM '), [_str('alinea'), _str('foo')], [section_1, section_2], None)
 
 
 _TEXT_A = StructuredText(

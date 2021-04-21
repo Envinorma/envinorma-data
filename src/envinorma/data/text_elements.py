@@ -58,12 +58,17 @@ def empty_link_list() -> List[Link]:
     return []
 
 
+def _enriched_string_id() -> str:
+    return _random_string(12)
+
+
 @dataclass
 class EnrichedString:
     text: str
     links: List[Link] = field(default_factory=empty_link_list)
     table: Optional[Table] = None
     active: Optional[bool] = True
+    id: str = field(default_factory=_enriched_string_id)
 
     @classmethod
     def from_dict(cls, dict_: Dict[str, Any]) -> 'EnrichedString':
@@ -77,8 +82,8 @@ class EnrichedString:
         return dict_
 
 
-def _random_string() -> str:
-    return ''.join([random.choice(ascii_letters) for _ in range(9)])
+def _random_string(size: int = 9) -> str:
+    return ''.join([random.choice(ascii_letters) for _ in range(size)])
 
 
 def _random_enriched_string() -> EnrichedString:
