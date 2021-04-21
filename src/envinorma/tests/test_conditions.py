@@ -21,11 +21,12 @@ from envinorma.parametrization.conditions import (
 
 
 def test_merge_words():
-    assert _merge_words([]) == ''
-    assert _merge_words(['foo']) == 'foo'
-    assert _merge_words(['foo', 'bar']) == 'foo et bar'
-    assert _merge_words(['foo', 'bar', 'baz']) == 'foo, bar et baz'
-    assert _merge_words(['foo', 'bar', 'baz', 'etc']) == 'foo, bar, baz et etc'
+    assert _merge_words([], 'AND') == ''
+    assert _merge_words(['foo'], 'AND') == 'foo'
+    assert _merge_words(['foo', 'bar'], 'AND') == 'foo et bar'
+    assert _merge_words(['foo', 'bar', 'baz'], 'AND') == 'foo, bar et baz'
+    assert _merge_words(['foo', 'bar', 'baz', 'etc'], 'AND') == 'foo, bar, baz et etc'
+    assert _merge_words(['foo', 'bar', 'baz', 'etc'], 'OR') == 'foo, bar, baz ou etc'
 
 
 def test_generate_warning_missing_value():
@@ -86,6 +87,20 @@ def test_generate_warning_missing_value():
     val = {parameter_regime: Regime.E}
     assert generate_warning_missing_value(AndCondition([condition_3, condition_regime]), val, None, True) == exp
 
+    exp = (
+        f'Ce paragraphe pourrait être modifié. C\'est le cas pour les installations dont la date d\'autorisation'
+        ' est antérieure au 01/01/2019 ou le régime est à autorisation.'
+    )
+    val = {parameter_regime: Regime.E}
+    assert generate_warning_missing_value(OrCondition([condition_3, condition_regime]), val, None, True) == exp
+
+    exp = (
+        f'Ce paragraphe pourrait être modifié. C\'est le cas pour les installations dont la date d\'autorisation'
+        ' est antérieure au 01/01/2019 ou le régime est à autorisation.'
+    )
+    val = {parameter_regime: Regime.E}
+    assert generate_warning_missing_value(OrCondition([condition_3, condition_regime]), val, None, True) == exp
+
 
 def test_generate_inactive_warning():
     parameter = ParameterEnum.DATE_AUTORISATION.value
@@ -128,9 +143,16 @@ def test_generate_inactive_warning():
 
     exp = (
         'Ce paragraphe ne s’applique pas à cette installation car '
-        'la date d\'autorisation est postérieure au 01/01/2018 et antérieure au 01/01/2019 et le régime est à autorisation.'
+        'la date d\'autorisation est postérieure au 01/01/2018 et antérieure au 01/01/2019 ou le régime est à autorisation.'
     )
     val = {parameter_regime: Regime.A, parameter: datetime(2018, 1, 5)}
+    assert generate_inactive_warning(OrCondition([condition_2, condition_regime]), val, True) == exp
+
+    exp = (
+        'Ce paragraphe ne s’applique pas à cette installation car '
+        'la date d\'autorisation est postérieure au 01/01/2018 et antérieure au 01/01/2019.'
+    )
+    val = {parameter_regime: Regime.E, parameter: datetime(2018, 1, 5)}
     assert generate_inactive_warning(OrCondition([condition_2, condition_regime]), val, True) == exp
 
 
@@ -174,7 +196,7 @@ def test_generate_modification_warning():
 
     exp = (
         'Ce paragraphe a été modifié pour cette installation car'
-        ' la date d\'autorisation est postérieure au 01/01/2018 et antérieure au 01/01/2019 et le régime est à autorisation.'
+        ' la date d\'autorisation est postérieure au 01/01/2018 et antérieure au 01/01/2019 ou le régime est à autorisation.'
     )
     val = {parameter_regime: Regime.A, parameter: datetime(2018, 1, 5)}
     assert generate_modification_warning(OrCondition([condition_2, condition_regime]), val) == exp

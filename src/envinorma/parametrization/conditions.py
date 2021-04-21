@@ -1,7 +1,7 @@
 from dataclasses import asdict, dataclass
 from datetime import datetime
 from enum import Enum
-from typing import Any, Dict, List, Optional, Union
+from typing import Any, Dict, List, Literal, Optional, Union
 
 from envinorma.data import Regime
 
@@ -221,6 +221,8 @@ MergeCondition = Union[AndCondition, OrCondition]
 MonoConditions = (Equal, Greater, Littler)
 MonoCondition = Union[Equal, Greater, Littler]
 
+MergeType = Literal['AND', 'OR']
+
 
 def ensure_mono_condition(condition: Condition) -> MonoCondition:
     if isinstance(condition, (Equal, Greater, Littler)):
@@ -355,12 +357,13 @@ def _parameter_id_to_str(parameter_id: str) -> str:
     return f'la valeur du paramètre {parameter_id}'
 
 
-def _merge_words(words: List[str]) -> str:
+def _merge_words(words: List[str], merge_type: MergeType) -> str:
     if not words:
         return ''
     if len(words) == 1:
         return words[0]
-    return ', '.join(words[:-1]) + ' et ' + words[-1]
+    merge_word = 'et' if merge_type == 'AND' else 'ou'
+    return ', '.join(words[:-1]) + f' {merge_word} ' + words[-1]
 
 
 def _is_range_of_size_at_least_2(alineas: List[int]) -> bool:
@@ -373,7 +376,8 @@ def _alineas_prefix(alineas: List[int]) -> str:
     if _is_range_of_size_at_least_2(alineas):
         return f'Les alinéas n°{min(alineas) + 1} à {max(alineas) + 1}'
     str_alineas = [str(i + 1) for i in sorted(alineas)]
-    return f'Les alinéas n°{_merge_words(str_alineas)}'
+    suffix = _merge_words(str_alineas, 'AND')
+    return f'Les alinéas n°{suffix}'
 
 
 def _generate_prefix(alineas: Optional[List[int]], modification: bool) -> str:
@@ -389,11 +393,6 @@ def _generate_prefix(alineas: Optional[List[int]], modification: bool) -> str:
 def generate_warning_missing_value(
     condition: Condition, parameter_values: Dict[Parameter, Any], alineas: Optional[List[int]], modification: bool
 ) -> str:
-    # parameters = set(extract_parameters_from_condition(condition))
-    # missing_parameters = sorted(
-    #     [_parameter_id_to_str(param.id) for param in parameters if param not in parameter_values]
-    # )
-    # enumeration = _merge_words(missing_parameters)
     return (
         f'{_generate_prefix(alineas, modification)}. C\'est le cas '
         f'pour les installations dont {_modification_warning(condition, parameter_values)}.'
@@ -477,25 +476,29 @@ def _ensure_leaf_condition(condition: Condition) -> LeafCondition:
     return condition
 
 
-def _stringify_all_conditions(conditions: List[Condition]) -> str:
-    if any([not isinstance(cond, LeafConditions) for cond in conditions]):
+def _has_non_leaf_condition(conditions: List[Condition]) -> bool:
+    return any([not isinstance(cond, LeafConditions) for cond in conditions])
+
+
+def _stringify_all_conditions(conditions: List[Condition], merge_type: MergeType) -> str:
+    if _has_non_leaf_condition(conditions):
         str_ = [condition_to_str(subcondition) for subcondition in conditions]
         return 'les conditions d\'application suivantes sont remplies : ' + ', '.join(str_)
-    return _merge_words([_warning_leaf(_ensure_leaf_condition(cond)) for cond in conditions])
+    return _merge_words([_warning_leaf(_ensure_leaf_condition(cond)) for cond in conditions], merge_type)
 
 
 def _warning_merge_condition(condition: MergeCondition, parameter_values: Dict[Parameter, Any]) -> str:
     if isinstance(condition, AndCondition):
         if len(condition.conditions) == 1:
             return _modification_warning(condition.conditions[0], parameter_values)
-        return _stringify_all_conditions(condition.conditions)
+        return _stringify_all_conditions(condition.conditions, 'AND')
     assert isinstance(condition, OrCondition)
     fulfilled_conditions = [
         subcondition for subcondition in condition.conditions if is_satisfied(subcondition, parameter_values)
     ]
     if len(fulfilled_conditions) == 1:
         return _modification_warning(fulfilled_conditions[0], parameter_values)
-    return _stringify_all_conditions(fulfilled_conditions)
+    return _stringify_all_conditions(condition.conditions, 'OR')
 
 
 def _modification_warning(condition: Condition, parameter_values: Dict[Parameter, Any]) -> str:

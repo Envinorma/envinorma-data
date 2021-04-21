@@ -24,7 +24,7 @@ from envinorma.back_office.pages.parametrization_edition.form_handling import (
 )
 from envinorma.back_office.pages.parametrization_edition.target_sections_form import TargetSectionFormValues
 from envinorma.data import ArreteMinisteriel, Regime, StructuredText, dump_path
-from envinorma.data.text_elements import estr
+from envinorma.data.text_elements import EnrichedString, estr
 from envinorma.parametrization import ConditionSource, EntityReference, SectionReference
 from envinorma.parametrization.conditions import (
     AndCondition,
@@ -242,11 +242,11 @@ def test_build_target_versions():
     modif = _Modification(SectionReference((0, 0)), None, text)
     res = _build_target_versions(am, form_values)
     modif.new_text.id = res[0].new_text.id
-    assert res == [modif]
+    assert _remove_ids(res) == _remove_ids([modif])
 
     form_values = TargetSectionFormValues([], [], [dump_path((0, 0))], [[0, 1]])
     modif = _Modification(SectionReference((0, 0)), None, None)
-    assert _build_target_versions(am, form_values) == [modif]
+    assert _remove_ids(_build_target_versions(am, form_values)) == _remove_ids([modif])
 
     form_values = TargetSectionFormValues([], [], [dump_path((0, 0))], [[0]])
     modif = _Modification(SectionReference((0, 0)), [0], None)
@@ -255,6 +255,21 @@ def test_build_target_versions():
     form_values = TargetSectionFormValues([], [], [dump_path((0,))], [[0]])
     modif = _Modification(SectionReference((0,)), [0], None)
     assert _build_target_versions(am, form_values) == [modif]
+
+
+def _remove_ids(obj):
+    if isinstance(obj, list):
+        for el in obj:
+            _remove_ids(el)
+    if isinstance(obj, StructuredText):
+        _remove_ids(obj.outer_alineas)
+        _remove_ids(obj.sections)
+        _remove_ids(obj.title)
+    if isinstance(obj, EnrichedString):
+        obj.id = ''
+    if isinstance(obj, _Modification):
+        _remove_ids(obj.new_text)
+    return obj
 
 
 def test_build_new_text():
@@ -269,7 +284,7 @@ def test_build_new_text():
     with pytest.raises(FormHandlingError):
         _build_new_text(None, 'bb')
     assert _build_new_text('aa', 'bb').title.text == 'aa'
-    assert _build_new_text('aa', 'bb').outer_alineas == [estr('bb')]
+    assert _remove_ids(_build_new_text('aa', 'bb').outer_alineas) == _remove_ids([estr('bb')])
 
 
 def test_build_condition():

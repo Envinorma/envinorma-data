@@ -59,10 +59,17 @@ def test_component_to_html():
     assert _component_to_html(html.H1([html.B('TE'), 'st'])) == '<h1><b>TE</b>st</h1>'
 
 
+def _remove_ids(table: Table) -> Table:
+    for row in table.rows:
+        for cell in row.cells:
+            cell.content.id = ''
+    return table
+
+
 def test_table_to_component():
     table = Table([Row([_cell('test\ntest')], True), Row([_cell('test\ntest')], False)])
     res = table_to_component(table, None)
     assert isinstance(res.children[0].children[0].children[0].children[1], html.Br)
 
     new_table = extract_table(_component_to_html(res))
-    assert new_table == table
+    assert _remove_ids(new_table) == _remove_ids(table)
