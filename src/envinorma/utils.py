@@ -5,9 +5,10 @@ import string
 import traceback
 from datetime import datetime
 from enum import Enum
-from typing import Dict, List, Optional, TypeVar, Union
+from typing import Dict, Iterable, List, Optional, TypeVar, Union
 
 import requests
+from tqdm import tqdm
 
 from envinorma.config import config
 
@@ -94,3 +95,9 @@ def batch(items: List[T], batch_size: int) -> List[List[T]]:
     if batch_size <= 0:
         raise ValueError(f'batch_size must be positive, got {batch_size}')
     return [items[i * batch_size : (i + 1) * batch_size] for i in range(math.ceil(len(items) / batch_size))]
+
+
+def typed_tqdm(
+    collection: Iterable[T], desc: Optional[str] = None, leave: bool = True, disable: bool = False
+) -> Iterable[T]:
+    return tqdm(collection, desc=desc, leave=leave, disable=disable)
