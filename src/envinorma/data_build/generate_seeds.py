@@ -6,6 +6,7 @@ from envinorma.data_build.build.build_ams import generate_ams
 from envinorma.data_build.build.build_aps import dump_ap_datasets, dump_aps
 from envinorma.data_build.build.build_classements import build_all_classement_datasets, build_classements_csv
 from envinorma.data_build.build.build_documents import build_all_document_datasets, download_georisques_documents
+from envinorma.data_build.build.build_georisques_ids import dump_georisques_ids
 from envinorma.data_build.build.build_installations import build_all_installations_datasets, build_installations_csv
 from envinorma.data_build.filenames import (
     AM_LIST_FILENAME,
@@ -38,6 +39,7 @@ def run():
     # download_georisques_documents()
     # build_all_document_datasets()
     # dump_ap_datasets()
+    # dump_georisques_ids()
     _check_seeds()
 
 

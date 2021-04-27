@@ -23,6 +23,10 @@ class Document:
     url: str
     s3ic_id: str
 
+    @property
+    def georisques_id(self) -> str:
+        return self.url[:-4]
+
     @classmethod
     def from_georisques_dict(cls, dict_: Dict[str, Any], s3ic_id: str) -> 'Document':
         dict_['type'] = DocumentType(dict_['typeDoc'])

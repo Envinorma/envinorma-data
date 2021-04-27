@@ -13,7 +13,7 @@ def _rowify_ap(ap: Document) -> Dict[str, Any]:
         'installation_s3ic_id': ap.s3ic_id,
         'description': ap.description,
         'date': ap.date,
-        'georisques_id': ap.url[:-4],
+        'georisques_id': ap.georisques_id,
     }
 
 

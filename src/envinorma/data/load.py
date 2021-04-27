@@ -10,7 +10,8 @@ from envinorma.data.classement import DetailedClassement
 from envinorma.data.document import Document, DocumentType
 from envinorma.data.installation import ActivityStatus, Installation, InstallationFamily, Seveso
 from envinorma.data_build.build.build_installations import load_installations_csv
-from envinorma.data_build.filenames import Dataset, dataset_filename
+from envinorma.data_build.filenames import GEORISQUES_IDS_FILENAME, Dataset, dataset_filename
+from envinorma.utils import typed_tqdm
 
 
 def _dataframe_record_to_installation(record: Dict[str, Any]) -> Installation:
@@ -57,13 +58,22 @@ def load_documents(dataset: Dataset) -> List[Document]:
 def _dataframe_record_to_ap(record: Dict[str, Any]) -> Document:
     record = record.copy()
     record['s3ic_id'] = record['installation_s3ic_id']
+    record['url'] = record['georisques_id'] + '.pdf'
     record['type'] = DocumentType.AP.value
-    return Document.from_dict(**record)
+    record['date'] = record['date'] if isinstance(record['date'], str) else None
+    del record['Unnamed: 0']
+    del record['installation_s3ic_id']
+    del record['georisques_id']
+    return Document.from_dict(record)
 
 
 def load_aps(dataset: Dataset) -> List[Document]:
     dataframe = pandas.read_csv(dataset_filename(dataset, 'aps'), dtype='str')
     return [
-        _dataframe_record_to_ap(cast(Dict, record))
-        for record in tqdm(dataframe.to_dict(orient='records'), 'Loading aps', leave=False)
+        _dataframe_record_to_ap(record)
+        for record in typed_tqdm(dataframe.to_dict(orient='records'), 'Loading aps', leave=False)
     ]
+
+
+def load_all_georisques_ids() -> List[str]:
+    return json.load(open(GEORISQUES_IDS_FILENAME))
