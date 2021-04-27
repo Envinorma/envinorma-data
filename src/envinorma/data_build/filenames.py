@@ -1,6 +1,14 @@
 import os
 from typing import Literal
 
+
+def _safely_replace(string: str, replaced: str, new_piece: str) -> str:
+    if replaced not in string:
+        raise ValueError(f'Expecting {replaced} to be in {string}.')
+    return string.replace(replaced, new_piece)
+
+
+GEORISQUES_IDS_FILENAME = _safely_replace(__file__, 'envinorma/data_build/filenames.py', 'data/georisque_ids.json')
 _ENVINORMA_WEB_SEED_FOLDER = '/Users/remidelbouys/EnviNorma/envinorma-web/db/seeds'
 
 ENRICHED_OUTPUT_FOLDER = os.path.join(_ENVINORMA_WEB_SEED_FOLDER, 'enriched_arretes')
