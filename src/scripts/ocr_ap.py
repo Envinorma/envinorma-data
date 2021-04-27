@@ -2,7 +2,7 @@ import random
 import shutil
 import tempfile
 from functools import lru_cache
-from typing import Dict, List, Literal
+from typing import Dict, Iterable, List, Literal
 
 import requests
 from ocrmypdf import Verbosity, configure_logging, ocr
@@ -94,6 +94,22 @@ def _already_uploaded(georisques_id: str) -> bool:
     return _file_exists(_ovh_filename(georisques_id), 'ap', _get_service())
 
 
+def _get_bucket_object_names(bucket: BucketName, service: SwiftService) -> List[str]:
+    return [x['name'] for x in list(service.list(bucket))[0]['listing']]
+
+
+def _get_uploaded_ap_files() -> List[str]:
+    return _get_bucket_object_names('ap', _get_service())
+
+
+def _compute_advancement() -> None:
+    remote_filenames = set(_get_uploaded_ap_files())
+    ids = load_all_georisques_ids()
+    expected_filenames = {_ovh_filename(x) for x in ids}
+    still_to_upload = len(expected_filenames - remote_filenames)
+    print(f'Advancement: {len(expected_filenames) - still_to_upload}/{len(expected_filenames)}')
+
+
 def run() -> None:
     ids = load_all_georisques_ids()
     random.shuffle(ids)
@@ -108,3 +124,4 @@ def run() -> None:
 
 
 run()
+# _compute_advancement()
