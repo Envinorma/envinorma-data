@@ -9,7 +9,7 @@ from ocrmypdf import ocr
 from ocrmypdf.exceptions import PriorOcrFoundError
 from swiftclient.service import SwiftService, SwiftUploadObject
 
-from envinorma.data.load import load_aps
+from envinorma.data.load import load_all_georisques_ids
 from envinorma.utils import typed_tqdm
 
 GEORISQUES_DOWNLOAD_URL = 'http://documents.installationsclassees.developpement-durable.gouv.fr/commun'
@@ -85,11 +85,11 @@ def _download_ocr_and_upload_document(georisques_id: str):
 
 
 def run() -> None:
-    documents = load_aps('all')
-    random.shuffle(documents)
+    ids = load_all_georisques_ids()
+    random.shuffle(ids)
 
-    for doc in typed_tqdm(documents):
-        _download_ocr_and_upload_document(doc.georisques_id)
+    for id_ in typed_tqdm(ids):
+        _download_ocr_and_upload_document(id_)
 
 
 run()
