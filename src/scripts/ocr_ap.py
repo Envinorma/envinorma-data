@@ -5,7 +5,7 @@ from functools import lru_cache
 from typing import Dict, List, Literal
 
 import requests
-from ocrmypdf import ocr
+from ocrmypdf import Verbosity, configure_logging, ocr
 from ocrmypdf.exceptions import PriorOcrFoundError
 from swiftclient.service import SwiftService, SwiftUploadObject
 
@@ -14,6 +14,7 @@ from envinorma.utils import typed_tqdm
 
 GEORISQUES_DOWNLOAD_URL = 'http://documents.installationsclassees.developpement-durable.gouv.fr/commun'
 BucketName = Literal['ap']
+configure_logging(Verbosity.quiet)
 
 
 def _check_upload(results: List[Dict]) -> None:
@@ -64,7 +65,7 @@ def _url(georisques_id: str) -> str:
 
 def _ocr(input_filename: str, output_filename: str) -> None:
     try:
-        ocr(input_filename, output_filename, language=['fra'])  # type: ignore
+        ocr(input_filename, output_filename, language=['fra'], progress_bar=False)  # type: ignore
     except PriorOcrFoundError:
         pass  # no work to do
 
@@ -84,12 +85,26 @@ def _download_ocr_and_upload_document(georisques_id: str):
         _upload_to_ovh(file_.name, _ovh_filename(georisques_id))
 
 
+def _file_exists(filename: str, bucket_name: BucketName, service: SwiftService) -> bool:
+    results: List[Dict] = list(service.stat(bucket_name, [filename]))  # type: ignore
+    return results[0]['success']
+
+
+def _already_uploaded(georisques_id: str) -> bool:
+    return _file_exists(_ovh_filename(georisques_id), 'ap', _get_service())
+
+
 def run() -> None:
     ids = load_all_georisques_ids()
     random.shuffle(ids)
 
     for id_ in typed_tqdm(ids):
-        _download_ocr_and_upload_document(id_)
+        if _already_uploaded(id_):
+            continue
+        try:
+            _download_ocr_and_upload_document(id_)
+        except Exception as exc:
+            print(f'Error when processing {id_}:\n{exc}')
 
 
 run()
