@@ -107,7 +107,8 @@ def _file_already_processed(georisques_id: str) -> bool:
 
 
 def _get_bucket_object_names(bucket: BucketName, service: SwiftService) -> List[str]:
-    return [x['name'] for x in list(service.list(bucket))[0]['listing']]
+    lists = list(service.list(bucket))
+    return [x['name'] for list_ in lists for x in list_['listing']]
 
 
 def _get_uploaded_ap_files() -> List[str]:
