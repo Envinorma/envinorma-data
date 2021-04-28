@@ -1,8 +1,10 @@
 import random
+import re
 import shutil
 import tempfile
+import traceback
 from functools import lru_cache
-from typing import Dict, Iterable, List, Literal
+from typing import Dict, List, Literal, Set
 
 import requests
 from ocrmypdf import Verbosity, configure_logging, ocr
@@ -42,8 +44,6 @@ def _check_auth(service: SwiftService) -> None:
 
 @lru_cache
 def _get_service() -> SwiftService:
-    # source ../../../Downloads/openrc.sh first
-    # enter pw
     service = SwiftService()
     _check_auth(service)
     return service
@@ -78,6 +78,10 @@ def _ovh_filename(georisques_id: str) -> str:
     return f'{georisques_id}.pdf'
 
 
+def _ovh_error_filename(georisques_id: str) -> str:
+    return f'{georisques_id}.error.txt'
+
+
 def _download_ocr_and_upload_document(georisques_id: str):
     with tempfile.NamedTemporaryFile() as file_:
         download_document(_url(georisques_id), file_.name)
@@ -85,13 +89,21 @@ def _download_ocr_and_upload_document(georisques_id: str):
         _upload_to_ovh(file_.name, _ovh_filename(georisques_id))
 
 
+def _upload_error_file(georisques_id: str, error: str):
+    with tempfile.NamedTemporaryFile(mode='w') as file_:
+        file_.write(error)
+        _upload_to_ovh(file_.name, _ovh_error_filename(georisques_id))
+
+
 def _file_exists(filename: str, bucket_name: BucketName, service: SwiftService) -> bool:
     results: List[Dict] = list(service.stat(bucket_name, [filename]))  # type: ignore
     return results[0]['success']
 
 
-def _already_uploaded(georisques_id: str) -> bool:
-    return _file_exists(_ovh_filename(georisques_id), 'ap', _get_service())
+def _file_already_processed(georisques_id: str) -> bool:
+    ocred_file_exists = _file_exists(_ovh_filename(georisques_id), 'ap', _get_service())
+    error_file_exists = _file_exists(_ovh_error_filename(georisques_id), 'ap', _get_service())
+    return ocred_file_exists or error_file_exists
 
 
 def _get_bucket_object_names(bucket: BucketName, service: SwiftService) -> List[str]:
@@ -103,25 +115,44 @@ def _get_uploaded_ap_files() -> List[str]:
 
 
 def _compute_advancement() -> None:
+    nb_files_to_process = len(load_all_georisques_ids())
+    print(f'Advancement: {nb_files_to_process - len(_load_remaining_ids())}/{nb_files_to_process}')
+
+
+_GEORISQUES_ID_REGEXP = re.compile(r'[A-Z]{1}/[a-f0-9]{1}/[a-f0-9]{32}')
+
+
+def _extract_ids(filenames: Set[str]) -> Set[str]:
+    filenames_without_extensions = {filename.split('.')[0] for filename in filenames}
+    return {id_ for id_ in filenames_without_extensions if re.match(_GEORISQUES_ID_REGEXP, id_)}
+
+
+def _fetch_already_processed_ids() -> Set[str]:
     remote_filenames = set(_get_uploaded_ap_files())
-    ids = load_all_georisques_ids()
-    expected_filenames = {_ovh_filename(x) for x in ids}
-    still_to_upload = len(expected_filenames - remote_filenames)
-    print(f'Advancement: {len(expected_filenames) - still_to_upload}/{len(expected_filenames)}')
+    return _extract_ids(remote_filenames)
+
+
+def _load_remaining_ids() -> List[str]:
+    already_processed_ids = _fetch_already_processed_ids()
+    ids_to_process = set(load_all_georisques_ids())
+    return list(ids_to_process - already_processed_ids)
 
 
 def run() -> None:
-    ids = load_all_georisques_ids()
+    ids = _load_remaining_ids()
     random.shuffle(ids)
 
     for id_ in typed_tqdm(ids):
-        if _already_uploaded(id_):
+        if _file_already_processed(id_):
             continue
         try:
             _download_ocr_and_upload_document(id_)
-        except Exception as exc:
-            print(f'Error when processing {id_}:\n{exc}')
+        except Exception:
+            error = traceback.format_exc()
+            _upload_error_file(id_, error)
+            print(f'Error when processing {id_}:\n{error}')
 
 
-run()
-# _compute_advancement()
+if __name__ == '__main__':
+    run()
+    # _compute_advancement()
