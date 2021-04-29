@@ -2,7 +2,8 @@ from dataclasses import replace
 from typing import List, Optional
 
 from envinorma.back_office.components.parametric_am import _extract_text_warnings
-from envinorma.data import Applicability, StructuredText, estr
+from envinorma.data import Applicability, StructuredText
+from envinorma.data.text_elements import estr
 
 
 def _get_simple_text(active: bool, modified: bool, sections: Optional[List[StructuredText]] = None) -> StructuredText:

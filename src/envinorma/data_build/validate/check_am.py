@@ -1,7 +1,7 @@
 import json
 import math
 import os
-import re
+from datetime import date
 from typing import Dict, List, Optional, Tuple
 
 from tqdm import tqdm
@@ -109,17 +109,6 @@ def _check_enriched_am_group(ams: Dict[str, ArreteMinisteriel]) -> None:
         raise
 
 
-_MONTHS = r'(janvier|février|mars|avril|mai|juin|juillet|août|septembre|octobre|novembre|décembre)'
-_PATTERN = rf'Arrêté du (1er|[0-9]*) ' + _MONTHS + ' [0-9]{4}'
-
-
-def _check_short_title(title: str) -> None:
-    if title == 'Faux Arrêté':
-        return
-    if not re.match(_PATTERN, title):
-        raise ValueError(f'Expecting am.short_title (={title}) to follow pattern, which is not the case.')
-
-
 def _print_input_id(func):
     def _func(am: ArreteMinisteriel):
         try:
@@ -129,6 +118,11 @@ def _print_input_id(func):
             raise
 
     return _func
+
+
+def _check_publication_date(publication_date: Optional[date]):
+    if not publication_date:
+        raise ValueError('Expecting publication_date to be defined')
 
 
 @_print_input_id
@@ -143,7 +137,7 @@ def _check_am(am: ArreteMinisteriel) -> None:
     assert am.aida_url is not None
     _check_references(am)
     _check_table_extraction(am)
-    _check_short_title(am.short_title)
+    _check_publication_date(am.publication_date)
 
 
 def _load_am_list(am_list_filename: str) -> List[ArreteMinisteriel]:

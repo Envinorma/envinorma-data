@@ -447,10 +447,6 @@ def elements_to_open_document(elements: List[TextElement]) -> OpenDocument:
     return OpenDocument(_elements_to_open_document_content_xml(elements))
 
 
-def _generate_tmp_filename() -> str:
-    return 'tmp_' + ''.join([random.choice(string.ascii_letters) for _ in range(10)])
-
-
 def structured_text_to_odt_file(text: StructuredText, filename: str) -> None:
     xml = structured_text_to_odt_xml(text)
     write_new_document('test_data/simple_document.odt', xml, filename)

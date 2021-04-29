@@ -1,15 +1,8 @@
-import json
-
-import pytest
-
-from envinorma.config import AM_DATA_FOLDER
-from envinorma.data import load_legifrance_text
 from envinorma.io.markdown import (
     DataFormat,
     Link,
     _extract_sorted_links_to_display,
     _insert_links,
-    am_to_markdown,
     extract_markdown_text,
     table_to_markdown,
 )
@@ -20,7 +13,6 @@ from envinorma.structure.am_structure_extraction import (
     _extract_sections,
     _structure_text,
     extract_table,
-    transform_arrete_ministeriel,
 )
 
 
@@ -88,19 +80,6 @@ def test_links_inclusion():
     assert _insert_links('Hello PiPa!', links, DataFormat.MARKDOWN) == '[Hello](A) [Pi](C)[Pa](D)!'
     html = _insert_links('Hello PiPa!', links, DataFormat.HTML)
     assert html == '<a href="A">Hello</a> <a href="C">Pi</a><a href="D">Pa</a>!'
-
-
-_SAMPLE_AM_NOR = ['DEVP1706393A', 'TREP1815737A', 'ATEP9870263A', 'DEVP1519168A', 'DEVP1430916A', 'DEVP1001990A']
-
-
-@pytest.mark.filterwarnings('ignore')
-def test_no_fail_in_markdown_extraction():
-    for nor in _SAMPLE_AM_NOR:
-        am_to_markdown(
-            transform_arrete_ministeriel(
-                load_legifrance_text(json.load(open(f'{AM_DATA_FOLDER}/legifrance_texts/{nor}.json')))
-            )
-        )
 
 
 def test_structure_via_markdown():

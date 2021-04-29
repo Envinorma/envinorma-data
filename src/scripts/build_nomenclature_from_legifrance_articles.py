@@ -11,17 +11,16 @@ from tqdm import tqdm
 
 from envinorma.config import AM_DATA_FOLDER, config
 from envinorma.data import (
-    Cell,
     EnrichedString,
     Nomenclature,
     Regime,
-    Row,
     RubriqueSimpleThresholds,
     Table,
     is_increasing,
     load_am_data,
 )
 from envinorma.data.load import load_classements, load_installations
+from envinorma.data.text_elements import Cell, Row
 from envinorma.data_build.georisques_data import GRClassementActivite, deduce_regime_if_possible
 from envinorma.io.parse_html import extract_table_from_soup
 from envinorma.utils import write_json

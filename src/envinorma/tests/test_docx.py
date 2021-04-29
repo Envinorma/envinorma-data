@@ -6,8 +6,8 @@ import bs4
 import pytest
 from bs4 import BeautifulSoup, Tag
 
-from envinorma.data import Cell, EnrichedString, Row, Table
-from envinorma.data.text_elements import TextElement, Title
+from envinorma.data import EnrichedString, Table
+from envinorma.data.text_elements import Cell, Row, TextElement, Title
 from envinorma.io.docx import (
     DocxNoTextError,
     Style,

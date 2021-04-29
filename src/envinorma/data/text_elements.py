@@ -73,12 +73,14 @@ class EnrichedString:
     @classmethod
     def from_dict(cls, dict_: Dict[str, Any]) -> 'EnrichedString':
         dict_ = dict_.copy()
-        dict_['links'] = [Link.from_dict(link) for link in dict_['links']]
+        dict_['links'] = [Link.from_dict(link) for link in dict_.get('links', [])]
         dict_['table'] = Table.from_dict(dict_['table']) if dict_['table'] else None
         return cls(**dict_)
 
     def to_dict(self, dict_: Dict[str, Any]) -> Dict[str, Any]:
         dict_ = asdict(self)
+        if not self.links:
+            del dict_['links']
         return dict_
 
 

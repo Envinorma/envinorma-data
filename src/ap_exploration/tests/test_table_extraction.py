@@ -26,7 +26,8 @@ from ap_exploration.pages.ap_image.table_extraction import (
     _upper_line,
     group_by_proximity,
 )
-from envinorma.data import Cell, Row, Table, estr
+from envinorma.data import Table
+from envinorma.data.text_elements import Cell, Row, estr
 
 
 def test_lines_are_neighbor():

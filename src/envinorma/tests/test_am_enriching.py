@@ -1,7 +1,4 @@
 import json
-from typing import List
-
-import pytest
 
 from envinorma.am_enriching import (
     _extract_prefix,
@@ -16,16 +13,14 @@ from envinorma.am_enriching import (
     _shorten_summary_text,
     _split_rows,
     add_inspection_sheet_in_table_rows,
-    add_links_in_enriched_string,
-    add_links_to_am,
     add_references,
     add_topics,
     extract_titles_and_reference_pairs,
     remove_prescriptive_power,
     remove_sections,
 )
-from envinorma.config import AM_DATA_FOLDER
-from envinorma.data import ArreteMinisteriel, Cell, EnrichedString, Hyperlink, Link, Row, StructuredText, Table, estr
+from envinorma.data import ArreteMinisteriel, EnrichedString, StructuredText, Table
+from envinorma.data.text_elements import Cell, Row, estr
 from envinorma.topics.patterns import TopicName
 
 
@@ -33,7 +28,7 @@ def test_add_topics():
     sub_section_1 = StructuredText(EnrichedString('Section 1.1'), [], [], None)
     section_1 = StructuredText(EnrichedString('Section 1'), [], [sub_section_1], None)
     section_2 = StructuredText(EnrichedString('Section 2'), [], [], None)
-    am = ArreteMinisteriel(EnrichedString(''), [section_1, section_2], [], '', id='FAKE_ID')
+    am = ArreteMinisteriel(EnrichedString('arrete du 10/10/10'), [section_1, section_2], [], None, id='FAKE_ID')
 
     am_with_topics = add_topics(
         am, {(0,): TopicName.INCENDIE, (0, 0): TopicName.INCENDIE, (1,): TopicName.BRUIT_VIBRATIONS}
@@ -229,7 +224,7 @@ def test_add_references():
         StructuredText(estr('Article 18.1'), [], [], None),
         StructuredText(estr('Article 1'), [], [], None),
     ]
-    am = ArreteMinisteriel(EnrichedString(''), sections, [], '', id='FAKE_ID')
+    am = ArreteMinisteriel(EnrichedString('Arrete du 10/10/10'), sections, [], None, id='FAKE_ID')
     am_with_references = add_references(am)
 
     assert am_with_references.sections[0].reference_str == 'Art. 1.'
@@ -378,31 +373,6 @@ def test_add_references_2():
         assert exp[1][:10] == computed[1][:10]
 
 
-def test_link_addition():
-    input_str = EnrichedString('This cat is called Pipa. Yes this cat.', [Link('example.com', 0, 4)])
-    new_str = add_links_in_enriched_string(input_str, {'cat': 'example.com/cat', 'Pipa.': 'example.com/pipa'})
-    assert len(new_str.links) == 4
-    assert sum([link.content_size == 3 for link in new_str.links]) == 2
-    assert sum([link.content_size == 4 for link in new_str.links]) == 1
-    assert sum([link.content_size == 5 for link in new_str.links]) == 1
-    assert sum([link.target == 'example.com' for link in new_str.links]) == 1
-    assert sum([link.target == 'example.com/cat' for link in new_str.links]) == 2
-    assert sum([link.target == 'example.com/pipa' for link in new_str.links]) == 1
-
-
-_SAMPLE_AM_NOR = ['DEVP1706393A', 'ATEP9760292A', 'DEVP1235896A', 'DEVP1329353A', 'TREP1900331A', 'TREP2013116A']
-
-
-@pytest.mark.filterwarnings('ignore')
-def test_no_fail_in_aida_links_addition():
-    for nor in _SAMPLE_AM_NOR:
-        links_json = json.load(open(f'data/aida/hyperlinks/{nor}.json'))
-        links = [Hyperlink(**link_doc) for link_doc in links_json]
-        add_links_to_am(
-            ArreteMinisteriel.from_dict(json.load(open(f'{AM_DATA_FOLDER}/structured_texts/{nor}.json'))), links
-        )
-
-
 def test_compute_summary():
     text = StructuredText(EnrichedString('Test_D2', []), [], [], None)
     parent_text = StructuredText(EnrichedString('Test_D1', []), [], [text] * 2, None)
@@ -445,7 +415,7 @@ def test_remove_sections():
         StructuredText(EnrichedString('2. zefez'), [], [], None),
         StructuredText(EnrichedString('A. zefze'), [], [], None),
     ]
-    am = ArreteMinisteriel(EnrichedString(''), sections, [], '', id='FAKE_ID')
+    am = ArreteMinisteriel(EnrichedString('Arrete du 10/10/10'), sections, [], None, id='FAKE_ID')
 
     am_1 = remove_sections(am, {(0,)})
     assert len(am_1.sections) == 2

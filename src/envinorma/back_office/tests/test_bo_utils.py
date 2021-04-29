@@ -19,7 +19,7 @@ def _get_simple_text() -> StructuredText:
 
 
 def test_get_section_title():
-    am = ArreteMinisteriel(EnrichedString('AM'), [_get_simple_text()], [], '', id='FAKE_ID')
+    am = ArreteMinisteriel(EnrichedString('arrete du 10/10/10'), [_get_simple_text()], [], None, id='FAKE_ID')
     assert get_section_title((), am) == 'Arrêté complet.'
     assert get_section_title((0,), am) == 'All sections'
     assert get_section_title((0, 0), am) == 'Section 1'
@@ -29,7 +29,7 @@ def test_get_section_title():
 
 
 def test_get_traversed_titles():
-    am = ArreteMinisteriel(EnrichedString('AM'), [_get_simple_text()], [], '', id='FAKE_ID')
+    am = ArreteMinisteriel(EnrichedString('arrete du 10/10/10'), [_get_simple_text()], [], None, id='FAKE_ID')
     assert get_traversed_titles((), am) == ['Arrêté complet.']
     assert get_traversed_titles((0,), am) == ['All sections']
     assert get_traversed_titles((0, 0), am) == ['All sections', 'Section 1']

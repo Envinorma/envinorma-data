@@ -4,8 +4,8 @@ import random
 import bs4
 from bs4 import BeautifulSoup
 
-from envinorma.data import Cell, EnrichedString, Row, StructuredText, Table
-from envinorma.data.text_elements import Title
+from envinorma.data import EnrichedString, StructuredText, Table
+from envinorma.data.text_elements import Cell, Row, Title
 from envinorma.io.open_document import (
     _build_structured_text_from_soup,
     _check_tag,

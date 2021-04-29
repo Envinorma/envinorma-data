@@ -1,32 +1,36 @@
+import json
 import random
 from collections import Counter
-from copy import copy
+from datetime import date
 from string import ascii_letters
 from typing import Optional
+
+import pytest
 
 from envinorma.data import (
     Annotations,
     Applicability,
     ArreteMinisteriel,
-    Cell,
     Classement,
     ClassementWithAlineas,
     DateCriterion,
     EnrichedString,
     Link,
     Regime,
-    Row,
     StructuredText,
     Table,
     TopicName,
+    _contains_human_date,
     _is_probably_cid,
-    estr,
+    extract_publication_date,
     extract_text_lines,
     group_classements_by_alineas,
     is_increasing,
     load_am_data,
+    standardize_title_date,
     table_to_html,
 )
+from envinorma.data.text_elements import Cell, Row, estr
 
 
 def _random_string() -> str:
@@ -69,10 +73,10 @@ def _node_section() -> StructuredText:
 
 def test_arrete_ministeriel():
     am = ArreteMinisteriel(
-        _str('abc'),
+        _str('Arrete du 01/01/10'),
         [_node_section()],
         [_enriched_string_links()],
-        'short_title',
+        date(2010, 1, 1),
         DateCriterion('2020-07-23', '2021-07-23'),
         'aida',
         'legifrance',
@@ -85,7 +89,8 @@ def test_arrete_ministeriel():
         warning_inactive='warning',
     )
     dict_ = am.to_dict()
-    new_dict = ArreteMinisteriel.from_dict(dict_).to_dict()
+    new_dict = ArreteMinisteriel.from_dict(json.loads(json.dumps(dict_))).to_dict()
+
     assert new_dict == dict_
 
 
@@ -252,3 +257,33 @@ def test_table_to_html():
 
     res = table_to_html(Table([Row([Cell(estr('test'), 1, 2)], True)]))
     assert res == '<table><tr><th rowspan="2">test</th></tr></table>'
+
+
+def test_extract_publication_date():
+    with pytest.raises(ValueError):
+        extract_publication_date('')
+    with pytest.raises(ValueError):
+        extract_publication_date('19/10/1993')
+    with pytest.raises(ValueError):
+        extract_publication_date('10/19/93')
+    assert extract_publication_date('19/10/93') == date(1993, 10, 19)
+
+
+def test_standardize_title_date():
+    assert standardize_title_date('Arrêté du 10 octobre 2010 relatif à') == 'Arrêté du 10/10/10 relatif à'
+    assert standardize_title_date('Arrêté du 31 octobre 2018 relatif à') == 'Arrêté du 31/10/18 relatif à'
+    with pytest.raises(ValueError):
+        standardize_title_date('Arrêté du 10 octobr 2010 relatif à')
+    with pytest.raises(ValueError):
+        standardize_title_date('Arrêté du 31 septembre 2010 relatif à')
+    with pytest.raises(ValueError):
+        standardize_title_date('Arrêté du 10')
+    with pytest.raises(ValueError):
+        standardize_title_date('Arrêté du 10/10/2010 relatif à')
+
+
+def test_contains_human_date():
+    assert _contains_human_date('Arrêté du 30 septembre 2010 relatif à')
+    assert _contains_human_date('Arrêté du 10 octobre 2019')
+    assert not _contains_human_date('Arrêté du 10/10/19')
+    assert not _contains_human_date('10 octobre 2019')

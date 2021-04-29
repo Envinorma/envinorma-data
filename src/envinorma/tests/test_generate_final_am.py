@@ -1,8 +1,9 @@
-from datetime import datetime
+from datetime import date, datetime
 
 from envinorma.back_office.generate_final_am import apply_parametrization
 from envinorma.back_office.utils import ID_TO_AM_MD
-from envinorma.data import ArreteMinisteriel, Cell, EnrichedString, Row, StructuredText, Table
+from envinorma.data import ArreteMinisteriel, EnrichedString, StructuredText, Table
+from envinorma.data.text_elements import Cell, Row
 from envinorma.parametrization import (
     AlternativeSection,
     ConditionSource,
@@ -75,7 +76,7 @@ _PARAMETRIZATION = Parametrization(
 )
 
 _STRUCTURED_AM = ArreteMinisteriel(
-    title=EnrichedString(text='Test fake nor', links=[], table=None, active=True),
+    title=EnrichedString(text='Arrêté du 15/12/20', links=[], table=None, active=True),
     sections=[
         StructuredText(
             title=EnrichedString(text='Article 1', links=[], table=None, active=True),
@@ -159,7 +160,7 @@ _STRUCTURED_AM = ArreteMinisteriel(
         ),
     ],
     visa=[],
-    short_title='Test fake nor',
+    publication_date=date(2020, 12, 15),
     installation_date_criterion=None,
     aida_url=None,
     legifrance_url=None,

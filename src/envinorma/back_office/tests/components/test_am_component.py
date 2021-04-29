@@ -8,7 +8,8 @@ from envinorma.back_office.components.am_component import (
     _split_in_header_and_body_rows,
     table_to_component,
 )
-from envinorma.data import Cell, Row, Table, estr
+from envinorma.data import Table
+from envinorma.data.text_elements import Cell, Row, estr
 from envinorma.io.parse_html import extract_table
 
 

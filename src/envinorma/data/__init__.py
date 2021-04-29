@@ -1,15 +1,17 @@
 import json
 import random
+import re
 import string
 import warnings
 from collections import Counter
 from copy import copy
 from dataclasses import asdict, dataclass, field
+from datetime import date, datetime
 from enum import Enum
 from typing import Any, Dict, List, Optional, Tuple
 
 from envinorma.config import AIDA_URL, AM_DATA_FOLDER
-from envinorma.data.text_elements import Cell, EnrichedString, Link, Row, Table, estr, table_to_html
+from envinorma.data.text_elements import EnrichedString, Link, Table, table_to_html
 from envinorma.topics.patterns import TopicName
 from envinorma.utils import str_to_date
 
@@ -277,12 +279,107 @@ def _is_probably_cid(candidate: str) -> bool:
     return candidate.startswith('JORFTEXT') or candidate.startswith('LEGITEXT')
 
 
+def extract_short_title(input_title: str) -> str:
+    return input_title.split('relatif')[0].split('fixant')[0].strip()
+
+
+_DATE_PATTERN = r'^[0-9]{2}/[0-9]{2}/[0-9]{2}$'
+
+
+def _extract_date(candidate_date: str) -> date:
+    if not re.match(_DATE_PATTERN, candidate_date):
+        raise ValueError(f'Expecting format {_DATE_PATTERN}. Got {candidate_date}.')
+    return datetime.strptime(candidate_date, '%d/%m/%y').date()
+
+
+def extract_publication_date(input_title: str) -> date:
+    short_title = extract_short_title(input_title)
+    candidate_date = (short_title.split() or [''])[-1]
+    return _extract_date(candidate_date)
+
+
+def _year(year_str: str) -> int:
+    if not year_str.isdigit():
+        raise ValueError(f'Expecting {year_str} to be a digit')
+    return int(year_str)
+
+
+_MONTH_TO_MONTH_RANK = {
+    'janvier': 1,
+    'février': 2,
+    'mars': 3,
+    'avril': 4,
+    'mai': 5,
+    'juin': 6,
+    'juillet': 7,
+    'août': 8,
+    'septembre': 9,
+    'octobre': 10,
+    'novembre': 11,
+    'décembre': 12,
+}
+
+
+def _month(french_month: str) -> int:
+    if french_month not in _MONTH_TO_MONTH_RANK:
+        raise ValueError(f'Expecting month to be in {_MONTH_TO_MONTH_RANK} got {french_month}')
+    return _MONTH_TO_MONTH_RANK[french_month]
+
+
+def _day(day_str: str) -> int:
+    if day_str == '1er':
+        return 1
+    if not day_str.isdigit():
+        raise ValueError(f'Expecting {day_str} to be a digit')
+    return int(day_str)
+
+
+def _read_human_french_date(day_str: str, french_month: str, year_str: str) -> date:
+    return date(_year(year_str), _month(french_month), _day(day_str))
+
+
+def _standardize_date(day_str: str, french_month: str, year_str: str) -> str:
+    date_ = _read_human_french_date(day_str, french_month, year_str)
+    return date_.strftime('%d/%m/%y')
+
+
+def standardize_title_date(title: str) -> str:
+    words = title.split()
+    if len(words) <= 5:
+        raise ValueError(f'Expecting title to have at least 5 words, got {len(words)} (title={title}).')
+    new_words = words[:2] + [_standardize_date(*words[2:5])] + words[5:]
+    return ' '.join(new_words)
+
+
+def _third_word(title: str) -> str:
+    words = title.split()
+    if len(words) >= 3:
+        return words[2]
+    return ''
+
+
+_MONTHS = r'(janvier|février|mars|avril|mai|juin|juillet|août|septembre|octobre|novembre|décembre)'
+_PATTERN = rf'Arrêté du (1er|[0-9]*) ' + _MONTHS + ' [0-9]{4}'
+
+
+def _contains_human_date(title: str) -> bool:
+    return re.match(_PATTERN, title) is not None
+
+
+def _standardize_title_if_necessary(title: str) -> str:
+    if title == 'Faux arrêté':  # Edge case for test text
+        return 'Faux arrêté du 10/10/10'
+    if _contains_human_date(title):
+        return standardize_title_date(title)
+    return title
+
+
 @dataclass
 class ArreteMinisteriel:
     title: EnrichedString
     sections: List[StructuredText]
     visa: List[EnrichedString]
-    short_title: str
+    publication_date: Optional[date] = None
     installation_date_criterion: Optional[DateCriterion] = None
     aida_url: Optional[str] = None
     legifrance_url: Optional[str] = None
@@ -294,12 +391,25 @@ class ArreteMinisteriel:
     active: bool = True
     warning_inactive: Optional[str] = None
 
+    @property
+    def short_title(self) -> str:
+        return extract_short_title(self.title.text)
+
     def __post_init__(self):
+        self.title.text = _standardize_title_if_necessary(self.title.text)
+        if self.publication_date is None:
+            self.publication_date = extract_publication_date(self.title.text)
+        else:
+            assert self.publication_date == extract_publication_date(
+                self.title.text
+            ), f'{self.publication_date} and {self.title.text} are inconsistent'
         if not _is_probably_cid(self.id or ''):
             warnings.warn(f'AM id does not look like a CID : {self.id} (title={self.title.text})')
 
     def to_dict(self) -> Dict[str, Any]:
         res = asdict(self)
+        if res['publication_date']:
+            res['publication_date'] = str(res['publication_date'])
         res['sections'] = [section.to_dict() for section in self.sections]
         res['classements'] = [cl.to_dict() for cl in self.classements]
         res['classements_with_alineas'] = [cl.to_dict() for cl in self.classements_with_alineas]
@@ -308,7 +418,12 @@ class ArreteMinisteriel:
     @classmethod
     def from_dict(cls, dict_: Dict[str, Any]) -> 'ArreteMinisteriel':
         dict_ = dict_.copy()
+        if 'short_title' in dict_:
+            del dict_['short_title']
         dict_['title'] = EnrichedString.from_dict(dict_['title'])
+        dict_['publication_date'] = (
+            date.fromisoformat(dict_['publication_date']) if dict_.get('publication_date') else None
+        )
         dict_['sections'] = [StructuredText.from_dict(sec) for sec in dict_['sections']]
         dict_['visa'] = [EnrichedString.from_dict(vu) for vu in dict_['visa']]
         dt_key = 'installation_date_criterion'
@@ -384,11 +499,10 @@ class AMSource(Enum):
 class AMMetadata:
     cid: str
     aida_page: str
-    page_name: str
-    short_title: str
+    title: str
     classements: List[Classement]
     state: AMState
-    publication_date: int
+    publication_date: date
     source: AMSource
     nor: Optional[str] = None
     reason_hidden: Optional[str] = None
@@ -403,6 +517,7 @@ class AMMetadata:
         dict_['aida_page'] = str(dict_['aida_page'])
         dict_['state'] = AMState(dict_['state'])
         dict_['source'] = AMSource(dict_['source'])
+        dict_['publication_date'] = date.fromtimestamp(dict_['publication_date'])
         dict_['classements'] = [Classement.from_dict(classement) for classement in dict_['classements']]
         return AMMetadata(**dict_)
 
@@ -410,6 +525,7 @@ class AMMetadata:
         dict_ = asdict(self)
         dict_['state'] = self.state.value
         dict_['source'] = self.source.value
+        dict_['publication_date'] = int(datetime.fromordinal(self.publication_date.toordinal()).timestamp())
         dict_['classements'] = [classement.to_dict() for classement in self.classements]
         return dict_
 
@@ -427,7 +543,6 @@ def _build_aida_url(page: str) -> str:
 
 def add_metadata(am: ArreteMinisteriel, metadata: AMMetadata) -> ArreteMinisteriel:
     am = copy(am)
-    am.short_title = metadata.short_title
     am.legifrance_url = _build_legifrance_url(metadata.cid)
     am.aida_url = _build_aida_url(metadata.aida_page)
     am.classements = metadata.classements

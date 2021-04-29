@@ -20,7 +20,7 @@ from envinorma.data import (
     load_am_data,
     load_legifrance_text,
 )
-from envinorma.structure.am_structure_extraction import extract_short_title, transform_arrete_ministeriel
+from envinorma.structure.am_structure_extraction import transform_arrete_ministeriel
 from legifrance.legifrance_API import get_legifrance_client, get_loda_via_cid
 
 _AM = load_am_data()
@@ -181,13 +181,12 @@ def extract_aida_am(page_id: str, am_id: str) -> Optional[ArreteMinisteriel]:
             new_sections = section.sections
         return ArreteMinisteriel(
             title=section.title,
-            short_title=extract_short_title(section.title.text),
             sections=new_sections,
             visa=[],
             id=am_id,
         )
-    return ArreteMinisteriel(
-        title=EnrichedString('title'), short_title='short_tile', sections=[text], visa=[], id=am_id
+    raise NotImplementedError(
+        f'Cannot handle more than one section when extracting text from AIDA. Got {len(text.sections)}'
     )
 
 
