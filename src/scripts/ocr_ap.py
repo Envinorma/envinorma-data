@@ -65,7 +65,7 @@ def _url(georisques_id: str) -> str:
 
 def _ocr(input_filename: str, output_filename: str) -> None:
     try:
-        ocr(input_filename, output_filename, language=['fra'], progress_bar=False)  # type: ignore
+        ocr(input_filename, output_filename, language=['fra'], progress_bar=False, jobs=1)  # type: ignore
     except PriorOcrFoundError:
         pass  # no work to do
 
