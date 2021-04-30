@@ -2,6 +2,7 @@ import copy
 import random
 from collections import Counter
 from dataclasses import replace
+from datetime import date
 from math import sqrt
 from typing import Any, Dict, Iterable, List, Optional, Tuple, TypeVar, Union
 
@@ -20,6 +21,8 @@ from envinorma.data import (
     StructuredText,
     Table,
     TableReference,
+    extract_publication_date,
+    standardize_title_date,
 )
 from envinorma.io.parse_html import extract_table
 from envinorma.structure import split_alineas_in_sections
@@ -637,15 +640,11 @@ def _clean_text_articles(text: LegifranceText, keep_abrogated: bool) -> Legifran
     )
 
 
-def extract_short_title(input_title: str) -> str:
-    return input_title.split('relatif')[0].split('fixant')[0].strip()
-
-
 def transform_arrete_ministeriel(
     input_text: LegifranceText, keep_abrogated_articles: bool = False, am_id: Optional[str] = None
 ) -> ArreteMinisteriel:
     visa = _extract_visa(input_text.visa)
     text_with_merged_articles = _clean_text_articles(input_text, keep_abrogated_articles)
     sections = _extract_sections(text_with_merged_articles.articles, text_with_merged_articles.sections, [])
-    short_title = extract_short_title(input_text.title)
-    return ArreteMinisteriel(EnrichedString(text_with_merged_articles.title), sections, visa, short_title, id=am_id)
+    title = standardize_title_date(text_with_merged_articles.title)
+    return ArreteMinisteriel(EnrichedString(title), sections, visa, id=am_id)

@@ -101,3 +101,9 @@ def typed_tqdm(
     collection: Iterable[T], desc: Optional[str] = None, leave: bool = True, disable: bool = False
 ) -> Iterable[T]:
     return tqdm(collection, desc=desc, leave=leave, disable=disable)
+
+
+def safely_replace(string: str, replaced_substring: str, new_substring: str) -> str:
+    if replaced_substring not in string:
+        raise ValueError(f'Expecting {replaced_substring} to be in {string}.')
+    return string.replace(replaced_substring, new_substring)

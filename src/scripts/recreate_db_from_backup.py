@@ -9,7 +9,7 @@ from typing import Optional
 
 import psycopg2
 
-from envinorma.config import AM_DATA_FOLDER, config
+from envinorma.config import config
 
 _CONNECTION = psycopg2.connect(config.storage.psql_dsn)
 

@@ -220,7 +220,7 @@ def test_extract_parameter_to_conditions():
 def _get_am() -> ArreteMinisteriel:
     subsections = [StructuredText(estr(''), [estr('al1.1.1'), estr('al1.1.2')], [], None)]
     sections = [StructuredText(estr(''), [estr('al1.1'), estr('al1.2')], subsections, None)]
-    return ArreteMinisteriel(estr(''), sections, [], '', id='JORFTEXT')
+    return ArreteMinisteriel(estr('Arrêté du 10/10/10'), sections, [], None, id='JORFTEXT')
 
 
 def test_simplify_alineas():

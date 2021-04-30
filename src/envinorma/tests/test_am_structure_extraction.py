@@ -3,7 +3,6 @@ import random
 
 import pytest
 
-from envinorma.config import AM_DATA_FOLDER
 from envinorma.data import LegifranceSection, LegifranceText, load_legifrance_text
 from envinorma.structure.am_structure_extraction import (
     _BASE_LEGIFRANCE_URL,
@@ -37,6 +36,7 @@ from envinorma.structure.texts_properties import (
     count_sections,
     count_tables,
 )
+from envinorma.utils import safely_replace
 
 
 def test_link_extraction():
@@ -119,12 +119,16 @@ def test_structure_extraction():
 _SAMPLE_AM_NOR = ['DEVP1706393A', 'TREP1815737A', 'ATEP9870263A', 'DEVP1519168A', 'DEVP1430916A', 'DEVP1001990A']
 
 
+def _get_filename(nor: str) -> str:
+    return safely_replace(
+        __file__, 'envinorma/tests/test_am_structure_extraction.py', f'test_data/AM/legifrance_texts/{nor}.json'
+    )
+
+
 @pytest.mark.filterwarnings('ignore')
 def test_no_fail_in_structure_extraction():
     for nor in _SAMPLE_AM_NOR:
-        transform_arrete_ministeriel(
-            load_legifrance_text(json.load(open(f'{AM_DATA_FOLDER}/legifrance_texts/{nor}.json')))
-        )
+        transform_arrete_ministeriel(load_legifrance_text(json.load(open(_get_filename(nor)))))
 
 
 def test_weird_annexe_replacement():

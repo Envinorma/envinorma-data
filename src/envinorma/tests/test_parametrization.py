@@ -5,7 +5,8 @@ from typing import Optional
 
 import pytest
 
-from envinorma.data import ArreteMinisteriel, EnrichedString, Regime, StructuredText, estr
+from envinorma.data import ArreteMinisteriel, EnrichedString, Regime, StructuredText
+from envinorma.data.text_elements import estr
 from envinorma.parametrization import (
     AlternativeSection,
     ConditionSource,
@@ -177,7 +178,7 @@ def _get_simple_text() -> StructuredText:
 
 
 def _get_simple_am() -> ArreteMinisteriel:
-    return ArreteMinisteriel(estr('title'), [_get_simple_text()], [], '', id='FAKE_CID')
+    return ArreteMinisteriel(estr('arrete du 10/10/10'), [_get_simple_text()], [], None, id='FAKE_CID')
 
 
 def test_extract_titles_sequence():

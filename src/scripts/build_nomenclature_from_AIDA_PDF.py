@@ -12,7 +12,8 @@ from docx import Document  # type: ignore
 from pdf2docx import parse
 from tqdm import tqdm
 
-from envinorma.data import Cell, Regime, Row
+from envinorma.data import Regime
+from envinorma.data.text_elements import Cell, Row
 from envinorma.io.docx import extract_table, write_xml
 
 if __name__ == '__main__':

@@ -1,18 +1,7 @@
 from enum import Enum
 from typing import List, TypeVar
 
-from envinorma.config import AIDA_URL
-from envinorma.data import (
-    AMMetadata,
-    ArreteMinisteriel,
-    Classement,
-    EnrichedString,
-    Link,
-    StructuredText,
-    Table,
-    get_text_defined_id,
-    table_to_html,
-)
+from envinorma.data import EnrichedString, Link, StructuredText, Table, table_to_html
 
 
 def table_to_markdown(table: Table, with_links: bool = False) -> str:  # html required for merging cells
@@ -97,52 +86,3 @@ def extract_markdown_text(text: StructuredText, level: int, with_links: bool = F
         *[enriched_string_to_markdown(alinea, with_links) for alinea in text.outer_alineas],
         *[line for section in text.sections for line in extract_markdown_text(section, level + 1, with_links)],
     ]
-
-
-def am_to_markdown(am: ArreteMinisteriel, with_links: bool = False) -> str:
-    lines = [
-        *extract_markdown_title(am.title, with_links),
-        *extract_markdown_visa(am.visa, with_links),
-        *[line for section in am.sections for line in extract_markdown_text(section, 2, with_links)],
-    ]
-    return '\n\n'.join(lines)
-
-
-def classement_to_md(classements: List[Classement]) -> str:
-    if not classements:
-        return ''
-    rows = [f"{clss.rubrique} | {clss.regime.value} | {clss.alinea or ''}" for clss in classements]
-    return '\n'.join(['Rubrique | Régime | Alinea', '---|---|---'] + rows)
-
-
-_LEGIFRANCE_URL = 'https://www.legifrance.gouv.fr/jorf/id/{}'
-
-
-def generate_text_md(text: AMMetadata) -> str:
-    page_name = get_text_defined_id(text)
-    table = classement_to_md(text.classements)
-    return '\n\n'.join(
-        [
-            f'## [{text.short_title}](/{page_name}.md)',
-            f'Etat: {text.state.value}',
-            f'NOR: {text.nor or "non défini"}',
-            f'CID: {text.cid}',
-            f'_{page_name.strip()}_',
-            f'- [sur Légifrance]({_LEGIFRANCE_URL.format(text.cid)})',
-            f'- [sur AIDA]({AIDA_URL.format(text.aida_page)})',
-            *([table] if table else []),
-        ]
-    )
-
-
-def make_collapsible(details: str, hidden: str) -> str:
-    return f'''
-        <details>
-            <summary>
-                {details}
-            </summary>
-
-            {hidden}
-        </details>
-
-    '''

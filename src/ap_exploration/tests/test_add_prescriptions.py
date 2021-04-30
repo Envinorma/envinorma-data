@@ -10,8 +10,8 @@ from ap_exploration.pages.ap.add_prescriptions import (
     _PrescriptionBeginMark,
     _split_between_prescription_marks,
 )
-from envinorma.data import Cell, EnrichedString, Row
-from envinorma.data.text_elements import Linebreak, Table, Title
+from envinorma.data import EnrichedString
+from envinorma.data.text_elements import Cell, Linebreak, Row, Table, Title
 
 
 def _soup(x: str) -> BeautifulSoup:

@@ -34,7 +34,6 @@ from envinorma.data import (
 from envinorma.data.text_elements import TextElement, Title
 from envinorma.io.parse_html import extract_text_elements
 from envinorma.structure import build_structured_text, structured_text_to_text_elements
-from envinorma.structure.am_structure_extraction import extract_short_title
 from legifrance.legifrance_API import LegifranceRequestError
 
 _AM_TITLE = 'am-init-am-title'
@@ -122,7 +121,9 @@ def _prepare_text_area_value(elements: List[TextElement]) -> str:
 
 
 def _extract_default_form_values(am: ArreteMinisteriel) -> Tuple[str, str]:
-    return am.title.text, _prepare_text_area_value(_text_to_elements(am_to_text(replace(am, title=EnrichedString('')))))
+    elements_with_title = _text_to_elements(am_to_text(am))
+    elements = elements_with_title[1:]
+    return am.title.text, _prepare_text_area_value(elements)
 
 
 def _save_button() -> Component:
@@ -284,7 +285,6 @@ def _parse_and_save_new_am(am_id: str, am_title: str, am_content: str) -> Compon
         new_am = replace(
             previous_am,
             title=EnrichedString(am_title),
-            short_title=extract_short_title(am_title),
             sections=new_sections,
         )
         upsert_initial_am(am_id, new_am)

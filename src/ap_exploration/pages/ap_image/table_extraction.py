@@ -6,7 +6,8 @@ import numpy as np
 import pytesseract
 from tqdm import tqdm
 
-from envinorma.data import Cell, Row, Table, estr
+from envinorma.data import Table
+from envinorma.data.text_elements import Cell, Row, estr
 
 
 def _invert_image(img: np.ndarray) -> np.ndarray:
