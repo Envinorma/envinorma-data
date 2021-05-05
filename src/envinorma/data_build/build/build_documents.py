@@ -6,9 +6,9 @@ import requests
 from tqdm import tqdm
 
 from envinorma.data.document import Document
-from envinorma.data.load import load_installation_ids, load_documents
+from envinorma.data.load import load_documents, load_installation_ids
 from envinorma.data_build.filenames import GEORISQUES_URL, Dataset, dataset_filename
-from envinorma.utils import batch, write_json
+from envinorma.utils import batch, typed_tqdm, write_json
 
 
 def _no_docs(dicts: List[Dict]) -> bool:
@@ -17,7 +17,7 @@ def _no_docs(dicts: List[Dict]) -> bool:
 
 def _download_batch(s3ic_ids: List[str]) -> List[Document]:
     res: List[Document] = []
-    for id_ in tqdm(s3ic_ids, desc='Fetching document references', leave=False):
+    for id_ in typed_tqdm(s3ic_ids, desc='Fetching document references', leave=False):
         remote_id = id_.replace('.', '-')
         response = requests.get(f'{GEORISQUES_URL}/installations/etablissement/{remote_id}/texte')
         try:

@@ -4,7 +4,7 @@ import shutil
 import tempfile
 import traceback
 from functools import lru_cache
-from typing import Dict, List, Literal, Set
+from typing import Dict, List, Literal, Set, Tuple
 
 import requests
 from ocrmypdf import Verbosity, configure_logging, ocr
@@ -116,21 +116,44 @@ def _get_uploaded_ap_files() -> List[str]:
 
 
 def _compute_advancement() -> None:
-    nb_files_to_process = len(load_all_georisques_ids())
-    print(f'Advancement: {nb_files_to_process - len(_load_remaining_ids())}/{nb_files_to_process}')
+    ids_with_statuses = _fetch_already_processed_ids_with_statuses()
+    error_ids = {id_ for id_, status in ids_with_statuses if status == 'error'}
+    success_ids = {id_ for id_, status in ids_with_statuses if status == 'success'}
+    all_ids = set(load_all_georisques_ids())
+    print(f'Advancement: {len(error_ids | success_ids)}/{len(all_ids)}')
+    print(f'Nb errors: {len(error_ids)}')
 
 
-_GEORISQUES_ID_REGEXP = re.compile(r'[A-Z]{1}/[a-f0-9]{1}/[a-f0-9]{32}')
+_GEORISQUES_ID_REGEXP = re.compile(r'^[A-Z]{1}/[a-f0-9]{1}/[a-f0-9]{32}')
+
+_OCRStatus = Literal['error', 'success']
 
 
-def _extract_ids(filenames: Set[str]) -> Set[str]:
-    filenames_without_extensions = {filename.split('.')[0] for filename in filenames}
-    return {id_ for id_ in filenames_without_extensions if re.match(_GEORISQUES_ID_REGEXP, id_)}
+def _extract_status(file_extension: str) -> _OCRStatus:
+    if file_extension == 'pdf':
+        return 'success'
+    if file_extension == 'error.txt':
+        return 'error'
+    raise ValueError(f'Unexpected file extension {file_extension}')
+
+
+def _extract_id_and_status(filename: str) -> Tuple[str, _OCRStatus]:
+    assert re.match(_GEORISQUES_ID_REGEXP, filename), f'filename {filename} does not contain id.'
+    georisques_id, *extension = filename.split('.')
+    return georisques_id, _extract_status('.'.join(extension))
+
+
+def _extract_ids_and_statuses(filenames: Set[str]) -> Set[Tuple[str, _OCRStatus]]:
+    return {_extract_id_and_status(filename) for filename in filenames if re.match(_GEORISQUES_ID_REGEXP, filename)}
+
+
+def _fetch_already_processed_ids_with_statuses() -> Set[Tuple[str, _OCRStatus]]:
+    remote_filenames = set(_get_uploaded_ap_files())
+    return _extract_ids_and_statuses(remote_filenames)
 
 
 def _fetch_already_processed_ids() -> Set[str]:
-    remote_filenames = set(_get_uploaded_ap_files())
-    return _extract_ids(remote_filenames)
+    return {id_ for id_, _ in _fetch_already_processed_ids_with_statuses()}
 
 
 def _load_remaining_ids() -> List[str]:
