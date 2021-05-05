@@ -1,4 +1,4 @@
-from dataclasses import  dataclass
+from dataclasses import dataclass
 from typing import List, Optional
 
 
@@ -31,4 +31,3 @@ class AMProperties:
 class TextProperties:
     legifrance: LegifranceTextProperties
     am: Optional[AMProperties]
-

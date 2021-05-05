@@ -2,8 +2,8 @@ import json
 import random
 
 import pytest
-
 from leginorma import LegifranceSection, LegifranceText
+
 from envinorma.structure.am_structure_extraction import (
     _BASE_LEGIFRANCE_URL,
     ArreteMinisteriel,

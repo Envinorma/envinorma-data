@@ -3,14 +3,9 @@ from dataclasses import dataclass
 from typing import Any, Callable, Dict, List, Optional, Tuple, Union
 
 from bs4 import BeautifulSoup
+from leginorma import ArticleStatus, LegifranceArticle, LegifranceSection, LegifranceText
 
-from envinorma.data import (
-    ArreteMinisteriel,
-    EnrichedString,
-    StructuredText,
-    StructuredTextSignature,
-    Table,
-)
+from envinorma.data import ArreteMinisteriel, EnrichedString, StructuredText, StructuredTextSignature, Table
 from envinorma.data.properties import AMProperties, LegifranceTextProperties, TextProperties, TitleInconsistency
 from envinorma.structure.am_structure_extraction import keep_visa_string, split_in_non_empty_html_line
 from envinorma.structure.title_detection import (
@@ -22,7 +17,6 @@ from envinorma.structure.title_detection import (
     prefixes_are_continuous,
     prefixes_are_increasing,
 )
-from leginorma import LegifranceText, LegifranceSection, ArticleStatus, LegifranceArticle
 
 
 def _count_articles(text: Union[LegifranceText, LegifranceSection]) -> int:

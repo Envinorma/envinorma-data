@@ -10,10 +10,9 @@ from datetime import date, datetime
 from enum import Enum
 from typing import Any, Dict, List, Optional, Tuple
 
-
 from envinorma.data.text_elements import EnrichedString, Link, Table, table_to_html
 from envinorma.topics.patterns import TopicName
-from envinorma.utils import str_to_date, AIDA_URL
+from envinorma.utils import AIDA_URL, str_to_date
 
 
 @dataclass

@@ -7,6 +7,7 @@ from typing import Any, Dict, Iterable, List, Optional, Tuple, TypeVar, Union
 
 import bs4
 from bs4 import BeautifulSoup
+from leginorma import ArticleStatus, LegifranceArticle, LegifranceSection, LegifranceText
 
 from envinorma.data import (
     ArreteMinisteriel,
@@ -26,7 +27,6 @@ from envinorma.structure.title_detection import (
     is_mainly_upper,
     is_probably_title,
 )
-from leginorma import LegifranceArticle, LegifranceSection, LegifranceText, ArticleStatus
 
 
 class AMStructurationError(Exception):
