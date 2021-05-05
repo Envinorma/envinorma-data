@@ -500,33 +500,6 @@ def load_am_data() -> AMData:
     return AMData.from_dict(json.load(open(filename)))
 
 
-@dataclass
-class Hyperlink:
-    content: str
-    href: str
-
-
-@dataclass
-class Anchor:
-    name: str
-    anchored_text: str
-
-    def to_dict(self) -> Dict[str, Any]:
-        return asdict(self)
-
-
-@dataclass
-class AidaData:
-    page_id_to_links: Dict[str, List[Hyperlink]]
-    page_id_to_anchors: Dict[str, List[Anchor]]
-
-
-@dataclass
-class Data:
-    aida: AidaData
-    arretes_ministeriels: AMData
-
-
 def get_text_defined_id(text: AMMetadata) -> str:
     return text.nor or text.cid
 

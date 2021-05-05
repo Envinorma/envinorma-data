@@ -4,7 +4,6 @@ import random
 import string
 import traceback
 from datetime import datetime
-from enum import Enum
 from typing import Dict, Iterable, List, Optional, TypeVar, Union
 
 from tqdm import tqdm

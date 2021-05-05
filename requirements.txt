@@ -1,6 +1,0 @@
-beautifulsoup4==4.8.2
-tqdm==4.30.0
-Unidecode==1.0.23
-pydantic==1.7.3
-lxml==4.6.3
-ocrmypdf==12.0.0

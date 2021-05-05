@@ -32,26 +32,13 @@ An ontology and a parser for topic detection in `StructuredTexts`.
 
 Module for managing the parametrization layer of `StructuredText` instances.
 
-## envinorma/back_office
-
-Web app for managing the database of AM, manually structuring, parametrization layer declaration and enriching AM.
-![Back office screenshot](assets/back_office_screenshot.png)
-
-## envinorma/dashboard
-
-Dash app for ICPE data exploration, deployed here [https://envinorma-dashboard.herokuapp.com/](https://envinorma-dashboard.herokuapp.com/) which gathers statistics on open data about ICPE and this project
-
-## legifrance
-
-A wrapper for [Légifrance API](https://api.gouv.fr/les-api/DILA_api_Legifrance).
-
 # Envinorma :fr:
 
 Envinorma cherche à faciliter la préparation des inspections en simplifiant l'accès à la réglementation applicables aux industries non nucléaires en France (les [ICPE](https://fr.wikipedia.org/wiki/Installation_class%C3%A9e_pour_la_protection_de_l'environnement)).
 
 Ce projet est réalisé dans le cadre du programme EIG, une page d'introduction est accessibile [ici](https://entrepreneur-interet-general.etalab.gouv.fr/defis/2020/envinorma.html).
 
-Ce dépôt est une librairie permettant la manipulation des textes réglementaires, en particulier les _Arrêtés Ministériels_ (AM) et les _Arrêtés Préfectoraux_ (AP). Elle est constituée de trois couches principales : structuration, parametrage et enrichissement.
+Ce dépôt est une librairie permettant la manipulation des textes réglementaires, en particulier les _Arrêtés Ministériels_ (AM) et les _Arrêtés Préfectoraux_ (AP). Elle est constituée de trois couches principales : structuration, paramétrage et enrichissement.
 
 # Modules
 
@@ -74,21 +61,3 @@ Module de détection de thème dans un `StructuredTexts`.
 ## envinorma/parametrization
 
 Module de gestion de la couche de parametrage d'un `StructuredText`.
-
-## envinorma/back_office
-
-Application web pour :
-
-- gérer la base des arrêtés ministériels
-- modifier manuellement la structure d'un `StructuredText``
-- intéragir avec un texte enrichi et paramétré.
-
-![Back office screenshot](assets/back_office_screenshot.png)
-
-## envinorma/dashboard
-
-Application Dash pour explorer les données ouvertes sur les ICPE. Une instance est accessible ici : [https://envinorma-dashboard.herokuapp.com/](https://envinorma-dashboard.herokuapp.com/)
-
-## legifrance
-
-Un module d'intéraction avec l'[API Légifrance](https://api.gouv.fr/les-api/DILA_api_Legifrance)

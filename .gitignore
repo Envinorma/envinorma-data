@@ -5,6 +5,8 @@
 backups
 *.DS_Store
 venv
+.eggs
+*.egg-info
 
 # misc
 .vscode
