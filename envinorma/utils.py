@@ -4,11 +4,13 @@ import random
 import string
 import traceback
 from datetime import datetime
+from enum import Enum
 from typing import Dict, Iterable, List, Optional, TypeVar, Union
 
 from tqdm import tqdm
 
 AIDA_URL = 'https://aida.ineris.fr/consultation_document/'
+AM1510_IDS = ('DEVP1706393A', 'JORFTEXT000034429274')
 
 
 def jsonify(obj: Union[Dict, List]) -> str:
@@ -88,3 +90,28 @@ def safely_replace(string: str, replaced_substring: str, new_substring: str) -> 
     if replaced_substring not in string:
         raise ValueError(f'Expecting {replaced_substring} to be in {string}.')
     return string.replace(replaced_substring, new_substring)
+
+
+class AMOperation(Enum):
+    INIT = 'init'
+    EDIT_STRUCTURE = 'edit_structure'
+    ADD_CONDITION = 'add_condition'
+    ADD_ALTERNATIVE_SECTION = 'add_alternative_section'
+
+
+class AMStatus(Enum):
+    PENDING_INITIALIZATION = 'pending-initialization'
+    PENDING_STRUCTURE_VALIDATION = 'pending-structure-validation'
+    PENDING_PARAMETRIZATION = 'pending-enrichment'
+    VALIDATED = 'validated'
+
+    def step(self) -> int:
+        if self == AMStatus.PENDING_INITIALIZATION:
+            return 0
+        if self == AMStatus.PENDING_STRUCTURE_VALIDATION:
+            return 1
+        if self == AMStatus.PENDING_PARAMETRIZATION:
+            return 2
+        if self == AMStatus.VALIDATED:
+            return 3
+        raise NotImplementedError()

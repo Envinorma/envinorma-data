@@ -499,6 +499,10 @@ def load_am_data() -> AMData:
     return AMData.from_dict(json.load(open(filename)))
 
 
+_AM = load_am_data()
+ID_TO_AM_MD = {am.cid: am for am in _AM.metadata if am.state == am.state.VIGUEUR}
+
+
 def get_text_defined_id(text: AMMetadata) -> str:
     return text.nor or text.cid
 
