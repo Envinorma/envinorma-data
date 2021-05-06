@@ -123,8 +123,11 @@ class DataFetcher:
             raise ValueError(f'Expecting one value, received {len(tuples[0])}.')
         return Parametrization.from_dict(json.loads(tuples[0][0]))
 
+    def load_or_init_parametrization(self, am_id: str) -> Parametrization:
+        return self.load_parametrization(am_id) or Parametrization([], [])
+
     def upsert_parameter(self, am_id: str, new_parameter: ParameterObject, parameter_rank: int) -> None:
-        previous_parametrization = self._load_parametrization(am_id) or Parametrization([], [])
+        previous_parametrization = self.load_or_init_parametrization(am_id)
         parametrization = _recreate_with_upserted_parameter(new_parameter, parameter_rank, previous_parametrization)
         check_parametrization_consistency(parametrization)
         self.upsert_new_parametrization(am_id, parametrization)
@@ -209,3 +212,9 @@ class DataFetcher:
         query = 'SELECT am_id, data FROM initial_am'
         tuples = self._exectute_select_query(query, ())
         return [_load_am_str(json_am) for id_, json_am in tuples if id_ in ids]
+
+    def safe_load_most_advanced_am(self, am_id: str) -> ArreteMinisteriel:
+        am = self.load_most_advanced_am(am_id)
+        if not am:
+            raise ValueError('Expecting one AM to proceed.')
+        return am
