@@ -47,6 +47,7 @@ requirements = [
     "pydantic==1.7.3",
     "lxml==4.6.3",
     "psycopg2-binary==2.8.6",
+    "leginorma==0.0.2",
 ]
 
 extra_requirements = {
