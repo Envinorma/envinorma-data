@@ -285,13 +285,6 @@ def standardize_title_date(title: str) -> str:
     return ' '.join(new_words)
 
 
-def _third_word(title: str) -> str:
-    words = title.split()
-    if len(words) >= 3:
-        return words[2]
-    return ''
-
-
 _MONTHS = r'(janvier|février|mars|avril|mai|juin|juillet|août|septembre|octobre|novembre|décembre)'
 _PATTERN = rf'Arrêté du (1er|[0-9]*) ' + _MONTHS + ' [0-9]{4}'
 

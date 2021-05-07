@@ -58,23 +58,20 @@ def empty_link_list() -> List[Link]:
     return []
 
 
-def _enriched_string_id() -> str:
-    return _random_string(12)
-
-
 @dataclass
 class EnrichedString:
     text: str
     links: List[Link] = field(default_factory=empty_link_list)
     table: Optional[Table] = None
     active: Optional[bool] = True
-    id: str = field(default_factory=_enriched_string_id)
 
     @classmethod
     def from_dict(cls, dict_: Dict[str, Any]) -> 'EnrichedString':
         dict_ = dict_.copy()
         dict_['links'] = [Link.from_dict(link) for link in dict_.get('links', [])]
         dict_['table'] = Table.from_dict(dict_['table']) if dict_['table'] else None
+        if 'id' in dict_:
+            del dict_['id']
         return cls(**dict_)
 
     def to_dict(self, dict_: Dict[str, Any]) -> Dict[str, Any]:
