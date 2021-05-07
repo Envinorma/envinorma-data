@@ -495,7 +495,7 @@ class AMData:
 
 
 def load_am_data() -> AMData:
-    filename = __file__.replace('envinorma/data/__init__.py', 'data/arretes_ministeriels.json')
+    filename = __file__.replace('__init__.py', 'arretes_ministeriels.json')
     return AMData.from_dict(json.load(open(filename)))
 
 
