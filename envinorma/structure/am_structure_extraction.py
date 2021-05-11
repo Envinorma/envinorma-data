@@ -632,6 +632,7 @@ def _clean_text_articles(text: LegifranceText, keep_abrogated: bool) -> Legifran
         input_text.title,
         _delete_or_merge_articles(input_text.articles),
         [_clean_section_articles(section) for section in input_text.sections],
+        text.last_modification_date,
     )
 
 
