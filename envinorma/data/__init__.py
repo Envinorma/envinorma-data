@@ -10,6 +10,7 @@ from datetime import date, datetime
 from enum import Enum
 from typing import Any, Dict, List, Optional, Tuple
 
+from envinorma.data.arretes_ministeriels import ARRETES_MINISTERIELS
 from envinorma.data.text_elements import EnrichedString, Link, Table, table_to_html
 from envinorma.topics.patterns import TopicName
 from envinorma.utils import AIDA_URL, str_to_date
@@ -488,8 +489,7 @@ class AMData:
 
 
 def load_am_data() -> AMData:
-    filename = __file__.replace('__init__.py', 'arretes_ministeriels.json')
-    return AMData.from_dict(json.load(open(filename)))
+    return AMData.from_dict(ARRETES_MINISTERIELS)
 
 
 _AM = load_am_data()
