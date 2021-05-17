@@ -41,7 +41,7 @@ dev_requirements = [
 ]
 
 requirements = [
-    "beautifulsoup4==4.8.2",
+    "beautifulsoup4>=4.8.2",
     "tqdm==4.30.0",
     "Unidecode==1.0.23",
     "pydantic==1.7.3",
