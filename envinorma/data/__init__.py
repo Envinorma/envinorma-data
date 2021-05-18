@@ -428,10 +428,6 @@ class AMMetadata:
     source: AMSource
     nor: Optional[str] = None
     reason_hidden: Optional[str] = None
-    id: str = field(init=False)
-
-    def __post_init__(self):
-        self.id = self.nor or self.cid
 
     @staticmethod
     def from_dict(dict_: Dict[str, Any]) -> 'AMMetadata':

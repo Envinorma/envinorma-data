@@ -1,9 +1,9 @@
 import json
-from typing import Any, Dict, List, Optional, Tuple, Type, TypeVar, Union
+from typing import Any, Dict, List, Optional, Set, Tuple, Type, TypeVar, Union
 
 import psycopg2
 
-from envinorma.data import ID_TO_AM_MD, ArreteMinisteriel
+from envinorma.data import AMMetadata, ArreteMinisteriel, ID_TO_AM_MD
 from envinorma.parametrization import (
     AlternativeSection,
     AMWarning,
@@ -110,6 +110,12 @@ class DataFetcher:
         cursor.close()
         connection.close()
 
+    def load_am_metadata(self, am_id: str) -> Optional[AMMetadata]:
+        return ID_TO_AM_MD.get(am_id)
+
+    def load_all_am_metadata(self) -> Dict[str, AMMetadata]:
+        return ID_TO_AM_MD
+
     def remove_parameter(self, am_id: str, parameter_type: Type[ParameterObject], parameter_rank: int) -> None:
         _ensure_non_negative(parameter_rank)
         previous_parametrization = self._load_parametrization(am_id)
@@ -215,17 +221,15 @@ class DataFetcher:
         )
         self._exectute_update_query(query, (am_id, new_status.value, new_status.value, am_id))
 
-    def load_all_structured_am(self) -> List[ArreteMinisteriel]:
-        ids = list(ID_TO_AM_MD)
+    def load_structured_ams(self, am_ids: Set[str]) -> List[ArreteMinisteriel]:
         query = 'SELECT am_id, data FROM structured_am'
         tuples = self._exectute_select_query(query, ())
-        return [_load_am_str(json_am) for id_, json_am in tuples if id_ in ids]
+        return [_load_am_str(json_am) for id_, json_am in tuples if id_ in am_ids]
 
-    def load_all_initial_am(self) -> List[ArreteMinisteriel]:
-        ids = list(ID_TO_AM_MD)
+    def load_initial_ams(self, am_ids: Set[str]) -> List[ArreteMinisteriel]:
         query = 'SELECT am_id, data FROM initial_am'
         tuples = self._exectute_select_query(query, ())
-        return [_load_am_str(json_am) for id_, json_am in tuples if id_ in ids]
+        return [_load_am_str(json_am) for id_, json_am in tuples if id_ in am_ids]
 
     def safe_load_most_advanced_am(self, am_id: str) -> ArreteMinisteriel:
         am = self.load_most_advanced_am(am_id)

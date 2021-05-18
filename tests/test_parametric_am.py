@@ -1,14 +1,14 @@
 import random
 from copy import copy
-from dataclasses import replace
 from datetime import datetime, timedelta
+from operator import itemgetter
 from string import ascii_letters
 from typing import List, Optional
 
 from envinorma.data import Applicability, ArreteMinisteriel, EnrichedString, Regime, StructuredText
 from envinorma.parametrization import (
-    AMWarning,
     AlternativeSection,
+    AMWarning,
     ConditionSource,
     EntityReference,
     NonApplicationCondition,
@@ -235,7 +235,7 @@ def test_apply_parameter_values_to_am():
 
     assert _all_alineas_inactive(new_am_1.sections[0])
     assert len(new_am_1.sections[0].applicability.warnings) == 2
-    assert new_am_1.sections[0].applicability.warnings[1] == 'Fake warning'
+    assert 'Fake warning' in itemgetter(0, 1)(new_am_1.sections[0].applicability.warnings)
 
     assert not new_am_1.sections[1].applicability.modified
     assert len(new_am_1.sections[1].applicability.warnings) == 0
