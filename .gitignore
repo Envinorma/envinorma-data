@@ -1,17 +1,19 @@
 # python
 *.mypy_cache*
 *__pycache__*
-src/.vscode
-src/.coverage
-tmp*
-src/scripts/s3ic.py
 *config.ini
 backups
 *.DS_Store
-src/venv
 venv
+.eggs
+*.egg-info
+
+# misc
+.vscode
+.coverage
+tmp*
 
 # data
 *actes.json
 seeds
-src/docs_dl_batches*
+docs_dl_batches*
