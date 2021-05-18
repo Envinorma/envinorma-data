@@ -5,7 +5,7 @@ from typing import Any, Callable, Dict, List, Optional, Tuple, Union
 from bs4 import BeautifulSoup
 from leginorma import ArticleStatus, LegifranceArticle, LegifranceSection, LegifranceText
 
-from envinorma.data import ArreteMinisteriel, EnrichedString, StructuredText, StructuredTextSignature, Table
+from envinorma.data import ArreteMinisteriel, EnrichedString, StructuredText, Table
 from envinorma.data.properties import AMProperties, LegifranceTextProperties, TextProperties, TitleInconsistency
 from envinorma.structure.am_structure_extraction import keep_visa_string, split_in_non_empty_html_line
 from envinorma.structure.title_detection import (
@@ -326,29 +326,6 @@ def get_first_upper_lines_of_articles(text: _AMOrSection) -> List[Tuple[str, Lis
 
 
 Ints = Tuple[int, ...]
-
-
-def compute_signatures(
-    text: StructuredText, path: Ints, rank_in_section_list: int, section_list_size: int
-) -> Dict[Ints, StructuredTextSignature]:
-    res = {
-        key: value
-        for i, section in enumerate(text.sections)
-        for key, value in compute_signatures(section, path + (i,), i, len(text.sections)).items()
-    }
-    outer_alineas = [al.text for al in text.outer_alineas]
-    res[path] = StructuredTextSignature(
-        path, text.title.text, outer_alineas, len(path), rank_in_section_list, section_list_size
-    )
-    return res
-
-
-def compute_am_signatures(text: ArreteMinisteriel) -> Dict[Ints, StructuredTextSignature]:
-    return {
-        key: value
-        for i, section in enumerate(text.sections)
-        for key, value in compute_signatures(section, (i,), i, len(text.sections)).items()
-    }
 
 
 def extract_leaves_with_successive_titles(

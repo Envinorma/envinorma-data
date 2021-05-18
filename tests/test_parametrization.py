@@ -24,6 +24,7 @@ from envinorma.parametrization import (
     _date_ranges_strictly_overlap,
     _extract_date_range,
     _extract_paths,
+    _group,
     _ranges_strictly_overlap,
     add_titles_sequences,
     add_titles_sequences_section,
@@ -156,18 +157,22 @@ def test_check_parametrization_consistency():
     new_text = StructuredText(_str('Art. 2'), [_str('version modifiée')], [], None)
     check_parametrization_consistency(
         Parametrization(
-            [_NAC(entity, cd_1, source), _NAC(entity, cd_3, source)], [_AS(entity.section, new_text, cd_4, source)]
+            [_NAC(entity, cd_1, source), _NAC(entity, cd_3, source)], [_AS(entity.section, new_text, cd_4, source)], []
         )
     )
-    check_parametrization_consistency(Parametrization([_NAC(entity, cd_3, source)], []))
+    check_parametrization_consistency(Parametrization([_NAC(entity, cd_3, source)], [], []))
     with pytest.raises(ParametrizationError):
         check_parametrization_consistency(
             Parametrization(
-                [_NAC(entity, cd_1, source), _NAC(entity, cd_5, source)], [_AS(entity.section, new_text, cd_6, source)]
+                [_NAC(entity, cd_1, source), _NAC(entity, cd_5, source)],
+                [_AS(entity.section, new_text, cd_6, source)],
+                [],
             )
         )
     with pytest.raises(ParametrizationError):
-        check_parametrization_consistency(Parametrization([_NAC(entity, cd_1, source), _NAC(entity, cd_1, source)], []))
+        check_parametrization_consistency(
+            Parametrization([_NAC(entity, cd_1, source), _NAC(entity, cd_1, source)], [], [])
+        )
 
 
 def _get_simple_text() -> StructuredText:
@@ -221,14 +226,14 @@ def test_add_titles_sequences():
     section = SectionReference((0, 0, 0))
     new_text = StructuredText(_str('Art. 2'), [_str('version modifiée')], [], None)
     res = add_titles_sequences(
-        Parametrization([_NAC(entity, cd_1, source)], [_AS(section, new_text, cd_4, source)]),
+        Parametrization([_NAC(entity, cd_1, source)], [_AS(section, new_text, cd_4, source)], []),
         _get_simple_am(),
     )
     new_source = ConditionSource('', EntityReference(SectionReference((0, 1), ['Chapter I', 'Section 2']), None, False))
     new_entity_0 = EntityReference(SectionReference((0,), ['Chapter I']), None)
     new_section = SectionReference((0, 0, 0), ['Chapter I', 'Section 1', 'Section 1.1'])
     assert res == Parametrization(
-        [_NAC(new_entity_0, cd_1, new_source)], [_AS(new_section, new_text, cd_4, new_source)]
+        [_NAC(new_entity_0, cd_1, new_source)], [_AS(new_section, new_text, cd_4, new_source)], []
     )
 
 
@@ -255,7 +260,7 @@ def test_regenerate_paths():
     section = SectionReference((19,), ['Chapter I', 'Section 1', 'Section 1.1'])
     new_text = StructuredText(_str('Art. 2'), [_str('version modifiée')], [], None)
     res = regenerate_paths(
-        Parametrization([_NAC(entity, cd_1, source)], [_AS(section, new_text, cd_4, source)]),
+        Parametrization([_NAC(entity, cd_1, source)], [_AS(section, new_text, cd_4, source)], []),
         _get_simple_am(),
     )
     new_source = ConditionSource('', EntityReference(SectionReference((0, 1), ['Chapter I', 'Section 2']), None, False))
@@ -263,5 +268,12 @@ def test_regenerate_paths():
     new_section = SectionReference((0, 0, 0), ['Chapter I', 'Section 1', 'Section 1.1'])
     assert res.alternative_sections[0] == _AS(new_section, new_text, cd_4, new_source)
     assert res == Parametrization(
-        [_NAC(new_entity_0, cd_1, new_source)], [_AS(new_section, new_text, cd_4, new_source)]
+        [_NAC(new_entity_0, cd_1, new_source)], [_AS(new_section, new_text, cd_4, new_source)], []
     )
+
+
+def test_group():
+    assert _group([], lambda x: x) == {}
+    assert _group([1, 2, 3, 4, 1], lambda x: x) == {1: [1, 1], 2: [2], 3: [3], 4: [4]}
+    assert _group([1, 2, -1], lambda x: abs(x)) == {1: [1, -1], 2: [2]}
+    assert _group([{'key': 'value'}, {}], lambda x: x.get('key', '')) == {'value': [{'key': 'value'}], '': [{}]}

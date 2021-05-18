@@ -5,15 +5,9 @@ from datetime import datetime, timedelta
 from string import ascii_letters
 from typing import List, Optional
 
-from envinorma.data import (
-    Applicability,
-    ArreteMinisteriel,
-    EnrichedString,
-    Regime,
-    StructuredText,
-    StructuredTextSignature,
-)
+from envinorma.data import Applicability, ArreteMinisteriel, EnrichedString, Regime, StructuredText
 from envinorma.parametrization import (
+    AMWarning,
     AlternativeSection,
     ConditionSource,
     EntityReference,
@@ -40,8 +34,6 @@ from envinorma.parametrization.parametric_am import (
     _extract_installation_date_criterion,
     _extract_interval_midpoints,
     _extract_sorted_targets,
-    _extract_warning,
-    _extract_warnings,
     _generate_combinations,
     _generate_equal_option_dicts,
     _generate_options_dict,
@@ -186,8 +178,7 @@ def test_apply_parameter_values_to_am_whole_arrete():
     is_installation_old = Equal(parameter, False)
     source = ConditionSource('', EntityReference(SectionReference((2,)), None, False))
     parametrization = Parametrization(
-        [_NAC(EntityReference(SectionReference(tuple()), None, True), is_installation_old, source)],
-        [],
+        [_NAC(EntityReference(SectionReference(tuple()), None, True), is_installation_old, source)], [], []
     )
 
     new_am_1 = apply_parameter_values_to_am(am, parametrization, {parameter: False})
@@ -237,12 +228,14 @@ def test_apply_parameter_values_to_am():
             _NAC(EntityReference(SectionReference((3,)), [0]), is_installation_old, source),
         ],
         [_AS(SectionReference((1,)), new_text, is_installation_new, source)],
+        [AMWarning(SectionReference((0,)), 'Fake warning')],
     )
 
     new_am_1 = apply_parameter_values_to_am(am, parametrization, {parameter: False})
 
     assert _all_alineas_inactive(new_am_1.sections[0])
-    assert len(new_am_1.sections[0].applicability.warnings) == 1
+    assert len(new_am_1.sections[0].applicability.warnings) == 2
+    assert new_am_1.sections[0].applicability.warnings[1] == 'Fake warning'
 
     assert not new_am_1.sections[1].applicability.modified
     assert len(new_am_1.sections[1].applicability.warnings) == 0
@@ -254,7 +247,7 @@ def test_apply_parameter_values_to_am():
     new_am_2 = apply_parameter_values_to_am(am, parametrization, {parameter: True})
 
     assert _all_alineas_active(new_am_2.sections[0])
-    assert len(new_am_2.sections[0].applicability.warnings) == 0
+    assert len(new_am_2.sections[0].applicability.warnings) == 1
 
     assert new_am_2.sections[1].applicability.modified
     assert len(new_am_2.sections[1].applicability.warnings) == 1
@@ -267,7 +260,7 @@ def test_apply_parameter_values_to_am():
 
     new_am_3 = apply_parameter_values_to_am(am, parametrization, {})
     assert _all_alineas_active(new_am_3.sections[0])
-    assert len(new_am_3.sections[0].applicability.warnings) == 1
+    assert len(new_am_3.sections[0].applicability.warnings) == 2
 
     assert not new_am_3.sections[1].applicability.modified
     assert len(new_am_3.sections[1].applicability.warnings) == 1
@@ -287,6 +280,7 @@ def test_extract_parameters_from_parametrization():
     parametrization = Parametrization(
         [_NAC(EntityReference(SectionReference((0,)), None), condition_1, source)],
         [_AS(SectionReference((1,)), new_text, condition_2, source)],
+        [],
     )
 
     parameters = extract_parameters_from_parametrization(parametrization)
@@ -304,6 +298,7 @@ def test_extract_parameters_from_parametrization_2():
     parametrization = Parametrization(
         [_NAC(EntityReference(SectionReference((0,)), None), condition_1, source)],
         [_AS(SectionReference((1,)), new_text, condition_2, source)],
+        [],
     )
 
     parameters = extract_parameters_from_parametrization(parametrization)
@@ -323,7 +318,7 @@ def test_generate_all_am_versions():
     parameter = Parameter('nouvelle-installation', ParameterType.BOOLEAN)
     condition = Equal(parameter, False)
     source = ConditionSource('', EntityReference(SectionReference((2,)), None, False))
-    parametrization = Parametrization([_NAC(EntityReference(SectionReference((0,)), None), condition, source)], [])
+    parametrization = Parametrization([_NAC(EntityReference(SectionReference((0,)), None), condition, source)], [], [])
 
     res = generate_all_am_versions(am, parametrization, False)
     assert len(res) == 3
@@ -335,7 +330,7 @@ def test_generate_all_am_versions():
     assert _all_alineas_active(res[()].sections[0])
     assert len(res[()].sections[0].applicability.warnings) == 1
 
-    res_2 = generate_all_am_versions(am, Parametrization([], []), False)
+    res_2 = generate_all_am_versions(am, Parametrization([], [], []), False)
     assert len(res_2) == 1
     assert tuple() in res_2
     exp = Applicability(active=True, modified=False, warnings=[], previous_version=None)
@@ -357,6 +352,7 @@ def test_extract_installation_date_criterion():
             _NAC(EntityReference(SectionReference((2,)), None), condition_3, source),
         ],
         [_AS(SectionReference((1,)), new_text, condition_2, source)],
+        [],
     )
 
     oldest = _extract_installation_date_criterion(parametrization, {parameter: date_1 - timedelta(1)})
@@ -373,7 +369,7 @@ def test_extract_installation_date_criterion():
     assert youngest.right_date is None
 
     assert _extract_installation_date_criterion(parametrization, {}) is None
-    assert _extract_installation_date_criterion(Parametrization([], []), {}) is None
+    assert _extract_installation_date_criterion(Parametrization([], [], []), {}) is None
 
 
 def test_is_satisfied():
@@ -393,37 +389,13 @@ def test_is_satisfied():
 
 
 def test_date_not_in_parametrization():
-    assert _date_not_in_parametrization(Parametrization([], []))
+    assert _date_not_in_parametrization(Parametrization([], [], []))
     nac = _NAC(
         EntityReference(SectionReference((1,)), None),
         Equal(ParameterEnum.DATE_INSTALLATION.value, datetime.now()),
         ConditionSource('', EntityReference(SectionReference((1,)), None)),
     )
-    assert not _date_not_in_parametrization(Parametrization([nac], []))
-
-
-def test_extract_warning():
-    ref = (0,)
-    base_text = StructuredTextSignature(ref, 'title', ['al1', 'al2'], 2, 2, 4)
-    assert _extract_warning(ref, base_text, base_text) is None
-    assert _extract_warning(ref, base_text, None) is not None
-    assert _extract_warning(ref, base_text, replace(base_text, title='title2')) is not None
-    assert _extract_warning(ref, base_text, replace(base_text, outer_alineas_text=['al3', 'al4', 'al5'])) is not None
-    assert _extract_warning(ref, base_text, replace(base_text, depth_in_am=10)) is not None
-    assert _extract_warning(ref, base_text, replace(base_text, rank_in_section_list=10)) is not None
-    assert _extract_warning(ref, base_text, replace(base_text, section_list_size=10)) is not None
-
-
-def test_extract_warnings():
-    ref = (0,)
-    base_text = StructuredTextSignature(ref, 'title', ['al1', 'al2'], 2, 2, 4)
-    assert len(_extract_warnings([ref], {ref: base_text}, {ref: base_text})) == 0
-    assert len(_extract_warnings([ref], {ref: base_text}, {})) == 1
-    assert len(_extract_warnings([ref], {ref: base_text}, {ref: replace(base_text, title='title2')})) == 1
-    assert len(_extract_warnings([ref], {ref: base_text}, {ref: replace(base_text, outer_alineas_text=['al3'])})) == 1
-    assert len(_extract_warnings([ref], {ref: base_text}, {ref: replace(base_text, depth_in_am=10)})) == 1
-    assert len(_extract_warnings([ref], {ref: base_text}, {ref: replace(base_text, rank_in_section_list=10)})) == 1
-    assert len(_extract_warnings([ref], {ref: base_text}, {ref: replace(base_text, section_list_size=10)})) == 1
+    assert not _date_not_in_parametrization(Parametrization([nac], [], []))
 
 
 def _get_simple_text(sections: Optional[List[StructuredText]] = None) -> StructuredText:

@@ -92,13 +92,6 @@ def safely_replace(string: str, replaced_substring: str, new_substring: str) -> 
     return string.replace(replaced_substring, new_substring)
 
 
-class AMOperation(Enum):
-    INIT = 'init'
-    EDIT_STRUCTURE = 'edit_structure'
-    ADD_CONDITION = 'add_condition'
-    ADD_ALTERNATIVE_SECTION = 'add_alternative_section'
-
-
 class AMStatus(Enum):
     PENDING_INITIALIZATION = 'pending-initialization'
     PENDING_STRUCTURE_VALIDATION = 'pending-structure-validation'

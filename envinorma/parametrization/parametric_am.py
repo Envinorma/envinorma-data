@@ -3,14 +3,7 @@ from dataclasses import replace
 from datetime import datetime, timedelta
 from typing import Any, Dict, List, Optional, Set, Tuple, Union
 
-from envinorma.data import (
-    Applicability,
-    ArreteMinisteriel,
-    DateCriterion,
-    Regime,
-    StructuredText,
-    StructuredTextSignature,
-)
+from envinorma.data import Applicability, ArreteMinisteriel, DateCriterion, Regime, StructuredText
 from envinorma.parametrization import (
     AlternativeSection,
     Combinations,
@@ -23,7 +16,7 @@ from envinorma.parametrization import (
     NonApplicationCondition,
     Parameter,
     ParameterEnum,
-    ParameterObject,
+    ParameterObjectWithCondition,
     ParameterType,
     Parametrization,
     Range,
@@ -37,7 +30,6 @@ from envinorma.parametrization.conditions import (
     generate_warning_missing_value,
     is_satisfied,
 )
-from envinorma.structure.texts_properties import compute_am_signatures
 from envinorma.utils import date_to_str
 
 
@@ -82,7 +74,7 @@ def _has_undefined_parameters(condition: Condition, parameter_values: Dict[Param
     return False
 
 
-def _compute_warnings(parameter: ParameterObject, parameter_values: Dict[Parameter, Any]) -> List[str]:
+def _compute_warnings(parameter: ParameterObjectWithCondition, parameter_values: Dict[Parameter, Any]) -> List[str]:
     if _has_undefined_parameters(parameter.condition, parameter_values):
         modification = isinstance(parameter, AlternativeSection)
         alineas = None if isinstance(parameter, AlternativeSection) else parameter.targeted_entity.outer_alinea_indices
@@ -183,14 +175,25 @@ def _ensure_applicabiliy(candidate: Any) -> Applicability:
     return candidate
 
 
-def _apply_parameter_values_in_text(
-    text: StructuredText, parametrization: Parametrization, parameter_values: Dict[Parameter, Any], path: Ints
-) -> StructuredText:
+def _extract_satisfied_objects_and_warnings(
+    parametrization: Parametrization, parameter_values: Dict[Parameter, Any], path: Ints
+) -> Tuple[List[NonApplicationCondition], List[AlternativeSection], List[str]]:
     na_conditions, warnings_1 = _keep_satisfied_conditions(
         parametrization.path_to_conditions.get(path) or [], parameter_values
     )
     alternative_sections, warnings_2 = _keep_satisfied_mofications(
         parametrization.path_to_alternative_sections.get(path) or [], parameter_values
+    )
+    warnings_3 = [x.text for x in parametrization.path_to_warnings.get(path) or []]
+    all_warnings = warnings_1 + warnings_2 + warnings_3
+    return na_conditions, alternative_sections, all_warnings
+
+
+def _apply_parameter_values_in_text(
+    text: StructuredText, parametrization: Parametrization, parameter_values: Dict[Parameter, Any], path: Ints
+) -> StructuredText:
+    na_conditions, alternative_sections, warnings = _extract_satisfied_objects_and_warnings(
+        parametrization, parameter_values, path
     )
     text = copy(text)
     if not na_conditions and not alternative_sections:
@@ -202,7 +205,7 @@ def _apply_parameter_values_in_text(
     else:
         text = _apply_satisfied_modificators(text, na_conditions, alternative_sections, parameter_values)
 
-    all_warnings = list(set(_ensure_applicabiliy(text.applicability).warnings + warnings_1 + warnings_2))
+    all_warnings = list(set(_ensure_applicabiliy(text.applicability).warnings + warnings))
     text.applicability = replace(_ensure_applicabiliy(text.applicability), warnings=all_warnings)
     return text
 
@@ -431,64 +434,3 @@ def generate_all_am_versions(
         combination_name: apply_parameter_values_to_am(am, parametrization, parameter_values)
         for combination_name, parameter_values in combinations.items()
     }
-
-
-def _extract_sources_section_paths(parametrization: Parametrization) -> List[Ints]:
-    sources_in_non_applicability = [na.source.reference.section.path for na in parametrization.application_conditions]
-    sources_in_alternative_texts = [at.source.reference.section.path for at in parametrization.alternative_sections]
-    return list(set(sources_in_non_applicability + sources_in_alternative_texts))
-
-
-def _extract_warning(
-    path: Ints, old_signature: Optional[StructuredTextSignature], new_signature: Optional[StructuredTextSignature]
-) -> Optional[str]:
-    if not old_signature:
-        raise ValueError(
-            f'Signature for path {path} not found in old signature, which means there was an '
-            f'inconsistency between signatures and parametrization. This should not happen.'
-        )
-    if not new_signature:
-        return f'Signature for path {path} not found in new signature, this should be corrected.'
-    names_and_fields = [
-        ('Title', 'title'),
-        ('Depth', 'depth_in_am'),
-        ('Alineas', 'outer_alineas_text'),
-        ('Rank in section list', 'rank_in_section_list'),
-        ('Section list size', 'section_list_size'),
-    ]
-    for name, field in names_and_fields:
-        if getattr(old_signature, field) != getattr(new_signature, field):
-            return (
-                f'{name} of section with path {path} have changed '
-                f'(before: {getattr(old_signature, field)}, after: {getattr(new_signature, field)}'
-            )
-    return None
-
-
-def _extract_warnings(
-    paths: List[Ints],
-    old_signatures: Dict[Ints, StructuredTextSignature],
-    new_signatures: Dict[Ints, StructuredTextSignature],
-) -> List[str]:
-    warnings = [_extract_warning(path, old_signatures.get(path), new_signatures.get(path)) for path in paths if path]
-    return [warning for warning in warnings if warning]
-
-
-def check_parametrization_is_still_valid(
-    parametrization: Parametrization, new_am: ArreteMinisteriel
-) -> Tuple[bool, List[str]]:
-    if not parametrization.signatures:
-        raise ValueError('Parametrization must have signatures to check validity.')
-    new_signatures = compute_am_signatures(new_am)
-    old_signatures = parametrization.signatures
-
-    source_paths = _extract_sources_section_paths(parametrization)
-    alternative_texts_paths = list(parametrization.path_to_conditions.keys())
-    non_applicability_paths = list(parametrization.path_to_alternative_sections.keys())
-
-    source_warnings = _extract_warnings(source_paths, old_signatures, new_signatures)
-    alternative_texts_warnings = _extract_warnings(alternative_texts_paths, old_signatures, new_signatures)
-    non_applicability_warnings = _extract_warnings(non_applicability_paths, old_signatures, new_signatures)
-
-    all_warnings = source_warnings + alternative_texts_warnings + non_applicability_warnings
-    return len(all_warnings) == 0, all_warnings

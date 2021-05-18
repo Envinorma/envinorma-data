@@ -4,6 +4,7 @@ from envinorma.data import ID_TO_AM_MD, ArreteMinisteriel, EnrichedString, Struc
 from envinorma.data.text_elements import Cell, Row
 from envinorma.parametrization import (
     AlternativeSection,
+    AMWarning,
     ConditionSource,
     EntityReference,
     Littler,
@@ -72,6 +73,7 @@ _PARAMETRIZATION = Parametrization(
             description='',
         )
     ],
+    warnings=[AMWarning(SectionReference(()), 'AM warning')],
 )
 
 _STRUCTURED_AM = ArreteMinisteriel(

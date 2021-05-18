@@ -1,16 +1,18 @@
 import json
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any, Dict, List, Optional, Tuple, Type, TypeVar, Union
 
 import psycopg2
 
 from envinorma.data import ID_TO_AM_MD, ArreteMinisteriel
 from envinorma.parametrization import (
+    AlternativeSection,
+    AMWarning,
     NonApplicationCondition,
     ParameterObject,
     Parametrization,
     check_parametrization_consistency,
 )
-from envinorma.utils import AMOperation, AMStatus
+from envinorma.utils import AMStatus
 
 
 def _ensure_len(list_: List, min_len: int) -> None:
@@ -34,17 +36,32 @@ def _load_am_str(str_: str) -> ArreteMinisteriel:
 
 
 def _recreate_with_removed_parameter(
-    operation: AMOperation, parameter_rank: int, parametrization: Parametrization
+    object_type: Type[ParameterObject], parameter_rank: int, parametrization: Parametrization
 ) -> Parametrization:
     new_sections = parametrization.alternative_sections.copy()
     new_conditions = parametrization.application_conditions.copy()
-    if operation == AMOperation.ADD_CONDITION:
+    new_warnings = parametrization.warnings.copy()
+    if object_type == NonApplicationCondition:
         _ensure_len(parametrization.application_conditions, parameter_rank + 1)
         del new_conditions[parameter_rank]
-    if operation == AMOperation.ADD_ALTERNATIVE_SECTION:
+    if object_type == AlternativeSection:
         _ensure_len(parametrization.alternative_sections, parameter_rank + 1)
         del new_sections[parameter_rank]
-    return Parametrization(new_conditions, new_sections)
+    if object_type == AMWarning:
+        _ensure_len(parametrization.warnings, parameter_rank + 1)
+        del new_warnings[parameter_rank]
+    return Parametrization(new_conditions, new_sections, new_warnings)
+
+
+T = TypeVar('T')
+
+
+def _replace_element_in_list_or_append_if_negative_rank(element: T, list_: List[T], rank: int) -> List[T]:
+    if rank < 0:
+        return [*list_, element]
+    if rank >= len(list_):
+        raise ValueError(f'Cannot replace element of rank {rank} in a list of size {len(list_)}')
+    return [elt if i != rank else element for i, elt in enumerate(list_)]
 
 
 def _recreate_with_upserted_parameter(
@@ -52,19 +69,16 @@ def _recreate_with_upserted_parameter(
 ) -> Parametrization:
     new_sections = parametrization.alternative_sections
     new_conditions = parametrization.application_conditions
+    new_warnings = parametrization.warnings
     if isinstance(new_parameter, NonApplicationCondition):
-        if parameter_rank >= 0:
-            _ensure_len(parametrization.application_conditions, parameter_rank + 1)
-            new_conditions[parameter_rank] = new_parameter
-        else:
-            new_conditions.append(new_parameter)
+        new_conditions = _replace_element_in_list_or_append_if_negative_rank(
+            new_parameter, new_conditions, parameter_rank
+        )
+    elif isinstance(new_parameter, AlternativeSection):
+        new_sections = _replace_element_in_list_or_append_if_negative_rank(new_parameter, new_sections, parameter_rank)
     else:
-        if parameter_rank >= 0:
-            _ensure_len(parametrization.alternative_sections, parameter_rank + 1)
-            new_sections[parameter_rank] = new_parameter
-        else:
-            new_sections.append(new_parameter)
-    return Parametrization(new_conditions, new_sections)
+        new_warnings = _replace_element_in_list_or_append_if_negative_rank(new_parameter, new_warnings, parameter_rank)
+    return Parametrization(new_conditions, new_sections, new_warnings)
 
 
 class DataFetcher:
@@ -96,12 +110,12 @@ class DataFetcher:
         cursor.close()
         connection.close()
 
-    def remove_parameter(self, am_id: str, operation: AMOperation, parameter_rank: int) -> None:
+    def remove_parameter(self, am_id: str, parameter_type: Type[ParameterObject], parameter_rank: int) -> None:
         _ensure_non_negative(parameter_rank)
         previous_parametrization = self._load_parametrization(am_id)
         if not previous_parametrization:
             raise ValueError('Expecting a non null parametrization.')
-        parametrization = _recreate_with_removed_parameter(operation, parameter_rank, previous_parametrization)
+        parametrization = _recreate_with_removed_parameter(parameter_type, parameter_rank, previous_parametrization)
         self.upsert_new_parametrization(am_id, parametrization)
 
     def upsert_new_parametrization(self, am_id: str, parametrization: Parametrization) -> None:
@@ -124,7 +138,7 @@ class DataFetcher:
         return Parametrization.from_dict(json.loads(tuples[0][0]))
 
     def load_or_init_parametrization(self, am_id: str) -> Parametrization:
-        return self.load_parametrization(am_id) or Parametrization([], [])
+        return self.load_parametrization(am_id) or Parametrization([], [], [])
 
     def upsert_parameter(self, am_id: str, new_parameter: ParameterObject, parameter_rank: int) -> None:
         previous_parametrization = self.load_or_init_parametrization(am_id)

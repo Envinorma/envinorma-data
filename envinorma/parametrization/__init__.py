@@ -4,9 +4,9 @@ import warnings
 from copy import deepcopy
 from dataclasses import asdict, dataclass, field, replace
 from datetime import datetime
-from typing import Any, Dict, List, Optional, Set, Tuple, TypeVar, Union
+from typing import Any, Callable, Dict, List, Optional, Set, Tuple, TypeVar, Union
 
-from envinorma.data import ArreteMinisteriel, StructuredText, StructuredTextSignature
+from envinorma.data import ArreteMinisteriel, StructuredText
 from envinorma.parametrization.conditions import (
     Condition,
     Equal,
@@ -123,6 +123,22 @@ class AlternativeSection:
             ConditionSource.from_dict(dict_['source']),
             dict_.get('description'),
         )
+
+
+@dataclass
+class AMWarning:
+    targeted_section: SectionReference
+    text: str
+
+    def to_dict(self) -> Dict[str, Any]:
+        return {
+            'targeted_section': self.targeted_section.to_dict(),
+            'text': self.text,
+        }
+
+    @classmethod
+    def from_dict(cls, dict_: Dict[str, Any]) -> 'AMWarning':
+        return AMWarning(SectionReference.from_dict(dict_['targeted_section']), dict_['text'])
 
 
 def extract_conditions_from_parametrization(
@@ -282,28 +298,33 @@ def check_parametrization_consistency(parametrization: 'Parametrization') -> Non
         )
 
 
+T = TypeVar('T')
+K = TypeVar('K')
+
+
+def _group(elements: List[T], groupper: Callable[[T], K]) -> Dict[K, List[T]]:
+    groups: Dict[K, List[T]] = {}
+    for element in elements:
+        key = groupper(element)
+        if key not in groups:
+            groups[key] = []
+        groups[key].append(element)
+    return groups
+
+
 @dataclass
 class Parametrization:
     application_conditions: List[NonApplicationCondition]
     alternative_sections: List[AlternativeSection]
-    signatures: Optional[Dict[Ints, StructuredTextSignature]] = None
+    warnings: List[AMWarning]
     path_to_conditions: Dict[Ints, List[NonApplicationCondition]] = field(init=False)
     path_to_alternative_sections: Dict[Ints, List[AlternativeSection]] = field(init=False)
+    path_to_warnings: Dict[Ints, List[AMWarning]] = field(init=False)
 
     def __post_init__(self):
-        self.path_to_conditions = {}
-        for cd in self.application_conditions:
-            path = cd.targeted_entity.section.path
-            if path not in self.path_to_conditions:
-                self.path_to_conditions[path] = []
-            self.path_to_conditions[path].append(cd)
-
-        self.path_to_alternative_sections = {}
-        for sec in self.alternative_sections:
-            path = sec.targeted_section.path
-            if path not in self.path_to_alternative_sections:
-                self.path_to_alternative_sections[path] = []
-            self.path_to_alternative_sections[path].append(sec)
+        self.path_to_conditions = _group(self.application_conditions, lambda x: x.targeted_entity.section.path)
+        self.path_to_alternative_sections = _group(self.alternative_sections, lambda x: x.targeted_section.path)
+        self.path_to_warnings = _group(self.warnings, lambda x: x.targeted_section.path)
         _check_parametrization(self)
         try:
             check_parametrization_consistency(self)
@@ -311,69 +332,24 @@ class Parametrization:
             warnings.warn(f'Parametrization error, will raise an exception in the future : {str(exc)}')
 
     def to_dict(self) -> Dict[str, Any]:
-        res = asdict(self)
-        del res['path_to_conditions']
-        del res['path_to_alternative_sections']
+        res = {}
         res['application_conditions'] = [app.to_dict() for app in self.application_conditions]
         res['alternative_sections'] = [sec.to_dict() for sec in self.alternative_sections]
-        if self.signatures:
-            res['signatures'] = [[path, signature.to_dict()] for path, signature in self.signatures.items()]
+        res['warnings'] = [warning.to_dict() for warning in self.warnings]
         return res
 
     @classmethod
     def from_dict(cls, dict_: Dict[str, Any]) -> 'Parametrization':
-        signatures: Optional[Dict[Ints, StructuredTextSignature]]
-        if dict_.get('signatures'):
-            signatures = {tuple(key): StructuredTextSignature.from_dict(value) for key, value in dict_['signatures']}
-        else:
-            signatures = None
         return Parametrization(
             [NonApplicationCondition.from_dict(app) for app in dict_['application_conditions']],
             [AlternativeSection.from_dict(sec) for sec in dict_['alternative_sections']],
-            signatures,
+            [AMWarning.from_dict(sec) for sec in dict_.get('warnings', [])],
         )
 
 
-ParameterObject = Union[NonApplicationCondition, AlternativeSection]
+ParameterObjectWithCondition = Union[NonApplicationCondition, AlternativeSection]
+ParameterObject = Union[ParameterObjectWithCondition, AMWarning]
 Combinations = Dict[Tuple[str, ...], Dict[Parameter, Any]]
-
-
-def build_simple_parametrization(
-    non_applicable_section_references: List[Ints],
-    modified_articles: Dict[Ints, StructuredText],
-    source_section: Ints,
-    date: datetime,
-) -> Parametrization:
-    source = ConditionSource(
-        'Paragraphe décrivant ce qui s\'applique aux installations existantes',
-        EntityReference(SectionReference(source_section), None),
-    )
-    date_str = date.strftime('%d-%m-%Y')
-    description = (
-        f'''Le paragraphe ne s'applique qu'aux sites dont la date d'installation est postérieure au {date_str}.'''
-    )
-    is_old_installation = Littler(ParameterEnum.DATE_INSTALLATION.value, date)
-    is_new_installation = Greater(ParameterEnum.DATE_INSTALLATION.value, date)
-    application_conditions = [
-        NonApplicationCondition(
-            EntityReference(SectionReference(tuple(ref)), None), is_old_installation, source, description
-        )
-        for ref in non_applicable_section_references
-    ]
-    description = (
-        f'''Le paragraphe est modifié pour les sites dont la date d'installation est postérieure au {date_str}.'''
-    )
-    alternative_sections = [
-        AlternativeSection(SectionReference(ref), value, is_new_installation, source, description)
-        for ref, value in modified_articles.items()
-    ]
-    return Parametrization(application_conditions, alternative_sections)
-
-
-def add_am_signatures(
-    parametrization: Parametrization, signatures: Dict[Ints, StructuredTextSignature]
-) -> Parametrization:
-    return replace(parametrization, signatures=signatures)
 
 
 def extract_titles_sequence(text: Union[ArreteMinisteriel, StructuredText], path: Ints) -> List[str]:
