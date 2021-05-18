@@ -1,4 +1,5 @@
 import pytest
+
 from envinorma.data_fetcher import _replace_element_in_list_or_append_if_negative_rank
 
 
