@@ -3,7 +3,7 @@ from typing import Any, Dict, List, Optional, Set, Tuple, Type, TypeVar, Union
 
 import psycopg2
 
-from envinorma.data import ID_TO_AM_MD, AMMetadata, ArreteMinisteriel
+from envinorma.data import ALL_ID_TO_AM_MD, AMMetadata, AMState, ArreteMinisteriel
 from envinorma.parametrization import (
     AlternativeSection,
     AMWarning,
@@ -111,10 +111,21 @@ class DataFetcher:
         connection.close()
 
     def load_am_metadata(self, am_id: str) -> Optional[AMMetadata]:
-        return ID_TO_AM_MD.get(am_id)
+        return ALL_ID_TO_AM_MD.get(am_id)
 
-    def load_all_am_metadata(self) -> Dict[str, AMMetadata]:
-        return ID_TO_AM_MD
+    def load_all_am_metadata(self, with_deleted_ams: bool = False) -> Dict[str, AMMetadata]:
+        if with_deleted_ams:
+            return ALL_ID_TO_AM_MD
+        return {am_id: am for am_id, am in ALL_ID_TO_AM_MD.items() if am.state == am.state.VIGUEUR}
+
+    def upsert_am(self, am_md: AMMetadata) -> None:
+        ALL_ID_TO_AM_MD[am_md.cid] = am_md
+
+    def delete_am(self, am_id: str, reason_deleted: str) -> None:
+        if am_id not in ALL_ID_TO_AM_MD:
+            raise ValueError(f'AM with id {am_id} does not exist.')
+        ALL_ID_TO_AM_MD[am_id].state = AMState.DELETED
+        ALL_ID_TO_AM_MD[am_id].reason_deleted = reason_deleted
 
     def remove_parameter(self, am_id: str, parameter_type: Type[ParameterObject], parameter_rank: int) -> None:
         _ensure_non_negative(parameter_rank)
@@ -207,7 +218,10 @@ class DataFetcher:
 
     def load_am_status(self, am_id: str) -> AMStatus:
         query = 'SELECT status FROM am_status WHERE am_id = %s;'
-        status = _ensure_one_variable(self._exectute_select_query(query, (am_id,)))
+        query_result = self._exectute_select_query(query, (am_id,))
+        if not query_result:
+            return AMStatus.PENDING_INITIALIZATION
+        status = _ensure_one_variable(query_result)
         return AMStatus(status)
 
     def load_all_am_statuses(self) -> Dict[str, AMStatus]:
