@@ -1,9 +1,9 @@
 import json
-from typing import Any, Dict, List, Optional, Tuple, Type, TypeVar, Union
+from typing import Any, Dict, List, Optional, Set, Tuple, Type, TypeVar, Union
 
 import psycopg2
 
-from envinorma.data import ID_TO_AM_MD, ArreteMinisteriel
+from envinorma.data import AMMetadata, AMState, ArreteMinisteriel
 from envinorma.parametrization import (
     AlternativeSection,
     AMWarning,
@@ -81,6 +81,27 @@ def _recreate_with_upserted_parameter(
     return Parametrization(new_conditions, new_sections, new_warnings)
 
 
+def _create_table_queries() -> List[str]:
+    queries = ['CREATE TABLE IF NOT EXISTS am_status (am_id VARCHAR(255) PRIMARY KEY, status VARCHAR(255));']
+    type_1_tables = ['am_metadata', 'initial_am', 'parametrization', 'structured_am']
+    for table in type_1_tables:
+        queries.append(f'CREATE TABLE IF NOT EXISTS {table} (am_id VARCHAR(255) PRIMARY KEY, data TEXT);')
+    return queries
+
+
+def create_tables(psql_dsn: str) -> None:
+    """
+    Execute this function if you start the application from an empty database, or have missing tables.
+    """
+    connection = psycopg2.connect(psql_dsn)
+    cursor = connection.cursor()
+    for query in _create_table_queries():
+        cursor.execute(query, ())
+    connection.commit()
+    cursor.close()
+    connection.close()
+
+
 class DataFetcher:
     def __init__(self, psql_dsn: str) -> None:
         self.psql_dsn: str = psql_dsn
@@ -109,6 +130,37 @@ class DataFetcher:
         connection.commit()
         cursor.close()
         connection.close()
+
+    def load_am_metadata(self, am_id: str) -> Optional[AMMetadata]:
+        query = 'SELECT data FROM am_metadata WHERE am_id = %s;'
+        json_am = self._exectute_select_query(query, (am_id,))
+        if json_am:
+            return AMMetadata.from_dict(json.loads(_ensure_one_variable(json_am)))
+        return None
+
+    def load_all_am_metadata(self, with_deleted_ams: bool = False) -> Dict[str, AMMetadata]:
+        query = 'SELECT am_id, data FROM am_metadata;'
+        tuples = self._exectute_select_query(query, ())
+        result = {am_id: AMMetadata.from_dict(json.loads(json_)) for am_id, json_ in tuples or {}}
+        if with_deleted_ams:
+            return result
+        return {am_id: am for am_id, am in result.items() if am.state == am.state.VIGUEUR}
+
+    def upsert_am(self, am_md: AMMetadata) -> None:
+        data = json.dumps(am_md.to_dict())
+        query = (
+            'INSERT INTO am_metadata(am_id, data) VALUES(%s, %s) ON CONFLICT (am_id)'
+            ' DO UPDATE SET data = %s WHERE am_metadata.am_id = %s;'
+        )
+        self._exectute_update_query(query, (am_md.cid, data, data, am_md.cid))
+
+    def delete_am(self, am_id: str, reason_deleted: str) -> None:
+        am_metadata = self.load_am_metadata(am_id)
+        if not am_metadata:
+            raise ValueError(f'AM with id {am_id} does not exist, cannot delete it.')
+        am_metadata.state = AMState.DELETED
+        am_metadata.reason_deleted = reason_deleted
+        self.upsert_am(am_metadata)
 
     def remove_parameter(self, am_id: str, parameter_type: Type[ParameterObject], parameter_rank: int) -> None:
         _ensure_non_negative(parameter_rank)
@@ -201,7 +253,10 @@ class DataFetcher:
 
     def load_am_status(self, am_id: str) -> AMStatus:
         query = 'SELECT status FROM am_status WHERE am_id = %s;'
-        status = _ensure_one_variable(self._exectute_select_query(query, (am_id,)))
+        query_result = self._exectute_select_query(query, (am_id,))
+        if not query_result:
+            return AMStatus.PENDING_INITIALIZATION
+        status = _ensure_one_variable(query_result)
         return AMStatus(status)
 
     def load_all_am_statuses(self) -> Dict[str, AMStatus]:
@@ -215,17 +270,15 @@ class DataFetcher:
         )
         self._exectute_update_query(query, (am_id, new_status.value, new_status.value, am_id))
 
-    def load_all_structured_am(self) -> List[ArreteMinisteriel]:
-        ids = list(ID_TO_AM_MD)
+    def load_structured_ams(self, am_ids: Set[str]) -> List[ArreteMinisteriel]:
         query = 'SELECT am_id, data FROM structured_am'
         tuples = self._exectute_select_query(query, ())
-        return [_load_am_str(json_am) for id_, json_am in tuples if id_ in ids]
+        return [_load_am_str(json_am) for id_, json_am in tuples if id_ in am_ids]
 
-    def load_all_initial_am(self) -> List[ArreteMinisteriel]:
-        ids = list(ID_TO_AM_MD)
+    def load_initial_ams(self, am_ids: Set[str]) -> List[ArreteMinisteriel]:
         query = 'SELECT am_id, data FROM initial_am'
         tuples = self._exectute_select_query(query, ())
-        return [_load_am_str(json_am) for id_, json_am in tuples if id_ in ids]
+        return [_load_am_str(json_am) for id_, json_am in tuples if id_ in am_ids]
 
     def safe_load_most_advanced_am(self, am_id: str) -> ArreteMinisteriel:
         am = self.load_most_advanced_am(am_id)

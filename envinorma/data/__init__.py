@@ -409,12 +409,15 @@ def check_am(am: ArreteMinisteriel):
 class AMState(Enum):
     VIGUEUR = 'VIGUEUR'
     ABROGE = 'ABROGE'
-    CACHE = 'CACHE'
+    DELETED = 'DELETED'
 
 
 class AMSource(Enum):
     LEGIFRANCE = 'LEGIFRANCE'
     AIDA = 'AIDA'
+
+
+DELETE_REASON_MIN_NB_CHARS = 10
 
 
 @dataclass
@@ -427,11 +430,7 @@ class AMMetadata:
     publication_date: date
     source: AMSource
     nor: Optional[str] = None
-    reason_hidden: Optional[str] = None
-    id: str = field(init=False)
-
-    def __post_init__(self):
-        self.id = self.nor or self.cid
+    reason_deleted: Optional[str] = None
 
     @staticmethod
     def from_dict(dict_: Dict[str, Any]) -> 'AMMetadata':
@@ -493,7 +492,7 @@ def load_am_data() -> AMData:
 
 
 _AM = load_am_data()
-ID_TO_AM_MD = {am.cid: am for am in _AM.metadata if am.state == am.state.VIGUEUR}
+ALL_ID_TO_AM_MD = {am.cid: am for am in _AM.metadata}
 
 
 def get_text_defined_id(text: AMMetadata) -> str:

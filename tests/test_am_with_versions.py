@@ -1,6 +1,16 @@
 from datetime import date, datetime
 
-from envinorma.data import ID_TO_AM_MD, ArreteMinisteriel, EnrichedString, StructuredText, Table
+from envinorma.data import (
+    AMMetadata,
+    AMSource,
+    AMState,
+    ArreteMinisteriel,
+    Classement,
+    EnrichedString,
+    Regime,
+    StructuredText,
+    Table,
+)
 from envinorma.data.text_elements import Cell, Row
 from envinorma.parametrization import (
     AlternativeSection,
@@ -176,7 +186,17 @@ _STRUCTURED_AM = ArreteMinisteriel(
 
 
 def test_apply_parametrization():
-    res = apply_parametrization('FACE_CID', _STRUCTURED_AM, _PARAMETRIZATION, ID_TO_AM_MD['FAKE_CID'])
+    md = AMMetadata(
+        aida_page='5619',
+        title='Faux Arrêté du 01/02/21 relatif aux tests',
+        nor='FAKE_NOR',
+        classements=[Classement(regime=Regime('E'), rubrique='5000', alinea='A.2')],
+        cid='FAKE_CID',
+        state=AMState('VIGUEUR'),
+        publication_date=date.fromtimestamp(1612195449),
+        source=AMSource('LEGIFRANCE'),
+    )
+    res = apply_parametrization('FACE_CID', _STRUCTURED_AM, _PARAMETRIZATION, md)
     assert res and len(res) == 4
 
 

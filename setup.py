@@ -44,7 +44,7 @@ requirements = [
     "beautifulsoup4>=4.8.2",
     "tqdm==4.30.0",
     "Unidecode==1.0.23",
-    "pydantic==1.7.3",
+    "pydantic>=1.7.4",
     "lxml==4.6.3",
     "psycopg2-binary==2.8.6",
     "leginorma>=0.0.3",
