@@ -39,9 +39,7 @@ _DATE = Parameter(id='date-d-installation', type=ParameterType.DATE)
 _PARAMETRIZATION = Parametrization(
     application_conditions=[
         NonApplicationCondition(
-            targeted_entity=EntityReference(
-                section=SectionReference(path=(0,)), outer_alinea_indices=None, whole_arrete=False
-            ),
+            targeted_entity=EntityReference(section=SectionReference(path=(0,)), outer_alinea_indices=None),
             condition=AndCondition(
                 conditions=[
                     Littler(parameter=_DATE, target=datetime(2021, 1, 1, 0, 0), strict=True, type=ConditionType.LITTLER)
@@ -50,9 +48,7 @@ _PARAMETRIZATION = Parametrization(
             ),
             source=ConditionSource(
                 explanation='',
-                reference=EntityReference(
-                    section=SectionReference(path=(0,)), outer_alinea_indices=None, whole_arrete=False
-                ),
+                reference=EntityReference(section=SectionReference(path=(0,)), outer_alinea_indices=None),
             ),
             description='',
         )
@@ -76,9 +72,7 @@ _PARAMETRIZATION = Parametrization(
             ),
             source=ConditionSource(
                 explanation='',
-                reference=EntityReference(
-                    section=SectionReference(path=(1,)), outer_alinea_indices=None, whole_arrete=False
-                ),
+                reference=EntityReference(section=SectionReference(path=(1,)), outer_alinea_indices=None),
             ),
             description='',
         )

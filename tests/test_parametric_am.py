@@ -176,9 +176,9 @@ def test_apply_parameter_values_to_am_whole_arrete():
 
     parameter = Parameter('nouvelle-installation', ParameterType.BOOLEAN)
     is_installation_old = Equal(parameter, False)
-    source = ConditionSource('', EntityReference(SectionReference((2,)), None, False))
+    source = ConditionSource('', EntityReference(SectionReference((2,)), None))
     parametrization = Parametrization(
-        [_NAC(EntityReference(SectionReference(tuple()), None, True), is_installation_old, source)], [], []
+        [_NAC(EntityReference(SectionReference(tuple()), None), is_installation_old, source)], [], []
     )
 
     new_am_1 = apply_parameter_values_to_am(am, parametrization, {parameter: False})
@@ -220,7 +220,7 @@ def test_apply_parameter_values_to_am():
     parameter = Parameter('nouvelle-installation', ParameterType.BOOLEAN)
     is_installation_old = Equal(parameter, False)
     is_installation_new = Equal(parameter, True)
-    source = ConditionSource('', EntityReference(SectionReference((2,)), None, False))
+    source = ConditionSource('', EntityReference(SectionReference((2,)), None))
     new_text = StructuredText(_str('Art. 2'), [_str('version modifiée')], [], None)
     parametrization = Parametrization(
         [
@@ -275,7 +275,7 @@ def test_extract_parameters_from_parametrization():
     condition_1 = Equal(parameter_1, True)
     parameter_2 = Parameter('nouvelle-installation', ParameterType.BOOLEAN)
     condition_2 = Equal(parameter_2, True)
-    source = ConditionSource('', EntityReference(SectionReference((2,)), None, False))
+    source = ConditionSource('', EntityReference(SectionReference((2,)), None))
     new_text = StructuredText(_str('Art. 2'), [_str('version modifiée')], [], None)
     parametrization = Parametrization(
         [_NAC(EntityReference(SectionReference((0,)), None), condition_1, source)],
@@ -293,7 +293,7 @@ def test_extract_parameters_from_parametrization_2():
     condition_1 = Equal(parameter_1, True)
     parameter_2 = Parameter('nouvelle-installation-2', ParameterType.BOOLEAN)
     condition_2 = Equal(parameter_2, True)
-    source = ConditionSource('', EntityReference(SectionReference((2,)), None, False))
+    source = ConditionSource('', EntityReference(SectionReference((2,)), None))
     new_text = StructuredText(_str('Art. 2'), [_str('version modifiée')], [], None)
     parametrization = Parametrization(
         [_NAC(EntityReference(SectionReference((0,)), None), condition_1, source)],
@@ -317,7 +317,7 @@ def test_generate_all_am_versions():
 
     parameter = Parameter('nouvelle-installation', ParameterType.BOOLEAN)
     condition = Equal(parameter, False)
-    source = ConditionSource('', EntityReference(SectionReference((2,)), None, False))
+    source = ConditionSource('', EntityReference(SectionReference((2,)), None))
     parametrization = Parametrization([_NAC(EntityReference(SectionReference((0,)), None), condition, source)], [], [])
 
     res = generate_all_am_versions(am, parametrization, False)
@@ -344,7 +344,7 @@ def test_extract_installation_date_criterion():
     condition_1 = Greater(parameter, date_1, False)
     condition_2 = Range(parameter, date_1, date_2, left_strict=False, right_strict=True)
     condition_3 = Littler(parameter, date_2, True)
-    source = ConditionSource('', EntityReference(SectionReference((2,)), None, False))
+    source = ConditionSource('', EntityReference(SectionReference((2,)), None))
     new_text = StructuredText(_str('Art. 2'), [_str('version modifiée')], [], None, None)
     parametrization = Parametrization(
         [

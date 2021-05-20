@@ -44,7 +44,6 @@ class SectionReference:
 class EntityReference:
     section: SectionReference
     outer_alinea_indices: Optional[List[int]]
-    whole_arrete: bool = False
 
     def to_dict(self) -> Dict[str, Any]:
         res = asdict(self)
@@ -52,10 +51,7 @@ class EntityReference:
 
     @classmethod
     def from_dict(cls, dict_: Dict[str, Any]) -> 'EntityReference':
-        whole_arrete = dict_['whole_arrete'] if 'whole_arrete' in dict_ else False
-        return EntityReference(
-            SectionReference.from_dict(dict_['section']), dict_['outer_alinea_indices'], whole_arrete
-        )
+        return EntityReference(SectionReference.from_dict(dict_['section']), dict_['outer_alinea_indices'])
 
 
 @dataclass

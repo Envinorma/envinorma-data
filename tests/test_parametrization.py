@@ -151,7 +151,7 @@ def test_check_parametrization_consistency():
     cd_4 = Greater(date_, dt_2)
     cd_5 = Littler(date_, dt_2)
     cd_6 = Greater(date_, dt_1)
-    source = ConditionSource('', EntityReference(SectionReference((2,)), None, False))
+    source = ConditionSource('', EntityReference(SectionReference((2,)), None))
     unique_path = (0,)
     entity = EntityReference(SectionReference(unique_path), None)
     new_text = StructuredText(_str('Art. 2'), [_str('version modifiée')], [], None)
@@ -221,7 +221,7 @@ def test_add_titles_sequences():
     dt_2 = dt_1 + timedelta(days=1)
     cd_1 = Range(date_, dt_1, dt_2)
     cd_4 = Greater(date_, dt_2)
-    source = ConditionSource('', EntityReference(SectionReference((0, 1)), None, False))
+    source = ConditionSource('', EntityReference(SectionReference((0, 1)), None))
     entity = EntityReference(SectionReference((0,)), None)
     section = SectionReference((0, 0, 0))
     new_text = StructuredText(_str('Art. 2'), [_str('version modifiée')], [], None)
@@ -229,7 +229,7 @@ def test_add_titles_sequences():
         Parametrization([_NAC(entity, cd_1, source)], [_AS(section, new_text, cd_4, source)], []),
         _get_simple_am(),
     )
-    new_source = ConditionSource('', EntityReference(SectionReference((0, 1), ['Chapter I', 'Section 2']), None, False))
+    new_source = ConditionSource('', EntityReference(SectionReference((0, 1), ['Chapter I', 'Section 2']), None))
     new_entity_0 = EntityReference(SectionReference((0,), ['Chapter I']), None)
     new_section = SectionReference((0, 0, 0), ['Chapter I', 'Section 1', 'Section 1.1'])
     assert res == Parametrization(
@@ -255,7 +255,7 @@ def test_regenerate_paths():
     dt_2 = dt_1 + timedelta(days=1)
     cd_1 = Range(date_, dt_1, dt_2)
     cd_4 = Greater(date_, dt_2)
-    source = ConditionSource('', EntityReference(SectionReference((19,), ['Chapter I', 'Section 2']), None, False))
+    source = ConditionSource('', EntityReference(SectionReference((19,), ['Chapter I', 'Section 2']), None))
     entity = EntityReference(SectionReference((19,), ['Chapter I']), None)
     section = SectionReference((19,), ['Chapter I', 'Section 1', 'Section 1.1'])
     new_text = StructuredText(_str('Art. 2'), [_str('version modifiée')], [], None)
@@ -263,7 +263,7 @@ def test_regenerate_paths():
         Parametrization([_NAC(entity, cd_1, source)], [_AS(section, new_text, cd_4, source)], []),
         _get_simple_am(),
     )
-    new_source = ConditionSource('', EntityReference(SectionReference((0, 1), ['Chapter I', 'Section 2']), None, False))
+    new_source = ConditionSource('', EntityReference(SectionReference((0, 1), ['Chapter I', 'Section 2']), None))
     new_entity_0 = EntityReference(SectionReference((0,), ['Chapter I']), None)
     new_section = SectionReference((0, 0, 0), ['Chapter I', 'Section 1', 'Section 1.1'])
     assert res.alternative_sections[0] == _AS(new_section, new_text, cd_4, new_source)
