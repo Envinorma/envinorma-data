@@ -22,7 +22,7 @@ from envinorma.data import (
     TopicName,
     _contains_human_date,
     _is_probably_cid,
-    extract_publication_date,
+    extract_date_of_signature,
     extract_text_lines,
     group_classements_by_alineas,
     is_increasing,
@@ -76,6 +76,7 @@ def test_arrete_ministeriel():
         _str('Arrete du 01/01/10'),
         [_node_section()],
         [_enriched_string_links()],
+        date(2010, 1, 1),
         date(2010, 1, 1),
         DateCriterion('2020-07-23', '2021-07-23'),
         'aida',
@@ -259,14 +260,14 @@ def test_table_to_html():
     assert res == '<table><tr><th rowspan="2">test</th></tr></table>'
 
 
-def test_extract_publication_date():
+def test_extract_date_of_signature():
     with pytest.raises(ValueError):
-        extract_publication_date('')
+        extract_date_of_signature('')
     with pytest.raises(ValueError):
-        extract_publication_date('19/10/1993')
+        extract_date_of_signature('19/10/1993')
     with pytest.raises(ValueError):
-        extract_publication_date('10/19/93')
-    assert extract_publication_date('19/10/93') == date(1993, 10, 19)
+        extract_date_of_signature('10/19/93')
+    assert extract_date_of_signature('19/10/93') == date(1993, 10, 19)
 
 
 def test_standardize_title_date():

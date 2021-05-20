@@ -6,7 +6,7 @@ ARRETES_MINISTERIELS = [
         "classements": [{"regime": "A", "rubrique": "1138"}, {"regime": "A", "rubrique": "4710"}],
         "cid": "JORFTEXT000000568479",
         "state": "VIGUEUR",
-        "publication_date": 869608800,
+        "date_of_signature": 869608800,
         "source": "LEGIFRANCE",
     },
     {
@@ -16,7 +16,7 @@ ARRETES_MINISTERIELS = [
         "classements": [{"regime": "A", "rubrique": "1435"}],
         "cid": "JORFTEXT000022097828",
         "state": "ABROGE",
-        "publication_date": 1271282400,
+        "date_of_signature": 1271282400,
         "source": "LEGIFRANCE",
     },
     {
@@ -41,7 +41,7 @@ ARRETES_MINISTERIELS = [
         ],
         "cid": "JORFTEXT000023081678",
         "state": "VIGUEUR",
-        "publication_date": 1286056800,
+        "date_of_signature": 1286056800,
         "source": "LEGIFRANCE",
     },
     {
@@ -66,7 +66,7 @@ ARRETES_MINISTERIELS = [
         ],
         "cid": "JORFTEXT000026251890",
         "state": "ABROGE",
-        "publication_date": 1342389600,
+        "date_of_signature": 1342389600,
         "source": "LEGIFRANCE",
     },
     {
@@ -91,7 +91,7 @@ ARRETES_MINISTERIELS = [
         ],
         "cid": "JORFTEXT000042364605",
         "state": "VIGUEUR",
-        "publication_date": 1600898400,
+        "date_of_signature": 1600898400,
         "source": "LEGIFRANCE",
     },
     {
@@ -115,7 +115,7 @@ ARRETES_MINISTERIELS = [
         ],
         "cid": "JORFTEXT000018820571",
         "state": "VIGUEUR",
-        "publication_date": 1208469600,
+        "date_of_signature": 1208469600,
         "source": "LEGIFRANCE",
     },
     {
@@ -132,7 +132,7 @@ ARRETES_MINISTERIELS = [
         ],
         "cid": "JORFTEXT000033117556",
         "state": "ABROGE",
-        "publication_date": 1471384800,
+        "date_of_signature": 1471384800,
         "source": "LEGIFRANCE",
     },
     {
@@ -146,7 +146,7 @@ ARRETES_MINISTERIELS = [
         ],
         "cid": "JORFTEXT000034429274",
         "state": "VIGUEUR",
-        "publication_date": 1491861600,
+        "date_of_signature": 1491861600,
         "source": "LEGIFRANCE",
     },
     {
@@ -156,7 +156,7 @@ ARRETES_MINISTERIELS = [
         "classements": [{"regime": "A", "rubrique": "1530"}],
         "cid": "JORFTEXT000019860739",
         "state": "VIGUEUR",
-        "publication_date": 1222639200,
+        "date_of_signature": 1222639200,
         "source": "LEGIFRANCE",
     },
     {
@@ -170,7 +170,7 @@ ARRETES_MINISTERIELS = [
         ],
         "cid": "JORFTEXT000030885472",
         "state": "VIGUEUR",
-        "publication_date": 1435010400,
+        "date_of_signature": 1435010400,
         "source": "LEGIFRANCE",
     },
     {
@@ -185,7 +185,7 @@ ARRETES_MINISTERIELS = [
         ],
         "cid": "JORFTEXT000028409297",
         "state": "VIGUEUR",
-        "publication_date": 1388098800,
+        "date_of_signature": 1388098800,
         "source": "LEGIFRANCE",
     },
     {
@@ -195,7 +195,7 @@ ARRETES_MINISTERIELS = [
         "classements": [{"regime": "A", "rubrique": "2110"}],
         "cid": "JORFTEXT000000246408",
         "state": "VIGUEUR",
-        "publication_date": 1162249200,
+        "date_of_signature": 1162249200,
         "source": "LEGIFRANCE",
     },
     {
@@ -205,7 +205,7 @@ ARRETES_MINISTERIELS = [
         "classements": [{"regime": "A", "rubrique": "2113"}],
         "cid": "JORFTEXT000000624760",
         "state": "VIGUEUR",
-        "publication_date": 1092088800,
+        "date_of_signature": 1092088800,
         "source": "LEGIFRANCE",
     },
     {
@@ -214,7 +214,7 @@ ARRETES_MINISTERIELS = [
         "classements": [{"regime": "A", "rubrique": "2113"}],
         "cid": "LEGITEXT000006074852",
         "state": "VIGUEUR",
-        "publication_date": 527119200,
+        "date_of_signature": 527119200,
         "source": "LEGIFRANCE",
     },
     {
@@ -224,7 +224,7 @@ ARRETES_MINISTERIELS = [
         "classements": [{"regime": "A", "rubrique": "2120"}],
         "cid": "JORFTEXT000000615876",
         "state": "VIGUEUR",
-        "publication_date": 1165532400,
+        "date_of_signature": 1165532400,
         "source": "LEGIFRANCE",
     },
     {
@@ -234,7 +234,7 @@ ARRETES_MINISTERIELS = [
         "classements": [{"regime": "A", "rubrique": "2130"}],
         "cid": "JORFTEXT000018622600",
         "state": "VIGUEUR",
-        "publication_date": 1207000800,
+        "date_of_signature": 1207000800,
         "source": "LEGIFRANCE",
     },
     {
@@ -244,7 +244,7 @@ ARRETES_MINISTERIELS = [
         "classements": [{"regime": "A", "rubrique": "2140"}],
         "cid": "JORFTEXT000000610915",
         "state": "VIGUEUR",
-        "publication_date": 1080169200,
+        "date_of_signature": 1080169200,
         "source": "LEGIFRANCE",
     },
     {
@@ -254,7 +254,7 @@ ARRETES_MINISTERIELS = [
         "cid": "JORFTEXT000036074614",
         "classements": [{"regime": "A", "rubrique": "2150"}],
         "state": "VIGUEUR",
-        "publication_date": 1511218800,
+        "date_of_signature": 1511218800,
         "source": "LEGIFRANCE",
     },
     {
@@ -264,7 +264,7 @@ ARRETES_MINISTERIELS = [
         "classements": [{"regime": "A", "rubrique": "2160"}],
         "cid": "JORFTEXT000000797999",
         "state": "VIGUEUR",
-        "publication_date": 1080511200,
+        "date_of_signature": 1080511200,
         "source": "LEGIFRANCE",
     },
     {
@@ -274,7 +274,7 @@ ARRETES_MINISTERIELS = [
         "classements": [{"regime": "A", "rubrique": "2210"}],
         "cid": "JORFTEXT000000803657",
         "state": "VIGUEUR",
-        "publication_date": 1083276000,
+        "date_of_signature": 1083276000,
         "source": "LEGIFRANCE",
     },
     {
@@ -284,7 +284,7 @@ ARRETES_MINISTERIELS = [
         "classements": [{"regime": "A", "rubrique": "2251"}],
         "cid": "JORFTEXT000000399672",
         "state": "VIGUEUR",
-        "publication_date": 957304800,
+        "date_of_signature": 957304800,
         "source": "LEGIFRANCE",
     },
     {
@@ -294,7 +294,7 @@ ARRETES_MINISTERIELS = [
         "classements": [{"regime": "A", "rubrique": "2260"}],
         "cid": "JORFTEXT000022039323",
         "state": "VIGUEUR",
-        "publication_date": 1266447600,
+        "date_of_signature": 1266447600,
         "source": "LEGIFRANCE",
     },
     {
@@ -308,7 +308,7 @@ ARRETES_MINISTERIELS = [
         ],
         "cid": "JORFTEXT000000570621",
         "state": "ABROGE",
-        "publication_date": 954712800,
+        "date_of_signature": 954712800,
         "source": "LEGIFRANCE",
     },
     {
@@ -318,7 +318,7 @@ ARRETES_MINISTERIELS = [
         "classements": [{"regime": "A", "rubrique": "2430"}, {"regime": "A", "rubrique": "3610"}],
         "cid": "JORFTEXT000042344843",
         "state": "VIGUEUR",
-        "publication_date": 1599688800,
+        "date_of_signature": 1599688800,
         "source": "LEGIFRANCE",
     },
     {
@@ -328,7 +328,7 @@ ARRETES_MINISTERIELS = [
         "classements": [{"regime": "A", "rubrique": "2510"}],
         "cid": "JORFTEXT000000347845",
         "state": "VIGUEUR",
-        "publication_date": 780184800,
+        "date_of_signature": 780184800,
         "source": "LEGIFRANCE",
     },
     {
@@ -338,7 +338,7 @@ ARRETES_MINISTERIELS = [
         "classements": [{"regime": "A", "rubrique": "2520"}],
         "cid": "JORFTEXT000000346445",
         "state": "VIGUEUR",
-        "publication_date": 736380000,
+        "date_of_signature": 736380000,
         "source": "LEGIFRANCE",
     },
     {
@@ -348,7 +348,7 @@ ARRETES_MINISTERIELS = [
         "classements": [{"regime": "A", "rubrique": "2530"}, {"regime": "A", "rubrique": "2531"}],
         "cid": "JORFTEXT000000411785",
         "state": "VIGUEUR",
-        "publication_date": 1047423600,
+        "date_of_signature": 1047423600,
         "source": "LEGIFRANCE",
     },
     {
@@ -358,7 +358,7 @@ ARRETES_MINISTERIELS = [
         "classements": [{"regime": "A", "rubrique": "2565"}, {"regime": "A", "rubrique": "3260"}],
         "cid": "JORFTEXT000000644060",
         "state": "VIGUEUR",
-        "publication_date": 1151618400,
+        "date_of_signature": 1151618400,
         "source": "LEGIFRANCE",
     },
     {
@@ -368,7 +368,7 @@ ARRETES_MINISTERIELS = [
         "classements": [{"regime": "A", "rubrique": "2680"}],
         "cid": "JORFTEXT000000389425",
         "state": "VIGUEUR",
-        "publication_date": 896738400,
+        "date_of_signature": 896738400,
         "source": "LEGIFRANCE",
     },
     {
@@ -378,7 +378,7 @@ ARRETES_MINISTERIELS = [
         "classements": [{"regime": "A", "rubrique": "2720"}],
         "cid": "JORFTEXT000022673160",
         "state": "VIGUEUR",
-        "publication_date": 1271628000,
+        "date_of_signature": 1271628000,
         "source": "LEGIFRANCE",
     },
     {
@@ -388,7 +388,7 @@ ARRETES_MINISTERIELS = [
         "classements": [{"regime": "A", "rubrique": "2730"}],
         "cid": "JORFTEXT000000419523",
         "state": "VIGUEUR",
-        "publication_date": 1045004400,
+        "date_of_signature": 1045004400,
         "source": "LEGIFRANCE",
     },
     {
@@ -398,7 +398,7 @@ ARRETES_MINISTERIELS = [
         "classements": [{"regime": "A", "rubrique": "2731"}],
         "cid": "JORFTEXT000000785128",
         "state": "VIGUEUR",
-        "publication_date": 1045004400,
+        "date_of_signature": 1045004400,
         "source": "LEGIFRANCE",
     },
     {
@@ -408,7 +408,7 @@ ARRETES_MINISTERIELS = [
         "classements": [{"regime": "A", "rubrique": "2740"}],
         "cid": "JORFTEXT000021187144",
         "state": "ABROGE",
-        "publication_date": 1247781600,
+        "date_of_signature": 1247781600,
         "source": "LEGIFRANCE",
     },
     {
@@ -418,7 +418,7 @@ ARRETES_MINISTERIELS = [
         "classements": [{"regime": "A", "rubrique": "2740"}],
         "cid": "JORFTEXT000037078514",
         "state": "VIGUEUR",
-        "publication_date": 1528236000,
+        "date_of_signature": 1528236000,
         "source": "LEGIFRANCE",
     },
     {
@@ -428,7 +428,7 @@ ARRETES_MINISTERIELS = [
         "classements": [{"regime": "A", "rubrique": "2760"}],
         "cid": "JORFTEXT000032275960",
         "state": "VIGUEUR",
-        "publication_date": 1455490800,
+        "date_of_signature": 1455490800,
         "source": "LEGIFRANCE",
     },
     {
@@ -438,7 +438,7 @@ ARRETES_MINISTERIELS = [
         "classements": [{"regime": "A", "rubrique": "2771"}],
         "cid": "JORFTEXT000000234557",
         "state": "VIGUEUR",
-        "publication_date": 1032472800,
+        "date_of_signature": 1032472800,
         "source": "LEGIFRANCE",
     },
     {
@@ -448,7 +448,7 @@ ARRETES_MINISTERIELS = [
         "classements": [{"regime": "A", "rubrique": "2780"}],
         "cid": "JORFTEXT000018800981",
         "state": "VIGUEUR",
-        "publication_date": 1208815200,
+        "date_of_signature": 1208815200,
         "source": "LEGIFRANCE",
     },
     {
@@ -458,7 +458,7 @@ ARRETES_MINISTERIELS = [
         "classements": [{"regime": "A", "rubrique": "2781"}],
         "cid": "JORFTEXT000021334497",
         "state": "VIGUEUR",
-        "publication_date": 1257807600,
+        "date_of_signature": 1257807600,
         "source": "LEGIFRANCE",
     },
     {
@@ -468,7 +468,7 @@ ARRETES_MINISTERIELS = [
         "classements": [{"regime": "A", "rubrique": "2910"}, {"regime": "A", "rubrique": "2931"}],
         "cid": "JORFTEXT000027995928",
         "state": "ABROGE",
-        "publication_date": 1377468000,
+        "date_of_signature": 1377468000,
         "source": "LEGIFRANCE",
     },
     {
@@ -478,7 +478,7 @@ ARRETES_MINISTERIELS = [
         "classements": [{"regime": "A", "rubrique": "2910"}],
         "cid": "JORFTEXT000000248169",
         "state": "ABROGE",
-        "publication_date": 1059516000,
+        "date_of_signature": 1059516000,
         "source": "LEGIFRANCE",
     },
     {
@@ -488,7 +488,7 @@ ARRETES_MINISTERIELS = [
         "classements": [{"regime": "A", "rubrique": "2910"}],
         "cid": "JORFTEXT000000779198",
         "state": "ABROGE",
-        "publication_date": 1024524000,
+        "date_of_signature": 1024524000,
         "source": "LEGIFRANCE",
     },
     {
@@ -498,7 +498,7 @@ ARRETES_MINISTERIELS = [
         "classements": [{"regime": "A", "rubrique": "2910"}],
         "cid": "JORFTEXT000000763103",
         "state": "ABROGE",
-        "publication_date": 934322400,
+        "date_of_signature": 934322400,
         "source": "LEGIFRANCE",
     },
     {
@@ -508,7 +508,7 @@ ARRETES_MINISTERIELS = [
         "classements": [{"regime": "A", "rubrique": "2910"}, {"regime": "A", "rubrique": "3110"}],
         "cid": "JORFTEXT000037284792",
         "state": "VIGUEUR",
-        "publication_date": 1533247200,
+        "date_of_signature": 1533247200,
         "source": "LEGIFRANCE",
     },
     {
@@ -518,7 +518,7 @@ ARRETES_MINISTERIELS = [
         "title": "Arrêté du 23/05/16 relatif aux installations de production de chaleur et/ou d'électricité à partir de déchets non dangereux préparés sous forme de combustibles solides de récupération dans des installations prévues à cet effet associés ou non à un autre combustible et relevant de la rubrique 2971 de la nomenclature des installations classées pour la protection de l'environnement",
         "classements": [{"regime": "A", "rubrique": "2971"}],
         "state": "VIGUEUR",
-        "publication_date": 1463954400,
+        "date_of_signature": 1463954400,
         "source": "LEGIFRANCE",
     },
     {
@@ -528,7 +528,7 @@ ARRETES_MINISTERIELS = [
         "classements": [{"regime": "A", "rubrique": "2980"}],
         "cid": "JORFTEXT000024507365",
         "state": "VIGUEUR",
-        "publication_date": 1314309600,
+        "date_of_signature": 1314309600,
         "source": "LEGIFRANCE",
     },
     {
@@ -538,7 +538,7 @@ ARRETES_MINISTERIELS = [
         "classements": [{"regime": "A", "rubrique": "3110"}],
         "cid": "JORFTEXT000037284870",
         "state": "VIGUEUR",
-        "publication_date": 1533247200,
+        "date_of_signature": 1533247200,
         "source": "LEGIFRANCE",
     },
     {
@@ -555,7 +555,7 @@ ARRETES_MINISTERIELS = [
         ],
         "cid": "JORFTEXT000017734021",
         "state": "VIGUEUR",
-        "publication_date": 1194303600,
+        "date_of_signature": 1194303600,
         "source": "LEGIFRANCE",
     },
     {
@@ -570,7 +570,7 @@ ARRETES_MINISTERIELS = [
         ],
         "cid": "JORFTEXT000022092771",
         "state": "VIGUEUR",
-        "publication_date": 1271109600,
+        "date_of_signature": 1271109600,
         "source": "LEGIFRANCE",
     },
     {
@@ -580,7 +580,7 @@ ARRETES_MINISTERIELS = [
         "classements": [{"regime": "A", "rubrique": "4718"}, {"regime": "A", "rubrique": "1412"}],
         "cid": "JORFTEXT000018008144",
         "state": "VIGUEUR",
-        "publication_date": 1199228400,
+        "date_of_signature": 1199228400,
         "source": "LEGIFRANCE",
     },
     {
@@ -590,7 +590,7 @@ ARRETES_MINISTERIELS = [
         "classements": [{"regime": "A", "rubrique": "4734"}, {"regime": "A", "rubrique": "1434", "alinea": "1"}],
         "cid": "JORFTEXT000000190990",
         "state": "VIGUEUR",
-        "publication_date": 818377200,
+        "date_of_signature": 818377200,
         "source": "LEGIFRANCE",
     },
     {
@@ -600,7 +600,7 @@ ARRETES_MINISTERIELS = [
         "classements": [{"regime": "A", "rubrique": "4735"}],
         "cid": "JORFTEXT000000202155",
         "state": "VIGUEUR",
-        "publication_date": 869004000,
+        "date_of_signature": 869004000,
         "source": "LEGIFRANCE",
     },
     {
@@ -610,7 +610,7 @@ ARRETES_MINISTERIELS = [
         "classements": [{"regime": "E", "rubrique": "1435"}],
         "cid": "JORFTEXT000022097882",
         "state": "VIGUEUR",
-        "publication_date": 1271282400,
+        "date_of_signature": 1271282400,
         "source": "LEGIFRANCE",
     },
     {
@@ -620,7 +620,7 @@ ARRETES_MINISTERIELS = [
         "classements": [{"regime": "E", "rubrique": "1510"}],
         "cid": "JORFTEXT000022097930",
         "state": "ABROGE",
-        "publication_date": 1271282400,
+        "date_of_signature": 1271282400,
         "source": "LEGIFRANCE",
     },
     {
@@ -630,7 +630,7 @@ ARRETES_MINISTERIELS = [
         "classements": [{"regime": "E", "rubrique": "1511"}],
         "cid": "JORFTEXT000022097955",
         "state": "VIGUEUR",
-        "publication_date": 1271282400,
+        "date_of_signature": 1271282400,
         "source": "LEGIFRANCE",
     },
     {
@@ -640,7 +640,7 @@ ARRETES_MINISTERIELS = [
         "classements": [{"regime": "E", "rubrique": "1530"}],
         "cid": "JORFTEXT000022097909",
         "state": "VIGUEUR",
-        "publication_date": 1271282400,
+        "date_of_signature": 1271282400,
         "source": "LEGIFRANCE",
     },
     {
@@ -650,7 +650,7 @@ ARRETES_MINISTERIELS = [
         "classements": [{"regime": "E", "rubrique": "1532"}],
         "cid": "JORFTEXT000027945320",
         "state": "VIGUEUR",
-        "publication_date": 1378850400,
+        "date_of_signature": 1378850400,
         "source": "LEGIFRANCE",
     },
     {
@@ -664,7 +664,7 @@ ARRETES_MINISTERIELS = [
         ],
         "cid": "JORFTEXT000028409384",
         "state": "VIGUEUR",
-        "publication_date": 1388098800,
+        "date_of_signature": 1388098800,
         "source": "LEGIFRANCE",
     },
     {
@@ -674,7 +674,7 @@ ARRETES_MINISTERIELS = [
         "classements": [{"regime": "E", "rubrique": "2120"}],
         "cid": "JORFTEXT000037518992",
         "state": "VIGUEUR",
-        "publication_date": 1540159200,
+        "date_of_signature": 1540159200,
         "source": "LEGIFRANCE",
     },
     {
@@ -684,7 +684,7 @@ ARRETES_MINISTERIELS = [
         "classements": [{"regime": "E", "rubrique": "2160"}],
         "cid": "JORFTEXT000026694666",
         "state": "VIGUEUR",
-        "publication_date": 1353884400,
+        "date_of_signature": 1353884400,
         "source": "LEGIFRANCE",
     },
     {
@@ -694,7 +694,7 @@ ARRETES_MINISTERIELS = [
         "classements": [{"regime": "E", "rubrique": "2220"}],
         "cid": "JORFTEXT000028374558",
         "state": "VIGUEUR",
-        "publication_date": 1386975600,
+        "date_of_signature": 1386975600,
         "source": "LEGIFRANCE",
     },
     {
@@ -704,7 +704,7 @@ ARRETES_MINISTERIELS = [
         "classements": [{"regime": "E", "rubrique": "2221"}],
         "cid": "JORFTEXT000025673104",
         "state": "VIGUEUR",
-        "publication_date": 1332457200,
+        "date_of_signature": 1332457200,
         "source": "LEGIFRANCE",
     },
     {
@@ -714,7 +714,7 @@ ARRETES_MINISTERIELS = [
         "cid": "JORFTEXT000034485050",
         "classements": [{"regime": "E", "rubrique": "2230"}],
         "state": "VIGUEUR",
-        "publication_date": 1492984800,
+        "date_of_signature": 1492984800,
         "source": "LEGIFRANCE",
     },
     {
@@ -724,7 +724,7 @@ ARRETES_MINISTERIELS = [
         "cid": "JORFTEXT000034484917",
         "classements": [{"regime": "E", "rubrique": "2240"}],
         "state": "VIGUEUR",
-        "publication_date": 1492984800,
+        "date_of_signature": 1492984800,
         "source": "LEGIFRANCE",
     },
     {
@@ -734,7 +734,7 @@ ARRETES_MINISTERIELS = [
         "classements": [{"regime": "E", "rubrique": "2250"}],
         "cid": "JORFTEXT000023689944",
         "state": "VIGUEUR",
-        "publication_date": 1294959600,
+        "date_of_signature": 1294959600,
         "source": "LEGIFRANCE",
     },
     {
@@ -744,7 +744,7 @@ ARRETES_MINISTERIELS = [
         "classements": [{"regime": "E", "rubrique": "2251"}],
         "cid": "JORFTEXT000026694774",
         "state": "VIGUEUR",
-        "publication_date": 1353884400,
+        "date_of_signature": 1353884400,
         "source": "LEGIFRANCE",
     },
     {
@@ -754,7 +754,7 @@ ARRETES_MINISTERIELS = [
         "classements": [{"regime": "E", "rubrique": "2260"}],
         "cid": "JORFTEXT000037519057",
         "state": "VIGUEUR",
-        "publication_date": 1540159200,
+        "date_of_signature": 1540159200,
         "source": "LEGIFRANCE",
     },
     {
@@ -764,7 +764,7 @@ ARRETES_MINISTERIELS = [
         "classements": [{"regime": "E", "rubrique": "2340"}],
         "cid": "JORFTEXT000023713720",
         "state": "VIGUEUR",
-        "publication_date": 1294959600,
+        "date_of_signature": 1294959600,
         "source": "LEGIFRANCE",
     },
     {
@@ -774,7 +774,7 @@ ARRETES_MINISTERIELS = [
         "classements": [{"regime": "E", "rubrique": "2410"}],
         "cid": "JORFTEXT000029419186",
         "state": "VIGUEUR",
-        "publication_date": 1409608800,
+        "date_of_signature": 1409608800,
         "source": "LEGIFRANCE",
     },
     {
@@ -784,7 +784,7 @@ ARRETES_MINISTERIELS = [
         "classements": [{"regime": "E", "rubrique": "2515"}],
         "cid": "JORFTEXT000026694913",
         "state": "VIGUEUR",
-        "publication_date": 1353884400,
+        "date_of_signature": 1353884400,
         "source": "LEGIFRANCE",
     },
     {
@@ -794,7 +794,7 @@ ARRETES_MINISTERIELS = [
         "classements": [{"regime": "E", "rubrique": "2516"}],
         "cid": "JORFTEXT000028379475",
         "state": "VIGUEUR",
-        "publication_date": 1386630000,
+        "date_of_signature": 1386630000,
         "source": "LEGIFRANCE",
     },
     {
@@ -804,7 +804,7 @@ ARRETES_MINISTERIELS = [
         "classements": [{"regime": "E", "rubrique": "2517"}],
         "cid": "JORFTEXT000028379599",
         "state": "VIGUEUR",
-        "publication_date": 1386630000,
+        "date_of_signature": 1386630000,
         "source": "LEGIFRANCE",
     },
     {
@@ -814,7 +814,7 @@ ARRETES_MINISTERIELS = [
         "classements": [{"regime": "E", "rubrique": "2518"}],
         "cid": "JORFTEXT000024490187",
         "state": "VIGUEUR",
-        "publication_date": 1312754400,
+        "date_of_signature": 1312754400,
         "source": "LEGIFRANCE",
     },
     {
@@ -824,7 +824,7 @@ ARRETES_MINISTERIELS = [
         "classements": [{"regime": "E", "rubrique": "2521"}],
         "cid": "JORFTEXT000038358856",
         "state": "VIGUEUR",
-        "publication_date": 1554760800,
+        "date_of_signature": 1554760800,
         "source": "LEGIFRANCE",
     },
     {
@@ -834,7 +834,7 @@ ARRETES_MINISTERIELS = [
         "classements": [{"regime": "E", "rubrique": "2522"}],
         "cid": "JORFTEXT000024490314",
         "state": "VIGUEUR",
-        "publication_date": 1312754400,
+        "date_of_signature": 1312754400,
         "source": "LEGIFRANCE",
     },
     {
@@ -844,7 +844,7 @@ ARRETES_MINISTERIELS = [
         "classements": [{"regime": "E", "rubrique": "2560"}],
         "cid": "JORFTEXT000028374698",
         "state": "VIGUEUR",
-        "publication_date": 1386975600,
+        "date_of_signature": 1386975600,
         "source": "LEGIFRANCE",
     },
     {
@@ -854,7 +854,7 @@ ARRETES_MINISTERIELS = [
         "classements": [{"regime": "E", "rubrique": "2563"}],
         "cid": "JORFTEXT000028374816",
         "state": "VIGUEUR",
-        "publication_date": 1386975600,
+        "date_of_signature": 1386975600,
         "source": "LEGIFRANCE",
     },
     {
@@ -864,7 +864,7 @@ ARRETES_MINISTERIELS = [
         "classements": [{"regime": "E", "rubrique": "2564"}, {"regime": "E", "rubrique": "2565"}],
         "cid": "JORFTEXT000038358667",
         "state": "VIGUEUR",
-        "publication_date": 1554760800,
+        "date_of_signature": 1554760800,
         "source": "LEGIFRANCE",
     },
     {
@@ -874,7 +874,7 @@ ARRETES_MINISTERIELS = [
         "classements": [{"regime": "E", "rubrique": "2661"}],
         "cid": "JORFTEXT000028409140",
         "state": "VIGUEUR",
-        "publication_date": 1388098800,
+        "date_of_signature": 1388098800,
         "source": "LEGIFRANCE",
     },
     {
@@ -884,7 +884,7 @@ ARRETES_MINISTERIELS = [
         "classements": [{"regime": "E", "rubrique": "2662"}],
         "cid": "JORFTEXT000022198234",
         "state": "VIGUEUR",
-        "publication_date": 1271282400,
+        "date_of_signature": 1271282400,
         "source": "LEGIFRANCE",
     },
     {
@@ -894,7 +894,7 @@ ARRETES_MINISTERIELS = [
         "classements": [{"regime": "E", "rubrique": "2663"}],
         "cid": "JORFTEXT000022198256",
         "state": "VIGUEUR",
-        "publication_date": 1271282400,
+        "date_of_signature": 1271282400,
         "source": "LEGIFRANCE",
     },
     {
@@ -904,7 +904,7 @@ ARRETES_MINISTERIELS = [
         "classements": [{"regime": "E", "rubrique": "2760"}],
         "cid": "JORFTEXT000029893853",
         "state": "VIGUEUR",
-        "publication_date": 1418338800,
+        "date_of_signature": 1418338800,
         "source": "LEGIFRANCE",
     },
     {
@@ -914,7 +914,7 @@ ARRETES_MINISTERIELS = [
         "classements": [{"regime": "E", "rubrique": "2780"}],
         "cid": "JORFTEXT000025789288",
         "state": "VIGUEUR",
-        "publication_date": 1334872800,
+        "date_of_signature": 1334872800,
         "source": "LEGIFRANCE",
     },
     {
@@ -924,7 +924,7 @@ ARRETES_MINISTERIELS = [
         "cid": "JORFTEXT000037032291",
         "classements": [{"regime": "E", "rubrique": "2794"}],
         "state": "VIGUEUR",
-        "publication_date": 1528236000,
+        "date_of_signature": 1528236000,
         "source": "LEGIFRANCE",
     },
     {
@@ -934,7 +934,7 @@ ARRETES_MINISTERIELS = [
         "cid": "JORFTEXT000036976496",
         "classements": [{"regime": "D", "rubrique": "2794"}],
         "state": "VIGUEUR",
-        "publication_date": 1526594400,
+        "date_of_signature": 1526594400,
         "source": "LEGIFRANCE",
     },
     {
@@ -944,7 +944,7 @@ ARRETES_MINISTERIELS = [
         "classements": [{"regime": "E", "rubrique": "2921"}],
         "cid": "JORFTEXT000028374941",
         "state": "VIGUEUR",
-        "publication_date": 1386975600,
+        "date_of_signature": 1386975600,
         "source": "LEGIFRANCE",
     },
     {
@@ -954,7 +954,7 @@ ARRETES_MINISTERIELS = [
         "classements": [{"regime": "E", "rubrique": "4220"}, {"regime": "E", "rubrique": "1311"}],
         "cid": "JORFTEXT000022593820",
         "state": "VIGUEUR",
-        "publication_date": 1280354400,
+        "date_of_signature": 1280354400,
         "source": "LEGIFRANCE",
     },
     {
@@ -964,7 +964,7 @@ ARRETES_MINISTERIELS = [
         "classements": [{"regime": "E", "rubrique": "4331"}, {"regime": "E", "rubrique": "4734"}],
         "cid": "JORFTEXT000030673177",
         "state": "VIGUEUR",
-        "publication_date": 1433109600,
+        "date_of_signature": 1433109600,
         "source": "LEGIFRANCE",
     },
     {
@@ -974,7 +974,7 @@ ARRETES_MINISTERIELS = [
         "classements": [{"regime": "D", "rubrique": "1136", "state": "SUPPRIMEE"}],
         "cid": "JORFTEXT000000753815",
         "state": "ABROGE",
-        "publication_date": 888188400,
+        "date_of_signature": 888188400,
         "source": "LEGIFRANCE",
     },
     {
@@ -984,7 +984,7 @@ ARRETES_MINISTERIELS = [
         "classements": [{"regime": "D", "rubrique": "1139"}],
         "cid": "JORFTEXT000000370053",
         "state": "ABROGE",
-        "publication_date": 876261600,
+        "date_of_signature": 876261600,
         "source": "AIDA",
     },
     {
@@ -994,7 +994,7 @@ ARRETES_MINISTERIELS = [
         "classements": [{"regime": "D", "rubrique": "1141"}],
         "cid": "JORFTEXT000000765521",
         "state": "ABROGE",
-        "publication_date": 955317600,
+        "date_of_signature": 955317600,
         "source": "AIDA",
     },
     {
@@ -1004,7 +1004,7 @@ ARRETES_MINISTERIELS = [
         "classements": [{"regime": "D", "rubrique": "1155"}],
         "cid": "JORFTEXT000000777935",
         "state": "ABROGE",
-        "publication_date": 1020290400,
+        "date_of_signature": 1020290400,
         "source": "LEGIFRANCE",
     },
     {
@@ -1014,7 +1014,7 @@ ARRETES_MINISTERIELS = [
         "classements": [{"regime": "D", "rubrique": "1156"}],
         "cid": "JORFTEXT000000400526",
         "state": "ABROGE",
-        "publication_date": 955317600,
+        "date_of_signature": 955317600,
         "source": "AIDA",
     },
     {
@@ -1024,7 +1024,7 @@ ARRETES_MINISTERIELS = [
         "classements": [{"regime": "D", "rubrique": "1158"}],
         "cid": "JORFTEXT000017640584",
         "state": "VIGUEUR",
-        "publication_date": 1193612400,
+        "date_of_signature": 1193612400,
         "source": "AIDA",
     },
     {
@@ -1034,7 +1034,7 @@ ARRETES_MINISTERIELS = [
         "classements": [{"regime": "D", "rubrique": "1185"}],
         "cid": "JORFTEXT000000592074",
         "state": "ABROGE",
-        "publication_date": 1017698400,
+        "date_of_signature": 1017698400,
         "source": "AIDA",
     },
     {
@@ -1044,7 +1044,7 @@ ARRETES_MINISTERIELS = [
         "classements": [{"regime": "D", "rubrique": "1185"}, {"regime": "D", "rubrique": "4802"}],
         "cid": "JORFTEXT000029359291",
         "state": "VIGUEUR",
-        "publication_date": 1407103200,
+        "date_of_signature": 1407103200,
         "source": "AIDA",
     },
     {
@@ -1054,7 +1054,7 @@ ARRETES_MINISTERIELS = [
         "classements": [{"regime": "D", "rubrique": "1413"}, {"regime": "D", "rubrique": "4718"}],
         "cid": "JORFTEXT000000418677",
         "state": "VIGUEUR",
-        "publication_date": 1041894000,
+        "date_of_signature": 1041894000,
         "source": "LEGIFRANCE",
     },
     {
@@ -1064,7 +1064,7 @@ ARRETES_MINISTERIELS = [
         "classements": [{"regime": "D", "rubrique": "1416"}],
         "cid": "JORFTEXT000037519292",
         "state": "VIGUEUR",
-        "publication_date": 1540159200,
+        "date_of_signature": 1540159200,
         "source": "LEGIFRANCE",
     },
     {
@@ -1074,7 +1074,7 @@ ARRETES_MINISTERIELS = [
         "classements": [{"regime": "D", "rubrique": "1435"}],
         "cid": "JORFTEXT000022097853",
         "state": "VIGUEUR",
-        "publication_date": 1271282400,
+        "date_of_signature": 1271282400,
         "source": "LEGIFRANCE",
     },
     {
@@ -1099,7 +1099,7 @@ ARRETES_MINISTERIELS = [
         ],
         "cid": "JORFTEXT000019996765",
         "state": "VIGUEUR",
-        "publication_date": 1229900400,
+        "date_of_signature": 1229900400,
         "source": "LEGIFRANCE",
     },
     {
@@ -1123,7 +1123,7 @@ ARRETES_MINISTERIELS = [
         ],
         "cid": "JORFTEXT000000630475",
         "state": "VIGUEUR",
-        "publication_date": 1113948000,
+        "date_of_signature": 1113948000,
         "source": "LEGIFRANCE",
     },
     {
@@ -1168,7 +1168,7 @@ ARRETES_MINISTERIELS = [
         ],
         "cid": "JORFTEXT000033560858",
         "state": "VIGUEUR",
-        "publication_date": 1480892400,
+        "date_of_signature": 1480892400,
         "source": "AIDA",
     },
     {
@@ -1178,7 +1178,7 @@ ARRETES_MINISTERIELS = [
         "classements": [{"regime": "D", "rubrique": "1455"}],
         "cid": "JORFTEXT000000399730",
         "state": "VIGUEUR",
-        "publication_date": 957304800,
+        "date_of_signature": 957304800,
         "source": "AIDA",
     },
     {
@@ -1188,7 +1188,7 @@ ARRETES_MINISTERIELS = [
         "classements": [{"regime": "D", "rubrique": "1510"}],
         "cid": "JORFTEXT000020009023",
         "state": "ABROGE",
-        "publication_date": 1229986800,
+        "date_of_signature": 1229986800,
         "source": "LEGIFRANCE",
     },
     {
@@ -1198,7 +1198,7 @@ ARRETES_MINISTERIELS = [
         "classements": [{"regime": "D", "rubrique": "1511"}],
         "cid": "JORFTEXT000028814820",
         "state": "VIGUEUR",
-        "publication_date": 1395874800,
+        "date_of_signature": 1395874800,
         "source": "AIDA",
     },
     {
@@ -1208,7 +1208,7 @@ ARRETES_MINISTERIELS = [
         "classements": [{"regime": "D", "rubrique": "1530"}],
         "cid": "JORFTEXT000019831346",
         "state": "VIGUEUR",
-        "publication_date": 1222725600,
+        "date_of_signature": 1222725600,
         "source": "LEGIFRANCE",
     },
     {
@@ -1218,7 +1218,7 @@ ARRETES_MINISTERIELS = [
         "classements": [{"regime": "D", "rubrique": "1531"}],
         "cid": "JORFTEXT000000764048",
         "state": "VIGUEUR",
-        "publication_date": 954712800,
+        "date_of_signature": 954712800,
         "source": "AIDA",
     },
     {
@@ -1228,7 +1228,7 @@ ARRETES_MINISTERIELS = [
         "classements": [{"regime": "D", "rubrique": "1611"}],
         "cid": "JORFTEXT000000573432",
         "state": "VIGUEUR",
-        "publication_date": 968191200,
+        "date_of_signature": 968191200,
         "source": "AIDA",
     },
     {
@@ -1238,7 +1238,7 @@ ARRETES_MINISTERIELS = [
         "classements": [{"regime": "D", "rubrique": "1612"}],
         "cid": "JORFTEXT000017640613",
         "state": "VIGUEUR",
-        "publication_date": 1193785200,
+        "date_of_signature": 1193785200,
         "source": "AIDA",
     },
     {
@@ -1248,7 +1248,7 @@ ARRETES_MINISTERIELS = [
         "classements": [{"regime": "D", "rubrique": "1630"}],
         "cid": "JORFTEXT000000772915",
         "state": "VIGUEUR",
-        "publication_date": 996098400,
+        "date_of_signature": 996098400,
         "source": "AIDA",
     },
     {
@@ -1258,7 +1258,7 @@ ARRETES_MINISTERIELS = [
         "classements": [{"regime": "D", "rubrique": "1716"}],
         "cid": "JORFTEXT000029917414",
         "state": "VIGUEUR",
-        "publication_date": 1417561200,
+        "date_of_signature": 1417561200,
         "source": "LEGIFRANCE",
     },
     {
@@ -1268,7 +1268,7 @@ ARRETES_MINISTERIELS = [
         "classements": [{"regime": "D", "rubrique": "1978"}],
         "cid": "JORFTEXT000041413405",
         "state": "VIGUEUR",
-        "publication_date": 1576191600,
+        "date_of_signature": 1576191600,
         "source": "LEGIFRANCE",
     },
     {
@@ -1282,7 +1282,7 @@ ARRETES_MINISTERIELS = [
         ],
         "cid": "JORFTEXT000000444709",
         "state": "ABROGE",
-        "publication_date": 1107730800,
+        "date_of_signature": 1107730800,
         "source": "LEGIFRANCE",
     },
     {
@@ -1298,7 +1298,7 @@ ARRETES_MINISTERIELS = [
         ],
         "cid": "JORFTEXT000028409472",
         "state": "VIGUEUR",
-        "publication_date": 1388098800,
+        "date_of_signature": 1388098800,
         "source": "LEGIFRANCE",
     },
     {
@@ -1308,7 +1308,7 @@ ARRETES_MINISTERIELS = [
         "classements": [{"regime": "D", "rubrique": "2110"}],
         "cid": "JORFTEXT000000425804",
         "state": "VIGUEUR",
-        "publication_date": 1162162800,
+        "date_of_signature": 1162162800,
         "source": "AIDA",
     },
     {
@@ -1318,7 +1318,7 @@ ARRETES_MINISTERIELS = [
         "classements": [{"regime": "D", "rubrique": "2112"}],
         "cid": "JORFTEXT000000444667",
         "state": "VIGUEUR",
-        "publication_date": 1107990000,
+        "date_of_signature": 1107990000,
         "source": "AIDA",
     },
     {
@@ -1328,7 +1328,7 @@ ARRETES_MINISTERIELS = [
         "classements": [{"regime": "D", "rubrique": "2120"}],
         "cid": "JORFTEXT000000791749",
         "state": "VIGUEUR",
-        "publication_date": 1165532400,
+        "date_of_signature": 1165532400,
         "source": "AIDA",
     },
     {
@@ -1338,7 +1338,7 @@ ARRETES_MINISTERIELS = [
         "classements": [{"regime": "D", "rubrique": "2150"}],
         "cid": "JORFTEXT000036074702",
         "state": "VIGUEUR",
-        "publication_date": 1511218800,
+        "date_of_signature": 1511218800,
         "source": "LEGIFRANCE",
     },
     {
@@ -1348,7 +1348,7 @@ ARRETES_MINISTERIELS = [
         "classements": [{"regime": "D", "rubrique": "2170"}],
         "cid": "JORFTEXT000000593036",
         "state": "ABROGE",
-        "publication_date": 1010358000,
+        "date_of_signature": 1010358000,
         "source": "LEGIFRANCE",
     },
     {
@@ -1358,7 +1358,7 @@ ARRETES_MINISTERIELS = [
         "classements": [{"regime": "D", "rubrique": "2210"}],
         "cid": "JORFTEXT000000418135",
         "state": "VIGUEUR",
-        "publication_date": 1083276000,
+        "date_of_signature": 1083276000,
         "source": "AIDA",
     },
     {
@@ -1368,7 +1368,7 @@ ARRETES_MINISTERIELS = [
         "classements": [{"regime": "D", "rubrique": "2220"}],
         "cid": "JORFTEXT000000812308",
         "state": "VIGUEUR",
-        "publication_date": 1118959200,
+        "date_of_signature": 1118959200,
         "source": "AIDA",
     },
     {
@@ -1378,7 +1378,7 @@ ARRETES_MINISTERIELS = [
         "classements": [{"regime": "D", "rubrique": "2221"}],
         "cid": "JORFTEXT000000277959",
         "state": "VIGUEUR",
-        "publication_date": 1186610400,
+        "date_of_signature": 1186610400,
         "source": "LEGIFRANCE",
     },
     {
@@ -1388,7 +1388,7 @@ ARRETES_MINISTERIELS = [
         "classements": [{"regime": "D", "rubrique": "2250"}],
         "cid": "JORFTEXT000026140269",
         "state": "VIGUEUR",
-        "publication_date": 1337896800,
+        "date_of_signature": 1337896800,
         "source": "AIDA",
     },
     {
@@ -1398,7 +1398,7 @@ ARRETES_MINISTERIELS = [
         "cid": "JORFTEXT000000210657",
         "classements": [{"regime": "D", "rubrique": "2251"}],
         "state": "VIGUEUR",
-        "publication_date": 921452400,
+        "date_of_signature": 921452400,
         "source": "AIDA",
     },
     {
@@ -1408,7 +1408,7 @@ ARRETES_MINISTERIELS = [
         "classements": [{"regime": "D", "rubrique": "2253"}],
         "cid": "JORFTEXT000030426541",
         "state": "ABROGE",
-        "publication_date": 1418857200,
+        "date_of_signature": 1418857200,
         "source": "LEGIFRANCE",
     },
     {
@@ -1418,7 +1418,7 @@ ARRETES_MINISTERIELS = [
         "classements": [{"regime": "D", "rubrique": "2260"}],
         "cid": "JORFTEXT000000792853",
         "state": "VIGUEUR",
-        "publication_date": 1148335200,
+        "date_of_signature": 1148335200,
         "source": "AIDA",
     },
     {
@@ -1428,7 +1428,7 @@ ARRETES_MINISTERIELS = [
         "classements": [{"regime": "D", "rubrique": "2265"}],
         "cid": "JORFTEXT000030024830",
         "state": "VIGUEUR",
-        "publication_date": 1418857200,
+        "date_of_signature": 1418857200,
         "source": "AIDA",
     },
     {
@@ -1438,7 +1438,7 @@ ARRETES_MINISTERIELS = [
         "cid": "JORFTEXT000000582313",
         "classements": [{"regime": "D", "rubrique": "2330"}],
         "state": "VIGUEUR",
-        "publication_date": 996012000,
+        "date_of_signature": 996012000,
         "source": "LEGIFRANCE",
     },
     {
@@ -1448,7 +1448,7 @@ ARRETES_MINISTERIELS = [
         "classements": [{"regime": "D", "rubrique": "2340"}],
         "cid": "JORFTEXT000023596449",
         "state": "VIGUEUR",
-        "publication_date": 1294959600,
+        "date_of_signature": 1294959600,
         "source": "LEGIFRANCE",
     },
     {
@@ -1458,7 +1458,7 @@ ARRETES_MINISTERIELS = [
         "classements": [{"regime": "D", "rubrique": "2345"}],
         "cid": "JORFTEXT000000413046",
         "state": "ABROGE",
-        "publication_date": 1020290400,
+        "date_of_signature": 1020290400,
         "source": "AIDA",
     },
     {
@@ -1468,7 +1468,7 @@ ARRETES_MINISTERIELS = [
         "classements": [{"regime": "D", "rubrique": "2345"}],
         "cid": "JORFTEXT000021030687",
         "state": "VIGUEUR",
-        "publication_date": 1251669600,
+        "date_of_signature": 1251669600,
         "source": "AIDA",
     },
     {
@@ -1478,7 +1478,7 @@ ARRETES_MINISTERIELS = [
         "cid": "JORFTEXT000000215138",
         "classements": [{"regime": "D", "rubrique": "2351"}],
         "state": "VIGUEUR",
-        "publication_date": 996012000,
+        "date_of_signature": 996012000,
         "source": "LEGIFRANCE",
     },
     {
@@ -1488,7 +1488,7 @@ ARRETES_MINISTERIELS = [
         "cid": "JORFTEXT000000582314",
         "classements": [{"regime": "D", "rubrique": "2360"}],
         "state": "VIGUEUR",
-        "publication_date": 996012000,
+        "date_of_signature": 996012000,
         "source": "LEGIFRANCE",
     },
     {
@@ -1498,7 +1498,7 @@ ARRETES_MINISTERIELS = [
         "classements": [{"regime": "D", "rubrique": "2415"}],
         "cid": "JORFTEXT000000786106",
         "state": "VIGUEUR",
-        "publication_date": 1103238000,
+        "date_of_signature": 1103238000,
         "source": "LEGIFRANCE",
     },
     {
@@ -1508,7 +1508,7 @@ ARRETES_MINISTERIELS = [
         "classements": [{"regime": "D", "rubrique": "2450"}],
         "cid": "JORFTEXT000000432338",
         "state": "VIGUEUR",
-        "publication_date": 1058306400,
+        "date_of_signature": 1058306400,
         "source": "LEGIFRANCE",
     },
     {
@@ -1518,7 +1518,7 @@ ARRETES_MINISTERIELS = [
         "classements": [{"regime": "D", "rubrique": "2510"}],
         "cid": "JORFTEXT000000427983",
         "state": "VIGUEUR",
-        "publication_date": 1167087600,
+        "date_of_signature": 1167087600,
         "source": "LEGIFRANCE",
     },
     {
@@ -1528,7 +1528,7 @@ ARRETES_MINISTERIELS = [
         "classements": [{"regime": "D", "rubrique": "2515"}],
         "cid": "JORFTEXT000000552021",
         "state": "VIGUEUR",
-        "publication_date": 867621600,
+        "date_of_signature": 867621600,
         "source": "LEGIFRANCE",
     },
     {
@@ -1538,7 +1538,7 @@ ARRETES_MINISTERIELS = [
         "classements": [{"regime": "D", "rubrique": "2516"}],
         "cid": "JORFTEXT000000369331",
         "state": "VIGUEUR",
-        "publication_date": 867621600,
+        "date_of_signature": 867621600,
         "source": "LEGIFRANCE",
     },
     {
@@ -1548,7 +1548,7 @@ ARRETES_MINISTERIELS = [
         "classements": [{"regime": "D", "rubrique": "2517"}],
         "cid": "JORFTEXT000000369330",
         "state": "VIGUEUR",
-        "publication_date": 867621600,
+        "date_of_signature": 867621600,
         "source": "LEGIFRANCE",
     },
     {
@@ -1558,7 +1558,7 @@ ARRETES_MINISTERIELS = [
         "classements": [{"regime": "D", "rubrique": "2518"}],
         "cid": "JORFTEXT000024968167",
         "state": "VIGUEUR",
-        "publication_date": 1322262000,
+        "date_of_signature": 1322262000,
         "source": "AIDA",
     },
     {
@@ -1568,7 +1568,7 @@ ARRETES_MINISTERIELS = [
         "classements": [{"regime": "D", "rubrique": "2521"}],
         "cid": "JORFTEXT000000552020",
         "state": "VIGUEUR",
-        "publication_date": 867621600,
+        "date_of_signature": 867621600,
         "source": "LEGIFRANCE",
     },
     {
@@ -1578,7 +1578,7 @@ ARRETES_MINISTERIELS = [
         "classements": [{"regime": "D", "rubrique": "2522"}],
         "cid": "JORFTEXT000000552019",
         "state": "ABROGE",
-        "publication_date": 867621600,
+        "date_of_signature": 867621600,
         "source": "LEGIFRANCE",
     },
     {
@@ -1588,7 +1588,7 @@ ARRETES_MINISTERIELS = [
         "classements": [{"regime": "D", "rubrique": "2522"}],
         "cid": "JORFTEXT000024968178",
         "state": "VIGUEUR",
-        "publication_date": 1322262000,
+        "date_of_signature": 1322262000,
         "source": "AIDA",
     },
     {
@@ -1598,7 +1598,7 @@ ARRETES_MINISTERIELS = [
         "classements": [{"regime": "D", "rubrique": "2524"}],
         "cid": "JORFTEXT000000369301",
         "state": "VIGUEUR",
-        "publication_date": 867621600,
+        "date_of_signature": 867621600,
         "source": "LEGIFRANCE",
     },
     {
@@ -1608,7 +1608,7 @@ ARRETES_MINISTERIELS = [
         "classements": [{"regime": "D", "rubrique": "2530"}],
         "cid": "JORFTEXT000000793557",
         "state": "VIGUEUR",
-        "publication_date": 1171407600,
+        "date_of_signature": 1171407600,
         "source": "AIDA",
     },
     {
@@ -1618,7 +1618,7 @@ ARRETES_MINISTERIELS = [
         "classements": [{"regime": "D", "rubrique": "2531"}],
         "cid": "JORFTEXT000000793558",
         "state": "VIGUEUR",
-        "publication_date": 1171407600,
+        "date_of_signature": 1171407600,
         "source": "AIDA",
     },
     {
@@ -1628,7 +1628,7 @@ ARRETES_MINISTERIELS = [
         "classements": [{"regime": "D", "rubrique": "2550"}],
         "cid": "JORFTEXT000000734395",
         "state": "VIGUEUR",
-        "publication_date": 867621600,
+        "date_of_signature": 867621600,
         "source": "AIDA",
     },
     {
@@ -1638,7 +1638,7 @@ ARRETES_MINISTERIELS = [
         "classements": [{"regime": "D", "rubrique": "2551"}],
         "cid": "JORFTEXT000000182387",
         "state": "VIGUEUR",
-        "publication_date": 867621600,
+        "date_of_signature": 867621600,
         "source": "AIDA",
     },
     {
@@ -1648,7 +1648,7 @@ ARRETES_MINISTERIELS = [
         "classements": [{"regime": "D", "rubrique": "2552"}],
         "cid": "JORFTEXT000000552051",
         "state": "VIGUEUR",
-        "publication_date": 867621600,
+        "date_of_signature": 867621600,
         "source": "AIDA",
     },
     {
@@ -1658,7 +1658,7 @@ ARRETES_MINISTERIELS = [
         "classements": [{"regime": "D", "rubrique": "2560"}],
         "cid": "JORFTEXT000031027065",
         "state": "VIGUEUR",
-        "publication_date": 1437948000,
+        "date_of_signature": 1437948000,
         "source": "AIDA",
     },
     {
@@ -1668,7 +1668,7 @@ ARRETES_MINISTERIELS = [
         "cid": "JORFTEXT000000183180",
         "classements": [{"regime": "D", "rubrique": "2560"}],
         "state": "ABROGE",
-        "publication_date": 867621600,
+        "date_of_signature": 867621600,
         "source": "LEGIFRANCE",
     },
     {
@@ -1678,7 +1678,7 @@ ARRETES_MINISTERIELS = [
         "classements": [{"regime": "D", "rubrique": "2561"}],
         "cid": "JORFTEXT000031027083",
         "state": "VIGUEUR",
-        "publication_date": 1437948000,
+        "date_of_signature": 1437948000,
         "source": "AIDA",
     },
     {
@@ -1688,7 +1688,7 @@ ARRETES_MINISTERIELS = [
         "cid": "JORFTEXT000000183179",
         "classements": [{"regime": "D", "rubrique": "2561"}],
         "state": "ABROGE",
-        "publication_date": 867621600,
+        "date_of_signature": 867621600,
         "source": "LEGIFRANCE",
     },
     {
@@ -1698,7 +1698,7 @@ ARRETES_MINISTERIELS = [
         "classements": [{"regime": "D", "rubrique": "2562"}],
         "cid": "JORFTEXT000000369300",
         "state": "VIGUEUR",
-        "publication_date": 867621600,
+        "date_of_signature": 867621600,
         "source": "LEGIFRANCE",
     },
     {
@@ -1708,7 +1708,7 @@ ARRETES_MINISTERIELS = [
         "classements": [{"regime": "D", "rubrique": "2563"}],
         "cid": "JORFTEXT000031027101",
         "state": "VIGUEUR",
-        "publication_date": 1437948000,
+        "date_of_signature": 1437948000,
         "source": "AIDA",
     },
     {
@@ -1718,7 +1718,7 @@ ARRETES_MINISTERIELS = [
         "classements": [{"regime": "D", "rubrique": "2564"}],
         "cid": "JORFTEXT000000619925",
         "state": "ABROGE",
-        "publication_date": 1087768800,
+        "date_of_signature": 1087768800,
         "source": "LEGIFRANCE",
     },
     {
@@ -1728,7 +1728,7 @@ ARRETES_MINISTERIELS = [
         "classements": [{"regime": "D", "rubrique": "2564"}],
         "cid": "JORFTEXT000038358780",
         "state": "VIGUEUR",
-        "publication_date": 1554760800,
+        "date_of_signature": 1554760800,
         "source": "LEGIFRANCE",
     },
     {
@@ -1738,7 +1738,7 @@ ARRETES_MINISTERIELS = [
         "classements": [{"regime": "D", "rubrique": "2565"}],
         "cid": "JORFTEXT000000551978",
         "state": "VIGUEUR",
-        "publication_date": 867621600,
+        "date_of_signature": 867621600,
         "source": "LEGIFRANCE",
     },
     {
@@ -1748,7 +1748,7 @@ ARRETES_MINISTERIELS = [
         "classements": [{"regime": "D", "rubrique": "2566"}],
         "cid": "JORFTEXT000031027118",
         "state": "VIGUEUR",
-        "publication_date": 1437948000,
+        "date_of_signature": 1437948000,
         "source": "AIDA",
     },
     {
@@ -1758,7 +1758,7 @@ ARRETES_MINISTERIELS = [
         "classements": [{"regime": "D", "rubrique": "2567"}],
         "cid": "JORFTEXT000031027133",
         "state": "VIGUEUR",
-        "publication_date": 1437948000,
+        "date_of_signature": 1437948000,
         "source": "LEGIFRANCE",
     },
     {
@@ -1768,7 +1768,7 @@ ARRETES_MINISTERIELS = [
         "classements": [{"regime": "D", "rubrique": "2570"}],
         "cid": "JORFTEXT000021028173",
         "state": "VIGUEUR",
-        "publication_date": 1246917600,
+        "date_of_signature": 1246917600,
         "source": "LEGIFRANCE",
     },
     {
@@ -1778,7 +1778,7 @@ ARRETES_MINISTERIELS = [
         "classements": [{"regime": "D", "rubrique": "2575"}],
         "cid": "JORFTEXT000000369299",
         "state": "VIGUEUR",
-        "publication_date": 867621600,
+        "date_of_signature": 867621600,
         "source": "LEGIFRANCE",
     },
     {
@@ -1788,7 +1788,7 @@ ARRETES_MINISTERIELS = [
         "classements": [{"regime": "D", "rubrique": "2660"}, {"regime": "D", "rubrique": "2661"}],
         "cid": "JORFTEXT000000202785",
         "state": "VIGUEUR",
-        "publication_date": 947804400,
+        "date_of_signature": 947804400,
         "source": "LEGIFRANCE",
     },
     {
@@ -1798,7 +1798,7 @@ ARRETES_MINISTERIELS = [
         "classements": [{"regime": "D", "rubrique": "2662"}],
         "cid": "JORFTEXT000000202754",
         "state": "VIGUEUR",
-        "publication_date": 947804400,
+        "date_of_signature": 947804400,
         "source": "LEGIFRANCE",
     },
     {
@@ -1808,7 +1808,7 @@ ARRETES_MINISTERIELS = [
         "classements": [{"regime": "D", "rubrique": "2663"}],
         "cid": "JORFTEXT000000567521",
         "state": "VIGUEUR",
-        "publication_date": 947804400,
+        "date_of_signature": 947804400,
         "source": "LEGIFRANCE",
     },
     {
@@ -1818,7 +1818,7 @@ ARRETES_MINISTERIELS = [
         "classements": [{"regime": "D", "rubrique": "2685"}],
         "cid": "JORFTEXT000000807264",
         "state": "VIGUEUR",
-        "publication_date": 1097618400,
+        "date_of_signature": 1097618400,
         "source": "LEGIFRANCE",
     },
     {
@@ -1828,7 +1828,7 @@ ARRETES_MINISTERIELS = [
         "classements": [{"regime": "D", "rubrique": "2710"}],
         "cid": "JORFTEXT000000565555",
         "state": "ABROGE",
-        "publication_date": 859932000,
+        "date_of_signature": 859932000,
         "source": "LEGIFRANCE",
     },
     {
@@ -1838,7 +1838,7 @@ ARRETES_MINISTERIELS = [
         "classements": [{"regime": "D", "rubrique": "2711"}],
         "cid": "JORFTEXT000017883576",
         "state": "ABROGE",
-        "publication_date": 1197414000,
+        "date_of_signature": 1197414000,
         "source": "LEGIFRANCE",
     },
     {
@@ -1853,7 +1853,7 @@ ARRETES_MINISTERIELS = [
         ],
         "cid": "JORFTEXT000037032196",
         "state": "VIGUEUR",
-        "publication_date": 1528236000,
+        "date_of_signature": 1528236000,
         "source": "AIDA",
     },
     {
@@ -1863,7 +1863,7 @@ ARRETES_MINISTERIELS = [
         "classements": [{"regime": "D", "rubrique": "2713"}],
         "cid": "JORFTEXT000023022747",
         "state": "ABROGE",
-        "publication_date": 1286920800,
+        "date_of_signature": 1286920800,
         "source": "LEGIFRANCE",
     },
     {
@@ -1873,7 +1873,7 @@ ARRETES_MINISTERIELS = [
         "classements": [{"regime": "D", "rubrique": "2714"}],
         "cid": "JORFTEXT000023022756",
         "state": "ABROGE",
-        "publication_date": 1287007200,
+        "date_of_signature": 1287007200,
         "source": "LEGIFRANCE",
     },
     {
@@ -1883,7 +1883,7 @@ ARRETES_MINISTERIELS = [
         "classements": [{"regime": "D", "rubrique": "2715"}],
         "cid": "JORFTEXT000023022769",
         "state": "VIGUEUR",
-        "publication_date": 1287093600,
+        "date_of_signature": 1287093600,
         "source": "AIDA",
     },
     {
@@ -1893,7 +1893,7 @@ ARRETES_MINISTERIELS = [
         "classements": [{"regime": "D", "rubrique": "2716"}],
         "cid": "JORFTEXT000023022778",
         "state": "ABROGE",
-        "publication_date": 1287180000,
+        "date_of_signature": 1287180000,
         "source": "LEGIFRANCE",
     },
     {
@@ -1903,7 +1903,7 @@ ARRETES_MINISTERIELS = [
         "classements": [{"regime": "D", "rubrique": "2719"}],
         "cid": "JORFTEXT000026274584",
         "state": "VIGUEUR",
-        "publication_date": 1343599200,
+        "date_of_signature": 1343599200,
         "source": "LEGIFRANCE",
     },
     {
@@ -1913,7 +1913,7 @@ ARRETES_MINISTERIELS = [
         "classements": [{"regime": "D", "rubrique": "2780"}],
         "cid": "JORFTEXT000024446891",
         "state": "VIGUEUR",
-        "publication_date": 1310421600,
+        "date_of_signature": 1310421600,
         "source": "AIDA",
     },
     {
@@ -1923,7 +1923,7 @@ ARRETES_MINISTERIELS = [
         "classements": [{"regime": "D", "rubrique": "2791"}],
         "cid": "JORFTEXT000024908356",
         "state": "VIGUEUR",
-        "publication_date": 1322002800,
+        "date_of_signature": 1322002800,
         "source": "AIDA",
     },
     {
@@ -1933,7 +1933,7 @@ ARRETES_MINISTERIELS = [
         "classements": [{"regime": "D", "rubrique": "2795"}],
         "cid": "JORFTEXT000025126196",
         "state": "VIGUEUR",
-        "publication_date": 1324594800,
+        "date_of_signature": 1324594800,
         "source": "LEGIFRANCE",
     },
     {
@@ -1943,7 +1943,7 @@ ARRETES_MINISTERIELS = [
         "classements": [{"regime": "D", "rubrique": "2798"}],
         "cid": "JORFTEXT000029917403",
         "state": "VIGUEUR",
-        "publication_date": 1417561200,
+        "date_of_signature": 1417561200,
         "source": "LEGIFRANCE",
     },
     {
@@ -1953,7 +1953,7 @@ ARRETES_MINISTERIELS = [
         "classements": [{"regime": "D", "rubrique": "2910"}],
         "cid": "JORFTEXT000000202304",
         "state": "ABROGE",
-        "publication_date": 869781600,
+        "date_of_signature": 869781600,
         "source": "LEGIFRANCE",
     },
     {
@@ -1963,7 +1963,7 @@ ARRETES_MINISTERIELS = [
         "classements": [{"regime": "D", "rubrique": "2921"}],
         "cid": "JORFTEXT000000424501",
         "state": "ABROGE",
-        "publication_date": 1102892400,
+        "date_of_signature": 1102892400,
         "source": "LEGIFRANCE",
     },
     {
@@ -1973,7 +1973,7 @@ ARRETES_MINISTERIELS = [
         "classements": [{"regime": "D", "rubrique": "2921"}],
         "cid": "JORFTEXT000028375083",
         "state": "VIGUEUR",
-        "publication_date": 1386975600,
+        "date_of_signature": 1386975600,
         "source": "LEGIFRANCE",
     },
     {
@@ -1983,7 +1983,7 @@ ARRETES_MINISTERIELS = [
         "classements": [{"regime": "D", "rubrique": "2925"}],
         "cid": "JORFTEXT000000584145",
         "state": "VIGUEUR",
-        "publication_date": 959551200,
+        "date_of_signature": 959551200,
         "source": "LEGIFRANCE",
     },
     {
@@ -1993,7 +1993,7 @@ ARRETES_MINISTERIELS = [
         "classements": [{"regime": "D", "rubrique": "2925"}],
         "cid": "JORFTEXT000037311523",
         "state": "VIGUEUR",
-        "publication_date": 1533247200,
+        "date_of_signature": 1533247200,
         "source": "LEGIFRANCE",
     },
     {
@@ -2003,7 +2003,7 @@ ARRETES_MINISTERIELS = [
         "classements": [{"regime": "D", "rubrique": "2930"}],
         "cid": "JORFTEXT000000619924",
         "state": "VIGUEUR",
-        "publication_date": 1086300000,
+        "date_of_signature": 1086300000,
         "source": "AIDA",
     },
     {
@@ -2013,7 +2013,7 @@ ARRETES_MINISTERIELS = [
         "classements": [{"regime": "D", "rubrique": "2935"}],
         "cid": "JORFTEXT000000764047",
         "state": "ABROGE",
-        "publication_date": 954712800,
+        "date_of_signature": 954712800,
         "source": "AIDA",
     },
     {
@@ -2023,7 +2023,7 @@ ARRETES_MINISTERIELS = [
         "classements": [{"regime": "D", "rubrique": "2940"}],
         "cid": "JORFTEXT000000413047",
         "state": "VIGUEUR",
-        "publication_date": 1020290400,
+        "date_of_signature": 1020290400,
         "source": "AIDA",
     },
     {
@@ -2033,7 +2033,7 @@ ARRETES_MINISTERIELS = [
         "classements": [{"regime": "D", "rubrique": "2950"}],
         "cid": "JORFTEXT000000199989",
         "state": "VIGUEUR",
-        "publication_date": 853974000,
+        "date_of_signature": 853974000,
         "source": "LEGIFRANCE",
     },
     {
@@ -2043,7 +2043,7 @@ ARRETES_MINISTERIELS = [
         "classements": [{"regime": "D", "rubrique": "2980"}],
         "cid": "JORFTEXT000024507356",
         "state": "VIGUEUR",
-        "publication_date": 1314309600,
+        "date_of_signature": 1314309600,
         "source": "LEGIFRANCE",
     },
     {
@@ -2060,7 +2060,7 @@ ARRETES_MINISTERIELS = [
         ],
         "cid": "JORFTEXT000000756621",
         "state": "VIGUEUR",
-        "publication_date": 900280800,
+        "date_of_signature": 900280800,
         "source": "LEGIFRANCE",
     },
     {
@@ -2079,7 +2079,7 @@ ARRETES_MINISTERIELS = [
         ],
         "cid": "JORFTEXT000000756654",
         "state": "VIGUEUR",
-        "publication_date": 900280800,
+        "date_of_signature": 900280800,
         "source": "LEGIFRANCE",
     },
     {
@@ -2089,7 +2089,7 @@ ARRETES_MINISTERIELS = [
         "cid": "JORFTEXT000029893770",
         "classements": [{"regime": "D", "rubrique": "4210"}, {"regime": "D", "rubrique": "1310"}],
         "state": "VIGUEUR",
-        "publication_date": 1418338800,
+        "date_of_signature": 1418338800,
         "source": "LEGIFRANCE",
     },
     {
@@ -2099,7 +2099,7 @@ ARRETES_MINISTERIELS = [
         "classements": [{"regime": "D", "rubrique": "4220"}, {"regime": "D", "rubrique": "1311"}],
         "cid": "JORFTEXT000018332514",
         "state": "VIGUEUR",
-        "publication_date": 1204239600,
+        "date_of_signature": 1204239600,
         "source": "LEGIFRANCE",
     },
     {
@@ -2116,7 +2116,7 @@ ARRETES_MINISTERIELS = [
         ],
         "cid": "JORFTEXT000019776628",
         "state": "VIGUEUR",
-        "publication_date": 1226271600,
+        "date_of_signature": 1226271600,
         "source": "LEGIFRANCE",
     },
     {
@@ -2130,7 +2130,7 @@ ARRETES_MINISTERIELS = [
         ],
         "cid": "JORFTEXT000039104029",
         "state": "VIGUEUR",
-        "publication_date": 1564610400,
+        "date_of_signature": 1564610400,
         "source": "LEGIFRANCE",
     },
     {
@@ -2145,7 +2145,7 @@ ARRETES_MINISTERIELS = [
         ],
         "cid": "JORFTEXT000000392482",
         "state": "VIGUEUR",
-        "publication_date": 914367600,
+        "date_of_signature": 914367600,
         "source": "AIDA",
     },
     {
@@ -2155,7 +2155,7 @@ ARRETES_MINISTERIELS = [
         "classements": [{"regime": "D", "rubrique": "4511"}, {"regime": "D", "rubrique": "1173"}],
         "cid": "JORFTEXT000000574817",
         "state": "VIGUEUR",
-        "publication_date": 914367600,
+        "date_of_signature": 914367600,
         "source": "LEGIFRANCE",
     },
     {
@@ -2165,7 +2165,7 @@ ARRETES_MINISTERIELS = [
         "classements": [{"regime": "D", "rubrique": "4610"}, {"regime": "D", "rubrique": "1810"}],
         "cid": "JORFTEXT000000770271",
         "state": "VIGUEUR",
-        "publication_date": 989877600,
+        "date_of_signature": 989877600,
         "source": "LEGIFRANCE",
     },
     {
@@ -2179,7 +2179,7 @@ ARRETES_MINISTERIELS = [
         ],
         "cid": "JORFTEXT000000770272",
         "state": "VIGUEUR",
-        "publication_date": 989877600,
+        "date_of_signature": 989877600,
         "source": "LEGIFRANCE",
     },
     {
@@ -2189,7 +2189,7 @@ ARRETES_MINISTERIELS = [
         "classements": [{"regime": "D", "rubrique": "4701"}, {"regime": "D", "rubrique": "1330"}],
         "cid": "JORFTEXT000019982114",
         "state": "VIGUEUR",
-        "publication_date": 1229554800,
+        "date_of_signature": 1229554800,
         "source": "LEGIFRANCE",
     },
     {
@@ -2199,7 +2199,7 @@ ARRETES_MINISTERIELS = [
         "classements": [{"regime": "D", "rubrique": "4702"}, {"regime": "D", "rubrique": "1331"}],
         "cid": "JORFTEXT000000609220",
         "state": "VIGUEUR",
-        "publication_date": 1152136800,
+        "date_of_signature": 1152136800,
         "source": "LEGIFRANCE",
     },
     {
@@ -2222,7 +2222,7 @@ ARRETES_MINISTERIELS = [
         ],
         "cid": "JORFTEXT000017640600",
         "state": "VIGUEUR",
-        "publication_date": 1193698800,
+        "date_of_signature": 1193698800,
         "source": "LEGIFRANCE",
     },
     {
@@ -2232,7 +2232,7 @@ ARRETES_MINISTERIELS = [
         "classements": [{"regime": "D", "rubrique": "4710"}, {"regime": "D", "rubrique": "1138"}],
         "cid": "JORFTEXT000019982074",
         "state": "VIGUEUR",
-        "publication_date": 1229468400,
+        "date_of_signature": 1229468400,
         "source": "LEGIFRANCE",
     },
     {
@@ -2242,7 +2242,7 @@ ARRETES_MINISTERIELS = [
         "classements": [{"regime": "D", "rubrique": "4714"}, {"regime": "D", "rubrique": "1140"}],
         "cid": "JORFTEXT000017640626",
         "state": "VIGUEUR",
-        "publication_date": 1193958000,
+        "date_of_signature": 1193958000,
         "source": "LEGIFRANCE",
     },
     {
@@ -2252,7 +2252,7 @@ ARRETES_MINISTERIELS = [
         "classements": [{"regime": "D", "rubrique": "4715"}, {"regime": "D", "rubrique": "1416"}],
         "cid": "JORFTEXT000000571176",
         "state": "VIGUEUR",
-        "publication_date": 887238000,
+        "date_of_signature": 887238000,
         "source": "LEGIFRANCE",
     },
     {
@@ -2262,7 +2262,7 @@ ARRETES_MINISTERIELS = [
         "classements": [{"regime": "D", "rubrique": "4718"}, {"regime": "D", "rubrique": "1412"}],
         "cid": "JORFTEXT000000447400",
         "state": "VIGUEUR",
-        "publication_date": 1124748000,
+        "date_of_signature": 1124748000,
         "source": "AIDA",
     },
     {
@@ -2272,7 +2272,7 @@ ARRETES_MINISTERIELS = [
         "classements": [{"regime": "D", "rubrique": "4719"}, {"regime": "D", "rubrique": "1418"}],
         "cid": "JORFTEXT000000564940",
         "state": "VIGUEUR",
-        "publication_date": 857948400,
+        "date_of_signature": 857948400,
         "source": "LEGIFRANCE",
     },
     {
@@ -2286,7 +2286,7 @@ ARRETES_MINISTERIELS = [
         ],
         "cid": "JORFTEXT000000383619",
         "state": "VIGUEUR",
-        "publication_date": 862869600,
+        "date_of_signature": 862869600,
         "source": "LEGIFRANCE",
     },
     {
@@ -2296,7 +2296,7 @@ ARRETES_MINISTERIELS = [
         "classements": [{"regime": "D", "rubrique": "4725"}, {"regime": "D", "rubrique": "1220"}],
         "cid": "JORFTEXT000000381759",
         "state": "VIGUEUR",
-        "publication_date": 857948400,
+        "date_of_signature": 857948400,
         "source": "LEGIFRANCE",
     },
     {
@@ -2306,7 +2306,7 @@ ARRETES_MINISTERIELS = [
         "classements": [{"regime": "D", "rubrique": "4727"}, {"regime": "D", "rubrique": "1116"}],
         "cid": "JORFTEXT000000446932",
         "state": "VIGUEUR",
-        "publication_date": 1124748000,
+        "date_of_signature": 1124748000,
         "source": "LEGIFRANCE",
     },
     {
@@ -2316,7 +2316,7 @@ ARRETES_MINISTERIELS = [
         "classements": [{"regime": "D", "rubrique": "4731"}, {"regime": "D", "rubrique": "1157"}],
         "cid": "JORFTEXT000000551230",
         "state": "VIGUEUR",
-        "publication_date": 870991200,
+        "date_of_signature": 870991200,
         "source": "LEGIFRANCE",
     },
     {
@@ -2326,7 +2326,7 @@ ARRETES_MINISTERIELS = [
         "classements": [{"regime": "D", "rubrique": "4735"}, {"regime": "D", "rubrique": "1136"}],
         "cid": "JORFTEXT000021519796",
         "state": "VIGUEUR",
-        "publication_date": 1258585200,
+        "date_of_signature": 1258585200,
         "source": "LEGIFRANCE",
     },
     {
@@ -2336,7 +2336,7 @@ ARRETES_MINISTERIELS = [
         "classements": [{"regime": "A", "rubrique": "1434", "alinea": "1"}],
         "cid": "JORFTEXT000019994396",
         "state": "VIGUEUR",
-        "publication_date": 1229641200,
+        "date_of_signature": 1229641200,
         "source": "LEGIFRANCE",
     },
     {
@@ -2346,7 +2346,7 @@ ARRETES_MINISTERIELS = [
         "classements": [{"regime": "A", "rubrique": "1434", "alinea": "2"}],
         "cid": "JORFTEXT000024778832",
         "state": "VIGUEUR",
-        "publication_date": 1318370400,
+        "date_of_signature": 1318370400,
         "source": "LEGIFRANCE",
     },
     {
@@ -2359,7 +2359,7 @@ ARRETES_MINISTERIELS = [
         ],
         "cid": "JORFTEXT000032282438",
         "state": "VIGUEUR",
-        "publication_date": 1455490800,
+        "date_of_signature": 1455490800,
         "source": "LEGIFRANCE",
     },
     {
@@ -2369,7 +2369,7 @@ ARRETES_MINISTERIELS = [
         "classements": [{"regime": "E", "rubrique": "2710", "alinea": "2"}],
         "cid": "JORFTEXT000025634333",
         "state": "VIGUEUR",
-        "publication_date": 1332712800,
+        "date_of_signature": 1332712800,
         "source": "LEGIFRANCE",
     },
     {
@@ -2384,7 +2384,7 @@ ARRETES_MINISTERIELS = [
         ],
         "cid": "JORFTEXT000037032383",
         "state": "VIGUEUR",
-        "publication_date": 1528236000,
+        "date_of_signature": 1528236000,
         "source": "LEGIFRANCE",
     },
     {
@@ -2394,7 +2394,7 @@ ARRETES_MINISTERIELS = [
         "classements": [{"regime": "E", "rubrique": "2712", "alinea": "1"}],
         "cid": "JORFTEXT000026695033",
         "state": "VIGUEUR",
-        "publication_date": 1353884400,
+        "date_of_signature": 1353884400,
         "source": "LEGIFRANCE",
     },
     {
@@ -2404,7 +2404,7 @@ ARRETES_MINISTERIELS = [
         "classements": [{"regime": "E", "rubrique": "2712", "alinea": "3"}],
         "cid": "JORFTEXT000037032238",
         "state": "VIGUEUR",
-        "publication_date": 1528236000,
+        "date_of_signature": 1528236000,
         "source": "LEGIFRANCE",
     },
     {
@@ -2414,7 +2414,7 @@ ARRETES_MINISTERIELS = [
         "classements": [{"regime": "E", "rubrique": "2731", "alinea": "1"}],
         "cid": "JORFTEXT000031259868",
         "state": "VIGUEUR",
-        "publication_date": 1443736800,
+        "date_of_signature": 1443736800,
         "source": "LEGIFRANCE",
     },
     {
@@ -2424,7 +2424,7 @@ ARRETES_MINISTERIELS = [
         "classements": [{"regime": "E", "rubrique": "2760", "alinea": "2.a"}],
         "cid": "JORFTEXT000037832596",
         "state": "VIGUEUR",
-        "publication_date": 1543273200,
+        "date_of_signature": 1543273200,
         "source": "LEGIFRANCE",
     },
     {
@@ -2434,7 +2434,7 @@ ARRETES_MINISTERIELS = [
         "classements": [{"regime": "E", "rubrique": "2781", "alinea": "1"}],
         "cid": "JORFTEXT000022727437",
         "state": "VIGUEUR",
-        "publication_date": 1281564000,
+        "date_of_signature": 1281564000,
         "source": "LEGIFRANCE",
     },
     {
@@ -2444,7 +2444,7 @@ ARRETES_MINISTERIELS = [
         "classements": [{"regime": "E", "rubrique": "2910", "alinea": "B"}],
         "cid": "JORFTEXT000028071164",
         "state": "ABROGE",
-        "publication_date": 1379973600,
+        "date_of_signature": 1379973600,
         "source": "LEGIFRANCE",
     },
     {
@@ -2454,7 +2454,7 @@ ARRETES_MINISTERIELS = [
         "classements": [{"regime": "E", "rubrique": "2910", "alinea": "C"}],
         "cid": "JORFTEXT000025178828",
         "state": "ABROGE",
-        "publication_date": 1323298800,
+        "date_of_signature": 1323298800,
         "source": "LEGIFRANCE",
     },
     {
@@ -2467,7 +2467,7 @@ ARRETES_MINISTERIELS = [
         ],
         "cid": "JORFTEXT000037284611",
         "state": "VIGUEUR",
-        "publication_date": 1533247200,
+        "date_of_signature": 1533247200,
         "source": "LEGIFRANCE",
     },
     {
@@ -2477,7 +2477,7 @@ ARRETES_MINISTERIELS = [
         "classements": [{"regime": "E", "rubrique": "2915", "alinea": "1"}],
         "cid": "JORFTEXT000041875990",
         "state": "VIGUEUR",
-        "publication_date": 1589234400,
+        "date_of_signature": 1589234400,
         "source": "AIDA",
     },
     {
@@ -2490,7 +2490,7 @@ ARRETES_MINISTERIELS = [
         ],
         "cid": "JORFTEXT000041876039",
         "state": "VIGUEUR",
-        "publication_date": 1589234400,
+        "date_of_signature": 1589234400,
         "source": "AIDA",
     },
     {
@@ -2504,7 +2504,7 @@ ARRETES_MINISTERIELS = [
         ],
         "cid": "JORFTEXT000041876133",
         "state": "VIGUEUR",
-        "publication_date": 1589234400,
+        "date_of_signature": 1589234400,
         "source": "AIDA",
     },
     {
@@ -2514,7 +2514,7 @@ ARRETES_MINISTERIELS = [
         "classements": [{"regime": "D", "rubrique": "1310", "alinea": "2.c", "state": "SUPPRIMEE"}],
         "cid": "JORFTEXT000000263777",
         "state": "ABROGE",
-        "publication_date": 1134342000,
+        "date_of_signature": 1134342000,
         "source": "LEGIFRANCE",
     },
     {
@@ -2524,7 +2524,7 @@ ARRETES_MINISTERIELS = [
         "classements": [{"regime": "D", "rubrique": "1414", "alinea": "3"}],
         "cid": "JORFTEXT000022865723",
         "state": "VIGUEUR",
-        "publication_date": 1283119200,
+        "date_of_signature": 1283119200,
         "source": "AIDA",
     },
     {
@@ -2534,7 +2534,7 @@ ARRETES_MINISTERIELS = [
         "classements": [{"regime": "D", "rubrique": "1434", "alinea": "1"}],
         "cid": "JORFTEXT000020008930",
         "state": "VIGUEUR",
-        "publication_date": 1229641200,
+        "date_of_signature": 1229641200,
         "source": "LEGIFRANCE",
     },
     {
@@ -2544,7 +2544,7 @@ ARRETES_MINISTERIELS = [
         "classements": [{"regime": "D", "rubrique": "2101", "alinea": "4"}],
         "cid": "JORFTEXT000000464327",
         "state": "VIGUEUR",
-        "publication_date": 1169420400,
+        "date_of_signature": 1169420400,
         "source": "AIDA",
     },
     {
@@ -2554,7 +2554,7 @@ ARRETES_MINISTERIELS = [
         "classements": [{"regime": "D", "rubrique": "2160", "alinea": "1"}],
         "cid": "JORFTEXT000000208529",
         "state": "ABROGE",
-        "publication_date": 914886000,
+        "date_of_signature": 914886000,
         "source": "LEGIFRANCE",
     },
     {
@@ -2567,7 +2567,7 @@ ARRETES_MINISTERIELS = [
         ],
         "cid": "JORFTEXT000018049814",
         "state": "VIGUEUR",
-        "publication_date": 1198796400,
+        "date_of_signature": 1198796400,
         "source": "AIDA",
     },
     {
@@ -2577,7 +2577,7 @@ ARRETES_MINISTERIELS = [
         "classements": [{"regime": "D", "rubrique": "2160", "alinea": "2"}],
         "cid": "JORFTEXT000000768178",
         "state": "ABROGE",
-        "publication_date": 977094000,
+        "date_of_signature": 977094000,
         "source": "LEGIFRANCE",
     },
     {
@@ -2587,7 +2587,7 @@ ARRETES_MINISTERIELS = [
         "classements": [{"regime": "D", "rubrique": "2210", "alinea": "3"}],
         "cid": "JORFTEXT000039397758",
         "state": "VIGUEUR",
-        "publication_date": 1572390000,
+        "date_of_signature": 1572390000,
         "source": "LEGIFRANCE",
     },
     {
@@ -2597,7 +2597,7 @@ ARRETES_MINISTERIELS = [
         "classements": [{"regime": "D", "rubrique": "2680", "alinea": "1"}],
         "cid": "JORFTEXT000000194255",
         "state": "VIGUEUR",
-        "publication_date": 896738400,
+        "date_of_signature": 896738400,
         "source": "AIDA",
     },
     {
@@ -2607,7 +2607,7 @@ ARRETES_MINISTERIELS = [
         "classements": [{"regime": "D", "rubrique": "2710", "alinea": "1"}],
         "cid": "JORFTEXT000025687401",
         "state": "VIGUEUR",
-        "publication_date": 1332799200,
+        "date_of_signature": 1332799200,
         "source": "AIDA",
     },
     {
@@ -2617,7 +2617,7 @@ ARRETES_MINISTERIELS = [
         "classements": [{"regime": "D", "rubrique": "2710", "alinea": "2"}],
         "cid": "JORFTEXT000025687415",
         "state": "VIGUEUR",
-        "publication_date": 1332799200,
+        "date_of_signature": 1332799200,
         "source": "AIDA",
     },
     {
@@ -2627,7 +2627,7 @@ ARRETES_MINISTERIELS = [
         "classements": [{"regime": "D", "rubrique": "2718"}],
         "cid": "JORFTEXT000024433621",
         "state": "ABROGE",
-        "publication_date": 1310940000,
+        "date_of_signature": 1310940000,
         "source": "LEGIFRANCE",
     },
     {
@@ -2637,7 +2637,7 @@ ARRETES_MINISTERIELS = [
         "classements": [{"regime": "D", "rubrique": "2731", "alinea": "3"}],
         "cid": "JORFTEXT000037518915",
         "state": "VIGUEUR",
-        "publication_date": 1540159200,
+        "date_of_signature": 1540159200,
         "source": "LEGIFRANCE",
     },
     {
@@ -2647,7 +2647,7 @@ ARRETES_MINISTERIELS = [
         "classements": [{"regime": "D", "rubrique": "2781", "alinea": "1"}],
         "cid": "JORFTEXT000021334587",
         "state": "VIGUEUR",
-        "publication_date": 1257807600,
+        "date_of_signature": 1257807600,
         "source": "AIDA",
     },
     {
@@ -2657,7 +2657,7 @@ ARRETES_MINISTERIELS = [
         "classements": [{"regime": "D", "rubrique": "2792", "alinea": "1"}],
         "cid": "JORFTEXT000038528312",
         "state": "VIGUEUR",
-        "publication_date": 1551999600,
+        "date_of_signature": 1551999600,
         "source": "LEGIFRANCE",
     },
     {
@@ -2667,7 +2667,7 @@ ARRETES_MINISTERIELS = [
         "classements": [{"regime": "D", "rubrique": "2793", "alinea": "1"}],
         "cid": "JORFTEXT000029964686",
         "state": "VIGUEUR",
-        "publication_date": 1418684400,
+        "date_of_signature": 1418684400,
         "source": "LEGIFRANCE",
     },
     {
@@ -2677,7 +2677,7 @@ ARRETES_MINISTERIELS = [
         "classements": [{"regime": "D", "rubrique": "2793", "alinea": "2"}],
         "cid": "JORFTEXT000029964692",
         "state": "VIGUEUR",
-        "publication_date": 1418684400,
+        "date_of_signature": 1418684400,
         "source": "AIDA",
     },
     {
@@ -2687,7 +2687,7 @@ ARRETES_MINISTERIELS = [
         "classements": [{"regime": "D", "rubrique": "2793", "alinea": "3"}],
         "cid": "JORFTEXT000036126905",
         "state": "VIGUEUR",
-        "publication_date": 1511218800,
+        "date_of_signature": 1511218800,
         "source": "LEGIFRANCE",
     },
     {
@@ -2697,7 +2697,7 @@ ARRETES_MINISTERIELS = [
         "classements": [{"regime": "D", "rubrique": "2910", "alinea": "C"}],
         "cid": "JORFTEXT000025014944",
         "state": "ABROGE",
-        "publication_date": 1323298800,
+        "date_of_signature": 1323298800,
         "source": "LEGIFRANCE",
     },
     {
@@ -2708,7 +2708,7 @@ ARRETES_MINISTERIELS = [
         "cid": "JORFTEXT000037284579",
         "state": "DELETED",
         "reason_deleted": "Cet AM est assez particulier : il s'applique aux 2781 dans les 2910",
-        "publication_date": 1533247200,
+        "date_of_signature": 1533247200,
         "source": "AIDA",
     },
     {
@@ -2718,7 +2718,7 @@ ARRETES_MINISTERIELS = [
         "classements": [{"regime": "D", "rubrique": "2910", "alinea": "A.2"}],
         "cid": "JORFTEXT000037284510",
         "state": "VIGUEUR",
-        "publication_date": 1533247200,
+        "date_of_signature": 1533247200,
         "source": "LEGIFRANCE",
     },
     {
@@ -2728,7 +2728,7 @@ ARRETES_MINISTERIELS = [
         "classements": [{"regime": "E", "rubrique": "5000", "alinea": "A.2"}],
         "cid": "FAKE_CID",
         "state": "VIGUEUR",
-        "publication_date": 1612195449,
+        "date_of_signature": 1612195449,
         "source": "LEGIFRANCE",
     },
 ]

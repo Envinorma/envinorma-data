@@ -171,7 +171,7 @@ _STRUCTURED_AM = ArreteMinisteriel(
         ),
     ],
     visa=[],
-    publication_date=date(2020, 12, 15),
+    date_of_signature=date(2020, 12, 15),
     installation_date_criterion=None,
     aida_url=None,
     legifrance_url=None,
@@ -193,7 +193,7 @@ def test_apply_parametrization():
         classements=[Classement(regime=Regime('E'), rubrique='5000', alinea='A.2')],
         cid='FAKE_CID',
         state=AMState('VIGUEUR'),
-        publication_date=date.fromtimestamp(1612195449),
+        date_of_signature=date.fromtimestamp(1612195449),
         source=AMSource('LEGIFRANCE'),
     )
     res = apply_parametrization('FACE_CID', _STRUCTURED_AM, _PARAMETRIZATION, md)

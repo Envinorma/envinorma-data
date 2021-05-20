@@ -227,7 +227,7 @@ def _extract_date(candidate_date: str) -> date:
     return datetime.strptime(candidate_date, '%d/%m/%y').date()
 
 
-def extract_publication_date(input_title: str) -> date:
+def extract_date_of_signature(input_title: str) -> date:
     short_title = extract_short_title(input_title)
     candidate_date = (short_title.split() or [''])[-1]
     return _extract_date(candidate_date)
@@ -308,6 +308,7 @@ class ArreteMinisteriel:
     sections: List[StructuredText]
     visa: List[EnrichedString]
     publication_date: Optional[date] = None
+    date_of_signature: Optional[date] = None
     installation_date_criterion: Optional[DateCriterion] = None
     aida_url: Optional[str] = None
     legifrance_url: Optional[str] = None
@@ -325,12 +326,17 @@ class ArreteMinisteriel:
 
     def __post_init__(self):
         self.title.text = _standardize_title_if_necessary(self.title.text)
-        if self.publication_date is None:
-            self.publication_date = extract_publication_date(self.title.text)
+        if self.date_of_signature is None:
+            self.date_of_signature = extract_date_of_signature(self.title.text)
         else:
-            assert self.publication_date == extract_publication_date(
+            assert self.date_of_signature == extract_date_of_signature(
                 self.title.text
-            ), f'{self.publication_date} and {self.title.text} are inconsistent'
+            ), f'{self.date_of_signature} and {self.title.text} are inconsistent'
+
+        # Below date must be kept as long as publication_date keeps being used in web app, remove after
+        # (because publication_date is not the right term.)
+        self.publication_date = self.date_of_signature
+
         if not _is_probably_cid(self.id or ''):
             warnings.warn(f'AM id does not look like a CID : {self.id} (title={self.title.text})')
 
@@ -338,6 +344,8 @@ class ArreteMinisteriel:
         res = asdict(self)
         if res['publication_date']:
             res['publication_date'] = str(res['publication_date'])
+        if res['date_of_signature']:
+            res['date_of_signature'] = str(res['date_of_signature'])
         res['sections'] = [section.to_dict() for section in self.sections]
         res['classements'] = [cl.to_dict() for cl in self.classements]
         res['classements_with_alineas'] = [cl.to_dict() for cl in self.classements_with_alineas]
@@ -351,6 +359,9 @@ class ArreteMinisteriel:
         dict_['title'] = EnrichedString.from_dict(dict_['title'])
         dict_['publication_date'] = (
             date.fromisoformat(dict_['publication_date']) if dict_.get('publication_date') else None
+        )
+        dict_['date_of_signature'] = (
+            date.fromisoformat(dict_['date_of_signature']) if dict_.get('date_of_signature') else None
         )
         dict_['sections'] = [StructuredText.from_dict(sec) for sec in dict_['sections']]
         dict_['visa'] = [EnrichedString.from_dict(vu) for vu in dict_['visa']]
@@ -427,7 +438,7 @@ class AMMetadata:
     title: str
     classements: List[Classement]
     state: AMState
-    publication_date: date
+    date_of_signature: date
     source: AMSource
     nor: Optional[str] = None
     reason_deleted: Optional[str] = None
@@ -438,7 +449,10 @@ class AMMetadata:
         dict_['aida_page'] = str(dict_['aida_page'])
         dict_['state'] = AMState(dict_['state'])
         dict_['source'] = AMSource(dict_['source'])
-        dict_['publication_date'] = date.fromtimestamp(dict_['publication_date'])
+        date_of_signature = date.fromtimestamp(dict_['date_of_signature'])
+        dict_['date_of_signature'] = date_of_signature
+        if 'publication_date' in dict_:
+            del dict_['publication_date']
         dict_['classements'] = [Classement.from_dict(classement) for classement in dict_['classements']]
         return AMMetadata(**dict_)
 
@@ -446,7 +460,7 @@ class AMMetadata:
         dict_ = asdict(self)
         dict_['state'] = self.state.value
         dict_['source'] = self.source.value
-        dict_['publication_date'] = int(datetime.fromordinal(self.publication_date.toordinal()).timestamp())
+        dict_['date_of_signature'] = int(datetime.fromordinal(self.date_of_signature.toordinal()).timestamp())
         dict_['classements'] = [classement.to_dict() for classement in self.classements]
         return dict_
 
