@@ -6,6 +6,7 @@ from typing import Any, Dict, List, Optional, Set, Tuple, Union
 from envinorma.data import Applicability, ArreteMinisteriel, DateCriterion, Regime, StructuredText
 from envinorma.parametrization import (
     AlternativeSection,
+    AMWarning,
     Combinations,
     Condition,
     Equal,
@@ -74,16 +75,20 @@ def _has_undefined_parameters(condition: Condition, parameter_values: Dict[Param
     return False
 
 
-def _compute_warnings(parameter: ParameterObjectWithCondition, parameter_values: Dict[Parameter, Any]) -> List[str]:
+def _compute_warnings(
+    parameter: ParameterObjectWithCondition, parameter_values: Dict[Parameter, Any], whole_text: bool
+) -> List[str]:
     if _has_undefined_parameters(parameter.condition, parameter_values):
         modification = isinstance(parameter, AlternativeSection)
         alineas = None if isinstance(parameter, AlternativeSection) else parameter.targeted_entity.outer_alinea_indices
-        return [generate_warning_missing_value(parameter.condition, parameter_values, alineas, modification)]
+        return [
+            generate_warning_missing_value(parameter.condition, parameter_values, alineas, modification, whole_text)
+        ]
     return []
 
 
 def _keep_satisfied_conditions(
-    non_application_conditions: List[NonApplicationCondition], parameter_values: Dict[Parameter, Any]
+    non_application_conditions: List[NonApplicationCondition], parameter_values: Dict[Parameter, Any], whole_text: bool
 ) -> Tuple[List[NonApplicationCondition], List[str]]:
     satisfied: List[NonApplicationCondition] = []
     warnings: List[str] = []
@@ -91,7 +96,7 @@ def _keep_satisfied_conditions(
         if is_satisfied(na_condition.condition, parameter_values):
             satisfied.append(na_condition)
         else:
-            warnings = _compute_warnings(na_condition, parameter_values)
+            warnings = _compute_warnings(na_condition, parameter_values, whole_text)
     return satisfied, warnings
 
 
@@ -104,7 +109,7 @@ def _keep_satisfied_mofications(
         if is_satisfied(alt.condition, parameter_values):
             satisfied.append(alt)
         else:
-            warnings = _compute_warnings(alt, parameter_values)
+            warnings = _compute_warnings(alt, parameter_values, False)
     return satisfied, warnings
 
 
@@ -125,7 +130,9 @@ def _deactivate_alineas(
     text = copy(text)
     inactive_alineas = satisfied.targeted_entity.outer_alinea_indices
     all_inactive = inactive_alineas is None
-    warning = generate_inactive_warning(satisfied.condition, parameter_values, all_alineas=all_inactive)
+    warning = generate_inactive_warning(
+        satisfied.condition, parameter_values, all_alineas=all_inactive, whole_text=False
+    )
     if inactive_alineas is not None:
         inactive_alineas_set = set(inactive_alineas)
         new_outer_alineas = [
@@ -179,7 +186,7 @@ def _extract_satisfied_objects_and_warnings(
     parametrization: Parametrization, parameter_values: Dict[Parameter, Any], path: Ints
 ) -> Tuple[List[NonApplicationCondition], List[AlternativeSection], List[str]]:
     na_conditions, warnings_1 = _keep_satisfied_conditions(
-        parametrization.path_to_conditions.get(path) or [], parameter_values
+        parametrization.path_to_conditions.get(path) or [], parameter_values, whole_text=False
     )
     alternative_sections, warnings_2 = _keep_satisfied_mofications(
         parametrization.path_to_alternative_sections.get(path) or [], parameter_values
@@ -211,24 +218,26 @@ def _apply_parameter_values_in_text(
 
 
 def _generate_whole_text_reason_inactive(condition: Condition, parameter_values: Dict[Parameter, Any]) -> str:
-    return 'TODO'
+    return generate_inactive_warning(condition, parameter_values, True, True)
 
 
 def _compute_whole_text_applicability(
-    application_conditions: List[NonApplicationCondition], parameter_values: Dict[Parameter, Any]
-) -> Tuple[bool, Optional[str]]:
-    na_conditions, warnings = _keep_satisfied_conditions(application_conditions, parameter_values)
+    application_conditions: List[NonApplicationCondition],
+    parameter_values: Dict[Parameter, Any],
+    simple_warnings: List[AMWarning],
+) -> Tuple[bool, List[str]]:
+    na_conditions, warnings = _keep_satisfied_conditions(application_conditions, parameter_values, whole_text=True)
     if len(na_conditions) > 1:
         raise ValueError(
-            f'Cannot handle more than 1 non-applicability conditions on one section. '
-            f'Here, {len(na_conditions)} conditions are applicable.'
+            f'Cannot handle more than one inapplicability on the whole text. '
+            f'Here, {len(na_conditions)} inapplicability conditions are fulfilled.'
         )
     if not na_conditions:
-        return True, '\n'.join(warnings) if warnings else None
+        return True, warnings + [x.text for x in simple_warnings]
     if application_conditions[0].targeted_entity.outer_alinea_indices:
         raise ValueError('Can only deactivate the whole AM, not particular alineas.')
     description = _generate_whole_text_reason_inactive(na_conditions[0].condition, parameter_values)
-    return False, description
+    return False, [description]
 
 
 def _extract_installation_date_criterion(
@@ -262,8 +271,10 @@ def apply_parameter_values_to_am(
         _apply_parameter_values_in_text(section, parametrization, parameter_values, (i,))
         for i, section in enumerate(am.sections)
     ]
-    am.active, am.warning_inactive = _compute_whole_text_applicability(
-        parametrization.path_to_conditions.get(tuple()) or [], parameter_values
+    am.active, am.applicability_warnings = _compute_whole_text_applicability(
+        parametrization.path_to_conditions.get(tuple()) or [],
+        parameter_values,
+        parametrization.path_to_warnings.get(tuple()) or [],
     )
     return am
 

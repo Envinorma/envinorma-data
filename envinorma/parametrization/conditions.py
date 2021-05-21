@@ -380,9 +380,11 @@ def _alineas_prefix(alineas: List[int]) -> str:
     return f'Les alinéas n°{suffix}'
 
 
-def _generate_prefix(alineas: Optional[List[int]], modification: bool) -> str:
+def _generate_prefix(alineas: Optional[List[int]], modification: bool, whole_text: bool) -> str:
     if modification:
         return 'Ce paragraphe pourrait être modifié'
+    if whole_text:
+        return 'Cet arrêté pourrait ne pas être applicable'
     if not alineas:
         return 'Ce paragraphe pourrait ne pas être applicable'
     if len(alineas) == 1:
@@ -391,10 +393,14 @@ def _generate_prefix(alineas: Optional[List[int]], modification: bool) -> str:
 
 
 def generate_warning_missing_value(
-    condition: Condition, parameter_values: Dict[Parameter, Any], alineas: Optional[List[int]], modification: bool
+    condition: Condition,
+    parameter_values: Dict[Parameter, Any],
+    alineas: Optional[List[int]],
+    modification: bool,
+    whole_text: bool,
 ) -> str:
     return (
-        f'{_generate_prefix(alineas, modification)}. C\'est le cas '
+        f'{_generate_prefix(alineas, modification, whole_text)}. C\'est le cas '
         f'pour les installations dont {_modification_warning(condition, parameter_values)}.'
     )
 
@@ -529,9 +535,14 @@ def _inactive_warning(condition: Condition, parameter_values: Dict[Parameter, An
     return _warning_leaf(condition)
 
 
-def generate_inactive_warning(condition: Condition, parameter_values: Dict[Parameter, Any], all_alineas: bool) -> str:
-    if all_alineas:
-        prefix = '''Ce paragraphe ne s’applique pas à cette installation car'''
+def generate_inactive_warning(
+    condition: Condition, parameter_values: Dict[Parameter, Any], all_alineas: bool, whole_text: bool
+) -> str:
+    if whole_text:
+        prefix = 'Cet arrêté ne s\'applique pas à cette installation car'
     else:
-        prefix = '''Une partie de ce paragraphe ne s’applique pas à cette installation car'''
+        if all_alineas:
+            prefix = '''Ce paragraphe ne s’applique pas à cette installation car'''
+        else:
+            prefix = '''Une partie de ce paragraphe ne s’applique pas à cette installation car'''
     return f'{prefix} {_inactive_warning(condition, parameter_values)}.'

@@ -5,9 +5,10 @@ import string
 import warnings
 from collections import Counter
 from copy import copy
-from dataclasses import asdict, dataclass, field
+from dataclasses import asdict, dataclass, field, fields
 from datetime import date, datetime
 from enum import Enum
+from operator import attrgetter
 from typing import Any, Dict, List, Optional, Tuple
 
 from envinorma.data.arretes_ministeriels import ARRETES_MINISTERIELS
@@ -318,7 +319,7 @@ class ArreteMinisteriel:
     summary: Optional[Summary] = None
     id: Optional[str] = field(default_factory=random_id)
     active: bool = True
-    warning_inactive: Optional[str] = None
+    applicability_warnings: List[str] = field(default_factory=list)
 
     @property
     def short_title(self) -> str:
@@ -376,7 +377,8 @@ class ArreteMinisteriel:
         dict_['summary'] = Summary.from_dict(dict_['summary']) if dict_.get('summary') else None
         if 'applicability' in dict_:  # keep during migration of schema
             del dict_['applicability']
-        return cls(**dict_)
+        fields_ = set(map(attrgetter('name'), fields(cls)))
+        return cls(**{key: value for key, value in dict_.items() if key in fields_})
 
 
 def load_link(dict_: Dict[str, Any]) -> Link:

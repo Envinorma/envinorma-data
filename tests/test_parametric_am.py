@@ -183,15 +183,20 @@ def test_apply_parameter_values_to_am_whole_arrete():
 
     new_am_1 = apply_parameter_values_to_am(am, parametrization, {parameter: False})
     assert not new_am_1.active
-    assert new_am_1.warning_inactive is not None
+    assert new_am_1.applicability_warnings == [
+        'Cet arrêté ne s\'applique pas à cette installation car le paramètre nouvelle-installation est égal à False.'
+    ]
 
     new_am_2 = apply_parameter_values_to_am(am, parametrization, {parameter: True})
     assert new_am_2.active
-    assert new_am_2.warning_inactive is None
+    assert new_am_2.applicability_warnings == []
 
     new_am_3 = apply_parameter_values_to_am(am, parametrization, {})
     assert new_am_3.active
-    assert new_am_3.warning_inactive is not None
+    assert new_am_3.applicability_warnings == [
+        'Cet arrêté pourrait ne pas être applicable. C\'est le cas pour les installations dont le paramètre '
+        'nouvelle-installation est égal à False.'
+    ]
 
 
 def _all_alineas_inactive(text: StructuredText) -> bool:

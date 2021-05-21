@@ -87,7 +87,7 @@ def test_arrete_ministeriel():
         summary=None,
         id='JORFTEXTid',
         active=True,
-        warning_inactive='warning',
+        applicability_warnings=['warning'],
     )
     dict_ = am.to_dict()
     new_dict = ArreteMinisteriel.from_dict(json.loads(json.dumps(dict_))).to_dict()
