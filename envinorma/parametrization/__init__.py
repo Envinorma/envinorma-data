@@ -3,7 +3,7 @@ import sys
 import warnings
 from copy import deepcopy
 from dataclasses import asdict, dataclass, field, replace
-from datetime import datetime
+from datetime import date
 from typing import Any, Callable, Dict, List, Optional, Set, Tuple, TypeVar, Union
 
 from envinorma.data import ArreteMinisteriel, StructuredText
@@ -162,7 +162,7 @@ def _extract_all_paths(parametrization: 'Parametrization') -> Set[Ints]:
     )
 
 
-_DateRange = Tuple[Optional[datetime], Optional[datetime]]
+_DateRange = Tuple[Optional[date], Optional[date]]
 
 
 def _extract_date_range(condition: LeafCondition) -> _DateRange:
@@ -189,7 +189,7 @@ def _ranges_strictly_overlap(ranges: List[Tuple[float, float]]) -> bool:
 
 def _date_ranges_strictly_overlap(ranges: List[_DateRange]) -> bool:
     timestamp_ranges = [
-        (dt_left.timestamp() if dt_left else -math.inf, dt_right.timestamp() if dt_right else math.inf)
+        (float(dt_left.toordinal()) if dt_left else -math.inf, float(dt_right.toordinal()) if dt_right else math.inf)
         for dt_left, dt_right in ranges
     ]
     return _ranges_strictly_overlap(timestamp_ranges)

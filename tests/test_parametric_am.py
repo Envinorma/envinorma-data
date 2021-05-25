@@ -1,14 +1,25 @@
 import random
 from copy import copy
-from datetime import datetime, timedelta
+from datetime import date, datetime, timedelta
 from operator import itemgetter
 from string import ascii_letters
 from typing import List, Optional
 
-from envinorma.data import Applicability, ArreteMinisteriel, EnrichedString, Regime, StructuredText
+import pytest
+
+from envinorma.data import (
+    Applicability,
+    ArreteMinisteriel,
+    Classement,
+    EnrichedString,
+    Regime,
+    StructuredText,
+    UsedDateParameter,
+)
 from envinorma.parametrization import (
     AlternativeSection,
     AMWarning,
+    Combinations,
     ConditionSource,
     EntityReference,
     NonApplicationCondition,
@@ -30,13 +41,18 @@ from envinorma.parametrization.conditions import (
 from envinorma.parametrization.parametric_am import (
     _change_value,
     _date_not_in_parametrization,
+    _date_parameters,
     _deactivate_alineas,
+    _extract_am_regime,
     _extract_installation_date_criterion,
     _extract_interval_midpoints,
     _extract_sorted_targets,
+    _extract_surrounding_dates,
+    _find_used_date,
     _generate_combinations,
     _generate_equal_option_dicts,
     _generate_options_dict,
+    _keep_aed_parameter,
     _mean,
     apply_parameter_values_to_am,
     extract_parameters_from_parametrization,
@@ -63,37 +79,27 @@ def test_generate_equal_option_dicts():
     parameter = Parameter('test', ParameterType.BOOLEAN)
     conditions: List[Condition] = [Equal(parameter, True), Equal(parameter, True)]
     res = _generate_equal_option_dicts(conditions)
-    assert len(res) == 2
-    assert 'test == True' in res
-    assert 'test != True' in res
-    assert res['test == True'] == (parameter, True)
-    assert res['test != True'] == (parameter, False)
+    assert res == [('test == True', True), ('test != True', False)]
 
 
 def test_generate_equal_option_dicts_2():
     parameter = Parameter('regime', ParameterType.REGIME)
     conditions: List[Condition] = [Equal(parameter, Regime.A), Equal(parameter, Regime.NC)]
     res = _generate_equal_option_dicts(conditions)
-    assert len(res) == 4
-    assert 'regime == A' in res
-    assert 'regime == E' in res
-    assert 'regime == D' in res
-    assert 'regime == NC' in res
-    assert res['regime == A'] == (parameter, Regime.A)
-    assert res['regime == E'] == (parameter, Regime.E)
-    assert res['regime == D'] == (parameter, Regime.D)
-    assert res['regime == NC'] == (parameter, Regime.NC)
+    expected = [
+        ('regime == A', Regime.A),
+        ('regime == E', Regime.E),
+        ('regime == D', Regime.D),
+        ('regime == NC', Regime.NC),
+    ]
+    assert expected == res
 
 
 def test_generate_options_dict():
     parameter = Parameter('test', ParameterType.BOOLEAN)
     conditions: List[Condition] = [Equal(parameter, True), Equal(parameter, True)]
     res = _generate_options_dict(conditions)
-    assert len(res) == 2
-    assert 'test == True' in res
-    assert 'test != True' in res
-    assert res['test == True'] == (parameter, True)
-    assert res['test != True'] == (parameter, False)
+    assert res == [('test == True', True), ('test != True', False)]
 
 
 def test_extract_sorted_targets():
@@ -114,15 +120,14 @@ def test_generate_options_dict_2():
         Greater(parameter, datetime(2021, 1, 1), False),
     ]
     res = _generate_options_dict(conditions)
-    assert len(res) == 3
     str_dt_20 = '2020-01-01'
     str_dt_21 = '2021-01-01'
-    assert f'test < {str_dt_20}' in res
-    assert f'{str_dt_20} <= test < {str_dt_21}' in res
-    assert f'test >= {str_dt_21}' in res
-    assert res[f'test < {str_dt_20}'] == (parameter, datetime(2019, 12, 31))
-    assert res[f'{str_dt_20} <= test < {str_dt_21}'] == (parameter, datetime(2020, 7, 2, 1, 0))
-    assert res[f'test >= {str_dt_21}'] == (parameter, datetime(2021, 1, 2))
+    expected = [
+        (f'test < {str_dt_20}', datetime(2019, 12, 31)),
+        (f'{str_dt_20} <= test < {str_dt_21}', datetime(2020, 7, 2, 1, 0)),
+        (f'test >= {str_dt_21}', datetime(2021, 1, 2)),
+    ]
+    assert res == expected
 
 
 def test_change_value():
@@ -136,17 +141,34 @@ def test_change_value():
 def test_generate_combinations():
     parameter_1 = Parameter('test_1', ParameterType.DATE)
     parameter_2 = Parameter('test_2', ParameterType.BOOLEAN)
-    option_dict_1 = {
-        'test_1 < a': (parameter_1, datetime(2021, 1, 1)),
-        'test_1 >= a': (parameter_1, datetime(2022, 1, 1)),
+    options_1 = (parameter_1, [('test_1 < a', datetime(2021, 1, 1)), ('test_1 >= a', datetime(2022, 1, 1))])
+    options_2 = (parameter_2, [('test_2 == True', True), ('test_2 != True', False)])
+    res = _generate_combinations([options_1, options_2], False)
+    expected: Combinations = {
+        ('test_1 < a', 'test_2 == True'): {parameter_1: datetime(2021, 1, 1), parameter_2: True},
+        ('test_1 < a', 'test_2 != True'): {parameter_1: datetime(2021, 1, 1), parameter_2: False},
+        ('test_1 >= a', 'test_2 == True'): {parameter_1: datetime(2022, 1, 1), parameter_2: True},
+        ('test_1 >= a', 'test_2 != True'): {parameter_1: datetime(2022, 1, 1), parameter_2: False},
     }
-    option_dict_2 = {'test_2 == True': (parameter_2, True), 'test_2 != True': (parameter_2, False)}
-    res = _generate_combinations([option_dict_1, option_dict_2])
-    assert len(res) == 4
-    assert ('test_2 == True', 'test_1 < a') in res
-    assert ('test_2 != True', 'test_1 < a') in res
-    assert ('test_2 == True', 'test_1 >= a') in res
-    assert ('test_2 != True', 'test_1 >= a') in res
+    assert expected == res
+
+    parameter_1 = Parameter('test_1', ParameterType.DATE)
+    parameter_2 = Parameter('test_2', ParameterType.BOOLEAN)
+    options_1 = (parameter_1, [('test_1 < a', datetime(2021, 1, 1)), ('test_1 >= a', datetime(2022, 1, 1))])
+    options_2 = (parameter_2, [('test_2 == True', True), ('test_2 != True', False)])
+    res = _generate_combinations([options_1, options_2], True)
+    expected: Combinations = {
+        (): {},
+        ('test_2 == True',): {parameter_2: True},
+        ('test_2 != True',): {parameter_2: False},
+        ('test_1 < a',): {parameter_1: datetime(2021, 1, 1)},
+        ('test_1 < a', 'test_2 == True'): {parameter_1: datetime(2021, 1, 1), parameter_2: True},
+        ('test_1 < a', 'test_2 != True'): {parameter_1: datetime(2021, 1, 1), parameter_2: False},
+        ('test_1 >= a',): {parameter_1: datetime(2022, 1, 1)},
+        ('test_1 >= a', 'test_2 == True'): {parameter_1: datetime(2022, 1, 1), parameter_2: True},
+        ('test_1 >= a', 'test_2 != True'): {parameter_1: datetime(2022, 1, 1), parameter_2: False},
+    }
+    assert expected == res
 
 
 def _random_string() -> str:
@@ -437,3 +459,139 @@ def test_deactivate_alineas():
     )
     assert not res.applicability.active
     assert not res.sections[0].applicability.active
+
+
+def test_extract_surrounding_dates():
+    assert _extract_surrounding_dates(date.today(), []) == (None, None)
+
+    dates = [date.today() + timedelta(days=2 * i + 1) for i in range(3)]
+    assert _extract_surrounding_dates(date.today(), dates) == (None, dates[0])
+    assert _extract_surrounding_dates(date.today() + timedelta(1), dates) == (dates[0], dates[1])
+    assert _extract_surrounding_dates(date.today() + timedelta(2), dates) == (dates[0], dates[1])
+    assert _extract_surrounding_dates(date.today() + timedelta(4), dates) == (dates[1], dates[2])
+    assert _extract_surrounding_dates(date.today() + timedelta(6), dates) == (dates[2], None)
+
+
+def _simple_nac(date_parameter: Parameter) -> NonApplicationCondition:
+    return _NAC(
+        EntityReference(SectionReference((0,)), None),
+        Littler(date_parameter, datetime(2021, 1, 1)),
+        ConditionSource('', EntityReference(SectionReference((1,)), None)),
+    )
+
+
+def test_find_used_date():
+    declaration = ParameterEnum.DATE_DECLARATION.value
+    enregistrement = ParameterEnum.DATE_ENREGISTREMENT.value
+    autorisation = ParameterEnum.DATE_AUTORISATION.value
+    installation = ParameterEnum.DATE_INSTALLATION.value
+
+    assert _find_used_date(Parametrization([], [], [])) == declaration
+
+    non_applicabilities = [_simple_nac(declaration)]
+    assert _find_used_date(Parametrization(non_applicabilities, [], [])) == declaration
+
+    non_applicabilities = [_simple_nac(installation)]
+    assert _find_used_date(Parametrization(non_applicabilities, [], [])) == declaration
+
+    non_applicabilities = [_simple_nac(enregistrement)]
+    assert _find_used_date(Parametrization(non_applicabilities, [], [])) == enregistrement
+
+    non_applicabilities = [_simple_nac(enregistrement), _simple_nac(installation)]
+    assert _find_used_date(Parametrization(non_applicabilities, [], [])) == enregistrement
+
+    with pytest.raises(ValueError):
+        non_applicabilities = [_simple_nac(enregistrement), _simple_nac(declaration)]
+        _find_used_date(Parametrization(non_applicabilities, [], []))
+
+    with pytest.raises(ValueError):
+        non_applicabilities = [_simple_nac(enregistrement), _simple_nac(declaration), _simple_nac(autorisation)]
+        _find_used_date(Parametrization(non_applicabilities, [], []))
+
+
+def _generate_classement(regime: str) -> Classement:
+    return Classement('1234', Regime(regime), None)
+
+
+def test_extract_am_regime():
+    assert _extract_am_regime([]) is None
+    assert _extract_am_regime([_generate_classement('A')]) == Regime.A
+    assert _extract_am_regime([_generate_classement('E')]) == Regime.E
+    assert _extract_am_regime([_generate_classement('D')]) == Regime.D
+    assert _extract_am_regime([_generate_classement('D'), _generate_classement('A')]) is None
+
+
+def test_keep_aed_parameter():
+    declaration = ParameterEnum.DATE_DECLARATION.value
+    enregistrement = ParameterEnum.DATE_ENREGISTREMENT.value
+    autorisation = ParameterEnum.DATE_AUTORISATION.value
+
+    assert _keep_aed_parameter(set(), None) is None
+    assert _keep_aed_parameter(set(), Regime.A) is None
+    assert _keep_aed_parameter(set(), Regime.D) is None
+    assert _keep_aed_parameter({declaration}, Regime.D) == declaration
+    assert _keep_aed_parameter({enregistrement}, None) == enregistrement
+    assert _keep_aed_parameter({declaration, enregistrement}, Regime.D) == declaration
+    assert _keep_aed_parameter({declaration, enregistrement}, Regime.A) is None
+    assert _keep_aed_parameter({declaration, autorisation}, Regime.A) == autorisation
+    with pytest.raises(ValueError):
+        _keep_aed_parameter({declaration, autorisation}, None)
+    with pytest.raises(ValueError):
+        _keep_aed_parameter({autorisation, enregistrement}, None)
+
+
+def _simple_nac_2(date_parameter: Parameter) -> NonApplicationCondition:
+    return _NAC(
+        EntityReference(SectionReference((0,)), None),
+        Littler(date_parameter, date(2021, 1, 1)),
+        ConditionSource('', EntityReference(SectionReference((1,)), None)),
+    )
+
+
+def test_date_parameters():
+    declaration = ParameterEnum.DATE_DECLARATION.value
+    enregistrement = ParameterEnum.DATE_ENREGISTREMENT.value
+    autorisation = ParameterEnum.DATE_AUTORISATION.value
+    installation = ParameterEnum.DATE_INSTALLATION.value
+
+    non_applicabilities = []
+    parametrization = Parametrization(non_applicabilities, [], [])
+    parameter_values = {}
+    expected = (UsedDateParameter(False), UsedDateParameter(False))
+    assert _date_parameters(parametrization, parameter_values) == expected
+
+    non_applicabilities = [_simple_nac_2(enregistrement)]
+    parametrization = Parametrization(non_applicabilities, [], [])
+    parameter_values = {}
+    expected = (UsedDateParameter(True, False), UsedDateParameter(False))
+    assert _date_parameters(parametrization, parameter_values) == expected
+
+    non_applicabilities = [_simple_nac_2(enregistrement)]
+    parametrization = Parametrization(non_applicabilities, [], [])
+    parameter_values = {enregistrement: date(2022, 1, 1)}
+    expected = (UsedDateParameter(True, True, date(2021, 1, 1), None), UsedDateParameter(False))
+    assert _date_parameters(parametrization, parameter_values) == expected
+
+    non_applicabilities = [_simple_nac_2(enregistrement)]
+    parametrization = Parametrization(non_applicabilities, [], [])
+    parameter_values = {enregistrement: date(2020, 1, 1)}
+    expected = (UsedDateParameter(True, True, None, date(2021, 1, 1)), UsedDateParameter(False))
+    assert _date_parameters(parametrization, parameter_values) == expected
+
+    non_applicabilities = [_simple_nac_2(enregistrement), _simple_nac_2(autorisation)]
+    parametrization = Parametrization(non_applicabilities, [], [])
+    parameter_values = {enregistrement: date(2020, 1, 1), autorisation: date(2020, 1, 1)}
+    with pytest.raises(ValueError):
+        _date_parameters(parametrization, parameter_values)
+
+    non_applicabilities = [_simple_nac_2(installation)]
+    parametrization = Parametrization(non_applicabilities, [], [])
+    parameter_values = {enregistrement: date(2020, 1, 1)}
+    expected = (UsedDateParameter(False), UsedDateParameter(True, False))
+    assert _date_parameters(parametrization, parameter_values) == expected
+
+    non_applicabilities = [_simple_nac_2(installation)]
+    parametrization = Parametrization(non_applicabilities, [], [])
+    parameter_values = {installation: date(2020, 1, 1)}
+    expected = (UsedDateParameter(False), UsedDateParameter(True, True, None, date(2021, 1, 1)))
+    assert _date_parameters(parametrization, parameter_values) == expected

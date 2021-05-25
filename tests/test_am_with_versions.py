@@ -200,20 +200,18 @@ def test_generate_all_am_versions():
 
 
 def test_generate_exhaustive_combinations():
-    res = _generate_exhaustive_combinations(_PARAMETRIZATION, True)
+    res = _generate_exhaustive_combinations(_PARAMETRIZATION, True, None)
     assert len(res) == 4
 
 
 def test_generate_options_dicts():
-    res = _generate_options_dicts(_PARAMETRIZATION, True)
-    assert len(res) == 1
-    options = res[0]
-    assert len(options) == 3
-    assert sorted(list(options.keys())) == [
-        '2020-01-01 <= date-d-installation < 2021-01-01',
+    res = _generate_options_dicts(_PARAMETRIZATION, True, None)
+    expected = [
         'date-d-installation < 2020-01-01',
+        '2020-01-01 <= date-d-installation < 2021-01-01',
         'date-d-installation >= 2021-01-01',
     ]
+    assert [name for _, options in res for name, _ in options] == expected
 
 
 def test_extract_parameters_from_parametrization():

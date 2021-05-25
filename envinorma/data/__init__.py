@@ -304,22 +304,80 @@ def _standardize_title_if_necessary(title: str) -> str:
 
 
 @dataclass
+class UsedDateParameter:
+    """
+    Describes an AM version with regard to a specific date
+    (e.g. the AM applicable to classements with installation date in a specific range.)
+
+    parameter_is_used
+        is True if the corresponding date was used in the parametrization of the AM
+    parameter_is_known
+        is defined if parameter_is_used is True. It is true for the AM version
+        corresponding to an unknown value of the date for the given classement.
+    left_date
+        is defined if parameter_is_used is True. With right_date, it describes the date range of
+        applicability of the AM. None corresponds to -infinity.
+    right_date
+        is defined if parameter_is_used is True. With left_date, it describes the date range of
+        applicability of the AM. None corresponds to +infinity.
+
+    example:
+        For an AM that changes version for date 2021-01-01, one of the generated version
+        will have (parameter_is_used=True, parameter_is_known=True, left_date=None, right_date=2021-01-01).
+        It corresponds to the classements whose date is known and whose date value is smaller than 2021-01-01.
+    """
+
+    parameter_is_used: bool
+    parameter_is_known: Optional[bool] = None
+    left_date: Optional[date] = None
+    right_date: Optional[date] = None
+
+    def __post_init__(self) -> None:
+        if not self.parameter_is_used:
+            assert self.parameter_is_known is None
+            assert self.left_date is None
+            assert self.right_date is None
+        if self.parameter_is_known in {False, True}:
+            assert self.parameter_is_used
+        if self.parameter_is_known == False:
+            assert self.left_date is None
+            assert self.right_date is None
+
+    @classmethod
+    def from_dict(cls, dict_: Dict[str, Any]) -> 'UsedDateParameter':
+        return cls(**dict_)
+
+
+@dataclass
+class AMApplicability:
+    applicable: bool
+    applicability_warnings: List[str]
+    aed_date_parameter: UsedDateParameter
+    installation_date_parameter: UsedDateParameter
+
+    @classmethod
+    def from_dict(cls, dict_: Dict[str, Any]) -> 'AMApplicability':
+        return cls(**dict_)
+
+
+@dataclass
 class ArreteMinisteriel:
     title: EnrichedString
     sections: List[StructuredText]
     visa: List[EnrichedString]
     publication_date: Optional[date] = None
     date_of_signature: Optional[date] = None
-    installation_date_criterion: Optional[DateCriterion] = None
+    installation_date_criterion: Optional[DateCriterion] = None  # deprecate
     aida_url: Optional[str] = None
     legifrance_url: Optional[str] = None
     classements: List[Classement] = field(default_factory=list)
     classements_with_alineas: List[ClassementWithAlineas] = field(default_factory=list)
-    unique_version: bool = False
+    unique_version: bool = False  # deprecate
     summary: Optional[Summary] = None
     id: Optional[str] = field(default_factory=random_id)
-    active: bool = True
-    applicability_warnings: List[str] = field(default_factory=list)
+    active: bool = True  # deprecate
+    applicability_warnings: List[str] = field(default_factory=list)  # deprecate
+    applicability: Optional[AMApplicability] = None
 
     @property
     def short_title(self) -> str:
