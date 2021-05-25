@@ -314,6 +314,10 @@ class UsedDateParameter:
     right_date: Optional[date] = None
 
     def __post_init__(self) -> None:
+        if self.left_date:
+            assert isinstance(self.left_date, date) and not isinstance(self.left_date, datetime)
+        if self.right_date:
+            assert isinstance(self.right_date, date) and not isinstance(self.right_date, datetime)
         if not self.parameter_is_used:
             assert self.parameter_is_known is None
             assert self.left_date is None

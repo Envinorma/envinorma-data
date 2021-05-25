@@ -280,6 +280,18 @@ def _keep_satisfiable(conditions: List[Condition], regime_target: Regime) -> Lis
     return [condition for condition in conditions if _is_satisfiable(condition, regime_target)]
 
 
+def _convert_to_date(element: Any) -> date:
+    if isinstance(element, datetime):
+        return element.date()
+    if isinstance(element, date):
+        return element
+    raise ValueError(f'Expection date or datetime, got {type(element)}')
+
+
+def _convert_to_dates(elements: List[Any]) -> List[date]:
+    return [_convert_to_date(el) for el in elements]
+
+
 def _used_date_parameter(
     searched_date_parameter: Parameter, parametrization: Parametrization, parameter_values: Dict[Parameter, Any]
 ) -> UsedDateParameter:
@@ -291,8 +303,8 @@ def _used_date_parameter(
         return UsedDateParameter(False)
     if searched_date_parameter not in parameter_values:
         return UsedDateParameter(True, False)
-    value = parameter_values[searched_date_parameter]
-    limit_dates = _extract_sorted_targets(leaf_conditions, True)
+    value = _convert_to_date(parameter_values[searched_date_parameter])
+    limit_dates = _convert_to_dates(_extract_sorted_targets(leaf_conditions, True))
     date_left, date_right = _extract_surrounding_dates(value, limit_dates)
     return UsedDateParameter(True, True, date_left, date_right)
 

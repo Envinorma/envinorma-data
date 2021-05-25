@@ -107,7 +107,9 @@ class OrCondition:
 
 def parameter_value_to_dict(value: Any, type_: ParameterType) -> Any:
     if type_ == ParameterType.DATE:
-        return int(value.timestamp())
+        if isinstance(value, datetime):
+            value = value.date()
+        return str(value)
     if type_ == ParameterType.REGIME:
         return value.value
     return value
@@ -115,7 +117,11 @@ def parameter_value_to_dict(value: Any, type_: ParameterType) -> Any:
 
 def load_target(json_value: Any, type_: ParameterType) -> Any:
     if type_ == ParameterType.DATE:
-        return datetime.fromtimestamp(json_value)
+        if isinstance(json_value, int):
+            date_ = datetime.fromtimestamp(json_value).date()
+        else:
+            date_ = date.fromisoformat(json_value)
+        return date_
     if type_ == ParameterType.REGIME:
         return Regime(json_value)
     return json_value

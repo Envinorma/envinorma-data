@@ -1,5 +1,5 @@
 from dataclasses import dataclass, replace
-from datetime import datetime
+from datetime import date
 from typing import Dict, Optional, Tuple
 
 from envinorma.am_enriching import (
@@ -50,18 +50,18 @@ def _generate_1510_combinations() -> Combinations:
     date_ = ParameterEnum.DATE_INSTALLATION.value
     return {
         ('reg_A_no_date',): {regime: Regime.A},
-        ('reg_A', 'date_before_2003'): {regime: Regime.A, date_: datetime(2000, 1, 1)},
-        ('reg_A', 'date_between_2003_and_2017'): {regime: Regime.A, date_: datetime(2010, 1, 1)},
-        ('reg_A', 'date_after_2017'): {regime: Regime.A, date_: datetime(2020, 1, 1)},
+        ('reg_A', 'date_before_2003'): {regime: Regime.A, date_: date(2000, 1, 1)},
+        ('reg_A', 'date_between_2003_and_2017'): {regime: Regime.A, date_: date(2010, 1, 1)},
+        ('reg_A', 'date_after_2017'): {regime: Regime.A, date_: date(2020, 1, 1)},
         ('reg_E_no_date',): {regime: Regime.E},
-        ('reg_E', 'date_before_2003'): {regime: Regime.E, date_: datetime(2000, 1, 1)},
-        ('reg_E', 'date_between_2003_and_2010'): {regime: Regime.E, date_: datetime(2006, 1, 1)},
-        ('reg_E', 'date_between_2010_and_2017'): {regime: Regime.E, date_: datetime(2015, 1, 1)},
-        ('reg_E', 'date_after_2017'): {regime: Regime.E, date_: datetime(2020, 1, 1)},
+        ('reg_E', 'date_before_2003'): {regime: Regime.E, date_: date(2000, 1, 1)},
+        ('reg_E', 'date_between_2003_and_2010'): {regime: Regime.E, date_: date(2006, 1, 1)},
+        ('reg_E', 'date_between_2010_and_2017'): {regime: Regime.E, date_: date(2015, 1, 1)},
+        ('reg_E', 'date_after_2017'): {regime: Regime.E, date_: date(2020, 1, 1)},
         ('reg_D_no_date',): {regime: Regime.D},
-        ('reg_D', 'date_before_2009'): {regime: Regime.D, date_: datetime(2000, 1, 1)},
-        ('reg_D', 'date_between_2009_and_2017'): {regime: Regime.D, date_: datetime(2010, 1, 1)},
-        ('reg_D', 'date_after_2017'): {regime: Regime.D, date_: datetime(2020, 1, 1)},
+        ('reg_D', 'date_before_2009'): {regime: Regime.D, date_: date(2000, 1, 1)},
+        ('reg_D', 'date_between_2009_and_2017'): {regime: Regime.D, date_: date(2010, 1, 1)},
+        ('reg_D', 'date_after_2017'): {regime: Regime.D, date_: date(2020, 1, 1)},
     }
 
 
