@@ -8,18 +8,19 @@ from typing import Optional
 import pytest
 
 from envinorma.data import (
+    AMApplicability,
     Annotations,
     Applicability,
     ArreteMinisteriel,
     Classement,
     ClassementWithAlineas,
-    DateCriterion,
     EnrichedString,
     Link,
     Regime,
     StructuredText,
     Table,
     TopicName,
+    UsedDateParameter,
     _contains_human_date,
     _is_probably_cid,
     extract_date_of_signature,
@@ -78,16 +79,15 @@ def test_arrete_ministeriel():
         [_enriched_string_links()],
         date(2010, 1, 1),
         date(2010, 1, 1),
-        DateCriterion('2020-07-23', '2021-07-23'),
         'aida',
         'legifrance',
         classements=[Classement('1510', Regime.A, 'al')],
         classements_with_alineas=[ClassementWithAlineas('1510', Regime.A, ['al', 'albis'])],
-        unique_version=True,
         summary=None,
         id='JORFTEXTid',
-        active=True,
-        applicability_warnings=['warning'],
+        applicability=AMApplicability(
+            True, [], UsedDateParameter(False), UsedDateParameter(True, True, None, date(2020, 1, 1))
+        ),
     )
     dict_ = am.to_dict()
     new_dict = ArreteMinisteriel.from_dict(json.loads(json.dumps(dict_))).to_dict()

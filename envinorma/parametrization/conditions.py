@@ -1,5 +1,5 @@
 from dataclasses import asdict, dataclass
-from datetime import datetime
+from datetime import date, datetime
 from enum import Enum
 from typing import Any, Dict, List, Literal, Optional, Union
 
@@ -519,9 +519,9 @@ def generate_modification_warning(condition: Condition, parameter_values: Dict[P
 
 
 def _date_to_human_str(value: Any) -> str:
-    if not isinstance(value, datetime):
-        raise ValueError(f'Expecting datetime not {type(value)}')
-    return value.strftime('%d/%m/%Y')
+    if isinstance(value, (date, datetime)):
+        return value.strftime('%d/%m/%Y')
+    raise ValueError(f'Expecting datetime not {type(value)}')
 
 
 '''

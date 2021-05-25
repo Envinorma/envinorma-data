@@ -8,7 +8,6 @@ from envinorma.data import (
     Applicability,
     ArreteMinisteriel,
     Classement,
-    DateCriterion,
     Regime,
     StructuredText,
     UsedDateParameter,
@@ -33,7 +32,10 @@ from envinorma.parametrization import (
     extract_conditions_from_parametrization,
 )
 from envinorma.parametrization.conditions import (
+    AndCondition,
     ConditionType,
+    OrCondition,
+    extract_leaf_conditions,
     extract_parameters_from_condition,
     generate_inactive_warning,
     generate_modification_warning,
@@ -249,27 +251,6 @@ def _compute_whole_text_applicability(
     return False, [description]
 
 
-def _extract_installation_date_criterion(
-    parametrization: Parametrization, parameter_values: Dict[Parameter, Any]
-) -> Optional[DateCriterion]:
-    targets = _extract_sorted_targets(
-        extract_conditions_from_parametrization(ParameterEnum.DATE_INSTALLATION.value, parametrization), True
-    )
-    if not targets or ParameterEnum.DATE_INSTALLATION.value not in parameter_values:
-        return None
-    value = parameter_values[ParameterEnum.DATE_INSTALLATION.value]
-    if value < targets[0]:
-        return DateCriterion(None, date_to_str(targets[0]))
-    for date_before, date_after in zip(targets, targets[1:]):
-        if value < date_after:
-            return DateCriterion(date_to_str(date_before), date_to_str(date_after))
-    return DateCriterion(date_to_str(targets[-1]), None)
-
-
-def _date_not_in_parametrization(parametrization: Parametrization) -> bool:
-    return len(extract_conditions_from_parametrization(ParameterEnum.DATE_INSTALLATION.value, parametrization)) == 0
-
-
 def _extract_surrounding_dates(target_date: date, limit_dates: List[date]) -> Tuple[Optional[date], Optional[date]]:
     if not limit_dates:
         return None, None
@@ -281,10 +262,31 @@ def _extract_surrounding_dates(target_date: date, limit_dates: List[date]) -> Tu
     return limit_dates[-1], None
 
 
+def _is_satisfiable(condition: Condition, regime_target: Regime) -> bool:
+    if isinstance(condition, AndCondition):
+        return all([_is_satisfiable(cd, regime_target) for cd in condition.conditions])
+    if isinstance(condition, OrCondition):
+        return any([_is_satisfiable(cd, regime_target) for cd in condition.conditions])
+    if condition.parameter != ParameterEnum.REGIME.value:
+        return True
+    if isinstance(condition, (Range, Littler, Greater)):
+        raise ValueError('Cannot have Range, Littler or Greater condition for Regime parameter.')
+    return regime_target == condition.target
+
+
+def _keep_satisfiable(conditions: List[Condition], regime_target: Regime) -> List[Condition]:
+    if not isinstance(regime_target, Regime):
+        raise ValueError(f'regime_target must be an instance of Regime, not {type(regime_target)}')
+    return [condition for condition in conditions if _is_satisfiable(condition, regime_target)]
+
+
 def _used_date_parameter(
     searched_date_parameter: Parameter, parametrization: Parametrization, parameter_values: Dict[Parameter, Any]
 ) -> UsedDateParameter:
-    leaf_conditions = extract_conditions_from_parametrization(searched_date_parameter, parametrization)
+    conditions = parametrization.extract_conditions()
+    if ParameterEnum.REGIME.value in parameter_values:
+        conditions = _keep_satisfiable(conditions, parameter_values[ParameterEnum.REGIME.value])
+    leaf_conditions = [leaf for cd in conditions for leaf in extract_leaf_conditions(cd, searched_date_parameter)]
     if not leaf_conditions:
         return UsedDateParameter(False)
     if searched_date_parameter not in parameter_values:
@@ -352,13 +354,6 @@ def apply_parameter_values_to_am(
         for i, section in enumerate(am.sections)
     ]
     am.applicability = _compute_am_applicability(parametrization, parameter_values)
-
-    # Deprecated (handled in AMApplicability):
-    am.unique_version = _date_not_in_parametrization(parametrization)
-    am.installation_date_criterion = _extract_installation_date_criterion(parametrization, parameter_values)
-    am.active = am.applicability.applicable
-    am.applicability_warnings = am.applicability.applicability_warnings
-
     return am
 
 
@@ -419,14 +414,18 @@ def _extract_sorted_targets(conditions: Union[List[Condition], List[LeafConditio
 def _mean(a: Any, b: Any):
     if isinstance(a, datetime) and isinstance(b, datetime):
         return datetime.fromtimestamp((a.timestamp() + b.timestamp()) / 2)
+    if isinstance(a, date) and isinstance(b, date):
+        return date.fromordinal((a.toordinal() + b.toordinal()) // 2)
     return (a + b) / 2
 
 
+def _is_date(candidate: Any) -> bool:
+    return isinstance(candidate, (date, datetime))
+
+
 def _extract_interval_midpoints(interval_sides: List[Any]) -> List[Any]:
-    left = (interval_sides[0] - timedelta(1)) if isinstance(interval_sides[0], datetime) else (interval_sides[0] - 1)
-    right = (
-        (interval_sides[-1] + timedelta(1)) if isinstance(interval_sides[-1], datetime) else (interval_sides[-1] + 1)
-    )
+    left = (interval_sides[0] - timedelta(1)) if _is_date(interval_sides[0]) else (interval_sides[0] - 1)
+    right = (interval_sides[-1] + timedelta(1)) if _is_date(interval_sides[-1]) else (interval_sides[-1] + 1)
     midpoints = [_mean(a, b) for a, b in zip(interval_sides[1:], interval_sides[:-1])]
     return [left] + midpoints + [right]
 
@@ -554,7 +553,7 @@ def generate_all_am_versions(
     if combinations is None:
         combinations = _generate_exhaustive_combinations(parametrization, date_only, _extract_am_regime(am.classements))
     if not combinations:
-        return {tuple(): replace(apply_parameter_values_to_am(am, parametrization, {}), unique_version=True)}
+        combinations = {(): {}}
     return {
         combination_name: apply_parameter_values_to_am(am, parametrization, parameter_values)
         for combination_name, parameter_values in combinations.items()

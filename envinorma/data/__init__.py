@@ -99,25 +99,6 @@ class StructuredText:
         return cls(**dict_)
 
 
-@dataclass
-class DateCriterion:
-    left_date: Optional[str]
-    right_date: Optional[str]
-
-    def __post_init__(self) -> None:
-        if self.left_date:
-            str_to_date(self.left_date)
-        if self.right_date:
-            str_to_date(self.right_date)
-
-    @classmethod
-    def from_dict(cls, dict_: Dict[str, Any]) -> 'DateCriterion':
-        dict_ = dict_.copy()
-        dict_['left_date'] = dict_.get('left_date')
-        dict_['right_date'] = dict_.get('right_date')
-        return cls(**dict_)
-
-
 class Regime(Enum):
     A = 'A'
     E = 'E'
@@ -345,7 +326,16 @@ class UsedDateParameter:
 
     @classmethod
     def from_dict(cls, dict_: Dict[str, Any]) -> 'UsedDateParameter':
+        dict_ = dict_.copy()
+        for key in ('left_date', 'right_date'):
+            dict_[key] = date.fromisoformat(dict_[key]) if dict_[key] else None
         return cls(**dict_)
+
+    def to_dict(self) -> Dict[str, Any]:
+        res = asdict(self)
+        res['left_date'] = str(self.left_date) if self.left_date else None
+        res['right_date'] = str(self.right_date) if self.right_date else None
+        return res
 
 
 @dataclass
@@ -357,7 +347,15 @@ class AMApplicability:
 
     @classmethod
     def from_dict(cls, dict_: Dict[str, Any]) -> 'AMApplicability':
+        for key in ['aed_date_parameter', 'installation_date_parameter']:
+            dict_[key] = UsedDateParameter.from_dict(dict_[key])
         return cls(**dict_)
+
+    def to_dict(self) -> Dict[str, Any]:
+        res = asdict(self)
+        res['aed_date_parameter'] = self.aed_date_parameter.to_dict()
+        res['installation_date_parameter'] = self.installation_date_parameter.to_dict()
+        return res
 
 
 @dataclass
@@ -367,16 +365,12 @@ class ArreteMinisteriel:
     visa: List[EnrichedString]
     publication_date: Optional[date] = None
     date_of_signature: Optional[date] = None
-    installation_date_criterion: Optional[DateCriterion] = None  # deprecate
     aida_url: Optional[str] = None
     legifrance_url: Optional[str] = None
     classements: List[Classement] = field(default_factory=list)
     classements_with_alineas: List[ClassementWithAlineas] = field(default_factory=list)
-    unique_version: bool = False  # deprecate
     summary: Optional[Summary] = None
     id: Optional[str] = field(default_factory=random_id)
-    active: bool = True  # deprecate
-    applicability_warnings: List[str] = field(default_factory=list)  # deprecate
     applicability: Optional[AMApplicability] = None
 
     @property
@@ -408,6 +402,8 @@ class ArreteMinisteriel:
         res['sections'] = [section.to_dict() for section in self.sections]
         res['classements'] = [cl.to_dict() for cl in self.classements]
         res['classements_with_alineas'] = [cl.to_dict() for cl in self.classements_with_alineas]
+        if self.applicability:
+            res['applicability'] = self.applicability.to_dict()
         return res
 
     @classmethod
@@ -424,8 +420,6 @@ class ArreteMinisteriel:
         )
         dict_['sections'] = [StructuredText.from_dict(sec) for sec in dict_['sections']]
         dict_['visa'] = [EnrichedString.from_dict(vu) for vu in dict_['visa']]
-        dt_key = 'installation_date_criterion'
-        dict_[dt_key] = DateCriterion.from_dict(dict_[dt_key]) if dict_.get(dt_key) else None
         classements = [Classement.from_dict(cl) for cl in dict_.get('classements') or []]
         dict_['classements'] = list(sorted(classements, key=lambda x: x.regime.value))
         classements_with_alineas = [
@@ -433,8 +427,7 @@ class ArreteMinisteriel:
         ]
         dict_['classements_with_alineas'] = list(sorted(classements_with_alineas, key=lambda x: x.regime.value))
         dict_['summary'] = Summary.from_dict(dict_['summary']) if dict_.get('summary') else None
-        if 'applicability' in dict_:  # keep during migration of schema
-            del dict_['applicability']
+        dict_['applicability'] = AMApplicability.from_dict(dict_['applicability']) if 'applicability' in dict_ else None
         fields_ = set(map(attrgetter('name'), fields(cls)))
         return cls(**{key: value for key, value in dict_.items() if key in fields_})
 

@@ -40,11 +40,9 @@ from envinorma.parametrization.conditions import (
 )
 from envinorma.parametrization.parametric_am import (
     _change_value,
-    _date_not_in_parametrization,
     _date_parameters,
     _deactivate_alineas,
     _extract_am_regime,
-    _extract_installation_date_criterion,
     _extract_interval_midpoints,
     _extract_sorted_targets,
     _extract_surrounding_dates,
@@ -52,8 +50,11 @@ from envinorma.parametrization.parametric_am import (
     _generate_combinations,
     _generate_equal_option_dicts,
     _generate_options_dict,
+    _is_satisfiable,
     _keep_aed_parameter,
+    _keep_satisfiable,
     _mean,
+    _used_date_parameter,
     apply_parameter_values_to_am,
     extract_parameters_from_parametrization,
     generate_all_am_versions,
@@ -204,18 +205,18 @@ def test_apply_parameter_values_to_am_whole_arrete():
     )
 
     new_am_1 = apply_parameter_values_to_am(am, parametrization, {parameter: False})
-    assert not new_am_1.active
-    assert new_am_1.applicability_warnings == [
+    assert not new_am_1.applicability.applicable
+    assert new_am_1.applicability.applicability_warnings == [
         'Cet arrêté ne s\'applique pas à cette installation car le paramètre nouvelle-installation est égal à False.'
     ]
 
     new_am_2 = apply_parameter_values_to_am(am, parametrization, {parameter: True})
-    assert new_am_2.active
-    assert new_am_2.applicability_warnings == []
+    assert new_am_2.applicability.applicable
+    assert new_am_2.applicability.applicability_warnings == []
 
     new_am_3 = apply_parameter_values_to_am(am, parametrization, {})
-    assert new_am_3.active
-    assert new_am_3.applicability_warnings == [
+    assert new_am_3.applicability.applicable
+    assert new_am_3.applicability.applicability_warnings == [
         'Cet arrêté pourrait ne pas être applicable. C\'est le cas pour les installations dont le paramètre '
         'nouvelle-installation est égal à False.'
     ]
@@ -364,41 +365,6 @@ def test_generate_all_am_versions():
     assert res_2[()].sections[0].applicability == exp
 
 
-def test_extract_installation_date_criterion():
-    parameter = ParameterEnum.DATE_INSTALLATION.value
-    date_1 = datetime(2018, 1, 1)
-    date_2 = datetime(2019, 1, 1)
-    condition_1 = Greater(parameter, date_1, False)
-    condition_2 = Range(parameter, date_1, date_2, left_strict=False, right_strict=True)
-    condition_3 = Littler(parameter, date_2, True)
-    source = ConditionSource('', EntityReference(SectionReference((2,)), None))
-    new_text = StructuredText(_str('Art. 2'), [_str('version modifiée')], [], None, None)
-    parametrization = Parametrization(
-        [
-            _NAC(EntityReference(SectionReference((0,)), None), condition_1, source),
-            _NAC(EntityReference(SectionReference((2,)), None), condition_3, source),
-        ],
-        [_AS(SectionReference((1,)), new_text, condition_2, source)],
-        [],
-    )
-
-    oldest = _extract_installation_date_criterion(parametrization, {parameter: date_1 - timedelta(1)})
-    assert oldest
-    assert oldest.left_date is None
-    assert oldest.right_date == '2018-01-01'
-    mid = _extract_installation_date_criterion(parametrization, {parameter: date_1 + timedelta(1)})
-    assert mid
-    assert mid.left_date == '2018-01-01'
-    assert mid.right_date == '2019-01-01'
-    youngest = _extract_installation_date_criterion(parametrization, {parameter: date_2 + timedelta(1)})
-    assert youngest
-    assert youngest.left_date == '2019-01-01'
-    assert youngest.right_date is None
-
-    assert _extract_installation_date_criterion(parametrization, {}) is None
-    assert _extract_installation_date_criterion(Parametrization([], [], []), {}) is None
-
-
 def test_is_satisfied():
     param_1 = Parameter('regime', ParameterType.REGIME)
     param_2 = Parameter('date', ParameterType.DATE)
@@ -413,16 +379,6 @@ def test_is_satisfied():
     assert is_satisfied(AndCondition([condition_1, condition_3]), {param_1: Regime.A, param_2: 0.5})
     assert is_satisfied(OrCondition([condition_2, condition_3]), {param_1: Regime.E, param_2: 0.5})
     assert not is_satisfied(OrCondition([condition_1, condition_3]), {param_1: Regime.E, param_2: 5})
-
-
-def test_date_not_in_parametrization():
-    assert _date_not_in_parametrization(Parametrization([], [], []))
-    nac = _NAC(
-        EntityReference(SectionReference((1,)), None),
-        Equal(ParameterEnum.DATE_INSTALLATION.value, datetime.now()),
-        ConditionSource('', EntityReference(SectionReference((1,)), None)),
-    )
-    assert not _date_not_in_parametrization(Parametrization([nac], [], []))
 
 
 def _get_simple_text(sections: Optional[List[StructuredText]] = None) -> StructuredText:
@@ -549,7 +505,6 @@ def _simple_nac_2(date_parameter: Parameter) -> NonApplicationCondition:
 
 
 def test_date_parameters():
-    declaration = ParameterEnum.DATE_DECLARATION.value
     enregistrement = ParameterEnum.DATE_ENREGISTREMENT.value
     autorisation = ParameterEnum.DATE_AUTORISATION.value
     installation = ParameterEnum.DATE_INSTALLATION.value
@@ -595,3 +550,90 @@ def test_date_parameters():
     parameter_values = {installation: date(2020, 1, 1)}
     expected = (UsedDateParameter(False), UsedDateParameter(True, True, None, date(2021, 1, 1)))
     assert _date_parameters(parametrization, parameter_values) == expected
+
+
+def test_is_satisfiable():
+    enregistrement = ParameterEnum.DATE_ENREGISTREMENT.value
+    regime = ParameterEnum.REGIME.value
+
+    condition = Littler(enregistrement, date(2021, 1, 1))
+    assert _is_satisfiable(condition, Regime.E)
+
+    condition = Equal(regime, Regime.E)
+    assert _is_satisfiable(condition, Regime.E)
+
+    condition = Equal(regime, Regime.A)
+    assert not _is_satisfiable(condition, Regime.E)
+
+    condition = AndCondition([Equal(regime, Regime.A), Littler(enregistrement, date(2021, 1, 1))])
+    assert not _is_satisfiable(condition, Regime.E)
+
+    condition = OrCondition([Equal(regime, Regime.A), Littler(enregistrement, date(2021, 1, 1))])
+    assert _is_satisfiable(condition, Regime.E)
+
+    condition = AndCondition([Equal(regime, Regime.E), Littler(enregistrement, date(2021, 1, 1))])
+    assert _is_satisfiable(condition, Regime.E)
+
+    with pytest.raises(ValueError):
+        condition = AndCondition([Littler(regime, Regime.E), Littler(enregistrement, date(2021, 1, 1))])
+        _is_satisfiable(condition, Regime.E)
+
+
+def test_keep_satisfiable():
+    enregistrement = ParameterEnum.DATE_ENREGISTREMENT.value
+    regime = ParameterEnum.REGIME.value
+
+    assert _keep_satisfiable([], Regime.A) == []
+
+    condition = Equal(regime, Regime.A)
+    assert _keep_satisfiable([condition], Regime.E) == []
+
+    condition = Equal(regime, Regime.E)
+    assert _keep_satisfiable([condition], Regime.E) == [condition]
+
+    condition = Equal(regime, Regime.E)
+    condition_ = Littler(enregistrement, date(2021, 1, 1))
+    assert _keep_satisfiable([condition, condition_], Regime.D) == [condition_]
+
+    installation = ParameterEnum.DATE_INSTALLATION.value
+    dt_1 = Littler(installation, date(2021, 1, 1))
+    dt_2 = Littler(installation, date(2022, 1, 1))
+    conditions = [dt_1, AndCondition([dt_2, Equal(regime, Regime.A)]), Equal(regime, Regime.A)]
+    assert _keep_satisfiable(conditions, Regime.E) == [dt_1]
+
+
+def test_used_date_parameter():
+    installation = ParameterEnum.DATE_INSTALLATION.value
+    regime = ParameterEnum.REGIME.value
+    source = ConditionSource('', EntityReference(SectionReference((1,)), None))
+    target = EntityReference(SectionReference((0,)), None)
+    dt_1 = Littler(installation, date(2021, 1, 1))
+    dt_2 = Littler(installation, date(2022, 1, 1))
+    nac_1 = _NAC(target, dt_1, source)
+    nac_2 = _NAC(target, AndCondition([dt_2, Equal(regime, Regime.A)]), source)
+    nac_3 = _NAC(target, Equal(regime, Regime.A), source)
+    parametrization = Parametrization([nac_1, nac_2, nac_3], [], [])
+
+    res = _used_date_parameter(installation, parametrization, {})
+    assert res == UsedDateParameter(True, False)
+
+    res = _used_date_parameter(installation, parametrization, {regime: Regime.A})
+    assert res == UsedDateParameter(True, False)
+
+    res = _used_date_parameter(installation, parametrization, {installation: date(2021, 5, 1)})
+    assert res == UsedDateParameter(True, True, date(2021, 1, 1), date(2022, 1, 1))
+
+    res = _used_date_parameter(installation, parametrization, {installation: date(2022, 5, 1)})
+    assert res == UsedDateParameter(True, True, date(2022, 1, 1), None)
+
+    res = _used_date_parameter(installation, parametrization, {installation: date(2021, 5, 1), regime: Regime.A})
+    assert res == UsedDateParameter(True, True, date(2021, 1, 1), date(2022, 1, 1))
+
+    res = _used_date_parameter(installation, parametrization, {installation: date(2022, 5, 1), regime: Regime.A})
+    assert res == UsedDateParameter(True, True, date(2022, 1, 1), None)
+
+    res = _used_date_parameter(installation, parametrization, {installation: date(2022, 5, 1), regime: Regime.E})
+    assert res == UsedDateParameter(True, True, date(2021, 1, 1), None)
+
+    res = _used_date_parameter(installation, parametrization, {installation: date(2020, 5, 1), regime: Regime.E})
+    assert res == UsedDateParameter(True, True, None, date(2021, 1, 1))

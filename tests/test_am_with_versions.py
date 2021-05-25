@@ -26,7 +26,7 @@ from envinorma.parametrization import (
     extract_conditions_from_parametrization,
 )
 from envinorma.parametrization.am_with_versions import apply_parametrization
-from envinorma.parametrization.conditions import AndCondition, ConditionType, Range, extract_leaf_conditions
+from envinorma.parametrization.conditions import AndCondition, Range, extract_leaf_conditions
 from envinorma.parametrization.parametric_am import (
     _generate_exhaustive_combinations,
     _generate_options_dicts,
@@ -35,17 +35,21 @@ from envinorma.parametrization.parametric_am import (
 )
 
 _DATE = Parameter(id='date-d-installation', type=ParameterType.DATE)
-
+_NEW_TEXT = StructuredText(
+    title=EnrichedString(text='Article 2.1'),
+    outer_alineas=[EnrichedString(text='Contenu nouveau')],
+    sections=[],
+    applicability=None,
+    lf_id=None,
+    reference_str=None,
+    annotations=None,
+    id='d16d0fE7C7fc',
+)
 _PARAMETRIZATION = Parametrization(
     application_conditions=[
         NonApplicationCondition(
             targeted_entity=EntityReference(section=SectionReference(path=(0,)), outer_alinea_indices=None),
-            condition=AndCondition(
-                conditions=[
-                    Littler(parameter=_DATE, target=datetime(2021, 1, 1, 0, 0), strict=True, type=ConditionType.LITTLER)
-                ],
-                type=ConditionType.AND,
-            ),
+            condition=AndCondition(conditions=[Littler(parameter=_DATE, target=date(2021, 1, 1), strict=True)]),
             source=ConditionSource(
                 explanation='',
                 reference=EntityReference(section=SectionReference(path=(0,)), outer_alinea_indices=None),
@@ -56,24 +60,9 @@ _PARAMETRIZATION = Parametrization(
     alternative_sections=[
         AlternativeSection(
             targeted_section=SectionReference(path=(1, 0)),
-            new_text=StructuredText(
-                title=EnrichedString(text='Article 2.1', links=[], table=None, active=True),
-                outer_alineas=[EnrichedString(text='Contenu nouveau', links=[], table=None, active=True)],
-                sections=[],
-                applicability=None,
-                lf_id=None,
-                reference_str=None,
-                annotations=None,
-                id='d16d0fE7C7fc',
-            ),
-            condition=AndCondition(
-                conditions=[Range(parameter=_DATE, left=datetime(2020, 1, 1, 0, 0), right=datetime(2021, 1, 1, 0, 0))],
-                type=ConditionType.AND,
-            ),
-            source=ConditionSource(
-                explanation='',
-                reference=EntityReference(section=SectionReference(path=(1,)), outer_alinea_indices=None),
-            ),
+            new_text=_NEW_TEXT,
+            condition=AndCondition(conditions=[Range(parameter=_DATE, left=date(2020, 1, 1), right=date(2021, 1, 1))]),
+            source=ConditionSource('', EntityReference(section=SectionReference(path=(1,)), outer_alinea_indices=None)),
             description='',
         )
     ],
@@ -166,15 +155,11 @@ _STRUCTURED_AM = ArreteMinisteriel(
     ],
     visa=[],
     date_of_signature=date(2020, 12, 15),
-    installation_date_criterion=None,
     aida_url=None,
     legifrance_url=None,
     classements=[],
     classements_with_alineas=[],
-    unique_version=False,
     summary=None,
-    active=True,
-    applicability_warnings=[],
     id='FAKE_ID',
 )
 
@@ -222,7 +207,10 @@ def test_extract_parameters_from_parametrization():
 
 def test_extract_conditions_from_parametrization():
     res = extract_conditions_from_parametrization(_DATE, _PARAMETRIZATION)
-    assert len(res) == 2
+    assert res == [
+        Littler(parameter=_DATE, target=date(2021, 1, 1), strict=True),
+        Range(parameter=_DATE, left=date(2020, 1, 1), right=date(2021, 1, 1)),
+    ]
 
 
 def test_extract_leaf_conditions():
