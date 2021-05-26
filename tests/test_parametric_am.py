@@ -205,18 +205,18 @@ def test_apply_parameter_values_to_am_whole_arrete():
     )
 
     new_am_1 = apply_parameter_values_to_am(am, parametrization, {parameter: False})
-    assert not new_am_1.applicability.applicable
-    assert new_am_1.applicability.applicability_warnings == [
+    assert not new_am_1.version.applicable
+    assert new_am_1.version.applicability_warnings == [
         'Cet arrêté ne s\'applique pas à cette installation car le paramètre nouvelle-installation est égal à False.'
     ]
 
     new_am_2 = apply_parameter_values_to_am(am, parametrization, {parameter: True})
-    assert new_am_2.applicability.applicable
-    assert new_am_2.applicability.applicability_warnings == []
+    assert new_am_2.version.applicable
+    assert new_am_2.version.applicability_warnings == []
 
     new_am_3 = apply_parameter_values_to_am(am, parametrization, {})
-    assert new_am_3.applicability.applicable
-    assert new_am_3.applicability.applicability_warnings == [
+    assert new_am_3.version.applicable
+    assert new_am_3.version.applicability_warnings == [
         'Cet arrêté pourrait ne pas être applicable. C\'est le cas pour les installations dont le paramètre '
         'nouvelle-installation est égal à False.'
     ]

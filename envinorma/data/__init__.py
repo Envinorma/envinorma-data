@@ -343,14 +343,14 @@ class UsedDateParameter:
 
 
 @dataclass
-class AMApplicability:
+class VersionDescriptor:
     applicable: bool
     applicability_warnings: List[str]
     aed_date_parameter: UsedDateParameter
     installation_date_parameter: UsedDateParameter
 
     @classmethod
-    def from_dict(cls, dict_: Dict[str, Any]) -> 'AMApplicability':
+    def from_dict(cls, dict_: Dict[str, Any]) -> 'VersionDescriptor':
         for key in ['aed_date_parameter', 'installation_date_parameter']:
             dict_[key] = UsedDateParameter.from_dict(dict_[key])
         return cls(**dict_)
@@ -375,7 +375,7 @@ class ArreteMinisteriel:
     classements_with_alineas: List[ClassementWithAlineas] = field(default_factory=list)
     summary: Optional[Summary] = None
     id: Optional[str] = field(default_factory=random_id)
-    applicability: Optional[AMApplicability] = None
+    version: Optional[VersionDescriptor] = None
 
     @property
     def short_title(self) -> str:
@@ -406,8 +406,8 @@ class ArreteMinisteriel:
         res['sections'] = [section.to_dict() for section in self.sections]
         res['classements'] = [cl.to_dict() for cl in self.classements]
         res['classements_with_alineas'] = [cl.to_dict() for cl in self.classements_with_alineas]
-        if self.applicability:
-            res['applicability'] = self.applicability.to_dict()
+        if self.version:
+            res['version'] = self.version.to_dict()
         return res
 
     @classmethod
@@ -431,9 +431,7 @@ class ArreteMinisteriel:
         ]
         dict_['classements_with_alineas'] = list(sorted(classements_with_alineas, key=lambda x: x.regime.value))
         dict_['summary'] = Summary.from_dict(dict_['summary']) if dict_.get('summary') else None
-        dict_['applicability'] = (
-            AMApplicability.from_dict(dict_['applicability']) if dict_.get('applicability') else None
-        )
+        dict_['version'] = VersionDescriptor.from_dict(dict_['version']) if dict_.get('version') else None
         fields_ = set(map(attrgetter('name'), fields(cls)))
         return cls(**{key: value for key, value in dict_.items() if key in fields_})
 

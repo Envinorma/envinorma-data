@@ -4,13 +4,13 @@ from datetime import date, datetime, timedelta
 from typing import Any, Dict, List, Optional, Set, Tuple, Union
 
 from envinorma.data import (
-    AMApplicability,
     Applicability,
     ArreteMinisteriel,
     Classement,
     Regime,
     StructuredText,
     UsedDateParameter,
+    VersionDescriptor,
 )
 from envinorma.parametrization import (
     AlternativeSection,
@@ -345,16 +345,16 @@ def _date_parameters(
     )
 
 
-def _compute_am_applicability(
+def _compute_am_version_descriptor(
     parametrization: Parametrization, parameter_values: Dict[Parameter, Any]
-) -> AMApplicability:
+) -> VersionDescriptor:
     am_applicable, am_applicability_warnings = _compute_whole_text_applicability(
         parametrization.path_to_conditions.get(tuple()) or [],
         parameter_values,
         parametrization.path_to_warnings.get(tuple()) or [],
     )
     date_parameters = _date_parameters(parametrization, parameter_values)
-    return AMApplicability(am_applicable, am_applicability_warnings, *date_parameters)
+    return VersionDescriptor(am_applicable, am_applicability_warnings, *date_parameters)
 
 
 def apply_parameter_values_to_am(
@@ -365,7 +365,7 @@ def apply_parameter_values_to_am(
         _apply_parameter_values_in_text(section, parametrization, parameter_values, (i,))
         for i, section in enumerate(am.sections)
     ]
-    am.applicability = _compute_am_applicability(parametrization, parameter_values)
+    am.version = _compute_am_version_descriptor(parametrization, parameter_values)
     return am
 
 

@@ -8,7 +8,6 @@ from typing import Optional
 import pytest
 
 from envinorma.data import (
-    AMApplicability,
     Annotations,
     Applicability,
     ArreteMinisteriel,
@@ -21,6 +20,7 @@ from envinorma.data import (
     Table,
     TopicName,
     UsedDateParameter,
+    VersionDescriptor,
     _contains_human_date,
     _is_probably_cid,
     extract_date_of_signature,
@@ -85,7 +85,7 @@ def test_arrete_ministeriel():
         classements_with_alineas=[ClassementWithAlineas('1510', Regime.A, ['al', 'albis'])],
         summary=None,
         id='JORFTEXTid',
-        applicability=AMApplicability(
+        version=VersionDescriptor(
             True, [], UsedDateParameter(False), UsedDateParameter(True, True, None, date(2020, 1, 1))
         ),
     )
