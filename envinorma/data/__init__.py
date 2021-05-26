@@ -284,7 +284,7 @@ def _standardize_title_if_necessary(title: str) -> str:
     return title
 
 
-@dataclass
+@dataclass(eq=True, frozen=True)
 class UsedDateParameter:
     """
     Describes an AM version with regard to a specific date
@@ -292,7 +292,7 @@ class UsedDateParameter:
 
     parameter_is_used
         is True if the corresponding date was used in the parametrization of the AM
-    parameter_is_known
+    applicable_when_value_is_known
         is defined if parameter_is_used is True. It is true for the AM version
         corresponding to an unknown value of the date for the given classement.
     left_date
@@ -304,12 +304,12 @@ class UsedDateParameter:
 
     example:
         For an AM that changes version for date 2021-01-01, one of the generated version
-        will have (parameter_is_used=True, parameter_is_known=True, left_date=None, right_date=2021-01-01).
+        will have (parameter_is_used=True, applicable_when_value_is_known=True, left_date=None, right_date=2021-01-01).
         It corresponds to the classements whose date is known and whose date value is smaller than 2021-01-01.
     """
 
     parameter_is_used: bool
-    parameter_is_known: Optional[bool] = None
+    applicable_when_value_is_known: Optional[bool] = None
     left_date: Optional[date] = None
     right_date: Optional[date] = None
 
@@ -319,12 +319,12 @@ class UsedDateParameter:
         if self.right_date:
             assert isinstance(self.right_date, date) and not isinstance(self.right_date, datetime)
         if not self.parameter_is_used:
-            assert self.parameter_is_known is None
+            assert self.applicable_when_value_is_known is None
             assert self.left_date is None
             assert self.right_date is None
-        if self.parameter_is_known in {False, True}:
+        if self.applicable_when_value_is_known in {False, True}:
             assert self.parameter_is_used
-        if self.parameter_is_known == False:
+        if self.applicable_when_value_is_known == False:
             assert self.left_date is None
             assert self.right_date is None
 
@@ -431,7 +431,9 @@ class ArreteMinisteriel:
         ]
         dict_['classements_with_alineas'] = list(sorted(classements_with_alineas, key=lambda x: x.regime.value))
         dict_['summary'] = Summary.from_dict(dict_['summary']) if dict_.get('summary') else None
-        dict_['applicability'] = AMApplicability.from_dict(dict_['applicability']) if 'applicability' in dict_ else None
+        dict_['applicability'] = (
+            AMApplicability.from_dict(dict_['applicability']) if dict_.get('applicability') else None
+        )
         fields_ = set(map(attrgetter('name'), fields(cls)))
         return cls(**{key: value for key, value in dict_.items() if key in fields_})
 
