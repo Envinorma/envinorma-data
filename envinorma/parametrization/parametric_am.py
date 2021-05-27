@@ -7,9 +7,9 @@ from envinorma.data import (
     Applicability,
     ArreteMinisteriel,
     Classement,
+    DateParameterDescriptor,
     Regime,
     StructuredText,
-    UsedDateParameter,
     VersionDescriptor,
 )
 from envinorma.parametrization import (
@@ -294,24 +294,24 @@ def _convert_to_dates(elements: List[Any]) -> List[date]:
 
 def _used_date_parameter(
     searched_date_parameter: Parameter, parametrization: Parametrization, parameter_values: Dict[Parameter, Any]
-) -> UsedDateParameter:
+) -> DateParameterDescriptor:
     conditions = parametrization.extract_conditions()
     if ParameterEnum.REGIME.value in parameter_values:
         conditions = _keep_satisfiable(conditions, parameter_values[ParameterEnum.REGIME.value])
     leaf_conditions = [leaf for cd in conditions for leaf in extract_leaf_conditions(cd, searched_date_parameter)]
     if not leaf_conditions:
-        return UsedDateParameter(False)
+        return DateParameterDescriptor(False)
     if searched_date_parameter not in parameter_values:
-        return UsedDateParameter(True, False)
+        return DateParameterDescriptor(True, False)
     value = _convert_to_date(parameter_values[searched_date_parameter])
     limit_dates = _convert_to_dates(_extract_sorted_targets(leaf_conditions, True))
     date_left, date_right = _extract_surrounding_dates(value, limit_dates)
-    return UsedDateParameter(True, True, date_left, date_right)
+    return DateParameterDescriptor(True, True, date_left, date_right)
 
 
 def _installation_date_parameter(
     parametrization: Parametrization, parameter_values: Dict[Parameter, Any]
-) -> UsedDateParameter:
+) -> DateParameterDescriptor:
     return _used_date_parameter(ParameterEnum.DATE_INSTALLATION.value, parametrization, parameter_values)
 
 
@@ -331,14 +331,16 @@ def _find_used_date(parametrization: Parametrization) -> Parameter:
     raise ValueError(f'Cannot handle several AED dates in the same parametrization, got {used_date_parameters}.')
 
 
-def _aed_date_parameter(parametrization: Parametrization, parameter_values: Dict[Parameter, Any]) -> UsedDateParameter:
+def _aed_date_parameter(
+    parametrization: Parametrization, parameter_values: Dict[Parameter, Any]
+) -> DateParameterDescriptor:
     used_date = _find_used_date(parametrization)
     return _used_date_parameter(used_date, parametrization, parameter_values)
 
 
 def _date_parameters(
     parametrization: Parametrization, parameter_values: Dict[Parameter, Any]
-) -> Tuple[UsedDateParameter, UsedDateParameter]:
+) -> Tuple[DateParameterDescriptor, DateParameterDescriptor]:
     return (
         _aed_date_parameter(parametrization, parameter_values),
         _installation_date_parameter(parametrization, parameter_values),
@@ -365,7 +367,7 @@ def apply_parameter_values_to_am(
         _apply_parameter_values_in_text(section, parametrization, parameter_values, (i,))
         for i, section in enumerate(am.sections)
     ]
-    am.version = _compute_am_version_descriptor(parametrization, parameter_values)
+    am.version_descriptor = _compute_am_version_descriptor(parametrization, parameter_values)
     return am
 
 

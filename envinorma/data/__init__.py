@@ -83,6 +83,8 @@ class StructuredText:
 
     def to_dict(self) -> Dict[str, Any]:
         res = asdict(self)
+        res['title'] = self.title.to_dict()
+        res['outer_alineas'] = [al.to_dict() for al in self.outer_alineas]
         res['sections'] = [se.to_dict() for se in self.sections]
         res['applicability'] = self.applicability.to_dict() if self.applicability else None
         res['annotations'] = self.annotations.to_dict() if self.annotations else None
@@ -285,60 +287,60 @@ def _standardize_title_if_necessary(title: str) -> str:
 
 
 @dataclass(eq=True, frozen=True)
-class UsedDateParameter:
+class DateParameterDescriptor:
     """
     Describes an AM version with regard to a specific date
     (e.g. the AM applicable to classements with installation date in a specific range.)
 
-    parameter_is_used
+    is_used
         is True if the corresponding date was used in the parametrization of the AM
-    applicable_when_value_is_known
-        is defined if parameter_is_used is True. It is true for the AM version
+    known_value
+        is defined if is_used is True. It is true for the AM version
         corresponding to an unknown value of the date for the given classement.
-    left_date
-        is defined if parameter_is_used is True. With right_date, it describes the date range of
+    left_value
+        is defined if is_used is True. With right_value, it describes the date range of
         applicability of the AM. None corresponds to -infinity.
-    right_date
-        is defined if parameter_is_used is True. With left_date, it describes the date range of
+    right_value
+        is defined if is_used is True. With left_value, it describes the date range of
         applicability of the AM. None corresponds to +infinity.
 
     example:
         For an AM that changes version for date 2021-01-01, one of the generated version
-        will have (parameter_is_used=True, applicable_when_value_is_known=True, left_date=None, right_date=2021-01-01).
+        will have (is_used=True, known_value=True, left_value=None, right_value=2021-01-01).
         It corresponds to the classements whose date is known and whose date value is smaller than 2021-01-01.
     """
 
-    parameter_is_used: bool
-    applicable_when_value_is_known: Optional[bool] = None
-    left_date: Optional[date] = None
-    right_date: Optional[date] = None
+    is_used: bool
+    known_value: Optional[bool] = None
+    left_value: Optional[date] = None
+    right_value: Optional[date] = None
 
     def __post_init__(self) -> None:
-        if self.left_date:
-            assert isinstance(self.left_date, date) and not isinstance(self.left_date, datetime)
-        if self.right_date:
-            assert isinstance(self.right_date, date) and not isinstance(self.right_date, datetime)
-        if not self.parameter_is_used:
-            assert self.applicable_when_value_is_known is None
-            assert self.left_date is None
-            assert self.right_date is None
-        if self.applicable_when_value_is_known in {False, True}:
-            assert self.parameter_is_used
-        if self.applicable_when_value_is_known == False:
-            assert self.left_date is None
-            assert self.right_date is None
+        if self.left_value:
+            assert isinstance(self.left_value, date) and not isinstance(self.left_value, datetime)
+        if self.right_value:
+            assert isinstance(self.right_value, date) and not isinstance(self.right_value, datetime)
+        if not self.is_used:
+            assert self.known_value is None
+            assert self.left_value is None
+            assert self.right_value is None
+        if self.known_value in {False, True}:
+            assert self.is_used
+        if self.known_value == False:
+            assert self.left_value is None
+            assert self.right_value is None
 
     @classmethod
-    def from_dict(cls, dict_: Dict[str, Any]) -> 'UsedDateParameter':
+    def from_dict(cls, dict_: Dict[str, Any]) -> 'DateParameterDescriptor':
         dict_ = dict_.copy()
-        for key in ('left_date', 'right_date'):
+        for key in ('left_value', 'right_value'):
             dict_[key] = date.fromisoformat(dict_[key]) if dict_[key] else None
         return cls(**dict_)
 
     def to_dict(self) -> Dict[str, Any]:
         res = asdict(self)
-        res['left_date'] = str(self.left_date) if self.left_date else None
-        res['right_date'] = str(self.right_date) if self.right_date else None
+        res['left_value'] = str(self.left_value) if self.left_value else None
+        res['right_value'] = str(self.right_value) if self.right_value else None
         return res
 
 
@@ -346,19 +348,19 @@ class UsedDateParameter:
 class VersionDescriptor:
     applicable: bool
     applicability_warnings: List[str]
-    aed_date_parameter: UsedDateParameter
-    installation_date_parameter: UsedDateParameter
+    aed_date: DateParameterDescriptor
+    installation_date: DateParameterDescriptor
 
     @classmethod
     def from_dict(cls, dict_: Dict[str, Any]) -> 'VersionDescriptor':
-        for key in ['aed_date_parameter', 'installation_date_parameter']:
-            dict_[key] = UsedDateParameter.from_dict(dict_[key])
+        for key in ['aed_date', 'installation_date']:
+            dict_[key] = DateParameterDescriptor.from_dict(dict_[key])
         return cls(**dict_)
 
     def to_dict(self) -> Dict[str, Any]:
         res = asdict(self)
-        res['aed_date_parameter'] = self.aed_date_parameter.to_dict()
-        res['installation_date_parameter'] = self.installation_date_parameter.to_dict()
+        res['aed_date'] = self.aed_date.to_dict()
+        res['installation_date'] = self.installation_date.to_dict()
         return res
 
 
@@ -375,7 +377,7 @@ class ArreteMinisteriel:
     classements_with_alineas: List[ClassementWithAlineas] = field(default_factory=list)
     summary: Optional[Summary] = None
     id: Optional[str] = field(default_factory=random_id)
-    version: Optional[VersionDescriptor] = None
+    version_descriptor: Optional[VersionDescriptor] = None
 
     @property
     def short_title(self) -> str:
@@ -403,11 +405,13 @@ class ArreteMinisteriel:
             res['publication_date'] = str(res['publication_date'])
         if res['date_of_signature']:
             res['date_of_signature'] = str(res['date_of_signature'])
+        res['title'] = self.title.to_dict()
+        res['visa'] = [vi.to_dict() for vi in self.visa]
         res['sections'] = [section.to_dict() for section in self.sections]
         res['classements'] = [cl.to_dict() for cl in self.classements]
         res['classements_with_alineas'] = [cl.to_dict() for cl in self.classements_with_alineas]
-        if self.version:
-            res['version'] = self.version.to_dict()
+        if self.version_descriptor:
+            res['version_descriptor'] = self.version_descriptor.to_dict()
         return res
 
     @classmethod
@@ -431,7 +435,9 @@ class ArreteMinisteriel:
         ]
         dict_['classements_with_alineas'] = list(sorted(classements_with_alineas, key=lambda x: x.regime.value))
         dict_['summary'] = Summary.from_dict(dict_['summary']) if dict_.get('summary') else None
-        dict_['version'] = VersionDescriptor.from_dict(dict_['version']) if dict_.get('version') else None
+        dict_['version_descriptor'] = (
+            VersionDescriptor.from_dict(dict_['version_descriptor']) if dict_.get('version_descriptor') else None
+        )
         fields_ = set(map(attrgetter('name'), fields(cls)))
         return cls(**{key: value for key, value in dict_.items() if key in fields_})
 

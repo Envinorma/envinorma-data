@@ -13,13 +13,13 @@ from envinorma.data import (
     ArreteMinisteriel,
     Classement,
     ClassementWithAlineas,
+    DateParameterDescriptor,
     EnrichedString,
     Link,
     Regime,
     StructuredText,
     Table,
     TopicName,
-    UsedDateParameter,
     VersionDescriptor,
     _contains_human_date,
     _is_probably_cid,
@@ -85,8 +85,8 @@ def test_arrete_ministeriel():
         classements_with_alineas=[ClassementWithAlineas('1510', Regime.A, ['al', 'albis'])],
         summary=None,
         id='JORFTEXTid',
-        version=VersionDescriptor(
-            True, [], UsedDateParameter(False), UsedDateParameter(True, True, None, date(2020, 1, 1))
+        version_descriptor=VersionDescriptor(
+            True, [], DateParameterDescriptor(False), DateParameterDescriptor(True, True, None, date(2020, 1, 1))
         ),
     )
     dict_ = am.to_dict()
