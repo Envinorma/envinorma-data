@@ -74,7 +74,7 @@ class EnrichedString:
             del dict_['id']
         return cls(**dict_)
 
-    def to_dict(self, dict_: Dict[str, Any]) -> Dict[str, Any]:
+    def to_dict(self) -> Dict[str, Any]:
         dict_ = asdict(self)
         if not self.links:
             del dict_['links']

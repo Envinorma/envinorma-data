@@ -1,11 +1,20 @@
 from copy import copy
 from dataclasses import replace
-from datetime import datetime, timedelta
+from datetime import date, datetime, timedelta
 from typing import Any, Dict, List, Optional, Set, Tuple, Union
 
-from envinorma.data import Applicability, ArreteMinisteriel, DateCriterion, Regime, StructuredText
+from envinorma.data import (
+    Applicability,
+    ArreteMinisteriel,
+    Classement,
+    DateParameterDescriptor,
+    Regime,
+    StructuredText,
+    VersionDescriptor,
+)
 from envinorma.parametrization import (
     AlternativeSection,
+    AMWarning,
     Combinations,
     Condition,
     Equal,
@@ -23,7 +32,10 @@ from envinorma.parametrization import (
     extract_conditions_from_parametrization,
 )
 from envinorma.parametrization.conditions import (
+    AndCondition,
     ConditionType,
+    OrCondition,
+    extract_leaf_conditions,
     extract_parameters_from_condition,
     generate_inactive_warning,
     generate_modification_warning,
@@ -74,16 +86,20 @@ def _has_undefined_parameters(condition: Condition, parameter_values: Dict[Param
     return False
 
 
-def _compute_warnings(parameter: ParameterObjectWithCondition, parameter_values: Dict[Parameter, Any]) -> List[str]:
+def _compute_warnings(
+    parameter: ParameterObjectWithCondition, parameter_values: Dict[Parameter, Any], whole_text: bool
+) -> List[str]:
     if _has_undefined_parameters(parameter.condition, parameter_values):
         modification = isinstance(parameter, AlternativeSection)
         alineas = None if isinstance(parameter, AlternativeSection) else parameter.targeted_entity.outer_alinea_indices
-        return [generate_warning_missing_value(parameter.condition, parameter_values, alineas, modification)]
+        return [
+            generate_warning_missing_value(parameter.condition, parameter_values, alineas, modification, whole_text)
+        ]
     return []
 
 
 def _keep_satisfied_conditions(
-    non_application_conditions: List[NonApplicationCondition], parameter_values: Dict[Parameter, Any]
+    non_application_conditions: List[NonApplicationCondition], parameter_values: Dict[Parameter, Any], whole_text: bool
 ) -> Tuple[List[NonApplicationCondition], List[str]]:
     satisfied: List[NonApplicationCondition] = []
     warnings: List[str] = []
@@ -91,7 +107,7 @@ def _keep_satisfied_conditions(
         if is_satisfied(na_condition.condition, parameter_values):
             satisfied.append(na_condition)
         else:
-            warnings = _compute_warnings(na_condition, parameter_values)
+            warnings = _compute_warnings(na_condition, parameter_values, whole_text)
     return satisfied, warnings
 
 
@@ -104,7 +120,7 @@ def _keep_satisfied_mofications(
         if is_satisfied(alt.condition, parameter_values):
             satisfied.append(alt)
         else:
-            warnings = _compute_warnings(alt, parameter_values)
+            warnings = _compute_warnings(alt, parameter_values, False)
     return satisfied, warnings
 
 
@@ -125,7 +141,9 @@ def _deactivate_alineas(
     text = copy(text)
     inactive_alineas = satisfied.targeted_entity.outer_alinea_indices
     all_inactive = inactive_alineas is None
-    warning = generate_inactive_warning(satisfied.condition, parameter_values, all_alineas=all_inactive)
+    warning = generate_inactive_warning(
+        satisfied.condition, parameter_values, all_alineas=all_inactive, whole_text=False
+    )
     if inactive_alineas is not None:
         inactive_alineas_set = set(inactive_alineas)
         new_outer_alineas = [
@@ -179,7 +197,7 @@ def _extract_satisfied_objects_and_warnings(
     parametrization: Parametrization, parameter_values: Dict[Parameter, Any], path: Ints
 ) -> Tuple[List[NonApplicationCondition], List[AlternativeSection], List[str]]:
     na_conditions, warnings_1 = _keep_satisfied_conditions(
-        parametrization.path_to_conditions.get(path) or [], parameter_values
+        parametrization.path_to_conditions.get(path) or [], parameter_values, whole_text=False
     )
     alternative_sections, warnings_2 = _keep_satisfied_mofications(
         parametrization.path_to_alternative_sections.get(path) or [], parameter_values
@@ -211,76 +229,164 @@ def _apply_parameter_values_in_text(
 
 
 def _generate_whole_text_reason_inactive(condition: Condition, parameter_values: Dict[Parameter, Any]) -> str:
-    return 'TODO'
+    return generate_inactive_warning(condition, parameter_values, True, True)
 
 
 def _compute_whole_text_applicability(
-    application_conditions: List[NonApplicationCondition], parameter_values: Dict[Parameter, Any]
-) -> Tuple[bool, Optional[str]]:
-    na_conditions, warnings = _keep_satisfied_conditions(application_conditions, parameter_values)
+    application_conditions: List[NonApplicationCondition],
+    parameter_values: Dict[Parameter, Any],
+    simple_warnings: List[AMWarning],
+) -> Tuple[bool, List[str]]:
+    na_conditions, warnings = _keep_satisfied_conditions(application_conditions, parameter_values, whole_text=True)
     if len(na_conditions) > 1:
         raise ValueError(
-            f'Cannot handle more than 1 non-applicability conditions on one section. '
-            f'Here, {len(na_conditions)} conditions are applicable.'
+            f'Cannot handle more than one inapplicability on the whole text. '
+            f'Here, {len(na_conditions)} inapplicability conditions are fulfilled.'
         )
     if not na_conditions:
-        return True, '\n'.join(warnings) if warnings else None
+        return True, warnings + [x.text for x in simple_warnings]
     if application_conditions[0].targeted_entity.outer_alinea_indices:
         raise ValueError('Can only deactivate the whole AM, not particular alineas.')
     description = _generate_whole_text_reason_inactive(na_conditions[0].condition, parameter_values)
-    return False, description
+    return False, [description]
 
 
-def _extract_installation_date_criterion(
+def _extract_surrounding_dates(target_date: date, limit_dates: List[date]) -> Tuple[Optional[date], Optional[date]]:
+    if not limit_dates:
+        return None, None
+    if target_date < limit_dates[0]:
+        return (None, limit_dates[0])
+    for date_before, date_after in zip(limit_dates, limit_dates[1:]):
+        if target_date < date_after:
+            return (date_before, date_after)
+    return limit_dates[-1], None
+
+
+def _is_satisfiable(condition: Condition, regime_target: Regime) -> bool:
+    if isinstance(condition, AndCondition):
+        return all([_is_satisfiable(cd, regime_target) for cd in condition.conditions])
+    if isinstance(condition, OrCondition):
+        return any([_is_satisfiable(cd, regime_target) for cd in condition.conditions])
+    if condition.parameter != ParameterEnum.REGIME.value:
+        return True
+    if isinstance(condition, (Range, Littler, Greater)):
+        raise ValueError('Cannot have Range, Littler or Greater condition for Regime parameter.')
+    return regime_target == condition.target
+
+
+def _keep_satisfiable(conditions: List[Condition], regime_target: Regime) -> List[Condition]:
+    if not isinstance(regime_target, Regime):
+        raise ValueError(f'regime_target must be an instance of Regime, not {type(regime_target)}')
+    return [condition for condition in conditions if _is_satisfiable(condition, regime_target)]
+
+
+def _convert_to_date(element: Any) -> date:
+    if isinstance(element, datetime):
+        return element.date()
+    if isinstance(element, date):
+        return element
+    raise ValueError(f'Expection date or datetime, got {type(element)}')
+
+
+def _convert_to_dates(elements: List[Any]) -> List[date]:
+    return [_convert_to_date(el) for el in elements]
+
+
+def _used_date_parameter(
+    searched_date_parameter: Parameter, parametrization: Parametrization, parameter_values: Dict[Parameter, Any]
+) -> DateParameterDescriptor:
+    conditions = parametrization.extract_conditions()
+    if ParameterEnum.REGIME.value in parameter_values:
+        conditions = _keep_satisfiable(conditions, parameter_values[ParameterEnum.REGIME.value])
+    leaf_conditions = [leaf for cd in conditions for leaf in extract_leaf_conditions(cd, searched_date_parameter)]
+    if not leaf_conditions:
+        return DateParameterDescriptor(False)
+    if searched_date_parameter not in parameter_values:
+        return DateParameterDescriptor(True, False)
+    value = _convert_to_date(parameter_values[searched_date_parameter])
+    limit_dates = _convert_to_dates(_extract_sorted_targets(leaf_conditions, True))
+    date_left, date_right = _extract_surrounding_dates(value, limit_dates)
+    return DateParameterDescriptor(True, True, date_left, date_right)
+
+
+def _installation_date_parameter(
     parametrization: Parametrization, parameter_values: Dict[Parameter, Any]
-) -> Optional[DateCriterion]:
-    targets = _extract_sorted_targets(
-        extract_conditions_from_parametrization(ParameterEnum.DATE_INSTALLATION.value, parametrization), True
+) -> DateParameterDescriptor:
+    return _used_date_parameter(ParameterEnum.DATE_INSTALLATION.value, parametrization, parameter_values)
+
+
+_AED_PARAMETERS = {
+    ParameterEnum.DATE_AUTORISATION.value,
+    ParameterEnum.DATE_ENREGISTREMENT.value,
+    ParameterEnum.DATE_DECLARATION.value,
+}
+
+
+def _find_used_date(parametrization: Parametrization) -> Parameter:
+    used_date_parameters = extract_parameters_from_parametrization(parametrization).intersection(_AED_PARAMETERS)
+    if not used_date_parameters:
+        return ParameterEnum.DATE_DECLARATION.value
+    if len(used_date_parameters) == 1:
+        return used_date_parameters.pop()
+    raise ValueError(f'Cannot handle several AED dates in the same parametrization, got {used_date_parameters}.')
+
+
+def _aed_date_parameter(
+    parametrization: Parametrization, parameter_values: Dict[Parameter, Any]
+) -> DateParameterDescriptor:
+    used_date = _find_used_date(parametrization)
+    return _used_date_parameter(used_date, parametrization, parameter_values)
+
+
+def _date_parameters(
+    parametrization: Parametrization, parameter_values: Dict[Parameter, Any]
+) -> Tuple[DateParameterDescriptor, DateParameterDescriptor]:
+    return (
+        _aed_date_parameter(parametrization, parameter_values),
+        _installation_date_parameter(parametrization, parameter_values),
     )
-    if not targets or ParameterEnum.DATE_INSTALLATION.value not in parameter_values:
-        return None
-    value = parameter_values[ParameterEnum.DATE_INSTALLATION.value]
-    if value < targets[0]:
-        return DateCriterion(None, date_to_str(targets[0]))
-    for date_before, date_after in zip(targets, targets[1:]):
-        if value < date_after:
-            return DateCriterion(date_to_str(date_before), date_to_str(date_after))
-    return DateCriterion(date_to_str(targets[-1]), None)
 
 
-def _date_not_in_parametrization(parametrization: Parametrization) -> bool:
-    return len(extract_conditions_from_parametrization(ParameterEnum.DATE_INSTALLATION.value, parametrization)) == 0
+def _compute_am_version_descriptor(
+    parametrization: Parametrization, parameter_values: Dict[Parameter, Any]
+) -> VersionDescriptor:
+    am_applicable, am_applicability_warnings = _compute_whole_text_applicability(
+        parametrization.path_to_conditions.get(tuple()) or [],
+        parameter_values,
+        parametrization.path_to_warnings.get(tuple()) or [],
+    )
+    date_parameters = _date_parameters(parametrization, parameter_values)
+    return VersionDescriptor(am_applicable, am_applicability_warnings, *date_parameters)
 
 
 def apply_parameter_values_to_am(
     am: ArreteMinisteriel, parametrization: Parametrization, parameter_values: Dict[Parameter, Any]
 ) -> ArreteMinisteriel:
     am = copy(am)
-    am.unique_version = _date_not_in_parametrization(parametrization)
-    am.installation_date_criterion = _extract_installation_date_criterion(parametrization, parameter_values)
     am.sections = [
         _apply_parameter_values_in_text(section, parametrization, parameter_values, (i,))
         for i, section in enumerate(am.sections)
     ]
-    am.active, am.warning_inactive = _compute_whole_text_applicability(
-        parametrization.path_to_conditions.get(tuple()) or [], parameter_values
-    )
+    am.version_descriptor = _compute_am_version_descriptor(parametrization, parameter_values)
     return am
 
 
-def _generate_combinations(
-    options_dicts: List[Dict[str, Tuple[Parameter, Any]]]
-) -> Dict[Tuple[str, ...], Dict[Parameter, Any]]:
-    if len(options_dicts) == 0:
-        raise ValueError('Cannot combine zero options dicts')
-    if len(options_dicts) == 1:
-        return {(str_,): {param: target} for str_, (param, target) in options_dicts[0].items()}
-    rec_combinations = _generate_combinations(options_dicts[1:])
-    return {
-        name + (new_name,): {**combination, new_combination[0]: new_combination[1]}
-        for new_name, new_combination in options_dicts[0].items()
-        for name, combination in rec_combinations.items()
+_Options = Tuple[Parameter, List[Tuple[str, Any]]]
+
+
+def _generate_combinations(all_options: List[_Options], add_unknown_target: bool) -> Combinations:
+    if len(all_options) == 0:
+        return {(): {}}
+    rec_combinations = _generate_combinations(all_options[1:], add_unknown_target)
+    parameter, options = all_options[0]
+    result = {
+        (name,) + name_rec: {parameter: target, **combination_rec}
+        for name, target in options
+        for name_rec, combination_rec in rec_combinations.items()
     }
+    if add_unknown_target:
+        result = {**result, **rec_combinations}
+    return result
 
 
 def _change_value(value: Any) -> Any:
@@ -322,35 +428,34 @@ def _extract_sorted_targets(conditions: Union[List[Condition], List[LeafConditio
 def _mean(a: Any, b: Any):
     if isinstance(a, datetime) and isinstance(b, datetime):
         return datetime.fromtimestamp((a.timestamp() + b.timestamp()) / 2)
+    if isinstance(a, date) and isinstance(b, date):
+        return date.fromordinal((a.toordinal() + b.toordinal()) // 2)
     return (a + b) / 2
 
 
+def _is_date(candidate: Any) -> bool:
+    return isinstance(candidate, (date, datetime))
+
+
 def _extract_interval_midpoints(interval_sides: List[Any]) -> List[Any]:
-    left = (interval_sides[0] - timedelta(1)) if isinstance(interval_sides[0], datetime) else (interval_sides[0] - 1)
-    right = (
-        (interval_sides[-1] + timedelta(1)) if isinstance(interval_sides[-1], datetime) else (interval_sides[-1] + 1)
-    )
+    left = (interval_sides[0] - timedelta(1)) if _is_date(interval_sides[0]) else (interval_sides[0] - 1)
+    right = (interval_sides[-1] + timedelta(1)) if _is_date(interval_sides[-1]) else (interval_sides[-1] + 1)
     midpoints = [_mean(a, b) for a, b in zip(interval_sides[1:], interval_sides[:-1])]
     return [left] + midpoints + [right]
 
 
-def _generate_equal_option_dicts(
-    conditions: Union[List[Condition], List[LeafCondition]]
-) -> Dict[str, Tuple[Parameter, Any]]:
+def _generate_equal_option_dicts(conditions: Union[List[Condition], List[LeafCondition]]) -> List[Tuple[str, Any]]:
     condition = conditions[0]
     assert isinstance(condition, Equal)
     targets = list({cd.target for cd in conditions if isinstance(cd, Equal)})
+    parameter = condition.parameter
     if len(targets) == 1:
-        return {
-            f'{condition.parameter.id} == {condition.target}': (condition.parameter, condition.target),
-            f'{condition.parameter.id} != {condition.target}': (condition.parameter, _change_value(condition.target)),
-        }
-    if condition.parameter.type == ParameterType.REGIME:
-        return {
-            f'{condition.parameter.id} == {regime.value}': (condition.parameter, regime)
-            for regime in (Regime.A, Regime.E, Regime.D, Regime.NC)
-        }
-
+        return [
+            (f'{parameter.id} == {condition.target}', condition.target),
+            (f'{parameter.id} != {condition.target}', _change_value(condition.target)),
+        ]
+    if parameter.type == ParameterType.REGIME:
+        return [(f'{parameter.id} == {regime.value}', regime) for regime in (Regime.A, Regime.E, Regime.D, Regime.NC)]
     raise NotImplementedError(
         f'Can only generate options dict for type Equal with one target. Received {len(targets)} targets: {targets}'
     )
@@ -367,7 +472,7 @@ def _compute_parameter_names(targets: List[Any], parameter: Parameter) -> List[s
     return [left_name] + mid_names + [right_name]
 
 
-def _generate_options_dict(conditions: Union[List[Condition], List[LeafCondition]]) -> Dict[str, Tuple[Parameter, Any]]:
+def _generate_options_dict(conditions: Union[List[Condition], List[LeafCondition]]) -> List[Tuple[str, Any]]:
     types = {condition.type for condition in conditions}
     if types == {ConditionType.EQUAL}:
         return _generate_equal_option_dicts(conditions)
@@ -378,11 +483,8 @@ def _generate_options_dict(conditions: Union[List[Condition], List[LeafCondition
         assert isinstance(condition, (Range, Greater, Littler))
         parameter = condition.parameter
         param_names = _compute_parameter_names(targets, parameter)
-        return {param_name: (parameter, value) for param_name, value in zip(param_names, values)}
+        return [(param_name, value) for param_name, value in zip(param_names, values)]
     raise NotImplementedError(f'Option dict generation not implemented for conditions with types {types}')
-
-
-OptionsDict = Dict[str, Tuple[Parameter, Any]]
 
 
 def extract_parameters_from_parametrization(parametrization: Parametrization) -> Set[Parameter]:
@@ -399,25 +501,61 @@ def extract_parameters_from_parametrization(parametrization: Parametrization) ->
     return application_conditions.union(alternative_sections)
 
 
-def _generate_options_dicts(parametrization: Parametrization, date_only: bool) -> List[OptionsDict]:
+def _keep_aed_parameter(parameters: Set[Parameter], am_regime: Optional[Regime]) -> Optional[Parameter]:
+    aed_parameters = _AED_PARAMETERS.intersection(parameters)
+    if len(aed_parameters) == 0:
+        return None
+    if len(aed_parameters) == 1:
+        return list(aed_parameters)[0]
+    if not am_regime:
+        raise ValueError('Cannot extract AED date parameter without a known regime')
+    if am_regime == Regime.A:
+        candidate = ParameterEnum.DATE_AUTORISATION.value
+    elif am_regime == Regime.E:
+        candidate = ParameterEnum.DATE_ENREGISTREMENT.value
+    elif am_regime in {Regime.D, Regime.DC}:
+        candidate = ParameterEnum.DATE_DECLARATION.value
+    else:
+        return None
+    return candidate if candidate in parameters else None
+
+
+def _keep_relevant_date_parameters(parameters: Set[Parameter], am_regime: Optional[Regime]) -> Set[Parameter]:
+    result = {ParameterEnum.DATE_INSTALLATION.value}.intersection(parameters)
+    aed_parameter = _keep_aed_parameter(parameters, am_regime)
+    if aed_parameter:
+        result.add(aed_parameter)
+    return result
+
+
+def _generate_options_dicts(
+    parametrization: Parametrization, date_only: bool, am_regime: Optional[Regime]
+) -> List[_Options]:
     parameters = extract_parameters_from_parametrization(parametrization)
     if date_only:
-        parameters = {param for param in parameters if param == ParameterEnum.DATE_INSTALLATION.value}
-    options_dicts = []
+        parameters = _keep_relevant_date_parameters(parameters, am_regime)
+    options_dicts: List[_Options] = []
     for parameter in parameters:
         conditions = extract_conditions_from_parametrization(parameter, parametrization)
-        options_dicts.append(_generate_options_dict(conditions))
+        options_dicts.append((parameter, _generate_options_dict(conditions)))
     return options_dicts
 
 
-def _generate_exhaustive_combinations(parametrization: Parametrization, date_only: bool) -> Combinations:
-    options_dicts = _generate_options_dicts(parametrization, date_only)
+def _generate_exhaustive_combinations(
+    parametrization: Parametrization, date_only: bool, am_regime: Optional[Regime]
+) -> Combinations:
+    options_dicts = _generate_options_dicts(parametrization, date_only, am_regime)
     if not options_dicts:
         return {}
-    combinations = _generate_combinations(options_dicts)
-    if () not in combinations:  # for undefined parameters warnings
-        combinations[()] = {}
+    combinations = _generate_combinations(options_dicts, True)
     return combinations
+
+
+def _extract_am_regime(classements: List[Classement]) -> Optional[Regime]:
+    regimes: Set[Regime] = {classement.regime for classement in classements}
+    if len(regimes) != 1:
+        return None
+    return list(regimes)[0]
 
 
 def generate_all_am_versions(
@@ -427,9 +565,9 @@ def generate_all_am_versions(
     combinations: Optional[Combinations] = None,
 ) -> Dict[Tuple[str, ...], ArreteMinisteriel]:
     if combinations is None:
-        combinations = _generate_exhaustive_combinations(parametrization, date_only)
+        combinations = _generate_exhaustive_combinations(parametrization, date_only, _extract_am_regime(am.classements))
     if not combinations:
-        return {tuple(): replace(apply_parameter_values_to_am(am, parametrization, {}), unique_version=True)}
+        combinations = {(): {}}
     return {
         combination_name: apply_parameter_values_to_am(am, parametrization, parameter_values)
         for combination_name, parameter_values in combinations.items()

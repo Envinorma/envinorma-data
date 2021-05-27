@@ -3,7 +3,7 @@ import sys
 import warnings
 from copy import deepcopy
 from dataclasses import asdict, dataclass, field, replace
-from datetime import datetime
+from datetime import date
 from typing import Any, Callable, Dict, List, Optional, Set, Tuple, TypeVar, Union
 
 from envinorma.data import ArreteMinisteriel, StructuredText
@@ -140,9 +140,7 @@ class AMWarning:
 def extract_conditions_from_parametrization(
     parameter: Parameter, parametrization: 'Parametrization'
 ) -> List[LeafCondition]:
-    return [
-        cd for ap in parametrization.application_conditions for cd in extract_leaf_conditions(ap.condition, parameter)
-    ] + [cd for as_ in parametrization.alternative_sections for cd in extract_leaf_conditions(as_.condition, parameter)]
+    return [leaf for cd in parametrization.extract_conditions() for leaf in extract_leaf_conditions(cd, parameter)]
 
 
 class ParametrizationError(Exception):
@@ -162,7 +160,7 @@ def _extract_all_paths(parametrization: 'Parametrization') -> Set[Ints]:
     )
 
 
-_DateRange = Tuple[Optional[datetime], Optional[datetime]]
+_DateRange = Tuple[Optional[date], Optional[date]]
 
 
 def _extract_date_range(condition: LeafCondition) -> _DateRange:
@@ -189,7 +187,7 @@ def _ranges_strictly_overlap(ranges: List[Tuple[float, float]]) -> bool:
 
 def _date_ranges_strictly_overlap(ranges: List[_DateRange]) -> bool:
     timestamp_ranges = [
-        (dt_left.timestamp() if dt_left else -math.inf, dt_right.timestamp() if dt_right else math.inf)
+        (float(dt_left.toordinal()) if dt_left else -math.inf, float(dt_right.toordinal()) if dt_right else math.inf)
         for dt_left, dt_right in ranges
     ]
     return _ranges_strictly_overlap(timestamp_ranges)
@@ -341,6 +339,11 @@ class Parametrization:
             [AlternativeSection.from_dict(sec) for sec in dict_['alternative_sections']],
             [AMWarning.from_dict(sec) for sec in dict_.get('warnings', [])],
         )
+
+    def extract_conditions(self) -> List[Condition]:
+        return [ap.condition for ap in self.application_conditions] + [
+            as_.condition for as_ in self.alternative_sections
+        ]
 
 
 ParameterObjectWithCondition = Union[NonApplicationCondition, AlternativeSection]

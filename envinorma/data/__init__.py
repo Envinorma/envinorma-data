@@ -5,9 +5,10 @@ import string
 import warnings
 from collections import Counter
 from copy import copy
-from dataclasses import asdict, dataclass, field
+from dataclasses import asdict, dataclass, field, fields
 from datetime import date, datetime
 from enum import Enum
+from operator import attrgetter
 from typing import Any, Dict, List, Optional, Tuple
 
 from envinorma.data.arretes_ministeriels import ARRETES_MINISTERIELS
@@ -82,6 +83,8 @@ class StructuredText:
 
     def to_dict(self) -> Dict[str, Any]:
         res = asdict(self)
+        res['title'] = self.title.to_dict()
+        res['outer_alineas'] = [al.to_dict() for al in self.outer_alineas]
         res['sections'] = [se.to_dict() for se in self.sections]
         res['applicability'] = self.applicability.to_dict() if self.applicability else None
         res['annotations'] = self.annotations.to_dict() if self.annotations else None
@@ -95,25 +98,6 @@ class StructuredText:
         dict_['sections'] = [StructuredText.from_dict(sec) for sec in dict_['sections']]
         dict_['applicability'] = Applicability.from_dict(dict_['applicability']) if dict_.get('applicability') else None
         dict_['annotations'] = Annotations.from_dict(dict_['annotations']) if dict_.get('annotations') else None
-        return cls(**dict_)
-
-
-@dataclass
-class DateCriterion:
-    left_date: Optional[str]
-    right_date: Optional[str]
-
-    def __post_init__(self) -> None:
-        if self.left_date:
-            str_to_date(self.left_date)
-        if self.right_date:
-            str_to_date(self.right_date)
-
-    @classmethod
-    def from_dict(cls, dict_: Dict[str, Any]) -> 'DateCriterion':
-        dict_ = dict_.copy()
-        dict_['left_date'] = dict_.get('left_date')
-        dict_['right_date'] = dict_.get('right_date')
         return cls(**dict_)
 
 
@@ -302,6 +286,84 @@ def _standardize_title_if_necessary(title: str) -> str:
     return title
 
 
+@dataclass(eq=True, frozen=True)
+class DateParameterDescriptor:
+    """
+    Describes an AM version with regard to a specific date
+    (e.g. the AM applicable to classements with installation date in a specific range.)
+
+    is_used
+        is True if the corresponding date was used in the parametrization of the AM
+    known_value
+        is defined if is_used is True. It is true for the AM version
+        corresponding to an unknown value of the date for the given classement.
+    left_value
+        is defined if is_used is True. With right_value, it describes the date range of
+        applicability of the AM. None corresponds to -infinity.
+    right_value
+        is defined if is_used is True. With left_value, it describes the date range of
+        applicability of the AM. None corresponds to +infinity.
+
+    example:
+        For an AM that changes version for date 2021-01-01, one of the generated version
+        will have (is_used=True, known_value=True, left_value=None, right_value=2021-01-01).
+        It corresponds to the classements whose date is known and whose date value is smaller than 2021-01-01.
+    """
+
+    is_used: bool
+    known_value: Optional[bool] = None
+    left_value: Optional[date] = None
+    right_value: Optional[date] = None
+
+    def __post_init__(self) -> None:
+        if self.left_value:
+            assert isinstance(self.left_value, date) and not isinstance(self.left_value, datetime)
+        if self.right_value:
+            assert isinstance(self.right_value, date) and not isinstance(self.right_value, datetime)
+        if not self.is_used:
+            assert self.known_value is None
+            assert self.left_value is None
+            assert self.right_value is None
+        if self.known_value in {False, True}:
+            assert self.is_used
+        if self.known_value == False:
+            assert self.left_value is None
+            assert self.right_value is None
+
+    @classmethod
+    def from_dict(cls, dict_: Dict[str, Any]) -> 'DateParameterDescriptor':
+        dict_ = dict_.copy()
+        for key in ('left_value', 'right_value'):
+            dict_[key] = date.fromisoformat(dict_[key]) if dict_[key] else None
+        return cls(**dict_)
+
+    def to_dict(self) -> Dict[str, Any]:
+        res = asdict(self)
+        res['left_value'] = str(self.left_value) if self.left_value else None
+        res['right_value'] = str(self.right_value) if self.right_value else None
+        return res
+
+
+@dataclass
+class VersionDescriptor:
+    applicable: bool
+    applicability_warnings: List[str]
+    aed_date: DateParameterDescriptor
+    installation_date: DateParameterDescriptor
+
+    @classmethod
+    def from_dict(cls, dict_: Dict[str, Any]) -> 'VersionDescriptor':
+        for key in ['aed_date', 'installation_date']:
+            dict_[key] = DateParameterDescriptor.from_dict(dict_[key])
+        return cls(**dict_)
+
+    def to_dict(self) -> Dict[str, Any]:
+        res = asdict(self)
+        res['aed_date'] = self.aed_date.to_dict()
+        res['installation_date'] = self.installation_date.to_dict()
+        return res
+
+
 @dataclass
 class ArreteMinisteriel:
     title: EnrichedString
@@ -309,16 +371,13 @@ class ArreteMinisteriel:
     visa: List[EnrichedString]
     publication_date: Optional[date] = None
     date_of_signature: Optional[date] = None
-    installation_date_criterion: Optional[DateCriterion] = None
     aida_url: Optional[str] = None
     legifrance_url: Optional[str] = None
     classements: List[Classement] = field(default_factory=list)
     classements_with_alineas: List[ClassementWithAlineas] = field(default_factory=list)
-    unique_version: bool = False
     summary: Optional[Summary] = None
     id: Optional[str] = field(default_factory=random_id)
-    active: bool = True
-    warning_inactive: Optional[str] = None
+    version_descriptor: Optional[VersionDescriptor] = None
 
     @property
     def short_title(self) -> str:
@@ -346,9 +405,13 @@ class ArreteMinisteriel:
             res['publication_date'] = str(res['publication_date'])
         if res['date_of_signature']:
             res['date_of_signature'] = str(res['date_of_signature'])
+        res['title'] = self.title.to_dict()
+        res['visa'] = [vi.to_dict() for vi in self.visa]
         res['sections'] = [section.to_dict() for section in self.sections]
         res['classements'] = [cl.to_dict() for cl in self.classements]
         res['classements_with_alineas'] = [cl.to_dict() for cl in self.classements_with_alineas]
+        if self.version_descriptor:
+            res['version_descriptor'] = self.version_descriptor.to_dict()
         return res
 
     @classmethod
@@ -365,8 +428,6 @@ class ArreteMinisteriel:
         )
         dict_['sections'] = [StructuredText.from_dict(sec) for sec in dict_['sections']]
         dict_['visa'] = [EnrichedString.from_dict(vu) for vu in dict_['visa']]
-        dt_key = 'installation_date_criterion'
-        dict_[dt_key] = DateCriterion.from_dict(dict_[dt_key]) if dict_.get(dt_key) else None
         classements = [Classement.from_dict(cl) for cl in dict_.get('classements') or []]
         dict_['classements'] = list(sorted(classements, key=lambda x: x.regime.value))
         classements_with_alineas = [
@@ -374,9 +435,11 @@ class ArreteMinisteriel:
         ]
         dict_['classements_with_alineas'] = list(sorted(classements_with_alineas, key=lambda x: x.regime.value))
         dict_['summary'] = Summary.from_dict(dict_['summary']) if dict_.get('summary') else None
-        if 'applicability' in dict_:  # keep during migration of schema
-            del dict_['applicability']
-        return cls(**dict_)
+        dict_['version_descriptor'] = (
+            VersionDescriptor.from_dict(dict_['version_descriptor']) if dict_.get('version_descriptor') else None
+        )
+        fields_ = set(map(attrgetter('name'), fields(cls)))
+        return cls(**{key: value for key, value in dict_.items() if key in fields_})
 
 
 def load_link(dict_: Dict[str, Any]) -> Link:

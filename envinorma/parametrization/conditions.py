@@ -1,5 +1,5 @@
 from dataclasses import asdict, dataclass
-from datetime import datetime
+from datetime import date, datetime
 from enum import Enum
 from typing import Any, Dict, List, Literal, Optional, Union
 
@@ -107,7 +107,9 @@ class OrCondition:
 
 def parameter_value_to_dict(value: Any, type_: ParameterType) -> Any:
     if type_ == ParameterType.DATE:
-        return int(value.timestamp())
+        if isinstance(value, datetime):
+            value = value.date()
+        return str(value)
     if type_ == ParameterType.REGIME:
         return value.value
     return value
@@ -115,7 +117,11 @@ def parameter_value_to_dict(value: Any, type_: ParameterType) -> Any:
 
 def load_target(json_value: Any, type_: ParameterType) -> Any:
     if type_ == ParameterType.DATE:
-        return datetime.fromtimestamp(json_value)
+        if isinstance(json_value, int):
+            date_ = datetime.fromtimestamp(json_value).date()
+        else:
+            date_ = date.fromisoformat(json_value)
+        return date_
     if type_ == ParameterType.REGIME:
         return Regime(json_value)
     return json_value
@@ -380,9 +386,11 @@ def _alineas_prefix(alineas: List[int]) -> str:
     return f'Les alinéas n°{suffix}'
 
 
-def _generate_prefix(alineas: Optional[List[int]], modification: bool) -> str:
+def _generate_prefix(alineas: Optional[List[int]], modification: bool, whole_text: bool) -> str:
     if modification:
         return 'Ce paragraphe pourrait être modifié'
+    if whole_text:
+        return 'Cet arrêté pourrait ne pas être applicable'
     if not alineas:
         return 'Ce paragraphe pourrait ne pas être applicable'
     if len(alineas) == 1:
@@ -391,10 +399,14 @@ def _generate_prefix(alineas: Optional[List[int]], modification: bool) -> str:
 
 
 def generate_warning_missing_value(
-    condition: Condition, parameter_values: Dict[Parameter, Any], alineas: Optional[List[int]], modification: bool
+    condition: Condition,
+    parameter_values: Dict[Parameter, Any],
+    alineas: Optional[List[int]],
+    modification: bool,
+    whole_text: bool,
 ) -> str:
     return (
-        f'{_generate_prefix(alineas, modification)}. C\'est le cas '
+        f'{_generate_prefix(alineas, modification, whole_text)}. C\'est le cas '
         f'pour les installations dont {_modification_warning(condition, parameter_values)}.'
     )
 
@@ -513,9 +525,9 @@ def generate_modification_warning(condition: Condition, parameter_values: Dict[P
 
 
 def _date_to_human_str(value: Any) -> str:
-    if not isinstance(value, datetime):
-        raise ValueError(f'Expecting datetime not {type(value)}')
-    return value.strftime('%d/%m/%Y')
+    if isinstance(value, (date, datetime)):
+        return value.strftime('%d/%m/%Y')
+    raise ValueError(f'Expecting datetime not {type(value)}')
 
 
 '''
@@ -529,9 +541,14 @@ def _inactive_warning(condition: Condition, parameter_values: Dict[Parameter, An
     return _warning_leaf(condition)
 
 
-def generate_inactive_warning(condition: Condition, parameter_values: Dict[Parameter, Any], all_alineas: bool) -> str:
-    if all_alineas:
-        prefix = '''Ce paragraphe ne s’applique pas à cette installation car'''
+def generate_inactive_warning(
+    condition: Condition, parameter_values: Dict[Parameter, Any], all_alineas: bool, whole_text: bool
+) -> str:
+    if whole_text:
+        prefix = 'Cet arrêté ne s\'applique pas à cette installation car'
     else:
-        prefix = '''Une partie de ce paragraphe ne s’applique pas à cette installation car'''
+        if all_alineas:
+            prefix = '''Ce paragraphe ne s’applique pas à cette installation car'''
+        else:
+            prefix = '''Une partie de ce paragraphe ne s’applique pas à cette installation car'''
     return f'{prefix} {_inactive_warning(condition, parameter_values)}.'
