@@ -5,16 +5,7 @@ from typing import Dict, List, Optional, Set, Tuple
 
 from bs4 import BeautifulSoup
 
-from envinorma.data import (
-    Annotations,
-    Applicability,
-    ArreteMinisteriel,
-    EnrichedString,
-    StructuredText,
-    Summary,
-    SummaryElement,
-    Table,
-)
+from envinorma.data import Annotations, Applicability, ArreteMinisteriel, EnrichedString, StructuredText, Table
 from envinorma.data.text_elements import Cell, Row, table_to_list
 from envinorma.structure.title_detection import (
     NUMBERING_PATTERNS,
@@ -294,34 +285,6 @@ def remove_null_applicabilities(am: ArreteMinisteriel) -> ArreteMinisteriel:
     am = copy(am)
     am.sections = [remove_null_applicabilities_in_section(section) for section in am.sections]
     return am
-
-
-def _remove_last_word(sentence: str) -> str:
-    return ' '.join(sentence.split(' ')[:-1])
-
-
-MAX_TITLE_LEN = 64
-
-
-def _shorten_summary_text(title: str, max_len: int = MAX_TITLE_LEN) -> str:
-    if len(title) > max_len:
-        return _remove_last_word(title[:max_len]) + ' [...]'
-    return title
-
-
-def _extract_summary_elements(text: StructuredText, depth: int) -> List[SummaryElement]:
-    child_elements = [element for section in text.sections for element in _extract_summary_elements(section, depth + 1)]
-    if not text.id:
-        raise ValueError('Cannot generate summary without section ids.')
-    return [SummaryElement(text.id, _shorten_summary_text(text.title.text), depth)] + child_elements
-
-
-def _compute_summary(text: ArreteMinisteriel) -> Summary:
-    return Summary([element for section in text.sections for element in _extract_summary_elements(section, 0)])
-
-
-def add_summary(text: ArreteMinisteriel) -> ArreteMinisteriel:
-    return replace(text, summary=_compute_summary(text))
 
 
 def _extract_headers(rows: List[Row]) -> List[str]:

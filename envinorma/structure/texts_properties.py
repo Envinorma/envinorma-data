@@ -1,6 +1,6 @@
 import re
 from dataclasses import dataclass
-from typing import Any, Callable, Dict, List, Optional, Tuple, Union
+from typing import Callable, List, Optional, Tuple, Union
 
 from bs4 import BeautifulSoup
 from leginorma import ArticleStatus, LegifranceArticle, LegifranceSection, LegifranceText
@@ -204,7 +204,7 @@ def _detect_inconsistency(titles: List[str], context: str = '') -> Optional[Titl
         return None
     no_match = [title for title in titles if not re.match(NUMBERING_PATTERNS[pattern_name], title)]
     if no_match:
-        return TitleInconsistency(titles, context, f'Numérotation manquante dans certains titres')
+        return TitleInconsistency(titles, context, 'Numérotation manquante dans certains titres')
     return _detect_inconsistency_in_numbering(titles, context, PATTERN_NAME_TO_LIST[pattern_name])
 
 

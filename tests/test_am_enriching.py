@@ -3,14 +3,11 @@ import json
 from envinorma.am_enriching import (
     _extract_prefix,
     _extract_special_prefix,
-    _extract_summary_elements,
     _is_prefix,
     _is_probably_section_number,
     _merge_prefixes,
     _merge_titles,
     _remove_html,
-    _remove_last_word,
-    _shorten_summary_text,
     _split_rows,
     add_inspection_sheet_in_table_rows,
     add_references,
@@ -371,37 +368,6 @@ def test_add_references_2():
     for exp, computed in zip(expected, res):
         assert exp[0][:10] == computed[0][:10]
         assert exp[1][:10] == computed[1][:10]
-
-
-def test_compute_summary():
-    text = StructuredText(EnrichedString('Test_D2', []), [], [], None)
-    parent_text = StructuredText(EnrichedString('Test_D1', []), [], [text] * 2, None)
-    grand_parent_text = StructuredText(EnrichedString('Test_D0', []), [], [parent_text] * 2, None)
-    summary_elements = _extract_summary_elements(grand_parent_text, 0)
-    assert len(summary_elements) == 7
-    assert summary_elements[0].depth == 0
-    assert summary_elements[1].depth == 1
-    assert summary_elements[2].depth == 2
-    assert summary_elements[3].depth == 2
-    assert summary_elements[4].depth == 1
-    assert summary_elements[5].depth == 2
-    assert summary_elements[6].depth == 2
-    assert summary_elements[-1].section_title == 'Test_D2'
-    assert summary_elements[-1].section_id == text.id
-
-
-def test_remove_last_word():
-    assert _remove_last_word('Hello Pipa!') == 'Hello'
-    assert _remove_last_word('Hello Pipa, how are you ?') == 'Hello Pipa, how are you'
-
-
-def test_shorten_summary_text():
-    assert _shorten_summary_text('Pipa is a cat', 8) == 'Pipa is [...]'
-    title = (
-        "c) Dans le cas de rejet dans le milieu naturel (ou "
-        "dans un réseau d'assainissement collectif dépourvu de stati"
-    )
-    assert _shorten_summary_text(title) == 'c) Dans le cas de rejet dans le milieu naturel (ou dans un [...]'
 
 
 def test_remove_sections():

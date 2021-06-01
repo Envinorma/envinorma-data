@@ -1,0 +1,5 @@
+[flake8]
+ignore = E203
+max-line-length = 120
+exclude = venv/*,envinorma/data/arretes_ministeriels.py
+; max-complexity = 10

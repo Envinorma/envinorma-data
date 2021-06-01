@@ -159,7 +159,6 @@ _STRUCTURED_AM = ArreteMinisteriel(
     legifrance_url=None,
     classements=[],
     classements_with_alineas=[],
-    summary=None,
     id='FAKE_ID',
 )
 

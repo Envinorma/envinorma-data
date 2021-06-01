@@ -1,4 +1,4 @@
-from typing import Any, Dict, List, Optional, Tuple, TypeVar, Union
+from typing import List, Optional, Tuple, TypeVar
 
 from envinorma.data import EnrichedString, StructuredText, Table
 from envinorma.data.text_elements import Linebreak, TextElement, Title

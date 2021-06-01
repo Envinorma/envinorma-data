@@ -4,7 +4,6 @@ from typing import Dict, Optional, Tuple
 
 from envinorma.am_enriching import (
     add_references,
-    add_summary,
     add_table_inspection_sheet_data,
     detect_and_add_topics,
     remove_null_applicabilities,
@@ -86,11 +85,9 @@ def apply_parametrization(
 
 
 def _add_enrichments(am: ArreteMinisteriel, metadata: AMMetadata) -> ArreteMinisteriel:
-    return add_summary(
-        remove_null_applicabilities(
-            add_table_inspection_sheet_data(
-                detect_and_add_topics(add_references(add_metadata(am, metadata)), TOPIC_ONTOLOGY)
-            )
+    return remove_null_applicabilities(
+        add_table_inspection_sheet_data(
+            detect_and_add_topics(add_references(add_metadata(am, metadata)), TOPIC_ONTOLOGY)
         )
     )
 

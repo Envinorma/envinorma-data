@@ -24,7 +24,6 @@ from envinorma.parametrization import (
     Littler,
     NonApplicationCondition,
     Parameter,
-    ParameterEnum,
     ParameterObjectWithCondition,
     ParameterType,
     Parametrization,
@@ -35,6 +34,7 @@ from envinorma.parametrization.conditions import (
     AndCondition,
     ConditionType,
     OrCondition,
+    ParameterEnum,
     extract_leaf_conditions,
     extract_parameters_from_condition,
     generate_inactive_warning,
@@ -42,7 +42,6 @@ from envinorma.parametrization.conditions import (
     generate_warning_missing_value,
     is_satisfied,
 )
-from envinorma.utils import date_to_str
 
 
 def _extract_section_titles(am: Union[StructuredText, ArreteMinisteriel], path: List[int]) -> Dict[int, str]:

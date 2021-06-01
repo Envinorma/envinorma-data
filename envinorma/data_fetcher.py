@@ -1,5 +1,5 @@
 import json
-from typing import Any, Dict, List, Optional, Set, Tuple, Type, TypeVar, Union
+from typing import Any, Dict, List, Optional, Set, Tuple, Type, TypeVar
 
 import psycopg2
 

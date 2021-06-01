@@ -14,7 +14,7 @@ from typing import Any, Dict, List, Optional, Tuple
 from envinorma.data.arretes_ministeriels import ARRETES_MINISTERIELS
 from envinorma.data.text_elements import EnrichedString, Link, Table, table_to_html
 from envinorma.topics.patterns import TopicName
-from envinorma.utils import AIDA_URL, str_to_date
+from envinorma.utils import AIDA_URL
 
 
 @dataclass
@@ -167,31 +167,6 @@ def group_classements_by_alineas(classements: List[Classement]) -> List[Classeme
     return [ClassementWithAlineas(rub, reg, als) for (rub, reg), als in rubrique_regime_to_alineas.items()]
 
 
-@dataclass
-class SummaryElement:
-    section_id: str
-    section_title: str
-    depth: int
-
-    @staticmethod
-    def from_dict(dict_: Dict[str, Any]) -> 'SummaryElement':
-        return SummaryElement(**dict_)
-
-
-@dataclass
-class Summary:
-    elements: List[SummaryElement]
-
-    def to_dict(self) -> Dict[str, Any]:
-        return asdict(self)
-
-    @staticmethod
-    def from_dict(dict_: Dict[str, Any]) -> 'Summary':
-        dict_ = dict_.copy()
-        dict_['elements'] = [SummaryElement.from_dict(se) for se in dict_['elements']]
-        return Summary(**dict_)
-
-
 def _is_probably_cid(candidate: str) -> bool:
     if 'FAKE' in candidate:
         return True  # for avoiding warning for fake cids, which contain FAKE by convention
@@ -271,7 +246,7 @@ def standardize_title_date(title: str) -> str:
 
 
 _MONTHS = r'(janvier|février|mars|avril|mai|juin|juillet|août|septembre|octobre|novembre|décembre)'
-_PATTERN = rf'Arrêté du (1er|[0-9]*) ' + _MONTHS + ' [0-9]{4}'
+_PATTERN = r'Arrêté du (1er|[0-9]*) ' + _MONTHS + ' [0-9]{4}'
 
 
 def _contains_human_date(title: str) -> bool:
@@ -326,7 +301,7 @@ class DateParameterDescriptor:
             assert self.right_value is None
         if self.known_value in {False, True}:
             assert self.is_used
-        if self.known_value == False:
+        if not self.known_value:
             assert self.left_value is None
             assert self.right_value is None
 
@@ -375,7 +350,6 @@ class ArreteMinisteriel:
     legifrance_url: Optional[str] = None
     classements: List[Classement] = field(default_factory=list)
     classements_with_alineas: List[ClassementWithAlineas] = field(default_factory=list)
-    summary: Optional[Summary] = None
     id: Optional[str] = field(default_factory=random_id)
     version_descriptor: Optional[VersionDescriptor] = None
 
@@ -434,7 +408,6 @@ class ArreteMinisteriel:
             ClassementWithAlineas.from_dict(cl) for cl in dict_.get('classements_with_alineas') or []
         ]
         dict_['classements_with_alineas'] = list(sorted(classements_with_alineas, key=lambda x: x.regime.value))
-        dict_['summary'] = Summary.from_dict(dict_['summary']) if dict_.get('summary') else None
         dict_['version_descriptor'] = (
             VersionDescriptor.from_dict(dict_['version_descriptor']) if dict_.get('version_descriptor') else None
         )
