@@ -78,7 +78,6 @@ def test_arrete_ministeriel():
         [_node_section()],
         [_enriched_string_links()],
         date(2010, 1, 1),
-        date(2010, 1, 1),
         'aida',
         'legifrance',
         classements=[Classement('1510', Regime.A, 'al')],

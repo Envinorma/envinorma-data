@@ -344,7 +344,6 @@ class ArreteMinisteriel:
     title: EnrichedString
     sections: List[StructuredText]
     visa: List[EnrichedString]
-    publication_date: Optional[date] = None
     date_of_signature: Optional[date] = None
     aida_url: Optional[str] = None
     legifrance_url: Optional[str] = None
@@ -366,17 +365,11 @@ class ArreteMinisteriel:
                 self.title.text
             ), f'{self.date_of_signature} and {self.title.text} are inconsistent'
 
-        # Below date must be kept as long as publication_date keeps being used in web app, remove after
-        # (because publication_date is not the right term.)
-        self.publication_date = self.date_of_signature
-
         if not _is_probably_cid(self.id or ''):
             warnings.warn(f'AM id does not look like a CID : {self.id} (title={self.title.text})')
 
     def to_dict(self) -> Dict[str, Any]:
         res = asdict(self)
-        if res['publication_date']:
-            res['publication_date'] = str(res['publication_date'])
         if res['date_of_signature']:
             res['date_of_signature'] = str(res['date_of_signature'])
         res['title'] = self.title.to_dict()
@@ -394,9 +387,6 @@ class ArreteMinisteriel:
         if 'short_title' in dict_:
             del dict_['short_title']
         dict_['title'] = EnrichedString.from_dict(dict_['title'])
-        dict_['publication_date'] = (
-            date.fromisoformat(dict_['publication_date']) if dict_.get('publication_date') else None
-        )
         dict_['date_of_signature'] = (
             date.fromisoformat(dict_['date_of_signature']) if dict_.get('date_of_signature') else None
         )
@@ -487,8 +477,6 @@ class AMMetadata:
         dict_['source'] = AMSource(dict_['source'])
         date_of_signature = date.fromtimestamp(dict_['date_of_signature'])
         dict_['date_of_signature'] = date_of_signature
-        if 'publication_date' in dict_:
-            del dict_['publication_date']
         dict_['classements'] = [Classement.from_dict(classement) for classement in dict_['classements']]
         return AMMetadata(**dict_)
 
