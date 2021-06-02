@@ -301,14 +301,14 @@ def _used_date_parameter(
     if not leaf_conditions:
         return DateParameterDescriptor(False)
     if searched_date_parameter not in parameter_values:
-        return DateParameterDescriptor(True, False)
+        return DateParameterDescriptor(True, True)
     value = _convert_to_date(parameter_values[searched_date_parameter])
     limit_dates = _convert_to_dates(_extract_sorted_targets(leaf_conditions, True))
     date_left, date_right = _extract_surrounding_dates(value, limit_dates)
-    return DateParameterDescriptor(True, True, date_left, date_right)
+    return DateParameterDescriptor(True, False, date_left, date_right)
 
 
-def _installation_date_parameter(
+def _date_de_mise_en_service_parameter(
     parametrization: Parametrization, parameter_values: Dict[Parameter, Any]
 ) -> DateParameterDescriptor:
     return _used_date_parameter(ParameterEnum.DATE_INSTALLATION.value, parametrization, parameter_values)
@@ -342,7 +342,7 @@ def _date_parameters(
 ) -> Tuple[DateParameterDescriptor, DateParameterDescriptor]:
     return (
         _aed_date_parameter(parametrization, parameter_values),
-        _installation_date_parameter(parametrization, parameter_values),
+        _date_de_mise_en_service_parameter(parametrization, parameter_values),
     )
 
 

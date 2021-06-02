@@ -267,26 +267,31 @@ class DateParameterDescriptor:
     Describes an AM version with regard to a specific date
     (e.g. the AM applicable to classements with installation date in a specific range.)
 
-    is_used
+    is_used_in_parametrization
         is True if the corresponding date was used in the parametrization of the AM
-    known_value
-        is defined if is_used is True. It is true for the AM version
+    unknown_classement_date_version
+        is defined if is_used_in_parametrization is True. It is true for the AM version
         corresponding to an unknown value of the date for the given classement.
     left_value
-        is defined if is_used is True. With right_value, it describes the date range of
+        is defined if is_used_in_parametrization is True. With right_value, it describes the date range of
         applicability of the AM. None corresponds to -infinity.
     right_value
-        is defined if is_used is True. With left_value, it describes the date range of
+        is defined if is_used_in_parametrization is True. With left_value, it describes the date range of
         applicability of the AM. None corresponds to +infinity.
 
     example:
         For an AM that changes version for date 2021-01-01, one of the generated version
-        will have (is_used=True, known_value=True, left_value=None, right_value=2021-01-01).
+        will have (
+            is_used_in_parametrization=True,
+            unknown_classement_date_version=False,
+            left_value=None,
+            right_value=2021-01-01
+        )
         It corresponds to the classements whose date is known and whose date value is smaller than 2021-01-01.
     """
 
-    is_used: bool
-    known_value: Optional[bool] = None
+    is_used_in_parametrization: bool
+    unknown_classement_date_version: Optional[bool] = None
     left_value: Optional[date] = None
     right_value: Optional[date] = None
 
@@ -295,15 +300,14 @@ class DateParameterDescriptor:
             assert isinstance(self.left_value, date) and not isinstance(self.left_value, datetime)
         if self.right_value:
             assert isinstance(self.right_value, date) and not isinstance(self.right_value, datetime)
-        if not self.is_used:
-            assert self.known_value is None
+        if not self.is_used_in_parametrization:
+            assert self.unknown_classement_date_version is None
             assert self.left_value is None
             assert self.right_value is None
-        if self.known_value in {False, True}:
-            assert self.is_used
-        if not self.known_value:
-            assert self.left_value is None
-            assert self.right_value is None
+        if self.unknown_classement_date_version in {False, True}:
+            assert self.is_used_in_parametrization
+        if self.is_used_in_parametrization and not self.unknown_classement_date_version:
+            assert self.left_value is not None or self.right_value is not None
 
     @classmethod
     def from_dict(cls, dict_: Dict[str, Any]) -> 'DateParameterDescriptor':
@@ -324,18 +328,18 @@ class VersionDescriptor:
     applicable: bool
     applicability_warnings: List[str]
     aed_date: DateParameterDescriptor
-    installation_date: DateParameterDescriptor
+    date_de_mise_en_service: DateParameterDescriptor
 
     @classmethod
     def from_dict(cls, dict_: Dict[str, Any]) -> 'VersionDescriptor':
-        for key in ['aed_date', 'installation_date']:
+        for key in ['aed_date', 'date_de_mise_en_service']:
             dict_[key] = DateParameterDescriptor.from_dict(dict_[key])
         return cls(**dict_)
 
     def to_dict(self) -> Dict[str, Any]:
         res = asdict(self)
         res['aed_date'] = self.aed_date.to_dict()
-        res['installation_date'] = self.installation_date.to_dict()
+        res['date_de_mise_en_service'] = self.date_de_mise_en_service.to_dict()
         return res
 
 

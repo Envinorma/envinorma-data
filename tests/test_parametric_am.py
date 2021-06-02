@@ -518,19 +518,19 @@ def test_date_parameters():
     non_applicabilities = [_simple_nac_2(enregistrement)]
     parametrization = Parametrization(non_applicabilities, [], [])
     parameter_values = {}
-    expected = (DateParameterDescriptor(True, False), DateParameterDescriptor(False))
+    expected = (DateParameterDescriptor(True, True), DateParameterDescriptor(False))
     assert _date_parameters(parametrization, parameter_values) == expected
 
     non_applicabilities = [_simple_nac_2(enregistrement)]
     parametrization = Parametrization(non_applicabilities, [], [])
     parameter_values = {enregistrement: date(2022, 1, 1)}
-    expected = (DateParameterDescriptor(True, True, date(2021, 1, 1), None), DateParameterDescriptor(False))
+    expected = (DateParameterDescriptor(True, False, date(2021, 1, 1), None), DateParameterDescriptor(False))
     assert _date_parameters(parametrization, parameter_values) == expected
 
     non_applicabilities = [_simple_nac_2(enregistrement)]
     parametrization = Parametrization(non_applicabilities, [], [])
     parameter_values = {enregistrement: date(2020, 1, 1)}
-    expected = (DateParameterDescriptor(True, True, None, date(2021, 1, 1)), DateParameterDescriptor(False))
+    expected = (DateParameterDescriptor(True, False, None, date(2021, 1, 1)), DateParameterDescriptor(False))
     assert _date_parameters(parametrization, parameter_values) == expected
 
     non_applicabilities = [_simple_nac_2(enregistrement), _simple_nac_2(autorisation)]
@@ -542,13 +542,13 @@ def test_date_parameters():
     non_applicabilities = [_simple_nac_2(installation)]
     parametrization = Parametrization(non_applicabilities, [], [])
     parameter_values = {enregistrement: date(2020, 1, 1)}
-    expected = (DateParameterDescriptor(False), DateParameterDescriptor(True, False))
+    expected = (DateParameterDescriptor(False), DateParameterDescriptor(True, True))
     assert _date_parameters(parametrization, parameter_values) == expected
 
     non_applicabilities = [_simple_nac_2(installation)]
     parametrization = Parametrization(non_applicabilities, [], [])
     parameter_values = {installation: date(2020, 1, 1)}
-    expected = (DateParameterDescriptor(False), DateParameterDescriptor(True, True, None, date(2021, 1, 1)))
+    expected = (DateParameterDescriptor(False), DateParameterDescriptor(True, False, None, date(2021, 1, 1)))
     assert _date_parameters(parametrization, parameter_values) == expected
 
 
@@ -615,25 +615,25 @@ def test_used_date_parameter():
     parametrization = Parametrization([nac_1, nac_2, nac_3], [], [])
 
     res = _used_date_parameter(installation, parametrization, {})
-    assert res == DateParameterDescriptor(True, False)
+    assert res == DateParameterDescriptor(True, True)
 
     res = _used_date_parameter(installation, parametrization, {regime: Regime.A})
-    assert res == DateParameterDescriptor(True, False)
+    assert res == DateParameterDescriptor(True, True)
 
     res = _used_date_parameter(installation, parametrization, {installation: date(2021, 5, 1)})
-    assert res == DateParameterDescriptor(True, True, date(2021, 1, 1), date(2022, 1, 1))
+    assert res == DateParameterDescriptor(True, False, date(2021, 1, 1), date(2022, 1, 1))
 
     res = _used_date_parameter(installation, parametrization, {installation: date(2022, 5, 1)})
-    assert res == DateParameterDescriptor(True, True, date(2022, 1, 1), None)
+    assert res == DateParameterDescriptor(True, False, date(2022, 1, 1), None)
 
     res = _used_date_parameter(installation, parametrization, {installation: date(2021, 5, 1), regime: Regime.A})
-    assert res == DateParameterDescriptor(True, True, date(2021, 1, 1), date(2022, 1, 1))
+    assert res == DateParameterDescriptor(True, False, date(2021, 1, 1), date(2022, 1, 1))
 
     res = _used_date_parameter(installation, parametrization, {installation: date(2022, 5, 1), regime: Regime.A})
-    assert res == DateParameterDescriptor(True, True, date(2022, 1, 1), None)
+    assert res == DateParameterDescriptor(True, False, date(2022, 1, 1), None)
 
     res = _used_date_parameter(installation, parametrization, {installation: date(2022, 5, 1), regime: Regime.E})
-    assert res == DateParameterDescriptor(True, True, date(2021, 1, 1), None)
+    assert res == DateParameterDescriptor(True, False, date(2021, 1, 1), None)
 
     res = _used_date_parameter(installation, parametrization, {installation: date(2020, 5, 1), regime: Regime.E})
-    assert res == DateParameterDescriptor(True, True, None, date(2021, 1, 1))
+    assert res == DateParameterDescriptor(True, False, None, date(2021, 1, 1))
