@@ -66,7 +66,7 @@ def _check_lf_article(article: Dict[str, Any]) -> None:
     _check_dict_field(article, 'intOrdre', int, 'legifrance.article')
     _check_dict_field(article, 'id', str, 'legifrance.article')
     _check_dict_field(article, 'content', str, 'legifrance.article')
-    _check_dict_field(article, 'etat', str, f'legifrance.article')
+    _check_dict_field(article, 'etat', str, 'legifrance.article')
 
 
 def _check_lf_articles(legifrance_dict: Dict[str, Any], depth: int = 0) -> None:
@@ -80,7 +80,7 @@ def _check_lf_section(section: Dict[str, Any], depth: int = 0) -> None:
     _check_dict_field(section, 'title', str, 'legifrance.section')
     _check_dict_field(section, 'intOrdre', int, 'legifrance.section')
     _check_dict_field(section, 'sections', list, 'legifrance.section')
-    _check_dict_field(section, 'etat', str, f'legifrance.section')
+    _check_dict_field(section, 'etat', str, 'legifrance.section')
     _check_lf_sections(section, depth + 1)
     _check_lf_articles(section, depth + 1)
 
@@ -321,7 +321,7 @@ _ROMAN_REPLACERS = [
     ('I I', 'II'),
 ]
 _ROMAN_ANNEXES = [(f'{_WEIRD_ANNEXE} {_BEF}', f'ANNEXE {_AF}') for _BEF, _AF in _ROMAN_REPLACERS]
-_ANNEXE_REPLACERS = [(f'{_WEIRD_ANNEXE} S', f'ANNEXES')] + _ROMAN_ANNEXES + [(_WEIRD_ANNEXE, 'ANNEXE')]
+_ANNEXE_REPLACERS = [(f'{_WEIRD_ANNEXE} S', 'ANNEXES')] + _ROMAN_ANNEXES + [(_WEIRD_ANNEXE, 'ANNEXE')]
 
 
 def _replace_weird_annexe_words(str_: str) -> str:

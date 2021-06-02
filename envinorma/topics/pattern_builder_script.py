@@ -92,7 +92,7 @@ def pretty_print(topic: TopicName, texts: List[Tuple[int, List[str], StructuredT
             print(f'\t{title}')
         for al in text.outer_alineas:
             if al.table:
-                print(f'\t\tTable')
+                print('\t\tTable')
             else:
                 print(f'\t\t{al.text}')
         print()

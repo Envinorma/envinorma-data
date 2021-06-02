@@ -41,7 +41,7 @@ NUMBERING_PATTERNS = {
     NumberingPattern.NUMERIC_CIRCLE: r'^[0-9]+° ',
     NumberingPattern.LETTERS: r'^[a-z]\)',
     NumberingPattern.CAPS: r'^[A-Z]\. ',
-    NumberingPattern.ANNEXE: rf'^ANNEXE [0-9]+',
+    NumberingPattern.ANNEXE: r'^ANNEXE [0-9]+',
     NumberingPattern.ANNEXE_ROMAN: rf'^ANNEXE {ROMAN_PATTERN}',
 }
 

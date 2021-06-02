@@ -14,11 +14,9 @@ from envinorma.parametrization.conditions import (
     LeafCondition,
     Littler,
     Parameter,
-    ParameterEnum,
     ParameterType,
     Range,
     check_condition,
-    condition_to_str,
     extract_leaf_conditions,
     extract_parameters_from_condition,
     load_condition,
@@ -355,7 +353,7 @@ def extract_titles_sequence(text: Union[ArreteMinisteriel, StructuredText], path
     if not path:
         return []
     if path[0] >= len(text.sections):
-        raise ValueError(f'Path is not compatible with this text.')
+        raise ValueError('Path is not compatible with this text.')
     return [text.sections[path[0]].title.text] + extract_titles_sequence(text.sections[path[0]], path[1:])
 
 
