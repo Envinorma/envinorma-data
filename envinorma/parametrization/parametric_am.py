@@ -203,7 +203,7 @@ def _extract_satisfied_objects_and_warnings(
     )
     warnings_3 = [x.text for x in parametrization.path_to_warnings.get(path) or []]
     all_warnings = warnings_1 + warnings_2 + warnings_3
-    return na_conditions, alternative_sections, all_warnings
+    return na_conditions, alternative_sections, sorted(all_warnings)
 
 
 def _apply_parameter_values_in_text(
@@ -222,7 +222,7 @@ def _apply_parameter_values_in_text(
     else:
         text = _apply_satisfied_modificators(text, na_conditions, alternative_sections, parameter_values)
 
-    all_warnings = list(set(_ensure_applicabiliy(text.applicability).warnings + warnings))
+    all_warnings = sorted(list(set(_ensure_applicabiliy(text.applicability).warnings + warnings)))
     text.applicability = replace(_ensure_applicabiliy(text.applicability), warnings=all_warnings)
     return text
 
