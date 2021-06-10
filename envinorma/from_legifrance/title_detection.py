@@ -2,7 +2,7 @@ import re
 from enum import Enum
 from typing import Dict, List, Optional, Set
 
-from envinorma.structure.numbering_exceptions import EXCEPTION_PREFIXES, MAX_PREFIX_LEN
+from envinorma.from_legifrance.numbering_exceptions import EXCEPTION_PREFIXES, MAX_PREFIX_LEN
 
 
 class NumberingPattern(Enum):

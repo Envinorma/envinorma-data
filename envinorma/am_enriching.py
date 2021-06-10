@@ -7,7 +7,7 @@ from bs4 import BeautifulSoup
 
 from envinorma.data import Annotations, Applicability, ArreteMinisteriel, EnrichedString, StructuredText, Table
 from envinorma.data.text_elements import Cell, Row, table_to_list
-from envinorma.structure.title_detection import (
+from envinorma.from_legifrance.title_detection import (
     NUMBERING_PATTERNS,
     ROMAN_PATTERN,
     NumberingPattern,
@@ -270,7 +270,7 @@ def extract_titles_and_reference_pairs(am: ArreteMinisteriel) -> List[Tuple[str,
 
 
 def _minify_section(text: StructuredText) -> StructuredText:
-    return StructuredText(text.title, [], [_minify_section(sec) for sec in text.sections], None, lf_id=text.lf_id)
+    return StructuredText(text.title, [], [_minify_section(sec) for sec in text.sections], None)
 
 
 def remove_null_applicabilities_in_section(paragraph: StructuredText) -> StructuredText:

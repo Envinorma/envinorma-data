@@ -1,7 +1,7 @@
 import re
 
-from envinorma.structure.numbering_exceptions import EXCEPTION_PREFIXES, MAX_PREFIX_LEN
-from envinorma.structure.title_detection import (
+from envinorma.from_legifrance.numbering_exceptions import EXCEPTION_PREFIXES, MAX_PREFIX_LEN
+from envinorma.from_legifrance.title_detection import (
     NUMBERING_PATTERNS,
     PATTERN_NAME_TO_LIST,
     NumberingPattern,

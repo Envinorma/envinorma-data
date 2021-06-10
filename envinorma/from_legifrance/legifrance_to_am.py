@@ -3,7 +3,7 @@ import random
 from collections import Counter
 from dataclasses import replace
 from math import sqrt
-from typing import Any, Dict, Iterable, List, Optional, Tuple, TypeVar, Union
+from typing import Dict, Iterable, List, Optional, Tuple, TypeVar, Union
 
 import bs4
 from bs4 import BeautifulSoup
@@ -20,8 +20,8 @@ from envinorma.data import (
     standardize_title_date,
 )
 from envinorma.io.parse_html import extract_table
-from envinorma.structure import split_alineas_in_sections
-from envinorma.structure.title_detection import (
+from envinorma.from_legifrance import split_alineas_in_sections
+from envinorma.from_legifrance.title_detection import (
     NumberingPattern,
     detect_patterns_if_exists,
     is_mainly_upper,
@@ -29,103 +29,8 @@ from envinorma.structure.title_detection import (
 )
 
 
-class AMStructurationError(Exception):
-    pass
-
-
-def _check_format(var: Any, type_: Union[type, Tuple], var_name: str) -> None:
-    if not isinstance(var, type_):
-        raise AMStructurationError(f'type of {var_name} is {type(var)}, nor {type_}')
-
-
-def _check_dict_field(
-    dict_: Dict[str, Any], key: str, expected_type: Union[type, Tuple], var_name: str, check_is_digit: bool = False
-) -> None:
-    if key not in dict_:
-        raise AMStructurationError(f'Expecting key {key} in {var_name}')
-    _check_format(dict_[key], expected_type, key)
-    if check_is_digit:
-        if not str.isdigit(dict_[key]):
-            raise AMStructurationError(f'{var_name}[{key}] is not a digit, but {dict_[key]}')
-
-
-def _check_lf_visa(legifrance_dict: Dict[str, Any]) -> None:
-    _check_dict_field(legifrance_dict, 'visa', str, 'legifrance_dict')
-
-
-def _check_lf_title(legifrance_dict: Dict[str, Any]) -> None:
-    _check_dict_field(legifrance_dict, 'title', str, 'legifrance_dict')
-
-
-def _check_lf_article(article: Dict[str, Any]) -> None:
-    if 'title' in article:
-        raise AMStructurationError('article should not have "title"')
-    if 'sections' in article:
-        raise AMStructurationError('article should not have "sections"')
-    _check_dict_field(article, 'num', (type(None), str), 'legifrance.article')
-    _check_dict_field(article, 'intOrdre', int, 'legifrance.article')
-    _check_dict_field(article, 'id', str, 'legifrance.article')
-    _check_dict_field(article, 'content', str, 'legifrance.article')
-    _check_dict_field(article, 'etat', str, 'legifrance.article')
-
-
-def _check_lf_articles(legifrance_dict: Dict[str, Any], depth: int = 0) -> None:
-    _check_dict_field(legifrance_dict, 'articles', list, f'legifrance_dict_depth_{depth}')
-    articles = legifrance_dict['articles']
-    for article in articles:
-        _check_lf_article(article)
-
-
-def _check_lf_section(section: Dict[str, Any], depth: int = 0) -> None:
-    _check_dict_field(section, 'title', str, 'legifrance.section')
-    _check_dict_field(section, 'intOrdre', int, 'legifrance.section')
-    _check_dict_field(section, 'sections', list, 'legifrance.section')
-    _check_dict_field(section, 'etat', str, 'legifrance.section')
-    _check_lf_sections(section, depth + 1)
-    _check_lf_articles(section, depth + 1)
-
-
-def _check_lf_sections(legifrance_dict: Dict[str, Any], depth: int = 0) -> None:
-    _check_dict_field(legifrance_dict, 'sections', list, f'legifrance_dict_depth_{depth}')
-    sections = legifrance_dict['sections']
-    for section in sections:
-        _check_lf_section(section, depth)
-
-
-def _article_nb_null_num(dict_) -> int:
-    return 1 if dict_['num'] is None else 0
-
-
 def _clean_title(str_: EnrichedString) -> EnrichedString:
     return replace(str_, text=str_.text.strip().replace('\r\n', ' ').replace('\n', ' '))
-
-
-def _text_nb_null_num_in_arrete(dict_) -> int:
-    nb_null_in_articles = [_article_nb_null_num(article) for article in dict_['articles']]
-    nb_null_in_sections = [_text_nb_null_num_in_arrete(section) for section in dict_['sections']]
-    return sum(nb_null_in_articles + nb_null_in_sections)
-
-
-def _get_total_nb_articles_in_arrete(dict_) -> int:
-    return sum([len(dict_['articles'])] + [_get_total_nb_articles_in_arrete(section) for section in dict_['sections']])
-
-
-def _get_proportion_of_null_articles(dict_) -> Tuple[int, int]:
-    return _text_nb_null_num_in_arrete(dict_), _get_total_nb_articles_in_arrete(dict_)
-
-
-def _check_proportion_of_null_articles(dict_) -> None:
-    nb_null, total = _get_proportion_of_null_articles(dict_)
-    if nb_null / total >= 0.5:
-        raise AMStructurationError(f'Too many articles have null num: {nb_null}/{total}')
-
-
-def check_legifrance_dict(legifrance_dict: Dict[str, Any]) -> None:
-    _check_lf_visa(legifrance_dict)
-    _check_lf_title(legifrance_dict)
-    _check_lf_articles(legifrance_dict)
-    _check_lf_sections(legifrance_dict)
-    _check_proportion_of_null_articles(legifrance_dict)
 
 
 def keep_visa_string(visas: List[str]) -> List[str]:
@@ -311,7 +216,7 @@ def _put_links_back(text: StructuredText, links: List[LinkReference]) -> Structu
 
 
 _WEIRD_ANNEXE = 'A N N E X E'
-_ROMAN_REPLACERS = [
+_ROMAN_REPLACERS: List[Tuple[str, str]] = [
     ('I X', 'IX'),
     ('V I I I', 'VIII'),
     ('V I I', 'VII'),
@@ -321,7 +226,7 @@ _ROMAN_REPLACERS = [
     ('I I', 'II'),
 ]
 _ROMAN_ANNEXES = [(f'{_WEIRD_ANNEXE} {_BEF}', f'ANNEXE {_AF}') for _BEF, _AF in _ROMAN_REPLACERS]
-_ANNEXE_REPLACERS = [(f'{_WEIRD_ANNEXE} S', 'ANNEXES')] + _ROMAN_ANNEXES + [(_WEIRD_ANNEXE, 'ANNEXE')]
+_ANNEXE_REPLACERS = [(f'{_WEIRD_ANNEXE} S', 'ANNEXES'), *_ROMAN_ANNEXES] + [(_WEIRD_ANNEXE, 'ANNEXE')]
 
 
 def _replace_weird_annexe_words(str_: str) -> str:
@@ -466,7 +371,7 @@ def _extract_structured_text_from_legifrance_article(
     if structured_text.title.text:
         raise ValueError(f'Should not happen. Article should not have titles. Article id : {article.id}')
     title, outer_alineas = _generate_article_title(article, structured_text.outer_alineas)
-    return StructuredText(_clean_title(title), outer_alineas, structured_text.sections, None, lf_id=article.id)
+    return StructuredText(_clean_title(title), outer_alineas, structured_text.sections, None)
 
 
 def _extract_structured_text_from_legifrance_section(
@@ -636,7 +541,7 @@ def _clean_text_articles(text: LegifranceText, keep_abrogated: bool) -> Legifran
     )
 
 
-def transform_arrete_ministeriel(
+def legifrance_to_arrete_ministeriel(
     input_text: LegifranceText, keep_abrogated_articles: bool = False, am_id: Optional[str] = None
 ) -> ArreteMinisteriel:
     visa = _extract_visa(input_text.visa)

@@ -57,7 +57,7 @@ def _enriched_string_links() -> EnrichedString:
 def _leaf_section() -> StructuredText:
     app = Applicability(True, True, ['beware'], StructuredText(_str('abc'), [], [], None))
     annotations = Annotations(TopicName.AIR_ODEURS, True, 'guide')
-    return StructuredText(_str('abc'), [_str('abc')], [], app, 'lf_id', 'ref', annotations)
+    return StructuredText(_str('abc'), [_str('abc')], [], app, 'ref', annotations)
 
 
 def _node_section() -> StructuredText:
@@ -65,7 +65,6 @@ def _node_section() -> StructuredText:
         _str('abc'),
         [_str('abc'), _enriched_string_table()],
         [_leaf_section()],
-        None,
         None,
         'ref',
         Annotations(None, True, None),
@@ -196,7 +195,6 @@ _TEXT_A = StructuredText(
     ],
     sections=[],
     applicability=None,
-    lf_id=None,
     reference_str='Annexe 2 6.',
     annotations=None,
     id='0bEB0b14A96f',
@@ -211,7 +209,6 @@ _TEXT_B = StructuredText(
     ],
     sections=[],
     applicability=None,
-    lf_id=None,
     reference_str=None,
     annotations=None,
     id='AA51E55feD6F',

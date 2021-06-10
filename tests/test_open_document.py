@@ -429,8 +429,8 @@ def _get_simple_text() -> StructuredText:
     row3 = Row([_cell('FF'), _cell('GG')], False)
     table = Table([row1, row2, row3])
     alineas = [_text('Alinea 1'), _text('Alinea 2'), EnrichedString('', table=table)]
-    sections = [StructuredText(_text('Title 2'), [], [], None, None, None, None)]
-    text = StructuredText(_text('Title'), alineas, sections, None, None, None, None)
+    sections = [StructuredText(_text('Title 2'), [], [], None, None, None)]
+    text = StructuredText(_text('Title'), alineas, sections, None, None, None)
     return text
 
 

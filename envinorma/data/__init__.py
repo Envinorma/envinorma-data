@@ -73,7 +73,6 @@ class StructuredText:
     outer_alineas: List[EnrichedString]
     sections: List['StructuredText']
     applicability: Optional[Applicability]
-    lf_id: Optional[str] = None
     reference_str: Optional[str] = None
     annotations: Optional[Annotations] = None
     id: str = field(default_factory=random_id)

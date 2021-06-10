@@ -6,7 +6,7 @@ from envinorma.io.markdown import (
     extract_markdown_text,
     table_to_markdown,
 )
-from envinorma.structure.am_structure_extraction import (
+from envinorma.from_legifrance.legifrance_to_am import (
     ArticleStatus,
     LegifranceArticle,
     LegifranceSection,
