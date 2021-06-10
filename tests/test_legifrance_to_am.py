@@ -27,10 +27,10 @@ from envinorma.from_legifrance.legifrance_to_am import (
     _remove_links,
     _replace_weird_annexe_words,
     _structure_text,
+    legifrance_to_arrete_ministeriel,
     remove_empty,
     remove_summaries,
     split_alineas_in_sections,
-    legifrance_to_arrete_ministeriel,
 )
 from envinorma.utils import safely_replace
 

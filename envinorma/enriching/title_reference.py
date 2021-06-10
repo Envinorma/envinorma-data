@@ -1,13 +1,9 @@
 import re
 from dataclasses import replace
-from envinorma.data import ArreteMinisteriel, StructuredText
 from typing import List, Optional
-from envinorma.title_detection import (
-    NUMBERING_PATTERNS,
-    ROMAN_PATTERN,
-    NumberingPattern,
-    detect_longest_matched_string,
-)
+
+from envinorma.data import ArreteMinisteriel, StructuredText
+from envinorma.title_detection import NUMBERING_PATTERNS, ROMAN_PATTERN, NumberingPattern, detect_longest_matched_string
 
 
 def _is_probably_section_number(candidate: str) -> bool:

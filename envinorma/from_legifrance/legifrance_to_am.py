@@ -19,9 +19,9 @@ from envinorma.data import (
     TableReference,
     standardize_title_date,
 )
-from envinorma.structure import split_alineas_in_sections
 from envinorma.from_legifrance.numbering_exceptions import EXCEPTION_PREFIXES, MAX_PREFIX_LEN
 from envinorma.io.parse_html import extract_table
+from envinorma.structure import split_alineas_in_sections
 from envinorma.title_detection import NumberingPattern, detect_patterns_if_exists, is_mainly_upper, is_probably_title
 
 
