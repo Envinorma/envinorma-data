@@ -12,7 +12,7 @@ from bs4 import BeautifulSoup
 
 from envinorma.data import StructuredText, add_title_default_numbering
 from envinorma.data.text_elements import Cell, EnrichedString, Linebreak, Row, Table, TextElement, Title
-from envinorma.from_legifrance import build_structured_text, structured_text_to_text_elements
+from envinorma.structure import build_structured_text, structured_text_to_text_elements
 from envinorma.utils import random_string
 
 

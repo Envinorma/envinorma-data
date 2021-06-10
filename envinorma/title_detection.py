@@ -1,8 +1,6 @@
 import re
 from enum import Enum
-from typing import Dict, List, Optional, Set
-
-from envinorma.from_legifrance.numbering_exceptions import EXCEPTION_PREFIXES, MAX_PREFIX_LEN
+from typing import Dict, List, Optional, Tuple
 
 
 class NumberingPattern(Enum):
@@ -94,109 +92,6 @@ def detect_longest_matched_string(string: str) -> Optional[str]:
     return _extract_matched_str(string, re.match(pattern, string))
 
 
-def _smart_detect_pattern(string: str) -> Optional[NumberingPattern]:
-    if string[:MAX_PREFIX_LEN] in EXCEPTION_PREFIXES:
-        pattern = EXCEPTION_PREFIXES[string[:MAX_PREFIX_LEN]]
-        return NumberingPattern(pattern) if pattern else None
-    return detect_longest_matched_pattern(string)
-
-
-def detect_patterns_if_exists(strings: List[str]) -> List[Optional[NumberingPattern]]:
-    return [_smart_detect_pattern(string) for string in strings]
-
-
-def detect_patterns(strings: List[str]) -> List[NumberingPattern]:
-    matched_patterns = detect_patterns_if_exists(strings)
-    return [pattern for pattern in matched_patterns if pattern]
-
-
-def detect_first_pattern(strs: List[str]) -> Optional[NumberingPattern]:
-    patterns = detect_patterns(strs)
-    if not patterns:
-        return None
-    return patterns[0]
-
-
-def group_strings_by_pattern(
-    patterns: List[Optional[NumberingPattern]], strings: List[str]
-) -> Dict[NumberingPattern, List[str]]:
-    pattern_to_strings: Dict[NumberingPattern, List[str]] = {}
-    for pattern, string in zip(patterns, strings):
-        if not pattern:
-            continue
-        if pattern not in pattern_to_strings:
-            pattern_to_strings[pattern] = []
-        pattern_to_strings[pattern].append(string)
-    return pattern_to_strings
-
-
-def _any_final_semicolon(strings: List[str]) -> bool:
-    return any([':' in string[-2:] for string in strings])
-
-
-def _starts_with_prefix(string: str, prefix: str) -> bool:
-    return string[: len(prefix)] == prefix
-
-
-def prefixes_are_increasing(prefixes: List[str], strings: List[str]) -> bool:
-    i = 0
-    for string in strings:
-        while True:
-            if i >= len(prefixes):
-                return False
-            if _starts_with_prefix(string, prefixes[i]):
-                break
-            i += 1
-    if i >= len(prefixes):
-        return False
-    return True
-
-
-def _pattern_is_increasing(pattern: NumberingPattern, strings: List[str]) -> bool:
-    prefixes = PATTERN_NAME_TO_LIST[pattern]
-    return prefixes_are_increasing(prefixes, strings)
-
-
-def prefixes_are_continuous(prefixes: List[str], strings: List[str]) -> bool:
-    for prefix, string in zip(prefixes, strings):
-        if not _starts_with_prefix(string, prefix):
-            return False
-    if len(strings) > len(prefixes):
-        raise ValueError(
-            f'Missing prefixes to check continuity. First prefix: {prefixes[0]}, first string: {strings[0]}'
-        )
-    return True
-
-
-def _is_valid(pattern: NumberingPattern, strings: List[str]) -> bool:
-    checks: List[bool] = []
-    if pattern in INCREASING_PATTERNS:
-        checks.append(_pattern_is_increasing(pattern, strings))
-    if pattern in SHOULD_HAVE_SEMICOLON_PATTERNS:
-        checks.append(_any_final_semicolon(strings))
-    return all(checks)
-
-
-def _deduce_pattern_to_use(
-    detected_patterns: List[Optional[NumberingPattern]], pattern_to_strings: Dict[NumberingPattern, List[str]]
-) -> Optional[NumberingPattern]:
-    invalid_patterns: Set[NumberingPattern] = set()
-    for pattern in detected_patterns:
-        if not pattern or pattern in invalid_patterns:
-            continue
-        if _is_valid(pattern, pattern_to_strings[pattern]):
-            return pattern
-        invalid_patterns.add(pattern)
-    return None
-
-
-def guess_numbering_pattern(strings: List[str]) -> Optional[NumberingPattern]:
-    return detect_first_pattern(strings)
-    # matched_patterns = [_smart_detect_pattern(string) for string in strings]
-    # pattern_to_strings = group_strings_by_pattern(matched_patterns, strings)
-    # return _deduce_pattern_to_use(matched_patterns, pattern_to_strings)
-
-
 ROMAN_TO_XXX = [
     f'{prefix}{unit}'
     for prefix in ['', 'X', 'XX', 'XXX']
@@ -230,17 +125,6 @@ PATTERN_NAME_TO_LIST = {
 }
 
 
-def get_first_match(title: str, prefixes: List[str]) -> int:
-    for i, prefix in enumerate(prefixes):
-        if title[: len(prefix)] == prefix:
-            return i
-    return -1
-
-
-def get_matched_strs(strs: List[str], pattern: NumberingPattern) -> List[bool]:
-    return [_smart_detect_pattern(str_) == pattern for str_ in strs]
-
-
 def _first_word(sentence: str) -> str:
     return sentence.split(' ')[0].split('\'')[0]
 
@@ -266,3 +150,23 @@ def is_probably_title(candidate: str) -> bool:
     if len(candidate.split(' ')) >= 15:
         return False
     return True
+
+
+_NumberingExceptions = Tuple[int, Dict[str, Optional[str]]]
+
+
+def _smart_detect_pattern(
+    string: str, numbering_exceptions: Optional[_NumberingExceptions]
+) -> Optional[NumberingPattern]:
+    if numbering_exceptions:
+        max_prefix_len, exceptions = numbering_exceptions
+        if string[:max_prefix_len] in exceptions:
+            pattern = exceptions[string[:max_prefix_len]]
+            return NumberingPattern(pattern) if pattern else None
+    return detect_longest_matched_pattern(string)
+
+
+def detect_patterns_if_exists(
+    strings: List[str], exceptions: Optional[_NumberingExceptions]
+) -> List[Optional[NumberingPattern]]:
+    return [_smart_detect_pattern(string, exceptions) for string in strings]

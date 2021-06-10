@@ -1,20 +1,56 @@
 import re
+from typing import List
 
 from envinorma.from_legifrance.numbering_exceptions import EXCEPTION_PREFIXES, MAX_PREFIX_LEN
-from envinorma.from_legifrance.title_detection import (
+from envinorma.title_detection import (
+    INCREASING_PATTERNS,
     NUMBERING_PATTERNS,
     PATTERN_NAME_TO_LIST,
+    SHOULD_HAVE_SEMICOLON_PATTERNS,
     NumberingPattern,
     _first_word,
-    _is_valid,
-    _pattern_is_increasing,
     _smart_detect_pattern,
     detect_longest_matched_pattern,
     detect_longest_matched_string,
     detect_patterns_if_exists,
     is_probably_title,
-    prefixes_are_continuous,
 )
+
+
+def _starts_with_prefix(string: str, prefix: str) -> bool:
+    return string[: len(prefix)] == prefix
+
+
+def _prefixes_are_increasing(prefixes: List[str], strings: List[str]) -> bool:
+    i = 0
+    for string in strings:
+        while True:
+            if i >= len(prefixes):
+                return False
+            if _starts_with_prefix(string, prefixes[i]):
+                break
+            i += 1
+    if i >= len(prefixes):
+        return False
+    return True
+
+
+def _pattern_is_increasing(pattern: NumberingPattern, strings: List[str]) -> bool:
+    prefixes = PATTERN_NAME_TO_LIST[pattern]
+    return _prefixes_are_increasing(prefixes, strings)
+
+
+def _any_final_semicolon(strings: List[str]) -> bool:
+    return any([':' in string[-2:] for string in strings])
+
+
+def _is_valid(pattern: NumberingPattern, strings: List[str]) -> bool:
+    checks: List[bool] = []
+    if pattern in INCREASING_PATTERNS:
+        checks.append(_pattern_is_increasing(pattern, strings))
+    if pattern in SHOULD_HAVE_SEMICOLON_PATTERNS:
+        checks.append(_any_final_semicolon(strings))
+    return all(checks)
 
 
 def test_pattern_is_increasing():
@@ -29,12 +65,6 @@ def test_regex():
     for pattern_name, pattern in NUMBERING_PATTERNS.items():
         for elt in PATTERN_NAME_TO_LIST[pattern_name]:
             assert re.match(pattern, elt)
-
-
-def test_prefixes_are_continuous():
-    prefixes = PATTERN_NAME_TO_LIST[NumberingPattern.NUMERIC_D1]
-    assert prefixes_are_continuous(prefixes, prefixes)
-    assert not prefixes_are_continuous(prefixes, prefixes[1:5])
 
 
 def test_is_valid():
@@ -58,9 +88,12 @@ def test_exceptions():
 
 def test_smart_detect_pattern():
     pattern = _smart_detect_pattern(
-        "1. Les zones d'effets Z1 et Z2 définies par l'arrêté du 20 a erez"
+        "1. Les zones d'effets Z1 et Z2 définies par l'arrêté du 20 a erez", (MAX_PREFIX_LEN, EXCEPTION_PREFIXES)
     )  # in EXCEPTION_PREFIXES
     assert pattern is None
+
+    pattern = _smart_detect_pattern("1. Les zones d'effets Z1 et Z2 définies par l'arrêté du 20 a erez", None)
+    assert pattern == NumberingPattern.NUMERIC_D1
 
 
 def test_structure_extraction():
@@ -74,7 +107,8 @@ def test_structure_extraction():
             "2. 1. 1. Surveillance de l'installation",
             "1. Les zones d'effets Z1 et Z2 définies par l'arrêté du 20 a erez",  # in EXCEPTION_PREFIXES
             "2. 1. 2. Clôture",
-        ]
+        ],
+        (MAX_PREFIX_LEN, EXCEPTION_PREFIXES),
     )
     assert patterns[0] == NumberingPattern.NUMERIC_D1
     assert patterns[1] == NumberingPattern.NUMERIC_D2_SPACE
@@ -89,7 +123,8 @@ def test_structure_extraction_2():
             "B. Second section",
             "H. H-th section",
             "I. ― Les aires de chargement et de déchargement des produits",  # must be letter (exception)
-        ]
+        ],
+        (MAX_PREFIX_LEN, EXCEPTION_PREFIXES),
     )
     assert patterns == [
         NumberingPattern.ROMAN,

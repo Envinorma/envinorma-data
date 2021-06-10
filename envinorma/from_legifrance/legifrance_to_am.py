@@ -19,14 +19,10 @@ from envinorma.data import (
     TableReference,
     standardize_title_date,
 )
+from envinorma.structure import split_alineas_in_sections
+from envinorma.from_legifrance.numbering_exceptions import EXCEPTION_PREFIXES, MAX_PREFIX_LEN
 from envinorma.io.parse_html import extract_table
-from envinorma.from_legifrance import split_alineas_in_sections
-from envinorma.from_legifrance.title_detection import (
-    NumberingPattern,
-    detect_patterns_if_exists,
-    is_mainly_upper,
-    is_probably_title,
-)
+from envinorma.title_detection import NumberingPattern, detect_patterns_if_exists, is_mainly_upper, is_probably_title
 
 
 def _clean_title(str_: EnrichedString) -> EnrichedString:
@@ -148,7 +144,7 @@ def _build_structured_text(
 
 
 def extract_pattern_names(alineas: List[str]) -> List[Optional[NumberingPattern]]:
-    return detect_patterns_if_exists(alineas)
+    return detect_patterns_if_exists(alineas, (MAX_PREFIX_LEN, EXCEPTION_PREFIXES))
 
 
 def _structure_text(title: str, alineas: List[str]) -> StructuredText:

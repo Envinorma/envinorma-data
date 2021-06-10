@@ -2,13 +2,9 @@ from dataclasses import dataclass, replace
 from datetime import date
 from typing import Dict, Optional, Tuple
 
-from envinorma.am_enriching import (
-    add_references,
-    add_table_inspection_sheet_data,
-    detect_and_add_topics,
-    remove_null_applicabilities,
-)
+from envinorma.am_enriching import add_table_inspection_sheet_data, detect_and_add_topics, remove_null_applicabilities
 from envinorma.data import AMMetadata, ArreteMinisteriel, ClassementWithAlineas, Regime, add_metadata
+from envinorma.enriching.title_reference import add_references
 from envinorma.parametrization import Combinations, Parametrization
 from envinorma.parametrization.conditions import ParameterEnum
 from envinorma.parametrization.parametric_am import generate_all_am_versions
