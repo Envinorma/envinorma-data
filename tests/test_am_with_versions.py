@@ -35,7 +35,7 @@ _NEW_TEXT = StructuredText(
     id='d16d0fE7C7fc',
 )
 _PARAMETRIZATION = Parametrization(
-    application_conditions=[
+    inapplicable_sections=[
         InapplicableSection(
             targeted_entity=EntityReference(section=SectionReference(path=(0,)), outer_alinea_indices=None),
             condition=AndCondition(conditions=[Littler(parameter=_DATE, target=date(2021, 1, 1), strict=True)]),
@@ -202,7 +202,7 @@ def test_extract_conditions_from_parametrization():
 
 
 def test_extract_leaf_conditions():
-    res = extract_leaf_conditions(_PARAMETRIZATION.application_conditions[0].condition, _DATE)
+    res = extract_leaf_conditions(_PARAMETRIZATION.inapplicable_sections[0].condition, _DATE)
     assert len(res) == 1
 
     res = extract_leaf_conditions(_PARAMETRIZATION.alternative_sections[0].condition, _DATE)

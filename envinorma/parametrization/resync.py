@@ -38,8 +38,8 @@ def _add_titles_sequences_alternative_section(obj: AlternativeSection, am: Arret
 def add_titles_sequences(parametrization: Parametrization, am: ArreteMinisteriel) -> Parametrization:
     return replace(
         parametrization,
-        application_conditions=[
-            _add_titles_sequences_inapplicable_section(x, am) for x in parametrization.application_conditions
+        inapplicable_sections=[
+            _add_titles_sequences_inapplicable_section(x, am) for x in parametrization.inapplicable_sections
         ],
         alternative_sections=[
             _add_titles_sequences_alternative_section(x, am) for x in parametrization.alternative_sections
@@ -90,8 +90,8 @@ def _regenerate_paths_alternative_section(obj: AlternativeSection, am: ArreteMin
 def regenerate_paths(parametrization: Parametrization, am: ArreteMinisteriel) -> Parametrization:
     return replace(
         parametrization,
-        application_conditions=[
-            _regenerate_paths_inapplicable_section(x, am) for x in parametrization.application_conditions
+        inapplicable_sections=[
+            _regenerate_paths_inapplicable_section(x, am) for x in parametrization.inapplicable_sections
         ],
         alternative_sections=[
             _regenerate_paths_alternative_section(x, am) for x in parametrization.alternative_sections

@@ -153,7 +153,7 @@ def _group(elements: List[T], groupper: Callable[[T], K]) -> Dict[K, List[T]]:
 
 @dataclass
 class Parametrization:
-    application_conditions: List[InapplicableSection]
+    inapplicable_sections: List[InapplicableSection]
     alternative_sections: List[AlternativeSection]
     warnings: List[AMWarning]
     path_to_conditions: Dict[Ints, List[InapplicableSection]] = field(init=False)
@@ -161,7 +161,7 @@ class Parametrization:
     path_to_warnings: Dict[Ints, List[AMWarning]] = field(init=False)
 
     def __post_init__(self):
-        self.path_to_conditions = _group(self.application_conditions, lambda x: x.targeted_entity.section.path)
+        self.path_to_conditions = _group(self.inapplicable_sections, lambda x: x.targeted_entity.section.path)
         self.path_to_alternative_sections = _group(self.alternative_sections, lambda x: x.targeted_section.path)
         self.path_to_warnings = _group(self.warnings, lambda x: x.targeted_section.path)
         self.check()
@@ -169,21 +169,26 @@ class Parametrization:
 
     def to_dict(self) -> Dict[str, Any]:
         res = {}
-        res['application_conditions'] = [app.to_dict() for app in self.application_conditions]
+        res['inapplicable_sections'] = [app.to_dict() for app in self.inapplicable_sections]
         res['alternative_sections'] = [sec.to_dict() for sec in self.alternative_sections]
         res['warnings'] = [warning.to_dict() for warning in self.warnings]
         return res
 
     @classmethod
     def from_dict(cls, dict_: Dict[str, Any]) -> 'Parametrization':
+        # field renaming
+        if 'inapplicable_sections' in dict_:
+            inapplicable_sections_raw = dict_['inapplicable_sections']
+        else:
+            inapplicable_sections_raw = dict_['application_conditions']
         return Parametrization(
-            [InapplicableSection.from_dict(app) for app in dict_['application_conditions']],
+            [InapplicableSection.from_dict(app) for app in inapplicable_sections_raw],
             [AlternativeSection.from_dict(sec) for sec in dict_['alternative_sections']],
             [AMWarning.from_dict(sec) for sec in dict_.get('warnings', [])],
         )
 
     def extract_conditions(self) -> List[Condition]:
-        return [ap.condition for ap in self.application_conditions] + [
+        return [ap.condition for ap in self.inapplicable_sections] + [
             as_.condition for as_ in self.alternative_sections
         ]
 
@@ -191,7 +196,7 @@ class Parametrization:
         return {parameter for condition in self.extract_conditions() for parameter in condition.parameters()}
 
     def check(self) -> None:
-        for app in self.application_conditions:
+        for app in self.inapplicable_sections:
             app.condition.check()
         for sec in self.alternative_sections:
             sec.condition.check()

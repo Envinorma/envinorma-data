@@ -39,10 +39,10 @@ def _recreate_with_removed_parameter(
     object_type: Type[ParameterObject], parameter_rank: int, parametrization: Parametrization
 ) -> Parametrization:
     new_sections = parametrization.alternative_sections.copy()
-    new_conditions = parametrization.application_conditions.copy()
+    new_conditions = parametrization.inapplicable_sections.copy()
     new_warnings = parametrization.warnings.copy()
     if object_type == InapplicableSection:
-        _ensure_len(parametrization.application_conditions, parameter_rank + 1)
+        _ensure_len(parametrization.inapplicable_sections, parameter_rank + 1)
         del new_conditions[parameter_rank]
     if object_type == AlternativeSection:
         _ensure_len(parametrization.alternative_sections, parameter_rank + 1)
@@ -68,7 +68,7 @@ def _recreate_with_upserted_parameter(
     new_parameter: ParameterObject, parameter_rank: int, parametrization: Parametrization
 ) -> Parametrization:
     new_sections = parametrization.alternative_sections
-    new_conditions = parametrization.application_conditions
+    new_conditions = parametrization.inapplicable_sections
     new_warnings = parametrization.warnings
     if isinstance(new_parameter, InapplicableSection):
         new_conditions = _replace_element_in_list_or_append_if_negative_rank(

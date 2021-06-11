@@ -199,11 +199,11 @@ def _generate_whole_text_reason_inactive(condition: Condition, parameter_values:
 
 
 def _compute_whole_text_applicability(
-    application_conditions: List[InapplicableSection],
+    inapplicable_sections: List[InapplicableSection],
     parameter_values: Dict[Parameter, Any],
     simple_warnings: List[AMWarning],
 ) -> Tuple[bool, List[str]]:
-    na_conditions, warnings = _keep_satisfied_conditions(application_conditions, parameter_values, whole_text=True)
+    na_conditions, warnings = _keep_satisfied_conditions(inapplicable_sections, parameter_values, whole_text=True)
     if len(na_conditions) > 1:
         raise ValueError(
             f'Cannot handle more than one inapplicability on the whole text. '
@@ -211,7 +211,7 @@ def _compute_whole_text_applicability(
         )
     if not na_conditions:
         return True, warnings + [x.text for x in simple_warnings]
-    if application_conditions[0].targeted_entity.outer_alinea_indices:
+    if inapplicable_sections[0].targeted_entity.outer_alinea_indices:
         raise ValueError('Can only deactivate the whole AM, not particular alineas.')
     description = _generate_whole_text_reason_inactive(na_conditions[0].condition, parameter_values)
     return False, [description]
