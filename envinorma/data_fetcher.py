@@ -5,13 +5,12 @@ import psycopg2
 
 from envinorma.models.am_metadata import AMMetadata, AMState
 from envinorma.models.arrete_ministeriel import ArreteMinisteriel
-from envinorma.parametrization import (
+from envinorma.parametrization.models.parametrization import (
     AlternativeSection,
     AMWarning,
     NonApplicationCondition,
     ParameterObject,
     Parametrization,
-    check_parametrization_consistency,
 )
 from envinorma.utils import AMStatus
 
@@ -196,7 +195,7 @@ class DataFetcher:
     def upsert_parameter(self, am_id: str, new_parameter: ParameterObject, parameter_rank: int) -> None:
         previous_parametrization = self.load_or_init_parametrization(am_id)
         parametrization = _recreate_with_upserted_parameter(new_parameter, parameter_rank, previous_parametrization)
-        check_parametrization_consistency(parametrization)
+        parametrization.check_consistency()
         self.upsert_new_parametrization(am_id, parametrization)
 
     def load_parametrization(self, am_id: str) -> Optional[Parametrization]:

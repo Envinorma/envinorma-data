@@ -5,26 +5,23 @@ from envinorma.models.arrete_ministeriel import ArreteMinisteriel
 from envinorma.models.classement import Classement, Regime
 from envinorma.models.structured_text import StructuredText
 from envinorma.models.text_elements import Cell, EnrichedString, Row, Table
-from envinorma.parametrization import (
+from envinorma.parametrization.am_with_versions import (
+    _extract_am_regime,
+    _generate_versions_and_postprocess,
+    generate_versions,
+)
+from envinorma.parametrization.combinations import _generate_options_dicts, generate_exhaustive_combinations
+from envinorma.parametrization.models.condition import AndCondition, Littler, Range, extract_leaf_conditions
+from envinorma.parametrization.models.parameter import Parameter, ParameterType
+from envinorma.parametrization.models.parametrization import (
     AlternativeSection,
     AMWarning,
     ConditionSource,
     EntityReference,
-    Littler,
     NonApplicationCondition,
-    Parameter,
-    ParameterType,
     Parametrization,
     SectionReference,
     extract_conditions_from_parametrization,
-)
-from envinorma.parametrization.am_with_versions import apply_parametrization
-from envinorma.parametrization.conditions import AndCondition, Range, extract_leaf_conditions
-from envinorma.parametrization.parametric_am import (
-    _generate_exhaustive_combinations,
-    _generate_options_dicts,
-    extract_parameters_from_parametrization,
-    generate_all_am_versions,
 )
 
 _DATE = Parameter(id='date-d-installation', type=ParameterType.DATE)
@@ -166,17 +163,17 @@ def test_apply_parametrization():
         date_of_signature=date.fromtimestamp(1612195449),
         source=AMSource('LEGIFRANCE'),
     )
-    res = apply_parametrization('FACE_CID', _STRUCTURED_AM, _PARAMETRIZATION, md)
+    res = _generate_versions_and_postprocess('FACE_CID', _STRUCTURED_AM, _PARAMETRIZATION, md)
     assert res and len(res) == 4
 
 
-def test_generate_all_am_versions():
-    res = generate_all_am_versions(_STRUCTURED_AM, _PARAMETRIZATION, True)
+def test_generate_versions_and_postprocess():
+    res = generate_versions(_STRUCTURED_AM, _PARAMETRIZATION, True)
     assert len(res) == 4
 
 
 def test_generate_exhaustive_combinations():
-    res = _generate_exhaustive_combinations(_PARAMETRIZATION, True, None)
+    res = generate_exhaustive_combinations(_PARAMETRIZATION, True, None)
     assert len(res) == 4
 
 
@@ -191,7 +188,7 @@ def test_generate_options_dicts():
 
 
 def test_extract_parameters_from_parametrization():
-    res = extract_parameters_from_parametrization(_PARAMETRIZATION)
+    res = _PARAMETRIZATION.extract_parameters()
     assert len(res) == 1
     assert list(res)[0] == _DATE
 
@@ -210,3 +207,15 @@ def test_extract_leaf_conditions():
 
     res = extract_leaf_conditions(_PARAMETRIZATION.alternative_sections[0].condition, _DATE)
     assert len(res) == 1
+
+
+def _generate_classement(regime: str) -> Classement:
+    return Classement('1234', Regime(regime), None)
+
+
+def test_extract_am_regime():
+    assert _extract_am_regime([]) is None
+    assert _extract_am_regime([_generate_classement('A')]) == Regime.A
+    assert _extract_am_regime([_generate_classement('E')]) == Regime.E
+    assert _extract_am_regime([_generate_classement('D')]) == Regime.D
+    assert _extract_am_regime([_generate_classement('D'), _generate_classement('A')]) is None

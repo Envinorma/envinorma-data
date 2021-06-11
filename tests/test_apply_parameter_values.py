@@ -8,163 +8,34 @@ from typing import List, Optional
 import pytest
 
 from envinorma.models.arrete_ministeriel import ArreteMinisteriel, DateParameterDescriptor
-from envinorma.models.classement import Classement, Regime
+from envinorma.models.classement import Regime
 from envinorma.models.structured_text import Applicability, StructuredText
 from envinorma.models.text_elements import EnrichedString
-from envinorma.parametrization import (
+from envinorma.parametrization.am_with_versions import generate_versions
+from envinorma.parametrization.apply_parameter_values import (
+    _date_parameters,
+    _deactivate_alineas,
+    _extract_surrounding_dates,
+    _find_used_date,
+    _is_satisfiable,
+    _keep_satisfiable,
+    _used_date_parameter,
+    apply_parameter_values_to_am,
+)
+from envinorma.parametrization.models.condition import AndCondition, Equal, Littler, OrCondition
+from envinorma.parametrization.models.parameter import Parameter, ParameterEnum, ParameterType
+from envinorma.parametrization.models.parametrization import (
     AlternativeSection,
     AMWarning,
-    Combinations,
     ConditionSource,
     EntityReference,
     NonApplicationCondition,
     Parametrization,
     SectionReference,
 )
-from envinorma.parametrization.conditions import (
-    AndCondition,
-    Condition,
-    Equal,
-    Greater,
-    Littler,
-    OrCondition,
-    Parameter,
-    ParameterEnum,
-    ParameterType,
-    Range,
-)
-from envinorma.parametrization.parametric_am import (
-    _change_value,
-    _date_parameters,
-    _deactivate_alineas,
-    _extract_am_regime,
-    _extract_interval_midpoints,
-    _extract_sorted_targets,
-    _extract_surrounding_dates,
-    _find_used_date,
-    _generate_combinations,
-    _generate_equal_option_dicts,
-    _generate_options_dict,
-    _is_satisfiable,
-    _keep_aed_parameter,
-    _keep_satisfiable,
-    _mean,
-    _used_date_parameter,
-    apply_parameter_values_to_am,
-    extract_parameters_from_parametrization,
-    generate_all_am_versions,
-    is_satisfied,
-)
 
 _NAC = NonApplicationCondition
 _AS = AlternativeSection
-
-
-def test_mean():
-    assert _mean(0, 2) == 1
-    assert _mean(datetime(2020, 1, 1), datetime(2020, 1, 3)) == datetime(2020, 1, 2)
-
-
-def test_extract_interval_midpoints():
-    assert _extract_interval_midpoints([0, 1, 2, 3]) == [-1, 0.5, 1.5, 2.5, 4]
-    res = [datetime(2019, 12, 31), datetime(2020, 1, 2), datetime(2020, 1, 4)]
-    assert _extract_interval_midpoints([datetime(2020, 1, 1), datetime(2020, 1, 3)]) == res
-
-
-def test_generate_equal_option_dicts():
-    parameter = Parameter('test', ParameterType.BOOLEAN)
-    conditions: List[Condition] = [Equal(parameter, True), Equal(parameter, True)]
-    res = _generate_equal_option_dicts(conditions)
-    assert res == [('test == True', True), ('test != True', False)]
-
-
-def test_generate_equal_option_dicts_2():
-    parameter = Parameter('regime', ParameterType.REGIME)
-    conditions: List[Condition] = [Equal(parameter, Regime.A), Equal(parameter, Regime.NC)]
-    res = _generate_equal_option_dicts(conditions)
-    expected = [
-        ('regime == A', Regime.A),
-        ('regime == E', Regime.E),
-        ('regime == D', Regime.D),
-        ('regime == NC', Regime.NC),
-    ]
-    assert expected == res
-
-
-def test_generate_options_dict():
-    parameter = Parameter('test', ParameterType.BOOLEAN)
-    conditions: List[Condition] = [Equal(parameter, True), Equal(parameter, True)]
-    res = _generate_options_dict(conditions)
-    assert res == [('test == True', True), ('test != True', False)]
-
-
-def test_extract_sorted_targets():
-    parameter = Parameter('test', ParameterType.DATE)
-    conditions = [
-        Range(parameter, datetime(2020, 1, 1), datetime(2021, 1, 1), False, True),
-        Littler(parameter, datetime(2020, 1, 1), True),
-        Greater(parameter, datetime(2021, 1, 1), False),
-    ]
-    assert _extract_sorted_targets(conditions, True) == [datetime(2020, 1, 1), datetime(2021, 1, 1)]
-
-
-def test_generate_options_dict_2():
-    parameter = Parameter('test', ParameterType.DATE)
-    conditions = [
-        Range(parameter, datetime(2020, 1, 1), datetime(2021, 1, 1), False, True),
-        Littler(parameter, datetime(2020, 1, 1), True),
-        Greater(parameter, datetime(2021, 1, 1), False),
-    ]
-    res = _generate_options_dict(conditions)
-    str_dt_20 = '2020-01-01'
-    str_dt_21 = '2021-01-01'
-    expected = [
-        (f'test < {str_dt_20}', datetime(2019, 12, 31)),
-        (f'{str_dt_20} <= test < {str_dt_21}', datetime(2020, 7, 2, 1, 0)),
-        (f'test >= {str_dt_21}', datetime(2021, 1, 2)),
-    ]
-    assert res == expected
-
-
-def test_change_value():
-    assert not _change_value(True)
-    assert _change_value(False)
-    assert _change_value(1) == 2
-    assert _change_value(2.0) == 3
-    assert _change_value(datetime(2020, 1, 1)) == datetime(2020, 1, 2)
-
-
-def test_generate_combinations():
-    parameter_1 = Parameter('test_1', ParameterType.DATE)
-    parameter_2 = Parameter('test_2', ParameterType.BOOLEAN)
-    options_1 = (parameter_1, [('test_1 < a', datetime(2021, 1, 1)), ('test_1 >= a', datetime(2022, 1, 1))])
-    options_2 = (parameter_2, [('test_2 == True', True), ('test_2 != True', False)])
-    res = _generate_combinations([options_1, options_2], False)
-    expected: Combinations = {
-        ('test_1 < a', 'test_2 == True'): {parameter_1: datetime(2021, 1, 1), parameter_2: True},
-        ('test_1 < a', 'test_2 != True'): {parameter_1: datetime(2021, 1, 1), parameter_2: False},
-        ('test_1 >= a', 'test_2 == True'): {parameter_1: datetime(2022, 1, 1), parameter_2: True},
-        ('test_1 >= a', 'test_2 != True'): {parameter_1: datetime(2022, 1, 1), parameter_2: False},
-    }
-    assert expected == res
-
-    parameter_1 = Parameter('test_1', ParameterType.DATE)
-    parameter_2 = Parameter('test_2', ParameterType.BOOLEAN)
-    options_1 = (parameter_1, [('test_1 < a', datetime(2021, 1, 1)), ('test_1 >= a', datetime(2022, 1, 1))])
-    options_2 = (parameter_2, [('test_2 == True', True), ('test_2 != True', False)])
-    res = _generate_combinations([options_1, options_2], True)
-    expected: Combinations = {
-        (): {},
-        ('test_2 == True',): {parameter_2: True},
-        ('test_2 != True',): {parameter_2: False},
-        ('test_1 < a',): {parameter_1: datetime(2021, 1, 1)},
-        ('test_1 < a', 'test_2 == True'): {parameter_1: datetime(2021, 1, 1), parameter_2: True},
-        ('test_1 < a', 'test_2 != True'): {parameter_1: datetime(2021, 1, 1), parameter_2: False},
-        ('test_1 >= a',): {parameter_1: datetime(2022, 1, 1)},
-        ('test_1 >= a', 'test_2 == True'): {parameter_1: datetime(2022, 1, 1), parameter_2: True},
-        ('test_1 >= a', 'test_2 != True'): {parameter_1: datetime(2022, 1, 1), parameter_2: False},
-    }
-    assert expected == res
 
 
 def _random_string() -> str:
@@ -306,7 +177,7 @@ def test_extract_parameters_from_parametrization():
         [],
     )
 
-    parameters = extract_parameters_from_parametrization(parametrization)
+    parameters = parametrization.extract_parameters()
     assert len(parameters) == 1
     assert list(parameters)[0].id == 'nouvelle-installation'
 
@@ -324,13 +195,13 @@ def test_extract_parameters_from_parametrization_2():
         [],
     )
 
-    parameters = extract_parameters_from_parametrization(parametrization)
+    parameters = parametrization.extract_parameters()
     assert len(parameters) == 2
     assert copy(parameter_1) in parameters
     assert copy(parameter_2) in parameters
 
 
-def test_generate_all_am_versions():
+def test_generate_versions():
     sections = [
         StructuredText(_str('Art. 1'), [_str('Initial version 1')], [], None),
         StructuredText(_str('Art. 2'), [_str('Initial version 2')], [], None),
@@ -343,7 +214,7 @@ def test_generate_all_am_versions():
     source = ConditionSource('', EntityReference(SectionReference((2,)), None))
     parametrization = Parametrization([_NAC(EntityReference(SectionReference((0,)), None), condition, source)], [], [])
 
-    res = generate_all_am_versions(am, parametrization, False)
+    res = generate_versions(am, parametrization, False)
     assert len(res) == 3
     assert ('nouvelle-installation != False',) in res
     assert ('nouvelle-installation == False',) in res
@@ -353,27 +224,11 @@ def test_generate_all_am_versions():
     assert _all_alineas_active(res[()].sections[0])
     assert len(res[()].sections[0].applicability.warnings) == 1
 
-    res_2 = generate_all_am_versions(am, Parametrization([], [], []), False)
+    res_2 = generate_versions(am, Parametrization([], [], []), False)
     assert len(res_2) == 1
     assert tuple() in res_2
     exp = Applicability(active=True, modified=False, warnings=[], previous_version=None)
     assert res_2[()].sections[0].applicability == exp
-
-
-def test_is_satisfied():
-    param_1 = Parameter('regime', ParameterType.REGIME)
-    param_2 = Parameter('date', ParameterType.DATE)
-    condition_1 = Equal(param_1, Regime.A)
-    condition_2 = Equal(param_1, Regime.E)
-    condition_3 = Littler(param_2, 1, True)
-    assert not is_satisfied(AndCondition([condition_1]), {})
-    assert is_satisfied(AndCondition([condition_1]), {param_1: Regime.A})
-    assert is_satisfied(OrCondition([condition_1, condition_2]), {param_1: Regime.A})
-    assert is_satisfied(OrCondition([condition_1, condition_3]), {param_1: Regime.A})
-    assert not is_satisfied(AndCondition([condition_1, condition_2]), {param_1: Regime.A})
-    assert is_satisfied(AndCondition([condition_1, condition_3]), {param_1: Regime.A, param_2: 0.5})
-    assert is_satisfied(OrCondition([condition_2, condition_3]), {param_1: Regime.E, param_2: 0.5})
-    assert not is_satisfied(OrCondition([condition_1, condition_3]), {param_1: Regime.E, param_2: 5})
 
 
 def _get_simple_text(sections: Optional[List[StructuredText]] = None) -> StructuredText:
@@ -458,37 +313,6 @@ def test_find_used_date():
     with pytest.raises(ValueError):
         non_applicabilities = [_simple_nac(enregistrement), _simple_nac(declaration), _simple_nac(autorisation)]
         _find_used_date(Parametrization(non_applicabilities, [], []))
-
-
-def _generate_classement(regime: str) -> Classement:
-    return Classement('1234', Regime(regime), None)
-
-
-def test_extract_am_regime():
-    assert _extract_am_regime([]) is None
-    assert _extract_am_regime([_generate_classement('A')]) == Regime.A
-    assert _extract_am_regime([_generate_classement('E')]) == Regime.E
-    assert _extract_am_regime([_generate_classement('D')]) == Regime.D
-    assert _extract_am_regime([_generate_classement('D'), _generate_classement('A')]) is None
-
-
-def test_keep_aed_parameter():
-    declaration = ParameterEnum.DATE_DECLARATION.value
-    enregistrement = ParameterEnum.DATE_ENREGISTREMENT.value
-    autorisation = ParameterEnum.DATE_AUTORISATION.value
-
-    assert _keep_aed_parameter(set(), None) is None
-    assert _keep_aed_parameter(set(), Regime.A) is None
-    assert _keep_aed_parameter(set(), Regime.D) is None
-    assert _keep_aed_parameter({declaration}, Regime.D) == declaration
-    assert _keep_aed_parameter({enregistrement}, None) == enregistrement
-    assert _keep_aed_parameter({declaration, enregistrement}, Regime.D) == declaration
-    assert _keep_aed_parameter({declaration, enregistrement}, Regime.A) is None
-    assert _keep_aed_parameter({declaration, autorisation}, Regime.A) == autorisation
-    with pytest.raises(ValueError):
-        _keep_aed_parameter({declaration, autorisation}, None)
-    with pytest.raises(ValueError):
-        _keep_aed_parameter({autorisation, enregistrement}, None)
 
 
 def _simple_nac_2(date_parameter: Parameter) -> NonApplicationCondition:
