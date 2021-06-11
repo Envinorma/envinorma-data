@@ -1,12 +1,7 @@
-from envinorma.am_enriching import (
-    _split_rows,
-    add_inspection_sheet_in_table_rows,
-    add_topics,
-    remove_prescriptive_power,
-    remove_sections,
-)
-from envinorma.models import ArreteMinisteriel, EnrichedString, StructuredText, Table
-from envinorma.models.text_elements import Cell, Row, estr
+from envinorma.am_enriching import _split_rows, add_inspection_sheet_in_table_rows, add_topics, remove_sections
+from envinorma.models.arrete_ministeriel import ArreteMinisteriel
+from envinorma.models.structured_text import StructuredText
+from envinorma.models.text_elements import Cell, EnrichedString, Row, Table, estr
 from envinorma.topics.patterns import TopicName
 
 
@@ -22,15 +17,6 @@ def test_add_topics():
     assert am_with_topics.sections[0].annotations.topic == TopicName.INCENDIE
     assert am_with_topics.sections[0].sections[0].annotations.topic == TopicName.INCENDIE
     assert am_with_topics.sections[1].annotations.topic == TopicName.BRUIT_VIBRATIONS
-
-    am_with_non_prescriptive = remove_prescriptive_power(am_with_topics, {(1,)})
-    assert am_with_non_prescriptive.sections[0].annotations.prescriptive
-    assert am_with_non_prescriptive.sections[0].sections[0].annotations.prescriptive
-    assert not am_with_non_prescriptive.sections[1].annotations.prescriptive
-
-    assert am_with_non_prescriptive.sections[0].annotations.topic == TopicName.INCENDIE
-    assert am_with_non_prescriptive.sections[0].sections[0].annotations.topic == TopicName.INCENDIE
-    assert am_with_non_prescriptive.sections[1].annotations.topic == TopicName.BRUIT_VIBRATIONS
 
 
 def test_remove_sections():

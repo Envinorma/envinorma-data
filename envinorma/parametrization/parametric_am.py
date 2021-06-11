@@ -3,15 +3,9 @@ from dataclasses import replace
 from datetime import date, datetime, timedelta
 from typing import Any, Dict, List, Optional, Set, Tuple, Union
 
-from envinorma.models import (
-    Applicability,
-    ArreteMinisteriel,
-    Classement,
-    DateParameterDescriptor,
-    Regime,
-    StructuredText,
-    VersionDescriptor,
-)
+from envinorma.models.arrete_ministeriel import ArreteMinisteriel, DateParameterDescriptor, VersionDescriptor
+from envinorma.models.classement import Classement, Regime
+from envinorma.models.structured_text import Applicability, StructuredText
 from envinorma.parametrization import (
     AlternativeSection,
     AMWarning,

@@ -4,7 +4,9 @@ from typing import Dict, Optional, Tuple
 
 from envinorma.am_enriching import add_table_inspection_sheet_data, detect_and_add_topics, remove_null_applicabilities
 from envinorma.enriching.title_reference import add_references
-from envinorma.models import AMMetadata, ArreteMinisteriel, ClassementWithAlineas, Regime, add_metadata
+from envinorma.models.am_metadata import AMMetadata
+from envinorma.models.arrete_ministeriel import ArreteMinisteriel, add_metadata
+from envinorma.models.classement import ClassementWithAlineas, Regime
 from envinorma.parametrization import Combinations, Parametrization
 from envinorma.parametrization.conditions import ParameterEnum
 from envinorma.parametrization.parametric_am import generate_all_am_versions

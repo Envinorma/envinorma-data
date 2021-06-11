@@ -3,7 +3,7 @@ from datetime import date, datetime
 from enum import Enum
 from typing import Any, Dict, Optional
 
-from envinorma.models import Regime
+from .classement import Regime
 
 
 class Seveso(Enum):

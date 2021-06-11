@@ -1,17 +1,10 @@
-from datetime import date, datetime
+from datetime import date
 
-from envinorma.models import (
-    AMMetadata,
-    AMSource,
-    AMState,
-    ArreteMinisteriel,
-    Classement,
-    EnrichedString,
-    Regime,
-    StructuredText,
-    Table,
-)
-from envinorma.models.text_elements import Cell, Row
+from envinorma.models.am_metadata import AMMetadata, AMSource, AMState
+from envinorma.models.arrete_ministeriel import ArreteMinisteriel
+from envinorma.models.classement import Classement, Regime
+from envinorma.models.structured_text import StructuredText
+from envinorma.models.text_elements import Cell, EnrichedString, Row, Table
 from envinorma.parametrization import (
     AlternativeSection,
     AMWarning,

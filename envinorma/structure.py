@@ -1,7 +1,7 @@
 from typing import List, Optional, Tuple, TypeVar
 
-from envinorma.models import EnrichedString, StructuredText, Table
-from envinorma.models.text_elements import Linebreak, TextElement, Title
+from envinorma.models.structured_text import StructuredText
+from envinorma.models.text_elements import EnrichedString, Linebreak, Table, TextElement, Title
 
 TP = TypeVar('TP')
 

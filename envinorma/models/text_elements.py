@@ -28,6 +28,16 @@ class Cell:
         dict_['content'] = EnrichedString.from_dict(dict_['content'])
         return cls(**dict_)
 
+    def to_html(self, is_header: bool, with_links: bool = False) -> str:
+        tag = 'th' if is_header else 'td'
+        colspan_attr = f' colspan="{self.colspan}"' if self.colspan != 1 else ''
+        rowspan_attr = f' rowspan="{self.rowspan}"' if self.rowspan != 1 else ''
+        return f'<{tag}{colspan_attr}{rowspan_attr}>' f'{_enriched_text_to_html(self.content, with_links)}' f'</{tag}>'
+
+
+def _cells_to_html(cells: List[Cell], is_header: bool, with_links: bool = False) -> str:
+    return ''.join([cell.to_html(is_header, with_links) for cell in cells])
+
 
 @dataclass
 class Row:
@@ -41,6 +51,13 @@ class Row:
         dict_['cells'] = [Cell.from_dict(cell) for cell in dict_['cells']]
         return cls(**dict_)
 
+    def to_html(self, with_links: bool = False) -> str:
+        return f'<tr>{_cells_to_html(self.cells, self.is_header, with_links)}</tr>'
+
+
+def _rows_to_html(rows: List[Row], with_links: bool = False) -> str:
+    return ''.join([row.to_html(with_links) for row in rows])
+
 
 @dataclass
 class Table:
@@ -53,9 +70,17 @@ class Table:
     def from_dict(cls, dict_: Dict) -> 'Table':
         return cls([Row.from_dict(row) for row in dict_['rows']])
 
+    def to_html(self, with_links: bool = False) -> str:
+        return f'<table>{_rows_to_html(self.rows, with_links)}</table>'
+
 
 def empty_link_list() -> List[Link]:
     return []
+
+
+def _split_html_in_lines(html: str) -> List[str]:
+    html = html.replace('<br/>', '').replace('>', '>\n').replace('<', '\n<')
+    return [x.strip() for x in html.split('\n')]
 
 
 @dataclass
@@ -80,6 +105,11 @@ class EnrichedString:
             del dict_['links']
         return dict_
 
+    def text_lines(self) -> List[str]:
+        if self.table:
+            return _split_html_in_lines(self.table.to_html())
+        return self.text.split('\n')
+
 
 def _random_string(size: int = 9) -> str:
     return ''.join([random.choice(ascii_letters) for _ in range(size)])
@@ -99,29 +129,6 @@ def _enriched_text_to_html(str_: EnrichedString, with_links: bool = False) -> st
     else:
         text = str_.text
     return text.replace('\n', '<br/>')
-
-
-def _cell_to_html(cell: Cell, is_header: bool, with_links: bool = False) -> str:
-    tag = 'th' if is_header else 'td'
-    colspan_attr = f' colspan="{cell.colspan}"' if cell.colspan != 1 else ''
-    rowspan_attr = f' rowspan="{cell.rowspan}"' if cell.rowspan != 1 else ''
-    return f'<{tag}{colspan_attr}{rowspan_attr}>' f'{_enriched_text_to_html(cell.content, with_links)}' f'</{tag}>'
-
-
-def _cells_to_html(cells: List[Cell], is_header: bool, with_links: bool = False) -> str:
-    return ''.join([_cell_to_html(cell, is_header, with_links) for cell in cells])
-
-
-def _row_to_html(row: Row, with_links: bool = False) -> str:
-    return f'<tr>{_cells_to_html(row.cells, row.is_header, with_links)}</tr>'
-
-
-def _rows_to_html(rows: List[Row], with_links: bool = False) -> str:
-    return ''.join([_row_to_html(row, with_links) for row in rows])
-
-
-def table_to_html(table: Table, with_links: bool = False) -> str:
-    return f'<table>{_rows_to_html(table.rows, with_links)}</table>'
 
 
 @dataclass(eq=True)

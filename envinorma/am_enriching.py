@@ -2,10 +2,9 @@ from copy import copy
 from dataclasses import replace
 from typing import Dict, List, Optional, Set, Tuple
 
-from bs4 import BeautifulSoup
-
-from envinorma.models import Annotations, Applicability, ArreteMinisteriel, EnrichedString, StructuredText, Table
-from envinorma.models.text_elements import Cell, Row, table_to_list
+from envinorma.models.arrete_ministeriel import ArreteMinisteriel
+from envinorma.models.structured_text import Annotations, Applicability, StructuredText
+from envinorma.models.text_elements import EnrichedString, Row, Table, table_to_list
 from envinorma.topics.patterns import TopicName, tokenize
 from envinorma.topics.topics import TopicOntology
 
@@ -72,27 +71,6 @@ def _detect_and_add_topic_in_text(text: StructuredText, ontology: TopicOntology,
 def detect_and_add_topics(am: ArreteMinisteriel, ontology: TopicOntology) -> ArreteMinisteriel:
     result = copy(am)
     result.sections = [_detect_and_add_topic_in_text(sec, ontology, []) for sec in am.sections]
-    return result
-
-
-def _add_prescriptive_power_in_text(
-    text: StructuredText, non_prescriptive_sections: Set[Ints], path: Ints
-) -> StructuredText:
-    result = copy(text)
-    if path in non_prescriptive_sections:
-        result.annotations = replace(text.annotations or Annotations(), prescriptive=False)
-    result.sections = [
-        _add_prescriptive_power_in_text(sec, non_prescriptive_sections, path + (i,))
-        for i, sec in enumerate(text.sections)
-    ]
-    return result
-
-
-def remove_prescriptive_power(am: ArreteMinisteriel, non_prescriptive_sections: Set[Ints]) -> ArreteMinisteriel:
-    result = copy(am)
-    result.sections = [
-        _add_prescriptive_power_in_text(sec, non_prescriptive_sections, (i,)) for i, sec in enumerate(am.sections)
-    ]
     return result
 
 

@@ -1,70 +1,79 @@
-import json
-from datetime import date
+from dataclasses import asdict, dataclass
 from enum import Enum
-from typing import Any, Dict, Optional
-
-from pydantic import BaseModel
-
-from envinorma.models import Regime
+from typing import Any, Dict, List, Optional, Tuple
 
 
-class State(Enum):
-    EN_PROJET = 'En projet'
-    EN_FONCTIONNEMENT = 'En fonctionnement'
-    A_L_ARRET = 'A l\'arrêt'
-    REPRISE = 'Reprise'
-
-
-_UNKNOWN_REGIME = 'unknown'
-
-
-class DetailedRegime(Enum):
-    NC = 'NC'
+class Regime(Enum):
+    A = 'A'
+    E = 'E'
     D = 'D'
     DC = 'DC'
-    A = 'A'
-    S = 'S'
-    _1 = '1'
-    _2 = '2'
-    _3 = '3'
-    E = 'E'
-    UNKNOWN = _UNKNOWN_REGIME
-
-    def to_regime(self) -> Optional[Regime]:
-        try:
-            return Regime(self.value)
-        except ValueError:
-            return None
-
-    def to_simple_regime(self) -> str:
-        if self.value in ('A', 'E', 'D', 'NC'):
-            return self.value
-        if self == self.DC:
-            return 'D'
-        return DetailedRegime.UNKNOWN.value
-
-    def __repr__(self) -> str:
-        return self.value
-
-    def __str__(self) -> str:
-        return self.value
+    NC = 'NC'
 
 
-class DetailedClassement(BaseModel):
-    s3ic_id: str
+class ClassementState(Enum):
+    ACTIVE = 'ACTIVE'
+    SUPPRIMEE = 'SUPPRIMEE'
+
+
+@dataclass
+class Classement:
     rubrique: str
-    regime: DetailedRegime
-    alinea: Optional[str]
-    date_autorisation: Optional[date]
-    state: Optional[State]
-    regime_acte: Optional[DetailedRegime]
-    alinea_acte: Optional[str]
-    rubrique_acte: Optional[str]
-    activite: Optional[str]
-    volume: str
-    unit: Optional[str]
-    date_mise_en_service: Optional[date] = None
-    last_substantial_modif_date: Optional[date] = None
+    regime: Regime
+    alinea: Optional[str] = None
+    state: ClassementState = ClassementState.ACTIVE
+
+    @staticmethod
+    def from_dict(dict_: Dict[str, Any]) -> 'Classement':
+        dict_ = dict_.copy()
+        dict_['rubrique'] = str(dict_['rubrique'])
+        dict_['regime'] = Regime(dict_['regime'])
+        dict_['alinea'] = dict_.get('alinea')
+        dict_['state'] = ClassementState(dict_.get('state') or ClassementState.ACTIVE.value)
+        return Classement(**dict_)
 
     def to_dict(self) -> Dict[str, Any]:
-        return json.loads(self.json())
+        res = asdict(self)
+        res['regime'] = self.regime.value
+        res['state'] = self.state.value
+        return res
+
+
+@dataclass
+class ClassementWithAlineas:
+    rubrique: str
+    regime: Regime
+    alineas: List[str]
+
+    @staticmethod
+    def from_dict(dict_: Dict[str, Any]) -> 'ClassementWithAlineas':
+        dict_ = dict_.copy()
+        dict_['rubrique'] = str(dict_['rubrique'])
+        dict_['regime'] = Regime(dict_['regime'])
+        return ClassementWithAlineas(**dict_)
+
+    def to_dict(self) -> Dict[str, Any]:
+        res = asdict(self)
+        res['regime'] = self.regime.value
+        return res
+
+
+def group_classements_by_alineas(classements: List[Classement]) -> List[ClassementWithAlineas]:
+    rubrique_regime_to_alineas: Dict[Tuple[str, Regime], List[str]] = {}
+    for classement in classements:
+        key = (classement.rubrique, classement.regime)
+        if key not in rubrique_regime_to_alineas:
+            rubrique_regime_to_alineas[key] = []
+        if classement.alinea:
+            rubrique_regime_to_alineas[key].append(classement.alinea)
+    return [ClassementWithAlineas(rub, reg, als) for (rub, reg), als in rubrique_regime_to_alineas.items()]
+
+
+def ensure_rubrique(candidate: str) -> str:
+    if len(candidate) != 4 or candidate[0] not in '1234':
+        raise ValueError(f'Incorrect rubrique value, got {candidate}')
+    try:
+        int(candidate)
+    except ValueError:
+        raise ValueError(f'Incorrect rubrique value, got {candidate}')
+    return candidate

@@ -10,7 +10,8 @@ from envinorma.enriching.title_reference import (
     _merge_titles,
     add_references,
 )
-from envinorma.models import ArreteMinisteriel, StructuredText
+from envinorma.models.arrete_ministeriel import ArreteMinisteriel
+from envinorma.models.structured_text import StructuredText
 from envinorma.models.text_elements import estr
 
 

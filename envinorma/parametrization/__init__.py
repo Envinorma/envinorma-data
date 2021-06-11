@@ -6,7 +6,8 @@ from dataclasses import asdict, dataclass, field, replace
 from datetime import date
 from typing import Any, Callable, Dict, List, Optional, Set, Tuple, TypeVar, Union
 
-from envinorma.models import ArreteMinisteriel, StructuredText
+from envinorma.models.arrete_ministeriel import ArreteMinisteriel
+from envinorma.models.structured_text import StructuredText
 from envinorma.parametrization.conditions import (
     Condition,
     Equal,

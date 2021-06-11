@@ -2,6 +2,7 @@ import os
 import shutil
 import tempfile
 import traceback
+from copy import copy
 from dataclasses import dataclass, field
 from enum import Enum
 from typing import Any, Callable, Dict, List, Optional
@@ -10,7 +11,7 @@ from zipfile import ZipFile
 import bs4
 from bs4 import BeautifulSoup
 
-from envinorma.models import StructuredText, add_title_default_numbering
+from envinorma.models.structured_text import StructuredText
 from envinorma.models.text_elements import Cell, EnrichedString, Linebreak, Row, Table, TextElement, Title
 from envinorma.structure import build_structured_text, structured_text_to_text_elements
 from envinorma.utils import random_string
@@ -227,11 +228,19 @@ def _extract_flattened_elements(tag: Any, group_children: bool = False) -> List[
     return [elt for elts in children_elements for elt in elts]
 
 
+def _add_title_default_numbering(text: StructuredText, prefix: str = '', rank: int = 0) -> StructuredText:
+    text = copy(text)
+    new_prefix = prefix + f'{rank+1}.'
+    text.title.text = f'{new_prefix} {text.title.text}'
+    text.sections = [_add_title_default_numbering(section, new_prefix, i) for i, section in enumerate(text.sections)]
+    return text
+
+
 def _build_structured_text_from_soup(tag: bs4.Tag, with_numbering: bool) -> StructuredText:
     elements = _extract_flattened_elements(tag)
     text = build_structured_text(None, elements)
     if with_numbering:
-        text.sections = [add_title_default_numbering(section, '', i) for i, section in enumerate(text.sections)]
+        text.sections = [_add_title_default_numbering(section, '', i) for i, section in enumerate(text.sections)]
     return text
 
 

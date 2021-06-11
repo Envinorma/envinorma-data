@@ -7,8 +7,7 @@ from envinorma.io.parse_html import (
     extract_text_elements,
     merge_between_linebreaks,
 )
-from envinorma.models import Table
-from envinorma.models.text_elements import Linebreak, Title
+from envinorma.models.text_elements import Linebreak, Table, Title
 
 
 def test_cell_data_extraction():

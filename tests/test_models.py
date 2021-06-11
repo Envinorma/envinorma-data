@@ -7,31 +7,19 @@ from typing import Optional
 
 import pytest
 
-from envinorma.models import (
-    Annotations,
-    Applicability,
+from envinorma.models.arrete_ministeriel import (
     ArreteMinisteriel,
-    Classement,
-    ClassementWithAlineas,
     DateParameterDescriptor,
-    EnrichedString,
-    Link,
-    Regime,
-    StructuredText,
-    Table,
-    TopicName,
     VersionDescriptor,
     _contains_human_date,
     _is_probably_cid,
     extract_date_of_signature,
-    extract_text_lines,
-    group_classements_by_alineas,
-    is_increasing,
-    load_am_data,
     standardize_title_date,
-    table_to_html,
 )
-from envinorma.models.text_elements import Cell, Row, estr
+from envinorma.models.classement import Classement, ClassementWithAlineas, Regime, group_classements_by_alineas
+from envinorma.models.structured_text import Annotations, Applicability, StructuredText
+from envinorma.models.text_elements import Cell, EnrichedString, Link, Row, Table, estr
+from envinorma.topics.patterns import TopicName
 
 
 def _random_string() -> str:
@@ -56,7 +44,7 @@ def _enriched_string_links() -> EnrichedString:
 
 def _leaf_section() -> StructuredText:
     app = Applicability(True, True, ['beware'], StructuredText(_str('abc'), [], [], None))
-    annotations = Annotations(TopicName.AIR_ODEURS, True, 'guide')
+    annotations = Annotations(TopicName.AIR_ODEURS)
     return StructuredText(_str('abc'), [_str('abc')], [], app, 'ref', annotations)
 
 
@@ -67,7 +55,7 @@ def _node_section() -> StructuredText:
         [_leaf_section()],
         None,
         'ref',
-        Annotations(None, True, None),
+        Annotations(None),
     )
 
 
@@ -102,30 +90,6 @@ def test_table():
     table_dict = _table().to_dict()
     new_dict = Table.from_dict(table_dict).to_dict()
     assert table_dict == new_dict
-
-
-def test_is_increasing():
-    assert is_increasing([])
-    assert is_increasing([1])
-    assert is_increasing([1, 3])
-    assert is_increasing([1, 3, 4, 5])
-    assert not is_increasing([1, 3, 4, 5, 1])
-    assert not is_increasing([1, 1])
-
-
-def test_am_list():
-    am_data = load_am_data()
-    for md in am_data.metadata:
-        assert md.aida_page.isdigit()
-        for classement in md.classements:
-            assert classement.rubrique.isdigit()
-            assert len(classement.rubrique) == 4
-        classements = [(cl.rubrique, cl.regime, cl.alinea) for cl in md.classements]
-        assert len(classements) >= 1
-        most_common = Counter(classements).most_common()[0]
-        if most_common[1] != 1:
-            raise ValueError(most_common)
-        assert most_common[1] == 1
 
 
 def test_group_classements_by_alineas():
@@ -216,7 +180,7 @@ _TEXT_B = StructuredText(
 
 
 def test_extract_text_lines():
-    assert extract_text_lines(_get_simple_text()) == [
+    assert _get_simple_text().text_lines() == [
         'AM',
         'alinea',
         'foo',
@@ -225,16 +189,16 @@ def test_extract_text_lines():
         '# Section 2',
         'bar',
     ]
-    assert extract_text_lines(StructuredText(EnrichedString(' A'), [], [], None)) == ['A']
-    assert extract_text_lines(StructuredText(EnrichedString(' A'), [EnrichedString('')], [], None)) == ['A', '']
-    assert extract_text_lines(_TEXT_A) == [
+    assert StructuredText(EnrichedString(' A'), [], [], None).text_lines() == ['A']
+    assert StructuredText(EnrichedString(' A'), [EnrichedString('')], [], None).text_lines() == ['A', '']
+    assert _TEXT_A.text_lines() == [
         '6. Schématisation des différents types de joints mentionnés :',
         'Vous pouvez consulter les schémas dans le',
         'JO',
         'n° 265 du 16/11/2010 texte numéro 21',
     ]
 
-    assert extract_text_lines(_TEXT_B) == [
+    assert _TEXT_B.text_lines() == [
         '6. Schématisation des différents types de joints mentionnés :',
         'Vous pouvez consulter les schémas dans le',
         'JO n° 265 du 16/11/2010 texte numéro 21',
@@ -242,16 +206,16 @@ def test_extract_text_lines():
 
 
 def test_table_to_html():
-    res = table_to_html(Table([Row([Cell(estr('test'), 1, 1)], False)]))
+    res = Table([Row([Cell(estr('test'), 1, 1)], False)]).to_html()
     assert res == '<table><tr><td>test</td></tr></table>'
 
-    res = table_to_html(Table([Row([Cell(estr('test'), 2, 1)], False)]))
+    res = Table([Row([Cell(estr('test'), 2, 1)], False)]).to_html()
     assert res == '<table><tr><td colspan="2">test</td></tr></table>'
 
-    res = table_to_html(Table([Row([Cell(estr('test'), 1, 2)], False)]))
+    res = Table([Row([Cell(estr('test'), 1, 2)], False)]).to_html()
     assert res == '<table><tr><td rowspan="2">test</td></tr></table>'
 
-    res = table_to_html(Table([Row([Cell(estr('test'), 1, 2)], True)]))
+    res = Table([Row([Cell(estr('test'), 1, 2)], True)]).to_html()
     assert res == '<table><tr><th rowspan="2">test</th></tr></table>'
 
 

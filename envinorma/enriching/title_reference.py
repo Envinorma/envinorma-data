@@ -2,7 +2,8 @@ import re
 from dataclasses import replace
 from typing import List, Optional
 
-from envinorma.models import ArreteMinisteriel, StructuredText
+from envinorma.models.arrete_ministeriel import ArreteMinisteriel
+from envinorma.models.structured_text import StructuredText
 from envinorma.title_detection import NUMBERING_PATTERNS, ROMAN_PATTERN, NumberingPattern, detect_longest_matched_string
 
 

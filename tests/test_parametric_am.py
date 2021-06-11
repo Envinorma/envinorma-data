@@ -7,15 +7,10 @@ from typing import List, Optional
 
 import pytest
 
-from envinorma.models import (
-    Applicability,
-    ArreteMinisteriel,
-    Classement,
-    DateParameterDescriptor,
-    EnrichedString,
-    Regime,
-    StructuredText,
-)
+from envinorma.models.arrete_ministeriel import ArreteMinisteriel, DateParameterDescriptor
+from envinorma.models.classement import Classement, Regime
+from envinorma.models.structured_text import Applicability, StructuredText
+from envinorma.models.text_elements import EnrichedString
 from envinorma.parametrization import (
     AlternativeSection,
     AMWarning,

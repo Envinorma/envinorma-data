@@ -1,11 +1,12 @@
 from enum import Enum
 from typing import List, TypeVar
 
-from envinorma.models import EnrichedString, Link, StructuredText, Table, table_to_html
+from envinorma.models.structured_text import StructuredText
+from envinorma.models.text_elements import EnrichedString, Link, Table
 
 
 def table_to_markdown(table: Table, with_links: bool = False) -> str:  # html required for merging cells
-    return table_to_html(table, with_links)
+    return table.to_html(with_links)
 
 
 def _extract_sorted_links_to_display(links: List[Link]) -> List[Link]:

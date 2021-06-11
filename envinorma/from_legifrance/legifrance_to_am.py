@@ -1,7 +1,7 @@
 import copy
 import random
 from collections import Counter
-from dataclasses import replace
+from dataclasses import dataclass, replace
 from math import sqrt
 from typing import Dict, Iterable, List, Optional, Tuple, TypeVar, Union
 
@@ -11,18 +11,24 @@ from leginorma import ArticleStatus, LegifranceArticle, LegifranceSection, Legif
 
 from envinorma.from_legifrance.numbering_exceptions import EXCEPTION_PREFIXES, MAX_PREFIX_LEN
 from envinorma.io.parse_html import extract_table
-from envinorma.models import (
-    ArreteMinisteriel,
-    EnrichedString,
-    Link,
-    LinkReference,
-    StructuredText,
-    Table,
-    TableReference,
-    standardize_title_date,
-)
+from envinorma.models.arrete_ministeriel import ArreteMinisteriel, standardize_title_date
+from envinorma.models.structured_text import StructuredText
+from envinorma.models.text_elements import EnrichedString, Link, Table
 from envinorma.structure import split_alineas_in_sections
 from envinorma.title_detection import NumberingPattern, detect_patterns_if_exists, is_mainly_upper, is_probably_title
+
+
+@dataclass
+class TableReference:
+    table: Table
+    reference: str
+
+
+@dataclass
+class LinkReference:
+    reference: str
+    target: str
+    text: str
 
 
 def _clean_title(str_: EnrichedString) -> EnrichedString:

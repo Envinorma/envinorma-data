@@ -10,6 +10,7 @@ from typing import Dict, Iterable, List, Optional, TypeVar, Union
 from tqdm import tqdm
 
 AIDA_URL = 'https://aida.ineris.fr/consultation_document/'
+LEGIFRANCE_LODA_BASE_URL = 'https://www.legifrance.gouv.fr/loda/id/'
 AM1510_IDS = ('DEVP1706393A', 'JORFTEXT000034429274')
 
 
@@ -90,6 +91,10 @@ def safely_replace(string: str, replaced_substring: str, new_substring: str) -> 
     if replaced_substring not in string:
         raise ValueError(f'Expecting {replaced_substring} to be in {string}.')
     return string.replace(replaced_substring, new_substring)
+
+
+def random_id(size: int = 12) -> str:
+    return ''.join([random.choice(string.hexdigits) for _ in range(size)])
 
 
 class AMStatus(Enum):

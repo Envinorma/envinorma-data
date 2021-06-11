@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from envinorma.models import Regime
+from envinorma.models.classement import Regime
 from envinorma.parametrization.conditions import (
     AndCondition,
     Equal,
