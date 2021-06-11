@@ -1,4 +1,4 @@
-from envinorma.data.text_elements import Table, Title
+from envinorma.models.text_elements import Table, Title
 from envinorma.structure import _build_enriched_alineas, _extract_highest_title_level, build_structured_text
 
 

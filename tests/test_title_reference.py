@@ -1,8 +1,6 @@
 import json
 from typing import List, Tuple
 
-from envinorma.data import ArreteMinisteriel, StructuredText
-from envinorma.data.text_elements import estr
 from envinorma.enriching.title_reference import (
     _extract_prefix,
     _extract_special_prefix,
@@ -12,6 +10,8 @@ from envinorma.enriching.title_reference import (
     _merge_titles,
     add_references,
 )
+from envinorma.models import ArreteMinisteriel, StructuredText
+from envinorma.models.text_elements import estr
 
 
 def test_extract_special_prefix():

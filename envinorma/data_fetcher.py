@@ -3,7 +3,7 @@ from typing import Any, Dict, List, Optional, Set, Tuple, Type, TypeVar
 
 import psycopg2
 
-from envinorma.data import AMMetadata, AMState, ArreteMinisteriel
+from envinorma.models import AMMetadata, AMState, ArreteMinisteriel
 from envinorma.parametrization import (
     AlternativeSection,
     AMWarning,

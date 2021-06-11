@@ -1,6 +1,6 @@
 from datetime import date, datetime
 
-from envinorma.data import (
+from envinorma.models import (
     AMMetadata,
     AMSource,
     AMState,
@@ -11,7 +11,7 @@ from envinorma.data import (
     StructuredText,
     Table,
 )
-from envinorma.data.text_elements import Cell, Row
+from envinorma.models.text_elements import Cell, Row
 from envinorma.parametrization import (
     AlternativeSection,
     AMWarning,

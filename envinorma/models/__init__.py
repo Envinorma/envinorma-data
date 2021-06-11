@@ -11,8 +11,8 @@ from enum import Enum
 from operator import attrgetter
 from typing import Any, Dict, List, Optional, Tuple
 
-from envinorma.data.arretes_ministeriels import ARRETES_MINISTERIELS
-from envinorma.data.text_elements import EnrichedString, Link, Table, table_to_html
+from envinorma.models.arretes_ministeriels import ARRETES_MINISTERIELS
+from envinorma.models.text_elements import EnrichedString, Link, Table, table_to_html
 from envinorma.topics.patterns import TopicName
 from envinorma.utils import AIDA_URL
 

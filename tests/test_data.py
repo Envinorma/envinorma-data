@@ -7,7 +7,7 @@ from typing import Optional
 
 import pytest
 
-from envinorma.data import (
+from envinorma.models import (
     Annotations,
     Applicability,
     ArreteMinisteriel,
@@ -31,7 +31,7 @@ from envinorma.data import (
     standardize_title_date,
     table_to_html,
 )
-from envinorma.data.text_elements import Cell, Row, estr
+from envinorma.models.text_elements import Cell, Row, estr
 
 
 def _random_string() -> str:

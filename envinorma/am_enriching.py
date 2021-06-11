@@ -4,8 +4,8 @@ from typing import Dict, List, Optional, Set, Tuple
 
 from bs4 import BeautifulSoup
 
-from envinorma.data import Annotations, Applicability, ArreteMinisteriel, EnrichedString, StructuredText, Table
-from envinorma.data.text_elements import Cell, Row, table_to_list
+from envinorma.models import Annotations, Applicability, ArreteMinisteriel, EnrichedString, StructuredText, Table
+from envinorma.models.text_elements import Cell, Row, table_to_list
 from envinorma.topics.patterns import TopicName, tokenize
 from envinorma.topics.topics import TopicOntology
 
@@ -210,38 +210,3 @@ def add_table_inspection_sheet_data_in_section(section: StructuredText) -> Struc
 
 def add_table_inspection_sheet_data(am: ArreteMinisteriel) -> ArreteMinisteriel:
     return replace(am, sections=[add_table_inspection_sheet_data_in_section(subsection) for subsection in am.sections])
-
-
-def _remove_html(str_: str) -> str:
-    return '\n'.join(list(BeautifulSoup(f'<div>{str_}</div>', 'html.parser').stripped_strings))
-
-
-def _remove_html_cell(cell: Cell) -> Cell:
-    cell = copy(cell)
-    cell.content.text = _remove_html(cell.content.text)
-    return cell
-
-
-def _remove_html_row(row: Row) -> Row:
-    row = copy(row)
-    row.cells = [_remove_html_cell(cell) for cell in row.cells]
-    return row
-
-
-def _remove_html_table(table: Table) -> Table:
-    table = copy(table)
-    table.rows = [_remove_html_row(row) for row in table.rows]
-    return table
-
-
-def _remove_html_string(text: EnrichedString) -> EnrichedString:
-    if not text.table:
-        return text
-    return replace(text, table=_remove_html_table(text.table))
-
-
-def _remove_table_html(text: StructuredText) -> StructuredText:
-    text = copy(text)
-    text.outer_alineas = [_remove_html_string(st) for st in text.outer_alineas]
-    text.sections = [_remove_table_html(sec) for sec in text.sections]
-    return text

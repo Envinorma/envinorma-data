@@ -1,15 +1,12 @@
-import json
-
 from envinorma.am_enriching import (
-    _remove_html,
     _split_rows,
     add_inspection_sheet_in_table_rows,
     add_topics,
     remove_prescriptive_power,
     remove_sections,
 )
-from envinorma.data import ArreteMinisteriel, EnrichedString, StructuredText, Table
-from envinorma.data.text_elements import Cell, Row, estr
+from envinorma.models import ArreteMinisteriel, EnrichedString, StructuredText, Table
+from envinorma.models.text_elements import Cell, Row, estr
 from envinorma.topics.patterns import TopicName
 
 
@@ -119,14 +116,6 @@ def test_add_inspection_sheet_in_table_rows():
     transformed_string = add_inspection_sheet_in_table_rows(string)
     assert transformed_string.table.rows[1].text_in_inspection_sheet == 'A\na\nB\nb\nC\nc'
     assert transformed_string.table.rows[2].text_in_inspection_sheet == 'A\na\nB\nd\nC\ne'
-
-
-def test_remove_html():
-    assert _remove_html('Hello<br/>How are you ?') == 'Hello\nHow are you ?'
-    assert _remove_html('Hello    How are you ?') == 'Hello    How are you ?'
-    assert _remove_html('') == ''
-    assert _remove_html('<div></div>') == ''
-    assert _remove_html('<a>URL</a>\n<p>P</p>') == 'URL\nP'
 
 
 def test_split_rows():

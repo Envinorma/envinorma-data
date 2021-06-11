@@ -3,7 +3,7 @@ from datetime import date, datetime
 from enum import Enum
 from typing import Any, Dict, List, Literal, Optional, Union
 
-from envinorma.data import Regime
+from envinorma.models import Regime
 
 
 class ParameterType(Enum):

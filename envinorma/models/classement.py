@@ -5,7 +5,7 @@ from typing import Any, Dict, Optional
 
 from pydantic import BaseModel
 
-from envinorma.data import Regime
+from envinorma.models import Regime
 
 
 class State(Enum):

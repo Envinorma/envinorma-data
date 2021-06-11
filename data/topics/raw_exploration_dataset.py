@@ -1,7 +1,7 @@
 import json
 from typing import Dict, List, Set, Tuple, Union
 
-from envinorma.data import EnrichedString
+from envinorma.models import EnrichedString
 from envinorma.topics.patterns import TopicName
 
 LABELS = {

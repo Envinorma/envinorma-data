@@ -3,7 +3,7 @@ from dataclasses import replace
 from datetime import date, datetime, timedelta
 from typing import Any, Dict, List, Optional, Set, Tuple, Union
 
-from envinorma.data import (
+from envinorma.models import (
     Applicability,
     ArreteMinisteriel,
     Classement,

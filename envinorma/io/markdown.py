@@ -1,7 +1,7 @@
 from enum import Enum
 from typing import List, TypeVar
 
-from envinorma.data import EnrichedString, Link, StructuredText, Table, table_to_html
+from envinorma.models import EnrichedString, Link, StructuredText, Table, table_to_html
 
 
 def table_to_markdown(table: Table, with_links: bool = False) -> str:  # html required for merging cells

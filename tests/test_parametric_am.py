@@ -7,7 +7,7 @@ from typing import List, Optional
 
 import pytest
 
-from envinorma.data import (
+from envinorma.models import (
     Applicability,
     ArreteMinisteriel,
     Classement,

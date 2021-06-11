@@ -5,8 +5,8 @@ from typing import Optional
 
 import pytest
 
-from envinorma.data import ArreteMinisteriel, EnrichedString, Regime, StructuredText
-from envinorma.data.text_elements import estr
+from envinorma.models import ArreteMinisteriel, EnrichedString, Regime, StructuredText
+from envinorma.models.text_elements import estr
 from envinorma.parametrization import (
     AlternativeSection,
     ConditionSource,
