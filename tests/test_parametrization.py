@@ -14,13 +14,13 @@ from envinorma.parametrization.models.parametrization import (
     AlternativeSection,
     ConditionSource,
     EntityReference,
-    NonApplicationCondition,
+    InapplicableSection,
     Parametrization,
     SectionReference,
     _group,
 )
 
-_NAC = NonApplicationCondition
+_NAC = InapplicableSection
 
 
 def _random_string() -> str:
@@ -73,7 +73,7 @@ def test_group():
     assert _group([{'key': 'value'}, {}], lambda x: x.get('key', '')) == {'value': [{'key': 'value'}], '': [{}]}
 
 
-def _simple_nac(condition: Condition) -> NonApplicationCondition:
+def _simple_nac(condition: Condition) -> InapplicableSection:
     source = ConditionSource('', EntityReference(SectionReference((0, 1)), None))
     target = EntityReference(SectionReference((0,)), None)
     return _NAC(target, condition, source)

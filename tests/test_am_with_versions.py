@@ -18,7 +18,7 @@ from envinorma.parametrization.models.parametrization import (
     AMWarning,
     ConditionSource,
     EntityReference,
-    NonApplicationCondition,
+    InapplicableSection,
     Parametrization,
     SectionReference,
     extract_conditions_from_parametrization,
@@ -36,7 +36,7 @@ _NEW_TEXT = StructuredText(
 )
 _PARAMETRIZATION = Parametrization(
     application_conditions=[
-        NonApplicationCondition(
+        InapplicableSection(
             targeted_entity=EntityReference(section=SectionReference(path=(0,)), outer_alinea_indices=None),
             condition=AndCondition(conditions=[Littler(parameter=_DATE, target=date(2021, 1, 1), strict=True)]),
             source=ConditionSource(

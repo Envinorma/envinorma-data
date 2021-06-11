@@ -29,12 +29,12 @@ from envinorma.parametrization.models.parametrization import (
     AMWarning,
     ConditionSource,
     EntityReference,
-    NonApplicationCondition,
+    InapplicableSection,
     Parametrization,
     SectionReference,
 )
 
-_NAC = NonApplicationCondition
+_IS = InapplicableSection
 _AS = AlternativeSection
 
 
@@ -67,7 +67,7 @@ def test_apply_parameter_values_to_am_whole_arrete():
     is_installation_old = Equal(parameter, False)
     source = ConditionSource('', EntityReference(SectionReference((2,)), None))
     parametrization = Parametrization(
-        [_NAC(EntityReference(SectionReference(tuple()), None), is_installation_old, source)], [], []
+        [_IS(EntityReference(SectionReference(tuple()), None), is_installation_old, source)], [], []
     )
 
     new_am_1 = apply_parameter_values_to_am(am, parametrization, {parameter: False})
@@ -118,8 +118,8 @@ def test_apply_parameter_values_to_am():
     new_text = StructuredText(_str('Art. 2'), [_str('version modifiée')], [], None)
     parametrization = Parametrization(
         [
-            _NAC(EntityReference(SectionReference((0,)), None), is_installation_old, source),
-            _NAC(EntityReference(SectionReference((3,)), [0]), is_installation_old, source),
+            _IS(EntityReference(SectionReference((0,)), None), is_installation_old, source),
+            _IS(EntityReference(SectionReference((3,)), [0]), is_installation_old, source),
         ],
         [_AS(SectionReference((1,)), new_text, is_installation_new, source)],
         [AMWarning(SectionReference((0,)), 'Fake warning')],
@@ -172,7 +172,7 @@ def test_extract_parameters_from_parametrization():
     source = ConditionSource('', EntityReference(SectionReference((2,)), None))
     new_text = StructuredText(_str('Art. 2'), [_str('version modifiée')], [], None)
     parametrization = Parametrization(
-        [_NAC(EntityReference(SectionReference((0,)), None), condition_1, source)],
+        [_IS(EntityReference(SectionReference((0,)), None), condition_1, source)],
         [_AS(SectionReference((1,)), new_text, condition_2, source)],
         [],
     )
@@ -190,7 +190,7 @@ def test_extract_parameters_from_parametrization_2():
     source = ConditionSource('', EntityReference(SectionReference((2,)), None))
     new_text = StructuredText(_str('Art. 2'), [_str('version modifiée')], [], None)
     parametrization = Parametrization(
-        [_NAC(EntityReference(SectionReference((0,)), None), condition_1, source)],
+        [_IS(EntityReference(SectionReference((0,)), None), condition_1, source)],
         [_AS(SectionReference((1,)), new_text, condition_2, source)],
         [],
     )
@@ -212,7 +212,7 @@ def test_generate_versions():
     parameter = Parameter('nouvelle-installation', ParameterType.BOOLEAN)
     condition = Equal(parameter, False)
     source = ConditionSource('', EntityReference(SectionReference((2,)), None))
-    parametrization = Parametrization([_NAC(EntityReference(SectionReference((0,)), None), condition, source)], [], [])
+    parametrization = Parametrization([_IS(EntityReference(SectionReference((0,)), None), condition, source)], [], [])
 
     res = generate_versions(am, parametrization, False)
     assert len(res) == 3
@@ -236,7 +236,7 @@ def _get_simple_text(sections: Optional[List[StructuredText]] = None) -> Structu
 
 
 def test_deactivate_alineas():
-    nac = _NAC(
+    nac = _IS(
         EntityReference(SectionReference((0,)), None),
         Littler(ParameterEnum.DATE_INSTALLATION.value, datetime(2021, 1, 1)),
         ConditionSource('', EntityReference(SectionReference((1,)), None)),
@@ -245,7 +245,7 @@ def test_deactivate_alineas():
     assert not res.applicability.active
     assert all([not al.active for al in res.outer_alineas])
 
-    nac = _NAC(
+    nac = _IS(
         EntityReference(SectionReference((0,)), [0]),
         Littler(ParameterEnum.DATE_INSTALLATION.value, datetime(2021, 1, 1)),
         ConditionSource('', EntityReference(SectionReference((1,)), None)),
@@ -255,7 +255,7 @@ def test_deactivate_alineas():
     assert not res.outer_alineas[0].active
     assert res.outer_alineas[1].active
 
-    nac = _NAC(
+    nac = _IS(
         EntityReference(SectionReference((0,)), None),
         Littler(ParameterEnum.DATE_INSTALLATION.value, datetime(2021, 1, 1)),
         ConditionSource('', EntityReference(SectionReference((1,)), None)),
@@ -278,8 +278,8 @@ def test_extract_surrounding_dates():
     assert _extract_surrounding_dates(date.today() + timedelta(6), dates) == (dates[2], None)
 
 
-def _simple_nac(date_parameter: Parameter) -> NonApplicationCondition:
-    return _NAC(
+def _simple_inap(date_parameter: Parameter) -> InapplicableSection:
+    return _IS(
         EntityReference(SectionReference((0,)), None),
         Littler(date_parameter, datetime(2021, 1, 1)),
         ConditionSource('', EntityReference(SectionReference((1,)), None)),
@@ -294,29 +294,29 @@ def test_find_used_date():
 
     assert _find_used_date(Parametrization([], [], [])) == declaration
 
-    non_applicabilities = [_simple_nac(declaration)]
-    assert _find_used_date(Parametrization(non_applicabilities, [], [])) == declaration
+    inapplicable_sections = [_simple_inap(declaration)]
+    assert _find_used_date(Parametrization(inapplicable_sections, [], [])) == declaration
 
-    non_applicabilities = [_simple_nac(installation)]
-    assert _find_used_date(Parametrization(non_applicabilities, [], [])) == declaration
+    inapplicable_sections = [_simple_inap(installation)]
+    assert _find_used_date(Parametrization(inapplicable_sections, [], [])) == declaration
 
-    non_applicabilities = [_simple_nac(enregistrement)]
-    assert _find_used_date(Parametrization(non_applicabilities, [], [])) == enregistrement
+    inapplicable_sections = [_simple_inap(enregistrement)]
+    assert _find_used_date(Parametrization(inapplicable_sections, [], [])) == enregistrement
 
-    non_applicabilities = [_simple_nac(enregistrement), _simple_nac(installation)]
-    assert _find_used_date(Parametrization(non_applicabilities, [], [])) == enregistrement
-
-    with pytest.raises(ValueError):
-        non_applicabilities = [_simple_nac(enregistrement), _simple_nac(declaration)]
-        _find_used_date(Parametrization(non_applicabilities, [], []))
+    inapplicable_sections = [_simple_inap(enregistrement), _simple_inap(installation)]
+    assert _find_used_date(Parametrization(inapplicable_sections, [], [])) == enregistrement
 
     with pytest.raises(ValueError):
-        non_applicabilities = [_simple_nac(enregistrement), _simple_nac(declaration), _simple_nac(autorisation)]
-        _find_used_date(Parametrization(non_applicabilities, [], []))
+        inapplicable_sections = [_simple_inap(enregistrement), _simple_inap(declaration)]
+        _find_used_date(Parametrization(inapplicable_sections, [], []))
+
+    with pytest.raises(ValueError):
+        inapplicable_sections = [_simple_inap(enregistrement), _simple_inap(declaration), _simple_inap(autorisation)]
+        _find_used_date(Parametrization(inapplicable_sections, [], []))
 
 
-def _simple_nac_2(date_parameter: Parameter) -> NonApplicationCondition:
-    return _NAC(
+def _simple_inap_2(date_parameter: Parameter) -> InapplicableSection:
+    return _IS(
         EntityReference(SectionReference((0,)), None),
         Littler(date_parameter, date(2021, 1, 1)),
         ConditionSource('', EntityReference(SectionReference((1,)), None)),
@@ -328,44 +328,44 @@ def test_date_parameters():
     autorisation = ParameterEnum.DATE_AUTORISATION.value
     installation = ParameterEnum.DATE_INSTALLATION.value
 
-    non_applicabilities = []
-    parametrization = Parametrization(non_applicabilities, [], [])
+    inapplicable_sections = []
+    parametrization = Parametrization(inapplicable_sections, [], [])
     parameter_values = {}
     expected = (DateParameterDescriptor(False), DateParameterDescriptor(False))
     assert _date_parameters(parametrization, parameter_values) == expected
 
-    non_applicabilities = [_simple_nac_2(enregistrement)]
-    parametrization = Parametrization(non_applicabilities, [], [])
+    inapplicable_sections = [_simple_inap_2(enregistrement)]
+    parametrization = Parametrization(inapplicable_sections, [], [])
     parameter_values = {}
     expected = (DateParameterDescriptor(True, True), DateParameterDescriptor(False))
     assert _date_parameters(parametrization, parameter_values) == expected
 
-    non_applicabilities = [_simple_nac_2(enregistrement)]
-    parametrization = Parametrization(non_applicabilities, [], [])
+    inapplicable_sections = [_simple_inap_2(enregistrement)]
+    parametrization = Parametrization(inapplicable_sections, [], [])
     parameter_values = {enregistrement: date(2022, 1, 1)}
     expected = (DateParameterDescriptor(True, False, date(2021, 1, 1), None), DateParameterDescriptor(False))
     assert _date_parameters(parametrization, parameter_values) == expected
 
-    non_applicabilities = [_simple_nac_2(enregistrement)]
-    parametrization = Parametrization(non_applicabilities, [], [])
+    inapplicable_sections = [_simple_inap_2(enregistrement)]
+    parametrization = Parametrization(inapplicable_sections, [], [])
     parameter_values = {enregistrement: date(2020, 1, 1)}
     expected = (DateParameterDescriptor(True, False, None, date(2021, 1, 1)), DateParameterDescriptor(False))
     assert _date_parameters(parametrization, parameter_values) == expected
 
-    non_applicabilities = [_simple_nac_2(enregistrement), _simple_nac_2(autorisation)]
-    parametrization = Parametrization(non_applicabilities, [], [])
+    inapplicable_sections = [_simple_inap_2(enregistrement), _simple_inap_2(autorisation)]
+    parametrization = Parametrization(inapplicable_sections, [], [])
     parameter_values = {enregistrement: date(2020, 1, 1), autorisation: date(2020, 1, 1)}
     with pytest.raises(ValueError):
         _date_parameters(parametrization, parameter_values)
 
-    non_applicabilities = [_simple_nac_2(installation)]
-    parametrization = Parametrization(non_applicabilities, [], [])
+    inapplicable_sections = [_simple_inap_2(installation)]
+    parametrization = Parametrization(inapplicable_sections, [], [])
     parameter_values = {enregistrement: date(2020, 1, 1)}
     expected = (DateParameterDescriptor(False), DateParameterDescriptor(True, True))
     assert _date_parameters(parametrization, parameter_values) == expected
 
-    non_applicabilities = [_simple_nac_2(installation)]
-    parametrization = Parametrization(non_applicabilities, [], [])
+    inapplicable_sections = [_simple_inap_2(installation)]
+    parametrization = Parametrization(inapplicable_sections, [], [])
     parameter_values = {installation: date(2020, 1, 1)}
     expected = (DateParameterDescriptor(False), DateParameterDescriptor(True, False, None, date(2021, 1, 1)))
     assert _date_parameters(parametrization, parameter_values) == expected
@@ -428,9 +428,9 @@ def test_used_date_parameter():
     target = EntityReference(SectionReference((0,)), None)
     dt_1 = Littler(installation, date(2021, 1, 1))
     dt_2 = Littler(installation, date(2022, 1, 1))
-    nac_1 = _NAC(target, dt_1, source)
-    nac_2 = _NAC(target, AndCondition([dt_2, Equal(regime, Regime.A)]), source)
-    nac_3 = _NAC(target, Equal(regime, Regime.A), source)
+    nac_1 = _IS(target, dt_1, source)
+    nac_2 = _IS(target, AndCondition([dt_2, Equal(regime, Regime.A)]), source)
+    nac_3 = _IS(target, Equal(regime, Regime.A), source)
     parametrization = Parametrization([nac_1, nac_2, nac_3], [], [])
 
     res = _used_date_parameter(installation, parametrization, {})

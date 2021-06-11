@@ -22,7 +22,7 @@ from .parametrization import (  # noqa: F401
     AMWarning,
     ConditionSource,
     EntityReference,
-    NonApplicationCondition,
+    InapplicableSection,
     ParameterObject,
     ParameterObjectWithCondition,
     Parametrization,

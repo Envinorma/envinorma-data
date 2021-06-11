@@ -6,7 +6,7 @@ from typing import List, Union
 
 from envinorma.models import ArreteMinisteriel, Ints, StructuredText
 
-from .models.parametrization import AlternativeSection, NonApplicationCondition, Parametrization, SectionReference
+from .models.parametrization import AlternativeSection, InapplicableSection, Parametrization, SectionReference
 
 
 def _extract_titles_sequence(text: Union[ArreteMinisteriel, StructuredText], path: Ints) -> List[str]:
@@ -21,9 +21,7 @@ def _add_titles_sequences_section(obj: SectionReference, am: ArreteMinisteriel) 
     return replace(obj, titles_sequence=_extract_titles_sequence(am, obj.path))
 
 
-def _add_titles_sequences_non_application_condition(
-    obj: NonApplicationCondition, am: ArreteMinisteriel
-) -> NonApplicationCondition:
+def _add_titles_sequences_inapplicable_section(obj: InapplicableSection, am: ArreteMinisteriel) -> InapplicableSection:
     new_source = deepcopy(obj)
     new_source.source.reference.section = _add_titles_sequences_section(new_source.source.reference.section, am)
     new_source.targeted_entity.section = _add_titles_sequences_section(new_source.targeted_entity.section, am)
@@ -41,7 +39,7 @@ def add_titles_sequences(parametrization: Parametrization, am: ArreteMinisteriel
     return replace(
         parametrization,
         application_conditions=[
-            _add_titles_sequences_non_application_condition(x, am) for x in parametrization.application_conditions
+            _add_titles_sequences_inapplicable_section(x, am) for x in parametrization.application_conditions
         ],
         alternative_sections=[
             _add_titles_sequences_alternative_section(x, am) for x in parametrization.alternative_sections
@@ -75,9 +73,7 @@ def _regenerate_paths_section(obj: SectionReference, am: ArreteMinisteriel) -> S
     return replace(obj, path=_extract_paths(am, obj.titles_sequence))
 
 
-def _regenerate_paths_non_application_condition(
-    obj: NonApplicationCondition, am: ArreteMinisteriel
-) -> NonApplicationCondition:
+def _regenerate_paths_inapplicable_section(obj: InapplicableSection, am: ArreteMinisteriel) -> InapplicableSection:
     new_source = deepcopy(obj)
     new_source.source.reference.section = _regenerate_paths_section(new_source.source.reference.section, am)
     new_source.targeted_entity.section = _regenerate_paths_section(new_source.targeted_entity.section, am)
@@ -95,7 +91,7 @@ def regenerate_paths(parametrization: Parametrization, am: ArreteMinisteriel) ->
     return replace(
         parametrization,
         application_conditions=[
-            _regenerate_paths_non_application_condition(x, am) for x in parametrization.application_conditions
+            _regenerate_paths_inapplicable_section(x, am) for x in parametrization.application_conditions
         ],
         alternative_sections=[
             _regenerate_paths_alternative_section(x, am) for x in parametrization.alternative_sections

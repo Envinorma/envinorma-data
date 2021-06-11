@@ -8,7 +8,7 @@ from envinorma.models.arrete_ministeriel import ArreteMinisteriel
 from envinorma.parametrization.models.parametrization import (
     AlternativeSection,
     AMWarning,
-    NonApplicationCondition,
+    InapplicableSection,
     ParameterObject,
     Parametrization,
 )
@@ -41,7 +41,7 @@ def _recreate_with_removed_parameter(
     new_sections = parametrization.alternative_sections.copy()
     new_conditions = parametrization.application_conditions.copy()
     new_warnings = parametrization.warnings.copy()
-    if object_type == NonApplicationCondition:
+    if object_type == InapplicableSection:
         _ensure_len(parametrization.application_conditions, parameter_rank + 1)
         del new_conditions[parameter_rank]
     if object_type == AlternativeSection:
@@ -70,7 +70,7 @@ def _recreate_with_upserted_parameter(
     new_sections = parametrization.alternative_sections
     new_conditions = parametrization.application_conditions
     new_warnings = parametrization.warnings
-    if isinstance(new_parameter, NonApplicationCondition):
+    if isinstance(new_parameter, InapplicableSection):
         new_conditions = _replace_element_in_list_or_append_if_negative_rank(
             new_parameter, new_conditions, parameter_rank
         )

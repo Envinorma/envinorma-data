@@ -22,7 +22,7 @@ from .models.parameter import AED_PARAMETERS, Parameter, ParameterEnum
 from .models.parametrization import (
     AlternativeSection,
     AMWarning,
-    NonApplicationCondition,
+    InapplicableSection,
     ParameterObjectWithCondition,
     Parametrization,
 )
@@ -65,15 +65,15 @@ def _compute_warnings(
 
 
 def _keep_satisfied_conditions(
-    non_application_conditions: List[NonApplicationCondition], parameter_values: Dict[Parameter, Any], whole_text: bool
-) -> Tuple[List[NonApplicationCondition], List[str]]:
-    satisfied: List[NonApplicationCondition] = []
+    inapplicable_sections: List[InapplicableSection], parameter_values: Dict[Parameter, Any], whole_text: bool
+) -> Tuple[List[InapplicableSection], List[str]]:
+    satisfied: List[InapplicableSection] = []
     warnings: List[str] = []
-    for na_condition in non_application_conditions:
-        if na_condition.condition.is_satisfied(parameter_values):
-            satisfied.append(na_condition)
+    for inapplicable_section in inapplicable_sections:
+        if inapplicable_section.condition.is_satisfied(parameter_values):
+            satisfied.append(inapplicable_section)
         else:
-            warnings = _compute_warnings(na_condition, parameter_values, whole_text)
+            warnings = _compute_warnings(inapplicable_section, parameter_values, whole_text)
     return satisfied, warnings
 
 
@@ -102,7 +102,7 @@ def _deactivate_child_section(section: StructuredText, all_inactive: bool) -> St
 
 
 def _deactivate_alineas(
-    text: StructuredText, satisfied: NonApplicationCondition, parameter_values: Dict[Parameter, Any]
+    text: StructuredText, satisfied: InapplicableSection, parameter_values: Dict[Parameter, Any]
 ) -> StructuredText:
     text = copy(text)
     inactive_alineas = satisfied.targeted_entity.outer_alinea_indices
@@ -125,14 +125,14 @@ def _deactivate_alineas(
 
 def _apply_satisfied_modificators(
     text: StructuredText,
-    non_applicable_conditions: List[NonApplicationCondition],
+    inapplicable_sections: List[InapplicableSection],
     alternative_sections: List[AlternativeSection],
     parameter_values: Dict[Parameter, Any],
 ) -> StructuredText:
-    if non_applicable_conditions and alternative_sections:
+    if inapplicable_sections and alternative_sections:
         raise NotImplementedError(
             f'Cannot apply conditions and alternative sections on one section. (Section title: {text.title.text})\n'
-            f'Non applicable condition: {non_applicable_conditions[0].condition}\n'
+            f'Non applicable condition: {inapplicable_sections[0].condition}\n'
             f'Modification condition: {alternative_sections[0].condition}\n'
         )
     if alternative_sections:
@@ -142,14 +142,14 @@ def _apply_satisfied_modificators(
                 f'Here, {len(alternative_sections)} are applicable.'
             )
         return _build_alternative_text(text, alternative_sections[0], parameter_values)
-    if non_applicable_conditions:
-        if len(non_applicable_conditions) > 1:
+    if inapplicable_sections:
+        if len(inapplicable_sections) > 1:
             raise ValueError(
                 f'Cannot handle more than 1 non-applicability conditions on one section. '
-                f'Here, {len(non_applicable_conditions)} conditions are applicable.'
+                f'Here, {len(inapplicable_sections)} conditions are applicable.'
                 f'\n{parameter_values}\n{text}'
             )
-        return _deactivate_alineas(text, non_applicable_conditions[0], parameter_values)
+        return _deactivate_alineas(text, inapplicable_sections[0], parameter_values)
     return text
 
 
@@ -161,7 +161,7 @@ def _ensure_applicabiliy(candidate: Any) -> Applicability:
 
 def _extract_satisfied_objects_and_warnings(
     parametrization: Parametrization, parameter_values: Dict[Parameter, Any], path: Ints
-) -> Tuple[List[NonApplicationCondition], List[AlternativeSection], List[str]]:
+) -> Tuple[List[InapplicableSection], List[AlternativeSection], List[str]]:
     na_conditions, warnings_1 = _keep_satisfied_conditions(
         parametrization.path_to_conditions.get(path) or [], parameter_values, whole_text=False
     )
@@ -199,7 +199,7 @@ def _generate_whole_text_reason_inactive(condition: Condition, parameter_values:
 
 
 def _compute_whole_text_applicability(
-    application_conditions: List[NonApplicationCondition],
+    application_conditions: List[InapplicableSection],
     parameter_values: Dict[Parameter, Any],
     simple_warnings: List[AMWarning],
 ) -> Tuple[bool, List[str]]:

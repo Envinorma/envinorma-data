@@ -11,7 +11,7 @@ from envinorma.parametrization.models.parametrization import (
     AlternativeSection,
     ConditionSource,
     EntityReference,
-    NonApplicationCondition,
+    InapplicableSection,
     Parametrization,
     SectionReference,
 )
@@ -77,7 +77,7 @@ def test_add_titles_sequences():
     new_text = StructuredText(estr('Art. 2'), [estr('version modifiée')], [], None)
     res = add_titles_sequences(
         Parametrization(
-            [NonApplicationCondition(entity, cd_1, source)], [AlternativeSection(section, new_text, cd_4, source)], []
+            [InapplicableSection(entity, cd_1, source)], [AlternativeSection(section, new_text, cd_4, source)], []
         ),
         _get_simple_am(),
     )
@@ -85,7 +85,7 @@ def test_add_titles_sequences():
     new_entity_0 = EntityReference(SectionReference((0,), ['Chapter I']), None)
     new_section = SectionReference((0, 0, 0), ['Chapter I', 'Section 1', 'Section 1.1'])
     assert res == Parametrization(
-        [NonApplicationCondition(new_entity_0, cd_1, new_source)],
+        [InapplicableSection(new_entity_0, cd_1, new_source)],
         [AlternativeSection(new_section, new_text, cd_4, new_source)],
         [],
     )
@@ -115,7 +115,7 @@ def test_regenerate_paths():
     new_text = StructuredText(estr('Art. 2'), [estr('version modifiée')], [], None)
     res = regenerate_paths(
         Parametrization(
-            [NonApplicationCondition(entity, cd_1, source)], [AlternativeSection(section, new_text, cd_4, source)], []
+            [InapplicableSection(entity, cd_1, source)], [AlternativeSection(section, new_text, cd_4, source)], []
         ),
         _get_simple_am(),
     )
@@ -124,7 +124,7 @@ def test_regenerate_paths():
     new_section = SectionReference((0, 0, 0), ['Chapter I', 'Section 1', 'Section 1.1'])
     assert res.alternative_sections[0] == AlternativeSection(new_section, new_text, cd_4, new_source)
     assert res == Parametrization(
-        [NonApplicationCondition(new_entity_0, cd_1, new_source)],
+        [InapplicableSection(new_entity_0, cd_1, new_source)],
         [AlternativeSection(new_section, new_text, cd_4, new_source)],
         [],
     )

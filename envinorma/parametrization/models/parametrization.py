@@ -52,7 +52,7 @@ class ConditionSource:
 
 
 @dataclass
-class NonApplicationCondition:
+class InapplicableSection:
     targeted_entity: EntityReference
     condition: Condition
     source: ConditionSource
@@ -67,8 +67,8 @@ class NonApplicationCondition:
         }
 
     @classmethod
-    def from_dict(cls, dict_: Dict[str, Any]) -> 'NonApplicationCondition':
-        return NonApplicationCondition(
+    def from_dict(cls, dict_: Dict[str, Any]) -> 'InapplicableSection':
+        return InapplicableSection(
             EntityReference.from_dict(dict_['targeted_entity']),
             load_condition(dict_['condition']),
             ConditionSource.from_dict(dict_['source']),
@@ -124,11 +124,9 @@ def extract_conditions_from_parametrization(
 
 
 def _check_consistency_on_section(
-    non_application_conditions: List[NonApplicationCondition], alternative_sections: List[AlternativeSection]
+    inapplicable_sections: List[InapplicableSection], alternative_sections: List[AlternativeSection]
 ) -> None:
-    all_conditions = [nac.condition for nac in non_application_conditions] + [
-        als.condition for als in alternative_sections
-    ]
+    all_conditions = [nac.condition for nac in inapplicable_sections] + [als.condition for als in alternative_sections]
     if not all_conditions:
         return None
     all_parameters = {param for condition in all_conditions for param in condition.parameters()}
@@ -155,10 +153,10 @@ def _group(elements: List[T], groupper: Callable[[T], K]) -> Dict[K, List[T]]:
 
 @dataclass
 class Parametrization:
-    application_conditions: List[NonApplicationCondition]
+    application_conditions: List[InapplicableSection]
     alternative_sections: List[AlternativeSection]
     warnings: List[AMWarning]
-    path_to_conditions: Dict[Ints, List[NonApplicationCondition]] = field(init=False)
+    path_to_conditions: Dict[Ints, List[InapplicableSection]] = field(init=False)
     path_to_alternative_sections: Dict[Ints, List[AlternativeSection]] = field(init=False)
     path_to_warnings: Dict[Ints, List[AMWarning]] = field(init=False)
 
@@ -179,7 +177,7 @@ class Parametrization:
     @classmethod
     def from_dict(cls, dict_: Dict[str, Any]) -> 'Parametrization':
         return Parametrization(
-            [NonApplicationCondition.from_dict(app) for app in dict_['application_conditions']],
+            [InapplicableSection.from_dict(app) for app in dict_['application_conditions']],
             [AlternativeSection.from_dict(sec) for sec in dict_['alternative_sections']],
             [AMWarning.from_dict(sec) for sec in dict_.get('warnings', [])],
         )
@@ -209,6 +207,6 @@ class Parametrization:
             )
 
 
-ParameterObjectWithCondition = Union[NonApplicationCondition, AlternativeSection]
+ParameterObjectWithCondition = Union[InapplicableSection, AlternativeSection]
 ParameterObject = Union[ParameterObjectWithCondition, AMWarning]
 Combinations = Dict[Tuple[str, ...], Dict[Parameter, Any]]
