@@ -1,6 +1,5 @@
 import json
 import random
-from collections import Counter
 from datetime import date
 from string import ascii_letters
 from typing import Optional

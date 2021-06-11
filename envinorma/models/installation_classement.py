@@ -8,7 +8,7 @@ from pydantic import BaseModel
 from envinorma.models.classement import Regime
 
 
-class State(Enum):
+class DetailedClassementState(Enum):
     EN_PROJET = 'En projet'
     EN_FONCTIONNEMENT = 'En fonctionnement'
     A_L_ARRET = 'A l\'arrêt'
@@ -56,7 +56,7 @@ class DetailedClassement(BaseModel):
     regime: DetailedRegime
     alinea: Optional[str]
     date_autorisation: Optional[date]
-    state: Optional[State]
+    state: Optional[DetailedClassementState]
     regime_acte: Optional[DetailedRegime]
     alinea_acte: Optional[str]
     rubrique_acte: Optional[str]

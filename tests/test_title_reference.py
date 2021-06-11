@@ -106,7 +106,8 @@ def test_merge_titles():
         ),
         (
             [
-                'Annexe I : Prescriptions générales applicables aux installations classées pour la protection de l’environnement soumises à déclaration sous la rubrique n° 2560',
+                'Annexe I : Prescriptions générales applicables aux installations classées pour la protection'
+                ' de l’environnement soumises à déclaration sous la rubrique n° 2560',
                 '2.Implantation - aménagement',
                 '2.4.Comportement au feu des locaux',
                 '2.4.4.Désenfumage',
@@ -115,7 +116,8 @@ def test_merge_titles():
         ),
         (
             [
-                'Annexe I : Prescriptions générales applicables et faisant l’objet du contrôle périodique applicables aux installations classées soumises à déclaration sous la rubrique n°2930',
+                'Annexe I : Prescriptions générales applicables et faisant l’objet du contrôle périodique '
+                'applicables aux installations classées soumises à déclaration sous la rubrique n°2930',
                 '1. Dispositions générales',
                 "1.7. Cessation d'activité",
             ],
@@ -140,7 +142,8 @@ def test_merge_titles():
         (
             [
                 'Annexes',
-                'Annexe I - PRESCRIPTIONS GÉNÉRALES APPLICABLES AUX INSTALLATIONS CLASSÉES SOUMISES À DÉCLARATION SOUS LA RUBRIQUE N° 2921',
+                'Annexe I - PRESCRIPTIONS GÉNÉRALES APPLICABLES AUX INSTALLATIONS CLASSÉES SOUMISES À DÉCLARATION'
+                ' SOUS LA RUBRIQUE N° 2921',
                 '8. Bruit et vibrations',
                 '8.3. Vibrations',
             ],
@@ -155,7 +158,8 @@ def test_merge_titles():
         (
             [
                 'Annexes',
-                "Annexe II - PRESCRIPTIONS GÉNÉRALES APPLICABLES AUX INSTALLATIONS CLASSÉES POUR LA PROTECTION DE L'ENVIRONNEMENT SOUMISES À LA RUBRIQUE 1510",
+                "Annexe II - PRESCRIPTIONS GÉNÉRALES APPLICABLES AUX INSTALLATIONS CLASSÉES POUR LA PROTECTION DE"
+                " L'ENVIRONNEMENT SOUMISES À LA RUBRIQUE 1510",
                 '1. Dispositions générales',
                 '1.8. Dispositions générales pour les installations soumises à déclaration',
                 '1.8.3. Contenu de la déclaration',
@@ -165,7 +169,8 @@ def test_merge_titles():
         (['Article 4'], 'Art. 4'),
         (
             [
-                'Annexe I : Prescriptions générales et faisant l’objet du contrôle périodique applicables aux installations classées soumises à déclaration sous la rubrique 2940',
+                'Annexe I : Prescriptions générales et faisant l’objet du contrôle périodique applicables aux '
+                'installations classées soumises à déclaration sous la rubrique 2940',
                 '5. Eau',
                 '5.6 . Interdiction des rejets en nappe',
             ],
