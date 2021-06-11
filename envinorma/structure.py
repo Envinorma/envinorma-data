@@ -6,14 +6,17 @@ from envinorma.models.text_elements import EnrichedString, Linebreak, Table, Tex
 TP = TypeVar('TP')
 
 
-def split_alineas_in_sections(alineas: List[TP], matches: List[bool]) -> Tuple[List[TP], List[List[TP]]]:
-    found_any_match = False
-    first_match = 0
-    for first_match, match in enumerate(matches):
+def _find_first_match(matches: List[bool]) -> int:
+    for index, match in enumerate(matches):
         if match:
-            found_any_match = True
-            break
-    if not found_any_match:
+            return index
+    raise ValueError('No match in list')
+
+
+def split_alineas_in_sections(alineas: List[TP], matches: List[bool]) -> Tuple[List[TP], List[List[TP]]]:
+    try:
+        first_match = _find_first_match(matches)
+    except ValueError:
         sections: List[List[TP]] = []
         return alineas, sections
     outer_alineas = alineas[:first_match]
@@ -63,19 +66,8 @@ def build_structured_text(title: Optional[TextElement], elements: List[TextEleme
     outer_alineas, previous_sections = _build_enriched_alineas(
         outer
     )  # There can be a lower level title in previous alineas
-    built_subsections = [
-        build_structured_text(
-            alinea_group[0],
-            alinea_group[1:],
-        )
-        for alinea_group in subsections
-    ]
-    return StructuredText(
-        built_title,
-        outer_alineas,
-        previous_sections + built_subsections,
-        None,
-    )
+    built_subsections = [build_structured_text(alinea_group[0], alinea_group[1:]) for alinea_group in subsections]
+    return StructuredText(built_title, outer_alineas, previous_sections + built_subsections, None)
 
 
 def _string_to_element(str_: EnrichedString) -> TextElement:

@@ -8,9 +8,9 @@ from envinorma.title_detection import (
     PATTERN_NAME_TO_LIST,
     SHOULD_HAVE_SEMICOLON_PATTERNS,
     NumberingPattern,
+    _detect_longest_matched_pattern,
     _first_word,
     _smart_detect_pattern,
-    detect_longest_matched_pattern,
     detect_longest_matched_string,
     detect_patterns_if_exists,
     is_probably_title,
@@ -74,11 +74,11 @@ def test_is_valid():
 
 
 def test_detect_longest_matched_pattern():
-    assert detect_longest_matched_pattern('1. 1. bnjr') == NumberingPattern.NUMERIC_D2_SPACE
-    assert detect_longest_matched_pattern('1. 2. 3. bnjr') == NumberingPattern.NUMERIC_D3_SPACE
-    assert detect_longest_matched_pattern('1. 2.3. bnjr') == NumberingPattern.NUMERIC_D1
-    assert detect_longest_matched_pattern('1.') is None
-    assert detect_longest_matched_pattern('') is None
+    assert _detect_longest_matched_pattern('1. 1. bnjr') == NumberingPattern.NUMERIC_D2_SPACE
+    assert _detect_longest_matched_pattern('1. 2. 3. bnjr') == NumberingPattern.NUMERIC_D3_SPACE
+    assert _detect_longest_matched_pattern('1. 2.3. bnjr') == NumberingPattern.NUMERIC_D1
+    assert _detect_longest_matched_pattern('1.') is None
+    assert _detect_longest_matched_pattern('') is None
 
 
 def test_exceptions():

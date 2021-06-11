@@ -64,7 +64,7 @@ def _match_size(match: re.Match) -> int:
     return y - x
 
 
-def detect_longest_matched_pattern(string: str) -> Optional[NumberingPattern]:
+def _detect_longest_matched_pattern(string: str) -> Optional[NumberingPattern]:
     max_size = -1
     argmax = None
     for pattern_name, pattern in NUMBERING_PATTERNS.items():
@@ -85,7 +85,7 @@ def _extract_matched_str(string: str, match: Optional[re.Match]) -> Optional[str
 
 
 def detect_longest_matched_string(string: str) -> Optional[str]:
-    pattern_name = detect_longest_matched_pattern(string)
+    pattern_name = _detect_longest_matched_pattern(string)
     if not pattern_name:
         return None
     pattern = NUMBERING_PATTERNS[pattern_name]
@@ -163,7 +163,7 @@ def _smart_detect_pattern(
         if string[:max_prefix_len] in exceptions:
             pattern = exceptions[string[:max_prefix_len]]
             return NumberingPattern(pattern) if pattern else None
-    return detect_longest_matched_pattern(string)
+    return _detect_longest_matched_pattern(string)
 
 
 def detect_patterns_if_exists(
