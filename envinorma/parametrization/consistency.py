@@ -2,21 +2,9 @@ import math
 from datetime import date
 from typing import List, Optional, Set, Tuple
 
-from envinorma.parametrization.models.condition import (
-    Condition,
-    Equal,
-    Greater,
-    LeafCondition,
-    Littler,
-    Range,
-    extract_leaf_conditions,
-)
-from envinorma.parametrization.models.parameter import Parameter, ParameterType
-
-
-class ParametrizationError(Exception):
-    pass
-
+from .exceptions import ParametrizationError
+from .models.condition import Condition, Equal, Greater, LeafCondition, Littler, Range, extract_leaf_conditions
+from .models.parameter import Parameter, ParameterType
 
 _DateRange = Tuple[Optional[date], Optional[date]]
 

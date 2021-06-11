@@ -4,7 +4,8 @@ from typing import Any, Callable, Dict, List, Optional, Set, Tuple, TypeVar, Uni
 from envinorma.models import Ints
 from envinorma.models.structured_text import StructuredText
 
-from ..consistency import ParametrizationError, check_conditions_are_incompatible
+from ..consistency import check_conditions_are_incompatible
+from ..exceptions import ParametrizationError
 from .condition import Condition, LeafCondition, extract_leaf_conditions, load_condition
 from .parameter import Parameter
 

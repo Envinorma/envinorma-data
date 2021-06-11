@@ -11,9 +11,9 @@ from envinorma.parametrization.consistency import (
     _ranges_strictly_overlap,
     check_conditions_are_incompatible,
 )
+from envinorma.parametrization.exceptions import ParametrizationError
 from envinorma.parametrization.models.condition import Equal, Greater, Littler, OrCondition, Range
 from envinorma.parametrization.models.parameter import ParameterEnum
-from envinorma.parametrization.models.parametrization import ParametrizationError
 
 
 def test_check_conditions_are_incompatible():

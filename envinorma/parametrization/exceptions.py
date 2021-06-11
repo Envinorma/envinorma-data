@@ -1,0 +1,2 @@
+class ParametrizationError(Exception):
+    pass
