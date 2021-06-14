@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import date, datetime
 from typing import List
 
 import pytest
@@ -59,17 +59,17 @@ def test_generate_options_dict():
 def test_generate_options_dict_2():
     parameter = Parameter('test', ParameterType.DATE)
     conditions = [
-        Range(parameter, datetime(2020, 1, 1), datetime(2021, 1, 1), False, True),
-        Littler(parameter, datetime(2020, 1, 1), True),
-        Greater(parameter, datetime(2021, 1, 1), False),
+        Range(parameter, date(2020, 1, 1), date(2021, 1, 1), False, True),
+        Littler(parameter, date(2020, 1, 1), True),
+        Greater(parameter, date(2021, 1, 1), False),
     ]
     res = _generate_options_dict(conditions)
     str_dt_20 = '2020-01-01'
     str_dt_21 = '2021-01-01'
     expected = [
-        (f'test < {str_dt_20}', datetime(2019, 12, 31)),
-        (f'{str_dt_20} <= test < {str_dt_21}', datetime(2020, 7, 2, 1, 0)),
-        (f'test >= {str_dt_21}', datetime(2021, 1, 2)),
+        (f'test < {str_dt_20}', date(2019, 12, 31)),
+        (f'{str_dt_20} <= test < {str_dt_21}', date(2020, 7, 2)),
+        (f'test >= {str_dt_21}', date(2021, 1, 2)),
     ]
     assert res == expected
 
