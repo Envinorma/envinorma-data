@@ -48,19 +48,30 @@ pip install -e .[dev] # or pip install -e .\[dev\] on MacOS
 
 # Exemple
 
-## 1. Download LegifranceText and print lines
+<details>
+<summary>
+    <strong>1. Télécharger, structurer et afficher un texte depuis Légifrance</strong>
+</summary>
 
 ```python
 from envinorma.from_legifrance.legifrance_to_am import legifrance_to_arrete_ministeriel
-from leginorma import LegifranceClient
+from leginorma import LegifranceClient, LegifranceText
 
-legifrance_text = LegifranceClient(CLIENT_ID, CLIENT_SECRET).consult_law_decree('JORFTEXTTODO')
+legifrance_text = LegifranceText.from_dict(LegifranceClient(CLIENT_ID, CLIENT_SECRET).consult_law_decree('JORFTEXT000034429274'))
 arrete_ministeriel = legifrance_to_arrete_ministeriel(legifrance_text)
-print(arrete_ministeriel.to_text().text_lines())
-
-# TODO
+print('\n'.join(arrete_ministeriel.to_text().text_lines()))
 ```
 
+Output
+
+```txt
+Arrêté du 11/04/17 relatif aux prescriptions générales applicables aux entrepôts couverts soumis à la rubrique 1510
+# Article 1
+Le présent arrêté s'applique aux entrepôts couverts déclarés, enregistrés ou autorisés au titre de la rubrique n° 1510 de la nomenclature des installations classées.
+[...]
+```
+
+</details>
 # Modules principaux
 
 ## [envinorma.models](envinorma/models/README.md)
