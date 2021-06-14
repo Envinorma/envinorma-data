@@ -65,7 +65,7 @@ def test_apply_parameter_values_to_am_whole_arrete():
 
     parameter = Parameter('nouvelle-installation', ParameterType.BOOLEAN)
     is_installation_old = Equal(parameter, False)
-    source = ConditionSource('', EntityReference(SectionReference((2,)), None))
+    source = ConditionSource(EntityReference(SectionReference((2,)), None))
     parametrization = Parametrization(
         [_IS(EntityReference(SectionReference(tuple()), None), is_installation_old, source)], [], []
     )
@@ -114,7 +114,7 @@ def test_apply_parameter_values_to_am():
     parameter = Parameter('nouvelle-installation', ParameterType.BOOLEAN)
     is_installation_old = Equal(parameter, False)
     is_installation_new = Equal(parameter, True)
-    source = ConditionSource('', EntityReference(SectionReference((2,)), None))
+    source = ConditionSource(EntityReference(SectionReference((2,)), None))
     new_text = StructuredText(_str('Art. 2'), [_str('version modifiée')], [], None)
     parametrization = Parametrization(
         [
@@ -169,7 +169,7 @@ def test_extract_parameters_from_parametrization():
     condition_1 = Equal(parameter_1, True)
     parameter_2 = Parameter('nouvelle-installation', ParameterType.BOOLEAN)
     condition_2 = Equal(parameter_2, True)
-    source = ConditionSource('', EntityReference(SectionReference((2,)), None))
+    source = ConditionSource(EntityReference(SectionReference((2,)), None))
     new_text = StructuredText(_str('Art. 2'), [_str('version modifiée')], [], None)
     parametrization = Parametrization(
         [_IS(EntityReference(SectionReference((0,)), None), condition_1, source)],
@@ -187,7 +187,7 @@ def test_extract_parameters_from_parametrization_2():
     condition_1 = Equal(parameter_1, True)
     parameter_2 = Parameter('nouvelle-installation-2', ParameterType.BOOLEAN)
     condition_2 = Equal(parameter_2, True)
-    source = ConditionSource('', EntityReference(SectionReference((2,)), None))
+    source = ConditionSource(EntityReference(SectionReference((2,)), None))
     new_text = StructuredText(_str('Art. 2'), [_str('version modifiée')], [], None)
     parametrization = Parametrization(
         [_IS(EntityReference(SectionReference((0,)), None), condition_1, source)],
@@ -211,7 +211,7 @@ def test_generate_versions():
 
     parameter = Parameter('nouvelle-installation', ParameterType.BOOLEAN)
     condition = Equal(parameter, False)
-    source = ConditionSource('', EntityReference(SectionReference((2,)), None))
+    source = ConditionSource(EntityReference(SectionReference((2,)), None))
     parametrization = Parametrization([_IS(EntityReference(SectionReference((0,)), None), condition, source)], [], [])
 
     res = generate_versions(am, parametrization, False)
@@ -239,7 +239,7 @@ def test_deactivate_alineas():
     nac = _IS(
         EntityReference(SectionReference((0,)), None),
         Littler(ParameterEnum.DATE_INSTALLATION.value, datetime(2021, 1, 1)),
-        ConditionSource('', EntityReference(SectionReference((1,)), None)),
+        ConditionSource(EntityReference(SectionReference((1,)), None)),
     )
     res = _deactivate_alineas(_get_simple_text(), nac, {ParameterEnum.DATE_INSTALLATION.value: datetime(2020, 1, 1)})
     assert not res.applicability.active
@@ -248,7 +248,7 @@ def test_deactivate_alineas():
     nac = _IS(
         EntityReference(SectionReference((0,)), [0]),
         Littler(ParameterEnum.DATE_INSTALLATION.value, datetime(2021, 1, 1)),
-        ConditionSource('', EntityReference(SectionReference((1,)), None)),
+        ConditionSource(EntityReference(SectionReference((1,)), None)),
     )
     res = _deactivate_alineas(_get_simple_text(), nac, {ParameterEnum.DATE_INSTALLATION.value: datetime(2020, 1, 1)})
     assert res.applicability.active
@@ -258,7 +258,7 @@ def test_deactivate_alineas():
     nac = _IS(
         EntityReference(SectionReference((0,)), None),
         Littler(ParameterEnum.DATE_INSTALLATION.value, datetime(2021, 1, 1)),
-        ConditionSource('', EntityReference(SectionReference((1,)), None)),
+        ConditionSource(EntityReference(SectionReference((1,)), None)),
     )
     res = _deactivate_alineas(
         _get_simple_text([_get_simple_text()]), nac, {ParameterEnum.DATE_INSTALLATION.value: datetime(2020, 1, 1)}
@@ -282,7 +282,7 @@ def _simple_inap(date_parameter: Parameter) -> InapplicableSection:
     return _IS(
         EntityReference(SectionReference((0,)), None),
         Littler(date_parameter, datetime(2021, 1, 1)),
-        ConditionSource('', EntityReference(SectionReference((1,)), None)),
+        ConditionSource(EntityReference(SectionReference((1,)), None)),
     )
 
 
@@ -319,7 +319,7 @@ def _simple_inap_2(date_parameter: Parameter) -> InapplicableSection:
     return _IS(
         EntityReference(SectionReference((0,)), None),
         Littler(date_parameter, date(2021, 1, 1)),
-        ConditionSource('', EntityReference(SectionReference((1,)), None)),
+        ConditionSource(EntityReference(SectionReference((1,)), None)),
     )
 
 
@@ -424,7 +424,7 @@ def test_keep_satisfiable():
 def test_used_date_parameter():
     installation = ParameterEnum.DATE_INSTALLATION.value
     regime = ParameterEnum.REGIME.value
-    source = ConditionSource('', EntityReference(SectionReference((1,)), None))
+    source = ConditionSource(EntityReference(SectionReference((1,)), None))
     target = EntityReference(SectionReference((0,)), None)
     dt_1 = Littler(installation, date(2021, 1, 1))
     dt_2 = Littler(installation, date(2022, 1, 1))

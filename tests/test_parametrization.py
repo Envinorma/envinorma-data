@@ -45,7 +45,7 @@ def test_check_parametrization_consistency():
     cd_4 = Greater(date_, dt_2)
     cd_5 = Littler(date_, dt_2)
     cd_6 = Greater(date_, dt_1)
-    source = ConditionSource('', EntityReference(SectionReference((2,)), None))
+    source = ConditionSource(EntityReference(SectionReference((2,)), None))
     unique_path = (0,)
     entity = EntityReference(SectionReference(unique_path), None)
     new_text = StructuredText(_str('Art. 2'), [_str('version modifiée')], [], None)
@@ -74,7 +74,7 @@ def test_group():
 
 
 def _simple_nac(condition: Condition) -> InapplicableSection:
-    source = ConditionSource('', EntityReference(SectionReference((0, 1)), None))
+    source = ConditionSource(EntityReference(SectionReference((0, 1)), None))
     target = EntityReference(SectionReference((0,)), None)
     return _NAC(target, condition, source)
 

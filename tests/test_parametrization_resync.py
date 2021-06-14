@@ -71,7 +71,7 @@ def test_add_titles_sequences():
     dt_2 = dt_1 + timedelta(days=1)
     cd_1 = Range(date_, dt_1, dt_2)
     cd_4 = Greater(date_, dt_2)
-    source = ConditionSource('', EntityReference(SectionReference((0, 1)), None))
+    source = ConditionSource(EntityReference(SectionReference((0, 1)), None))
     entity = EntityReference(SectionReference((0,)), None)
     section = SectionReference((0, 0, 0))
     new_text = StructuredText(estr('Art. 2'), [estr('version modifiée')], [], None)
@@ -81,7 +81,7 @@ def test_add_titles_sequences():
         ),
         _get_simple_am(),
     )
-    new_source = ConditionSource('', EntityReference(SectionReference((0, 1), ['Chapter I', 'Section 2']), None))
+    new_source = ConditionSource(EntityReference(SectionReference((0, 1), ['Chapter I', 'Section 2']), None))
     new_entity_0 = EntityReference(SectionReference((0,), ['Chapter I']), None)
     new_section = SectionReference((0, 0, 0), ['Chapter I', 'Section 1', 'Section 1.1'])
     assert res == Parametrization(
@@ -109,7 +109,7 @@ def test_regenerate_paths():
     dt_2 = dt_1 + timedelta(days=1)
     cd_1 = Range(date_, dt_1, dt_2)
     cd_4 = Greater(date_, dt_2)
-    source = ConditionSource('', EntityReference(SectionReference((19,), ['Chapter I', 'Section 2']), None))
+    source = ConditionSource(EntityReference(SectionReference((19,), ['Chapter I', 'Section 2']), None))
     entity = EntityReference(SectionReference((19,), ['Chapter I']), None)
     section = SectionReference((19,), ['Chapter I', 'Section 1', 'Section 1.1'])
     new_text = StructuredText(estr('Art. 2'), [estr('version modifiée')], [], None)
@@ -119,7 +119,7 @@ def test_regenerate_paths():
         ),
         _get_simple_am(),
     )
-    new_source = ConditionSource('', EntityReference(SectionReference((0, 1), ['Chapter I', 'Section 2']), None))
+    new_source = ConditionSource(EntityReference(SectionReference((0, 1), ['Chapter I', 'Section 2']), None))
     new_entity_0 = EntityReference(SectionReference((0,), ['Chapter I']), None)
     new_section = SectionReference((0, 0, 0), ['Chapter I', 'Section 1', 'Section 1.1'])
     assert res.alternative_sections[0] == AlternativeSection(new_section, new_text, cd_4, new_source)

@@ -51,7 +51,6 @@ class EntityReference:
 
 @dataclass
 class ConditionSource:
-    explanation: str
     reference: EntityReference
 
     def to_dict(self) -> Dict[str, Any]:
@@ -60,7 +59,7 @@ class ConditionSource:
 
     @classmethod
     def from_dict(cls, dict_: Dict[str, Any]) -> 'ConditionSource':
-        return ConditionSource(dict_['explanation'], EntityReference.from_dict(dict_['reference']))
+        return ConditionSource(EntityReference.from_dict(dict_['reference']))
 
 
 @dataclass
@@ -74,22 +73,17 @@ class InapplicableSection:
             Condition to which the targeted section is modified
         source (ConditionSource):
             Description of where the condition was found in the arrete
-        description (Optional[str] = None):
-            Optional free explanation of the reason for having this inapplicable
-            section.
     """
 
     targeted_entity: EntityReference
     condition: Condition
     source: ConditionSource
-    description: Optional[str] = None
 
     def to_dict(self) -> Dict[str, Any]:
         return {
             'targeted_entity': self.targeted_entity.to_dict(),
             'condition': self.condition.to_dict(),
             'source': self.source.to_dict(),
-            'description': self.description,
         }
 
     @classmethod
@@ -98,7 +92,6 @@ class InapplicableSection:
             EntityReference.from_dict(dict_['targeted_entity']),
             load_condition(dict_['condition']),
             ConditionSource.from_dict(dict_['source']),
-            dict_.get('description'),
         )
 
 
@@ -115,9 +108,6 @@ class AlternativeSection:
             Condition to which the targeted section is modified
         source (ConditionSource):
             Description of where the condition was found in the arrete
-        description (Optional[str] = None):
-            Optional free explanation of the reason for having this alternative
-            section.
 
     """
 
@@ -125,7 +115,6 @@ class AlternativeSection:
     new_text: StructuredText
     condition: Condition
     source: ConditionSource
-    description: Optional[str] = None
 
     def to_dict(self) -> Dict[str, Any]:
         return {
@@ -133,7 +122,6 @@ class AlternativeSection:
             'new_text': self.new_text.to_dict(),
             'condition': self.condition.to_dict(),
             'source': self.source.to_dict(),
-            'description': self.description,
         }
 
     @classmethod
@@ -143,7 +131,6 @@ class AlternativeSection:
             StructuredText.from_dict(dict_['new_text']),
             load_condition(dict_['condition']),
             ConditionSource.from_dict(dict_['source']),
-            dict_.get('description'),
         )
 
 

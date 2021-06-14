@@ -40,10 +40,8 @@ _PARAMETRIZATION = Parametrization(
             targeted_entity=EntityReference(section=SectionReference(path=(0,)), outer_alinea_indices=None),
             condition=AndCondition(conditions=[Littler(parameter=_DATE, target=date(2021, 1, 1), strict=True)]),
             source=ConditionSource(
-                explanation='',
                 reference=EntityReference(section=SectionReference(path=(0,)), outer_alinea_indices=None),
             ),
-            description='',
         )
     ],
     alternative_sections=[
@@ -51,8 +49,7 @@ _PARAMETRIZATION = Parametrization(
             targeted_section=SectionReference(path=(1, 0)),
             new_text=_NEW_TEXT,
             condition=AndCondition(conditions=[Range(parameter=_DATE, left=date(2020, 1, 1), right=date(2021, 1, 1))]),
-            source=ConditionSource('', EntityReference(section=SectionReference(path=(1,)), outer_alinea_indices=None)),
-            description='',
+            source=ConditionSource(EntityReference(section=SectionReference(path=(1,)), outer_alinea_indices=None)),
         )
     ],
     warnings=[AMWarning(SectionReference(()), 'AM warning')],
