@@ -46,6 +46,20 @@ cd envinorma-data
 pip install -e .[dev] # or pip install -e .\[dev\] on MacOS
 ```
 
+Testing
+
+```sh
+pytest --mypy-ignore-missing-imports
+```
+
+Linting
+
+```sh
+isort . --profile black -l 120
+flake8 --count --verbose --show-source --statistics
+black . --check --exclude venv -S -l 120
+```
+
 # Exemple
 
 <details>
