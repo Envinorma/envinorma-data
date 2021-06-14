@@ -251,7 +251,7 @@ def _convert_to_date(element: Any) -> date:
         return element.date()
     if isinstance(element, date):
         return element
-    raise ValueError(f'Expection date or datetime, got {type(element)}')
+    raise ValueError(f'Expecting date or datetime, got {type(element)}')
 
 
 def _convert_to_dates(elements: List[Any]) -> List[date]:
