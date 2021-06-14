@@ -93,6 +93,22 @@ def _split_html_in_lines(html: str) -> List[str]:
 
 @dataclass
 class EnrichedString:
+    """Dataclass for representing string potentially decorated with links and tables and
+    potentially inapplicably in a certain context.
+
+    Args:
+        text (str):
+            content of the string
+        links (List[Link] = field(default_factory=empty_link_list)):
+            list of links decorating text
+        table (Optional[Table] = None):
+            if not None, the string actually is a table
+        active (Optional[bool] = True):
+            if False, the string is inactive in the context of its usage
+            (example : inapplicable alinea in an AM)
+
+    """
+
     text: str
     links: List[Link] = field(default_factory=empty_link_list)
     table: Optional[Table] = None

@@ -25,6 +25,24 @@ class Annotations:
 
 @dataclass
 class Applicability:
+    """Describes the applicability of a StructuredText. It can either be applicable,
+    inapplicable or applicable with modifications.
+
+    Args:
+        active (bool = True):
+            True is the associated StructuredText is applicable.
+        modified (bool = False):
+            True is the associated StructuredText is modified in the considered context.
+        warnings (List[str] = []):
+            List of warnings for explaining why the section could be inactive, why it is modified
+            of why it is inactive.
+        previous_version (Optional[StructuredText] = None):
+            if modified is True, the previous version from which it was modified.
+
+    Raises:
+        ValueError: when modified is True but previous_version is not given
+    """
+
     active: bool = True
     modified: bool = False
     warnings: List[str] = field(default_factory=list)
@@ -52,6 +70,25 @@ class Applicability:
 
 @dataclass
 class StructuredText:
+    """Section of a text. This data structure can contain sections itself.
+
+    Args:
+        title (EnrichedString):
+            section title
+        outer_alineas (List[EnrichedString]):
+            alineas before the first sections
+        sections (List[StructuredText]):
+            list of subsections contained after alineas
+        applicability (Optional[Applicability]):
+            describes the applicability of the text in a certain context
+        reference_str (Optional[str] = None):
+            reference of the current section in the section tree (for human reader)
+        annotations (Optional[Annotations] = None):
+            misc annotations for enriching purposes
+        id (str = field(default_factory=random_id)):
+            identifier of the section
+    """
+
     title: EnrichedString
     outer_alineas: List[EnrichedString]
     sections: List['StructuredText']

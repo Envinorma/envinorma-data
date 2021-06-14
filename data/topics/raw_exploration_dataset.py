@@ -1,5 +1,6 @@
 import json
 from typing import Dict, List, Set, Tuple
+from pathlib import Path
 
 from envinorma.models.text_elements import EnrichedString
 from envinorma.topics.patterns import TopicName
@@ -222,6 +223,6 @@ def _load_dataset(
     return [_build_labelized_text(text, labels[i]) for i, text in enumerate(texts)]
 
 
-TEXTS = json.load(open('data/topics/raw_exploration_dataset.json'))
-
+_PATH = Path(__file__).parent / 'raw_exploration_dataset.json'
+TEXTS = json.load(open(_PATH))
 DATASET = _load_dataset(TEXTS, LABELS)

@@ -12,6 +12,18 @@ from .parameter import Parameter
 
 @dataclass
 class SectionReference:
+    """Reference of a section in an ArreteMinisteriel
+
+    Args:
+        path (Tuple[int, ...]):
+            path to the section in the tree structure of the ArreteMinisteriel
+            e.g. (0, 1, 0) matches section: arrete_ministeriel.sections[0].sections[1].sections[0]
+        titles_sequence (Optional[List[str]]):
+            path to the section in the tree structure of the ArreteMinisteriel following
+            section titles, useful when modifications are made in the AM that break the
+            path search.
+    """
+
     path: Ints
     titles_sequence: Optional[List[str]] = None
 
@@ -53,6 +65,20 @@ class ConditionSource:
 
 @dataclass
 class InapplicableSection:
+    """Description of a potential inapplicable section in a ArreteMinisteriel under some condition.
+
+    Args:
+        targeted_entity (EntityReference):
+            Section and alineas potentially inapplicable
+        condition (Condition):
+            Condition to which the targeted section is modified
+        source (ConditionSource):
+            Description of where the condition was found in the arrete
+        description (Optional[str] = None):
+            Optional free explanation of the reason for having this inapplicable
+            section.
+    """
+
     targeted_entity: EntityReference
     condition: Condition
     source: ConditionSource
@@ -78,6 +104,23 @@ class InapplicableSection:
 
 @dataclass
 class AlternativeSection:
+    """Description of a potential modification in a ArreteMinisteriel, applied at some condition.
+
+    Args:
+        targeted_section (SectionReference):
+            Section potentially modified
+        new_text (StructuredText):
+            New version of the section when condition is met
+        condition (Condition):
+            Condition to which the targeted section is modified
+        source (ConditionSource):
+            Description of where the condition was found in the arrete
+        description (Optional[str] = None):
+            Optional free explanation of the reason for having this alternative
+            section.
+
+    """
+
     targeted_section: SectionReference
     new_text: StructuredText
     condition: Condition
@@ -106,6 +149,16 @@ class AlternativeSection:
 
 @dataclass
 class AMWarning:
+    """Warning attached to a section of an arrete_ministeriel
+
+    Args:
+        targeted_section (SectionReference):
+            Section to which the warning is attached
+        text (str):
+            Content of the warning
+
+    """
+
     targeted_section: SectionReference
     text: str
 
@@ -153,6 +206,18 @@ def _group(elements: List[T], groupper: Callable[[T], K]) -> Dict[K, List[T]]:
 
 @dataclass
 class Parametrization:
+    """Data class for describing parametrization of an arrete ministeriel.
+
+    Args:
+        inapplicable_sections (List[InapplicableSection]):
+            list of potentially inapplicable sections of an ArreteMinisteriel
+        alternative_sections (List[AlternativeSection])
+            list of potentially inapplicable modified sections of an ArreteMinisteriel
+        warnings (List[AMWarning])
+            list of non conditionned warnings associated with an ArreteMinisteriel
+
+    """
+
     inapplicable_sections: List[InapplicableSection]
     alternative_sections: List[AlternativeSection]
     warnings: List[AMWarning]

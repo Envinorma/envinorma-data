@@ -18,29 +18,35 @@ from .text_elements import EnrichedString
 class DateParameterDescriptor:
     """
     Describes an AM version with regard to a specific date
-    (e.g. the AM applicable to classements with installation date in a specific range.)
+    (e.g. the AM applicable to classements having date_de_mise_en_service in a specific range.)
 
-    is_used_in_parametrization
-        is True if the corresponding date was used in the parametrization of the AM
-    unknown_classement_date_version
-        is defined if is_used_in_parametrization is True. It is true for the AM version
-        corresponding to an unknown value of the date for the given classement.
-    left_value
-        is defined if is_used_in_parametrization is True. With right_value, it describes the date range of
-        applicability of the AM. None corresponds to -infinity.
-    right_value
-        is defined if is_used_in_parametrization is True. With left_value, it describes the date range of
-        applicability of the AM. None corresponds to +infinity.
-
-    example:
+    Example:
         For an AM that changes version for date 2021-01-01, one of the generated version
         will have (
             is_used_in_parametrization=True,
+
             unknown_classement_date_version=False,
+
             left_value=None,
+
             right_value=2021-01-01
         )
+
         It corresponds to the classements whose date is known and whose date value is smaller than 2021-01-01.
+
+    Args:
+        is_used_in_parametrization (bool):
+            is True if the corresponding date was used in the parametrization of the AM
+        unknown_classement_date_version (Optional[bool]):
+            is defined if is_used_in_parametrization is True. It is true for the AM version
+            corresponding to an unknown value of the date for the given classement.
+        left_value (Optional[date]):
+            is defined if is_used_in_parametrization is True. With right_value, it describes the date range of
+            applicability of the AM. None corresponds to -infinity.
+        right_value (Optional[date]):
+            is defined if is_used_in_parametrization is True. With left_value, it describes the date range of
+            applicability of the AM. None corresponds to +infinity.
+
     """
 
     is_used_in_parametrization: bool
@@ -78,6 +84,24 @@ class DateParameterDescriptor:
 
 @dataclass
 class VersionDescriptor:
+    """Describes an AM version (e.g. the AM applicable to classements with specific date values).
+
+    Args:
+        applicable (bool) :
+            True if this specific AM version is applicable (some AM are not applicable for specific
+            date ranges, this parameter makes this fact explicit)
+        applicability_warnings (List[str]) :
+            list of warnings corresponding the this specific AM version. If applicable == False,
+            it explains why it is so. Otherwise, it mainly explains why the AM could be inapplicable.
+        aed_date (DateParameterDescriptor) :
+            descriptor of the range of values of date_autorisation to which this version
+            corresponds.
+        date_de_mise_en_service (DateParameterDescriptor) :
+            descriptor of the range of values of date_de_mise_en_service to which this
+            version corresponds.
+
+    """
+
     applicable: bool
     applicability_warnings: List[str]
     aed_date: DateParameterDescriptor
@@ -192,6 +216,34 @@ def extract_date_of_signature(input_title: str) -> date:
 
 @dataclass
 class ArreteMinisteriel:
+    """Dataclass for ICPE arrete ministeriels (AM)
+
+    Args:
+        title (EnrichedString):
+            title of the arrete ministeriel
+        sections (List[StructuredText]):
+            actual content of the AM (recursive data class, a section contains alineas and subsections)
+        visa (List[EnrichedString]):
+            list of visa
+        date_of_signature (Optional[date]):
+            date of signature of the AM. It is expected to be consistent with the AM title
+            (ie. title should contain the date of signature.)
+        aida_url (Optional[str]):
+            optional url to the AIDA version of the arrete
+        legifrance_url (Optional[str]):
+            optional url to the Legifrance version of the arrete
+        classements (List[Classement]):
+            List of classements for which this AM is applicable, with (Rubrique, Regime) couples potentially
+            repeated for several alineas
+        classements_with_alineas (List[ClassementWithAlineas] = field(default_factory=list)):
+            List of classements for which this AM is applicable, groupped by (Rubrique, Regime) couples
+        id (Optional[str]):
+            CID of the AM (of the form JORFTEXT... or LEGITEXT...)
+        version_descriptor (Optional[VersionDescriptor]):
+            If None, the AM is in a generic version.
+            Otherwise, version_descriptor describes to which caracteristics this version corresponds
+    """
+
     title: EnrichedString
     sections: List[StructuredText]
     visa: List[EnrichedString]
