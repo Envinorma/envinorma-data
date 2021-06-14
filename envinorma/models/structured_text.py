@@ -80,6 +80,8 @@ class StructuredText:
         dict_['sections'] = [StructuredText.from_dict(sec) for sec in dict_['sections']]
         dict_['applicability'] = Applicability.from_dict(dict_['applicability']) if dict_.get('applicability') else None
         dict_['annotations'] = Annotations.from_dict(dict_['annotations']) if dict_.get('annotations') else None
+        if 'lf_id' in dict_:
+            del dict_['lf_id']  # retrocompatibility
         return cls(**dict_)
 
     def text_lines(self, level: int = 0) -> List[str]:
