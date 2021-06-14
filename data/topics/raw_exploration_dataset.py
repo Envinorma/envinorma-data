@@ -1,6 +1,6 @@
 import json
-from typing import Dict, List, Set, Tuple
 from pathlib import Path
+from typing import Dict, List, Set, Tuple
 
 from envinorma.models.text_elements import EnrichedString
 from envinorma.topics.patterns import TopicName
