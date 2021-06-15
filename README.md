@@ -62,7 +62,7 @@ flake8 --count --verbose --show-source --statistics
 black . --check --exclude venv -S -l 120
 ```
 
-# Exemples
+# Exemples d'utilisation
 
 <strong>1. Télécharger, structurer et afficher un texte depuis Légifrance</strong>
 
@@ -80,12 +80,34 @@ print('\n'.join(arrete_ministeriel.to_text().text_lines()))
 Output
 
 ```markdown
-Arrêté du 11/04/17 relatif aux prescriptions générales applicables aux entrepôts couverts soumis à la rubrique 1510
+Arrêté du 11/04/17 relatif aux prescriptions générales applicable aux entrepôts couverts soumis à la rubrique 1510
 
 # Article 1
 
 Le présent arrêté s'applique aux entrepôts couverts déclarés, enregistrés ou autorisés au titre de la rubrique n° 1510 de la nomenclature des installations classées.
 [...]
+```
+
+<strong>2. Appliquer un jeu de paramètres à un arrêté ministériel paramétré</strong>
+
+Ce script peut être exécuté à partir des arrêtés ministériels contenus dans le dépôt [arretes-ministeriels](https://github.com/Envinorma/arretes-ministeriels).
+
+```python
+from datetime import date
+
+from envinorma.models import ArreteMinisteriel
+from envinorma.parametrization import Parametrization, ParameterEnum
+from envinorma.parametrization.apply_parameter_values import apply_parameter_values_to_am
+
+am_folder = 'TODO' # Replace with the folder containing AMs
+am_id = 'JORFTEXT000018332514'
+parametrization = Parametrization.from_dict(json.load(open(f'{am_folder}/parametrizations/{am_id}.json')))
+base_am = ArreteMinisteriel.from_dict(json.load(open(f'{am_folder}/base_ams/{am_id}.json')))
+
+parameter_values = {ParameterEnum.DATE_AUTORISATION.value: date.today()}
+am_with_warnings = apply_parameter_values_to_am(base_am, parametrization, parameter_values)
+
+
 ```
 
 # Modules principaux
