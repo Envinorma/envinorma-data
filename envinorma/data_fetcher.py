@@ -3,14 +3,14 @@ from typing import Any, Dict, List, Optional, Set, Tuple, Type, TypeVar
 
 import psycopg2
 
-from envinorma.data import AMMetadata, AMState, ArreteMinisteriel
-from envinorma.parametrization import (
+from envinorma.models.am_metadata import AMMetadata, AMState
+from envinorma.models.arrete_ministeriel import ArreteMinisteriel
+from envinorma.parametrization.models.parametrization import (
     AlternativeSection,
     AMWarning,
-    NonApplicationCondition,
+    InapplicableSection,
     ParameterObject,
     Parametrization,
-    check_parametrization_consistency,
 )
 from envinorma.utils import AMStatus
 
@@ -39,10 +39,10 @@ def _recreate_with_removed_parameter(
     object_type: Type[ParameterObject], parameter_rank: int, parametrization: Parametrization
 ) -> Parametrization:
     new_sections = parametrization.alternative_sections.copy()
-    new_conditions = parametrization.application_conditions.copy()
+    new_conditions = parametrization.inapplicable_sections.copy()
     new_warnings = parametrization.warnings.copy()
-    if object_type == NonApplicationCondition:
-        _ensure_len(parametrization.application_conditions, parameter_rank + 1)
+    if object_type == InapplicableSection:
+        _ensure_len(parametrization.inapplicable_sections, parameter_rank + 1)
         del new_conditions[parameter_rank]
     if object_type == AlternativeSection:
         _ensure_len(parametrization.alternative_sections, parameter_rank + 1)
@@ -68,9 +68,9 @@ def _recreate_with_upserted_parameter(
     new_parameter: ParameterObject, parameter_rank: int, parametrization: Parametrization
 ) -> Parametrization:
     new_sections = parametrization.alternative_sections
-    new_conditions = parametrization.application_conditions
+    new_conditions = parametrization.inapplicable_sections
     new_warnings = parametrization.warnings
-    if isinstance(new_parameter, NonApplicationCondition):
+    if isinstance(new_parameter, InapplicableSection):
         new_conditions = _replace_element_in_list_or_append_if_negative_rank(
             new_parameter, new_conditions, parameter_rank
         )
@@ -195,7 +195,7 @@ class DataFetcher:
     def upsert_parameter(self, am_id: str, new_parameter: ParameterObject, parameter_rank: int) -> None:
         previous_parametrization = self.load_or_init_parametrization(am_id)
         parametrization = _recreate_with_upserted_parameter(new_parameter, parameter_rank, previous_parametrization)
-        check_parametrization_consistency(parametrization)
+        parametrization.check_consistency()
         self.upsert_new_parametrization(am_id, parametrization)
 
     def load_parametrization(self, am_id: str) -> Optional[Parametrization]:

@@ -2,7 +2,8 @@ from collections import Counter, defaultdict
 from typing import List, Set, Tuple
 
 from data.topics.raw_exploration_dataset import DATASET, _LabelizedText
-from envinorma.data import EnrichedString, StructuredText
+from envinorma.models.structured_text import StructuredText
+from envinorma.models.text_elements import EnrichedString
 from envinorma.topics.patterns import TopicName, tokenize
 from envinorma.topics.topics import TOPIC_ONTOLOGY, TopicOntology
 

@@ -1,21 +1,43 @@
 from dataclasses import dataclass, replace
 from datetime import date
-from typing import Dict, Optional, Tuple
+from typing import Dict, List, Optional, Set, Tuple
 
-from envinorma.am_enriching import (
-    add_references,
-    add_table_inspection_sheet_data,
-    detect_and_add_topics,
-    remove_null_applicabilities,
-)
-from envinorma.data import AMMetadata, ArreteMinisteriel, ClassementWithAlineas, Regime, add_metadata
-from envinorma.parametrization import Combinations, Parametrization
-from envinorma.parametrization.conditions import ParameterEnum
-from envinorma.parametrization.parametric_am import generate_all_am_versions
-from envinorma.topics.topics import TOPIC_ONTOLOGY
+from envinorma.enriching import enrich
+from envinorma.enriching.remove_null_applicabilities import remove_null_applicabilities
+from envinorma.models.am_metadata import AMMetadata
+from envinorma.models.arrete_ministeriel import ArreteMinisteriel
+from envinorma.models.classement import Classement, ClassementWithAlineas, Regime
+from envinorma.parametrization.combinations import generate_exhaustive_combinations
 from envinorma.utils import AM1510_IDS, ensure_not_none
 
+from .apply_parameter_values import apply_parameter_values_to_am
+from .models.parameter import ParameterEnum
+from .models.parametrization import Combinations, Parametrization
+
 AMVersions = Dict[Tuple[str, ...], ArreteMinisteriel]
+
+
+def _extract_am_regime(classements: List[Classement]) -> Optional[Regime]:
+    regimes: Set[Regime] = {classement.regime for classement in classements}
+    if len(regimes) != 1:
+        return None
+    return list(regimes)[0]
+
+
+def generate_versions(
+    am: ArreteMinisteriel,
+    parametrization: Parametrization,
+    date_only: bool,
+    combinations: Optional[Combinations] = None,
+) -> Dict[Tuple[str, ...], ArreteMinisteriel]:
+    if combinations is None:
+        combinations = generate_exhaustive_combinations(parametrization, date_only, _extract_am_regime(am.classements))
+    if not combinations:
+        combinations = {(): {}}
+    return {
+        combination_name: apply_parameter_values_to_am(am, parametrization, parameter_values)
+        for combination_name, parameter_values in combinations.items()
+    }
 
 
 def _manual_1510_post_process(am: ArreteMinisteriel, regime: str) -> ArreteMinisteriel:
@@ -70,32 +92,18 @@ def _get_manual_combinations(am_id: str) -> Optional[Combinations]:
     return None
 
 
-def apply_parametrization(
+def _generate_versions_and_postprocess(
     am_id: str, am: Optional[ArreteMinisteriel], parametrization: Parametrization, metadata: AMMetadata
 ) -> Optional[AMVersions]:
     if not am:
         return None
     enriched_am = remove_null_applicabilities(am)
     manual_combinations = _get_manual_combinations(am_id)  # For AM 1510 mainly, none otherwise
-    all_versions = generate_all_am_versions(enriched_am, parametrization, True, manual_combinations)
+    all_versions = generate_versions(enriched_am, parametrization, True, manual_combinations)
     return {
-        name: _post_process(am_id, _add_enrichments(am_, metadata), _extract_regime(am_id, name))
+        name: _post_process(am_id, enrich(am_, metadata), _extract_regime(am_id, name))
         for name, am_ in all_versions.items()
     }
-
-
-def _add_enrichments(am: ArreteMinisteriel, metadata: AMMetadata) -> ArreteMinisteriel:
-    return remove_null_applicabilities(
-        add_table_inspection_sheet_data(
-            detect_and_add_topics(add_references(add_metadata(am, metadata)), TOPIC_ONTOLOGY)
-        )
-    )
-
-
-def enrich_am(am: Optional[ArreteMinisteriel], metadata: AMMetadata) -> Optional[ArreteMinisteriel]:
-    if not am:
-        return None
-    return _add_enrichments(am, metadata)
 
 
 @dataclass
@@ -108,6 +116,6 @@ def generate_am_with_versions(
     base_am: ArreteMinisteriel, parametrization: Parametrization, metadata: AMMetadata
 ) -> AMWithVersions:
     cid = metadata.cid
-    base_am = ensure_not_none(enrich_am(base_am, metadata))
-    am_versions = apply_parametrization(cid, base_am, parametrization, metadata)
+    base_am = ensure_not_none(enrich(ensure_not_none(base_am), metadata))
+    am_versions = _generate_versions_and_postprocess(cid, base_am, parametrization, metadata)
     return AMWithVersions(base_am=base_am, am_versions=am_versions)

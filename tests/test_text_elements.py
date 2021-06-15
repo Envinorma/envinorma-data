@@ -1,6 +1,6 @@
 from typing import List, Tuple
 
-from envinorma.data.text_elements import (
+from envinorma.models.text_elements import (
     Cell,
     Row,
     Table,

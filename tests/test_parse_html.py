@@ -1,7 +1,5 @@
 from bs4 import BeautifulSoup
 
-from envinorma.data import Table
-from envinorma.data.text_elements import Linebreak, Title
 from envinorma.io.parse_html import (
     _extract_cell_data,
     _extract_text_elements_with_linebreaks,
@@ -9,6 +7,7 @@ from envinorma.io.parse_html import (
     extract_text_elements,
     merge_between_linebreaks,
 )
+from envinorma.models.text_elements import Linebreak, Table, Title
 
 
 def test_cell_data_extraction():

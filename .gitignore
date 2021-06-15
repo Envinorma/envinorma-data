@@ -17,3 +17,7 @@ tmp*
 *actes.json
 seeds
 docs_dl_batches*
+
+# Sphinx documentation
+docs/_build/
+docs/envinorma.*rst

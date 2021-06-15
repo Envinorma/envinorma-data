@@ -1,3 +1,11 @@
+from envinorma.from_legifrance.legifrance_to_am import (
+    ArticleStatus,
+    LegifranceArticle,
+    LegifranceSection,
+    _extract_sections,
+    _structure_text,
+    extract_table,
+)
 from envinorma.io.markdown import (
     DataFormat,
     Link,
@@ -5,14 +13,6 @@ from envinorma.io.markdown import (
     _insert_links,
     extract_markdown_text,
     table_to_markdown,
-)
-from envinorma.structure.am_structure_extraction import (
-    ArticleStatus,
-    LegifranceArticle,
-    LegifranceSection,
-    _extract_sections,
-    _structure_text,
-    extract_table,
 )
 
 

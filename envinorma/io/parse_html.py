@@ -3,7 +3,7 @@ from typing import Any, List, Union
 import bs4
 from bs4 import BeautifulSoup
 
-from envinorma.data.text_elements import Cell, EnrichedString, Linebreak, Row, Table, TextElement, Title
+from envinorma.models.text_elements import Cell, EnrichedString, Linebreak, Row, Table, TextElement, Title
 
 
 def _ensure_str(element: TextElement) -> str:

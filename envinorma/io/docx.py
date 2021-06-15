@@ -11,8 +11,8 @@ from zipfile import ZipFile
 import bs4
 from bs4 import BeautifulSoup
 
-from envinorma.data import StructuredText
-from envinorma.data.text_elements import Cell, EnrichedString, Row, Table, TextElement, Title
+from envinorma.models.structured_text import StructuredText
+from envinorma.models.text_elements import Cell, EnrichedString, Row, Table, TextElement, Title
 from envinorma.structure import build_structured_text
 from envinorma.utils import random_string
 

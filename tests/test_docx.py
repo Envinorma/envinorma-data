@@ -6,8 +6,6 @@ import bs4
 import pytest
 from bs4 import BeautifulSoup, Tag
 
-from envinorma.data import EnrichedString, Table
-from envinorma.data.text_elements import Cell, Row, TextElement, Title
 from envinorma.io.docx import (
     DocxNoTextError,
     Style,
@@ -47,8 +45,9 @@ from envinorma.io.docx import (
     remove_empty,
     write_new_document,
 )
+from envinorma.models.text_elements import Cell, EnrichedString, Row, Table, TextElement, Title
 
-_PREFIX = '''<?xml version="1.0" encoding="utf-8"?>\n<w:document mc:Ignorable="w14 wp14" xmlns:m="http://schemas.openxmlformats.org/officeDocument/2006/math" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:mo="http://schemas.microsoft.com/office/mac/office/2008/main" xmlns:mv="urn:schemas-microsoft-com:mac:vml" xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main" xmlns:w10="urn:schemas-microsoft-com:office:word" xmlns:w14="http://schemas.microsoft.com/office/word/2010/wordml" xmlns:wne="http://schemas.microsoft.com/office/word/2006/wordml" xmlns:wp="http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing" xmlns:wp14="http://schemas.microsoft.com/office/word/2010/wordprocessingDrawing" xmlns:wpc="http://schemas.microsoft.com/office/word/2010/wordprocessingCanvas" xmlns:wpg="http://schemas.microsoft.com/office/word/2010/wordprocessingGroup" xmlns:wpi="http://schemas.microsoft.com/office/word/2010/wordprocessingInk" xmlns:wps="http://schemas.microsoft.com/office/word/2010/wordprocessingShape">'''
+_PREFIX = '''<?xml version="1.0" encoding="utf-8"?>\n<w:document mc:Ignorable="w14 wp14" xmlns:m="http://schemas.openxmlformats.org/officeDocument/2006/math" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:mo="http://schemas.microsoft.com/office/mac/office/2008/main" xmlns:mv="urn:schemas-microsoft-com:mac:vml" xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main" xmlns:w10="urn:schemas-microsoft-com:office:word" xmlns:w14="http://schemas.microsoft.com/office/word/2010/wordml" xmlns:wne="http://schemas.microsoft.com/office/word/2006/wordml" xmlns:wp="http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing" xmlns:wp14="http://schemas.microsoft.com/office/word/2010/wordprocessingDrawing" xmlns:wpc="http://schemas.microsoft.com/office/word/2010/wordprocessingCanvas" xmlns:wpg="http://schemas.microsoft.com/office/word/2010/wordprocessingGroup" xmlns:wpi="http://schemas.microsoft.com/office/word/2010/wordprocessingInk" xmlns:wps="http://schemas.microsoft.com/office/word/2010/wordprocessingShape">'''  # noqa: E501
 
 
 def test_extract_property_value():
@@ -86,12 +85,10 @@ def test_extract_size():
 
 
 def test_extract_font_name():
-    assert (
-        _extract_property_value(
-            BeautifulSoup(f'{_PREFIX}<w:rFonts w:ascii="Times" />', 'lxml-xml'), 'rFonts', 'w:ascii'
-        )
-        == 'Times'
+    res = _extract_property_value(
+        BeautifulSoup(f'{_PREFIX}<w:rFonts w:ascii="Times" />', 'lxml-xml'), 'rFonts', 'w:ascii'
     )
+    assert res == 'Times'
     assert _extract_font_name(BeautifulSoup(f'{_PREFIX}<w:rFonts w:ascii="Times" />', 'lxml-xml')) == 'Times'
 
 
@@ -185,8 +182,8 @@ def test_is_header():
 
 
 def test_extract_cell():
-    tc_tag = '<w:tc>\n<w:tcPr>\n<w:tcW w:type="dxa" w:w="3212"/>\n<w:tcBorders>\n<w:top w:color="000000" w:space="0" w:sz="2" w:val="single"/>\n<w:left w:color="000000" w:space="0" w:sz="2" w:val="single"/>\n<w:bottom w:color="000000" w:space="0" w:sz="2" w:val="single"/>\n</w:tcBorders>\n</w:tcPr>\n<w:p>\n<w:pPr>\n<w:pStyle w:val="TableHeading"/>\n<w:suppressLineNumbers/>\n<w:bidi w:val="0"/>\n<w:jc w:val="center"/>\n<w:rPr/>\n</w:pPr>\n<w:r>\n<w:rPr/>\n<w:t>\n    AA\n   </w:t>\n</w:r>\n</w:p>\n</w:tc>'
-    str_tag = f'<?xml version="1.0" encoding="utf-8"?>\n<w:document mc:Ignorable="w14 wp14" xmlns:m="http://schemas.openxmlformats.org/officeDocument/2006/math" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:mo="http://schemas.microsoft.com/office/mac/office/2008/main" xmlns:mv="urn:schemas-microsoft-com:mac:vml" xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main" xmlns:w10="urn:schemas-microsoft-com:office:word" xmlns:w14="http://schemas.microsoft.com/office/word/2010/wordml" xmlns:wne="http://schemas.microsoft.com/office/word/2006/wordml" xmlns:wp="http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing" xmlns:wp14="http://schemas.microsoft.com/office/word/2010/wordprocessingDrawing" xmlns:wpc="http://schemas.microsoft.com/office/word/2010/wordprocessingCanvas" xmlns:wpg="http://schemas.microsoft.com/office/word/2010/wordprocessingGroup" xmlns:wpi="http://schemas.microsoft.com/office/word/2010/wordprocessingInk" xmlns:wps="http://schemas.microsoft.com/office/word/2010/wordprocessingShape"> {tc_tag}</w:document>'
+    tc_tag = '<w:tc>\n<w:tcPr>\n<w:tcW w:type="dxa" w:w="3212"/>\n<w:tcBorders>\n<w:top w:color="000000" w:space="0" w:sz="2" w:val="single"/>\n<w:left w:color="000000" w:space="0" w:sz="2" w:val="single"/>\n<w:bottom w:color="000000" w:space="0" w:sz="2" w:val="single"/>\n</w:tcBorders>\n</w:tcPr>\n<w:p>\n<w:pPr>\n<w:pStyle w:val="TableHeading"/>\n<w:suppressLineNumbers/>\n<w:bidi w:val="0"/>\n<w:jc w:val="center"/>\n<w:rPr/>\n</w:pPr>\n<w:r>\n<w:rPr/>\n<w:t>\n    AA\n   </w:t>\n</w:r>\n</w:p>\n</w:tc>'  # noqa:E501
+    str_tag = f'<?xml version="1.0" encoding="utf-8"?>\n<w:document mc:Ignorable="w14 wp14" xmlns:m="http://schemas.openxmlformats.org/officeDocument/2006/math" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:mo="http://schemas.microsoft.com/office/mac/office/2008/main" xmlns:mv="urn:schemas-microsoft-com:mac:vml" xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main" xmlns:w10="urn:schemas-microsoft-com:office:word" xmlns:w14="http://schemas.microsoft.com/office/word/2010/wordml" xmlns:wne="http://schemas.microsoft.com/office/word/2006/wordml" xmlns:wp="http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing" xmlns:wp14="http://schemas.microsoft.com/office/word/2010/wordprocessingDrawing" xmlns:wpc="http://schemas.microsoft.com/office/word/2010/wordprocessingCanvas" xmlns:wpg="http://schemas.microsoft.com/office/word/2010/wordprocessingGroup" xmlns:wpi="http://schemas.microsoft.com/office/word/2010/wordprocessingInk" xmlns:wps="http://schemas.microsoft.com/office/word/2010/wordprocessingShape"> {tc_tag}</w:document>'  # noqa:E501
     tag = BeautifulSoup(str_tag, 'lxml-xml').find('w:tc')
     if not isinstance(tag, Tag):
         raise ValueError(f'Expecting Tag, not {type(tag)}')

@@ -4,8 +4,6 @@ import random
 import bs4
 from bs4 import BeautifulSoup
 
-from envinorma.data import EnrichedString, StructuredText, Table
-from envinorma.data.text_elements import Cell, Row, Title
 from envinorma.io.open_document import (
     _build_structured_text_from_soup,
     _check_tag,
@@ -27,9 +25,29 @@ from envinorma.io.open_document import (
     structured_text_to_text_elements,
     write_new_document,
 )
+from envinorma.models.structured_text import StructuredText
+from envinorma.models.text_elements import Cell, EnrichedString, Row, Table, Title
 
-_XML_PREFIX = '''<?xml version="1.0" encoding="utf-8"?>
-<office:document-content office:version="1.2" xmlns:chart="urn:oasis:names:tc:opendocument:xmlns:chart:1.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dom="http://www.w3.org/2001/xml-events" xmlns:dr3d="urn:oasis:names:tc:opendocument:xmlns:dr3d:1.0" xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0" xmlns:field="urn:openoffice:names:experimental:ooo-ms-interop:xmlns:field:1.0" xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0" xmlns:form="urn:oasis:names:tc:opendocument:xmlns:form:1.0" xmlns:grddl="http://www.w3.org/2003/g/data-view#" xmlns:math="http://www.w3.org/1998/Math/MathML" xmlns:meta="urn:oasis:names:tc:opendocument:xmlns:meta:1.0" xmlns:number="urn:oasis:names:tc:opendocument:xmlns:datastyle:1.0" xmlns:of="urn:oasis:names:tc:opendocument:xmlns:of:1.2" xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:ooo="http://openoffice.org/2004/office" xmlns:oooc="http://openoffice.org/2004/calc" xmlns:ooow="http://openoffice.org/2004/writer" xmlns:rpt="http://openoffice.org/2005/report" xmlns:script="urn:oasis:names:tc:opendocument:xmlns:script:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0" xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0" xmlns:tableooo="http://openoffice.org/2009/table" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:textooo="http://openoffice.org/2013/office" xmlns:xforms="http://www.w3.org/2002/xforms" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><office:scripts/><office:font-face-decls/><office:body><office:text>'''
+_XML_PREFIX = (
+    '''<?xml version="1.0" encoding="utf-8"?>
+<office:document-content office:version="1.2" xmlns:chart="urn:oasis:names:tc:opendocument:xmlns:chart:1.0" xml'''
+    '''ns:dc="http://purl.org/dc/elements/1.1/" xmlns:dom="http://www.w3.org/2001/xml-events" xmlns:dr3d="urn:o'''
+    '''asis:names:tc:opendocument:xmlns:dr3d:1.0" xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0'''
+    '''" xmlns:field="urn:openoffice:names:experimental:ooo-ms-interop:xmlns:field:1.0" xmlns:fo="urn:oasis:nam'''
+    '''es:tc:opendocument:xmlns:xsl-fo-compatible:1.0" xmlns:form="urn:oasis:names:tc:opendocument:xmlns:form:1'''
+    '''.0" xmlns:grddl="http://www.w3.org/2003/g/data-view#" xmlns:math="http://www.w3.org/1998/Math/MathML" xm'''
+    '''lns:meta="urn:oasis:names:tc:opendocument:xmlns:meta:1.0" xmlns:number="urn:oasis:names:tc:opendocument:'''
+    '''xmlns:datastyle:1.0" xmlns:of="urn:oasis:names:tc:opendocument:xmlns:of:1.2" xmlns:office="urn:oasis:nam'''
+    '''es:tc:opendocument:xmlns:office:1.0" xmlns:ooo="http://openoffice.org/2004/office" xmlns:oooc="http://op'''
+    '''enoffice.org/2004/calc" xmlns:ooow="http://openoffice.org/2004/writer" xmlns:rpt="http://openoffice.org/'''
+    '''2005/report" xmlns:script="urn:oasis:names:tc:opendocument:xmlns:script:1.0" xmlns:style="urn:oasis:name'''
+    '''s:tc:opendocument:xmlns:style:1.0" xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0" '''
+    '''xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0" xmlns:tableooo="http://openoffice.org/2009'''
+    '''/table" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:textooo="http://openoffice.org'''
+    '''/2013/office" xmlns:xforms="http://www.w3.org/2002/xforms" xmlns:xhtml="http://www.w3.org/1999/xhtml" xm'''
+    '''lns:xlink="http://www.w3.org/1999/xlink" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://'''
+    '''www.w3.org/2001/XMLSchema-instance"><office:scripts/><office:font-face-decls/><office:body><office:text>'''
+)
 _XML_SUFFIX = '''</office:text></office:body></office:document-content>'''
 
 
@@ -62,7 +80,9 @@ def test_extract_title():
 def test_extract_string_from_tag():
     xml = (
         '''<text:span><text:p text:style-name="P667">le bassin de réserve d’eaux incendie ;</text:p>'''
-        '''<text:p text:style-name="P667">les aires de stationnement des engins pompes et de mise en station des moyens élévateurs aériens ;</text:p></text:span>'''
+        '''<text:p text:style-name="P667">les aires de stationnement des engins pompes et de mise '''
+        '''en station des moyens '''
+        '''élévateurs aériens ;</text:p></text:span>'''
     )
     text = _extract_string_from_tag(_get_soup(xml))
     expected = '''le bassin de réserve d’eaux incendie ;
@@ -87,10 +107,13 @@ def test_extract_cell():
     assert cell.rowspan == 2
     assert cell.content.text == 'Fusion in column'
 
-    xml = '''<table:table-cell table:style-name="Tableau1.A2" table:number-rows-spanned="2" table:number-columns-spanned="2" office:value-type="string">
+    xml = (
+        '''<table:table-cell table:style-name="Tableau1.A2" table:number-rows-spanned="2" '''
+        '''table:number-columns-spanned="2" office:value-type="string">
 <text:p text:style-name="Table_20_Contents">Fusion in both</text:p><text:p> column and row</text:p>
 </table:table-cell>
 '''
+    )
     cell = _extract_cell(_get_soup(xml))
     assert cell
     assert cell.colspan == 2
@@ -99,10 +122,14 @@ def test_extract_cell():
 
 
 def test_extract_cells():
-    xml_0 = '''<table:table-cell table:style-name="Tableau1.A2" table:number-rows-spanned="2" table:number-columns-spanned="2" office:value-type="string">
-<text:p text:style-name="Table_20_Contents">Fusion in both</text:p><text:p> column and row</text:p>
+    xml_0 = (
+        '''<table:table-cell table:style-name="Tableau1.A2" table:number-rows-spanned="2" '''
+        '''table:number-columns-spanned="2" office:value-type="string">
+<text:p text:style-name="Table_20_Contents">Fusion in both</text:p><text:p> column and'''
+        ''' row</text:p>
 </table:table-cell>
 '''
+    )
     xml_1 = '<table:covered-table-cell/>'
     cells = _extract_cells([_get_soup(xml_0), _get_soup(xml_1)])
     assert len(cells) == 1
@@ -189,22 +216,30 @@ def test_extract_flattened_elements():
         '''<text:p text:style-name="P668">les organes de coupure des installations électrique du site ;</text:p>'''
         '''</text:list-item>'''
         '''<text:list-item>'''
-        '''<text:p text:style-name="P669">toutes informations complémentaires demandées par les services d’incendie et de secours.</text:p>'''
+        '''<text:p text:style-name="P669">toutes informations complémentaires demandées par les services '''
+        '''d’incendie et de secours.</text:p>'''
         '''</text:list-item>'''
         '''</text:list>'''
         '''<text:p text:style-name="P401"/>'''
         '''<text:h text:style-name="P688" text:outline-level="2">'''
-        '''<text:bookmark-start text:name="__RefHeading__4845_1039603210"/>Dispositions constructives<text:bookmark-end text:name="__RefHeading__4845_1039603210"/>'''
+        '''<text:bookmark-start text:name="__RefHeading__4845_1039603210"/>Dispositions constructives'''
+        '''<text:bookmark-end text:name="__RefHeading__4845_1039603210"/>'''
         '''</text:h>'''
         '''<text:h text:style-name="P719" text:outline-level="3">'''
         '''<text:bookmark-start text:name="__RefHeading__4847_1039603210"/>'''
         '''<text:bookmark text:name="8.3.1 explosion"/>'''
         '''<text:s/>Comportement au feu<text:bookmark-end text:name="__RefHeading__4847_1039603210"/>'''
         '''</text:h>'''
-        '''<text:p text:style-name="P67">Les bâtiments et locaux sont conçus et aménagés de façon à pouvoir détecter rapidement un départ d'incendie et s'opposer à la propagation d'un incendie.</text:p>'''
+        '''<text:p text:style-name="P67">Les bâtiments et locaux sont conçus et aménagés de façon à pouvoir '''
+        '''détecter rapidement un départ d'incendie et s'opposer à la propagation d'un incendie.</text:p>'''
         '''<text:p text:style-name="P67"/>'''
-        '''<text:p text:style-name="P209">Les bâtiments ou locaux susceptibles d’être l’objet d’une explosion sont suffisamment éloignés des autres bâtiments et unités de l’installation, ou protégés en conséquence. <text:span text:style-name="T90">L’installation de dépoussiérage est munie d’une surface anti-déflagrante, d’un dôme d’explosion, de ventilateurs anti-déflagrants et d’un système anti-étincelle</text:span>'''
-        '''<text:span text:style-name="T467">. Avant broyage, une vérification visuelle de l’absence de déchets suspects (bouteille de gaz non vide…) est réalisée par le grutier ou une autre personne qui est formée en conséquence.</text:span>'''
+        '''<text:p text:style-name="P209">Les bâtiments ou locaux susceptibles d’être l’objet d’une explosion sont '''
+        '''suffisamment éloignés des autres bâtiments et unités de l’installation, ou protégés en conséquence. '''
+        '''<text:span text:style-name="T90">L’installation de dépoussiérage est munie d’une surface anti-déflagrante'''
+        ''', d’un dôme d’explosion, de ventilateurs anti-déflagrants et d’un système anti-étincelle</text:span>'''
+        '''<text:span text:style-name="T467">. Avant broyage, une vérification visuelle de l’absence de déchets'''
+        ''' suspects (bouteille de gaz non vide…) est réalisée par le grutier ou une autre personne qui est '''
+        '''formée en conséquence.</text:span>'''
         '''</text:p>'''
         '''</text:p>'''
         '''</text:span>'''
@@ -246,7 +281,9 @@ def test_extract_flattened_elements_3():
         '''R. 543-154 du CE).'''
         '''</text:span>'''
         '''<text:span text:style-name="T284">'''
-        '''Le terme « VHU » couvre les voitures particulières, les camionnettes et les cyclomoteurs à trois roues et par extension, pour cet établissement, les poids lourds, les caravanes, les remorques et les cylomoteurs.'''
+        '''Le terme « VHU » couvre les voitures particulières, les camionnettes et les cyclomoteurs à trois roues'''
+        ''' et par extension, pour cet établissement, les poids lourds, les caravanes, les remorques et les '''
+        '''cylomoteurs.'''
         '''</text:span>'''
         '''</text:p>'''
     )
@@ -254,18 +291,35 @@ def test_extract_flattened_elements_3():
     assert len(elements) == 1
     assert isinstance(elements[0], str)
 
-    xml = '''<text:p text:style-name="P584">Dans le présent arrêté, le terme VHU désigne un véhicule hors d’usage <text:span text:style-name="T279">que son détenteur remet à un tiers pour qu' il le détruise ou qu' il a l' obligation de détruire </text:span><text:span text:style-name="T280">(</text:span><text:span text:style-name="T281">article </text:span><text:span text:style-name="T280">R. 543-154 du CE). </text:span><text:span text:style-name="T284">Le terme « VHU » couvre les voitures particulières, les camionnettes et les cyclomoteurs à trois roues et par extension, pour cet établissement, les poids lourds, les caravanes, les remorques et les cylomoteurs.</text:span></text:p>'''
+    xml = (
+        '''<text:p text:style-name="P584">Dans le présent arrêté, le terme VHU désigne un véhicule '''
+        '''hors d’usage <text:span text:style-name="T279">que son détenteur remet à un tiers pour qu' '''
+        '''il le détruise ou qu' il a l' obligation de détruire </text:span><text:span text:style-name="T280">'''
+        '''(</text:span><text:span text:style-name="T281">article </text:span><text:span text:style-name="T280">'''
+        '''R. 543-154 du CE). </text:span><text:span text:style-name="T284">Le terme « VHU » couvre les voitures'''
+        ''' particulières, les camionnettes et les cyclomoteurs à trois roues et par extension, pour cet '''
+        '''établissement, les poids lourds, les caravanes, les remorques et les cylomoteurs.</text:span></text:p>'''
+    )
     elements = _extract_flattened_elements(_get_soup(xml))
     assert len(elements) == 1
     assert isinstance(elements[0], str)
-    assert (
-        elements[0]
-        == '''Dans le présent arrêté, le terme VHU désigne un véhicule hors d’usage que son détenteur remet à un tiers pour qu' il le détruise ou qu' il a l' obligation de détruire (article R. 543-154 du CE). Le terme « VHU » couvre les voitures particulières, les camionnettes et les cyclomoteurs à trois roues et par extension, pour cet établissement, les poids lourds, les caravanes, les remorques et les cylomoteurs.'''
+    expected = (
+        '''Dans le présent arrêté, le terme VHU désigne un véhicule hors d’usage que son détenteur '''
+        '''remet à un tiers pour qu' il le détruise ou qu' il a l' obligation de détruire (article R.'''
+        ''' 543-154 du CE). Le terme « VHU » couvre les voitures particulières, les camionnettes et les'''
+        ''' cyclomoteurs à trois roues et par extension, pour cet établissement, les poids lourds, les '''
+        '''caravanes, les remorques et les cylomoteurs.'''
     )
+    assert elements[0] == expected
 
 
 def test_extract_flattened_elements_4():
-    xml = '''<text:p><text:span text:style-name="T284">subi les opérations de dépollution figurant en </text:span><text:bookmark-start text:name="a"/><text:span text:style-name="T284">annexe II</text:span><text:bookmark-end text:name="a"/><text:span text:style-name="T284"> du présent arrêté</text:span></text:p>'''
+    xml = (
+        '''<text:p><text:span text:style-name="T284">subi les opérations de dépollution figurant'''
+        ''' en </text:span><text:bookmark-start text:name="a"/><text:span text:style-name="T284">'''
+        '''annexe II</text:span><text:bookmark-end text:name="a"/><text:span text:style-name="T284">'''
+        ''' du présent arrêté</text:span></text:p>'''
+    )
     elements = _extract_flattened_elements(_get_soup(xml))
     assert len(elements) == 1
     assert isinstance(elements[0], str)
@@ -284,22 +338,36 @@ def test_build_structured_text_from_soup():
         '''<text:p text:style-name="P668">les organes de coupure des installations électrique du site ;</text:p>'''
         '''</text:list-item>'''
         '''<text:list-item>'''
-        '''<text:p text:style-name="P669">toutes informations complémentaires demandées par les services d’incendie et de secours.</text:p>'''
+        '''<text:p text:style-name="P669">toutes informations complémentaires demandées par les services '''
+        '''d’incendie'''
+        ''' et de secours.</text:p>'''
         '''</text:list-item>'''
         '''</text:list>'''
         '''<text:p text:style-name="P401"/>'''
         '''<text:h text:style-name="P688" text:outline-level="2">'''
-        '''<text:bookmark-start text:name="__RefHeading__4845_1039603210"/>Dispositions constructives<text:bookmark-end text:name="__RefHeading__4845_1039603210"/>'''
+        '''<text:bookmark-start text:name="__RefHeading__4845_1039603210"/>Dispositions constructives'''
+        '''<text:bookmark-end'''
+        ''' text:name="__RefHeading__4845_1039603210"/>'''
         '''</text:h>'''
         '''<text:h text:style-name="P719" text:outline-level="3">'''
         '''<text:bookmark-start text:name="__RefHeading__4847_1039603210"/>'''
         '''<text:bookmark text:name="8.3.1 explosion"/>'''
         '''<text:s/>Comportement au feu<text:bookmark-end text:name="__RefHeading__4847_1039603210"/>'''
         '''</text:h>'''
-        '''<text:p text:style-name="P67">Les bâtiments et locaux sont conçus et aménagés de façon à pouvoir détecter rapidement un départ d'incendie et s'opposer à la propagation d'un incendie.</text:p>'''
+        '''<text:p text:style-name="P67">Les bâtiments et locaux sont conçus et aménagés de façon à pouvoir'''
+        ''' détecter '''
+        '''rapidement un départ d'incendie et s'opposer à la propagation d'un incendie.</text:p>'''
         '''<text:p text:style-name="P67"/>'''
-        '''<text:p text:style-name="P209">Les bâtiments ou locaux susceptibles d’être l’objet d’une explosion sont suffisamment éloignés des autres bâtiments et unités de l’installation, ou protégés en conséquence. <text:span text:style-name="T90">L’installation de dépoussiérage est munie d’une surface anti-déflagrante, d’un dôme d’explosion, de ventilateurs anti-déflagrants et d’un système anti-étincelle</text:span>'''
-        '''<text:span text:style-name="T467">. Avant broyage, une vérification visuelle de l’absence de déchets suspects (bouteille de gaz non vide…) est réalisée par le grutier ou une autre personne qui est formée en conséquence.</text:span>'''
+        '''<text:p text:style-name="P209">Les bâtiments ou locaux susceptibles d’être l’objet d’une explosion sont '''
+        '''suffisamment éloignés des autres bâtiments et unités de l’installation, ou protégés en conséquence. '''
+        '''<text:span text:style-name="T90">L’installation de dépoussiérage est'''
+        ''' munie d’une surface anti-déflagrante, d’un dôme d’explosion, de ventilateurs anti-déflagrants et d’un'''
+        ''' système anti-étincelle</text:span>'''
+        '''<text:span text:style-name="T467">. Avant broyage, une vérification visuelle de l’absence de '''
+        '''déchets suspects '''
+        '''(bouteille de gaz non vide…) est réalisée par le grutier ou une autre personne qui est formée '''
+        '''en conséquence.'''
+        '''</text:span>'''
         '''</text:p>'''
         '''</text:p>'''
         '''</text:span>'''
@@ -330,14 +398,22 @@ def test_build_structured_text_from_soup_2():
         '''R. 543-154 du CE).'''
         '''</text:span>'''
         '''<text:span text:style-name="T284">'''
-        ''' Le terme « VHU » couvre les voitures particulières, les camionnettes et les cyclomoteurs à trois roues et par extension, pour cet établissement, les poids lourds, les caravanes, les remorques et les cylomoteurs.'''
+        ''' Le terme « VHU » couvre les voitures particulières, les camionnettes et les cyclomoteurs à trois'''
+        ''' roues et par extension, pour cet établissement, les poids lourds, les caravanes, les remorques '''
+        '''et les cylomoteurs.'''
         '''</text:span>'''
         '''</text:p>'''
     )
     text = _build_structured_text_from_soup(_get_soup(xml), True)
     assert len(text.sections) == 0
     assert text.title.text == ''
-    expected = '''Dans le présent arrêté, le terme VHU désigne un véhicule hors d’usage que son détenteur remet à un tiers pour qu'il le détruise ou qu'il a l'obligation de détruire (article R. 543-154 du CE). Le terme « VHU » couvre les voitures particulières, les camionnettes et les cyclomoteurs à trois roues et par extension, pour cet établissement, les poids lourds, les caravanes, les remorques et les cylomoteurs.'''
+    expected = (
+        '''Dans le présent arrêté, le terme VHU désigne un véhicule hors d’usage que son '''
+        '''détenteur remet à un tiers pour qu'il le détruise ou qu'il a l'obligation de '''
+        '''détruire (article R. 543-154 du CE). Le terme « VHU » couvre les voitures particulières,'''
+        ''' les camionnettes et les cyclomoteurs à trois roues et par extension, pour cet établissement,'''
+        ''' les poids lourds, les caravanes, les remorques et les cylomoteurs.'''
+    )
     assert len(text.outer_alineas) == 1
     assert text.outer_alineas[0].text == expected
 
@@ -429,8 +505,8 @@ def _get_simple_text() -> StructuredText:
     row3 = Row([_cell('FF'), _cell('GG')], False)
     table = Table([row1, row2, row3])
     alineas = [_text('Alinea 1'), _text('Alinea 2'), EnrichedString('', table=table)]
-    sections = [StructuredText(_text('Title 2'), [], [], None, None, None, None)]
-    text = StructuredText(_text('Title'), alineas, sections, None, None, None, None)
+    sections = [StructuredText(_text('Title 2'), [], [], None, None, None)]
+    text = StructuredText(_text('Title'), alineas, sections, None, None, None)
     return text
 
 
