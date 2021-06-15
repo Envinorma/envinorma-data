@@ -12,7 +12,7 @@ This repository is a library for manipulating enriched versions of regulation te
 
 # Envinorma (fr)
 
-Envinorma cherche à faciliter la préparation des inspections en simplifiant l'accès à la réglementation applicables aux industries en France (les [ICPE](https://fr.wikipedia.org/wiki/Installation_class%C3%A9e_pour_la_protection_de_l'environnement)).
+Envinorma cherche à faciliter la préparation des inspections en simplifiant l'accès à la réglementation applicable aux industries en France (les [ICPE](https://fr.wikipedia.org/wiki/Installation_class%C3%A9e_pour_la_protection_de_l'environnement)).
 
 Ce projet est réalisé dans le cadre du programme EIG, une page d'introduction est accessibile [ici](https://entrepreneur-interet-general.etalab.gouv.fr/defis/2020/envinorma.html).
 
@@ -62,7 +62,7 @@ flake8 --count --verbose --show-source --statistics
 black . --check --exclude venv -S -l 120
 ```
 
-# Exemples
+# Exemples d'utilisation
 
 <strong>1. Télécharger, structurer et afficher un texte depuis Légifrance</strong>
 
@@ -86,6 +86,28 @@ Arrêté du 11/04/17 relatif aux prescriptions générales applicables aux entre
 
 Le présent arrêté s'applique aux entrepôts couverts déclarés, enregistrés ou autorisés au titre de la rubrique n° 1510 de la nomenclature des installations classées.
 [...]
+```
+
+<strong>2. Appliquer un jeu de paramètres à un arrêté ministériel paramétré</strong>
+
+Ce script peut être exécuté à partir des arrêtés ministériels contenus dans le dépôt [arretes-ministeriels](https://github.com/Envinorma/arretes-ministeriels).
+
+```python
+from datetime import date
+
+from envinorma.models import ArreteMinisteriel
+from envinorma.parametrization import Parametrization, ParameterEnum
+from envinorma.parametrization.apply_parameter_values import apply_parameter_values_to_am
+
+am_folder = 'TODO' # Replace with the folder containing AMs
+am_id = 'JORFTEXT000018332514'
+parametrization = Parametrization.from_dict(json.load(open(f'{am_folder}/parametrizations/{am_id}.json')))
+base_am = ArreteMinisteriel.from_dict(json.load(open(f'{am_folder}/base_ams/{am_id}.json')))
+
+parameter_values = {ParameterEnum.DATE_AUTORISATION.value: date.today()}
+am_with_warnings = apply_parameter_values_to_am(base_am, parametrization, parameter_values)
+
+
 ```
 
 # Modules principaux
