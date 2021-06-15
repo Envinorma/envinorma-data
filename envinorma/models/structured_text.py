@@ -18,9 +18,7 @@ class Annotations:
 
     @classmethod
     def from_dict(cls, dict_: Dict) -> 'Annotations':
-        new_dict = dict_.copy()
-        new_dict['topic'] = TopicName(dict_['topic']) if dict_['topic'] else None
-        return cls(**new_dict)
+        return cls(topic=TopicName(dict_['topic']) if dict_['topic'] else None)
 
 
 @dataclass
