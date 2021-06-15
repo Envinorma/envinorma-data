@@ -1,0 +1,385 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>envinorma.parametrization.combinations &mdash; Envinorma 0.0.0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> Envinorma
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.0.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../index.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">Package modules</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../envinorma.html">envinorma package</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../envinorma.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../envinorma.enriching.html">envinorma.enriching package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../envinorma.from_legifrance.html">envinorma.from_legifrance package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../envinorma.io.html">envinorma.io package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../envinorma.models.html">envinorma.models package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../envinorma.parametrization.html">envinorma.parametrization package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../envinorma.topics.html">envinorma.topics package</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../envinorma.html#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../envinorma.html#module-envinorma.data_fetcher">envinorma.data_fetcher module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../envinorma.html#module-envinorma.structure">envinorma.structure module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../envinorma.html#module-envinorma.title_detection">envinorma.title_detection module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../envinorma.html#module-envinorma.utils">envinorma.utils module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../envinorma.html#module-envinorma">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">Envinorma</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+          <li><a href="../../envinorma.html">envinorma</a> &raquo;</li>
+        
+      <li>envinorma.parametrization.combinations</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for envinorma.parametrization.combinations</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">date</span><span class="p">,</span> <span class="n">datetime</span><span class="p">,</span> <span class="n">timedelta</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Set</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Union</span>
+
+<span class="kn">from</span> <span class="nn">envinorma.models.classement</span> <span class="kn">import</span> <span class="n">Regime</span>
+<span class="kn">from</span> <span class="nn">envinorma.parametrization.models.condition</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">Condition</span><span class="p">,</span>
+    <span class="n">ConditionType</span><span class="p">,</span>
+    <span class="n">Equal</span><span class="p">,</span>
+    <span class="n">Greater</span><span class="p">,</span>
+    <span class="n">LeafCondition</span><span class="p">,</span>
+    <span class="n">Littler</span><span class="p">,</span>
+    <span class="n">Range</span><span class="p">,</span>
+    <span class="n">extract_sorted_interval_sides_targets</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="kn">from</span> <span class="nn">.models.parameter</span> <span class="kn">import</span> <span class="n">AED_PARAMETERS</span><span class="p">,</span> <span class="n">Parameter</span><span class="p">,</span> <span class="n">ParameterEnum</span><span class="p">,</span> <span class="n">ParameterType</span>
+<span class="kn">from</span> <span class="nn">.models.parametrization</span> <span class="kn">import</span> <span class="n">Combinations</span><span class="p">,</span> <span class="n">Parametrization</span><span class="p">,</span> <span class="n">extract_conditions_from_parametrization</span>
+
+<span class="n">_Options</span> <span class="o">=</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Parameter</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]]</span>
+
+
+<span class="k">def</span> <span class="nf">_generate_combinations</span><span class="p">(</span><span class="n">all_options</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">_Options</span><span class="p">],</span> <span class="n">add_unknown_target</span><span class="p">:</span> <span class="nb">bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Combinations</span><span class="p">:</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">all_options</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">{():</span> <span class="p">{}}</span>
+    <span class="n">rec_combinations</span> <span class="o">=</span> <span class="n">_generate_combinations</span><span class="p">(</span><span class="n">all_options</span><span class="p">[</span><span class="mi">1</span><span class="p">:],</span> <span class="n">add_unknown_target</span><span class="p">)</span>
+    <span class="n">parameter</span><span class="p">,</span> <span class="n">options</span> <span class="o">=</span> <span class="n">all_options</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="p">(</span><span class="n">name</span><span class="p">,)</span> <span class="o">+</span> <span class="n">name_rec</span><span class="p">:</span> <span class="p">{</span><span class="n">parameter</span><span class="p">:</span> <span class="n">target</span><span class="p">,</span> <span class="o">**</span><span class="n">combination_rec</span><span class="p">}</span>
+        <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">target</span> <span class="ow">in</span> <span class="n">options</span>
+        <span class="k">for</span> <span class="n">name_rec</span><span class="p">,</span> <span class="n">combination_rec</span> <span class="ow">in</span> <span class="n">rec_combinations</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
+    <span class="p">}</span>
+    <span class="k">if</span> <span class="n">add_unknown_target</span><span class="p">:</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="p">{</span><span class="o">**</span><span class="n">result</span><span class="p">,</span> <span class="o">**</span><span class="n">rec_combinations</span><span class="p">}</span>
+    <span class="k">return</span> <span class="n">result</span>
+
+
+<span class="k">def</span> <span class="nf">_change_value</span><span class="p">(</span><span class="n">value</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">bool</span><span class="p">):</span>
+        <span class="k">return</span> <span class="ow">not</span> <span class="n">value</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="p">(</span><span class="nb">float</span><span class="p">,</span> <span class="nb">int</span><span class="p">)):</span>
+        <span class="k">return</span> <span class="n">value</span> <span class="o">+</span> <span class="mi">1</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">datetime</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">value</span> <span class="o">+</span> <span class="n">timedelta</span><span class="p">(</span><span class="n">days</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Cannot generate changed value for type </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">value</span><span class="p">)</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">_mean</span><span class="p">(</span><span class="n">a</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">b</span><span class="p">:</span> <span class="n">Any</span><span class="p">):</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">datetime</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">datetime</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">datetime</span><span class="o">.</span><span class="n">fromtimestamp</span><span class="p">((</span><span class="n">a</span><span class="o">.</span><span class="n">timestamp</span><span class="p">()</span> <span class="o">+</span> <span class="n">b</span><span class="o">.</span><span class="n">timestamp</span><span class="p">())</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">date</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">date</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">date</span><span class="o">.</span><span class="n">fromordinal</span><span class="p">((</span><span class="n">a</span><span class="o">.</span><span class="n">toordinal</span><span class="p">()</span> <span class="o">+</span> <span class="n">b</span><span class="o">.</span><span class="n">toordinal</span><span class="p">())</span> <span class="o">//</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="k">return</span> <span class="p">(</span><span class="n">a</span> <span class="o">+</span> <span class="n">b</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span>
+
+
+<span class="k">def</span> <span class="nf">_is_date</span><span class="p">(</span><span class="n">candidate</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+    <span class="k">return</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">candidate</span><span class="p">,</span> <span class="p">(</span><span class="n">date</span><span class="p">,</span> <span class="n">datetime</span><span class="p">))</span>
+
+
+<span class="k">def</span> <span class="nf">_extract_interval_midpoints</span><span class="p">(</span><span class="n">interval_sides</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Any</span><span class="p">]:</span>
+    <span class="n">left</span> <span class="o">=</span> <span class="p">(</span><span class="n">interval_sides</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">timedelta</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span> <span class="k">if</span> <span class="n">_is_date</span><span class="p">(</span><span class="n">interval_sides</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="k">else</span> <span class="p">(</span><span class="n">interval_sides</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">right</span> <span class="o">=</span> <span class="p">(</span><span class="n">interval_sides</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">timedelta</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span> <span class="k">if</span> <span class="n">_is_date</span><span class="p">(</span><span class="n">interval_sides</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span> <span class="k">else</span> <span class="p">(</span><span class="n">interval_sides</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">midpoints</span> <span class="o">=</span> <span class="p">[</span><span class="n">_mean</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span> <span class="k">for</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">interval_sides</span><span class="p">[</span><span class="mi">1</span><span class="p">:],</span> <span class="n">interval_sides</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">])]</span>
+    <span class="k">return</span> <span class="p">[</span><span class="n">left</span><span class="p">]</span> <span class="o">+</span> <span class="n">midpoints</span> <span class="o">+</span> <span class="p">[</span><span class="n">right</span><span class="p">]</span>
+
+
+<span class="k">def</span> <span class="nf">_generate_equal_option_dicts</span><span class="p">(</span><span class="n">conditions</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">Condition</span><span class="p">],</span> <span class="n">List</span><span class="p">[</span><span class="n">LeafCondition</span><span class="p">]])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]:</span>
+    <span class="n">condition</span> <span class="o">=</span> <span class="n">conditions</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">condition</span><span class="p">,</span> <span class="n">Equal</span><span class="p">)</span>
+    <span class="n">targets</span> <span class="o">=</span> <span class="nb">list</span><span class="p">({</span><span class="n">cd</span><span class="o">.</span><span class="n">target</span> <span class="k">for</span> <span class="n">cd</span> <span class="ow">in</span> <span class="n">conditions</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">cd</span><span class="p">,</span> <span class="n">Equal</span><span class="p">)})</span>
+    <span class="n">parameter</span> <span class="o">=</span> <span class="n">condition</span><span class="o">.</span><span class="n">parameter</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">targets</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">[</span>
+            <span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">parameter</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s1"> == </span><span class="si">{</span><span class="n">condition</span><span class="o">.</span><span class="n">target</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">condition</span><span class="o">.</span><span class="n">target</span><span class="p">),</span>
+            <span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">parameter</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s1"> != </span><span class="si">{</span><span class="n">condition</span><span class="o">.</span><span class="n">target</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">_change_value</span><span class="p">(</span><span class="n">condition</span><span class="o">.</span><span class="n">target</span><span class="p">)),</span>
+        <span class="p">]</span>
+    <span class="k">if</span> <span class="n">parameter</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="n">ParameterType</span><span class="o">.</span><span class="n">REGIME</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">[(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">parameter</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s1"> == </span><span class="si">{</span><span class="n">regime</span><span class="o">.</span><span class="n">value</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">regime</span><span class="p">)</span> <span class="k">for</span> <span class="n">regime</span> <span class="ow">in</span> <span class="p">(</span><span class="n">Regime</span><span class="o">.</span><span class="n">A</span><span class="p">,</span> <span class="n">Regime</span><span class="o">.</span><span class="n">E</span><span class="p">,</span> <span class="n">Regime</span><span class="o">.</span><span class="n">D</span><span class="p">,</span> <span class="n">Regime</span><span class="o">.</span><span class="n">NC</span><span class="p">)]</span>
+    <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span>
+        <span class="sa">f</span><span class="s1">&#39;Can only generate options dict for type Equal with one target. Received </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">targets</span><span class="p">)</span><span class="si">}</span><span class="s1"> targets: </span><span class="si">{</span><span class="n">targets</span><span class="si">}</span><span class="s1">&#39;</span>
+    <span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">_compute_parameter_names</span><span class="p">(</span><span class="n">targets</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Any</span><span class="p">],</span> <span class="n">parameter</span><span class="p">:</span> <span class="n">Parameter</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+    <span class="k">if</span> <span class="n">parameter</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="n">ParameterType</span><span class="o">.</span><span class="n">DATE</span><span class="p">:</span>
+        <span class="n">strs</span> <span class="o">=</span> <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">target</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%Y-%m-</span><span class="si">%d</span><span class="s1">&#39;</span><span class="p">))</span> <span class="k">for</span> <span class="n">target</span> <span class="ow">in</span> <span class="n">targets</span><span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">strs</span> <span class="o">=</span> <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">target</span><span class="p">)</span> <span class="k">for</span> <span class="n">target</span> <span class="ow">in</span> <span class="n">targets</span><span class="p">]</span>
+    <span class="n">left_name</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">parameter</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s1"> &lt; </span><span class="si">{</span><span class="n">strs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s1">&#39;</span>
+    <span class="n">mid_names</span> <span class="o">=</span> <span class="p">[</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">l_str</span><span class="si">}</span><span class="s1"> &lt;= </span><span class="si">{</span><span class="n">parameter</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s1"> &lt; </span><span class="si">{</span><span class="n">r_str</span><span class="si">}</span><span class="s1">&#39;</span> <span class="k">for</span> <span class="n">l_str</span><span class="p">,</span> <span class="n">r_str</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">strs</span><span class="p">,</span> <span class="n">strs</span><span class="p">[</span><span class="mi">1</span><span class="p">:])]</span>
+    <span class="n">right_name</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">parameter</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s1"> &gt;= </span><span class="si">{</span><span class="n">strs</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s1">&#39;</span>
+    <span class="k">return</span> <span class="p">[</span><span class="n">left_name</span><span class="p">]</span> <span class="o">+</span> <span class="n">mid_names</span> <span class="o">+</span> <span class="p">[</span><span class="n">right_name</span><span class="p">]</span>
+
+
+<span class="k">def</span> <span class="nf">_generate_options_dict</span><span class="p">(</span><span class="n">conditions</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">Condition</span><span class="p">],</span> <span class="n">List</span><span class="p">[</span><span class="n">LeafCondition</span><span class="p">]])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]:</span>
+    <span class="n">types</span> <span class="o">=</span> <span class="p">{</span><span class="n">condition</span><span class="o">.</span><span class="n">type</span> <span class="k">for</span> <span class="n">condition</span> <span class="ow">in</span> <span class="n">conditions</span><span class="p">}</span>
+    <span class="k">if</span> <span class="n">types</span> <span class="o">==</span> <span class="p">{</span><span class="n">ConditionType</span><span class="o">.</span><span class="n">EQUAL</span><span class="p">}:</span>
+        <span class="k">return</span> <span class="n">_generate_equal_option_dicts</span><span class="p">(</span><span class="n">conditions</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">ConditionType</span><span class="o">.</span><span class="n">EQUAL</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">types</span><span class="p">:</span>
+        <span class="n">targets</span> <span class="o">=</span> <span class="n">extract_sorted_interval_sides_targets</span><span class="p">(</span><span class="n">conditions</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+        <span class="n">values</span> <span class="o">=</span> <span class="n">_extract_interval_midpoints</span><span class="p">(</span><span class="n">targets</span><span class="p">)</span>
+        <span class="n">condition</span> <span class="o">=</span> <span class="n">conditions</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">condition</span><span class="p">,</span> <span class="p">(</span><span class="n">Range</span><span class="p">,</span> <span class="n">Greater</span><span class="p">,</span> <span class="n">Littler</span><span class="p">))</span>
+        <span class="n">parameter</span> <span class="o">=</span> <span class="n">condition</span><span class="o">.</span><span class="n">parameter</span>
+        <span class="n">param_names</span> <span class="o">=</span> <span class="n">_compute_parameter_names</span><span class="p">(</span><span class="n">targets</span><span class="p">,</span> <span class="n">parameter</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">[(</span><span class="n">param_name</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span> <span class="k">for</span> <span class="n">param_name</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">param_names</span><span class="p">,</span> <span class="n">values</span><span class="p">)]</span>
+    <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Option dict generation not implemented for conditions with types </span><span class="si">{</span><span class="n">types</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">_keep_aed_parameter</span><span class="p">(</span><span class="n">parameters</span><span class="p">:</span> <span class="n">Set</span><span class="p">[</span><span class="n">Parameter</span><span class="p">],</span> <span class="n">am_regime</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Regime</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Parameter</span><span class="p">]:</span>
+    <span class="n">aed_parameters</span> <span class="o">=</span> <span class="n">AED_PARAMETERS</span><span class="o">.</span><span class="n">intersection</span><span class="p">(</span><span class="n">parameters</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">aed_parameters</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">None</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">aed_parameters</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="n">aed_parameters</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">am_regime</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Cannot extract AED date parameter without a known regime&#39;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">am_regime</span> <span class="o">==</span> <span class="n">Regime</span><span class="o">.</span><span class="n">A</span><span class="p">:</span>
+        <span class="n">candidate</span> <span class="o">=</span> <span class="n">ParameterEnum</span><span class="o">.</span><span class="n">DATE_AUTORISATION</span><span class="o">.</span><span class="n">value</span>
+    <span class="k">elif</span> <span class="n">am_regime</span> <span class="o">==</span> <span class="n">Regime</span><span class="o">.</span><span class="n">E</span><span class="p">:</span>
+        <span class="n">candidate</span> <span class="o">=</span> <span class="n">ParameterEnum</span><span class="o">.</span><span class="n">DATE_ENREGISTREMENT</span><span class="o">.</span><span class="n">value</span>
+    <span class="k">elif</span> <span class="n">am_regime</span> <span class="ow">in</span> <span class="p">{</span><span class="n">Regime</span><span class="o">.</span><span class="n">D</span><span class="p">,</span> <span class="n">Regime</span><span class="o">.</span><span class="n">DC</span><span class="p">}:</span>
+        <span class="n">candidate</span> <span class="o">=</span> <span class="n">ParameterEnum</span><span class="o">.</span><span class="n">DATE_DECLARATION</span><span class="o">.</span><span class="n">value</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">None</span>
+    <span class="k">return</span> <span class="n">candidate</span> <span class="k">if</span> <span class="n">candidate</span> <span class="ow">in</span> <span class="n">parameters</span> <span class="k">else</span> <span class="kc">None</span>
+
+
+<span class="k">def</span> <span class="nf">_keep_relevant_date_parameters</span><span class="p">(</span><span class="n">parameters</span><span class="p">:</span> <span class="n">Set</span><span class="p">[</span><span class="n">Parameter</span><span class="p">],</span> <span class="n">am_regime</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Regime</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Set</span><span class="p">[</span><span class="n">Parameter</span><span class="p">]:</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="p">{</span><span class="n">ParameterEnum</span><span class="o">.</span><span class="n">DATE_INSTALLATION</span><span class="o">.</span><span class="n">value</span><span class="p">}</span><span class="o">.</span><span class="n">intersection</span><span class="p">(</span><span class="n">parameters</span><span class="p">)</span>
+    <span class="n">aed_parameter</span> <span class="o">=</span> <span class="n">_keep_aed_parameter</span><span class="p">(</span><span class="n">parameters</span><span class="p">,</span> <span class="n">am_regime</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">aed_parameter</span><span class="p">:</span>
+        <span class="n">result</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">aed_parameter</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">result</span>
+
+
+<span class="k">def</span> <span class="nf">_generate_options_dicts</span><span class="p">(</span>
+    <span class="n">parametrization</span><span class="p">:</span> <span class="n">Parametrization</span><span class="p">,</span> <span class="n">date_only</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span> <span class="n">am_regime</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Regime</span><span class="p">]</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">_Options</span><span class="p">]:</span>
+    <span class="n">parameters</span> <span class="o">=</span> <span class="n">parametrization</span><span class="o">.</span><span class="n">extract_parameters</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">date_only</span><span class="p">:</span>
+        <span class="n">parameters</span> <span class="o">=</span> <span class="n">_keep_relevant_date_parameters</span><span class="p">(</span><span class="n">parameters</span><span class="p">,</span> <span class="n">am_regime</span><span class="p">)</span>
+    <span class="n">options_dicts</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">_Options</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">parameter</span> <span class="ow">in</span> <span class="n">parameters</span><span class="p">:</span>
+        <span class="n">conditions</span> <span class="o">=</span> <span class="n">extract_conditions_from_parametrization</span><span class="p">(</span><span class="n">parameter</span><span class="p">,</span> <span class="n">parametrization</span><span class="p">)</span>
+        <span class="n">options_dicts</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">parameter</span><span class="p">,</span> <span class="n">_generate_options_dict</span><span class="p">(</span><span class="n">conditions</span><span class="p">)))</span>
+    <span class="k">return</span> <span class="n">options_dicts</span>
+
+
+<div class="viewcode-block" id="generate_exhaustive_combinations"><a class="viewcode-back" href="../../../envinorma.parametrization.html#envinorma.parametrization.combinations.generate_exhaustive_combinations">[docs]</a><span class="k">def</span> <span class="nf">generate_exhaustive_combinations</span><span class="p">(</span>
+    <span class="n">parametrization</span><span class="p">:</span> <span class="n">Parametrization</span><span class="p">,</span> <span class="n">date_only</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span> <span class="n">am_regime</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Regime</span><span class="p">]</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Combinations</span><span class="p">:</span>
+    <span class="n">options_dicts</span> <span class="o">=</span> <span class="n">_generate_options_dicts</span><span class="p">(</span><span class="n">parametrization</span><span class="p">,</span> <span class="n">date_only</span><span class="p">,</span> <span class="n">am_regime</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">options_dicts</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">{}</span>
+    <span class="n">combinations</span> <span class="o">=</span> <span class="n">_generate_combinations</span><span class="p">(</span><span class="n">options_dicts</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">combinations</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, Envinorma.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

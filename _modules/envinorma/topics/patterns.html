@@ -1,0 +1,706 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>envinorma.topics.patterns &mdash; Envinorma 0.0.0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> Envinorma
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.0.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../index.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">Package modules</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../envinorma.html">envinorma package</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../envinorma.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../envinorma.enriching.html">envinorma.enriching package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../envinorma.from_legifrance.html">envinorma.from_legifrance package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../envinorma.io.html">envinorma.io package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../envinorma.models.html">envinorma.models package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../envinorma.parametrization.html">envinorma.parametrization package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../envinorma.topics.html">envinorma.topics package</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../envinorma.html#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../envinorma.html#module-envinorma.data_fetcher">envinorma.data_fetcher module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../envinorma.html#module-envinorma.structure">envinorma.structure module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../envinorma.html#module-envinorma.title_detection">envinorma.title_detection module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../envinorma.html#module-envinorma.utils">envinorma.utils module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../envinorma.html#module-envinorma">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">Envinorma</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+          <li><a href="../../envinorma.html">envinorma</a> &raquo;</li>
+        
+      <li>envinorma.topics.patterns</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for envinorma.topics.patterns</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">from</span> <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">dataclass</span><span class="p">,</span> <span class="n">field</span>
+<span class="kn">from</span> <span class="nn">enum</span> <span class="kn">import</span> <span class="n">Enum</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Tuple</span>
+
+<span class="kn">from</span> <span class="nn">unidecode</span> <span class="kn">import</span> <span class="n">unidecode</span>
+
+
+<div class="viewcode-block" id="TopicName"><a class="viewcode-back" href="../../../envinorma.topics.html#envinorma.topics.patterns.TopicName">[docs]</a><span class="k">class</span> <span class="nc">TopicName</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+    <span class="n">UNNAMED</span> <span class="o">=</span> <span class="s1">&#39;UNNAMED&#39;</span>
+    <span class="n">EPANDAGE</span> <span class="o">=</span> <span class="s1">&#39;EPANDAGE&#39;</span>
+    <span class="n">EAU</span> <span class="o">=</span> <span class="s1">&#39;EAU&#39;</span>
+    <span class="n">DECHETS</span> <span class="o">=</span> <span class="s1">&#39;DECHETS&#39;</span>
+    <span class="n">EXECUTION</span> <span class="o">=</span> <span class="s1">&#39;EXECUTION&#39;</span>
+    <span class="n">RISQUES</span> <span class="o">=</span> <span class="s1">&#39;RISQUES&#39;</span>
+    <span class="n">DISPOSITIONS_CONSTRUCTIVES_AMENAGEMENT</span> <span class="o">=</span> <span class="s1">&#39;DISPOSITIONS_CONSTRUCTIVES_AMENAGEMENT&#39;</span>
+    <span class="n">DISPOSITIONS_GENERALES</span> <span class="o">=</span> <span class="s1">&#39;DISPOSITIONS_GENERALES&#39;</span>
+    <span class="n">BRUIT_VIBRATIONS</span> <span class="o">=</span> <span class="s1">&#39;BRUIT_VIBRATIONS&#39;</span>
+    <span class="n">AIR_ODEURS</span> <span class="o">=</span> <span class="s1">&#39;AIR_ODEURS&#39;</span>
+    <span class="n">EMISSIONS</span> <span class="o">=</span> <span class="s1">&#39;EMISSIONS&#39;</span>
+    <span class="n">ACCIDENTS_POLLUTIONS</span> <span class="o">=</span> <span class="s1">&#39;ACCIDENTS_POLLUTIONS&#39;</span>
+    <span class="n">ABROGATION_AM_PASSE</span> <span class="o">=</span> <span class="s1">&#39;ABROGATION_AM_PASSE&#39;</span>
+    <span class="n">ANNEXE_BO</span> <span class="o">=</span> <span class="s1">&#39;ANNEXE_BO&#39;</span>
+    <span class="n">DECHETS_BANALS</span> <span class="o">=</span> <span class="s1">&#39;DECHETS_BANALS&#39;</span>
+    <span class="n">BILAN_ENVIRONNEMENT</span> <span class="o">=</span> <span class="s1">&#39;BILAN_ENVIRONNEMENT&#39;</span>
+    <span class="n">BIOGAZ</span> <span class="o">=</span> <span class="s1">&#39;BIOGAZ&#39;</span>
+    <span class="n">BIOMASSE</span> <span class="o">=</span> <span class="s1">&#39;BIOMASSE&#39;</span>
+    <span class="n">BRULAGE</span> <span class="o">=</span> <span class="s1">&#39;BRULAGE&#39;</span>
+    <span class="n">CHANGEMENT_EXPLOITANT</span> <span class="o">=</span> <span class="s1">&#39;CHANGEMENT_EXPLOITANT&#39;</span>
+    <span class="n">COMBUSTIBLES</span> <span class="o">=</span> <span class="s1">&#39;COMBUSTIBLES&#39;</span>
+    <span class="n">CONDITIONS_APPLICATION</span> <span class="o">=</span> <span class="s1">&#39;CONDITIONS_APPLICATION&#39;</span>
+    <span class="n">CONDITIONS_REJET</span> <span class="o">=</span> <span class="s1">&#39;CONDITIONS_REJET&#39;</span>
+    <span class="n">CONFINEMENT</span> <span class="o">=</span> <span class="s1">&#39;CONFINEMENT&#39;</span>
+    <span class="n">CONSIGNES</span> <span class="o">=</span> <span class="s1">&#39;CONSIGNES&#39;</span>
+    <span class="n">CONSOMMATION_D_EAU</span> <span class="o">=</span> <span class="s1">&#39;CONSOMMATION_D_EAU&#39;</span>
+    <span class="n">COV</span> <span class="o">=</span> <span class="s1">&#39;COV&#39;</span>
+    <span class="n">DECLARATION_DES_EMISSIONS</span> <span class="o">=</span> <span class="s1">&#39;DECLARATION_DES_EMISSIONS&#39;</span>
+    <span class="n">DEFINITIONS</span> <span class="o">=</span> <span class="s1">&#39;DEFINITIONS&#39;</span>
+    <span class="n">DOSSIER</span> <span class="o">=</span> <span class="s1">&#39;DOSSIER&#39;</span>
+    <span class="n">EFFLUENTS</span> <span class="o">=</span> <span class="s1">&#39;EFFLUENTS&#39;</span>
+    <span class="n">ELECTRICITE_STATIQUE</span> <span class="o">=</span> <span class="s1">&#39;ELECTRICITE_STATIQUE&#39;</span>
+    <span class="n">EMISSIONS_AIR</span> <span class="o">=</span> <span class="s1">&#39;EMISSIONS_AIR&#39;</span>
+    <span class="n">EMISSIONS_ATMOSPHERE</span> <span class="o">=</span> <span class="s1">&#39;EMISSIONS_ATMOSPHERE&#39;</span>
+    <span class="n">ENTREE_VIGUEUR</span> <span class="o">=</span> <span class="s1">&#39;ENTREE_VIGUEUR&#39;</span>
+    <span class="n">ENTREPOSAGE</span> <span class="o">=</span> <span class="s1">&#39;ENTREPOSAGE&#39;</span>
+    <span class="n">ETANCHEITE</span> <span class="o">=</span> <span class="s1">&#39;ETANCHEITE&#39;</span>
+    <span class="n">EXPLOITATION</span> <span class="o">=</span> <span class="s1">&#39;EXPLOITATION&#39;</span>
+    <span class="n">FARINES_VIANDE_ET_OS</span> <span class="o">=</span> <span class="s1">&#39;FARINES_VIANDE_ET_OS&#39;</span>
+    <span class="n">FEU</span> <span class="o">=</span> <span class="s1">&#39;FEU&#39;</span>
+    <span class="n">FIN_EXPLOITATION</span> <span class="o">=</span> <span class="s1">&#39;FIN_EXPLOITATION&#39;</span>
+    <span class="n">FOUDRE</span> <span class="o">=</span> <span class="s1">&#39;FOUDRE&#39;</span>
+    <span class="n">GESTION_QUALITE</span> <span class="o">=</span> <span class="s1">&#39;GESTION_QUALITE&#39;</span>
+    <span class="n">HAUTEUR_CHEMINEE</span> <span class="o">=</span> <span class="s1">&#39;HAUTEUR_CHEMINEE&#39;</span>
+    <span class="n">INCENDIE</span> <span class="o">=</span> <span class="s1">&#39;INCENDIE&#39;</span>
+    <span class="n">INFO_REDACTION</span> <span class="o">=</span> <span class="s1">&#39;INFO_REDACTION&#39;</span>
+    <span class="n">INSTALLATIONS_ELECTRIQUES</span> <span class="o">=</span> <span class="s1">&#39;INSTALLATIONS_ELECTRIQUES&#39;</span>
+    <span class="n">JUSTIFICATIONS</span> <span class="o">=</span> <span class="s1">&#39;JUSTIFICATIONS&#39;</span>
+    <span class="n">LEGIONELLES</span> <span class="o">=</span> <span class="s1">&#39;LEGIONELLES&#39;</span>
+    <span class="n">MESURE_BRUIT</span> <span class="o">=</span> <span class="s1">&#39;MESURE_BRUIT&#39;</span>
+    <span class="n">METHODOLOGIE</span> <span class="o">=</span> <span class="s1">&#39;METHODOLOGIE&#39;</span>
+    <span class="n">MILIEU_AQUATIQUE</span> <span class="o">=</span> <span class="s1">&#39;MILIEU_AQUATIQUE&#39;</span>
+    <span class="n">MODIFICATIONS</span> <span class="o">=</span> <span class="s1">&#39;MODIFICATIONS&#39;</span>
+    <span class="n">DECHETS_NON_DANGEREUX</span> <span class="o">=</span> <span class="s1">&#39;DECHETS_NON_DANGEREUX&#39;</span>
+    <span class="n">NORME_TRANSFORMATION</span> <span class="o">=</span> <span class="s1">&#39;NORME_TRANSFORMATION&#39;</span>
+    <span class="n">POUSSIERES</span> <span class="o">=</span> <span class="s1">&#39;POUSSIERES&#39;</span>
+    <span class="n">PREFET</span> <span class="o">=</span> <span class="s1">&#39;PREFET&#39;</span>
+    <span class="n">PROPRETE</span> <span class="o">=</span> <span class="s1">&#39;PROPRETE&#39;</span>
+    <span class="n">RADIOACTIVITES</span> <span class="o">=</span> <span class="s1">&#39;RADIOACTIVITES&#39;</span>
+    <span class="n">RECENSEMENT</span> <span class="o">=</span> <span class="s1">&#39;RECENSEMENT&#39;</span>
+    <span class="n">RECYCLAGE</span> <span class="o">=</span> <span class="s1">&#39;RECYCLAGE&#39;</span>
+    <span class="n">REGISTRE</span> <span class="o">=</span> <span class="s1">&#39;REGISTRE&#39;</span>
+    <span class="n">REJETS_ACCIDENTELS</span> <span class="o">=</span> <span class="s1">&#39;REJETS_ACCIDENTELS&#39;</span>
+    <span class="n">REJETS_CHLORE</span> <span class="o">=</span> <span class="s1">&#39;REJETS_CHLORE&#39;</span>
+    <span class="n">RESERVES_DE_PRODUIT</span> <span class="o">=</span> <span class="s1">&#39;RESERVES_DE_PRODUIT&#39;</span>
+    <span class="n">RETENTION</span> <span class="o">=</span> <span class="s1">&#39;RETENTION&#39;</span>
+    <span class="n">RISQUE_INDIVIDUEL</span> <span class="o">=</span> <span class="s1">&#39;RISQUE_INDIVIDUEL&#39;</span>
+    <span class="n">SECURITE</span> <span class="o">=</span> <span class="s1">&#39;SECURITE&#39;</span>
+    <span class="n">DECHETS_SPECIAUX</span> <span class="o">=</span> <span class="s1">&#39;DECHETS_SPECIAUX&#39;</span>
+    <span class="n">SURVEILLANCE</span> <span class="o">=</span> <span class="s1">&#39;SURVEILLANCE&#39;</span>
+    <span class="n">SURVEILLANCE_EXPLOITATION</span> <span class="o">=</span> <span class="s1">&#39;SURVEILLANCE_EXPLOITATION&#39;</span>
+    <span class="n">TOITURE</span> <span class="o">=</span> <span class="s1">&#39;TOITURE&#39;</span>
+    <span class="n">VAPEURS</span> <span class="o">=</span> <span class="s1">&#39;VAPEURS&#39;</span>
+    <span class="n">VENTILATION</span> <span class="o">=</span> <span class="s1">&#39;VENTILATION&#39;</span>
+    <span class="n">VLE</span> <span class="o">=</span> <span class="s1">&#39;VLE&#39;</span></div>
+
+
+<span class="n">Pattern</span> <span class="o">=</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span>
+
+
+<div class="viewcode-block" id="tokenize"><a class="viewcode-back" href="../../../envinorma.topics.html#envinorma.topics.patterns.tokenize">[docs]</a><span class="k">def</span> <span class="nf">tokenize</span><span class="p">(</span><span class="n">str_</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+    <span class="k">return</span> <span class="n">re</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;\W+&#39;</span><span class="p">,</span> <span class="n">str_</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="normalize"><a class="viewcode-back" href="../../../envinorma.topics.html#envinorma.topics.patterns.normalize">[docs]</a><span class="k">def</span> <span class="nf">normalize</span><span class="p">(</span><span class="n">pattern</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="n">lower_unidecoded</span> <span class="o">=</span> <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">unidecode</span><span class="p">(</span><span class="n">token</span><span class="o">.</span><span class="n">lower</span><span class="p">()))</span> <span class="k">for</span> <span class="n">token</span> <span class="ow">in</span> <span class="n">tokenize</span><span class="p">(</span><span class="n">pattern</span><span class="p">)]</span>
+    <span class="k">return</span> <span class="s1">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">lower_unidecoded</span><span class="p">)</span></div>
+
+
+<span class="k">def</span> <span class="nf">_clean_patterns</span><span class="p">(</span><span class="n">patterns</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+    <span class="k">return</span> <span class="nb">list</span><span class="p">({</span><span class="n">normalize</span><span class="p">(</span><span class="n">pattern</span><span class="p">)</span> <span class="k">for</span> <span class="n">pattern</span> <span class="ow">in</span> <span class="n">patterns</span><span class="p">})</span>
+
+
+<div class="viewcode-block" id="merge_patterns"><a class="viewcode-back" href="../../../envinorma.topics.html#envinorma.topics.patterns.merge_patterns">[docs]</a><span class="k">def</span> <span class="nf">merge_patterns</span><span class="p">(</span><span class="n">patterns</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">return</span> <span class="s1">&#39;|&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="sa">fr</span><span class="s1">&#39;\b(</span><span class="si">{</span><span class="n">re</span><span class="o">.</span><span class="n">escape</span><span class="p">(</span><span class="n">pat</span><span class="p">)</span><span class="si">}</span><span class="s1">)\b&#39;</span> <span class="k">for</span> <span class="n">pat</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">patterns</span><span class="p">)[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]])</span></div>
+
+
+<div class="viewcode-block" id="Topic"><a class="viewcode-back" href="../../../envinorma.topics.html#envinorma.topics.patterns.Topic">[docs]</a><span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">Topic</span><span class="p">:</span>
+    <span class="n">topic_name</span><span class="p">:</span> <span class="n">TopicName</span>
+    <span class="n">metatopic</span><span class="p">:</span> <span class="n">TopicName</span>
+    <span class="n">compatible_topics</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">TopicName</span><span class="p">]</span>
+    <span class="n">short_title_patterns</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+    <span class="n">other_patterns</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+    <span class="n">escaped_short_title_pattern</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">init</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">escaped_pattern</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">init</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_check_consistency</span><span class="p">(</span><span class="n">short_title_patterns</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">other_patterns</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">common_patterns</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">short_title_patterns</span><span class="p">)</span> <span class="o">&amp;</span> <span class="nb">set</span><span class="p">(</span><span class="n">other_patterns</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">common_patterns</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;There are common patterns in short title patterns and other patterns: </span><span class="si">{</span><span class="n">common_patterns</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__post_init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_check_consistency</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">short_title_patterns</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">other_patterns</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">escaped_pattern</span> <span class="o">=</span> <span class="n">merge_patterns</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">other_patterns</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">escaped_short_title_pattern</span> <span class="o">=</span> <span class="n">merge_patterns</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">short_title_patterns</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">other_patterns</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Topic.from_raw_patterns"><a class="viewcode-back" href="../../../envinorma.topics.html#envinorma.topics.patterns.Topic.from_raw_patterns">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">from_raw_patterns</span><span class="p">(</span>
+        <span class="n">topic</span><span class="p">:</span> <span class="n">TopicName</span><span class="p">,</span>
+        <span class="n">metatopic</span><span class="p">:</span> <span class="n">TopicName</span><span class="p">,</span>
+        <span class="n">compatible_topics</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">TopicName</span><span class="p">],</span>
+        <span class="n">short_title_patterns</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+        <span class="n">other_patterns</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="s1">&#39;Topic&#39;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">Topic</span><span class="p">(</span>
+            <span class="n">topic</span><span class="p">,</span> <span class="n">metatopic</span><span class="p">,</span> <span class="n">compatible_topics</span><span class="p">,</span> <span class="n">_clean_patterns</span><span class="p">(</span><span class="n">short_title_patterns</span><span class="p">),</span> <span class="n">_clean_patterns</span><span class="p">(</span><span class="n">other_patterns</span><span class="p">)</span>
+        <span class="p">)</span></div>
+
+<div class="viewcode-block" id="Topic.monotopic"><a class="viewcode-back" href="../../../envinorma.topics.html#envinorma.topics.patterns.Topic.monotopic">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">monotopic</span><span class="p">(</span>
+        <span class="n">patterns</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="s1">&#39;Topic&#39;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">Topic</span><span class="p">(</span><span class="n">TopicName</span><span class="o">.</span><span class="n">UNNAMED</span><span class="p">,</span> <span class="n">TopicName</span><span class="o">.</span><span class="n">UNNAMED</span><span class="p">,</span> <span class="p">[],</span> <span class="p">[],</span> <span class="n">_clean_patterns</span><span class="p">(</span><span class="n">patterns</span><span class="p">))</span></div></div>
+
+
+<span class="n">ALL_TOPICS</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">Topic</span><span class="o">.</span><span class="n">from_raw_patterns</span><span class="p">(</span>
+        <span class="n">TopicName</span><span class="o">.</span><span class="n">EAU</span><span class="p">,</span>
+        <span class="n">TopicName</span><span class="o">.</span><span class="n">EAU</span><span class="p">,</span>
+        <span class="p">[</span><span class="n">TopicName</span><span class="o">.</span><span class="n">EPANDAGE</span><span class="p">],</span>
+        <span class="p">[</span><span class="s2">&quot;Eau&quot;</span><span class="p">],</span>
+        <span class="p">[</span>
+            <span class="s2">&quot;Collecte et rejet des effluents&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Collecte des effluents&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Réseau de collecte&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;lixiviats&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;eaux de ruissellement&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;eaux résiduaires&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;effluents d&#39;élevage&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;stockage des effluents&quot;</span><span class="p">,</span>
+            <span class="s1">&#39;RESSOURCE EN EAU&#39;</span><span class="p">,</span>
+            <span class="s2">&quot;Emissions dans l&#39;eau&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;surveillance des eaux souterraines&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;bassin de stockage des eaux&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;eau de ruissellement&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;traitement des eaux&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;eaux de ressuyage&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;POLLUTION DES EAUX&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;EMISSIONS DANS L&#39;EAU&quot;</span><span class="p">,</span>
+        <span class="p">],</span>
+    <span class="p">),</span>
+    <span class="n">Topic</span><span class="o">.</span><span class="n">from_raw_patterns</span><span class="p">(</span>
+        <span class="n">TopicName</span><span class="o">.</span><span class="n">EPANDAGE</span><span class="p">,</span>
+        <span class="n">TopicName</span><span class="o">.</span><span class="n">EPANDAGE</span><span class="p">,</span>
+        <span class="p">[</span><span class="n">TopicName</span><span class="o">.</span><span class="n">EAU</span><span class="p">,</span> <span class="n">TopicName</span><span class="o">.</span><span class="n">DECHETS</span><span class="p">],</span>
+        <span class="p">[</span><span class="s2">&quot;Epandage&quot;</span><span class="p">],</span>
+        <span class="p">[</span><span class="s2">&quot;PLAN D&#39;ÉPANDAGE&quot;</span><span class="p">,</span> <span class="s1">&#39;valorisées par épandage&#39;</span><span class="p">],</span>
+    <span class="p">),</span>
+    <span class="n">Topic</span><span class="o">.</span><span class="n">from_raw_patterns</span><span class="p">(</span>
+        <span class="n">TopicName</span><span class="o">.</span><span class="n">DECHETS</span><span class="p">,</span>
+        <span class="n">TopicName</span><span class="o">.</span><span class="n">DECHETS</span><span class="p">,</span>
+        <span class="p">[</span><span class="n">TopicName</span><span class="o">.</span><span class="n">EPANDAGE</span><span class="p">],</span>
+        <span class="p">[</span><span class="s2">&quot;dechets&quot;</span><span class="p">,</span> <span class="s2">&quot;dechet&quot;</span><span class="p">],</span>
+        <span class="p">[</span>
+            <span class="s2">&quot;entreposage de déchets&quot;</span><span class="p">,</span>
+            <span class="s1">&#39;Stockage des déchets&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;gestion des déchets&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;Registre de sortie&#39;</span><span class="p">,</span>
+            <span class="s2">&quot;ADMISSION DES DECHETS&quot;</span><span class="p">,</span>
+            <span class="s1">&#39;Déchets entrants&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;Registre des déchets&#39;</span><span class="p">,</span>
+        <span class="p">],</span>
+    <span class="p">),</span>
+    <span class="n">Topic</span><span class="o">.</span><span class="n">from_raw_patterns</span><span class="p">(</span>
+        <span class="n">TopicName</span><span class="o">.</span><span class="n">RISQUES</span><span class="p">,</span>
+        <span class="n">TopicName</span><span class="o">.</span><span class="n">RISQUES</span><span class="p">,</span>
+        <span class="p">[],</span>
+        <span class="p">[</span><span class="s2">&quot;Risques&quot;</span><span class="p">,</span> <span class="s1">&#39;Consignes de sécurité&#39;</span><span class="p">,</span> <span class="s1">&#39;PRÉVENTION DES RISQUES&#39;</span><span class="p">],</span>
+        <span class="p">[</span><span class="s1">&#39;permis de feu&#39;</span><span class="p">,</span> <span class="s1">&#39;RISQUES INDUSTRIELS&#39;</span><span class="p">],</span>
+    <span class="p">),</span>
+    <span class="n">Topic</span><span class="o">.</span><span class="n">from_raw_patterns</span><span class="p">(</span>
+        <span class="n">TopicName</span><span class="o">.</span><span class="n">DISPOSITIONS_CONSTRUCTIVES_AMENAGEMENT</span><span class="p">,</span>
+        <span class="n">TopicName</span><span class="o">.</span><span class="n">DISPOSITIONS_GENERALES</span><span class="p">,</span>
+        <span class="p">[],</span>
+        <span class="p">[</span>
+            <span class="s1">&#39;Implantation&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;Aménagement&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;Accessibilité&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;DISPOSITIONS CONSTRUCTIVES&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;Résistance au feu&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;CONSTRUCTION DE L</span><span class="se">\&#39;</span><span class="s1">INSTALLATION&#39;</span><span class="p">,</span>
+        <span class="p">],</span>
+        <span class="p">[],</span>
+    <span class="p">),</span>
+    <span class="n">Topic</span><span class="o">.</span><span class="n">from_raw_patterns</span><span class="p">(</span>
+        <span class="n">TopicName</span><span class="o">.</span><span class="n">DISPOSITIONS_GENERALES</span><span class="p">,</span>
+        <span class="n">TopicName</span><span class="o">.</span><span class="n">DISPOSITIONS_GENERALES</span><span class="p">,</span>
+        <span class="p">[</span><span class="n">TopicName</span><span class="o">.</span><span class="n">DISPOSITIONS_CONSTRUCTIVES_AMENAGEMENT</span><span class="p">],</span>
+        <span class="p">[</span><span class="s1">&#39;Dispositions générales&#39;</span><span class="p">,</span> <span class="s1">&#39;remise en état&#39;</span><span class="p">,</span> <span class="s2">&quot;Conditions d&#39;exploitation&quot;</span><span class="p">],</span>
+        <span class="p">[],</span>
+    <span class="p">),</span>
+    <span class="n">Topic</span><span class="o">.</span><span class="n">from_raw_patterns</span><span class="p">(</span>
+        <span class="n">TopicName</span><span class="o">.</span><span class="n">EXECUTION</span><span class="p">,</span>
+        <span class="n">TopicName</span><span class="o">.</span><span class="n">DISPOSITIONS_GENERALES</span><span class="p">,</span>
+        <span class="p">[],</span>
+        <span class="p">[</span><span class="s1">&#39;Exécution&#39;</span><span class="p">,</span> <span class="s1">&#39;DISPOSITIONS APPLICABLES&#39;</span><span class="p">],</span>
+        <span class="p">[</span><span class="s1">&#39;directeur général de la prévention des risques&#39;</span><span class="p">],</span>
+    <span class="p">),</span>
+    <span class="n">Topic</span><span class="o">.</span><span class="n">from_raw_patterns</span><span class="p">(</span>
+        <span class="n">TopicName</span><span class="o">.</span><span class="n">BRUIT_VIBRATIONS</span><span class="p">,</span>
+        <span class="n">TopicName</span><span class="o">.</span><span class="n">BRUIT_VIBRATIONS</span><span class="p">,</span>
+        <span class="p">[],</span>
+        <span class="p">[</span>
+            <span class="s1">&#39;Bruit et vibrations&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;Mesure de bruit&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;bruit&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;VIBRATIONS&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;NUISANCES ACOUSTIQUES&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;émissions sonores&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;Bruit ambiant&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;niveaux de bruit admissibles&#39;</span><span class="p">,</span>
+        <span class="p">],</span>
+        <span class="p">[],</span>
+    <span class="p">),</span>
+    <span class="n">Topic</span><span class="o">.</span><span class="n">from_raw_patterns</span><span class="p">(</span>
+        <span class="n">TopicName</span><span class="o">.</span><span class="n">AIR_ODEURS</span><span class="p">,</span>
+        <span class="n">TopicName</span><span class="o">.</span><span class="n">AIR_ODEURS</span><span class="p">,</span>
+        <span class="p">[],</span>
+        <span class="p">[</span><span class="s1">&#39;Emissions dans l</span><span class="se">\&#39;</span><span class="s1">air&#39;</span><span class="p">,</span> <span class="s1">&#39;Odeurs&#39;</span><span class="p">,</span> <span class="s1">&#39;Air&#39;</span><span class="p">,</span> <span class="s1">&#39;Pollution de l</span><span class="se">\&#39;</span><span class="s1">air&#39;</span><span class="p">,</span> <span class="s1">&#39;Chlorure d</span><span class="se">\&#39;</span><span class="s1">hydrogène&#39;</span><span class="p">],</span>
+        <span class="p">[],</span>
+    <span class="p">),</span>
+    <span class="n">Topic</span><span class="o">.</span><span class="n">from_raw_patterns</span><span class="p">(</span>
+        <span class="n">TopicName</span><span class="o">.</span><span class="n">EMISSIONS</span><span class="p">,</span>
+        <span class="n">TopicName</span><span class="o">.</span><span class="n">EMISSIONS</span><span class="p">,</span>
+        <span class="p">[</span><span class="n">TopicName</span><span class="o">.</span><span class="n">EMISSIONS_AIR</span><span class="p">,</span> <span class="n">TopicName</span><span class="o">.</span><span class="n">EAU</span><span class="p">,</span> <span class="n">TopicName</span><span class="o">.</span><span class="n">EMISSIONS_ATMOSPHERE</span><span class="p">],</span>
+        <span class="p">[</span><span class="s1">&#39;Surveillance des émissions&#39;</span><span class="p">,</span> <span class="s1">&#39;émissions polluantes&#39;</span><span class="p">,</span> <span class="s1">&#39;Emissions&#39;</span><span class="p">],</span>
+        <span class="p">[],</span>
+    <span class="p">),</span>
+    <span class="n">Topic</span><span class="o">.</span><span class="n">from_raw_patterns</span><span class="p">(</span>
+        <span class="n">TopicName</span><span class="o">.</span><span class="n">ACCIDENTS_POLLUTIONS</span><span class="p">,</span>
+        <span class="n">TopicName</span><span class="o">.</span><span class="n">ACCIDENTS_POLLUTIONS</span><span class="p">,</span>
+        <span class="p">[],</span>
+        <span class="p">[</span>
+            <span class="s1">&#39;Prévention des accidents et des pollutions&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;pollutions accidentelles&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;PRÉVENTION DES POLLUTIONS&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;PRÉVENTION DES ACCIDENTS&#39;</span><span class="p">,</span>
+        <span class="p">],</span>
+        <span class="p">[</span><span class="s1">&#39;Prévention des accidents et des pollutions accidentelles&#39;</span><span class="p">],</span>
+    <span class="p">),</span>
+    <span class="n">Topic</span><span class="o">.</span><span class="n">from_raw_patterns</span><span class="p">(</span>
+        <span class="n">TopicName</span><span class="o">.</span><span class="n">METHODOLOGIE</span><span class="p">,</span>
+        <span class="n">TopicName</span><span class="o">.</span><span class="n">DISPOSITIONS_GENERALES</span><span class="p">,</span>
+        <span class="p">[],</span>
+        <span class="p">[</span><span class="s1">&#39;methodologie&#39;</span><span class="p">,</span> <span class="s1">&#39;Méthodes de référence&#39;</span><span class="p">,</span> <span class="s1">&#39;règles de calcul&#39;</span><span class="p">],</span>
+        <span class="p">[],</span>
+    <span class="p">),</span>
+    <span class="n">Topic</span><span class="o">.</span><span class="n">from_raw_patterns</span><span class="p">(</span>
+        <span class="n">TopicName</span><span class="o">.</span><span class="n">SURVEILLANCE_EXPLOITATION</span><span class="p">,</span>
+        <span class="n">TopicName</span><span class="o">.</span><span class="n">DISPOSITIONS_GENERALES</span><span class="p">,</span>
+        <span class="p">[],</span>
+        <span class="p">[</span><span class="s1">&#39;surveillance de l exploitation&#39;</span><span class="p">,</span> <span class="s1">&#39;Surveillance de l</span><span class="se">\&#39;</span><span class="s1">installation&#39;</span><span class="p">],</span>
+        <span class="p">[</span><span class="s1">&#39;personnes étrangères à l établissement&#39;</span><span class="p">,</span> <span class="s1">&#39;gardiennage ou télésurveillance&#39;</span><span class="p">],</span>
+    <span class="p">),</span>
+    <span class="n">Topic</span><span class="o">.</span><span class="n">from_raw_patterns</span><span class="p">(</span><span class="n">TopicName</span><span class="o">.</span><span class="n">CONSIGNES</span><span class="p">,</span> <span class="n">TopicName</span><span class="o">.</span><span class="n">DISPOSITIONS_GENERALES</span><span class="p">,</span> <span class="p">[],</span> <span class="p">[</span><span class="s1">&#39;consignes&#39;</span><span class="p">],</span> <span class="p">[]),</span>
+    <span class="n">Topic</span><span class="o">.</span><span class="n">from_raw_patterns</span><span class="p">(</span>
+        <span class="n">TopicName</span><span class="o">.</span><span class="n">MILIEU_AQUATIQUE</span><span class="p">,</span> <span class="n">TopicName</span><span class="o">.</span><span class="n">EAU</span><span class="p">,</span> <span class="p">[],</span> <span class="p">[</span><span class="s1">&#39;milieu aquatique&#39;</span><span class="p">],</span> <span class="p">[</span><span class="s1">&#39;MILIEUX AQUATIQUES&#39;</span><span class="p">]</span>
+    <span class="p">),</span>
+    <span class="n">Topic</span><span class="o">.</span><span class="n">from_raw_patterns</span><span class="p">(</span>
+        <span class="n">TopicName</span><span class="o">.</span><span class="n">INFO_REDACTION</span><span class="p">,</span>
+        <span class="n">TopicName</span><span class="o">.</span><span class="n">DISPOSITIONS_GENERALES</span><span class="p">,</span>
+        <span class="p">[],</span>
+        <span class="p">[],</span>
+        <span class="p">[</span><span class="s1">&#39;la numérotation a été conservée pour permettre une homogénéité&#39;</span><span class="p">],</span>
+    <span class="p">),</span>
+    <span class="n">Topic</span><span class="o">.</span><span class="n">from_raw_patterns</span><span class="p">(</span><span class="n">TopicName</span><span class="o">.</span><span class="n">CONDITIONS_REJET</span><span class="p">,</span> <span class="n">TopicName</span><span class="o">.</span><span class="n">EAU</span><span class="p">,</span> <span class="p">[],</span> <span class="p">[</span><span class="s1">&#39;conditions de rejet&#39;</span><span class="p">],</span> <span class="p">[]),</span>
+    <span class="n">Topic</span><span class="o">.</span><span class="n">from_raw_patterns</span><span class="p">(</span><span class="n">TopicName</span><span class="o">.</span><span class="n">FOUDRE</span><span class="p">,</span> <span class="n">TopicName</span><span class="o">.</span><span class="n">FOUDRE</span><span class="p">,</span> <span class="p">[],</span> <span class="p">[</span><span class="s1">&#39;foudre&#39;</span><span class="p">],</span> <span class="p">[]),</span>
+    <span class="n">Topic</span><span class="o">.</span><span class="n">from_raw_patterns</span><span class="p">(</span><span class="n">TopicName</span><span class="o">.</span><span class="n">RECENSEMENT</span><span class="p">,</span> <span class="n">TopicName</span><span class="o">.</span><span class="n">DISPOSITIONS_GENERALES</span><span class="p">,</span> <span class="p">[],</span> <span class="p">[</span><span class="s1">&#39;recensement&#39;</span><span class="p">],</span> <span class="p">[]),</span>
+    <span class="n">Topic</span><span class="o">.</span><span class="n">from_raw_patterns</span><span class="p">(</span><span class="n">TopicName</span><span class="o">.</span><span class="n">POUSSIERES</span><span class="p">,</span> <span class="n">TopicName</span><span class="o">.</span><span class="n">POUSSIERES</span><span class="p">,</span> <span class="p">[],</span> <span class="p">[</span><span class="s1">&#39;poussieres&#39;</span><span class="p">],</span> <span class="p">[]),</span>
+    <span class="n">Topic</span><span class="o">.</span><span class="n">from_raw_patterns</span><span class="p">(</span><span class="n">TopicName</span><span class="o">.</span><span class="n">COV</span><span class="p">,</span> <span class="n">TopicName</span><span class="o">.</span><span class="n">COV</span><span class="p">,</span> <span class="p">[],</span> <span class="p">[</span><span class="s1">&#39;cov&#39;</span><span class="p">,</span> <span class="s1">&#39;composés organiques volatils&#39;</span><span class="p">],</span> <span class="p">[]),</span>
+    <span class="n">Topic</span><span class="o">.</span><span class="n">from_raw_patterns</span><span class="p">(</span><span class="n">TopicName</span><span class="o">.</span><span class="n">FEU</span><span class="p">,</span> <span class="n">TopicName</span><span class="o">.</span><span class="n">INCENDIE</span><span class="p">,</span> <span class="p">[],</span> <span class="p">[</span><span class="s1">&#39;feu&#39;</span><span class="p">],</span> <span class="p">[]),</span>
+    <span class="n">Topic</span><span class="o">.</span><span class="n">from_raw_patterns</span><span class="p">(</span>
+        <span class="n">TopicName</span><span class="o">.</span><span class="n">RADIOACTIVITES</span><span class="p">,</span> <span class="n">TopicName</span><span class="o">.</span><span class="n">RADIOACTIVITES</span><span class="p">,</span> <span class="p">[],</span> <span class="p">[</span><span class="s1">&#39;radioactivites&#39;</span><span class="p">,</span> <span class="s1">&#39;radioactivite&#39;</span><span class="p">],</span> <span class="p">[</span><span class="s1">&#39;RADIOACTIFS&#39;</span><span class="p">]</span>
+    <span class="p">),</span>
+    <span class="n">Topic</span><span class="o">.</span><span class="n">from_raw_patterns</span><span class="p">(</span>
+        <span class="n">TopicName</span><span class="o">.</span><span class="n">TOITURE</span><span class="p">,</span>
+        <span class="n">TopicName</span><span class="o">.</span><span class="n">DISPOSITIONS_GENERALES</span><span class="p">,</span>
+        <span class="p">[],</span>
+        <span class="p">[</span><span class="s1">&#39;toiture&#39;</span><span class="p">,</span> <span class="s1">&#39;toitures&#39;</span><span class="p">],</span>
+        <span class="p">[</span><span class="s1">&#39;Toitures et couvertures de toiture&#39;</span><span class="p">],</span>
+    <span class="p">),</span>
+    <span class="n">Topic</span><span class="o">.</span><span class="n">from_raw_patterns</span><span class="p">(</span>
+        <span class="n">TopicName</span><span class="o">.</span><span class="n">CONDITIONS_APPLICATION</span><span class="p">,</span>
+        <span class="n">TopicName</span><span class="o">.</span><span class="n">DISPOSITIONS_GENERALES</span><span class="p">,</span>
+        <span class="p">[],</span>
+        <span class="p">[</span>
+            <span class="s1">&#39;conditions d</span><span class="se">\&#39;</span><span class="s1">application&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;champ d</span><span class="se">\&#39;</span><span class="s1">application&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;calendrier d application&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;Modalités d application&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;DISPOSITIONS APPLICABLES AUX INSTALLATIONS EXISTANTES&#39;</span><span class="p">,</span>
+        <span class="p">],</span>
+        <span class="p">[</span><span class="s1">&#39;applicables aux installations&#39;</span><span class="p">],</span>
+    <span class="p">),</span>
+    <span class="n">Topic</span><span class="o">.</span><span class="n">from_raw_patterns</span><span class="p">(</span><span class="n">TopicName</span><span class="o">.</span><span class="n">BIOMASSE</span><span class="p">,</span> <span class="n">TopicName</span><span class="o">.</span><span class="n">BIOMASSE</span><span class="p">,</span> <span class="p">[],</span> <span class="p">[</span><span class="s1">&#39;biomasse&#39;</span><span class="p">],</span> <span class="p">[]),</span>
+    <span class="n">Topic</span><span class="o">.</span><span class="n">from_raw_patterns</span><span class="p">(</span>
+        <span class="n">TopicName</span><span class="o">.</span><span class="n">JUSTIFICATIONS</span><span class="p">,</span>
+        <span class="n">TopicName</span><span class="o">.</span><span class="n">DISPOSITIONS_GENERALES</span><span class="p">,</span>
+        <span class="p">[],</span>
+        <span class="p">[],</span>
+        <span class="p">[</span><span class="s1">&#39;justifie en tant que de besoin toutes les dispositions prises&#39;</span><span class="p">],</span>
+    <span class="p">),</span>
+    <span class="n">Topic</span><span class="o">.</span><span class="n">from_raw_patterns</span><span class="p">(</span>
+        <span class="n">TopicName</span><span class="o">.</span><span class="n">FARINES_VIANDE_ET_OS</span><span class="p">,</span> <span class="n">TopicName</span><span class="o">.</span><span class="n">FARINES_VIANDE_ET_OS</span><span class="p">,</span> <span class="p">[],</span> <span class="p">[],</span> <span class="p">[</span><span class="s1">&#39;farines de viande&#39;</span><span class="p">]</span>
+    <span class="p">),</span>
+    <span class="n">Topic</span><span class="o">.</span><span class="n">from_raw_patterns</span><span class="p">(</span><span class="n">TopicName</span><span class="o">.</span><span class="n">EFFLUENTS</span><span class="p">,</span> <span class="n">TopicName</span><span class="o">.</span><span class="n">EFFLUENTS</span><span class="p">,</span> <span class="p">[],</span> <span class="p">[</span><span class="s1">&#39;effluents&#39;</span><span class="p">],</span> <span class="p">[]),</span>
+    <span class="n">Topic</span><span class="o">.</span><span class="n">from_raw_patterns</span><span class="p">(</span>
+        <span class="n">TopicName</span><span class="o">.</span><span class="n">GESTION_QUALITE</span><span class="p">,</span> <span class="n">TopicName</span><span class="o">.</span><span class="n">DISPOSITIONS_GENERALES</span><span class="p">,</span> <span class="p">[],</span> <span class="p">[</span><span class="s1">&#39;sgq&#39;</span><span class="p">,</span> <span class="s1">&#39;gestion de la qualité&#39;</span><span class="p">],</span> <span class="p">[]</span>
+    <span class="p">),</span>
+    <span class="n">Topic</span><span class="o">.</span><span class="n">from_raw_patterns</span><span class="p">(</span>
+        <span class="n">TopicName</span><span class="o">.</span><span class="n">ETANCHEITE</span><span class="p">,</span> <span class="n">TopicName</span><span class="o">.</span><span class="n">DISPOSITIONS_GENERALES</span><span class="p">,</span> <span class="p">[],</span> <span class="p">[</span><span class="s1">&#39;etancheite&#39;</span><span class="p">],</span> <span class="p">[</span><span class="s1">&#39;relatives à l étanchéité&#39;</span><span class="p">]</span>
+    <span class="p">),</span>
+    <span class="n">Topic</span><span class="o">.</span><span class="n">from_raw_patterns</span><span class="p">(</span><span class="n">TopicName</span><span class="o">.</span><span class="n">EMISSIONS_AIR</span><span class="p">,</span> <span class="n">TopicName</span><span class="o">.</span><span class="n">AIR_ODEURS</span><span class="p">,</span> <span class="p">[],</span> <span class="p">[</span><span class="s1">&#39;emissions_air&#39;</span><span class="p">],</span> <span class="p">[]),</span>
+    <span class="n">Topic</span><span class="o">.</span><span class="n">from_raw_patterns</span><span class="p">(</span>
+        <span class="n">TopicName</span><span class="o">.</span><span class="n">DECHETS_NON_DANGEREUX</span><span class="p">,</span> <span class="n">TopicName</span><span class="o">.</span><span class="n">DECHETS</span><span class="p">,</span> <span class="p">[],</span> <span class="p">[</span><span class="s1">&#39;dechets non dangereux&#39;</span><span class="p">,</span> <span class="s1">&#39;dechet non dangereux&#39;</span><span class="p">],</span> <span class="p">[]</span>
+    <span class="p">),</span>
+    <span class="n">Topic</span><span class="o">.</span><span class="n">from_raw_patterns</span><span class="p">(</span>
+        <span class="n">TopicName</span><span class="o">.</span><span class="n">REGISTRE</span><span class="p">,</span>
+        <span class="n">TopicName</span><span class="o">.</span><span class="n">DISPOSITIONS_GENERALES</span><span class="p">,</span>
+        <span class="p">[],</span>
+        <span class="p">[</span><span class="s1">&#39;registre&#39;</span><span class="p">],</span>
+        <span class="p">[</span><span class="s1">&#39;tient à jour un registre&#39;</span><span class="p">,</span> <span class="s1">&#39;un registre des admissions&#39;</span><span class="p">],</span>
+    <span class="p">),</span>
+    <span class="n">Topic</span><span class="o">.</span><span class="n">from_raw_patterns</span><span class="p">(</span><span class="n">TopicName</span><span class="o">.</span><span class="n">DECHETS_BANALS</span><span class="p">,</span> <span class="n">TopicName</span><span class="o">.</span><span class="n">DECHETS</span><span class="p">,</span> <span class="p">[],</span> <span class="p">[</span><span class="s1">&#39;dechets banals&#39;</span><span class="p">],</span> <span class="p">[]),</span>
+    <span class="n">Topic</span><span class="o">.</span><span class="n">from_raw_patterns</span><span class="p">(</span>
+        <span class="n">TopicName</span><span class="o">.</span><span class="n">INCENDIE</span><span class="p">,</span> <span class="n">TopicName</span><span class="o">.</span><span class="n">INCENDIE</span><span class="p">,</span> <span class="p">[],</span> <span class="p">[</span><span class="s1">&#39;incendie&#39;</span><span class="p">],</span> <span class="p">[</span><span class="s1">&#39;opérations d</span><span class="se">\&#39;</span><span class="s1">extinction&#39;</span><span class="p">,</span> <span class="s1">&#39;bouches d</span><span class="se">\&#39;</span><span class="s1">incendie&#39;</span><span class="p">]</span>
+    <span class="p">),</span>
+    <span class="n">Topic</span><span class="o">.</span><span class="n">from_raw_patterns</span><span class="p">(</span>
+        <span class="n">TopicName</span><span class="o">.</span><span class="n">SECURITE</span><span class="p">,</span>
+        <span class="n">TopicName</span><span class="o">.</span><span class="n">DISPOSITIONS_GENERALES</span><span class="p">,</span>
+        <span class="p">[],</span>
+        <span class="p">[</span><span class="s1">&#39;organisation de la sécurité&#39;</span><span class="p">,</span> <span class="s1">&#39;Dispositions de sécurité&#39;</span><span class="p">],</span>
+        <span class="p">[],</span>
+    <span class="p">),</span>
+    <span class="n">Topic</span><span class="o">.</span><span class="n">from_raw_patterns</span><span class="p">(</span><span class="n">TopicName</span><span class="o">.</span><span class="n">BRULAGE</span><span class="p">,</span> <span class="n">TopicName</span><span class="o">.</span><span class="n">BRULAGE</span><span class="p">,</span> <span class="p">[],</span> <span class="p">[</span><span class="s1">&#39;brulage&#39;</span><span class="p">],</span> <span class="p">[]),</span>
+    <span class="n">Topic</span><span class="o">.</span><span class="n">from_raw_patterns</span><span class="p">(</span>
+        <span class="n">TopicName</span><span class="o">.</span><span class="n">DECLARATION_DES_EMISSIONS</span><span class="p">,</span> <span class="n">TopicName</span><span class="o">.</span><span class="n">EMISSIONS</span><span class="p">,</span> <span class="p">[],</span> <span class="p">[</span><span class="s1">&#39;Déclaration annuelle des émissions&#39;</span><span class="p">],</span> <span class="p">[]</span>
+    <span class="p">),</span>
+    <span class="n">Topic</span><span class="o">.</span><span class="n">from_raw_patterns</span><span class="p">(</span>
+        <span class="n">TopicName</span><span class="o">.</span><span class="n">REJETS_CHLORE</span><span class="p">,</span>
+        <span class="n">TopicName</span><span class="o">.</span><span class="n">ACCIDENTS_POLLUTIONS</span><span class="p">,</span>
+        <span class="p">[],</span>
+        <span class="p">[</span><span class="s1">&#39;rejets de chlore&#39;</span><span class="p">],</span>
+        <span class="p">[</span><span class="s1">&#39;neutralisation des rejets de chlore&#39;</span><span class="p">],</span>
+    <span class="p">),</span>
+    <span class="n">Topic</span><span class="o">.</span><span class="n">from_raw_patterns</span><span class="p">(</span>
+        <span class="n">TopicName</span><span class="o">.</span><span class="n">ANNEXE_BO</span><span class="p">,</span>
+        <span class="n">TopicName</span><span class="o">.</span><span class="n">DISPOSITIONS_GENERALES</span><span class="p">,</span>
+        <span class="p">[],</span>
+        <span class="p">[],</span>
+        <span class="p">[</span><span class="s1">&#39;annexe est publiée au Bulletin officiel du ministère de l</span><span class="se">\&#39;</span><span class="s1">écologie&#39;</span><span class="p">],</span>
+    <span class="p">),</span>
+    <span class="n">Topic</span><span class="o">.</span><span class="n">from_raw_patterns</span><span class="p">(</span>
+        <span class="n">TopicName</span><span class="o">.</span><span class="n">DEFINITIONS</span><span class="p">,</span>
+        <span class="n">TopicName</span><span class="o">.</span><span class="n">DISPOSITIONS_GENERALES</span><span class="p">,</span>
+        <span class="p">[],</span>
+        <span class="p">[</span><span class="s1">&#39;definitions&#39;</span><span class="p">,</span> <span class="s1">&#39;définition&#39;</span><span class="p">],</span>
+        <span class="p">[</span><span class="s1">&#39;Au sens du présent arrêté, on entend par&#39;</span><span class="p">],</span>
+    <span class="p">),</span>
+    <span class="n">Topic</span><span class="o">.</span><span class="n">from_raw_patterns</span><span class="p">(</span>
+        <span class="n">TopicName</span><span class="o">.</span><span class="n">CHANGEMENT_EXPLOITANT</span><span class="p">,</span> <span class="n">TopicName</span><span class="o">.</span><span class="n">DISPOSITIONS_GENERALES</span><span class="p">,</span> <span class="p">[],</span> <span class="p">[</span><span class="s1">&#39;changement d</span><span class="se">\&#39;</span><span class="s1">exploitant&#39;</span><span class="p">],</span> <span class="p">[]</span>
+    <span class="p">),</span>
+    <span class="n">Topic</span><span class="o">.</span><span class="n">from_raw_patterns</span><span class="p">(</span>
+        <span class="n">TopicName</span><span class="o">.</span><span class="n">RESERVES_DE_PRODUIT</span><span class="p">,</span>
+        <span class="n">TopicName</span><span class="o">.</span><span class="n">DISPOSITIONS_GENERALES</span><span class="p">,</span>
+        <span class="p">[],</span>
+        <span class="p">[],</span>
+        <span class="p">[</span><span class="s1">&#39;exploitant dispose de réserves suffisantes de produits&#39;</span><span class="p">],</span>
+    <span class="p">),</span>
+    <span class="n">Topic</span><span class="o">.</span><span class="n">from_raw_patterns</span><span class="p">(</span>
+        <span class="n">TopicName</span><span class="o">.</span><span class="n">ELECTRICITE_STATIQUE</span><span class="p">,</span> <span class="n">TopicName</span><span class="o">.</span><span class="n">ELECTRICITE_STATIQUE</span><span class="p">,</span> <span class="p">[],</span> <span class="p">[],</span> <span class="p">[</span><span class="s1">&#39;electricite statique&#39;</span><span class="p">]</span>
+    <span class="p">),</span>
+    <span class="n">Topic</span><span class="o">.</span><span class="n">from_raw_patterns</span><span class="p">(</span><span class="n">TopicName</span><span class="o">.</span><span class="n">BIOGAZ</span><span class="p">,</span> <span class="n">TopicName</span><span class="o">.</span><span class="n">BIOGAZ</span><span class="p">,</span> <span class="p">[],</span> <span class="p">[</span><span class="s1">&#39;biogaz&#39;</span><span class="p">],</span> <span class="p">[]),</span>
+    <span class="n">Topic</span><span class="o">.</span><span class="n">from_raw_patterns</span><span class="p">(</span><span class="n">TopicName</span><span class="o">.</span><span class="n">CONFINEMENT</span><span class="p">,</span> <span class="n">TopicName</span><span class="o">.</span><span class="n">DISPOSITIONS_GENERALES</span><span class="p">,</span> <span class="p">[],</span> <span class="p">[</span><span class="s1">&#39;confinement&#39;</span><span class="p">],</span> <span class="p">[]),</span>
+    <span class="n">Topic</span><span class="o">.</span><span class="n">from_raw_patterns</span><span class="p">(</span>
+        <span class="n">TopicName</span><span class="o">.</span><span class="n">MESURE_BRUIT</span><span class="p">,</span>
+        <span class="n">TopicName</span><span class="o">.</span><span class="n">BRUIT_VIBRATIONS</span><span class="p">,</span>
+        <span class="p">[],</span>
+        <span class="p">[</span><span class="s1">&#39;MÉTHODE DE MESURE DES ÉMISSIONS SONORES&#39;</span><span class="p">,</span> <span class="s1">&#39;RÈGLES TECHNIQUES APPLICABLES EN MATIÈRE DE VIBRATIONS&#39;</span><span class="p">],</span>
+        <span class="p">[],</span>
+    <span class="p">),</span>
+    <span class="n">Topic</span><span class="o">.</span><span class="n">from_raw_patterns</span><span class="p">(</span>
+        <span class="n">TopicName</span><span class="o">.</span><span class="n">VAPEURS</span><span class="p">,</span> <span class="n">TopicName</span><span class="o">.</span><span class="n">VAPEURS</span><span class="p">,</span> <span class="p">[],</span> <span class="p">[</span><span class="s1">&#39;vapeurs&#39;</span><span class="p">],</span> <span class="p">[</span><span class="s1">&#39;COLLECTE DES VAPEURS&#39;</span><span class="p">,</span> <span class="s1">&#39;retenue des vapeurs&#39;</span><span class="p">]</span>
+    <span class="p">),</span>
+    <span class="n">Topic</span><span class="o">.</span><span class="n">from_raw_patterns</span><span class="p">(</span><span class="n">TopicName</span><span class="o">.</span><span class="n">RISQUE_INDIVIDUEL</span><span class="p">,</span> <span class="n">TopicName</span><span class="o">.</span><span class="n">RISQUES</span><span class="p">,</span> <span class="p">[],</span> <span class="p">[</span><span class="s1">&#39;Protection individuelle&#39;</span><span class="p">],</span> <span class="p">[]),</span>
+    <span class="n">Topic</span><span class="o">.</span><span class="n">from_raw_patterns</span><span class="p">(</span><span class="n">TopicName</span><span class="o">.</span><span class="n">LEGIONELLES</span><span class="p">,</span> <span class="n">TopicName</span><span class="o">.</span><span class="n">LEGIONELLES</span><span class="p">,</span> <span class="p">[],</span> <span class="p">[</span><span class="s1">&#39;legionelles&#39;</span><span class="p">],</span> <span class="p">[]),</span>
+    <span class="n">Topic</span><span class="o">.</span><span class="n">from_raw_patterns</span><span class="p">(</span><span class="n">TopicName</span><span class="o">.</span><span class="n">EXPLOITATION</span><span class="p">,</span> <span class="n">TopicName</span><span class="o">.</span><span class="n">DISPOSITIONS_GENERALES</span><span class="p">,</span> <span class="p">[],</span> <span class="p">[</span><span class="s1">&#39;exploitation&#39;</span><span class="p">],</span> <span class="p">[]),</span>
+    <span class="n">Topic</span><span class="o">.</span><span class="n">from_raw_patterns</span><span class="p">(</span>
+        <span class="n">TopicName</span><span class="o">.</span><span class="n">VENTILATION</span><span class="p">,</span> <span class="n">TopicName</span><span class="o">.</span><span class="n">DISPOSITIONS_GENERALES</span><span class="p">,</span> <span class="p">[],</span> <span class="p">[</span><span class="s1">&#39;ventilation&#39;</span><span class="p">,</span> <span class="s1">&#39;ventilations&#39;</span><span class="p">],</span> <span class="p">[]</span>
+    <span class="p">),</span>
+    <span class="n">Topic</span><span class="o">.</span><span class="n">from_raw_patterns</span><span class="p">(</span>
+        <span class="n">TopicName</span><span class="o">.</span><span class="n">FIN_EXPLOITATION</span><span class="p">,</span>
+        <span class="n">TopicName</span><span class="o">.</span><span class="n">DISPOSITIONS_GENERALES</span><span class="p">,</span>
+        <span class="p">[],</span>
+        <span class="p">[</span><span class="s1">&#39;fin d</span><span class="se">\&#39;</span><span class="s1">exploitation&#39;</span><span class="p">],</span>
+        <span class="p">[</span><span class="s1">&#39;en fin d exploitation&#39;</span><span class="p">],</span>
+    <span class="p">),</span>
+    <span class="n">Topic</span><span class="o">.</span><span class="n">from_raw_patterns</span><span class="p">(</span><span class="n">TopicName</span><span class="o">.</span><span class="n">SURVEILLANCE</span><span class="p">,</span> <span class="n">TopicName</span><span class="o">.</span><span class="n">DISPOSITIONS_GENERALES</span><span class="p">,</span> <span class="p">[],</span> <span class="p">[</span><span class="s1">&#39;surveillance&#39;</span><span class="p">],</span> <span class="p">[]),</span>
+    <span class="n">Topic</span><span class="o">.</span><span class="n">from_raw_patterns</span><span class="p">(</span>
+        <span class="n">TopicName</span><span class="o">.</span><span class="n">CONSOMMATION_D_EAU</span><span class="p">,</span> <span class="n">TopicName</span><span class="o">.</span><span class="n">EAU</span><span class="p">,</span> <span class="p">[],</span> <span class="p">[</span><span class="s1">&#39;consommation d</span><span class="se">\&#39;</span><span class="s1">eau&#39;</span><span class="p">],</span> <span class="p">[</span><span class="s1">&#39;limiter la quantité d</span><span class="se">\&#39;</span><span class="s1">eau&#39;</span><span class="p">]</span>
+    <span class="p">),</span>
+    <span class="n">Topic</span><span class="o">.</span><span class="n">from_raw_patterns</span><span class="p">(</span>
+        <span class="n">TopicName</span><span class="o">.</span><span class="n">NORME_TRANSFORMATION</span><span class="p">,</span> <span class="n">TopicName</span><span class="o">.</span><span class="n">DISPOSITIONS_GENERALES</span><span class="p">,</span> <span class="p">[],</span> <span class="p">[</span><span class="s1">&#39;NORMES DE TRANSFORMATION&#39;</span><span class="p">],</span> <span class="p">[]</span>
+    <span class="p">),</span>
+    <span class="n">Topic</span><span class="o">.</span><span class="n">from_raw_patterns</span><span class="p">(</span><span class="n">TopicName</span><span class="o">.</span><span class="n">PROPRETE</span><span class="p">,</span> <span class="n">TopicName</span><span class="o">.</span><span class="n">DISPOSITIONS_GENERALES</span><span class="p">,</span> <span class="p">[],</span> <span class="p">[</span><span class="s1">&#39;proprete&#39;</span><span class="p">],</span> <span class="p">[]),</span>
+    <span class="n">Topic</span><span class="o">.</span><span class="n">from_raw_patterns</span><span class="p">(</span><span class="n">TopicName</span><span class="o">.</span><span class="n">PREFET</span><span class="p">,</span> <span class="n">TopicName</span><span class="o">.</span><span class="n">DISPOSITIONS_GENERALES</span><span class="p">,</span> <span class="p">[],</span> <span class="p">[],</span> <span class="p">[</span><span class="s1">&#39;prefet&#39;</span><span class="p">]),</span>
+    <span class="n">Topic</span><span class="o">.</span><span class="n">from_raw_patterns</span><span class="p">(</span>
+        <span class="n">TopicName</span><span class="o">.</span><span class="n">INSTALLATIONS_ELECTRIQUES</span><span class="p">,</span> <span class="n">TopicName</span><span class="o">.</span><span class="n">INSTALLATIONS_ELECTRIQUES</span><span class="p">,</span> <span class="p">[],</span> <span class="p">[],</span> <span class="p">[</span><span class="s1">&#39;installations electriques&#39;</span><span class="p">]</span>
+    <span class="p">),</span>
+    <span class="n">Topic</span><span class="o">.</span><span class="n">from_raw_patterns</span><span class="p">(</span>
+        <span class="n">TopicName</span><span class="o">.</span><span class="n">HAUTEUR_CHEMINEE</span><span class="p">,</span>
+        <span class="n">TopicName</span><span class="o">.</span><span class="n">DISPOSITIONS_GENERALES</span><span class="p">,</span>
+        <span class="p">[],</span>
+        <span class="p">[],</span>
+        <span class="p">[</span><span class="s1">&#39;hauteur des cheminees&#39;</span><span class="p">,</span> <span class="s1">&#39;hauteur de cheminee&#39;</span><span class="p">,</span> <span class="s1">&#39;HAUTEURS DE CHEMINÉE&#39;</span><span class="p">],</span>
+    <span class="p">),</span>
+    <span class="n">Topic</span><span class="o">.</span><span class="n">from_raw_patterns</span><span class="p">(</span>
+        <span class="n">TopicName</span><span class="o">.</span><span class="n">ABROGATION_AM_PASSE</span><span class="p">,</span> <span class="n">TopicName</span><span class="o">.</span><span class="n">DISPOSITIONS_GENERALES</span><span class="p">,</span> <span class="p">[],</span> <span class="p">[],</span> <span class="p">[</span><span class="s1">&#39;A abrogé les dispositions&#39;</span><span class="p">]</span>
+    <span class="p">),</span>
+    <span class="n">Topic</span><span class="o">.</span><span class="n">from_raw_patterns</span><span class="p">(</span><span class="n">TopicName</span><span class="o">.</span><span class="n">MODIFICATIONS</span><span class="p">,</span> <span class="n">TopicName</span><span class="o">.</span><span class="n">DISPOSITIONS_GENERALES</span><span class="p">,</span> <span class="p">[],</span> <span class="p">[</span><span class="s1">&#39;modifications&#39;</span><span class="p">],</span> <span class="p">[]),</span>
+    <span class="n">Topic</span><span class="o">.</span><span class="n">from_raw_patterns</span><span class="p">(</span>
+        <span class="n">TopicName</span><span class="o">.</span><span class="n">RETENTION</span><span class="p">,</span> <span class="n">TopicName</span><span class="o">.</span><span class="n">DISPOSITIONS_GENERALES</span><span class="p">,</span> <span class="p">[],</span> <span class="p">[</span><span class="s1">&#39;retention&#39;</span><span class="p">],</span> <span class="p">[</span><span class="s1">&#39;rétention déportée&#39;</span><span class="p">]</span>
+    <span class="p">),</span>
+    <span class="n">Topic</span><span class="o">.</span><span class="n">from_raw_patterns</span><span class="p">(</span>
+        <span class="n">TopicName</span><span class="o">.</span><span class="n">BILAN_ENVIRONNEMENT</span><span class="p">,</span> <span class="n">TopicName</span><span class="o">.</span><span class="n">DISPOSITIONS_GENERALES</span><span class="p">,</span> <span class="p">[],</span> <span class="p">[</span><span class="s1">&#39;Bilan environnement&#39;</span><span class="p">],</span> <span class="p">[]</span>
+    <span class="p">),</span>
+    <span class="n">Topic</span><span class="o">.</span><span class="n">from_raw_patterns</span><span class="p">(</span><span class="n">TopicName</span><span class="o">.</span><span class="n">ENTREPOSAGE</span><span class="p">,</span> <span class="n">TopicName</span><span class="o">.</span><span class="n">DISPOSITIONS_GENERALES</span><span class="p">,</span> <span class="p">[],</span> <span class="p">[</span><span class="s1">&#39;entreposage&#39;</span><span class="p">],</span> <span class="p">[]),</span>
+    <span class="n">Topic</span><span class="o">.</span><span class="n">from_raw_patterns</span><span class="p">(</span><span class="n">TopicName</span><span class="o">.</span><span class="n">ENTREE_VIGUEUR</span><span class="p">,</span> <span class="n">TopicName</span><span class="o">.</span><span class="n">DISPOSITIONS_GENERALES</span><span class="p">,</span> <span class="p">[],</span> <span class="p">[</span><span class="s1">&#39;Entrée en vigueur&#39;</span><span class="p">],</span> <span class="p">[]),</span>
+    <span class="n">Topic</span><span class="o">.</span><span class="n">from_raw_patterns</span><span class="p">(</span>
+        <span class="n">TopicName</span><span class="o">.</span><span class="n">VLE</span><span class="p">,</span> <span class="n">TopicName</span><span class="o">.</span><span class="n">DISPOSITIONS_GENERALES</span><span class="p">,</span> <span class="p">[],</span> <span class="p">[</span><span class="s1">&#39;valeurs limites&#39;</span><span class="p">],</span> <span class="p">[</span><span class="s1">&#39;valeurs limites d emission&#39;</span><span class="p">]</span>
+    <span class="p">),</span>
+    <span class="n">Topic</span><span class="o">.</span><span class="n">from_raw_patterns</span><span class="p">(</span>
+        <span class="n">TopicName</span><span class="o">.</span><span class="n">EMISSIONS_ATMOSPHERE</span><span class="p">,</span>
+        <span class="n">TopicName</span><span class="o">.</span><span class="n">EMISSIONS_ATMOSPHERE</span><span class="p">,</span>
+        <span class="p">[],</span>
+        <span class="p">[],</span>
+        <span class="p">[</span><span class="s1">&#39;POLLUTION ATMOSPHÉRIQUE&#39;</span><span class="p">,</span> <span class="s1">&#39;REJETS À L ATMOSPHÈRE&#39;</span><span class="p">],</span>
+    <span class="p">),</span>
+    <span class="n">Topic</span><span class="o">.</span><span class="n">from_raw_patterns</span><span class="p">(</span><span class="n">TopicName</span><span class="o">.</span><span class="n">RECYCLAGE</span><span class="p">,</span> <span class="n">TopicName</span><span class="o">.</span><span class="n">DECHETS</span><span class="p">,</span> <span class="p">[],</span> <span class="p">[</span><span class="s1">&#39;recyclage&#39;</span><span class="p">],</span> <span class="p">[]),</span>
+    <span class="n">Topic</span><span class="o">.</span><span class="n">from_raw_patterns</span><span class="p">(</span>
+        <span class="n">TopicName</span><span class="o">.</span><span class="n">REJETS_ACCIDENTELS</span><span class="p">,</span> <span class="n">TopicName</span><span class="o">.</span><span class="n">ACCIDENTS_POLLUTIONS</span><span class="p">,</span> <span class="p">[],</span> <span class="p">[</span><span class="s1">&#39;Rejets accidentels&#39;</span><span class="p">],</span> <span class="p">[]</span>
+    <span class="p">),</span>
+    <span class="n">Topic</span><span class="o">.</span><span class="n">from_raw_patterns</span><span class="p">(</span><span class="n">TopicName</span><span class="o">.</span><span class="n">DECHETS_SPECIAUX</span><span class="p">,</span> <span class="n">TopicName</span><span class="o">.</span><span class="n">DECHETS</span><span class="p">,</span> <span class="p">[],</span> <span class="p">[</span><span class="s1">&#39;Déchets industriels spéciaux&#39;</span><span class="p">],</span> <span class="p">[]),</span>
+    <span class="n">Topic</span><span class="o">.</span><span class="n">from_raw_patterns</span><span class="p">(</span><span class="n">TopicName</span><span class="o">.</span><span class="n">COMBUSTIBLES</span><span class="p">,</span> <span class="n">TopicName</span><span class="o">.</span><span class="n">COMBUSTIBLES</span><span class="p">,</span> <span class="p">[],</span> <span class="p">[</span><span class="s1">&#39;combustibles&#39;</span><span class="p">],</span> <span class="p">[]),</span>
+    <span class="n">Topic</span><span class="o">.</span><span class="n">from_raw_patterns</span><span class="p">(</span><span class="n">TopicName</span><span class="o">.</span><span class="n">DOSSIER</span><span class="p">,</span> <span class="n">TopicName</span><span class="o">.</span><span class="n">DISPOSITIONS_GENERALES</span><span class="p">,</span> <span class="p">[],</span> <span class="p">[</span><span class="s1">&#39;dossier&#39;</span><span class="p">],</span> <span class="p">[]),</span>
+<span class="p">]</span>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, Envinorma.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

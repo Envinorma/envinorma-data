@@ -1,0 +1,45 @@
+envinorma.io package
+====================
+
+Submodules
+----------
+
+envinorma.io.docx module
+------------------------
+
+.. automodule:: envinorma.io.docx
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+envinorma.io.markdown module
+----------------------------
+
+.. automodule:: envinorma.io.markdown
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+envinorma.io.open\_document module
+----------------------------------
+
+.. automodule:: envinorma.io.open_document
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+envinorma.io.parse\_html module
+-------------------------------
+
+.. automodule:: envinorma.io.parse_html
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Module contents
+---------------
+
+.. automodule:: envinorma.io
+   :members:
+   :undoc-members:
+   :show-inheritance:

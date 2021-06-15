@@ -1,0 +1,459 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>envinorma.models.text_elements &mdash; Envinorma 0.0.0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> Envinorma
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.0.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../index.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">Package modules</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../envinorma.html">envinorma package</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../envinorma.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../envinorma.enriching.html">envinorma.enriching package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../envinorma.from_legifrance.html">envinorma.from_legifrance package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../envinorma.io.html">envinorma.io package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../envinorma.models.html">envinorma.models package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../envinorma.parametrization.html">envinorma.parametrization package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../envinorma.topics.html">envinorma.topics package</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../envinorma.html#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../envinorma.html#module-envinorma.data_fetcher">envinorma.data_fetcher module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../envinorma.html#module-envinorma.structure">envinorma.structure module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../envinorma.html#module-envinorma.title_detection">envinorma.title_detection module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../envinorma.html#module-envinorma.utils">envinorma.utils module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../envinorma.html#module-envinorma">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">Envinorma</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+          <li><a href="../../envinorma.html">envinorma</a> &raquo;</li>
+        
+          <li><a href="../models.html">envinorma.models</a> &raquo;</li>
+        
+      <li>envinorma.models.text_elements</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for envinorma.models.text_elements</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">random</span>
+<span class="kn">from</span> <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">asdict</span><span class="p">,</span> <span class="n">dataclass</span><span class="p">,</span> <span class="n">field</span>
+<span class="kn">from</span> <span class="nn">string</span> <span class="kn">import</span> <span class="n">ascii_letters</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Union</span>
+
+
+<div class="viewcode-block" id="Link"><a class="viewcode-back" href="../../../envinorma.models.html#envinorma.models.text_elements.Link">[docs]</a><span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">Link</span><span class="p">:</span>
+    <span class="n">target</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">position</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">content_size</span><span class="p">:</span> <span class="nb">int</span>
+
+<div class="viewcode-block" id="Link.from_dict"><a class="viewcode-back" href="../../../envinorma.models.html#envinorma.models.text_elements.Link.from_dict">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">from_dict</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">dict_</span><span class="p">:</span> <span class="n">Dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s1">&#39;Link&#39;</span><span class="p">:</span>
+        <span class="n">dict_</span> <span class="o">=</span> <span class="n">dict_</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="o">**</span><span class="n">dict_</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="Cell"><a class="viewcode-back" href="../../../envinorma.models.html#envinorma.models.text_elements.Cell">[docs]</a><span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">Cell</span><span class="p">:</span>
+    <span class="n">content</span><span class="p">:</span> <span class="s1">&#39;EnrichedString&#39;</span>
+    <span class="n">colspan</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">rowspan</span><span class="p">:</span> <span class="nb">int</span>
+
+<div class="viewcode-block" id="Cell.from_dict"><a class="viewcode-back" href="../../../envinorma.models.html#envinorma.models.text_elements.Cell.from_dict">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">from_dict</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">dict_</span><span class="p">:</span> <span class="n">Dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s1">&#39;Cell&#39;</span><span class="p">:</span>
+        <span class="n">dict_</span> <span class="o">=</span> <span class="n">dict_</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="n">dict_</span><span class="p">[</span><span class="s1">&#39;content&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">EnrichedString</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">dict_</span><span class="p">[</span><span class="s1">&#39;content&#39;</span><span class="p">])</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="o">**</span><span class="n">dict_</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Cell.to_html"><a class="viewcode-back" href="../../../envinorma.models.html#envinorma.models.text_elements.Cell.to_html">[docs]</a>    <span class="k">def</span> <span class="nf">to_html</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_header</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span> <span class="n">with_links</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="n">tag</span> <span class="o">=</span> <span class="s1">&#39;th&#39;</span> <span class="k">if</span> <span class="n">is_header</span> <span class="k">else</span> <span class="s1">&#39;td&#39;</span>
+        <span class="n">colspan_attr</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39; colspan=&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">colspan</span><span class="si">}</span><span class="s1">&quot;&#39;</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">colspan</span> <span class="o">!=</span> <span class="mi">1</span> <span class="k">else</span> <span class="s1">&#39;&#39;</span>
+        <span class="n">rowspan_attr</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39; rowspan=&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">rowspan</span><span class="si">}</span><span class="s1">&quot;&#39;</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">rowspan</span> <span class="o">!=</span> <span class="mi">1</span> <span class="k">else</span> <span class="s1">&#39;&#39;</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s1">&#39;&lt;</span><span class="si">{</span><span class="n">tag</span><span class="si">}{</span><span class="n">colspan_attr</span><span class="si">}{</span><span class="n">rowspan_attr</span><span class="si">}</span><span class="s1">&gt;&#39;</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">_enriched_text_to_html</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">content</span><span class="p">,</span> <span class="n">with_links</span><span class="p">)</span><span class="si">}</span><span class="s1">&#39;</span> <span class="sa">f</span><span class="s1">&#39;&lt;/</span><span class="si">{</span><span class="n">tag</span><span class="si">}</span><span class="s1">&gt;&#39;</span></div></div>
+
+
+<span class="k">def</span> <span class="nf">_cells_to_html</span><span class="p">(</span><span class="n">cells</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Cell</span><span class="p">],</span> <span class="n">is_header</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span> <span class="n">with_links</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">return</span> <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">cell</span><span class="o">.</span><span class="n">to_html</span><span class="p">(</span><span class="n">is_header</span><span class="p">,</span> <span class="n">with_links</span><span class="p">)</span> <span class="k">for</span> <span class="n">cell</span> <span class="ow">in</span> <span class="n">cells</span><span class="p">])</span>
+
+
+<div class="viewcode-block" id="Row"><a class="viewcode-back" href="../../../envinorma.models.html#envinorma.models.text_elements.Row">[docs]</a><span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">Row</span><span class="p">:</span>
+    <span class="n">cells</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Cell</span><span class="p">]</span>
+    <span class="n">is_header</span><span class="p">:</span> <span class="nb">bool</span>
+    <span class="n">inline_content</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+
+<div class="viewcode-block" id="Row.from_dict"><a class="viewcode-back" href="../../../envinorma.models.html#envinorma.models.text_elements.Row.from_dict">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">from_dict</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">dict_</span><span class="p">:</span> <span class="n">Dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s1">&#39;Row&#39;</span><span class="p">:</span>
+        <span class="n">dict_</span> <span class="o">=</span> <span class="n">dict_</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="n">dict_</span><span class="p">[</span><span class="s1">&#39;cells&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">Cell</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">cell</span><span class="p">)</span> <span class="k">for</span> <span class="n">cell</span> <span class="ow">in</span> <span class="n">dict_</span><span class="p">[</span><span class="s1">&#39;cells&#39;</span><span class="p">]]</span>
+        <span class="n">dict_</span><span class="p">[</span><span class="s1">&#39;inline_content&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">dict_</span><span class="p">[</span><span class="s1">&#39;text_in_inspection_sheet&#39;</span><span class="p">]</span>
+        <span class="k">del</span> <span class="n">dict_</span><span class="p">[</span><span class="s1">&#39;text_in_inspection_sheet&#39;</span><span class="p">]</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="o">**</span><span class="n">dict_</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Row.to_dict"><a class="viewcode-back" href="../../../envinorma.models.html#envinorma.models.text_elements.Row.to_dict">[docs]</a>    <span class="k">def</span> <span class="nf">to_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+        <span class="n">dict_</span> <span class="o">=</span> <span class="n">asdict</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="n">dict_</span><span class="p">[</span><span class="s1">&#39;text_in_inspection_sheet&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">dict_</span><span class="p">[</span><span class="s1">&#39;inline_content&#39;</span><span class="p">]</span>
+        <span class="k">del</span> <span class="n">dict_</span><span class="p">[</span><span class="s1">&#39;inline_content&#39;</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">dict_</span></div>
+
+<div class="viewcode-block" id="Row.to_html"><a class="viewcode-back" href="../../../envinorma.models.html#envinorma.models.text_elements.Row.to_html">[docs]</a>    <span class="k">def</span> <span class="nf">to_html</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">with_links</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s1">&#39;&lt;tr&gt;</span><span class="si">{</span><span class="n">_cells_to_html</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cells</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_header</span><span class="p">,</span> <span class="n">with_links</span><span class="p">)</span><span class="si">}</span><span class="s1">&lt;/tr&gt;&#39;</span></div></div>
+
+
+<span class="k">def</span> <span class="nf">_rows_to_html</span><span class="p">(</span><span class="n">rows</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Row</span><span class="p">],</span> <span class="n">with_links</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">return</span> <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">row</span><span class="o">.</span><span class="n">to_html</span><span class="p">(</span><span class="n">with_links</span><span class="p">)</span> <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">rows</span><span class="p">])</span>
+
+
+<div class="viewcode-block" id="Table"><a class="viewcode-back" href="../../../envinorma.models.html#envinorma.models.text_elements.Table">[docs]</a><span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">Table</span><span class="p">:</span>
+    <span class="n">rows</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Row</span><span class="p">]</span>
+
+<div class="viewcode-block" id="Table.to_dict"><a class="viewcode-back" href="../../../envinorma.models.html#envinorma.models.text_elements.Table.to_dict">[docs]</a>    <span class="k">def</span> <span class="nf">to_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="p">{</span><span class="s1">&#39;rows&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">row</span><span class="o">.</span><span class="n">to_dict</span><span class="p">()</span> <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">rows</span><span class="p">]}</span></div>
+
+<div class="viewcode-block" id="Table.from_dict"><a class="viewcode-back" href="../../../envinorma.models.html#envinorma.models.text_elements.Table.from_dict">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">from_dict</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">dict_</span><span class="p">:</span> <span class="n">Dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s1">&#39;Table&#39;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="p">([</span><span class="n">Row</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">row</span><span class="p">)</span> <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">dict_</span><span class="p">[</span><span class="s1">&#39;rows&#39;</span><span class="p">]])</span></div>
+
+<div class="viewcode-block" id="Table.to_html"><a class="viewcode-back" href="../../../envinorma.models.html#envinorma.models.text_elements.Table.to_html">[docs]</a>    <span class="k">def</span> <span class="nf">to_html</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">with_links</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s1">&#39;&lt;table&gt;</span><span class="si">{</span><span class="n">_rows_to_html</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rows</span><span class="p">,</span> <span class="n">with_links</span><span class="p">)</span><span class="si">}</span><span class="s1">&lt;/table&gt;&#39;</span></div></div>
+
+
+<div class="viewcode-block" id="empty_link_list"><a class="viewcode-back" href="../../../envinorma.models.html#envinorma.models.text_elements.empty_link_list">[docs]</a><span class="k">def</span> <span class="nf">empty_link_list</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Link</span><span class="p">]:</span>
+    <span class="k">return</span> <span class="p">[]</span></div>
+
+
+<span class="k">def</span> <span class="nf">_split_html_in_lines</span><span class="p">(</span><span class="n">html</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+    <span class="n">html</span> <span class="o">=</span> <span class="n">html</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;&lt;br/&gt;&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;&gt;&#39;</span><span class="p">,</span> <span class="s1">&#39;&gt;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;&lt;&#39;</span><span class="p">,</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&lt;&#39;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="p">[</span><span class="n">x</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">html</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)]</span>
+
+
+<div class="viewcode-block" id="EnrichedString"><a class="viewcode-back" href="../../../envinorma.models.html#envinorma.models.text_elements.EnrichedString">[docs]</a><span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">EnrichedString</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Dataclass for representing string potentially decorated with links and tables and</span>
+<span class="sd">    potentially inapplicably in a certain context.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        text (str):</span>
+<span class="sd">            content of the string</span>
+<span class="sd">        links (List[Link] = field(default_factory=empty_link_list)):</span>
+<span class="sd">            list of links decorating text</span>
+<span class="sd">        table (Optional[Table] = None):</span>
+<span class="sd">            if not None, the string actually is a table</span>
+<span class="sd">        active (Optional[bool] = True):</span>
+<span class="sd">            if False, the string is inactive in the context of its usage</span>
+<span class="sd">            (example : inapplicable alinea in an AM)</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">text</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">links</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Link</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="n">empty_link_list</span><span class="p">)</span>
+    <span class="n">table</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Table</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">active</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
+
+<div class="viewcode-block" id="EnrichedString.from_dict"><a class="viewcode-back" href="../../../envinorma.models.html#envinorma.models.text_elements.EnrichedString.from_dict">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">from_dict</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">dict_</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="s1">&#39;EnrichedString&#39;</span><span class="p">:</span>
+        <span class="n">dict_</span> <span class="o">=</span> <span class="n">dict_</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="n">dict_</span><span class="p">[</span><span class="s1">&#39;links&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">Link</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">link</span><span class="p">)</span> <span class="k">for</span> <span class="n">link</span> <span class="ow">in</span> <span class="n">dict_</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;links&#39;</span><span class="p">,</span> <span class="p">[])]</span>
+        <span class="n">dict_</span><span class="p">[</span><span class="s1">&#39;table&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Table</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">dict_</span><span class="p">[</span><span class="s1">&#39;table&#39;</span><span class="p">])</span> <span class="k">if</span> <span class="n">dict_</span><span class="p">[</span><span class="s1">&#39;table&#39;</span><span class="p">]</span> <span class="k">else</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="s1">&#39;id&#39;</span> <span class="ow">in</span> <span class="n">dict_</span><span class="p">:</span>
+            <span class="k">del</span> <span class="n">dict_</span><span class="p">[</span><span class="s1">&#39;id&#39;</span><span class="p">]</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="o">**</span><span class="n">dict_</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="EnrichedString.to_dict"><a class="viewcode-back" href="../../../envinorma.models.html#envinorma.models.text_elements.EnrichedString.to_dict">[docs]</a>    <span class="k">def</span> <span class="nf">to_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+        <span class="n">dict_</span> <span class="o">=</span> <span class="n">asdict</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="n">dict_</span><span class="p">[</span><span class="s1">&#39;table&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">table</span><span class="o">.</span><span class="n">to_dict</span><span class="p">()</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">table</span> <span class="k">else</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">links</span><span class="p">:</span>
+            <span class="k">del</span> <span class="n">dict_</span><span class="p">[</span><span class="s1">&#39;links&#39;</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">dict_</span></div>
+
+<div class="viewcode-block" id="EnrichedString.text_lines"><a class="viewcode-back" href="../../../envinorma.models.html#envinorma.models.text_elements.EnrichedString.text_lines">[docs]</a>    <span class="k">def</span> <span class="nf">text_lines</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">table</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">_split_html_in_lines</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">table</span><span class="o">.</span><span class="n">to_html</span><span class="p">())</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">text</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span></div></div>
+
+
+<span class="k">def</span> <span class="nf">_random_string</span><span class="p">(</span><span class="n">size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">9</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">return</span> <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">ascii_letters</span><span class="p">)</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">size</span><span class="p">)])</span>
+
+
+<span class="k">def</span> <span class="nf">_random_enriched_string</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">EnrichedString</span><span class="p">:</span>
+    <span class="k">return</span> <span class="n">EnrichedString</span><span class="p">(</span><span class="n">_random_string</span><span class="p">(),</span> <span class="p">[],</span> <span class="kc">None</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="estr"><a class="viewcode-back" href="../../../envinorma.models.html#envinorma.models.text_elements.estr">[docs]</a><span class="k">def</span> <span class="nf">estr</span><span class="p">(</span><span class="n">text</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">EnrichedString</span><span class="p">:</span>
+    <span class="k">return</span> <span class="n">EnrichedString</span><span class="p">(</span><span class="n">text</span><span class="p">)</span> <span class="k">if</span> <span class="n">text</span> <span class="k">else</span> <span class="n">_random_enriched_string</span><span class="p">()</span></div>
+
+
+<span class="k">def</span> <span class="nf">_enriched_text_to_html</span><span class="p">(</span><span class="n">str_</span><span class="p">:</span> <span class="n">EnrichedString</span><span class="p">,</span> <span class="n">with_links</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">with_links</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">()</span>  <span class="c1"># see markdown if required</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">text</span> <span class="o">=</span> <span class="n">str_</span><span class="o">.</span><span class="n">text</span>
+    <span class="k">return</span> <span class="n">text</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">,</span> <span class="s1">&#39;&lt;br/&gt;&#39;</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="Linebreak"><a class="viewcode-back" href="../../../envinorma.models.html#envinorma.models.text_elements.Linebreak">[docs]</a><span class="nd">@dataclass</span><span class="p">(</span><span class="n">eq</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">class</span> <span class="nc">Linebreak</span><span class="p">:</span>
+    <span class="k">pass</span></div>
+
+
+<div class="viewcode-block" id="Title"><a class="viewcode-back" href="../../../envinorma.models.html#envinorma.models.text_elements.Title">[docs]</a><span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">Title</span><span class="p">:</span>
+    <span class="n">text</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">level</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="nb">id</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+
+<div class="viewcode-block" id="Title.to_dict"><a class="viewcode-back" href="../../../envinorma.models.html#envinorma.models.text_elements.Title.to_dict">[docs]</a>    <span class="k">def</span> <span class="nf">to_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="n">asdict</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Title.from_dict"><a class="viewcode-back" href="../../../envinorma.models.html#envinorma.models.text_elements.Title.from_dict">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">from_dict</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">dict_</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="s1">&#39;Title&#39;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="o">**</span><span class="n">dict_</span><span class="p">)</span></div></div>
+
+
+<span class="n">TextElement</span> <span class="o">=</span> <span class="n">Union</span><span class="p">[</span><span class="n">Table</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="n">Title</span><span class="p">,</span> <span class="n">Linebreak</span><span class="p">]</span>
+<span class="n">TextElements</span> <span class="o">=</span> <span class="p">(</span><span class="n">Table</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="n">Title</span><span class="p">,</span> <span class="n">Linebreak</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="load_text_element"><a class="viewcode-back" href="../../../envinorma.models.html#envinorma.models.text_elements.load_text_element">[docs]</a><span class="k">def</span> <span class="nf">load_text_element</span><span class="p">(</span><span class="n">json_</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">TextElement</span><span class="p">:</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">json_</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">json_</span>
+    <span class="k">if</span> <span class="s1">&#39;rows&#39;</span> <span class="ow">in</span> <span class="n">json_</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">Table</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">json_</span><span class="p">)</span>
+    <span class="k">if</span> <span class="s1">&#39;level&#39;</span> <span class="ow">in</span> <span class="n">json_</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">Title</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">json_</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">json_</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Expected empty dict, got </span><span class="si">{</span><span class="n">json_</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">Linebreak</span><span class="p">()</span></div>
+
+
+<span class="k">def</span> <span class="nf">_count_nb_cols_in_each_row</span><span class="p">(</span><span class="n">table</span><span class="p">:</span> <span class="n">Table</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]:</span>
+    <span class="n">nb_cols_in_each_row</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">table</span><span class="o">.</span><span class="n">rows</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">row_rank</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">table</span><span class="o">.</span><span class="n">rows</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">cell</span> <span class="ow">in</span> <span class="n">row</span><span class="o">.</span><span class="n">cells</span><span class="p">:</span>
+            <span class="n">nb_cols_in_each_row</span><span class="p">[</span><span class="n">row_rank</span><span class="p">]</span> <span class="o">+=</span> <span class="n">cell</span><span class="o">.</span><span class="n">colspan</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">cell</span><span class="o">.</span><span class="n">rowspan</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">row_rank</span> <span class="o">+</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">nb_cols_in_each_row</span><span class="p">):</span>
+                    <span class="n">nb_cols_in_each_row</span><span class="p">[</span><span class="n">row_rank</span> <span class="o">+</span> <span class="n">i</span><span class="p">]</span> <span class="o">+=</span> <span class="n">cell</span><span class="o">.</span><span class="n">colspan</span>
+    <span class="k">return</span> <span class="n">nb_cols_in_each_row</span>
+
+
+<span class="k">def</span> <span class="nf">_find_next_index_none</span><span class="p">(</span><span class="n">start_index</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">list_</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]])</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]:</span>
+    <span class="k">while</span> <span class="n">start_index</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">list_</span><span class="p">)</span> <span class="ow">and</span> <span class="n">list_</span><span class="p">[</span><span class="n">start_index</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">start_index</span> <span class="o">+=</span> <span class="mi">1</span>
+    <span class="k">if</span> <span class="n">start_index</span> <span class="o">&gt;=</span> <span class="nb">len</span><span class="p">(</span><span class="n">list_</span><span class="p">):</span>
+        <span class="k">return</span> <span class="kc">None</span>
+    <span class="k">return</span> <span class="n">start_index</span>
+
+
+<div class="viewcode-block" id="table_to_list"><a class="viewcode-back" href="../../../envinorma.models.html#envinorma.models.text_elements.table_to_list">[docs]</a><span class="k">def</span> <span class="nf">table_to_list</span><span class="p">(</span><span class="n">table</span><span class="p">:</span> <span class="n">Table</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]:</span>
+    <span class="n">nb_cols_in_each_row</span> <span class="o">=</span> <span class="n">_count_nb_cols_in_each_row</span><span class="p">(</span><span class="n">table</span><span class="p">)</span>
+    <span class="n">rows</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]]]</span> <span class="o">=</span> <span class="p">[[</span><span class="kc">None</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">size</span><span class="p">)]</span> <span class="k">for</span> <span class="n">size</span> <span class="ow">in</span> <span class="n">nb_cols_in_each_row</span><span class="p">]</span>
+    <span class="k">for</span> <span class="n">row_rank</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">table</span><span class="o">.</span><span class="n">rows</span><span class="p">):</span>
+        <span class="n">dest_row</span> <span class="o">=</span> <span class="n">rows</span><span class="p">[</span><span class="n">row_rank</span><span class="p">]</span>
+        <span class="n">col_index</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">cell</span> <span class="ow">in</span> <span class="n">row</span><span class="o">.</span><span class="n">cells</span><span class="p">:</span>
+            <span class="n">new_col_index</span> <span class="o">=</span> <span class="n">_find_next_index_none</span><span class="p">(</span><span class="n">col_index</span><span class="p">,</span> <span class="n">dest_row</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">new_col_index</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">break</span>
+            <span class="n">col_index</span> <span class="o">=</span> <span class="n">new_col_index</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">cell</span><span class="o">.</span><span class="n">rowspan</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">row_rank</span> <span class="o">+</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">rows</span><span class="p">):</span>
+                    <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">cell</span><span class="o">.</span><span class="n">colspan</span><span class="p">):</span>
+                        <span class="n">rows</span><span class="p">[</span><span class="n">row_rank</span> <span class="o">+</span> <span class="n">i</span><span class="p">][</span><span class="n">col_index</span> <span class="o">+</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">cell</span><span class="o">.</span><span class="n">content</span><span class="o">.</span><span class="n">text</span>
+    <span class="k">return</span> <span class="p">[[</span><span class="n">x</span> <span class="ow">or</span> <span class="s1">&#39;&#39;</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">xs</span><span class="p">]</span> <span class="k">for</span> <span class="n">xs</span> <span class="ow">in</span> <span class="n">rows</span><span class="p">]</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, Envinorma.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

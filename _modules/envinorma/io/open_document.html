@@ -1,0 +1,738 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>envinorma.io.open_document &mdash; Envinorma 0.0.0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> Envinorma
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.0.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../index.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">Package modules</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../envinorma.html">envinorma package</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../envinorma.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../envinorma.enriching.html">envinorma.enriching package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../envinorma.from_legifrance.html">envinorma.from_legifrance package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../envinorma.io.html">envinorma.io package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../envinorma.models.html">envinorma.models package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../envinorma.parametrization.html">envinorma.parametrization package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../envinorma.topics.html">envinorma.topics package</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../envinorma.html#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../envinorma.html#module-envinorma.data_fetcher">envinorma.data_fetcher module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../envinorma.html#module-envinorma.structure">envinorma.structure module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../envinorma.html#module-envinorma.title_detection">envinorma.title_detection module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../envinorma.html#module-envinorma.utils">envinorma.utils module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../envinorma.html#module-envinorma">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">Envinorma</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+          <li><a href="../../envinorma.html">envinorma</a> &raquo;</li>
+        
+      <li>envinorma.io.open_document</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for envinorma.io.open_document</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">shutil</span>
+<span class="kn">import</span> <span class="nn">tempfile</span>
+<span class="kn">import</span> <span class="nn">traceback</span>
+<span class="kn">from</span> <span class="nn">copy</span> <span class="kn">import</span> <span class="n">copy</span>
+<span class="kn">from</span> <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">dataclass</span><span class="p">,</span> <span class="n">field</span>
+<span class="kn">from</span> <span class="nn">enum</span> <span class="kn">import</span> <span class="n">Enum</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span>
+<span class="kn">from</span> <span class="nn">zipfile</span> <span class="kn">import</span> <span class="n">ZipFile</span>
+
+<span class="kn">import</span> <span class="nn">bs4</span>
+<span class="kn">from</span> <span class="nn">bs4</span> <span class="kn">import</span> <span class="n">BeautifulSoup</span>
+
+<span class="kn">from</span> <span class="nn">envinorma.models.structured_text</span> <span class="kn">import</span> <span class="n">StructuredText</span>
+<span class="kn">from</span> <span class="nn">envinorma.models.text_elements</span> <span class="kn">import</span> <span class="n">Cell</span><span class="p">,</span> <span class="n">EnrichedString</span><span class="p">,</span> <span class="n">Linebreak</span><span class="p">,</span> <span class="n">Row</span><span class="p">,</span> <span class="n">Table</span><span class="p">,</span> <span class="n">TextElement</span><span class="p">,</span> <span class="n">Title</span>
+<span class="kn">from</span> <span class="nn">envinorma.structure</span> <span class="kn">import</span> <span class="n">build_structured_text</span><span class="p">,</span> <span class="n">structured_text_to_text_elements</span>
+<span class="kn">from</span> <span class="nn">envinorma.utils</span> <span class="kn">import</span> <span class="n">random_string</span>
+
+
+<span class="k">def</span> <span class="nf">_extract_title</span><span class="p">(</span><span class="n">tag</span><span class="p">:</span> <span class="n">bs4</span><span class="o">.</span><span class="n">Tag</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Title</span><span class="p">:</span>
+    <span class="n">level_str</span> <span class="o">=</span> <span class="n">tag</span><span class="o">.</span><span class="n">attrs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">ODFXMLAttributes</span><span class="o">.</span><span class="n">TITLE_LEVEL</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">level_str</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">level_str</span><span class="o">.</span><span class="n">isdigit</span><span class="p">():</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s1">&#39;Expecting </span><span class="si">{</span><span class="n">ODFXMLAttributes</span><span class="o">.</span><span class="n">TITLE_LEVEL</span><span class="o">.</span><span class="n">value</span><span class="si">}</span><span class="s1"> attribute to be a string digit, received: </span><span class="si">{</span><span class="n">level_str</span><span class="si">}</span><span class="s1">&#39;</span>
+        <span class="p">)</span>
+    <span class="k">return</span> <span class="n">Title</span><span class="p">(</span><span class="n">tag</span><span class="o">.</span><span class="n">text</span><span class="o">.</span><span class="n">strip</span><span class="p">(),</span> <span class="nb">int</span><span class="p">(</span><span class="n">level_str</span><span class="p">))</span>
+
+
+<div class="viewcode-block" id="ODFXMLTagNames"><a class="viewcode-back" href="../../../envinorma.io.html#envinorma.io.open_document.ODFXMLTagNames">[docs]</a><span class="k">class</span> <span class="nc">ODFXMLTagNames</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+    <span class="n">TABLE_COLUMN</span> <span class="o">=</span> <span class="s1">&#39;table:table-column&#39;</span>
+    <span class="n">TABLE_ROW</span> <span class="o">=</span> <span class="s1">&#39;table:table-row&#39;</span>
+    <span class="n">TABLE_TABLE</span> <span class="o">=</span> <span class="s1">&#39;table:table&#39;</span>
+    <span class="n">TABLE_HEADER</span> <span class="o">=</span> <span class="s1">&#39;table:table-header-rows&#39;</span>
+    <span class="n">TABLE_COVERED_CELL</span> <span class="o">=</span> <span class="s1">&#39;table:covered-table-cell&#39;</span>
+    <span class="n">TABLE_CELL</span> <span class="o">=</span> <span class="s1">&#39;table:table-cell&#39;</span>
+    <span class="n">TEXT_SOFT_PAGE_BREAK</span> <span class="o">=</span> <span class="s1">&#39;text:soft-page-break&#39;</span>
+    <span class="n">TEXT_LIST</span> <span class="o">=</span> <span class="s1">&#39;text:list&#39;</span>
+    <span class="n">TEXT_LIST_ITEM</span> <span class="o">=</span> <span class="s1">&#39;text:list-item&#39;</span>
+    <span class="n">TEXT_LIST_HEADER</span> <span class="o">=</span> <span class="s1">&#39;text:list-header&#39;</span>
+    <span class="n">TEXT_H</span> <span class="o">=</span> <span class="s1">&#39;text:h&#39;</span>
+    <span class="n">TEXT_SECTION</span> <span class="o">=</span> <span class="s1">&#39;text:section&#39;</span>
+    <span class="n">TEXT_P</span> <span class="o">=</span> <span class="s1">&#39;text:p&#39;</span>
+    <span class="n">TEXT_TRACKED_CHANGES</span> <span class="o">=</span> <span class="s1">&#39;text:tracked-changes&#39;</span>
+    <span class="n">TEXT_SEQUENCE_DECLS</span> <span class="o">=</span> <span class="s1">&#39;text:sequence-decls&#39;</span>
+    <span class="n">TEXT_TOC</span> <span class="o">=</span> <span class="s1">&#39;text:table-of-content&#39;</span>
+    <span class="n">TEXT_BOOKMARK_START</span> <span class="o">=</span> <span class="s1">&#39;text:bookmark-start&#39;</span>
+    <span class="n">TEXT_BOOKMARK_END</span> <span class="o">=</span> <span class="s1">&#39;text:bookmark-end&#39;</span>
+    <span class="n">OFFICE_ANNOTATION</span> <span class="o">=</span> <span class="s1">&#39;office:annotation&#39;</span></div>
+
+
+<div class="viewcode-block" id="ODFXMLAttributes"><a class="viewcode-back" href="../../../envinorma.io.html#envinorma.io.open_document.ODFXMLAttributes">[docs]</a><span class="k">class</span> <span class="nc">ODFXMLAttributes</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+    <span class="n">TITLE_LEVEL</span> <span class="o">=</span> <span class="s1">&#39;text:outline-level&#39;</span>
+    <span class="n">TABLE_ROW_SPAN</span> <span class="o">=</span> <span class="s1">&#39;table:number-rows-spanned&#39;</span>
+    <span class="n">TABLE_COL_SPAN</span> <span class="o">=</span> <span class="s1">&#39;table:number-columns-spanned&#39;</span>
+    <span class="n">TABLE_COL_REPEATED</span> <span class="o">=</span> <span class="s1">&#39;table:number-columns-repeated&#39;</span>
+    <span class="n">STYLE_NAME</span> <span class="o">=</span> <span class="s1">&#39;text:style-name&#39;</span></div>
+
+
+<span class="k">def</span> <span class="nf">_descriptor</span><span class="p">(</span><span class="n">tag</span><span class="p">:</span> <span class="n">bs4</span><span class="o">.</span><span class="n">Tag</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">return</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">tag</span><span class="o">.</span><span class="n">prefix</span><span class="si">}</span><span class="s1">:</span><span class="si">{</span><span class="n">tag</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s1">&#39;</span>
+
+
+<span class="k">def</span> <span class="nf">_extract_string_from_tag</span><span class="p">(</span><span class="n">tag</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">tag</span><span class="p">,</span> <span class="p">(</span><span class="n">bs4</span><span class="o">.</span><span class="n">Tag</span><span class="p">,</span> <span class="n">bs4</span><span class="o">.</span><span class="n">NavigableString</span><span class="p">)):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Expecting tag or NavigableString as input, received element of type </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">tag</span><span class="p">)</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">tag</span><span class="p">,</span> <span class="n">bs4</span><span class="o">.</span><span class="n">NavigableString</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">tag</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">_descriptor</span><span class="p">(</span><span class="n">tag</span><span class="p">)</span> <span class="o">==</span> <span class="n">ODFXMLTagNames</span><span class="o">.</span><span class="n">TEXT_P</span><span class="o">.</span><span class="n">value</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">_extract_string_from_tags</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">tag</span><span class="o">.</span><span class="n">children</span><span class="p">))</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span>
+    <span class="k">return</span> <span class="n">_extract_string_from_tags</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">tag</span><span class="o">.</span><span class="n">children</span><span class="p">))</span>
+
+
+<span class="k">def</span> <span class="nf">_remove_last_line_break</span><span class="p">(</span><span class="n">str_</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">str_</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">str_</span>
+    <span class="k">if</span> <span class="n">str_</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">str_</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">str_</span>
+
+
+<span class="k">def</span> <span class="nf">_ensure_not_navigable_string</span><span class="p">(</span><span class="n">candidate</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">candidate</span><span class="p">,</span> <span class="n">bs4</span><span class="o">.</span><span class="n">NavigableString</span><span class="p">)</span> <span class="ow">or</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">candidate</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Expecting str, not </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">candidate</span><span class="p">)</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">candidate</span>
+
+
+<span class="k">def</span> <span class="nf">_extract_string_from_tags</span><span class="p">(</span><span class="n">tags</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">return</span> <span class="n">_ensure_not_navigable_string</span><span class="p">(</span>
+        <span class="n">_remove_last_line_break</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">_extract_string_from_tag</span><span class="p">(</span><span class="n">tag</span><span class="p">)</span> <span class="k">for</span> <span class="n">tag</span> <span class="ow">in</span> <span class="n">tags</span><span class="p">]))</span>
+    <span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">_extract_cell</span><span class="p">(</span><span class="n">tag</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Cell</span><span class="p">]:</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">tag</span><span class="p">,</span> <span class="n">bs4</span><span class="o">.</span><span class="n">Tag</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Expecting tag as input, received element of type </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">tag</span><span class="p">)</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+    <span class="n">_expected_names</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">ODFXMLTagNames</span><span class="o">.</span><span class="n">TABLE_CELL</span><span class="o">.</span><span class="n">value</span><span class="p">,</span>
+        <span class="n">ODFXMLTagNames</span><span class="o">.</span><span class="n">TABLE_COVERED_CELL</span><span class="o">.</span><span class="n">value</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="k">if</span> <span class="n">_descriptor</span><span class="p">(</span><span class="n">tag</span><span class="p">)</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">_expected_names</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Expecting tag with name in </span><span class="si">{</span><span class="n">_expected_names</span><span class="si">}</span><span class="s1">, tag with name </span><span class="si">{</span><span class="n">_descriptor</span><span class="p">(</span><span class="n">tag</span><span class="p">)</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">_descriptor</span><span class="p">(</span><span class="n">tag</span><span class="p">)</span> <span class="o">==</span> <span class="n">ODFXMLTagNames</span><span class="o">.</span><span class="n">TABLE_COVERED_CELL</span><span class="o">.</span><span class="n">value</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">None</span>
+    <span class="n">row_span</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">tag</span><span class="o">.</span><span class="n">attrs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">ODFXMLAttributes</span><span class="o">.</span><span class="n">TABLE_ROW_SPAN</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+    <span class="n">col_span</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">tag</span><span class="o">.</span><span class="n">attrs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">ODFXMLAttributes</span><span class="o">.</span><span class="n">TABLE_COL_SPAN</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">Cell</span><span class="p">(</span><span class="n">EnrichedString</span><span class="p">(</span><span class="n">_extract_string_from_tags</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">tag</span><span class="o">.</span><span class="n">children</span><span class="p">))),</span> <span class="n">colspan</span><span class="o">=</span><span class="n">col_span</span><span class="p">,</span> <span class="n">rowspan</span><span class="o">=</span><span class="n">row_span</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">_extract_cells</span><span class="p">(</span><span class="n">tags</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Cell</span><span class="p">]:</span>
+    <span class="n">cells</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Cell</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">tag</span> <span class="ow">in</span> <span class="n">tags</span><span class="p">:</span>
+        <span class="n">cell</span> <span class="o">=</span> <span class="n">_extract_cell</span><span class="p">(</span><span class="n">tag</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">cell</span><span class="p">:</span>
+            <span class="n">cells</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cell</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">cells</span>
+
+
+<span class="k">def</span> <span class="nf">_extract_rows</span><span class="p">(</span><span class="n">tag</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">is_header</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Row</span><span class="p">]:</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">tag</span><span class="p">,</span> <span class="n">bs4</span><span class="o">.</span><span class="n">Tag</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Expecting tag as input, received element of type </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">tag</span><span class="p">)</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+    <span class="n">_expected_names</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">ODFXMLTagNames</span><span class="o">.</span><span class="n">TABLE_COLUMN</span><span class="o">.</span><span class="n">value</span><span class="p">,</span>
+        <span class="n">ODFXMLTagNames</span><span class="o">.</span><span class="n">TABLE_ROW</span><span class="o">.</span><span class="n">value</span><span class="p">,</span>
+        <span class="n">ODFXMLTagNames</span><span class="o">.</span><span class="n">TEXT_SOFT_PAGE_BREAK</span><span class="o">.</span><span class="n">value</span><span class="p">,</span>
+        <span class="n">ODFXMLTagNames</span><span class="o">.</span><span class="n">TABLE_HEADER</span><span class="o">.</span><span class="n">value</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="k">if</span> <span class="n">_descriptor</span><span class="p">(</span><span class="n">tag</span><span class="p">)</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">_expected_names</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Expecting tag with name in </span><span class="si">{</span><span class="n">_expected_names</span><span class="si">}</span><span class="s1">, tag with name </span><span class="si">{</span><span class="n">_descriptor</span><span class="p">(</span><span class="n">tag</span><span class="p">)</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">_descriptor</span><span class="p">(</span><span class="n">tag</span><span class="p">)</span> <span class="o">==</span> <span class="n">ODFXMLTagNames</span><span class="o">.</span><span class="n">TABLE_HEADER</span><span class="o">.</span><span class="n">value</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">row</span> <span class="k">for</span> <span class="n">child</span> <span class="ow">in</span> <span class="n">tag</span><span class="o">.</span><span class="n">children</span> <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">_extract_rows</span><span class="p">(</span><span class="n">child</span><span class="p">,</span> <span class="kc">True</span><span class="p">)]</span>
+    <span class="k">if</span> <span class="n">_descriptor</span><span class="p">(</span><span class="n">tag</span><span class="p">)</span> <span class="ow">in</span> <span class="p">(</span><span class="n">ODFXMLTagNames</span><span class="o">.</span><span class="n">TABLE_COLUMN</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="n">ODFXMLTagNames</span><span class="o">.</span><span class="n">TEXT_SOFT_PAGE_BREAK</span><span class="o">.</span><span class="n">value</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">[]</span>  <span class="c1"># &lt;table:column&gt; only contains styles</span>
+    <span class="k">return</span> <span class="p">[</span><span class="n">Row</span><span class="p">(</span><span class="n">_extract_cells</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">tag</span><span class="o">.</span><span class="n">children</span><span class="p">)),</span> <span class="n">is_header</span><span class="p">)]</span>
+
+
+<span class="k">def</span> <span class="nf">_extract_table</span><span class="p">(</span><span class="n">tag</span><span class="p">:</span> <span class="n">bs4</span><span class="o">.</span><span class="n">Tag</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Table</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">_descriptor</span><span class="p">(</span><span class="n">tag</span><span class="p">)</span> <span class="o">!=</span> <span class="n">ODFXMLTagNames</span><span class="o">.</span><span class="n">TABLE_TABLE</span><span class="o">.</span><span class="n">value</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Expecting table tag, received tag with name </span><span class="si">{</span><span class="n">_descriptor</span><span class="p">(</span><span class="n">tag</span><span class="p">)</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+    <span class="n">rows</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Row</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">child</span> <span class="ow">in</span> <span class="n">tag</span><span class="o">.</span><span class="n">children</span><span class="p">:</span>
+        <span class="n">rows</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">_extract_rows</span><span class="p">(</span><span class="n">child</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">Table</span><span class="p">(</span><span class="n">rows</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">_extract_list_item_text</span><span class="p">(</span><span class="n">tag</span><span class="p">:</span> <span class="n">bs4</span><span class="o">.</span><span class="n">Tag</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="n">_expected</span> <span class="o">=</span> <span class="p">(</span><span class="n">ODFXMLTagNames</span><span class="o">.</span><span class="n">TEXT_LIST_ITEM</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="n">ODFXMLTagNames</span><span class="o">.</span><span class="n">TEXT_LIST_HEADER</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">_descriptor</span><span class="p">(</span><span class="n">tag</span><span class="p">)</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">_expected</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Expecting tag in </span><span class="si">{</span><span class="n">_expected</span><span class="si">}</span><span class="s1">, received tag with name </span><span class="si">{</span><span class="n">_descriptor</span><span class="p">(</span><span class="n">tag</span><span class="p">)</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">_extract_string_from_tag</span><span class="p">(</span><span class="n">tag</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">_extract_list_elements</span><span class="p">(</span><span class="n">tag</span><span class="p">:</span> <span class="n">bs4</span><span class="o">.</span><span class="n">Tag</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+    <span class="k">if</span> <span class="n">_descriptor</span><span class="p">(</span><span class="n">tag</span><span class="p">)</span> <span class="o">!=</span> <span class="n">ODFXMLTagNames</span><span class="o">.</span><span class="n">TEXT_LIST</span><span class="o">.</span><span class="n">value</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Expecting </span><span class="si">{</span><span class="n">ODFXMLTagNames</span><span class="o">.</span><span class="n">TEXT_LIST</span><span class="o">.</span><span class="n">value</span><span class="si">}</span><span class="s1"> tag, received tag with name </span><span class="si">{</span><span class="n">_descriptor</span><span class="p">(</span><span class="n">tag</span><span class="p">)</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+    <span class="n">results</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">child</span> <span class="ow">in</span> <span class="n">tag</span><span class="o">.</span><span class="n">children</span><span class="p">:</span>
+        <span class="n">text</span> <span class="o">=</span> <span class="s1">&#39;- &#39;</span> <span class="o">+</span> <span class="n">_extract_list_item_text</span><span class="p">(</span><span class="n">child</span><span class="p">)</span>
+        <span class="n">results</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">results</span>
+
+
+<span class="k">def</span> <span class="nf">_is_independent_element</span><span class="p">(</span><span class="n">tag</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">tag</span><span class="p">,</span> <span class="n">bs4</span><span class="o">.</span><span class="n">NavigableString</span><span class="p">):</span>
+        <span class="k">return</span> <span class="kc">False</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">tag</span><span class="p">,</span> <span class="n">bs4</span><span class="o">.</span><span class="n">Tag</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Expecting tag as input, received element of type </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">tag</span><span class="p">)</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+    <span class="n">independent_elements</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">ODFXMLTagNames</span><span class="o">.</span><span class="n">TABLE_TABLE</span><span class="o">.</span><span class="n">value</span><span class="p">,</span>
+        <span class="n">ODFXMLTagNames</span><span class="o">.</span><span class="n">TEXT_LIST</span><span class="o">.</span><span class="n">value</span><span class="p">,</span>
+        <span class="n">ODFXMLTagNames</span><span class="o">.</span><span class="n">TEXT_H</span><span class="o">.</span><span class="n">value</span><span class="p">,</span>
+        <span class="n">ODFXMLTagNames</span><span class="o">.</span><span class="n">TEXT_P</span><span class="o">.</span><span class="n">value</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="k">if</span> <span class="n">_descriptor</span><span class="p">(</span><span class="n">tag</span><span class="p">)</span> <span class="ow">in</span> <span class="n">independent_elements</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">True</span>
+    <span class="k">return</span> <span class="kc">False</span>
+
+
+<span class="k">def</span> <span class="nf">_merge_children</span><span class="p">(</span><span class="n">all_elements</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">TextElement</span><span class="p">]],</span> <span class="n">can_be_merged_list</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">bool</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">TextElement</span><span class="p">]:</span>
+    <span class="n">final_elements</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">TextElement</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">current_built_string</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">sep</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+    <span class="k">for</span> <span class="n">can_be_merged</span><span class="p">,</span> <span class="n">elements</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">can_be_merged_list</span><span class="p">,</span> <span class="n">all_elements</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">can_be_merged</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">elements</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">elements</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="n">elt</span> <span class="o">=</span> <span class="n">elements</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">elt</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>  <span class="c1"># to alleviate pylance type inference.</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">()</span>
+            <span class="n">current_built_string</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">elt</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">can_be_merged</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">elements</span><span class="p">:</span>
+            <span class="k">continue</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">current_built_string</span><span class="p">:</span>
+                <span class="n">final_elements</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">sep</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">current_built_string</span><span class="p">))</span>
+            <span class="n">current_built_string</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="n">final_elements</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">elements</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">current_built_string</span><span class="p">:</span>
+        <span class="n">final_elements</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">sep</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">current_built_string</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">final_elements</span>
+
+
+<span class="k">def</span> <span class="nf">_extract_flattened_elements</span><span class="p">(</span><span class="n">tag</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">group_children</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">TextElement</span><span class="p">]:</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">tag</span><span class="p">,</span> <span class="n">bs4</span><span class="o">.</span><span class="n">NavigableString</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">tag</span><span class="p">)]</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">tag</span><span class="p">,</span> <span class="n">bs4</span><span class="o">.</span><span class="n">Tag</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Expecting tag as input, received element of type </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">tag</span><span class="p">)</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+    <span class="n">tags_to_skip_with_line_break</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">ODFXMLTagNames</span><span class="o">.</span><span class="n">TEXT_TRACKED_CHANGES</span><span class="o">.</span><span class="n">value</span><span class="p">,</span>
+        <span class="n">ODFXMLTagNames</span><span class="o">.</span><span class="n">TEXT_SEQUENCE_DECLS</span><span class="o">.</span><span class="n">value</span><span class="p">,</span>
+        <span class="n">ODFXMLTagNames</span><span class="o">.</span><span class="n">TEXT_TOC</span><span class="o">.</span><span class="n">value</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="k">if</span> <span class="n">_descriptor</span><span class="p">(</span><span class="n">tag</span><span class="p">)</span> <span class="ow">in</span> <span class="n">tags_to_skip_with_line_break</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">Linebreak</span><span class="p">()]</span>
+    <span class="n">tags_to_skip</span> <span class="o">=</span> <span class="p">(</span><span class="n">ODFXMLTagNames</span><span class="o">.</span><span class="n">OFFICE_ANNOTATION</span><span class="o">.</span><span class="n">value</span><span class="p">,)</span>
+    <span class="k">if</span> <span class="n">_descriptor</span><span class="p">(</span><span class="n">tag</span><span class="p">)</span> <span class="ow">in</span> <span class="n">tags_to_skip</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">[]</span>
+    <span class="k">if</span> <span class="n">_descriptor</span><span class="p">(</span><span class="n">tag</span><span class="p">)</span> <span class="o">==</span> <span class="n">ODFXMLTagNames</span><span class="o">.</span><span class="n">TABLE_TABLE</span><span class="o">.</span><span class="n">value</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">_extract_table</span><span class="p">(</span><span class="n">tag</span><span class="p">)]</span>
+    <span class="k">if</span> <span class="n">_descriptor</span><span class="p">(</span><span class="n">tag</span><span class="p">)</span> <span class="o">==</span> <span class="n">ODFXMLTagNames</span><span class="o">.</span><span class="n">TEXT_LIST</span><span class="o">.</span><span class="n">value</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">[</span><span class="o">*</span><span class="n">_extract_list_elements</span><span class="p">(</span><span class="n">tag</span><span class="p">)]</span>
+    <span class="k">if</span> <span class="n">_descriptor</span><span class="p">(</span><span class="n">tag</span><span class="p">)</span> <span class="o">==</span> <span class="n">ODFXMLTagNames</span><span class="o">.</span><span class="n">TEXT_H</span><span class="o">.</span><span class="n">value</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">_extract_title</span><span class="p">(</span><span class="n">tag</span><span class="p">)]</span>
+    <span class="k">if</span> <span class="n">_descriptor</span><span class="p">(</span><span class="n">tag</span><span class="p">)</span> <span class="o">==</span> <span class="n">ODFXMLTagNames</span><span class="o">.</span><span class="n">TEXT_P</span><span class="o">.</span><span class="n">value</span><span class="p">:</span>
+        <span class="n">group_children</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">children</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">tag</span><span class="o">.</span><span class="n">children</span><span class="p">)</span>
+    <span class="n">children_elements</span> <span class="o">=</span> <span class="p">[</span><span class="n">_extract_flattened_elements</span><span class="p">(</span><span class="n">child</span><span class="p">,</span> <span class="n">group_children</span><span class="p">)</span> <span class="k">for</span> <span class="n">child</span> <span class="ow">in</span> <span class="n">children</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">group_children</span><span class="p">:</span>
+        <span class="n">can_be_merged</span> <span class="o">=</span> <span class="p">[</span><span class="ow">not</span> <span class="n">_is_independent_element</span><span class="p">(</span><span class="n">child</span><span class="p">)</span> <span class="k">for</span> <span class="n">child</span> <span class="ow">in</span> <span class="n">children</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">_merge_children</span><span class="p">(</span><span class="n">children_elements</span><span class="p">,</span> <span class="n">can_be_merged</span><span class="p">)</span>
+    <span class="k">return</span> <span class="p">[</span><span class="n">elt</span> <span class="k">for</span> <span class="n">elts</span> <span class="ow">in</span> <span class="n">children_elements</span> <span class="k">for</span> <span class="n">elt</span> <span class="ow">in</span> <span class="n">elts</span><span class="p">]</span>
+
+
+<span class="k">def</span> <span class="nf">_add_title_default_numbering</span><span class="p">(</span><span class="n">text</span><span class="p">:</span> <span class="n">StructuredText</span><span class="p">,</span> <span class="n">prefix</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">rank</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">StructuredText</span><span class="p">:</span>
+    <span class="n">text</span> <span class="o">=</span> <span class="n">copy</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+    <span class="n">new_prefix</span> <span class="o">=</span> <span class="n">prefix</span> <span class="o">+</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">rank</span><span class="o">+</span><span class="mi">1</span><span class="si">}</span><span class="s1">.&#39;</span>
+    <span class="n">text</span><span class="o">.</span><span class="n">title</span><span class="o">.</span><span class="n">text</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">new_prefix</span><span class="si">}</span><span class="s1"> </span><span class="si">{</span><span class="n">text</span><span class="o">.</span><span class="n">title</span><span class="o">.</span><span class="n">text</span><span class="si">}</span><span class="s1">&#39;</span>
+    <span class="n">text</span><span class="o">.</span><span class="n">sections</span> <span class="o">=</span> <span class="p">[</span><span class="n">_add_title_default_numbering</span><span class="p">(</span><span class="n">section</span><span class="p">,</span> <span class="n">new_prefix</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">section</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">text</span><span class="o">.</span><span class="n">sections</span><span class="p">)]</span>
+    <span class="k">return</span> <span class="n">text</span>
+
+
+<span class="k">def</span> <span class="nf">_build_structured_text_from_soup</span><span class="p">(</span><span class="n">tag</span><span class="p">:</span> <span class="n">bs4</span><span class="o">.</span><span class="n">Tag</span><span class="p">,</span> <span class="n">with_numbering</span><span class="p">:</span> <span class="nb">bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">StructuredText</span><span class="p">:</span>
+    <span class="n">elements</span> <span class="o">=</span> <span class="n">_extract_flattened_elements</span><span class="p">(</span><span class="n">tag</span><span class="p">)</span>
+    <span class="n">text</span> <span class="o">=</span> <span class="n">build_structured_text</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">elements</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">with_numbering</span><span class="p">:</span>
+        <span class="n">text</span><span class="o">.</span><span class="n">sections</span> <span class="o">=</span> <span class="p">[</span><span class="n">_add_title_default_numbering</span><span class="p">(</span><span class="n">section</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">section</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">text</span><span class="o">.</span><span class="n">sections</span><span class="p">)]</span>
+    <span class="k">return</span> <span class="n">text</span>
+
+
+<span class="k">def</span> <span class="nf">_extract_tag_from_soup</span><span class="p">(</span><span class="n">soup</span><span class="p">:</span> <span class="n">BeautifulSoup</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">bs4</span><span class="o">.</span><span class="n">Tag</span><span class="p">:</span>
+    <span class="n">tags</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">bs4</span><span class="o">.</span><span class="n">Tag</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">child</span> <span class="ow">in</span> <span class="n">soup</span><span class="o">.</span><span class="n">children</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">child</span><span class="p">,</span> <span class="n">bs4</span><span class="o">.</span><span class="n">element</span><span class="o">.</span><span class="n">ProcessingInstruction</span><span class="p">):</span>
+            <span class="k">continue</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">child</span><span class="p">,</span> <span class="n">bs4</span><span class="o">.</span><span class="n">element</span><span class="o">.</span><span class="n">NavigableString</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">child</span><span class="o">.</span><span class="n">strip</span><span class="p">():</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Unexpected non-void string at top level of soup: </span><span class="si">{</span><span class="n">child</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">child</span><span class="p">,</span> <span class="n">bs4</span><span class="o">.</span><span class="n">Tag</span><span class="p">):</span>
+            <span class="n">tags</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">child</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Unexpected bs4 type </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">child</span><span class="p">)</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">tags</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Expected exactly one tag at toplevel of odt xml. Received </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">tags</span><span class="p">)</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">tags</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+
+<span class="k">def</span> <span class="nf">_transform_odt</span><span class="p">(</span><span class="n">html</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">with_numbering</span><span class="p">:</span> <span class="nb">bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">StructuredText</span><span class="p">:</span>
+    <span class="n">soup</span> <span class="o">=</span> <span class="n">BeautifulSoup</span><span class="p">(</span><span class="n">html</span><span class="p">,</span> <span class="s1">&#39;lxml-xml&#39;</span><span class="p">)</span>
+    <span class="n">tag</span> <span class="o">=</span> <span class="n">_extract_tag_from_soup</span><span class="p">(</span><span class="n">soup</span><span class="p">)</span>  <span class="c1"># expecting exactly one tag, might not hold True</span>
+    <span class="k">return</span> <span class="n">_build_structured_text_from_soup</span><span class="p">(</span><span class="n">tag</span><span class="p">,</span> <span class="n">with_numbering</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="get_odt_xml"><a class="viewcode-back" href="../../../envinorma.io.html#envinorma.io.open_document.get_odt_xml">[docs]</a><span class="k">def</span> <span class="nf">get_odt_xml</span><span class="p">(</span><span class="n">filename</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">return</span> <span class="n">ZipFile</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="s1">&#39;content.xml&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">decode</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="load_and_transform"><a class="viewcode-back" href="../../../envinorma.io.html#envinorma.io.open_document.load_and_transform">[docs]</a><span class="k">def</span> <span class="nf">load_and_transform</span><span class="p">(</span><span class="n">filename</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">add_numbering</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">StructuredText</span><span class="p">:</span>
+    <span class="k">return</span> <span class="n">_transform_odt</span><span class="p">(</span><span class="n">get_odt_xml</span><span class="p">(</span><span class="n">filename</span><span class="p">),</span> <span class="n">add_numbering</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="extract_text"><a class="viewcode-back" href="../../../envinorma.io.html#envinorma.io.open_document.extract_text">[docs]</a><span class="k">def</span> <span class="nf">extract_text</span><span class="p">(</span><span class="n">file_content</span><span class="p">:</span> <span class="nb">bytes</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">StructuredText</span><span class="p">:</span>
+    <span class="n">filename</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;/tmp/tmp_</span><span class="si">{</span><span class="n">random_string</span><span class="p">()</span><span class="si">}</span><span class="s1">&#39;</span>
+    <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s1">&#39;wb&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">file_content</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">_transform_odt</span><span class="p">(</span><span class="n">get_odt_xml</span><span class="p">(</span><span class="n">filename</span><span class="p">),</span> <span class="kc">False</span><span class="p">)</span></div>
+
+
+<span class="k">def</span> <span class="nf">_extract_lines_from_page_element</span><span class="p">(</span><span class="n">page_element</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">page_element</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">page_element</span><span class="p">]</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">page_element</span><span class="p">,</span> <span class="n">bs4</span><span class="o">.</span><span class="n">Tag</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">line</span> <span class="k">for</span> <span class="n">child</span> <span class="ow">in</span> <span class="n">page_element</span><span class="o">.</span><span class="n">children</span> <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">_extract_lines_from_page_element</span><span class="p">(</span><span class="n">child</span><span class="p">)]</span>
+    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Unhandled type </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">page_element</span><span class="p">)</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">_extract_lines_from_soup</span><span class="p">(</span><span class="n">soup</span><span class="p">:</span> <span class="n">BeautifulSoup</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+    <span class="k">return</span> <span class="p">[</span><span class="n">line</span> <span class="k">for</span> <span class="n">child</span> <span class="ow">in</span> <span class="n">soup</span><span class="o">.</span><span class="n">children</span> <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">_extract_lines_from_page_element</span><span class="p">(</span><span class="n">child</span><span class="p">)]</span>
+
+
+<span class="k">def</span> <span class="nf">_extract_lines</span><span class="p">(</span><span class="n">filename</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+    <span class="n">html</span> <span class="o">=</span> <span class="n">ZipFile</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="s1">&#39;content.xml&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">decode</span><span class="p">()</span>
+    <span class="n">soup</span> <span class="o">=</span> <span class="n">BeautifulSoup</span><span class="p">(</span><span class="n">html</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">_extract_lines_from_soup</span><span class="p">(</span><span class="n">soup</span><span class="p">)</span>
+
+
+<span class="n">_XML_EMPTY_ODT</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="sd">&#39;&#39;&#39;&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;&lt;office:document-content office:version=&quot;1.2&quot; xmlns:chart=&quot;urn&#39;&#39;&#39;</span>
+    <span class="sd">&#39;&#39;&#39;:oasis:names:tc:opendocument:xmlns:chart:1.0&quot; xmlns:dc=&quot;http://purl.org/dc/elements/1.1/&quot; xmlns:dom=&#39;&#39;&#39;</span>
+    <span class="sd">&#39;&#39;&#39;&quot;http://www.w3.org/2001/xml-events&quot; xmlns:dr3d=&quot;urn:oasis:names:tc:opendocument:xmlns:dr3d:1.0&quot; xmln&#39;&#39;&#39;</span>
+    <span class="sd">&#39;&#39;&#39;s:draw=&quot;urn:oasis:names:tc:opendocument:xmlns:drawing:1.0&quot; xmlns:field=&quot;urn:openoffice:names:experim&#39;&#39;&#39;</span>
+    <span class="sd">&#39;&#39;&#39;ental:ooo-ms-interop:xmlns:field:1.0&quot; xmlns:fo=&quot;urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compati&#39;&#39;&#39;</span>
+    <span class="sd">&#39;&#39;&#39;ble:1.0&quot; xmlns:form=&quot;urn:oasis:names:tc:opendocument:xmlns:form:1.0&quot; xmlns:grddl=&quot;http://www.w3.org/&#39;&#39;&#39;</span>
+    <span class="sd">&#39;&#39;&#39;2003/g/data-view#&quot; xmlns:math=&quot;http://www.w3.org/1998/Math/MathML&quot; xmlns:meta=&quot;urn:oasis:names:tc:op&#39;&#39;&#39;</span>
+    <span class="sd">&#39;&#39;&#39;endocument:xmlns:meta:1.0&quot; xmlns:number=&quot;urn:oasis:names:tc:opendocument:xmlns:datastyle:1.0&quot; xmlns:&#39;&#39;&#39;</span>
+    <span class="sd">&#39;&#39;&#39;of=&quot;urn:oasis:names:tc:opendocument:xmlns:of:1.2&quot; xmlns:office=&quot;urn:oasis:names:tc:opendocument:xmln&#39;&#39;&#39;</span>
+    <span class="sd">&#39;&#39;&#39;s:office:1.0&quot; xmlns:ooo=&quot;http://openoffice.org/2004/office&quot; xmlns:oooc=&quot;http://openoffice.org/2004/c&#39;&#39;&#39;</span>
+    <span class="sd">&#39;&#39;&#39;alc&quot; xmlns:ooow=&quot;http://openoffice.org/2004/writer&quot; xmlns:rpt=&quot;http://openoffice.org/2005/report&quot; xm&#39;&#39;&#39;</span>
+    <span class="sd">&#39;&#39;&#39;lns:script=&quot;urn:oasis:names:tc:opendocument:xmlns:script:1.0&quot; xmlns:style=&quot;urn:oasis:names:tc:opendo&#39;&#39;&#39;</span>
+    <span class="sd">&#39;&#39;&#39;cument:xmlns:style:1.0&quot; xmlns:svg=&quot;urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0&quot; xmlns:t&#39;&#39;&#39;</span>
+    <span class="sd">&#39;&#39;&#39;able=&quot;urn:oasis:names:tc:opendocument:xmlns:table:1.0&quot; xmlns:tableooo=&quot;http://openoffice.org/2009/ta&#39;&#39;&#39;</span>
+    <span class="sd">&#39;&#39;&#39;ble&quot; xmlns:text=&quot;urn:oasis:names:tc:opendocument:xmlns:text:1.0&quot; xmlns:textooo=&quot;http://openoffice.or&#39;&#39;&#39;</span>
+    <span class="sd">&#39;&#39;&#39;g/2013/office&quot; xmlns:xforms=&quot;http://www.w3.org/2002/xforms&quot; xmlns:xhtml=&quot;http://www.w3.org/1999/xhtm&#39;&#39;&#39;</span>
+    <span class="sd">&#39;&#39;&#39;l&quot; xmlns:xlink=&quot;http://www.w3.org/1999/xlink&quot; xmlns:xsd=&quot;http://www.w3.org/2001/XMLSchema&quot; xmlns:xsi&#39;&#39;&#39;</span>
+    <span class="sd">&#39;&#39;&#39;=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;&gt;&lt;office:scripts/&gt;&lt;office:font-face-decls&gt;&lt;style:font-fa&#39;&#39;&#39;</span>
+    <span class="sd">&#39;&#39;&#39;ce style:font-family-generic=&quot;swiss&quot; style:name=&quot;Arial Unicode MS1&quot; svg:font-family=&quot;&#39;Arial Unicode &#39;&#39;&#39;</span>
+    <span class="sd">&#39;&#39;&#39;MS&#39;&quot;/&gt;&lt;style:font-face style:font-family-generic=&quot;roman&quot; style:font-pitch=&quot;variable&quot; style:name=&quot;Lib&#39;&#39;&#39;</span>
+    <span class="sd">&#39;&#39;&#39;eration Serif&quot; svg:font-family=&quot;&#39;Liberation Serif&#39;&quot;/&gt;&lt;style:font-face style:font-family-generic=&quot;swi&#39;&#39;&#39;</span>
+    <span class="sd">&#39;&#39;&#39;ss&quot; style:font-pitch=&quot;variable&quot; style:name=&quot;Liberation Sans&quot; svg:font-family=&quot;&#39;Liberation Sans&#39;&quot;/&gt;&lt;s&#39;&#39;&#39;</span>
+    <span class="sd">&#39;&#39;&#39;tyle:font-face style:font-family-generic=&quot;system&quot; style:font-pitch=&quot;variable&quot; style:name=&quot;Arial Unic&#39;&#39;&#39;</span>
+    <span class="sd">&#39;&#39;&#39;ode MS&quot; svg:font-family=&quot;&#39;Arial Unicode MS&#39;&quot;/&gt;&lt;style:font-face style:font-family-generic=&quot;system&quot; st&#39;&#39;&#39;</span>
+    <span class="sd">&#39;&#39;&#39;yle:font-pitch=&quot;variable&quot; style:name=&quot;PingFang SC&quot; svg:font-family=&quot;&#39;PingFang SC&#39;&quot;/&gt;&lt;style:font-face&#39;&#39;&#39;</span>
+    <span class="sd">&#39;&#39;&#39; style:font-family-generic=&quot;system&quot; style:font-pitch=&quot;variable&quot; style:name=&quot;Songti SC&quot; svg:font-fami&#39;&#39;&#39;</span>
+    <span class="sd">&#39;&#39;&#39;ly=&quot;&#39;Songti SC&#39;&quot;/&gt;&lt;/office:font-face-decls&gt;&lt;office:automatic-styles/&gt;&lt;office:body&gt;&lt;office:text&gt;&lt;text&#39;&#39;&#39;</span>
+    <span class="sd">&#39;&#39;&#39;:sequence-decls&gt;&lt;text:sequence-decl text:display-outline-level=&quot;0&quot; text:name=&quot;Illustration&quot;/&gt;&lt;text:s&#39;&#39;&#39;</span>
+    <span class="sd">&#39;&#39;&#39;equence-decl text:display-outline-level=&quot;0&quot; text:name=&quot;Table&quot;/&gt;&lt;text:sequence-decl text:display-outl&#39;&#39;&#39;</span>
+    <span class="sd">&#39;&#39;&#39;ine-level=&quot;0&quot; text:name=&quot;Text&quot;/&gt;&lt;text:sequence-decl text:display-outline-level=&quot;0&quot; text:name=&quot;Drawin&#39;&#39;&#39;</span>
+    <span class="sd">&#39;&#39;&#39;g&quot;/&gt;&lt;text:sequence-decl text:display-outline-level=&quot;0&quot; text:name=&quot;Figure&quot;/&gt;&lt;/text:sequence-decls&gt;&lt;/o&#39;&#39;&#39;</span>
+    <span class="sd">&#39;&#39;&#39;ffice:text&gt;&lt;/office:body&gt;&lt;/office:document-content&gt;&#39;&#39;&#39;</span>
+<span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">_generate_empty_tree</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">return</span> <span class="n">_XML_EMPTY_ODT</span>
+
+
+<span class="k">def</span> <span class="nf">_check_tag</span><span class="p">(</span><span class="n">candidate</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">bs4</span><span class="o">.</span><span class="n">Tag</span><span class="p">:</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">candidate</span><span class="p">,</span> <span class="n">bs4</span><span class="o">.</span><span class="n">Tag</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Expecting type bs4.Tag, received </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">candidate</span><span class="p">)</span><span class="si">}</span><span class="s1">.&#39;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">candidate</span>
+
+
+<span class="k">def</span> <span class="nf">_get_title_builder</span><span class="p">(</span><span class="n">title</span><span class="p">:</span> <span class="n">Title</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">BeautifulSoup</span><span class="p">],</span> <span class="n">bs4</span><span class="o">.</span><span class="n">PageElement</span><span class="p">]:</span>
+    <span class="k">def</span> <span class="nf">_add_title_tag</span><span class="p">(</span><span class="n">soup</span><span class="p">:</span> <span class="n">BeautifulSoup</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">bs4</span><span class="o">.</span><span class="n">Tag</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">title</span><span class="o">.</span><span class="n">level</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">new_tag</span> <span class="o">=</span> <span class="n">soup</span><span class="o">.</span><span class="n">new_tag</span><span class="p">(</span><span class="n">ODFXMLTagNames</span><span class="o">.</span><span class="n">TEXT_P</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="n">attrs</span><span class="o">=</span><span class="p">{</span><span class="n">ODFXMLAttributes</span><span class="o">.</span><span class="n">STYLE_NAME</span><span class="o">.</span><span class="n">value</span><span class="p">:</span> <span class="s1">&#39;Title&#39;</span><span class="p">})</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">new_tag</span> <span class="o">=</span> <span class="n">soup</span><span class="o">.</span><span class="n">new_tag</span><span class="p">(</span>
+                <span class="n">ODFXMLTagNames</span><span class="o">.</span><span class="n">TEXT_H</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="n">attrs</span><span class="o">=</span><span class="p">{</span><span class="n">ODFXMLAttributes</span><span class="o">.</span><span class="n">TITLE_LEVEL</span><span class="o">.</span><span class="n">value</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">title</span><span class="o">.</span><span class="n">level</span><span class="p">)}</span>
+            <span class="p">)</span>
+        <span class="n">new_tag</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">soup</span><span class="o">.</span><span class="n">new_string</span><span class="p">(</span><span class="n">title</span><span class="o">.</span><span class="n">text</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">new_tag</span>
+
+    <span class="k">return</span> <span class="n">_add_title_tag</span>
+
+
+<span class="k">def</span> <span class="nf">_get_cell_builder</span><span class="p">(</span><span class="n">cell</span><span class="p">:</span> <span class="n">Cell</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">BeautifulSoup</span><span class="p">],</span> <span class="n">bs4</span><span class="o">.</span><span class="n">PageElement</span><span class="p">]:</span>
+    <span class="k">def</span> <span class="nf">_add_tag</span><span class="p">(</span><span class="n">soup</span><span class="p">:</span> <span class="n">BeautifulSoup</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">bs4</span><span class="o">.</span><span class="n">Tag</span><span class="p">:</span>
+        <span class="n">new_tag</span> <span class="o">=</span> <span class="n">soup</span><span class="o">.</span><span class="n">new_tag</span><span class="p">(</span>
+            <span class="n">ODFXMLTagNames</span><span class="o">.</span><span class="n">TABLE_CELL</span><span class="o">.</span><span class="n">value</span><span class="p">,</span>
+            <span class="n">attrs</span><span class="o">=</span><span class="p">{</span>
+                <span class="n">ODFXMLAttributes</span><span class="o">.</span><span class="n">TABLE_ROW_SPAN</span><span class="o">.</span><span class="n">value</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">cell</span><span class="o">.</span><span class="n">rowspan</span><span class="p">),</span>
+                <span class="n">ODFXMLAttributes</span><span class="o">.</span><span class="n">TABLE_COL_SPAN</span><span class="o">.</span><span class="n">value</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">cell</span><span class="o">.</span><span class="n">colspan</span><span class="p">),</span>
+            <span class="p">},</span>
+        <span class="p">)</span>
+        <span class="n">p_tag</span> <span class="o">=</span> <span class="n">soup</span><span class="o">.</span><span class="n">new_tag</span><span class="p">(</span><span class="n">ODFXMLTagNames</span><span class="o">.</span><span class="n">TEXT_P</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+        <span class="n">p_tag</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">soup</span><span class="o">.</span><span class="n">new_string</span><span class="p">(</span><span class="n">cell</span><span class="o">.</span><span class="n">content</span><span class="o">.</span><span class="n">text</span><span class="p">))</span>
+        <span class="n">new_tag</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">p_tag</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">new_tag</span>
+
+    <span class="k">return</span> <span class="n">_add_tag</span>
+
+
+<span class="k">def</span> <span class="nf">_get_row_builder</span><span class="p">(</span><span class="n">row</span><span class="p">:</span> <span class="n">Row</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">BeautifulSoup</span><span class="p">],</span> <span class="n">bs4</span><span class="o">.</span><span class="n">PageElement</span><span class="p">]:</span>
+    <span class="k">def</span> <span class="nf">_add_tag</span><span class="p">(</span><span class="n">soup</span><span class="p">:</span> <span class="n">BeautifulSoup</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">bs4</span><span class="o">.</span><span class="n">Tag</span><span class="p">:</span>
+        <span class="n">new_tag</span> <span class="o">=</span> <span class="n">soup</span><span class="o">.</span><span class="n">new_tag</span><span class="p">(</span><span class="n">ODFXMLTagNames</span><span class="o">.</span><span class="n">TABLE_ROW</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">cell</span> <span class="ow">in</span> <span class="n">row</span><span class="o">.</span><span class="n">cells</span><span class="p">:</span>
+            <span class="n">new_tag</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">_get_cell_builder</span><span class="p">(</span><span class="n">cell</span><span class="p">)(</span><span class="n">soup</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">row</span><span class="o">.</span><span class="n">is_header</span><span class="p">:</span>
+            <span class="n">header_tag</span> <span class="o">=</span> <span class="n">soup</span><span class="o">.</span><span class="n">new_tag</span><span class="p">(</span><span class="n">ODFXMLTagNames</span><span class="o">.</span><span class="n">TABLE_HEADER</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+            <span class="n">header_tag</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">new_tag</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">header_tag</span>
+        <span class="k">return</span> <span class="n">new_tag</span>
+
+    <span class="k">return</span> <span class="n">_add_tag</span>
+
+
+<span class="k">def</span> <span class="nf">_compute_nb_cols</span><span class="p">(</span><span class="n">table</span><span class="p">:</span> <span class="n">Table</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">table</span><span class="o">.</span><span class="n">rows</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mi">0</span>
+    <span class="k">return</span> <span class="nb">sum</span><span class="p">([</span><span class="n">cell</span><span class="o">.</span><span class="n">colspan</span> <span class="k">for</span> <span class="n">cell</span> <span class="ow">in</span> <span class="n">table</span><span class="o">.</span><span class="n">rows</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">cells</span><span class="p">])</span>
+
+
+<span class="k">def</span> <span class="nf">_get_table_builder</span><span class="p">(</span><span class="n">table</span><span class="p">:</span> <span class="n">Table</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">BeautifulSoup</span><span class="p">],</span> <span class="n">bs4</span><span class="o">.</span><span class="n">PageElement</span><span class="p">]:</span>
+    <span class="k">def</span> <span class="nf">_add_tag</span><span class="p">(</span><span class="n">soup</span><span class="p">:</span> <span class="n">BeautifulSoup</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">bs4</span><span class="o">.</span><span class="n">Tag</span><span class="p">:</span>
+        <span class="n">new_tag</span> <span class="o">=</span> <span class="n">soup</span><span class="o">.</span><span class="n">new_tag</span><span class="p">(</span><span class="n">ODFXMLTagNames</span><span class="o">.</span><span class="n">TABLE_TABLE</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+        <span class="n">nb_cols</span> <span class="o">=</span> <span class="n">_compute_nb_cols</span><span class="p">(</span><span class="n">table</span><span class="p">)</span>
+        <span class="n">attrs</span> <span class="o">=</span> <span class="p">{</span><span class="n">ODFXMLAttributes</span><span class="o">.</span><span class="n">TABLE_COL_REPEATED</span><span class="o">.</span><span class="n">value</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">nb_cols</span><span class="p">)}</span>
+        <span class="n">new_tag</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">soup</span><span class="o">.</span><span class="n">new_tag</span><span class="p">(</span><span class="n">ODFXMLTagNames</span><span class="o">.</span><span class="n">TABLE_COLUMN</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="n">attrs</span><span class="o">=</span><span class="n">attrs</span><span class="p">))</span>
+        <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">table</span><span class="o">.</span><span class="n">rows</span><span class="p">:</span>
+            <span class="n">new_tag</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">_get_row_builder</span><span class="p">(</span><span class="n">row</span><span class="p">)(</span><span class="n">soup</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">new_tag</span>
+
+    <span class="k">return</span> <span class="n">_add_tag</span>
+
+
+<span class="k">def</span> <span class="nf">_get_body_builder</span><span class="p">(</span><span class="n">str_</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">BeautifulSoup</span><span class="p">],</span> <span class="n">bs4</span><span class="o">.</span><span class="n">PageElement</span><span class="p">]:</span>
+    <span class="k">def</span> <span class="nf">_add_body_tag</span><span class="p">(</span><span class="n">soup</span><span class="p">:</span> <span class="n">BeautifulSoup</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">bs4</span><span class="o">.</span><span class="n">Tag</span><span class="p">:</span>
+        <span class="n">new_tag</span> <span class="o">=</span> <span class="n">soup</span><span class="o">.</span><span class="n">new_tag</span><span class="p">(</span><span class="n">ODFXMLTagNames</span><span class="o">.</span><span class="n">TEXT_P</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+        <span class="n">new_tag</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">soup</span><span class="o">.</span><span class="n">new_string</span><span class="p">(</span><span class="n">str_</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">new_tag</span>
+
+    <span class="k">return</span> <span class="n">_add_body_tag</span>
+
+
+<span class="k">def</span> <span class="nf">_get_soup_modifier</span><span class="p">(</span><span class="n">element</span><span class="p">:</span> <span class="n">TextElement</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">BeautifulSoup</span><span class="p">],</span> <span class="n">bs4</span><span class="o">.</span><span class="n">PageElement</span><span class="p">]:</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">element</span><span class="p">,</span> <span class="n">Title</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">_get_title_builder</span><span class="p">(</span><span class="n">element</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">element</span><span class="p">,</span> <span class="n">Table</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">_get_table_builder</span><span class="p">(</span><span class="n">element</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">element</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">_get_body_builder</span><span class="p">(</span><span class="n">element</span><span class="p">)</span>
+    <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Not implemented for type </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">element</span><span class="p">)</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">_elements_to_open_document_content_xml</span><span class="p">(</span><span class="n">elements</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">TextElement</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="n">empty_tree</span> <span class="o">=</span> <span class="n">_generate_empty_tree</span><span class="p">()</span>
+    <span class="n">soup</span> <span class="o">=</span> <span class="n">BeautifulSoup</span><span class="p">(</span><span class="n">empty_tree</span><span class="p">,</span> <span class="s1">&#39;lxml-xml&#39;</span><span class="p">)</span>
+    <span class="n">tag</span> <span class="o">=</span> <span class="n">_check_tag</span><span class="p">(</span><span class="n">soup</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s1">&#39;office:text&#39;</span><span class="p">))</span>
+    <span class="k">for</span> <span class="n">element</span> <span class="ow">in</span> <span class="n">elements</span><span class="p">:</span>
+        <span class="n">tag</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">_get_soup_modifier</span><span class="p">(</span><span class="n">element</span><span class="p">)(</span><span class="n">soup</span><span class="p">))</span>
+    <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">soup</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="structured_text_to_odt_xml"><a class="viewcode-back" href="../../../envinorma.io.html#envinorma.io.open_document.structured_text_to_odt_xml">[docs]</a><span class="k">def</span> <span class="nf">structured_text_to_odt_xml</span><span class="p">(</span><span class="n">text</span><span class="p">:</span> <span class="n">StructuredText</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="n">elements</span> <span class="o">=</span> <span class="n">structured_text_to_text_elements</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">_elements_to_open_document_content_xml</span><span class="p">(</span><span class="n">elements</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="OpenDocument"><a class="viewcode-back" href="../../../envinorma.io.html#envinorma.io.open_document.OpenDocument">[docs]</a><span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">OpenDocument</span><span class="p">:</span>
+    <span class="n">content_xml</span><span class="p">:</span> <span class="nb">str</span>
+
+<div class="viewcode-block" id="OpenDocument.write"><a class="viewcode-back" href="../../../envinorma.io.html#envinorma.io.open_document.OpenDocument.write">[docs]</a>    <span class="k">def</span> <span class="nf">write</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">write_new_document</span><span class="p">(</span><span class="s1">&#39;test_data/simple_document.odt&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">content_xml</span><span class="p">,</span> <span class="n">filename</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="elements_to_open_document"><a class="viewcode-back" href="../../../envinorma.io.html#envinorma.io.open_document.elements_to_open_document">[docs]</a><span class="k">def</span> <span class="nf">elements_to_open_document</span><span class="p">(</span><span class="n">elements</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">TextElement</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">OpenDocument</span><span class="p">:</span>
+    <span class="k">return</span> <span class="n">OpenDocument</span><span class="p">(</span><span class="n">_elements_to_open_document_content_xml</span><span class="p">(</span><span class="n">elements</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="structured_text_to_odt_file"><a class="viewcode-back" href="../../../envinorma.io.html#envinorma.io.open_document.structured_text_to_odt_file">[docs]</a><span class="k">def</span> <span class="nf">structured_text_to_odt_file</span><span class="p">(</span><span class="n">text</span><span class="p">:</span> <span class="n">StructuredText</span><span class="p">,</span> <span class="n">filename</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="n">xml</span> <span class="o">=</span> <span class="n">structured_text_to_odt_xml</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+    <span class="n">write_new_document</span><span class="p">(</span><span class="s1">&#39;test_data/simple_document.odt&#39;</span><span class="p">,</span> <span class="n">xml</span><span class="p">,</span> <span class="n">filename</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="write_new_document"><a class="viewcode-back" href="../../../envinorma.io.html#envinorma.io.open_document.write_new_document">[docs]</a><span class="k">def</span> <span class="nf">write_new_document</span><span class="p">(</span><span class="n">input_filename</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">new_document_xml</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">new_filename</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+    <span class="n">tmp_dir</span> <span class="o">=</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">mkdtemp</span><span class="p">()</span>
+    <span class="n">zip_</span> <span class="o">=</span> <span class="n">ZipFile</span><span class="p">(</span><span class="n">input_filename</span><span class="p">)</span>
+    <span class="n">zip_</span><span class="o">.</span><span class="n">extractall</span><span class="p">(</span><span class="n">tmp_dir</span><span class="p">)</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">tmp_dir</span><span class="p">,</span> <span class="s1">&#39;content.xml&#39;</span><span class="p">),</span> <span class="s1">&#39;wb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">new_document_xml</span><span class="o">.</span><span class="n">encode</span><span class="p">())</span>
+    <span class="n">filenames</span> <span class="o">=</span> <span class="n">zip_</span><span class="o">.</span><span class="n">namelist</span><span class="p">()</span>
+    <span class="k">with</span> <span class="n">ZipFile</span><span class="p">(</span><span class="n">new_filename</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">docx</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">filename</span> <span class="ow">in</span> <span class="n">filenames</span><span class="p">:</span>
+            <span class="n">docx</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">tmp_dir</span><span class="p">,</span> <span class="n">filename</span><span class="p">),</span> <span class="n">filename</span><span class="p">)</span>
+    <span class="n">shutil</span><span class="o">.</span><span class="n">rmtree</span><span class="p">(</span><span class="n">tmp_dir</span><span class="p">)</span></div>
+
+
+<span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">_APMetadata</span><span class="p">:</span>
+    <span class="n">nb_sections</span><span class="p">:</span> <span class="nb">int</span>
+
+
+<span class="k">def</span> <span class="nf">_compute_nb_sections</span><span class="p">(</span><span class="n">text</span><span class="p">:</span> <span class="n">StructuredText</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+    <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="n">text</span><span class="o">.</span><span class="n">sections</span><span class="p">)</span> <span class="o">+</span> <span class="nb">sum</span><span class="p">([</span><span class="n">_compute_nb_sections</span><span class="p">(</span><span class="n">sec</span><span class="p">)</span> <span class="k">for</span> <span class="n">sec</span> <span class="ow">in</span> <span class="n">text</span><span class="o">.</span><span class="n">sections</span><span class="p">])</span>
+
+
+<span class="k">def</span> <span class="nf">_extract_metadata</span><span class="p">(</span><span class="n">text</span><span class="p">:</span> <span class="n">StructuredText</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">_APMetadata</span><span class="p">:</span>
+    <span class="k">return</span> <span class="n">_APMetadata</span><span class="p">(</span><span class="n">_compute_nb_sections</span><span class="p">(</span><span class="n">text</span><span class="p">))</span>
+
+
+<div class="viewcode-block" id="ODTExtractedText"><a class="viewcode-back" href="../../../envinorma.io.html#envinorma.io.open_document.ODTExtractedText">[docs]</a><span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">ODTExtractedText</span><span class="p">:</span>
+    <span class="n">text</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">StructuredText</span><span class="p">]</span>
+    <span class="n">error</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+    <span class="n">metadata</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">_APMetadata</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">init</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__post_init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span> <span class="o">=</span> <span class="kc">None</span> <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">text</span> <span class="k">else</span> <span class="n">_extract_metadata</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
+
+<div class="viewcode-block" id="ODTExtractedText.from_dict"><a class="viewcode-back" href="../../../envinorma.io.html#envinorma.io.open_document.ODTExtractedText.from_dict">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">from_dict</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">dict_</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="s1">&#39;ODTExtractedText&#39;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="n">StructuredText</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">dict_</span><span class="p">[</span><span class="s1">&#39;text&#39;</span><span class="p">])</span> <span class="k">if</span> <span class="n">dict_</span><span class="p">[</span><span class="s1">&#39;text&#39;</span><span class="p">]</span> <span class="k">else</span> <span class="kc">None</span><span class="p">,</span> <span class="n">error</span><span class="o">=</span><span class="n">dict_</span><span class="p">[</span><span class="s1">&#39;error&#39;</span><span class="p">])</span></div>
+
+<div class="viewcode-block" id="ODTExtractedText.to_dict"><a class="viewcode-back" href="../../../envinorma.io.html#envinorma.io.open_document.ODTExtractedText.to_dict">[docs]</a>    <span class="k">def</span> <span class="nf">to_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="p">{</span><span class="s1">&#39;text&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">text</span><span class="o">.</span><span class="n">to_dict</span><span class="p">()</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">text</span> <span class="k">else</span> <span class="kc">None</span><span class="p">,</span> <span class="s1">&#39;error&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">error</span><span class="p">}</span></div></div>
+
+
+<div class="viewcode-block" id="extract_text_and_metadata"><a class="viewcode-back" href="../../../envinorma.io.html#envinorma.io.open_document.extract_text_and_metadata">[docs]</a><span class="k">def</span> <span class="nf">extract_text_and_metadata</span><span class="p">(</span><span class="n">filename</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ODTExtractedText</span><span class="p">:</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">ODTExtractedText</span><span class="p">(</span><span class="n">load_and_transform</span><span class="p">(</span><span class="n">filename</span><span class="p">),</span> <span class="kc">None</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">ODTExtractedText</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">traceback</span><span class="o">.</span><span class="n">format_exc</span><span class="p">())</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, Envinorma.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

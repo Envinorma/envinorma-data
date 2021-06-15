@@ -1,0 +1,782 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>envinorma.from_legifrance.legifrance_to_am &mdash; Envinorma 0.0.0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> Envinorma
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.0.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../index.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">Package modules</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../envinorma.html">envinorma package</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../envinorma.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../envinorma.enriching.html">envinorma.enriching package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../envinorma.from_legifrance.html">envinorma.from_legifrance package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../envinorma.io.html">envinorma.io package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../envinorma.models.html">envinorma.models package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../envinorma.parametrization.html">envinorma.parametrization package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../envinorma.topics.html">envinorma.topics package</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../envinorma.html#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../envinorma.html#module-envinorma.data_fetcher">envinorma.data_fetcher module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../envinorma.html#module-envinorma.structure">envinorma.structure module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../envinorma.html#module-envinorma.title_detection">envinorma.title_detection module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../envinorma.html#module-envinorma.utils">envinorma.utils module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../envinorma.html#module-envinorma">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">Envinorma</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+          <li><a href="../../envinorma.html">envinorma</a> &raquo;</li>
+        
+      <li>envinorma.from_legifrance.legifrance_to_am</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for envinorma.from_legifrance.legifrance_to_am</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">copy</span>
+<span class="kn">import</span> <span class="nn">random</span>
+<span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">Counter</span>
+<span class="kn">from</span> <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">dataclass</span><span class="p">,</span> <span class="n">replace</span>
+<span class="kn">from</span> <span class="nn">math</span> <span class="kn">import</span> <span class="n">sqrt</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">TypeVar</span><span class="p">,</span> <span class="n">Union</span>
+
+<span class="kn">import</span> <span class="nn">bs4</span>
+<span class="kn">from</span> <span class="nn">bs4</span> <span class="kn">import</span> <span class="n">BeautifulSoup</span>
+<span class="kn">from</span> <span class="nn">leginorma</span> <span class="kn">import</span> <span class="n">ArticleStatus</span><span class="p">,</span> <span class="n">LegifranceArticle</span><span class="p">,</span> <span class="n">LegifranceSection</span><span class="p">,</span> <span class="n">LegifranceText</span>
+
+<span class="kn">from</span> <span class="nn">envinorma.from_legifrance.numbering_exceptions</span> <span class="kn">import</span> <span class="n">EXCEPTION_PREFIXES</span><span class="p">,</span> <span class="n">MAX_PREFIX_LEN</span>
+<span class="kn">from</span> <span class="nn">envinorma.io.parse_html</span> <span class="kn">import</span> <span class="n">extract_table</span>
+<span class="kn">from</span> <span class="nn">envinorma.models.arrete_ministeriel</span> <span class="kn">import</span> <span class="n">ArreteMinisteriel</span><span class="p">,</span> <span class="n">standardize_title_date</span>
+<span class="kn">from</span> <span class="nn">envinorma.models.structured_text</span> <span class="kn">import</span> <span class="n">StructuredText</span>
+<span class="kn">from</span> <span class="nn">envinorma.models.text_elements</span> <span class="kn">import</span> <span class="n">EnrichedString</span><span class="p">,</span> <span class="n">Link</span><span class="p">,</span> <span class="n">Table</span>
+<span class="kn">from</span> <span class="nn">envinorma.structure</span> <span class="kn">import</span> <span class="n">split_alineas_in_sections</span>
+<span class="kn">from</span> <span class="nn">envinorma.title_detection</span> <span class="kn">import</span> <span class="n">NumberingPattern</span><span class="p">,</span> <span class="n">detect_patterns_if_exists</span><span class="p">,</span> <span class="n">is_mainly_upper</span><span class="p">,</span> <span class="n">is_probably_title</span>
+
+
+<div class="viewcode-block" id="TableReference"><a class="viewcode-back" href="../../../envinorma.from_legifrance.html#envinorma.from_legifrance.legifrance_to_am.TableReference">[docs]</a><span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">TableReference</span><span class="p">:</span>
+    <span class="n">table</span><span class="p">:</span> <span class="n">Table</span>
+    <span class="n">reference</span><span class="p">:</span> <span class="nb">str</span></div>
+
+
+<div class="viewcode-block" id="LinkReference"><a class="viewcode-back" href="../../../envinorma.from_legifrance.html#envinorma.from_legifrance.legifrance_to_am.LinkReference">[docs]</a><span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">LinkReference</span><span class="p">:</span>
+    <span class="n">reference</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">target</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">text</span><span class="p">:</span> <span class="nb">str</span></div>
+
+
+<span class="k">def</span> <span class="nf">_clean_title</span><span class="p">(</span><span class="n">str_</span><span class="p">:</span> <span class="n">EnrichedString</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">EnrichedString</span><span class="p">:</span>
+    <span class="k">return</span> <span class="n">replace</span><span class="p">(</span><span class="n">str_</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="n">str_</span><span class="o">.</span><span class="n">text</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\r\n</span><span class="s1">&#39;</span><span class="p">,</span> <span class="s1">&#39; &#39;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">,</span> <span class="s1">&#39; &#39;</span><span class="p">))</span>
+
+
+<div class="viewcode-block" id="keep_visa_string"><a class="viewcode-back" href="../../../envinorma.from_legifrance.html#envinorma.from_legifrance.legifrance_to_am.keep_visa_string">[docs]</a><span class="k">def</span> <span class="nf">keep_visa_string</span><span class="p">(</span><span class="n">visas</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+    <span class="k">return</span> <span class="p">[</span><span class="n">visa</span> <span class="k">for</span> <span class="n">visa</span> <span class="ow">in</span> <span class="n">visas</span> <span class="k">if</span> <span class="n">visa</span><span class="p">[:</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s1">&#39;vu&#39;</span><span class="p">]</span></div>
+
+
+<div class="viewcode-block" id="split_in_non_empty_html_line"><a class="viewcode-back" href="../../../envinorma.from_legifrance.html#envinorma.from_legifrance.legifrance_to_am.split_in_non_empty_html_line">[docs]</a><span class="k">def</span> <span class="nf">split_in_non_empty_html_line</span><span class="p">(</span><span class="n">html</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+    <span class="k">return</span> <span class="p">[</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">html</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;&lt;br/&gt;&#39;</span><span class="p">)</span> <span class="k">if</span> <span class="n">x</span><span class="p">]</span></div>
+
+
+<span class="k">def</span> <span class="nf">_extract_visa</span><span class="p">(</span><span class="n">visa_raw</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">EnrichedString</span><span class="p">]:</span>
+    <span class="k">return</span> <span class="p">[</span><span class="n">_extract_links</span><span class="p">(</span><span class="n">str_</span><span class="p">)</span> <span class="k">for</span> <span class="n">str_</span> <span class="ow">in</span> <span class="n">keep_visa_string</span><span class="p">(</span><span class="n">split_in_non_empty_html_line</span><span class="p">(</span><span class="n">visa_raw</span><span class="p">))]</span>
+
+
+<div class="viewcode-block" id="remove_empty"><a class="viewcode-back" href="../../../envinorma.from_legifrance.html#envinorma.from_legifrance.legifrance_to_am.remove_empty">[docs]</a><span class="k">def</span> <span class="nf">remove_empty</span><span class="p">(</span><span class="n">strs</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+    <span class="n">stripped</span> <span class="o">=</span> <span class="p">[</span><span class="n">str_</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="k">for</span> <span class="n">str_</span> <span class="ow">in</span> <span class="n">strs</span><span class="p">]</span>
+    <span class="k">return</span> <span class="p">[</span><span class="n">str_</span> <span class="k">for</span> <span class="n">str_</span> <span class="ow">in</span> <span class="n">stripped</span> <span class="k">if</span> <span class="n">str_</span><span class="p">]</span></div>
+
+
+<div class="viewcode-block" id="extract_alineas"><a class="viewcode-back" href="../../../envinorma.from_legifrance.html#envinorma.from_legifrance.legifrance_to_am.extract_alineas">[docs]</a><span class="k">def</span> <span class="nf">extract_alineas</span><span class="p">(</span><span class="n">html_text</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+    <span class="n">soup</span> <span class="o">=</span> <span class="n">BeautifulSoup</span><span class="p">(</span><span class="n">html_text</span><span class="p">,</span> <span class="s1">&#39;html.parser&#39;</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">tag_type</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;sup&#39;</span><span class="p">,</span> <span class="s1">&#39;sub&#39;</span><span class="p">,</span> <span class="s1">&#39;font&#39;</span><span class="p">,</span> <span class="s1">&#39;strong&#39;</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="s1">&#39;i&#39;</span><span class="p">,</span> <span class="s1">&#39;em&#39;</span><span class="p">]:</span>
+        <span class="k">for</span> <span class="n">tag</span> <span class="ow">in</span> <span class="n">soup</span><span class="o">.</span><span class="n">find_all</span><span class="p">(</span><span class="n">tag_type</span><span class="p">):</span>
+            <span class="n">tag</span><span class="o">.</span><span class="n">unwrap</span><span class="p">()</span>
+    <span class="k">return</span> <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">sstr</span><span class="p">)</span> <span class="k">for</span> <span class="n">sstr</span> <span class="ow">in</span> <span class="n">BeautifulSoup</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">soup</span><span class="p">),</span> <span class="s1">&#39;html.parser&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">stripped_strings</span><span class="p">]</span></div>
+
+
+<span class="k">def</span> <span class="nf">_extract_placeholder_positions</span><span class="p">(</span><span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">placeholder</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]]:</span>
+    <span class="n">pieces</span> <span class="o">=</span> <span class="n">text</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">placeholder</span><span class="p">)</span>
+    <span class="n">lengths</span> <span class="o">=</span> <span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">piece</span><span class="p">)</span> <span class="k">for</span> <span class="n">piece</span> <span class="ow">in</span> <span class="n">pieces</span><span class="p">]</span>
+    <span class="n">cumulative_lengths</span> <span class="o">=</span> <span class="n">cumsum</span><span class="p">(</span><span class="n">lengths</span><span class="p">)</span>
+    <span class="k">return</span> <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">pieces</span><span class="p">),</span> <span class="n">cumulative_lengths</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+
+
+<div class="viewcode-block" id="secure_zip"><a class="viewcode-back" href="../../../envinorma.from_legifrance.html#envinorma.from_legifrance.legifrance_to_am.secure_zip">[docs]</a><span class="k">def</span> <span class="nf">secure_zip</span><span class="p">(</span><span class="o">*</span><span class="n">lists</span><span class="p">:</span> <span class="n">List</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">Tuple</span><span class="p">]:</span>
+    <span class="n">lengths</span> <span class="o">=</span> <span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">list_</span><span class="p">)</span> <span class="k">for</span> <span class="n">list_</span> <span class="ow">in</span> <span class="n">lists</span><span class="p">]</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">lengths</span><span class="p">))</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Lists have different lengths: </span><span class="si">{</span><span class="n">lengths</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="n">lists</span><span class="p">)</span></div>
+
+
+<span class="n">_BR_PLACEHOLDER</span> <span class="o">=</span> <span class="s1">&#39;{{BR_PLACEHOLDER}}&#39;</span>
+
+
+<span class="k">def</span> <span class="nf">_remove_tables</span><span class="p">(</span><span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="n">TableReference</span><span class="p">]]:</span>
+    <span class="n">soup</span> <span class="o">=</span> <span class="n">BeautifulSoup</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="s1">&#39;html.parser&#39;</span><span class="p">)</span>
+    <span class="n">tables</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Table</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">references</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">div</span> <span class="ow">in</span> <span class="n">soup</span><span class="o">.</span><span class="n">find_all</span><span class="p">(</span><span class="s1">&#39;table&#39;</span><span class="p">):</span>
+        <span class="n">reference</span> <span class="o">=</span> <span class="n">_generate_reference</span><span class="p">()</span>
+        <span class="n">tables</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">extract_table</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">div</span><span class="p">)))</span>
+        <span class="n">div</span><span class="o">.</span><span class="n">replace_with</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">_BR_PLACEHOLDER</span><span class="si">}{</span><span class="n">reference</span><span class="si">}{</span><span class="n">_BR_PLACEHOLDER</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="n">references</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">reference</span><span class="p">)</span>
+    <span class="n">table_refs</span> <span class="o">=</span> <span class="p">[</span><span class="n">TableReference</span><span class="p">(</span><span class="n">table</span><span class="p">,</span> <span class="n">reference</span><span class="p">)</span> <span class="k">for</span> <span class="n">table</span><span class="p">,</span> <span class="n">reference</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">tables</span><span class="p">,</span> <span class="n">references</span><span class="p">)]</span>
+    <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">soup</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">_BR_PLACEHOLDER</span><span class="p">,</span> <span class="s1">&#39;&lt;br/&gt;&#39;</span><span class="p">),</span> <span class="n">table_refs</span>
+
+
+<span class="k">def</span> <span class="nf">_remove_links</span><span class="p">(</span><span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="n">LinkReference</span><span class="p">]]:</span>
+    <span class="n">soup</span> <span class="o">=</span> <span class="n">BeautifulSoup</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="s1">&#39;html.parser&#39;</span><span class="p">)</span>
+    <span class="n">links</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">LinkReference</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">tag</span> <span class="ow">in</span> <span class="n">soup</span><span class="o">.</span><span class="n">find_all</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">):</span>
+        <span class="k">if</span> <span class="s1">&#39;href&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">tag</span><span class="o">.</span><span class="n">attrs</span><span class="p">:</span>
+            <span class="k">continue</span>
+        <span class="n">reference</span> <span class="o">=</span> <span class="n">_generate_reference</span><span class="p">()</span>
+        <span class="n">links</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">LinkReference</span><span class="p">(</span><span class="n">reference</span><span class="p">,</span> <span class="n">_BASE_LEGIFRANCE_URL</span> <span class="o">+</span> <span class="n">tag</span><span class="p">[</span><span class="s1">&#39;href&#39;</span><span class="p">],</span> <span class="n">tag</span><span class="o">.</span><span class="n">text</span><span class="p">))</span>
+        <span class="n">tag</span><span class="o">.</span><span class="n">replace_with</span><span class="p">(</span><span class="n">reference</span><span class="p">)</span>
+    <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">soup</span><span class="p">),</span> <span class="n">links</span>
+
+
+<div class="viewcode-block" id="remove_empty_enriched_str"><a class="viewcode-back" href="../../../envinorma.from_legifrance.html#envinorma.from_legifrance.legifrance_to_am.remove_empty_enriched_str">[docs]</a><span class="k">def</span> <span class="nf">remove_empty_enriched_str</span><span class="p">(</span><span class="n">strs</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">EnrichedString</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">EnrichedString</span><span class="p">]:</span>
+    <span class="k">return</span> <span class="p">[</span><span class="n">str_</span> <span class="k">for</span> <span class="n">str_</span> <span class="ow">in</span> <span class="n">strs</span> <span class="k">if</span> <span class="n">str_</span><span class="o">.</span><span class="n">text</span> <span class="ow">or</span> <span class="n">str_</span><span class="o">.</span><span class="n">table</span><span class="p">]</span></div>
+
+
+<span class="n">TP</span> <span class="o">=</span> <span class="n">TypeVar</span><span class="p">(</span><span class="s1">&#39;TP&#39;</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">_extract_first_non_null_elt</span><span class="p">(</span><span class="n">elements</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">TP</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">TP</span><span class="p">]:</span>
+    <span class="k">for</span> <span class="n">element</span> <span class="ow">in</span> <span class="n">elements</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">element</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">element</span>
+    <span class="k">return</span> <span class="kc">None</span>
+
+
+<div class="viewcode-block" id="select_alineas_for_splitting"><a class="viewcode-back" href="../../../envinorma.from_legifrance.html#envinorma.from_legifrance.legifrance_to_am.select_alineas_for_splitting">[docs]</a><span class="k">def</span> <span class="nf">select_alineas_for_splitting</span><span class="p">(</span><span class="n">alineas</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">pattern_names</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Optional</span><span class="p">[</span><span class="n">NumberingPattern</span><span class="p">]])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">bool</span><span class="p">]:</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">alineas</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">pattern_names</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Expecting same lengths, received </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">alineas</span><span class="p">)</span><span class="si">}</span><span class="s1"> and </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">pattern_names</span><span class="p">)</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+    <span class="n">first_pattern</span> <span class="o">=</span> <span class="n">_extract_first_non_null_elt</span><span class="p">(</span><span class="n">pattern_names</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">first_pattern</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">[</span><span class="kc">False</span><span class="p">]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">alineas</span><span class="p">)</span>
+    <span class="k">return</span> <span class="p">[</span><span class="n">pattern</span> <span class="o">==</span> <span class="n">first_pattern</span> <span class="k">for</span> <span class="n">pattern</span> <span class="ow">in</span> <span class="n">pattern_names</span><span class="p">]</span></div>
+
+
+<span class="k">def</span> <span class="nf">_build_structured_text</span><span class="p">(</span>
+    <span class="n">title</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">alineas</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">pattern_names</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Optional</span><span class="p">[</span><span class="n">NumberingPattern</span><span class="p">]]</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">StructuredText</span><span class="p">:</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">alineas</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">pattern_names</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">pattern_names</span><span class="p">)</span><span class="si">}</span><span class="s1"> pattern_names != </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">alineas</span><span class="p">)</span><span class="si">}</span><span class="s1"> alineas&#39;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">any</span><span class="p">(</span><span class="n">pattern_names</span><span class="p">):</span>
+        <span class="n">outer_alineas</span> <span class="o">=</span> <span class="n">alineas</span>
+        <span class="n">grouped_alineas</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">grouped_pattern_names</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">Optional</span><span class="p">[</span><span class="n">NumberingPattern</span><span class="p">]]]</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">selected_alineas_for_section</span> <span class="o">=</span> <span class="n">select_alineas_for_splitting</span><span class="p">(</span><span class="n">alineas</span><span class="p">,</span> <span class="n">pattern_names</span><span class="p">)</span>
+        <span class="n">outer_alineas</span><span class="p">,</span> <span class="n">grouped_alineas</span> <span class="o">=</span> <span class="n">split_alineas_in_sections</span><span class="p">(</span><span class="n">alineas</span><span class="p">,</span> <span class="n">selected_alineas_for_section</span><span class="p">)</span>
+        <span class="n">_</span><span class="p">,</span> <span class="n">grouped_pattern_names</span> <span class="o">=</span> <span class="n">split_alineas_in_sections</span><span class="p">(</span><span class="n">pattern_names</span><span class="p">,</span> <span class="n">selected_alineas_for_section</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">StructuredText</span><span class="p">(</span>
+        <span class="n">_clean_title</span><span class="p">(</span><span class="n">_extract_links</span><span class="p">(</span><span class="n">title</span><span class="p">)),</span>
+        <span class="n">remove_empty_enriched_str</span><span class="p">([</span><span class="n">_extract_links</span><span class="p">(</span><span class="n">al</span><span class="p">)</span> <span class="k">for</span> <span class="n">al</span> <span class="ow">in</span> <span class="n">outer_alineas</span><span class="p">]),</span>
+        <span class="p">[</span>
+            <span class="n">_build_structured_text</span><span class="p">(</span><span class="n">alinea_group</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">alinea_group</span><span class="p">[</span><span class="mi">1</span><span class="p">:],</span> <span class="n">pattern_name_group</span><span class="p">[</span><span class="mi">1</span><span class="p">:])</span>
+            <span class="k">for</span> <span class="n">alinea_group</span><span class="p">,</span> <span class="n">pattern_name_group</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">grouped_alineas</span><span class="p">,</span> <span class="n">grouped_pattern_names</span><span class="p">)</span>
+        <span class="p">],</span>
+        <span class="kc">None</span><span class="p">,</span>
+    <span class="p">)</span>
+
+
+<div class="viewcode-block" id="extract_pattern_names"><a class="viewcode-back" href="../../../envinorma.from_legifrance.html#envinorma.from_legifrance.legifrance_to_am.extract_pattern_names">[docs]</a><span class="k">def</span> <span class="nf">extract_pattern_names</span><span class="p">(</span><span class="n">alineas</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Optional</span><span class="p">[</span><span class="n">NumberingPattern</span><span class="p">]]:</span>
+    <span class="k">return</span> <span class="n">detect_patterns_if_exists</span><span class="p">(</span><span class="n">alineas</span><span class="p">,</span> <span class="p">(</span><span class="n">MAX_PREFIX_LEN</span><span class="p">,</span> <span class="n">EXCEPTION_PREFIXES</span><span class="p">))</span></div>
+
+
+<span class="k">def</span> <span class="nf">_structure_text</span><span class="p">(</span><span class="n">title</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">alineas</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">StructuredText</span><span class="p">:</span>
+    <span class="n">pattern_names</span> <span class="o">=</span> <span class="n">extract_pattern_names</span><span class="p">(</span><span class="n">alineas</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">_build_structured_text</span><span class="p">(</span><span class="n">title</span><span class="p">,</span> <span class="n">alineas</span><span class="p">,</span> <span class="n">pattern_names</span><span class="p">)</span>
+
+
+<span class="n">REF</span> <span class="o">=</span> <span class="n">TypeVar</span><span class="p">(</span><span class="s1">&#39;REF&#39;</span><span class="p">,</span> <span class="n">bound</span><span class="o">=</span><span class="n">Union</span><span class="p">[</span><span class="n">TableReference</span><span class="p">,</span> <span class="n">LinkReference</span><span class="p">])</span>
+
+
+<span class="k">def</span> <span class="nf">_find_reference</span><span class="p">(</span><span class="n">str_</span><span class="p">:</span> <span class="n">EnrichedString</span><span class="p">,</span> <span class="n">references</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">REF</span><span class="p">],</span> <span class="n">exact_match</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">REF</span><span class="p">]:</span>
+    <span class="k">for</span> <span class="n">reference</span> <span class="ow">in</span> <span class="n">references</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">reference</span><span class="o">.</span><span class="n">reference</span> <span class="ow">in</span> <span class="n">str_</span><span class="o">.</span><span class="n">text</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">exact_match</span> <span class="ow">and</span> <span class="n">str_</span><span class="o">.</span><span class="n">text</span> <span class="o">!=</span> <span class="n">reference</span><span class="o">.</span><span class="n">reference</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;There is sth else than a reference in this string: </span><span class="si">{</span><span class="n">str_</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">reference</span>
+    <span class="k">return</span> <span class="kc">None</span>
+
+
+<span class="k">def</span> <span class="nf">_find_references</span><span class="p">(</span><span class="n">str_</span><span class="p">:</span> <span class="n">EnrichedString</span><span class="p">,</span> <span class="n">references</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">REF</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">REF</span><span class="p">]:</span>
+    <span class="k">return</span> <span class="p">[</span><span class="n">reference</span> <span class="k">for</span> <span class="n">reference</span> <span class="ow">in</span> <span class="n">references</span> <span class="k">if</span> <span class="n">reference</span><span class="o">.</span><span class="n">reference</span> <span class="ow">in</span> <span class="n">str_</span><span class="o">.</span><span class="n">text</span><span class="p">]</span>
+
+
+<span class="k">def</span> <span class="nf">_add_table_if_any</span><span class="p">(</span><span class="n">str_</span><span class="p">:</span> <span class="n">EnrichedString</span><span class="p">,</span> <span class="n">tables</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">TableReference</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">EnrichedString</span><span class="p">:</span>
+    <span class="n">match</span> <span class="o">=</span> <span class="n">_find_reference</span><span class="p">(</span><span class="n">str_</span><span class="p">,</span> <span class="n">tables</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">match</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">str_</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">EnrichedString</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="p">[],</span> <span class="n">match</span><span class="o">.</span><span class="n">table</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">_put_tables_back</span><span class="p">(</span><span class="n">text</span><span class="p">:</span> <span class="n">StructuredText</span><span class="p">,</span> <span class="n">tables</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">TableReference</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">StructuredText</span><span class="p">:</span>
+    <span class="n">clean_title</span> <span class="o">=</span> <span class="n">_add_table_if_any</span><span class="p">(</span><span class="n">text</span><span class="o">.</span><span class="n">title</span><span class="p">,</span> <span class="n">tables</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">StructuredText</span><span class="p">(</span>
+        <span class="n">_clean_title</span><span class="p">(</span><span class="n">clean_title</span><span class="p">),</span>
+        <span class="p">[</span><span class="n">_add_table_if_any</span><span class="p">(</span><span class="n">alinea</span><span class="p">,</span> <span class="n">tables</span><span class="p">)</span> <span class="k">for</span> <span class="n">alinea</span> <span class="ow">in</span> <span class="n">text</span><span class="o">.</span><span class="n">outer_alineas</span><span class="p">],</span>
+        <span class="p">[</span><span class="n">_put_tables_back</span><span class="p">(</span><span class="n">section</span><span class="p">,</span> <span class="n">tables</span><span class="p">)</span> <span class="k">for</span> <span class="n">section</span> <span class="ow">in</span> <span class="n">text</span><span class="o">.</span><span class="n">sections</span><span class="p">],</span>
+        <span class="kc">None</span><span class="p">,</span>
+    <span class="p">)</span>
+
+
+<span class="n">_LINK_PLACEHOLDER</span> <span class="o">=</span> <span class="s1">&#39;{{LINK}}&#39;</span>
+
+
+<span class="k">def</span> <span class="nf">_add_links_if_any</span><span class="p">(</span><span class="n">str_</span><span class="p">:</span> <span class="n">EnrichedString</span><span class="p">,</span> <span class="n">links</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">LinkReference</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">EnrichedString</span><span class="p">:</span>
+    <span class="n">matches</span> <span class="o">=</span> <span class="n">_find_references</span><span class="p">(</span><span class="n">str_</span><span class="p">,</span> <span class="n">links</span><span class="p">)</span>
+    <span class="n">str_copy</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">str_</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">match</span> <span class="ow">in</span> <span class="n">matches</span><span class="p">:</span>
+        <span class="n">str_copy</span><span class="o">.</span><span class="n">text</span> <span class="o">=</span> <span class="n">str_copy</span><span class="o">.</span><span class="n">text</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">match</span><span class="o">.</span><span class="n">reference</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">_LINK_PLACEHOLDER</span><span class="si">}{</span><span class="n">match</span><span class="o">.</span><span class="n">text</span><span class="si">}{</span><span class="n">_LINK_PLACEHOLDER</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+    <span class="n">str_copy</span><span class="o">.</span><span class="n">text</span><span class="p">,</span> <span class="n">positions</span> <span class="o">=</span> <span class="n">_extract_placeholder_positions</span><span class="p">(</span><span class="n">str_copy</span><span class="o">.</span><span class="n">text</span><span class="p">,</span> <span class="n">_LINK_PLACEHOLDER</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">match</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">end</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">matches</span><span class="p">,</span> <span class="n">positions</span><span class="p">[::</span><span class="mi">2</span><span class="p">],</span> <span class="n">positions</span><span class="p">[</span><span class="mi">1</span><span class="p">::</span><span class="mi">2</span><span class="p">]):</span>
+        <span class="n">str_copy</span><span class="o">.</span><span class="n">links</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Link</span><span class="p">(</span><span class="n">match</span><span class="o">.</span><span class="n">target</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">end</span> <span class="o">-</span> <span class="n">start</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">str_copy</span>
+
+
+<span class="k">def</span> <span class="nf">_put_links_back</span><span class="p">(</span><span class="n">text</span><span class="p">:</span> <span class="n">StructuredText</span><span class="p">,</span> <span class="n">links</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">LinkReference</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">StructuredText</span><span class="p">:</span>
+    <span class="n">clean_title</span> <span class="o">=</span> <span class="n">_add_links_if_any</span><span class="p">(</span><span class="n">text</span><span class="o">.</span><span class="n">title</span><span class="p">,</span> <span class="n">links</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">StructuredText</span><span class="p">(</span>
+        <span class="n">_clean_title</span><span class="p">(</span><span class="n">clean_title</span><span class="p">),</span>
+        <span class="p">[</span><span class="n">_add_links_if_any</span><span class="p">(</span><span class="n">alinea</span><span class="p">,</span> <span class="n">links</span><span class="p">)</span> <span class="k">for</span> <span class="n">alinea</span> <span class="ow">in</span> <span class="n">text</span><span class="o">.</span><span class="n">outer_alineas</span><span class="p">],</span>
+        <span class="p">[</span><span class="n">_put_links_back</span><span class="p">(</span><span class="n">section</span><span class="p">,</span> <span class="n">links</span><span class="p">)</span> <span class="k">for</span> <span class="n">section</span> <span class="ow">in</span> <span class="n">text</span><span class="o">.</span><span class="n">sections</span><span class="p">],</span>
+        <span class="kc">None</span><span class="p">,</span>
+    <span class="p">)</span>
+
+
+<span class="n">_WEIRD_ANNEXE</span> <span class="o">=</span> <span class="s1">&#39;A N N E X E&#39;</span>
+<span class="n">_ROMAN_REPLACERS</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">(</span><span class="s1">&#39;I X&#39;</span><span class="p">,</span> <span class="s1">&#39;IX&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">&#39;V I I I&#39;</span><span class="p">,</span> <span class="s1">&#39;VIII&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">&#39;V I I&#39;</span><span class="p">,</span> <span class="s1">&#39;VII&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">&#39;V I&#39;</span><span class="p">,</span> <span class="s1">&#39;VI&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">&#39;I V&#39;</span><span class="p">,</span> <span class="s1">&#39;IV&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">&#39;I I I&#39;</span><span class="p">,</span> <span class="s1">&#39;III&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">&#39;I I&#39;</span><span class="p">,</span> <span class="s1">&#39;II&#39;</span><span class="p">),</span>
+<span class="p">]</span>
+<span class="n">_ROMAN_ANNEXES</span> <span class="o">=</span> <span class="p">[(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">_WEIRD_ANNEXE</span><span class="si">}</span><span class="s1"> </span><span class="si">{</span><span class="n">_BEF</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;ANNEXE </span><span class="si">{</span><span class="n">_AF</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span> <span class="k">for</span> <span class="n">_BEF</span><span class="p">,</span> <span class="n">_AF</span> <span class="ow">in</span> <span class="n">_ROMAN_REPLACERS</span><span class="p">]</span>
+<span class="n">_ANNEXE_REPLACERS</span> <span class="o">=</span> <span class="p">[(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">_WEIRD_ANNEXE</span><span class="si">}</span><span class="s1"> S&#39;</span><span class="p">,</span> <span class="s1">&#39;ANNEXES&#39;</span><span class="p">),</span> <span class="o">*</span><span class="n">_ROMAN_ANNEXES</span><span class="p">]</span> <span class="o">+</span> <span class="p">[(</span><span class="n">_WEIRD_ANNEXE</span><span class="p">,</span> <span class="s1">&#39;ANNEXE&#39;</span><span class="p">)]</span>
+
+
+<span class="k">def</span> <span class="nf">_replace_weird_annexe_words</span><span class="p">(</span><span class="n">str_</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="n">res</span> <span class="o">=</span> <span class="n">str_</span>
+    <span class="k">for</span> <span class="n">bef</span><span class="p">,</span> <span class="n">aft</span> <span class="ow">in</span> <span class="n">_ANNEXE_REPLACERS</span><span class="p">:</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="n">res</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">bef</span><span class="p">,</span> <span class="n">aft</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">res</span>
+
+
+<div class="viewcode-block" id="remove_summaries"><a class="viewcode-back" href="../../../envinorma.from_legifrance.html#envinorma.from_legifrance.legifrance_to_am.remove_summaries">[docs]</a><span class="k">def</span> <span class="nf">remove_summaries</span><span class="p">(</span><span class="n">alineas</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+    <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">found</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">alinea</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">alineas</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">alinea</span> <span class="o">==</span> <span class="s1">&#39;SOMMAIRE&#39;</span> <span class="ow">and</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">alineas</span><span class="p">)</span> <span class="ow">and</span> <span class="n">alineas</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;Annexe I.&#39;</span><span class="p">:</span>
+            <span class="n">found</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="k">break</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">found</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">alineas</span>
+    <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">alineas</span><span class="p">)):</span>
+        <span class="k">if</span> <span class="n">alineas</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;Modalités de calcul du dimensionnement du plan d</span><span class="se">\&#39;</span><span class="s1">épandage.&#39;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">alineas</span><span class="p">[:</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="n">alineas</span><span class="p">[</span><span class="n">j</span> <span class="o">+</span> <span class="mi">1</span> <span class="p">:]</span>
+    <span class="k">return</span> <span class="n">alineas</span></div>
+
+
+<span class="k">def</span> <span class="nf">_html_to_structured_text</span><span class="p">(</span><span class="n">html</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">extract_structure</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">StructuredText</span><span class="p">:</span>
+    <span class="n">html_with_correct_annexe</span> <span class="o">=</span> <span class="n">_replace_weird_annexe_words</span><span class="p">(</span><span class="n">html</span><span class="p">)</span>
+    <span class="n">html_without_tables</span><span class="p">,</span> <span class="n">tables</span> <span class="o">=</span> <span class="n">_remove_tables</span><span class="p">(</span><span class="n">html_with_correct_annexe</span><span class="p">)</span>
+    <span class="n">html_without_links</span><span class="p">,</span> <span class="n">links</span> <span class="o">=</span> <span class="n">_remove_links</span><span class="p">(</span><span class="n">html_without_tables</span><span class="p">)</span>
+    <span class="n">alineas</span> <span class="o">=</span> <span class="n">extract_alineas</span><span class="p">(</span><span class="n">html_without_links</span><span class="p">)</span>
+    <span class="n">filtered_alineas</span> <span class="o">=</span> <span class="n">remove_summaries</span><span class="p">(</span><span class="n">alineas</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">extract_structure</span><span class="p">:</span>
+        <span class="n">final_text</span> <span class="o">=</span> <span class="n">_structure_text</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">filtered_alineas</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">final_text</span> <span class="o">=</span> <span class="n">_build_structured_text</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">filtered_alineas</span><span class="p">,</span> <span class="p">[</span><span class="kc">None</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">filtered_alineas</span><span class="p">))])</span>
+    <span class="k">return</span> <span class="n">_put_tables_back</span><span class="p">(</span><span class="n">_put_links_back</span><span class="p">(</span><span class="n">final_text</span><span class="p">,</span> <span class="n">links</span><span class="p">),</span> <span class="n">tables</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="print_structured_text"><a class="viewcode-back" href="../../../envinorma.from_legifrance.html#envinorma.from_legifrance.legifrance_to_am.print_structured_text">[docs]</a><span class="k">def</span> <span class="nf">print_structured_text</span><span class="p">(</span><span class="n">text</span><span class="p">:</span> <span class="n">StructuredText</span><span class="p">,</span> <span class="n">prefix</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">prefix</span><span class="si">}{</span><span class="n">text</span><span class="o">.</span><span class="n">title</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+    <span class="n">new_prefix</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="se">\t</span><span class="si">{</span><span class="n">prefix</span><span class="si">}</span><span class="s1">&#39;</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">new_prefix</span> <span class="o">+</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="se">\n</span><span class="si">{</span><span class="n">new_prefix</span><span class="si">}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">alinea</span><span class="o">.</span><span class="n">text</span> <span class="k">for</span> <span class="n">alinea</span> <span class="ow">in</span> <span class="n">text</span><span class="o">.</span><span class="n">outer_alineas</span><span class="p">]))</span>
+    <span class="k">for</span> <span class="n">section</span> <span class="ow">in</span> <span class="n">text</span><span class="o">.</span><span class="n">sections</span><span class="p">:</span>
+        <span class="n">print_structured_text</span><span class="p">(</span><span class="n">section</span><span class="p">,</span> <span class="n">new_prefix</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="cumsum"><a class="viewcode-back" href="../../../envinorma.from_legifrance.html#envinorma.from_legifrance.legifrance_to_am.cumsum">[docs]</a><span class="k">def</span> <span class="nf">cumsum</span><span class="p">(</span><span class="n">ints</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]:</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">ints</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">[]</span>
+    <span class="n">res</span> <span class="o">=</span> <span class="p">[</span><span class="n">ints</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
+    <span class="k">for</span> <span class="n">int_</span> <span class="ow">in</span> <span class="n">ints</span><span class="p">[</span><span class="mi">1</span><span class="p">:]:</span>
+        <span class="n">res</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">res</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">int_</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">res</span></div>
+
+
+<span class="n">_ALPHABET</span> <span class="o">=</span> <span class="s1">&#39;0123456789ABCDEF&#39;</span>
+
+
+<span class="k">def</span> <span class="nf">_generate_random_string</span><span class="p">(</span><span class="n">size</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">return</span> <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">_ALPHABET</span><span class="p">)</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">size</span><span class="p">)])</span>
+
+
+<span class="n">_REF_SIG_LEFT</span> <span class="o">=</span> <span class="s1">&#39;$$REF_L$$&#39;</span>
+<span class="n">_REF_SIG_RIGHT</span> <span class="o">=</span> <span class="s1">&#39;$$REF_R$$&#39;</span>
+
+
+<span class="k">def</span> <span class="nf">_generate_reference</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">return</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">_REF_SIG_LEFT</span><span class="si">}{</span><span class="n">_generate_random_string</span><span class="p">(</span><span class="mi">6</span><span class="p">)</span><span class="si">}{</span><span class="n">_REF_SIG_RIGHT</span><span class="si">}</span><span class="s1">&#39;</span>
+
+
+<span class="n">_BASE_LEGIFRANCE_URL</span> <span class="o">=</span> <span class="s1">&#39;https://www.legifrance.gouv.fr&#39;</span>
+
+
+<span class="k">def</span> <span class="nf">_replace_link</span><span class="p">(</span><span class="n">link_tag</span><span class="p">:</span> <span class="n">bs4</span><span class="o">.</span><span class="n">Tag</span><span class="p">,</span> <span class="n">placeholder</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">add_legifrance_prefix</span><span class="p">:</span> <span class="nb">bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">]:</span>  <span class="c1"># side effects</span>
+    <span class="n">link_text</span> <span class="o">=</span> <span class="n">link_tag</span><span class="o">.</span><span class="n">text</span>
+    <span class="n">link_tag</span><span class="o">.</span><span class="n">replace_with</span><span class="p">(</span><span class="n">placeholder</span> <span class="o">+</span> <span class="n">link_text</span><span class="p">)</span>
+    <span class="k">return</span> <span class="p">(</span><span class="n">_BASE_LEGIFRANCE_URL</span> <span class="k">if</span> <span class="n">add_legifrance_prefix</span> <span class="k">else</span> <span class="s1">&#39;&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="n">link_tag</span><span class="p">[</span><span class="s1">&#39;href&#39;</span><span class="p">],</span> <span class="nb">len</span><span class="p">(</span><span class="n">link_text</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">_extract_links</span><span class="p">(</span><span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">add_legifrance_prefix</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">EnrichedString</span><span class="p">:</span>
+    <span class="n">soup</span> <span class="o">=</span> <span class="n">BeautifulSoup</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="s1">&#39;html.parser&#39;</span><span class="p">)</span>
+    <span class="n">placeholder</span> <span class="o">=</span> <span class="s1">&#39;{{</span><span class="si">{LINK}</span><span class="s1">}}&#39;</span>
+    <span class="n">raw_links</span> <span class="o">=</span> <span class="p">[</span><span class="n">_replace_link</span><span class="p">(</span><span class="n">tag</span><span class="p">,</span> <span class="n">placeholder</span><span class="p">,</span> <span class="n">add_legifrance_prefix</span><span class="p">)</span> <span class="k">for</span> <span class="n">tag</span> <span class="ow">in</span> <span class="n">soup</span><span class="o">.</span><span class="n">find_all</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">)]</span>
+    <span class="n">final_text</span><span class="p">,</span> <span class="n">positions</span> <span class="o">=</span> <span class="n">_extract_placeholder_positions</span><span class="p">(</span><span class="n">soup</span><span class="o">.</span><span class="n">text</span><span class="p">,</span> <span class="n">placeholder</span><span class="p">)</span>
+    <span class="n">links</span> <span class="o">=</span> <span class="p">[</span><span class="n">Link</span><span class="p">(</span><span class="n">target</span><span class="p">,</span> <span class="n">position</span><span class="p">,</span> <span class="n">size</span><span class="p">)</span> <span class="k">for</span> <span class="p">(</span><span class="n">target</span><span class="p">,</span> <span class="n">size</span><span class="p">),</span> <span class="n">position</span> <span class="ow">in</span> <span class="n">secure_zip</span><span class="p">(</span><span class="n">raw_links</span><span class="p">,</span> <span class="n">positions</span><span class="p">)]</span>
+    <span class="k">return</span> <span class="n">EnrichedString</span><span class="p">(</span><span class="n">final_text</span><span class="p">,</span> <span class="n">links</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">_move_first_2_upper_alineas_to_title_in_annexe</span><span class="p">(</span><span class="n">alineas</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">EnrichedString</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="n">EnrichedString</span><span class="p">]]:</span>
+    <span class="n">first_lines</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]:</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">alineas</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">i</span> <span class="ow">and</span> <span class="n">is_mainly_upper</span><span class="p">(</span><span class="n">alineas</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">text</span><span class="p">):</span>
+            <span class="n">first_lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">alineas</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">break</span>
+    <span class="k">return</span> <span class="s1">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">first_lines</span><span class="p">),</span> <span class="n">alineas</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">first_lines</span><span class="p">)</span> <span class="p">:]</span>
+
+
+<span class="k">def</span> <span class="nf">_move_first_2_upper_alineas_to_title_in_article</span><span class="p">(</span><span class="n">alineas</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">EnrichedString</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="n">EnrichedString</span><span class="p">]]:</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">alineas</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="p">[]</span>
+    <span class="k">if</span> <span class="n">is_probably_title</span><span class="p">(</span><span class="n">alineas</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">text</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">alineas</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">text</span><span class="p">,</span> <span class="n">alineas</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
+    <span class="k">return</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">alineas</span>
+
+
+<span class="k">def</span> <span class="nf">_generate_article_title</span><span class="p">(</span>
+    <span class="n">article</span><span class="p">:</span> <span class="n">LegifranceArticle</span><span class="p">,</span> <span class="n">outer_alineas</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">EnrichedString</span><span class="p">]</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">EnrichedString</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="n">EnrichedString</span><span class="p">]]:</span>
+    <span class="k">if</span> <span class="n">article</span><span class="o">.</span><span class="n">num</span> <span class="ow">and</span> <span class="s1">&#39;annexe&#39;</span> <span class="ow">in</span> <span class="n">article</span><span class="o">.</span><span class="n">num</span><span class="o">.</span><span class="n">lower</span><span class="p">():</span>
+        <span class="n">title</span><span class="p">,</span> <span class="n">new_outer_alineas</span> <span class="o">=</span> <span class="n">_move_first_2_upper_alineas_to_title_in_annexe</span><span class="p">(</span><span class="n">outer_alineas</span><span class="p">)</span>
+        <span class="n">final_title</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">article</span><span class="o">.</span><span class="n">num</span><span class="si">}</span><span class="s1"> - </span><span class="si">{</span><span class="n">title</span><span class="si">}</span><span class="s1">&#39;</span> <span class="k">if</span> <span class="n">title</span> <span class="k">else</span> <span class="n">article</span><span class="o">.</span><span class="n">num</span>
+        <span class="k">return</span> <span class="n">EnrichedString</span><span class="p">(</span><span class="n">final_title</span><span class="p">),</span> <span class="n">new_outer_alineas</span>
+    <span class="n">title</span><span class="p">,</span> <span class="n">new_outer_alineas</span> <span class="o">=</span> <span class="n">_move_first_2_upper_alineas_to_title_in_article</span><span class="p">(</span><span class="n">outer_alineas</span><span class="p">)</span>
+    <span class="n">title_beginning</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;Article </span><span class="si">{</span><span class="n">article</span><span class="o">.</span><span class="n">num</span><span class="si">}</span><span class="s1">&#39;</span> <span class="k">if</span> <span class="n">article</span><span class="o">.</span><span class="n">num</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="s1">&#39;Article&#39;</span>
+    <span class="n">title_end</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39; - </span><span class="si">{</span><span class="n">title</span><span class="si">}</span><span class="s1">&#39;</span> <span class="k">if</span> <span class="n">title</span> <span class="k">else</span> <span class="s1">&#39;&#39;</span>
+    <span class="k">return</span> <span class="n">EnrichedString</span><span class="p">(</span><span class="n">title_beginning</span> <span class="o">+</span> <span class="n">title_end</span><span class="p">),</span> <span class="n">new_outer_alineas</span>
+
+
+<span class="n">_EXISTING_INSTALLATIONS_PATTERN</span> <span class="o">=</span> <span class="s1">&#39;dispositions applicables aux installations existantes&#39;</span>
+
+
+<span class="k">def</span> <span class="nf">_contains_lower</span><span class="p">(</span><span class="n">strs</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">pattern</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+    <span class="k">for</span> <span class="n">str_</span> <span class="ow">in</span> <span class="n">strs</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">pattern</span> <span class="ow">in</span> <span class="n">str_</span><span class="o">.</span><span class="n">lower</span><span class="p">():</span>
+            <span class="k">return</span> <span class="kc">True</span>
+    <span class="k">return</span> <span class="kc">False</span>
+
+
+<span class="k">def</span> <span class="nf">_is_about_existing_installations</span><span class="p">(</span><span class="n">article</span><span class="p">:</span> <span class="n">LegifranceArticle</span><span class="p">,</span> <span class="n">ascendant_titles</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">_contains_lower</span><span class="p">(</span><span class="n">ascendant_titles</span><span class="p">,</span> <span class="n">_EXISTING_INSTALLATIONS_PATTERN</span><span class="p">):</span>
+        <span class="k">return</span> <span class="kc">True</span>
+    <span class="n">in_annexe</span> <span class="o">=</span> <span class="n">_contains_lower</span><span class="p">(</span><span class="n">ascendant_titles</span> <span class="o">+</span> <span class="p">[</span><span class="n">article</span><span class="o">.</span><span class="n">num</span> <span class="ow">or</span> <span class="s1">&#39;&#39;</span><span class="p">],</span> <span class="s1">&#39;annexe&#39;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">in_annexe</span> <span class="ow">and</span> <span class="n">_EXISTING_INSTALLATIONS_PATTERN</span> <span class="ow">in</span> <span class="n">article</span><span class="o">.</span><span class="n">content</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+
+
+<span class="k">def</span> <span class="nf">_extract_structured_text_from_legifrance_article</span><span class="p">(</span>
+    <span class="n">article</span><span class="p">:</span> <span class="n">LegifranceArticle</span><span class="p">,</span> <span class="n">ascendant_titles</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">StructuredText</span><span class="p">:</span>
+    <span class="n">structured_text</span> <span class="o">=</span> <span class="n">_html_to_structured_text</span><span class="p">(</span>
+        <span class="n">article</span><span class="o">.</span><span class="n">content</span><span class="p">,</span> <span class="ow">not</span> <span class="n">_is_about_existing_installations</span><span class="p">(</span><span class="n">article</span><span class="p">,</span> <span class="n">ascendant_titles</span><span class="p">)</span>
+    <span class="p">)</span>
+    <span class="k">if</span> <span class="n">structured_text</span><span class="o">.</span><span class="n">title</span><span class="o">.</span><span class="n">text</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Should not happen. Article should not have titles. Article id : </span><span class="si">{</span><span class="n">article</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+    <span class="n">title</span><span class="p">,</span> <span class="n">outer_alineas</span> <span class="o">=</span> <span class="n">_generate_article_title</span><span class="p">(</span><span class="n">article</span><span class="p">,</span> <span class="n">structured_text</span><span class="o">.</span><span class="n">outer_alineas</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">StructuredText</span><span class="p">(</span><span class="n">_clean_title</span><span class="p">(</span><span class="n">title</span><span class="p">),</span> <span class="n">outer_alineas</span><span class="p">,</span> <span class="n">structured_text</span><span class="o">.</span><span class="n">sections</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">_extract_structured_text_from_legifrance_section</span><span class="p">(</span>
+    <span class="n">section</span><span class="p">:</span> <span class="n">LegifranceSection</span><span class="p">,</span> <span class="n">ascendant_titles</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">StructuredText</span><span class="p">:</span>
+    <span class="k">return</span> <span class="n">StructuredText</span><span class="p">(</span>
+        <span class="n">_clean_title</span><span class="p">(</span><span class="n">_extract_links</span><span class="p">(</span><span class="n">section</span><span class="o">.</span><span class="n">title</span><span class="p">)),</span>
+        <span class="p">[],</span>
+        <span class="n">_extract_sections</span><span class="p">(</span><span class="n">section</span><span class="o">.</span><span class="n">articles</span><span class="p">,</span> <span class="n">section</span><span class="o">.</span><span class="n">sections</span><span class="p">,</span> <span class="n">ascendant_titles</span><span class="p">),</span>
+        <span class="kc">None</span><span class="p">,</span>
+    <span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">_extract_structured_text</span><span class="p">(</span>
+    <span class="n">section_or_article</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">LegifranceSection</span><span class="p">,</span> <span class="n">LegifranceArticle</span><span class="p">],</span> <span class="n">ascendant_titles</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">StructuredText</span><span class="p">:</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">section_or_article</span><span class="p">,</span> <span class="n">LegifranceSection</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">_extract_structured_text_from_legifrance_section</span><span class="p">(</span>
+            <span class="n">section_or_article</span><span class="p">,</span> <span class="n">ascendant_titles</span> <span class="o">+</span> <span class="p">[</span><span class="n">section_or_article</span><span class="o">.</span><span class="n">title</span><span class="p">]</span>
+        <span class="p">)</span>
+    <span class="k">return</span> <span class="n">_extract_structured_text_from_legifrance_article</span><span class="p">(</span><span class="n">section_or_article</span><span class="p">,</span> <span class="n">ascendant_titles</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">_extract_sections</span><span class="p">(</span>
+    <span class="n">articles</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">LegifranceArticle</span><span class="p">],</span> <span class="n">sections</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">LegifranceSection</span><span class="p">],</span> <span class="n">ascendant_titles</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">StructuredText</span><span class="p">]:</span>
+    <span class="n">articles_and_sections</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">LegifranceArticle</span><span class="p">,</span> <span class="n">LegifranceSection</span><span class="p">]]</span> <span class="o">=</span> <span class="p">[</span><span class="o">*</span><span class="n">articles</span><span class="p">,</span> <span class="o">*</span><span class="n">sections</span><span class="p">]</span>
+    <span class="k">return</span> <span class="p">[</span>
+        <span class="n">_extract_structured_text</span><span class="p">(</span><span class="n">article_or_section</span><span class="p">,</span> <span class="n">ascendant_titles</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">article_or_section</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">articles_and_sections</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">int_ordre</span><span class="p">)</span>
+    <span class="p">]</span>
+
+
+<span class="k">def</span> <span class="nf">_norm_2</span><span class="p">(</span><span class="n">dict_</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+    <span class="k">return</span> <span class="n">sqrt</span><span class="p">(</span><span class="nb">sum</span><span class="p">([</span><span class="n">x</span> <span class="o">**</span> <span class="mi">2</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">dict_</span><span class="o">.</span><span class="n">values</span><span class="p">()]))</span>
+
+
+<span class="k">def</span> <span class="nf">_normalized_scalar_product</span><span class="p">(</span><span class="n">dict_1</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">],</span> <span class="n">dict_2</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+    <span class="n">common_keys</span> <span class="o">=</span> <span class="p">{</span><span class="o">*</span><span class="n">dict_1</span><span class="o">.</span><span class="n">keys</span><span class="p">(),</span> <span class="o">*</span><span class="n">dict_2</span><span class="o">.</span><span class="n">keys</span><span class="p">()}</span>
+    <span class="n">numerator</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">([</span><span class="n">dict_1</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">*</span> <span class="n">dict_2</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">common_keys</span><span class="p">])</span>
+    <span class="n">denominator</span> <span class="o">=</span> <span class="p">(</span><span class="n">_norm_2</span><span class="p">(</span><span class="n">dict_1</span><span class="p">)</span> <span class="o">*</span> <span class="n">_norm_2</span><span class="p">(</span><span class="n">dict_2</span><span class="p">))</span> <span class="ow">or</span> <span class="mi">1</span>
+    <span class="k">return</span> <span class="n">numerator</span> <span class="o">/</span> <span class="n">denominator</span>
+
+
+<span class="k">def</span> <span class="nf">_compute_proximity</span><span class="p">(</span><span class="n">str_1</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">str_2</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+    <span class="n">tokens_1</span> <span class="o">=</span> <span class="n">Counter</span><span class="p">(</span><span class="n">str_1</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">))</span>
+    <span class="n">tokens_2</span> <span class="o">=</span> <span class="n">Counter</span><span class="p">(</span><span class="n">str_2</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">_normalized_scalar_product</span><span class="p">(</span><span class="n">tokens_1</span><span class="p">,</span> <span class="n">tokens_2</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">_html_to_str</span><span class="p">(</span><span class="n">html</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">return</span> <span class="n">BeautifulSoup</span><span class="p">(</span><span class="n">html</span><span class="p">,</span> <span class="s1">&#39;html.parser&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">text</span>
+
+
+<span class="k">def</span> <span class="nf">_are_very_similar</span><span class="p">(</span><span class="n">article_1</span><span class="p">:</span> <span class="n">LegifranceArticle</span><span class="p">,</span> <span class="n">article_2</span><span class="p">:</span> <span class="n">LegifranceArticle</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+    <span class="k">return</span> <span class="n">_compute_proximity</span><span class="p">(</span><span class="n">_html_to_str</span><span class="p">(</span><span class="n">article_1</span><span class="o">.</span><span class="n">content</span><span class="p">),</span> <span class="n">_html_to_str</span><span class="p">(</span><span class="n">article_2</span><span class="o">.</span><span class="n">content</span><span class="p">))</span> <span class="o">&gt;=</span> <span class="mf">0.95</span>
+
+
+<span class="k">def</span> <span class="nf">_particular_case</span><span class="p">(</span><span class="n">article_1</span><span class="p">:</span> <span class="n">LegifranceArticle</span><span class="p">,</span> <span class="n">article_2</span><span class="p">:</span> <span class="n">LegifranceArticle</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+    <span class="k">return</span> <span class="n">article_1</span><span class="o">.</span><span class="n">num</span> <span class="o">==</span> <span class="s1">&#39;Annexe I&#39;</span> <span class="ow">and</span> <span class="n">article_2</span><span class="o">.</span><span class="n">num</span> <span class="o">==</span> <span class="s1">&#39;Annexe I (suite)&#39;</span>
+
+
+<span class="n">_ArticlePair</span> <span class="o">=</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">LegifranceArticle</span><span class="p">,</span> <span class="n">LegifranceArticle</span><span class="p">]</span>
+<span class="n">_ArticleGroup</span> <span class="o">=</span> <span class="n">Union</span><span class="p">[</span><span class="n">LegifranceArticle</span><span class="p">,</span> <span class="n">_ArticlePair</span><span class="p">]</span>
+
+
+<span class="k">def</span> <span class="nf">_check_number_of_articles</span><span class="p">(</span><span class="n">groups</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">_ArticleGroup</span><span class="p">],</span> <span class="n">expected_nb_articles</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="n">nb_articles</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">([</span><span class="mi">1</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">group</span><span class="p">,</span> <span class="n">LegifranceArticle</span><span class="p">)</span> <span class="k">else</span> <span class="mi">2</span> <span class="k">for</span> <span class="n">group</span> <span class="ow">in</span> <span class="n">groups</span><span class="p">])</span>
+    <span class="k">if</span> <span class="n">nb_articles</span> <span class="o">!=</span> <span class="n">expected_nb_articles</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Expecting </span><span class="si">{</span><span class="n">expected_nb_articles</span><span class="si">}</span><span class="s1"> articles, received </span><span class="si">{</span><span class="n">nb_articles</span><span class="si">}</span><span class="s1">.&#39;</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">_group_articles_to_merge</span><span class="p">(</span><span class="n">articles</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">LegifranceArticle</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">_ArticleGroup</span><span class="p">]:</span>
+    <span class="n">previous_is_not_none</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="n">groups</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">_ArticleGroup</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">article</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">articles</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">i</span> <span class="ow">and</span> <span class="n">_particular_case</span><span class="p">(</span><span class="n">articles</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">],</span> <span class="n">article</span><span class="p">):</span>
+            <span class="n">groups</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
+            <span class="n">groups</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">articles</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">],</span> <span class="n">article</span><span class="p">))</span>
+            <span class="n">previous_is_not_none</span> <span class="o">=</span> <span class="kc">False</span>
+            <span class="k">continue</span>
+        <span class="k">if</span> <span class="n">article</span><span class="o">.</span><span class="n">num</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">previous_is_not_none</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="n">groups</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">article</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">previous_is_not_none</span><span class="p">:</span>
+                <span class="n">groups</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
+                <span class="n">groups</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">articles</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">],</span> <span class="n">article</span><span class="p">))</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">groups</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">article</span><span class="p">)</span>
+            <span class="n">previous_is_not_none</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="n">_check_number_of_articles</span><span class="p">(</span><span class="n">groups</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">articles</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">groups</span>
+
+
+<span class="k">def</span> <span class="nf">_merge_articles</span><span class="p">(</span><span class="n">main_article</span><span class="p">:</span> <span class="n">LegifranceArticle</span><span class="p">,</span> <span class="n">articles_to_append</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">LegifranceArticle</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">LegifranceArticle</span><span class="p">:</span>
+    <span class="n">merged_content</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&lt;br/&gt;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">main_article</span><span class="o">.</span><span class="n">content</span><span class="p">]</span> <span class="o">+</span> <span class="p">[</span><span class="n">art</span><span class="o">.</span><span class="n">content</span> <span class="k">for</span> <span class="n">art</span> <span class="ow">in</span> <span class="n">articles_to_append</span><span class="p">])</span>
+    <span class="k">return</span> <span class="n">LegifranceArticle</span><span class="p">(</span>
+        <span class="n">main_article</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
+        <span class="n">content</span><span class="o">=</span><span class="n">merged_content</span><span class="p">,</span>
+        <span class="n">int_ordre</span><span class="o">=</span><span class="n">main_article</span><span class="o">.</span><span class="n">int_ordre</span><span class="p">,</span>
+        <span class="n">num</span><span class="o">=</span><span class="n">main_article</span><span class="o">.</span><span class="n">num</span><span class="p">,</span>
+        <span class="n">etat</span><span class="o">=</span><span class="n">main_article</span><span class="o">.</span><span class="n">etat</span><span class="p">,</span>
+    <span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">_handle_article_group</span><span class="p">(</span><span class="n">group</span><span class="p">:</span> <span class="n">_ArticleGroup</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">LegifranceArticle</span><span class="p">:</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">group</span><span class="p">,</span> <span class="n">LegifranceArticle</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">group</span>
+    <span class="k">if</span> <span class="n">_are_very_similar</span><span class="p">(</span><span class="o">*</span><span class="n">group</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">group</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">_merge_articles</span><span class="p">(</span><span class="n">group</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="n">group</span><span class="p">[</span><span class="mi">1</span><span class="p">]])</span>
+
+
+<span class="k">def</span> <span class="nf">_sort_with_int_ordre</span><span class="p">(</span><span class="n">articles</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">LegifranceArticle</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">LegifranceArticle</span><span class="p">]:</span>
+    <span class="k">return</span> <span class="p">[</span><span class="n">art</span> <span class="k">for</span> <span class="n">art</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">articles</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">int_ordre</span><span class="p">)]</span>
+
+
+<span class="k">def</span> <span class="nf">_all_none_articles</span><span class="p">(</span><span class="n">articles</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">LegifranceArticle</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+    <span class="k">return</span> <span class="nb">all</span><span class="p">([</span><span class="n">article</span><span class="o">.</span><span class="n">num</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">for</span> <span class="n">article</span> <span class="ow">in</span> <span class="n">articles</span><span class="p">])</span>
+
+
+<span class="k">def</span> <span class="nf">_delete_or_merge_articles</span><span class="p">(</span><span class="n">articles_</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">LegifranceArticle</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">LegifranceArticle</span><span class="p">]:</span>
+    <span class="n">articles</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">_sort_with_int_ordre</span><span class="p">(</span><span class="n">articles_</span><span class="p">))</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">articles</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">articles</span>
+    <span class="k">if</span> <span class="n">_all_none_articles</span><span class="p">(</span><span class="n">articles</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">_merge_articles</span><span class="p">(</span><span class="n">articles</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">articles</span><span class="p">[</span><span class="mi">1</span><span class="p">:])]</span>
+    <span class="n">grouped_articles</span> <span class="o">=</span> <span class="n">_group_articles_to_merge</span><span class="p">(</span><span class="n">articles</span><span class="p">)</span>
+    <span class="k">return</span> <span class="p">[</span><span class="n">_handle_article_group</span><span class="p">(</span><span class="n">group</span><span class="p">)</span> <span class="k">for</span> <span class="n">group</span> <span class="ow">in</span> <span class="n">grouped_articles</span><span class="p">]</span>
+
+
+<span class="k">def</span> <span class="nf">_clean_section_articles</span><span class="p">(</span><span class="n">section</span><span class="p">:</span> <span class="n">LegifranceSection</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">LegifranceSection</span><span class="p">:</span>
+    <span class="k">return</span> <span class="n">LegifranceSection</span><span class="p">(</span>
+        <span class="n">section</span><span class="o">.</span><span class="n">int_ordre</span><span class="p">,</span>
+        <span class="n">section</span><span class="o">.</span><span class="n">title</span><span class="p">,</span>
+        <span class="n">_delete_or_merge_articles</span><span class="p">(</span><span class="n">section</span><span class="o">.</span><span class="n">articles</span><span class="p">),</span>
+        <span class="p">[</span><span class="n">_clean_section_articles</span><span class="p">(</span><span class="n">subsection</span><span class="p">)</span> <span class="k">for</span> <span class="n">subsection</span> <span class="ow">in</span> <span class="n">section</span><span class="o">.</span><span class="n">sections</span><span class="p">],</span>
+        <span class="n">section</span><span class="o">.</span><span class="n">etat</span><span class="p">,</span>
+    <span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">_in_force</span><span class="p">(</span><span class="n">legifrance_element</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">LegifranceArticle</span><span class="p">,</span> <span class="n">LegifranceSection</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+    <span class="k">return</span> <span class="n">legifrance_element</span><span class="o">.</span><span class="n">etat</span> <span class="o">==</span> <span class="n">ArticleStatus</span><span class="o">.</span><span class="n">VIGUEUR</span>
+
+
+<span class="n">LFTP</span> <span class="o">=</span> <span class="n">TypeVar</span><span class="p">(</span><span class="s1">&#39;LFTP&#39;</span><span class="p">,</span> <span class="n">bound</span><span class="o">=</span><span class="n">Union</span><span class="p">[</span><span class="n">LegifranceText</span><span class="p">,</span> <span class="n">LegifranceSection</span><span class="p">])</span>
+
+
+<span class="k">def</span> <span class="nf">_remove_abrogated</span><span class="p">(</span><span class="n">text</span><span class="p">:</span> <span class="n">LFTP</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">LFTP</span><span class="p">:</span>
+    <span class="n">articles</span> <span class="o">=</span> <span class="p">[</span><span class="n">article</span> <span class="k">for</span> <span class="n">article</span> <span class="ow">in</span> <span class="n">text</span><span class="o">.</span><span class="n">articles</span> <span class="k">if</span> <span class="n">_in_force</span><span class="p">(</span><span class="n">article</span><span class="p">)]</span>
+    <span class="n">sections</span> <span class="o">=</span> <span class="p">[</span><span class="n">_remove_abrogated</span><span class="p">(</span><span class="n">section</span><span class="p">)</span> <span class="k">for</span> <span class="n">section</span> <span class="ow">in</span> <span class="n">text</span><span class="o">.</span><span class="n">sections</span> <span class="k">if</span> <span class="n">_in_force</span><span class="p">(</span><span class="n">section</span><span class="p">)]</span>
+    <span class="k">return</span> <span class="n">replace</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">articles</span><span class="o">=</span><span class="n">articles</span><span class="p">,</span> <span class="n">sections</span><span class="o">=</span><span class="n">sections</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">_clean_text_articles</span><span class="p">(</span><span class="n">text</span><span class="p">:</span> <span class="n">LegifranceText</span><span class="p">,</span> <span class="n">keep_abrogated</span><span class="p">:</span> <span class="nb">bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">LegifranceText</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">keep_abrogated</span><span class="p">:</span>
+        <span class="n">input_text</span> <span class="o">=</span> <span class="n">text</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">input_text</span> <span class="o">=</span> <span class="n">_remove_abrogated</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">LegifranceText</span><span class="p">(</span>
+        <span class="n">input_text</span><span class="o">.</span><span class="n">visa</span><span class="p">,</span>
+        <span class="n">input_text</span><span class="o">.</span><span class="n">title</span><span class="p">,</span>
+        <span class="n">_delete_or_merge_articles</span><span class="p">(</span><span class="n">input_text</span><span class="o">.</span><span class="n">articles</span><span class="p">),</span>
+        <span class="p">[</span><span class="n">_clean_section_articles</span><span class="p">(</span><span class="n">section</span><span class="p">)</span> <span class="k">for</span> <span class="n">section</span> <span class="ow">in</span> <span class="n">input_text</span><span class="o">.</span><span class="n">sections</span><span class="p">],</span>
+        <span class="n">text</span><span class="o">.</span><span class="n">last_modification_date</span><span class="p">,</span>
+    <span class="p">)</span>
+
+
+<div class="viewcode-block" id="legifrance_to_arrete_ministeriel"><a class="viewcode-back" href="../../../envinorma.from_legifrance.html#envinorma.from_legifrance.legifrance_to_am.legifrance_to_arrete_ministeriel">[docs]</a><span class="k">def</span> <span class="nf">legifrance_to_arrete_ministeriel</span><span class="p">(</span>
+    <span class="n">input_text</span><span class="p">:</span> <span class="n">LegifranceText</span><span class="p">,</span> <span class="n">keep_abrogated_articles</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">am_id</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ArreteMinisteriel</span><span class="p">:</span>
+    <span class="n">visa</span> <span class="o">=</span> <span class="n">_extract_visa</span><span class="p">(</span><span class="n">input_text</span><span class="o">.</span><span class="n">visa</span><span class="p">)</span>
+    <span class="n">text_with_merged_articles</span> <span class="o">=</span> <span class="n">_clean_text_articles</span><span class="p">(</span><span class="n">input_text</span><span class="p">,</span> <span class="n">keep_abrogated_articles</span><span class="p">)</span>
+    <span class="n">sections</span> <span class="o">=</span> <span class="n">_extract_sections</span><span class="p">(</span><span class="n">text_with_merged_articles</span><span class="o">.</span><span class="n">articles</span><span class="p">,</span> <span class="n">text_with_merged_articles</span><span class="o">.</span><span class="n">sections</span><span class="p">,</span> <span class="p">[])</span>
+    <span class="n">title</span> <span class="o">=</span> <span class="n">standardize_title_date</span><span class="p">(</span><span class="n">text_with_merged_articles</span><span class="o">.</span><span class="n">title</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">ArreteMinisteriel</span><span class="p">(</span><span class="n">EnrichedString</span><span class="p">(</span><span class="n">title</span><span class="p">),</span> <span class="n">sections</span><span class="p">,</span> <span class="n">visa</span><span class="p">,</span> <span class="nb">id</span><span class="o">=</span><span class="n">am_id</span><span class="p">)</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, Envinorma.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

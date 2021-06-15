@@ -1,0 +1,782 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>envinorma.topics package &mdash; Envinorma 0.0.0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="envinorma.parametrization.models package" href="envinorma.parametrization.models.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> Envinorma
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.0.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="index.html">Overview</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">Package modules</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="envinorma.html">envinorma package</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="envinorma.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="envinorma.enriching.html">envinorma.enriching package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="envinorma.from_legifrance.html">envinorma.from_legifrance package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="envinorma.io.html">envinorma.io package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="envinorma.models.html">envinorma.models package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="envinorma.parametrization.html">envinorma.parametrization package</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">envinorma.topics package</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="envinorma.html#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="envinorma.html#module-envinorma.data_fetcher">envinorma.data_fetcher module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="envinorma.html#module-envinorma.structure">envinorma.structure module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="envinorma.html#module-envinorma.title_detection">envinorma.title_detection module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="envinorma.html#module-envinorma.utils">envinorma.utils module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="envinorma.html#module-envinorma">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Envinorma</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="modules.html">envinorma</a> &raquo;</li>
+        
+          <li><a href="envinorma.html">envinorma package</a> &raquo;</li>
+        
+      <li>envinorma.topics package</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="_sources/envinorma.topics.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <div class="rst-breadcrumbs-buttons" role="navigation" aria-label="breadcrumb navigation">
+      
+      
+        <a href="envinorma.parametrization.models.html" class="btn btn-neutral float-left" title="envinorma.parametrization.models package" accesskey="p"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+      
+  </div>
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="envinorma-topics-package">
+<h1>envinorma.topics package<a class="headerlink" href="#envinorma-topics-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-envinorma.topics.pattern_builder_script">
+<span id="envinorma-topics-pattern-builder-script-module"></span><h2>envinorma.topics.pattern_builder_script module<a class="headerlink" href="#module-envinorma.topics.pattern_builder_script" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="envinorma.topics.pattern_builder_script.compute_detection_performance">
+<span class="sig-prename descclassname"><span class="pre">envinorma.topics.pattern_builder_script.</span></span><span class="sig-name descname"><span class="pre">compute_detection_performance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="envinorma.models.html#envinorma.models.text_elements.EnrichedString" title="envinorma.models.text_elements.EnrichedString"><span class="pre">envinorma.models.text_elements.EnrichedString</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span> </span><span class="pre">Set</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#envinorma.topics.patterns.TopicName" title="envinorma.topics.patterns.TopicName"><span class="pre">envinorma.topics.patterns.TopicName</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ontology</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="#envinorma.topics.topics.TopicOntology" title="envinorma.topics.topics.TopicOntology"><span class="pre">envinorma.topics.topics.TopicOntology</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/envinorma/topics/pattern_builder_script.html#compute_detection_performance"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#envinorma.topics.pattern_builder_script.compute_detection_performance" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="envinorma.topics.pattern_builder_script.extract_topic_titles">
+<span class="sig-prename descclassname"><span class="pre">envinorma.topics.pattern_builder_script.</span></span><span class="sig-name descname"><span class="pre">extract_topic_titles</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">topic</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dataset</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">Tuple</span><span class="p"><span class="pre">,</span> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><a class="reference internal" href="_modules/envinorma/topics/pattern_builder_script.html#extract_topic_titles"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#envinorma.topics.pattern_builder_script.extract_topic_titles" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="envinorma.topics.pattern_builder_script.pretty_print">
+<span class="sig-prename descclassname"><span class="pre">envinorma.topics.pattern_builder_script.</span></span><span class="sig-name descname"><span class="pre">pretty_print</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">topic</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="#envinorma.topics.patterns.TopicName" title="envinorma.topics.patterns.TopicName"><span class="pre">envinorma.topics.patterns.TopicName</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">texts</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span> </span><a class="reference internal" href="envinorma.models.html#envinorma.models.structured_text.StructuredText" title="envinorma.models.structured_text.StructuredText"><span class="pre">envinorma.models.structured_text.StructuredText</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">None</span><a class="reference internal" href="_modules/envinorma/topics/pattern_builder_script.html#pretty_print"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#envinorma.topics.pattern_builder_script.pretty_print" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-envinorma.topics.patterns">
+<span id="envinorma-topics-patterns-module"></span><h2>envinorma.topics.patterns module<a class="headerlink" href="#module-envinorma.topics.patterns" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="envinorma.topics.patterns.Topic">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">envinorma.topics.patterns.</span></span><span class="sig-name descname"><span class="pre">Topic</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">topic_name</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="#envinorma.topics.patterns.TopicName" title="envinorma.topics.patterns.TopicName"><span class="pre">envinorma.topics.patterns.TopicName</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">metatopic</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="#envinorma.topics.patterns.TopicName" title="envinorma.topics.patterns.TopicName"><span class="pre">envinorma.topics.patterns.TopicName</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">compatible_topics</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#envinorma.topics.patterns.TopicName" title="envinorma.topics.patterns.TopicName"><span class="pre">envinorma.topics.patterns.TopicName</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">short_title_patterns</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">other_patterns</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/envinorma/topics/patterns.html#Topic"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#envinorma.topics.patterns.Topic" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="envinorma.topics.patterns.Topic.compatible_topics">
+<span class="sig-name descname"><span class="pre">compatible_topics</span></span><em class="property"><span class="pre">:</span> <span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#envinorma.topics.patterns.TopicName" title="envinorma.topics.patterns.TopicName"><span class="pre">envinorma.topics.patterns.TopicName</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#envinorma.topics.patterns.Topic.compatible_topics" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="envinorma.topics.patterns.Topic.escaped_pattern">
+<span class="sig-name descname"><span class="pre">escaped_pattern</span></span><em class="property"><span class="pre">:</span> <span class="pre">str</span></em><a class="headerlink" href="#envinorma.topics.patterns.Topic.escaped_pattern" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="envinorma.topics.patterns.Topic.escaped_short_title_pattern">
+<span class="sig-name descname"><span class="pre">escaped_short_title_pattern</span></span><em class="property"><span class="pre">:</span> <span class="pre">str</span></em><a class="headerlink" href="#envinorma.topics.patterns.Topic.escaped_short_title_pattern" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="envinorma.topics.patterns.Topic.from_raw_patterns">
+<em class="property"><span class="pre">static</span> </em><span class="sig-name descname"><span class="pre">from_raw_patterns</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">topic</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="#envinorma.topics.patterns.TopicName" title="envinorma.topics.patterns.TopicName"><span class="pre">envinorma.topics.patterns.TopicName</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">metatopic</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="#envinorma.topics.patterns.TopicName" title="envinorma.topics.patterns.TopicName"><span class="pre">envinorma.topics.patterns.TopicName</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">compatible_topics</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#envinorma.topics.patterns.TopicName" title="envinorma.topics.patterns.TopicName"><span class="pre">envinorma.topics.patterns.TopicName</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">short_title_patterns</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">other_patterns</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="#envinorma.topics.patterns.Topic" title="envinorma.topics.patterns.Topic"><span class="pre">envinorma.topics.patterns.Topic</span></a><a class="reference internal" href="_modules/envinorma/topics/patterns.html#Topic.from_raw_patterns"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#envinorma.topics.patterns.Topic.from_raw_patterns" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="envinorma.topics.patterns.Topic.metatopic">
+<span class="sig-name descname"><span class="pre">metatopic</span></span><em class="property"><span class="pre">:</span> <a class="reference internal" href="#envinorma.topics.patterns.TopicName" title="envinorma.topics.patterns.TopicName"><span class="pre">envinorma.topics.patterns.TopicName</span></a></em><a class="headerlink" href="#envinorma.topics.patterns.Topic.metatopic" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="envinorma.topics.patterns.Topic.monotopic">
+<em class="property"><span class="pre">static</span> </em><span class="sig-name descname"><span class="pre">monotopic</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">patterns</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="#envinorma.topics.patterns.Topic" title="envinorma.topics.patterns.Topic"><span class="pre">envinorma.topics.patterns.Topic</span></a><a class="reference internal" href="_modules/envinorma/topics/patterns.html#Topic.monotopic"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#envinorma.topics.patterns.Topic.monotopic" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="envinorma.topics.patterns.Topic.other_patterns">
+<span class="sig-name descname"><span class="pre">other_patterns</span></span><em class="property"><span class="pre">:</span> <span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#envinorma.topics.patterns.Topic.other_patterns" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="envinorma.topics.patterns.Topic.short_title_patterns">
+<span class="sig-name descname"><span class="pre">short_title_patterns</span></span><em class="property"><span class="pre">:</span> <span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#envinorma.topics.patterns.Topic.short_title_patterns" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="envinorma.topics.patterns.Topic.topic_name">
+<span class="sig-name descname"><span class="pre">topic_name</span></span><em class="property"><span class="pre">:</span> <a class="reference internal" href="#envinorma.topics.patterns.TopicName" title="envinorma.topics.patterns.TopicName"><span class="pre">envinorma.topics.patterns.TopicName</span></a></em><a class="headerlink" href="#envinorma.topics.patterns.Topic.topic_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="envinorma.topics.patterns.TopicName">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">envinorma.topics.patterns.</span></span><span class="sig-name descname"><span class="pre">TopicName</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/envinorma/topics/patterns.html#TopicName"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#envinorma.topics.patterns.TopicName" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">enum.Enum</span></code></p>
+<p>An enumeration.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="envinorma.topics.patterns.TopicName.ABROGATION_AM_PASSE">
+<span class="sig-name descname"><span class="pre">ABROGATION_AM_PASSE</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'ABROGATION_AM_PASSE'</span></em><a class="headerlink" href="#envinorma.topics.patterns.TopicName.ABROGATION_AM_PASSE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="envinorma.topics.patterns.TopicName.ACCIDENTS_POLLUTIONS">
+<span class="sig-name descname"><span class="pre">ACCIDENTS_POLLUTIONS</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'ACCIDENTS_POLLUTIONS'</span></em><a class="headerlink" href="#envinorma.topics.patterns.TopicName.ACCIDENTS_POLLUTIONS" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="envinorma.topics.patterns.TopicName.AIR_ODEURS">
+<span class="sig-name descname"><span class="pre">AIR_ODEURS</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'AIR_ODEURS'</span></em><a class="headerlink" href="#envinorma.topics.patterns.TopicName.AIR_ODEURS" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="envinorma.topics.patterns.TopicName.ANNEXE_BO">
+<span class="sig-name descname"><span class="pre">ANNEXE_BO</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'ANNEXE_BO'</span></em><a class="headerlink" href="#envinorma.topics.patterns.TopicName.ANNEXE_BO" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="envinorma.topics.patterns.TopicName.BILAN_ENVIRONNEMENT">
+<span class="sig-name descname"><span class="pre">BILAN_ENVIRONNEMENT</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'BILAN_ENVIRONNEMENT'</span></em><a class="headerlink" href="#envinorma.topics.patterns.TopicName.BILAN_ENVIRONNEMENT" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="envinorma.topics.patterns.TopicName.BIOGAZ">
+<span class="sig-name descname"><span class="pre">BIOGAZ</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'BIOGAZ'</span></em><a class="headerlink" href="#envinorma.topics.patterns.TopicName.BIOGAZ" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="envinorma.topics.patterns.TopicName.BIOMASSE">
+<span class="sig-name descname"><span class="pre">BIOMASSE</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'BIOMASSE'</span></em><a class="headerlink" href="#envinorma.topics.patterns.TopicName.BIOMASSE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="envinorma.topics.patterns.TopicName.BRUIT_VIBRATIONS">
+<span class="sig-name descname"><span class="pre">BRUIT_VIBRATIONS</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'BRUIT_VIBRATIONS'</span></em><a class="headerlink" href="#envinorma.topics.patterns.TopicName.BRUIT_VIBRATIONS" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="envinorma.topics.patterns.TopicName.BRULAGE">
+<span class="sig-name descname"><span class="pre">BRULAGE</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'BRULAGE'</span></em><a class="headerlink" href="#envinorma.topics.patterns.TopicName.BRULAGE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="envinorma.topics.patterns.TopicName.CHANGEMENT_EXPLOITANT">
+<span class="sig-name descname"><span class="pre">CHANGEMENT_EXPLOITANT</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'CHANGEMENT_EXPLOITANT'</span></em><a class="headerlink" href="#envinorma.topics.patterns.TopicName.CHANGEMENT_EXPLOITANT" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="envinorma.topics.patterns.TopicName.COMBUSTIBLES">
+<span class="sig-name descname"><span class="pre">COMBUSTIBLES</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'COMBUSTIBLES'</span></em><a class="headerlink" href="#envinorma.topics.patterns.TopicName.COMBUSTIBLES" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="envinorma.topics.patterns.TopicName.CONDITIONS_APPLICATION">
+<span class="sig-name descname"><span class="pre">CONDITIONS_APPLICATION</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'CONDITIONS_APPLICATION'</span></em><a class="headerlink" href="#envinorma.topics.patterns.TopicName.CONDITIONS_APPLICATION" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="envinorma.topics.patterns.TopicName.CONDITIONS_REJET">
+<span class="sig-name descname"><span class="pre">CONDITIONS_REJET</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'CONDITIONS_REJET'</span></em><a class="headerlink" href="#envinorma.topics.patterns.TopicName.CONDITIONS_REJET" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="envinorma.topics.patterns.TopicName.CONFINEMENT">
+<span class="sig-name descname"><span class="pre">CONFINEMENT</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'CONFINEMENT'</span></em><a class="headerlink" href="#envinorma.topics.patterns.TopicName.CONFINEMENT" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="envinorma.topics.patterns.TopicName.CONSIGNES">
+<span class="sig-name descname"><span class="pre">CONSIGNES</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'CONSIGNES'</span></em><a class="headerlink" href="#envinorma.topics.patterns.TopicName.CONSIGNES" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="envinorma.topics.patterns.TopicName.CONSOMMATION_D_EAU">
+<span class="sig-name descname"><span class="pre">CONSOMMATION_D_EAU</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'CONSOMMATION_D_EAU'</span></em><a class="headerlink" href="#envinorma.topics.patterns.TopicName.CONSOMMATION_D_EAU" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="envinorma.topics.patterns.TopicName.COV">
+<span class="sig-name descname"><span class="pre">COV</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'COV'</span></em><a class="headerlink" href="#envinorma.topics.patterns.TopicName.COV" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="envinorma.topics.patterns.TopicName.DECHETS">
+<span class="sig-name descname"><span class="pre">DECHETS</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'DECHETS'</span></em><a class="headerlink" href="#envinorma.topics.patterns.TopicName.DECHETS" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="envinorma.topics.patterns.TopicName.DECHETS_BANALS">
+<span class="sig-name descname"><span class="pre">DECHETS_BANALS</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'DECHETS_BANALS'</span></em><a class="headerlink" href="#envinorma.topics.patterns.TopicName.DECHETS_BANALS" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="envinorma.topics.patterns.TopicName.DECHETS_NON_DANGEREUX">
+<span class="sig-name descname"><span class="pre">DECHETS_NON_DANGEREUX</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'DECHETS_NON_DANGEREUX'</span></em><a class="headerlink" href="#envinorma.topics.patterns.TopicName.DECHETS_NON_DANGEREUX" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="envinorma.topics.patterns.TopicName.DECHETS_SPECIAUX">
+<span class="sig-name descname"><span class="pre">DECHETS_SPECIAUX</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'DECHETS_SPECIAUX'</span></em><a class="headerlink" href="#envinorma.topics.patterns.TopicName.DECHETS_SPECIAUX" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="envinorma.topics.patterns.TopicName.DECLARATION_DES_EMISSIONS">
+<span class="sig-name descname"><span class="pre">DECLARATION_DES_EMISSIONS</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'DECLARATION_DES_EMISSIONS'</span></em><a class="headerlink" href="#envinorma.topics.patterns.TopicName.DECLARATION_DES_EMISSIONS" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="envinorma.topics.patterns.TopicName.DEFINITIONS">
+<span class="sig-name descname"><span class="pre">DEFINITIONS</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'DEFINITIONS'</span></em><a class="headerlink" href="#envinorma.topics.patterns.TopicName.DEFINITIONS" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="envinorma.topics.patterns.TopicName.DISPOSITIONS_CONSTRUCTIVES_AMENAGEMENT">
+<span class="sig-name descname"><span class="pre">DISPOSITIONS_CONSTRUCTIVES_AMENAGEMENT</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'DISPOSITIONS_CONSTRUCTIVES_AMENAGEMENT'</span></em><a class="headerlink" href="#envinorma.topics.patterns.TopicName.DISPOSITIONS_CONSTRUCTIVES_AMENAGEMENT" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="envinorma.topics.patterns.TopicName.DISPOSITIONS_GENERALES">
+<span class="sig-name descname"><span class="pre">DISPOSITIONS_GENERALES</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'DISPOSITIONS_GENERALES'</span></em><a class="headerlink" href="#envinorma.topics.patterns.TopicName.DISPOSITIONS_GENERALES" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="envinorma.topics.patterns.TopicName.DOSSIER">
+<span class="sig-name descname"><span class="pre">DOSSIER</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'DOSSIER'</span></em><a class="headerlink" href="#envinorma.topics.patterns.TopicName.DOSSIER" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="envinorma.topics.patterns.TopicName.EAU">
+<span class="sig-name descname"><span class="pre">EAU</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'EAU'</span></em><a class="headerlink" href="#envinorma.topics.patterns.TopicName.EAU" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="envinorma.topics.patterns.TopicName.EFFLUENTS">
+<span class="sig-name descname"><span class="pre">EFFLUENTS</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'EFFLUENTS'</span></em><a class="headerlink" href="#envinorma.topics.patterns.TopicName.EFFLUENTS" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="envinorma.topics.patterns.TopicName.ELECTRICITE_STATIQUE">
+<span class="sig-name descname"><span class="pre">ELECTRICITE_STATIQUE</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'ELECTRICITE_STATIQUE'</span></em><a class="headerlink" href="#envinorma.topics.patterns.TopicName.ELECTRICITE_STATIQUE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="envinorma.topics.patterns.TopicName.EMISSIONS">
+<span class="sig-name descname"><span class="pre">EMISSIONS</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'EMISSIONS'</span></em><a class="headerlink" href="#envinorma.topics.patterns.TopicName.EMISSIONS" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="envinorma.topics.patterns.TopicName.EMISSIONS_AIR">
+<span class="sig-name descname"><span class="pre">EMISSIONS_AIR</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'EMISSIONS_AIR'</span></em><a class="headerlink" href="#envinorma.topics.patterns.TopicName.EMISSIONS_AIR" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="envinorma.topics.patterns.TopicName.EMISSIONS_ATMOSPHERE">
+<span class="sig-name descname"><span class="pre">EMISSIONS_ATMOSPHERE</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'EMISSIONS_ATMOSPHERE'</span></em><a class="headerlink" href="#envinorma.topics.patterns.TopicName.EMISSIONS_ATMOSPHERE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="envinorma.topics.patterns.TopicName.ENTREE_VIGUEUR">
+<span class="sig-name descname"><span class="pre">ENTREE_VIGUEUR</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'ENTREE_VIGUEUR'</span></em><a class="headerlink" href="#envinorma.topics.patterns.TopicName.ENTREE_VIGUEUR" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="envinorma.topics.patterns.TopicName.ENTREPOSAGE">
+<span class="sig-name descname"><span class="pre">ENTREPOSAGE</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'ENTREPOSAGE'</span></em><a class="headerlink" href="#envinorma.topics.patterns.TopicName.ENTREPOSAGE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="envinorma.topics.patterns.TopicName.EPANDAGE">
+<span class="sig-name descname"><span class="pre">EPANDAGE</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'EPANDAGE'</span></em><a class="headerlink" href="#envinorma.topics.patterns.TopicName.EPANDAGE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="envinorma.topics.patterns.TopicName.ETANCHEITE">
+<span class="sig-name descname"><span class="pre">ETANCHEITE</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'ETANCHEITE'</span></em><a class="headerlink" href="#envinorma.topics.patterns.TopicName.ETANCHEITE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="envinorma.topics.patterns.TopicName.EXECUTION">
+<span class="sig-name descname"><span class="pre">EXECUTION</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'EXECUTION'</span></em><a class="headerlink" href="#envinorma.topics.patterns.TopicName.EXECUTION" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="envinorma.topics.patterns.TopicName.EXPLOITATION">
+<span class="sig-name descname"><span class="pre">EXPLOITATION</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'EXPLOITATION'</span></em><a class="headerlink" href="#envinorma.topics.patterns.TopicName.EXPLOITATION" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="envinorma.topics.patterns.TopicName.FARINES_VIANDE_ET_OS">
+<span class="sig-name descname"><span class="pre">FARINES_VIANDE_ET_OS</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'FARINES_VIANDE_ET_OS'</span></em><a class="headerlink" href="#envinorma.topics.patterns.TopicName.FARINES_VIANDE_ET_OS" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="envinorma.topics.patterns.TopicName.FEU">
+<span class="sig-name descname"><span class="pre">FEU</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'FEU'</span></em><a class="headerlink" href="#envinorma.topics.patterns.TopicName.FEU" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="envinorma.topics.patterns.TopicName.FIN_EXPLOITATION">
+<span class="sig-name descname"><span class="pre">FIN_EXPLOITATION</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'FIN_EXPLOITATION'</span></em><a class="headerlink" href="#envinorma.topics.patterns.TopicName.FIN_EXPLOITATION" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="envinorma.topics.patterns.TopicName.FOUDRE">
+<span class="sig-name descname"><span class="pre">FOUDRE</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'FOUDRE'</span></em><a class="headerlink" href="#envinorma.topics.patterns.TopicName.FOUDRE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="envinorma.topics.patterns.TopicName.GESTION_QUALITE">
+<span class="sig-name descname"><span class="pre">GESTION_QUALITE</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'GESTION_QUALITE'</span></em><a class="headerlink" href="#envinorma.topics.patterns.TopicName.GESTION_QUALITE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="envinorma.topics.patterns.TopicName.HAUTEUR_CHEMINEE">
+<span class="sig-name descname"><span class="pre">HAUTEUR_CHEMINEE</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'HAUTEUR_CHEMINEE'</span></em><a class="headerlink" href="#envinorma.topics.patterns.TopicName.HAUTEUR_CHEMINEE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="envinorma.topics.patterns.TopicName.INCENDIE">
+<span class="sig-name descname"><span class="pre">INCENDIE</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'INCENDIE'</span></em><a class="headerlink" href="#envinorma.topics.patterns.TopicName.INCENDIE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="envinorma.topics.patterns.TopicName.INFO_REDACTION">
+<span class="sig-name descname"><span class="pre">INFO_REDACTION</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'INFO_REDACTION'</span></em><a class="headerlink" href="#envinorma.topics.patterns.TopicName.INFO_REDACTION" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="envinorma.topics.patterns.TopicName.INSTALLATIONS_ELECTRIQUES">
+<span class="sig-name descname"><span class="pre">INSTALLATIONS_ELECTRIQUES</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'INSTALLATIONS_ELECTRIQUES'</span></em><a class="headerlink" href="#envinorma.topics.patterns.TopicName.INSTALLATIONS_ELECTRIQUES" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="envinorma.topics.patterns.TopicName.JUSTIFICATIONS">
+<span class="sig-name descname"><span class="pre">JUSTIFICATIONS</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'JUSTIFICATIONS'</span></em><a class="headerlink" href="#envinorma.topics.patterns.TopicName.JUSTIFICATIONS" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="envinorma.topics.patterns.TopicName.LEGIONELLES">
+<span class="sig-name descname"><span class="pre">LEGIONELLES</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'LEGIONELLES'</span></em><a class="headerlink" href="#envinorma.topics.patterns.TopicName.LEGIONELLES" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="envinorma.topics.patterns.TopicName.MESURE_BRUIT">
+<span class="sig-name descname"><span class="pre">MESURE_BRUIT</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'MESURE_BRUIT'</span></em><a class="headerlink" href="#envinorma.topics.patterns.TopicName.MESURE_BRUIT" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="envinorma.topics.patterns.TopicName.METHODOLOGIE">
+<span class="sig-name descname"><span class="pre">METHODOLOGIE</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'METHODOLOGIE'</span></em><a class="headerlink" href="#envinorma.topics.patterns.TopicName.METHODOLOGIE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="envinorma.topics.patterns.TopicName.MILIEU_AQUATIQUE">
+<span class="sig-name descname"><span class="pre">MILIEU_AQUATIQUE</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'MILIEU_AQUATIQUE'</span></em><a class="headerlink" href="#envinorma.topics.patterns.TopicName.MILIEU_AQUATIQUE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="envinorma.topics.patterns.TopicName.MODIFICATIONS">
+<span class="sig-name descname"><span class="pre">MODIFICATIONS</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'MODIFICATIONS'</span></em><a class="headerlink" href="#envinorma.topics.patterns.TopicName.MODIFICATIONS" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="envinorma.topics.patterns.TopicName.NORME_TRANSFORMATION">
+<span class="sig-name descname"><span class="pre">NORME_TRANSFORMATION</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'NORME_TRANSFORMATION'</span></em><a class="headerlink" href="#envinorma.topics.patterns.TopicName.NORME_TRANSFORMATION" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="envinorma.topics.patterns.TopicName.POUSSIERES">
+<span class="sig-name descname"><span class="pre">POUSSIERES</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'POUSSIERES'</span></em><a class="headerlink" href="#envinorma.topics.patterns.TopicName.POUSSIERES" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="envinorma.topics.patterns.TopicName.PREFET">
+<span class="sig-name descname"><span class="pre">PREFET</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'PREFET'</span></em><a class="headerlink" href="#envinorma.topics.patterns.TopicName.PREFET" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="envinorma.topics.patterns.TopicName.PROPRETE">
+<span class="sig-name descname"><span class="pre">PROPRETE</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'PROPRETE'</span></em><a class="headerlink" href="#envinorma.topics.patterns.TopicName.PROPRETE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="envinorma.topics.patterns.TopicName.RADIOACTIVITES">
+<span class="sig-name descname"><span class="pre">RADIOACTIVITES</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'RADIOACTIVITES'</span></em><a class="headerlink" href="#envinorma.topics.patterns.TopicName.RADIOACTIVITES" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="envinorma.topics.patterns.TopicName.RECENSEMENT">
+<span class="sig-name descname"><span class="pre">RECENSEMENT</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'RECENSEMENT'</span></em><a class="headerlink" href="#envinorma.topics.patterns.TopicName.RECENSEMENT" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="envinorma.topics.patterns.TopicName.RECYCLAGE">
+<span class="sig-name descname"><span class="pre">RECYCLAGE</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'RECYCLAGE'</span></em><a class="headerlink" href="#envinorma.topics.patterns.TopicName.RECYCLAGE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="envinorma.topics.patterns.TopicName.REGISTRE">
+<span class="sig-name descname"><span class="pre">REGISTRE</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'REGISTRE'</span></em><a class="headerlink" href="#envinorma.topics.patterns.TopicName.REGISTRE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="envinorma.topics.patterns.TopicName.REJETS_ACCIDENTELS">
+<span class="sig-name descname"><span class="pre">REJETS_ACCIDENTELS</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'REJETS_ACCIDENTELS'</span></em><a class="headerlink" href="#envinorma.topics.patterns.TopicName.REJETS_ACCIDENTELS" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="envinorma.topics.patterns.TopicName.REJETS_CHLORE">
+<span class="sig-name descname"><span class="pre">REJETS_CHLORE</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'REJETS_CHLORE'</span></em><a class="headerlink" href="#envinorma.topics.patterns.TopicName.REJETS_CHLORE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="envinorma.topics.patterns.TopicName.RESERVES_DE_PRODUIT">
+<span class="sig-name descname"><span class="pre">RESERVES_DE_PRODUIT</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'RESERVES_DE_PRODUIT'</span></em><a class="headerlink" href="#envinorma.topics.patterns.TopicName.RESERVES_DE_PRODUIT" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="envinorma.topics.patterns.TopicName.RETENTION">
+<span class="sig-name descname"><span class="pre">RETENTION</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'RETENTION'</span></em><a class="headerlink" href="#envinorma.topics.patterns.TopicName.RETENTION" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="envinorma.topics.patterns.TopicName.RISQUES">
+<span class="sig-name descname"><span class="pre">RISQUES</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'RISQUES'</span></em><a class="headerlink" href="#envinorma.topics.patterns.TopicName.RISQUES" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="envinorma.topics.patterns.TopicName.RISQUE_INDIVIDUEL">
+<span class="sig-name descname"><span class="pre">RISQUE_INDIVIDUEL</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'RISQUE_INDIVIDUEL'</span></em><a class="headerlink" href="#envinorma.topics.patterns.TopicName.RISQUE_INDIVIDUEL" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="envinorma.topics.patterns.TopicName.SECURITE">
+<span class="sig-name descname"><span class="pre">SECURITE</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'SECURITE'</span></em><a class="headerlink" href="#envinorma.topics.patterns.TopicName.SECURITE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="envinorma.topics.patterns.TopicName.SURVEILLANCE">
+<span class="sig-name descname"><span class="pre">SURVEILLANCE</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'SURVEILLANCE'</span></em><a class="headerlink" href="#envinorma.topics.patterns.TopicName.SURVEILLANCE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="envinorma.topics.patterns.TopicName.SURVEILLANCE_EXPLOITATION">
+<span class="sig-name descname"><span class="pre">SURVEILLANCE_EXPLOITATION</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'SURVEILLANCE_EXPLOITATION'</span></em><a class="headerlink" href="#envinorma.topics.patterns.TopicName.SURVEILLANCE_EXPLOITATION" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="envinorma.topics.patterns.TopicName.TOITURE">
+<span class="sig-name descname"><span class="pre">TOITURE</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'TOITURE'</span></em><a class="headerlink" href="#envinorma.topics.patterns.TopicName.TOITURE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="envinorma.topics.patterns.TopicName.UNNAMED">
+<span class="sig-name descname"><span class="pre">UNNAMED</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'UNNAMED'</span></em><a class="headerlink" href="#envinorma.topics.patterns.TopicName.UNNAMED" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="envinorma.topics.patterns.TopicName.VAPEURS">
+<span class="sig-name descname"><span class="pre">VAPEURS</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'VAPEURS'</span></em><a class="headerlink" href="#envinorma.topics.patterns.TopicName.VAPEURS" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="envinorma.topics.patterns.TopicName.VENTILATION">
+<span class="sig-name descname"><span class="pre">VENTILATION</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'VENTILATION'</span></em><a class="headerlink" href="#envinorma.topics.patterns.TopicName.VENTILATION" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="envinorma.topics.patterns.TopicName.VLE">
+<span class="sig-name descname"><span class="pre">VLE</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'VLE'</span></em><a class="headerlink" href="#envinorma.topics.patterns.TopicName.VLE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="envinorma.topics.patterns.merge_patterns">
+<span class="sig-prename descclassname"><span class="pre">envinorma.topics.patterns.</span></span><span class="sig-name descname"><span class="pre">merge_patterns</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">patterns</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">str</span><a class="reference internal" href="_modules/envinorma/topics/patterns.html#merge_patterns"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#envinorma.topics.patterns.merge_patterns" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="envinorma.topics.patterns.normalize">
+<span class="sig-prename descclassname"><span class="pre">envinorma.topics.patterns.</span></span><span class="sig-name descname"><span class="pre">normalize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pattern</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">str</span><a class="reference internal" href="_modules/envinorma/topics/patterns.html#normalize"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#envinorma.topics.patterns.normalize" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="envinorma.topics.patterns.tokenize">
+<span class="sig-prename descclassname"><span class="pre">envinorma.topics.patterns.</span></span><span class="sig-name descname"><span class="pre">tokenize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">str_</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><a class="reference internal" href="_modules/envinorma/topics/patterns.html#tokenize"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#envinorma.topics.patterns.tokenize" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-envinorma.topics.topics">
+<span id="envinorma-topics-topics-module"></span><h2>envinorma.topics.topics module<a class="headerlink" href="#module-envinorma.topics.topics" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="envinorma.topics.topics.TopicOntology">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">envinorma.topics.topics.</span></span><span class="sig-name descname"><span class="pre">TopicOntology</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">topics</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#envinorma.topics.patterns.Topic" title="envinorma.topics.patterns.Topic"><span class="pre">envinorma.topics.patterns.Topic</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/envinorma/topics/topics.html#TopicOntology"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#envinorma.topics.topics.TopicOntology" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="envinorma.topics.topics.TopicOntology.deduce_main_topic">
+<span class="sig-name descname"><span class="pre">deduce_main_topic</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">topics</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Iterable</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#envinorma.topics.patterns.TopicName" title="envinorma.topics.patterns.TopicName"><span class="pre">envinorma.topics.patterns.TopicName</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#envinorma.topics.patterns.TopicName" title="envinorma.topics.patterns.TopicName"><span class="pre">envinorma.topics.patterns.TopicName</span></a><span class="p"><span class="pre">]</span></span><a class="reference internal" href="_modules/envinorma/topics/topics.html#TopicOntology.deduce_main_topic"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#envinorma.topics.topics.TopicOntology.deduce_main_topic" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="envinorma.topics.topics.TopicOntology.detect_matched_patterns">
+<span class="sig-name descname"><span class="pre">detect_matched_patterns</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">text</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">topic</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#envinorma.topics.patterns.TopicName" title="envinorma.topics.patterns.TopicName"><span class="pre">envinorma.topics.patterns.TopicName</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">short_title</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">Set</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><a class="reference internal" href="_modules/envinorma/topics/topics.html#TopicOntology.detect_matched_patterns"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#envinorma.topics.topics.TopicOntology.detect_matched_patterns" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="envinorma.topics.topics.TopicOntology.general_compiled_pattern">
+<span class="sig-name descname"><span class="pre">general_compiled_pattern</span></span><em class="property"><span class="pre">:</span> <span class="pre">re.Pattern</span></em><a class="headerlink" href="#envinorma.topics.topics.TopicOntology.general_compiled_pattern" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="envinorma.topics.topics.TopicOntology.monotopic">
+<em class="property"><span class="pre">static</span> </em><span class="sig-name descname"><span class="pre">monotopic</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">patterns</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="#envinorma.topics.topics.TopicOntology" title="envinorma.topics.topics.TopicOntology"><span class="pre">envinorma.topics.topics.TopicOntology</span></a><a class="reference internal" href="_modules/envinorma/topics/topics.html#TopicOntology.monotopic"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#envinorma.topics.topics.TopicOntology.monotopic" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="envinorma.topics.topics.TopicOntology.parse">
+<span class="sig-name descname"><span class="pre">parse</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">text</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">short_title</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">Set</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#envinorma.topics.patterns.TopicName" title="envinorma.topics.patterns.TopicName"><span class="pre">envinorma.topics.patterns.TopicName</span></a><span class="p"><span class="pre">]</span></span><a class="reference internal" href="_modules/envinorma/topics/topics.html#TopicOntology.parse"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#envinorma.topics.topics.TopicOntology.parse" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="envinorma.topics.topics.TopicOntology.pattern_to_topic">
+<span class="sig-name descname"><span class="pre">pattern_to_topic</span></span><em class="property"><span class="pre">:</span> <span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span> </span><a class="reference internal" href="#envinorma.topics.patterns.TopicName" title="envinorma.topics.patterns.TopicName"><span class="pre">envinorma.topics.patterns.TopicName</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#envinorma.topics.topics.TopicOntology.pattern_to_topic" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="envinorma.topics.topics.TopicOntology.title_compiled_pattern">
+<span class="sig-name descname"><span class="pre">title_compiled_pattern</span></span><em class="property"><span class="pre">:</span> <span class="pre">re.Pattern</span></em><a class="headerlink" href="#envinorma.topics.topics.TopicOntology.title_compiled_pattern" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="envinorma.topics.topics.TopicOntology.topic_name_to_topic">
+<span class="sig-name descname"><span class="pre">topic_name_to_topic</span></span><em class="property"><span class="pre">:</span> <span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#envinorma.topics.patterns.TopicName" title="envinorma.topics.patterns.TopicName"><span class="pre">envinorma.topics.patterns.TopicName</span></a><span class="p"><span class="pre">,</span> </span><a class="reference internal" href="#envinorma.topics.patterns.Topic" title="envinorma.topics.patterns.Topic"><span class="pre">envinorma.topics.patterns.Topic</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#envinorma.topics.topics.TopicOntology.topic_name_to_topic" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="envinorma.topics.topics.TopicOntology.topics">
+<span class="sig-name descname"><span class="pre">topics</span></span><em class="property"><span class="pre">:</span> <span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#envinorma.topics.patterns.Topic" title="envinorma.topics.patterns.Topic"><span class="pre">envinorma.topics.patterns.Topic</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#envinorma.topics.topics.TopicOntology.topics" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="envinorma.topics.topics.detect_matched_patterns">
+<span class="sig-prename descclassname"><span class="pre">envinorma.topics.topics.</span></span><span class="sig-name descname"><span class="pre">detect_matched_patterns</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ontology</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="#envinorma.topics.topics.TopicOntology" title="envinorma.topics.topics.TopicOntology"><span class="pre">envinorma.topics.topics.TopicOntology</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">text</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">topic</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#envinorma.topics.patterns.TopicName" title="envinorma.topics.patterns.TopicName"><span class="pre">envinorma.topics.patterns.TopicName</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">short_title</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">Set</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><a class="reference internal" href="_modules/envinorma/topics/topics.html#detect_matched_patterns"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#envinorma.topics.topics.detect_matched_patterns" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="envinorma.topics.topics.parse">
+<span class="sig-prename descclassname"><span class="pre">envinorma.topics.topics.</span></span><span class="sig-name descname"><span class="pre">parse</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ontology</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="#envinorma.topics.topics.TopicOntology" title="envinorma.topics.topics.TopicOntology"><span class="pre">envinorma.topics.topics.TopicOntology</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">text</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">short_title</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">Set</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#envinorma.topics.patterns.TopicName" title="envinorma.topics.patterns.TopicName"><span class="pre">envinorma.topics.patterns.TopicName</span></a><span class="p"><span class="pre">]</span></span><a class="reference internal" href="_modules/envinorma/topics/topics.html#parse"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#envinorma.topics.topics.parse" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-envinorma.topics">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-envinorma.topics" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, Envinorma.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

@@ -1,0 +1,58 @@
+envinorma package
+=================
+
+Subpackages
+-----------
+
+.. toctree::
+   :maxdepth: 4
+
+   envinorma.enriching
+   envinorma.from_legifrance
+   envinorma.io
+   envinorma.models
+   envinorma.parametrization
+   envinorma.topics
+
+Submodules
+----------
+
+envinorma.data\_fetcher module
+------------------------------
+
+.. automodule:: envinorma.data_fetcher
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+envinorma.structure module
+--------------------------
+
+.. automodule:: envinorma.structure
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+envinorma.title\_detection module
+---------------------------------
+
+.. automodule:: envinorma.title_detection
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+envinorma.utils module
+----------------------
+
+.. automodule:: envinorma.utils
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Module contents
+---------------
+
+.. automodule:: envinorma
+   :members:
+   :undoc-members:
+   :show-inheritance:

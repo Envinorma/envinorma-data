@@ -1,0 +1,29 @@
+envinorma.from\_legifrance package
+==================================
+
+Submodules
+----------
+
+envinorma.from\_legifrance.legifrance\_to\_am module
+----------------------------------------------------
+
+.. automodule:: envinorma.from_legifrance.legifrance_to_am
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+envinorma.from\_legifrance.numbering\_exceptions module
+-------------------------------------------------------
+
+.. automodule:: envinorma.from_legifrance.numbering_exceptions
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Module contents
+---------------
+
+.. automodule:: envinorma.from_legifrance
+   :members:
+   :undoc-members:
+   :show-inheritance:

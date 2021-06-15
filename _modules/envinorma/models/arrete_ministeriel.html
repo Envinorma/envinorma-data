@@ -1,0 +1,559 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>envinorma.models.arrete_ministeriel &mdash; Envinorma 0.0.0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> Envinorma
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.0.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../index.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">Package modules</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../envinorma.html">envinorma package</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../envinorma.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../envinorma.enriching.html">envinorma.enriching package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../envinorma.from_legifrance.html">envinorma.from_legifrance package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../envinorma.io.html">envinorma.io package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../envinorma.models.html">envinorma.models package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../envinorma.parametrization.html">envinorma.parametrization package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../envinorma.topics.html">envinorma.topics package</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../envinorma.html#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../envinorma.html#module-envinorma.data_fetcher">envinorma.data_fetcher module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../envinorma.html#module-envinorma.structure">envinorma.structure module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../envinorma.html#module-envinorma.title_detection">envinorma.title_detection module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../envinorma.html#module-envinorma.utils">envinorma.utils module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../envinorma.html#module-envinorma">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">Envinorma</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+          <li><a href="../../envinorma.html">envinorma</a> &raquo;</li>
+        
+          <li><a href="../models.html">envinorma.models</a> &raquo;</li>
+        
+      <li>envinorma.models.arrete_ministeriel</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for envinorma.models.arrete_ministeriel</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">import</span> <span class="nn">warnings</span>
+<span class="kn">from</span> <span class="nn">copy</span> <span class="kn">import</span> <span class="n">copy</span>
+<span class="kn">from</span> <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">asdict</span><span class="p">,</span> <span class="n">dataclass</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">fields</span>
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">date</span><span class="p">,</span> <span class="n">datetime</span>
+<span class="kn">from</span> <span class="nn">operator</span> <span class="kn">import</span> <span class="n">attrgetter</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span>
+
+<span class="kn">from</span> <span class="nn">envinorma.models.classement</span> <span class="kn">import</span> <span class="n">Classement</span><span class="p">,</span> <span class="n">ClassementWithAlineas</span><span class="p">,</span> <span class="n">group_classements_by_alineas</span>
+<span class="kn">from</span> <span class="nn">envinorma.utils</span> <span class="kn">import</span> <span class="n">AIDA_URL</span><span class="p">,</span> <span class="n">LEGIFRANCE_LODA_BASE_URL</span><span class="p">,</span> <span class="n">random_id</span>
+
+<span class="kn">from</span> <span class="nn">.am_metadata</span> <span class="kn">import</span> <span class="n">AMMetadata</span>
+<span class="kn">from</span> <span class="nn">.structured_text</span> <span class="kn">import</span> <span class="n">StructuredText</span>
+<span class="kn">from</span> <span class="nn">.text_elements</span> <span class="kn">import</span> <span class="n">EnrichedString</span>
+
+
+<div class="viewcode-block" id="DateParameterDescriptor"><a class="viewcode-back" href="../../../envinorma.models.html#envinorma.models.arrete_ministeriel.DateParameterDescriptor">[docs]</a><span class="nd">@dataclass</span><span class="p">(</span><span class="n">eq</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">class</span> <span class="nc">DateParameterDescriptor</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Describes an AM version with regard to a specific date</span>
+<span class="sd">    (e.g. the AM applicable to classements having date_de_mise_en_service in a specific range.)</span>
+
+<span class="sd">    Example:</span>
+<span class="sd">        For an AM that changes version for date 2021-01-01, one of the generated version</span>
+<span class="sd">        will have (</span>
+<span class="sd">            is_used_in_parametrization=True,</span>
+
+<span class="sd">            unknown_classement_date_version=False,</span>
+
+<span class="sd">            left_value=None,</span>
+
+<span class="sd">            right_value=2021-01-01</span>
+<span class="sd">        )</span>
+
+<span class="sd">        It corresponds to the classements whose date is known and whose date value is smaller than 2021-01-01.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        is_used_in_parametrization (bool):</span>
+<span class="sd">            is True if the corresponding date was used in the parametrization of the AM</span>
+<span class="sd">        unknown_classement_date_version (Optional[bool]):</span>
+<span class="sd">            is defined if is_used_in_parametrization is True. It is true for the AM version</span>
+<span class="sd">            corresponding to an unknown value of the date for the given classement.</span>
+<span class="sd">        left_value (Optional[date]):</span>
+<span class="sd">            is defined if is_used_in_parametrization is True. With right_value, it describes the date range of</span>
+<span class="sd">            applicability of the AM. None corresponds to -infinity.</span>
+<span class="sd">        right_value (Optional[date]):</span>
+<span class="sd">            is defined if is_used_in_parametrization is True. With left_value, it describes the date range of</span>
+<span class="sd">            applicability of the AM. None corresponds to +infinity.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">is_used_in_parametrization</span><span class="p">:</span> <span class="nb">bool</span>
+    <span class="n">unknown_classement_date_version</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">left_value</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">date</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">right_value</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">date</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="k">def</span> <span class="nf">__post_init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">left_value</span><span class="p">:</span>
+            <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">left_value</span><span class="p">,</span> <span class="n">date</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">left_value</span><span class="p">,</span> <span class="n">datetime</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">right_value</span><span class="p">:</span>
+            <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">right_value</span><span class="p">,</span> <span class="n">date</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">right_value</span><span class="p">,</span> <span class="n">datetime</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_used_in_parametrization</span><span class="p">:</span>
+            <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">unknown_classement_date_version</span> <span class="ow">is</span> <span class="kc">None</span>
+            <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">left_value</span> <span class="ow">is</span> <span class="kc">None</span>
+            <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">right_value</span> <span class="ow">is</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">unknown_classement_date_version</span> <span class="ow">in</span> <span class="p">{</span><span class="kc">False</span><span class="p">,</span> <span class="kc">True</span><span class="p">}:</span>
+            <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_used_in_parametrization</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_used_in_parametrization</span> <span class="ow">and</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">unknown_classement_date_version</span><span class="p">:</span>
+            <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">left_value</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">right_value</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+
+<div class="viewcode-block" id="DateParameterDescriptor.from_dict"><a class="viewcode-back" href="../../../envinorma.models.html#envinorma.models.arrete_ministeriel.DateParameterDescriptor.from_dict">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">from_dict</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">dict_</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="s1">&#39;DateParameterDescriptor&#39;</span><span class="p">:</span>
+        <span class="n">dict_</span> <span class="o">=</span> <span class="n">dict_</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;left_value&#39;</span><span class="p">,</span> <span class="s1">&#39;right_value&#39;</span><span class="p">):</span>
+            <span class="n">dict_</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">date</span><span class="o">.</span><span class="n">fromisoformat</span><span class="p">(</span><span class="n">dict_</span><span class="p">[</span><span class="n">key</span><span class="p">])</span> <span class="k">if</span> <span class="n">dict_</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="k">else</span> <span class="kc">None</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="o">**</span><span class="n">dict_</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="DateParameterDescriptor.to_dict"><a class="viewcode-back" href="../../../envinorma.models.html#envinorma.models.arrete_ministeriel.DateParameterDescriptor.to_dict">[docs]</a>    <span class="k">def</span> <span class="nf">to_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="n">asdict</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="n">res</span><span class="p">[</span><span class="s1">&#39;left_value&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">left_value</span><span class="p">)</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">left_value</span> <span class="k">else</span> <span class="kc">None</span>
+        <span class="n">res</span><span class="p">[</span><span class="s1">&#39;right_value&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">right_value</span><span class="p">)</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">right_value</span> <span class="k">else</span> <span class="kc">None</span>
+        <span class="k">return</span> <span class="n">res</span></div></div>
+
+
+<div class="viewcode-block" id="VersionDescriptor"><a class="viewcode-back" href="../../../envinorma.models.html#envinorma.models.arrete_ministeriel.VersionDescriptor">[docs]</a><span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">VersionDescriptor</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Describes an AM version (e.g. the AM applicable to classements with specific date values).</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        applicable (bool) :</span>
+<span class="sd">            True if this specific AM version is applicable (some AM are not applicable for specific</span>
+<span class="sd">            date ranges, this parameter makes this fact explicit)</span>
+<span class="sd">        applicability_warnings (List[str]) :</span>
+<span class="sd">            list of warnings corresponding the this specific AM version. If applicable == False,</span>
+<span class="sd">            it explains why it is so. Otherwise, it mainly explains why the AM could be inapplicable.</span>
+<span class="sd">        aed_date (DateParameterDescriptor) :</span>
+<span class="sd">            descriptor of the range of values of date_autorisation to which this version</span>
+<span class="sd">            corresponds.</span>
+<span class="sd">        date_de_mise_en_service (DateParameterDescriptor) :</span>
+<span class="sd">            descriptor of the range of values of date_de_mise_en_service to which this</span>
+<span class="sd">            version corresponds.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">applicable</span><span class="p">:</span> <span class="nb">bool</span>
+    <span class="n">applicability_warnings</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+    <span class="n">aed_date</span><span class="p">:</span> <span class="n">DateParameterDescriptor</span>
+    <span class="n">date_de_mise_en_service</span><span class="p">:</span> <span class="n">DateParameterDescriptor</span>
+
+<div class="viewcode-block" id="VersionDescriptor.from_dict"><a class="viewcode-back" href="../../../envinorma.models.html#envinorma.models.arrete_ministeriel.VersionDescriptor.from_dict">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">from_dict</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">dict_</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="s1">&#39;VersionDescriptor&#39;</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;aed_date&#39;</span><span class="p">,</span> <span class="s1">&#39;date_de_mise_en_service&#39;</span><span class="p">]:</span>
+            <span class="n">dict_</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">DateParameterDescriptor</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">dict_</span><span class="p">[</span><span class="n">key</span><span class="p">])</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="o">**</span><span class="n">dict_</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="VersionDescriptor.to_dict"><a class="viewcode-back" href="../../../envinorma.models.html#envinorma.models.arrete_ministeriel.VersionDescriptor.to_dict">[docs]</a>    <span class="k">def</span> <span class="nf">to_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="n">asdict</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="n">res</span><span class="p">[</span><span class="s1">&#39;aed_date&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">aed_date</span><span class="o">.</span><span class="n">to_dict</span><span class="p">()</span>
+        <span class="n">res</span><span class="p">[</span><span class="s1">&#39;date_de_mise_en_service&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">date_de_mise_en_service</span><span class="o">.</span><span class="n">to_dict</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">res</span></div></div>
+
+
+<span class="k">def</span> <span class="nf">_is_probably_cid</span><span class="p">(</span><span class="n">candidate</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+    <span class="k">if</span> <span class="s1">&#39;FAKE&#39;</span> <span class="ow">in</span> <span class="n">candidate</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">True</span>  <span class="c1"># for avoiding warning for fake cids, which contain FAKE by convention</span>
+    <span class="k">return</span> <span class="n">candidate</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;JORFTEXT&#39;</span><span class="p">)</span> <span class="ow">or</span> <span class="n">candidate</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;LEGITEXT&#39;</span><span class="p">)</span>
+
+
+<span class="n">_MONTHS</span> <span class="o">=</span> <span class="sa">r</span><span class="s1">&#39;(janvier|février|mars|avril|mai|juin|juillet|août|septembre|octobre|novembre|décembre)&#39;</span>
+<span class="n">_PATTERN</span> <span class="o">=</span> <span class="sa">r</span><span class="s1">&#39;Arrêté du (1er|[0-9]*) &#39;</span> <span class="o">+</span> <span class="n">_MONTHS</span> <span class="o">+</span> <span class="s1">&#39; [0-9]</span><span class="si">{4}</span><span class="s1">&#39;</span>
+
+
+<span class="k">def</span> <span class="nf">_contains_human_date</span><span class="p">(</span><span class="n">title</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+    <span class="k">return</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">_PATTERN</span><span class="p">,</span> <span class="n">title</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+
+
+<span class="k">def</span> <span class="nf">_year</span><span class="p">(</span><span class="n">year_str</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">year_str</span><span class="o">.</span><span class="n">isdigit</span><span class="p">():</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Expecting </span><span class="si">{</span><span class="n">year_str</span><span class="si">}</span><span class="s1"> to be a digit&#39;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">year_str</span><span class="p">)</span>
+
+
+<span class="n">_MONTH_TO_MONTH_RANK</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;janvier&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="s1">&#39;février&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
+    <span class="s1">&#39;mars&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>
+    <span class="s1">&#39;avril&#39;</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span>
+    <span class="s1">&#39;mai&#39;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span>
+    <span class="s1">&#39;juin&#39;</span><span class="p">:</span> <span class="mi">6</span><span class="p">,</span>
+    <span class="s1">&#39;juillet&#39;</span><span class="p">:</span> <span class="mi">7</span><span class="p">,</span>
+    <span class="s1">&#39;août&#39;</span><span class="p">:</span> <span class="mi">8</span><span class="p">,</span>
+    <span class="s1">&#39;septembre&#39;</span><span class="p">:</span> <span class="mi">9</span><span class="p">,</span>
+    <span class="s1">&#39;octobre&#39;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
+    <span class="s1">&#39;novembre&#39;</span><span class="p">:</span> <span class="mi">11</span><span class="p">,</span>
+    <span class="s1">&#39;décembre&#39;</span><span class="p">:</span> <span class="mi">12</span><span class="p">,</span>
+<span class="p">}</span>
+
+
+<span class="k">def</span> <span class="nf">_month</span><span class="p">(</span><span class="n">french_month</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">french_month</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">_MONTH_TO_MONTH_RANK</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Expecting month to be in </span><span class="si">{</span><span class="n">_MONTH_TO_MONTH_RANK</span><span class="si">}</span><span class="s1"> got </span><span class="si">{</span><span class="n">french_month</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">_MONTH_TO_MONTH_RANK</span><span class="p">[</span><span class="n">french_month</span><span class="p">]</span>
+
+
+<span class="k">def</span> <span class="nf">_day</span><span class="p">(</span><span class="n">day_str</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">day_str</span> <span class="o">==</span> <span class="s1">&#39;1er&#39;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mi">1</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">day_str</span><span class="o">.</span><span class="n">isdigit</span><span class="p">():</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Expecting </span><span class="si">{</span><span class="n">day_str</span><span class="si">}</span><span class="s1"> to be a digit&#39;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">day_str</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">_read_human_french_date</span><span class="p">(</span><span class="n">day_str</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">french_month</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">year_str</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">date</span><span class="p">:</span>
+    <span class="k">return</span> <span class="n">date</span><span class="p">(</span><span class="n">_year</span><span class="p">(</span><span class="n">year_str</span><span class="p">),</span> <span class="n">_month</span><span class="p">(</span><span class="n">french_month</span><span class="p">),</span> <span class="n">_day</span><span class="p">(</span><span class="n">day_str</span><span class="p">))</span>
+
+
+<span class="k">def</span> <span class="nf">_standardize_date</span><span class="p">(</span><span class="n">day_str</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">french_month</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">year_str</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="n">date_</span> <span class="o">=</span> <span class="n">_read_human_french_date</span><span class="p">(</span><span class="n">day_str</span><span class="p">,</span> <span class="n">french_month</span><span class="p">,</span> <span class="n">year_str</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">date_</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%d</span><span class="s1">/%m/%y&#39;</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="standardize_title_date"><a class="viewcode-back" href="../../../envinorma.models.html#envinorma.models.arrete_ministeriel.standardize_title_date">[docs]</a><span class="k">def</span> <span class="nf">standardize_title_date</span><span class="p">(</span><span class="n">title</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="n">words</span> <span class="o">=</span> <span class="n">title</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">words</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="mi">5</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Expecting title to have at least 5 words, got </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">words</span><span class="p">)</span><span class="si">}</span><span class="s1"> (title=</span><span class="si">{</span><span class="n">title</span><span class="si">}</span><span class="s1">).&#39;</span><span class="p">)</span>
+    <span class="n">new_words</span> <span class="o">=</span> <span class="n">words</span><span class="p">[:</span><span class="mi">2</span><span class="p">]</span> <span class="o">+</span> <span class="p">[</span><span class="n">_standardize_date</span><span class="p">(</span><span class="o">*</span><span class="n">words</span><span class="p">[</span><span class="mi">2</span><span class="p">:</span><span class="mi">5</span><span class="p">])]</span> <span class="o">+</span> <span class="n">words</span><span class="p">[</span><span class="mi">5</span><span class="p">:]</span>
+    <span class="k">return</span> <span class="s1">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">new_words</span><span class="p">)</span></div>
+
+
+<span class="k">def</span> <span class="nf">_standardize_title_if_necessary</span><span class="p">(</span><span class="n">title</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">title</span> <span class="o">==</span> <span class="s1">&#39;Faux arrêté&#39;</span><span class="p">:</span>  <span class="c1"># Edge case for test text</span>
+        <span class="k">return</span> <span class="s1">&#39;Faux arrêté du 10/10/10&#39;</span>
+    <span class="k">if</span> <span class="n">_contains_human_date</span><span class="p">(</span><span class="n">title</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">standardize_title_date</span><span class="p">(</span><span class="n">title</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">title</span>
+
+
+<div class="viewcode-block" id="extract_short_title"><a class="viewcode-back" href="../../../envinorma.models.html#envinorma.models.arrete_ministeriel.extract_short_title">[docs]</a><span class="k">def</span> <span class="nf">extract_short_title</span><span class="p">(</span><span class="n">input_title</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">return</span> <span class="n">input_title</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;relatif&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;fixant&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span></div>
+
+
+<span class="n">_DATE_PATTERN</span> <span class="o">=</span> <span class="sa">r</span><span class="s1">&#39;^[0-9]</span><span class="si">{2}</span><span class="s1">/[0-9]</span><span class="si">{2}</span><span class="s1">/[0-9]</span><span class="si">{2}</span><span class="s1">$&#39;</span>
+
+
+<span class="k">def</span> <span class="nf">_extract_date</span><span class="p">(</span><span class="n">candidate_date</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">date</span><span class="p">:</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">_DATE_PATTERN</span><span class="p">,</span> <span class="n">candidate_date</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Expecting format </span><span class="si">{</span><span class="n">_DATE_PATTERN</span><span class="si">}</span><span class="s1">. Got </span><span class="si">{</span><span class="n">candidate_date</span><span class="si">}</span><span class="s1">.&#39;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">datetime</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span><span class="n">candidate_date</span><span class="p">,</span> <span class="s1">&#39;</span><span class="si">%d</span><span class="s1">/%m/%y&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">date</span><span class="p">()</span>
+
+
+<div class="viewcode-block" id="extract_date_of_signature"><a class="viewcode-back" href="../../../envinorma.models.html#envinorma.models.arrete_ministeriel.extract_date_of_signature">[docs]</a><span class="k">def</span> <span class="nf">extract_date_of_signature</span><span class="p">(</span><span class="n">input_title</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">date</span><span class="p">:</span>
+    <span class="n">short_title</span> <span class="o">=</span> <span class="n">extract_short_title</span><span class="p">(</span><span class="n">input_title</span><span class="p">)</span>
+    <span class="n">candidate_date</span> <span class="o">=</span> <span class="p">(</span><span class="n">short_title</span><span class="o">.</span><span class="n">split</span><span class="p">()</span> <span class="ow">or</span> <span class="p">[</span><span class="s1">&#39;&#39;</span><span class="p">])[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">_extract_date</span><span class="p">(</span><span class="n">candidate_date</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="ArreteMinisteriel"><a class="viewcode-back" href="../../../envinorma.models.html#envinorma.models.arrete_ministeriel.ArreteMinisteriel">[docs]</a><span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">ArreteMinisteriel</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Dataclass for ICPE arrete ministeriels (AM)</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        title (EnrichedString):</span>
+<span class="sd">            title of the arrete ministeriel</span>
+<span class="sd">        sections (List[StructuredText]):</span>
+<span class="sd">            actual content of the AM (recursive data class, a section contains alineas and subsections)</span>
+<span class="sd">        visa (List[EnrichedString]):</span>
+<span class="sd">            list of visa</span>
+<span class="sd">        date_of_signature (Optional[date]):</span>
+<span class="sd">            date of signature of the AM. It is expected to be consistent with the AM title</span>
+<span class="sd">            (ie. title should contain the date of signature.)</span>
+<span class="sd">        aida_url (Optional[str]):</span>
+<span class="sd">            optional url to the AIDA version of the arrete</span>
+<span class="sd">        legifrance_url (Optional[str]):</span>
+<span class="sd">            optional url to the Legifrance version of the arrete</span>
+<span class="sd">        classements (List[Classement]):</span>
+<span class="sd">            List of classements for which this AM is applicable, with (Rubrique, Regime) couples potentially</span>
+<span class="sd">            repeated for several alineas</span>
+<span class="sd">        classements_with_alineas (List[ClassementWithAlineas] = field(default_factory=list)):</span>
+<span class="sd">            List of classements for which this AM is applicable, groupped by (Rubrique, Regime) couples</span>
+<span class="sd">        id (Optional[str]):</span>
+<span class="sd">            CID of the AM (of the form JORFTEXT... or LEGITEXT...)</span>
+<span class="sd">        version_descriptor (Optional[VersionDescriptor]):</span>
+<span class="sd">            If None, the AM is in a generic version.</span>
+<span class="sd">            Otherwise, version_descriptor describes to which caracteristics this version corresponds</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">title</span><span class="p">:</span> <span class="n">EnrichedString</span>
+    <span class="n">sections</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">StructuredText</span><span class="p">]</span>
+    <span class="n">visa</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">EnrichedString</span><span class="p">]</span>
+    <span class="n">date_of_signature</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">date</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">aida_url</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">legifrance_url</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">classements</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Classement</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">)</span>
+    <span class="n">classements_with_alineas</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">ClassementWithAlineas</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">)</span>
+    <span class="nb">id</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="n">random_id</span><span class="p">)</span>
+    <span class="n">version_descriptor</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">VersionDescriptor</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">short_title</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">extract_short_title</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">title</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__post_init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">title</span><span class="o">.</span><span class="n">text</span> <span class="o">=</span> <span class="n">_standardize_title_if_necessary</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">title</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">date_of_signature</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">date_of_signature</span> <span class="o">=</span> <span class="n">extract_date_of_signature</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">title</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">date_of_signature</span> <span class="o">==</span> <span class="n">extract_date_of_signature</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">title</span><span class="o">.</span><span class="n">text</span>
+            <span class="p">),</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">date_of_signature</span><span class="si">}</span><span class="s1"> and </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">title</span><span class="o">.</span><span class="n">text</span><span class="si">}</span><span class="s1"> are inconsistent&#39;</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">_is_probably_cid</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">id</span> <span class="ow">or</span> <span class="s1">&#39;&#39;</span><span class="p">):</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;AM id does not look like a CID : </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s1"> (title=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">title</span><span class="o">.</span><span class="n">text</span><span class="si">}</span><span class="s1">)&#39;</span><span class="p">)</span>
+
+<div class="viewcode-block" id="ArreteMinisteriel.to_dict"><a class="viewcode-back" href="../../../envinorma.models.html#envinorma.models.arrete_ministeriel.ArreteMinisteriel.to_dict">[docs]</a>    <span class="k">def</span> <span class="nf">to_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="n">asdict</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">res</span><span class="p">[</span><span class="s1">&#39;date_of_signature&#39;</span><span class="p">]:</span>
+            <span class="n">res</span><span class="p">[</span><span class="s1">&#39;date_of_signature&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">res</span><span class="p">[</span><span class="s1">&#39;date_of_signature&#39;</span><span class="p">])</span>
+        <span class="n">res</span><span class="p">[</span><span class="s1">&#39;title&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">title</span><span class="o">.</span><span class="n">to_dict</span><span class="p">()</span>
+        <span class="n">res</span><span class="p">[</span><span class="s1">&#39;visa&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">vi</span><span class="o">.</span><span class="n">to_dict</span><span class="p">()</span> <span class="k">for</span> <span class="n">vi</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">visa</span><span class="p">]</span>
+        <span class="n">res</span><span class="p">[</span><span class="s1">&#39;sections&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">section</span><span class="o">.</span><span class="n">to_dict</span><span class="p">()</span> <span class="k">for</span> <span class="n">section</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">sections</span><span class="p">]</span>
+        <span class="n">res</span><span class="p">[</span><span class="s1">&#39;classements&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">cl</span><span class="o">.</span><span class="n">to_dict</span><span class="p">()</span> <span class="k">for</span> <span class="n">cl</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">classements</span><span class="p">]</span>
+        <span class="n">res</span><span class="p">[</span><span class="s1">&#39;classements_with_alineas&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">cl</span><span class="o">.</span><span class="n">to_dict</span><span class="p">()</span> <span class="k">for</span> <span class="n">cl</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">classements_with_alineas</span><span class="p">]</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">version_descriptor</span><span class="p">:</span>
+            <span class="n">res</span><span class="p">[</span><span class="s1">&#39;version_descriptor&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">version_descriptor</span><span class="o">.</span><span class="n">to_dict</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">res</span></div>
+
+<div class="viewcode-block" id="ArreteMinisteriel.from_dict"><a class="viewcode-back" href="../../../envinorma.models.html#envinorma.models.arrete_ministeriel.ArreteMinisteriel.from_dict">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">from_dict</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">dict_</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="s1">&#39;ArreteMinisteriel&#39;</span><span class="p">:</span>
+        <span class="n">dict_</span> <span class="o">=</span> <span class="n">dict_</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="k">if</span> <span class="s1">&#39;short_title&#39;</span> <span class="ow">in</span> <span class="n">dict_</span><span class="p">:</span>
+            <span class="k">del</span> <span class="n">dict_</span><span class="p">[</span><span class="s1">&#39;short_title&#39;</span><span class="p">]</span>
+        <span class="n">dict_</span><span class="p">[</span><span class="s1">&#39;title&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">EnrichedString</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">dict_</span><span class="p">[</span><span class="s1">&#39;title&#39;</span><span class="p">])</span>
+        <span class="n">dict_</span><span class="p">[</span><span class="s1">&#39;date_of_signature&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">date</span><span class="o">.</span><span class="n">fromisoformat</span><span class="p">(</span><span class="n">dict_</span><span class="p">[</span><span class="s1">&#39;date_of_signature&#39;</span><span class="p">])</span> <span class="k">if</span> <span class="n">dict_</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;date_of_signature&#39;</span><span class="p">)</span> <span class="k">else</span> <span class="kc">None</span>
+        <span class="p">)</span>
+        <span class="n">dict_</span><span class="p">[</span><span class="s1">&#39;sections&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">StructuredText</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">sec</span><span class="p">)</span> <span class="k">for</span> <span class="n">sec</span> <span class="ow">in</span> <span class="n">dict_</span><span class="p">[</span><span class="s1">&#39;sections&#39;</span><span class="p">]]</span>
+        <span class="n">dict_</span><span class="p">[</span><span class="s1">&#39;visa&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">EnrichedString</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">vu</span><span class="p">)</span> <span class="k">for</span> <span class="n">vu</span> <span class="ow">in</span> <span class="n">dict_</span><span class="p">[</span><span class="s1">&#39;visa&#39;</span><span class="p">]]</span>
+        <span class="n">classements</span> <span class="o">=</span> <span class="p">[</span><span class="n">Classement</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">cl</span><span class="p">)</span> <span class="k">for</span> <span class="n">cl</span> <span class="ow">in</span> <span class="n">dict_</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;classements&#39;</span><span class="p">)</span> <span class="ow">or</span> <span class="p">[]]</span>
+        <span class="n">dict_</span><span class="p">[</span><span class="s1">&#39;classements&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="n">classements</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">regime</span><span class="o">.</span><span class="n">value</span><span class="p">))</span>
+        <span class="n">classements_with_alineas</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">ClassementWithAlineas</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">cl</span><span class="p">)</span> <span class="k">for</span> <span class="n">cl</span> <span class="ow">in</span> <span class="n">dict_</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;classements_with_alineas&#39;</span><span class="p">)</span> <span class="ow">or</span> <span class="p">[]</span>
+        <span class="p">]</span>
+        <span class="n">dict_</span><span class="p">[</span><span class="s1">&#39;classements_with_alineas&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="n">classements_with_alineas</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">regime</span><span class="o">.</span><span class="n">value</span><span class="p">))</span>
+        <span class="n">dict_</span><span class="p">[</span><span class="s1">&#39;version_descriptor&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">VersionDescriptor</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">dict_</span><span class="p">[</span><span class="s1">&#39;version_descriptor&#39;</span><span class="p">])</span> <span class="k">if</span> <span class="n">dict_</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;version_descriptor&#39;</span><span class="p">)</span> <span class="k">else</span> <span class="kc">None</span>
+        <span class="p">)</span>
+        <span class="n">fields_</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="n">attrgetter</span><span class="p">(</span><span class="s1">&#39;name&#39;</span><span class="p">),</span> <span class="n">fields</span><span class="p">(</span><span class="bp">cls</span><span class="p">)))</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="o">**</span><span class="p">{</span><span class="n">key</span><span class="p">:</span> <span class="n">value</span> <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">dict_</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">fields_</span><span class="p">})</span></div>
+
+<div class="viewcode-block" id="ArreteMinisteriel.to_text"><a class="viewcode-back" href="../../../envinorma.models.html#envinorma.models.arrete_ministeriel.ArreteMinisteriel.to_text">[docs]</a>    <span class="k">def</span> <span class="nf">to_text</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">StructuredText</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">StructuredText</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">title</span><span class="p">,</span> <span class="p">[],</span> <span class="bp">self</span><span class="o">.</span><span class="n">sections</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span></div></div>
+
+
+<span class="k">def</span> <span class="nf">_build_legifrance_url</span><span class="p">(</span><span class="n">cid</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">return</span> <span class="n">LEGIFRANCE_LODA_BASE_URL</span> <span class="o">+</span> <span class="n">cid</span>
+
+
+<span class="k">def</span> <span class="nf">_build_aida_url</span><span class="p">(</span><span class="n">page</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">return</span> <span class="n">AIDA_URL</span> <span class="o">+</span> <span class="n">page</span>
+
+
+<div class="viewcode-block" id="add_metadata"><a class="viewcode-back" href="../../../envinorma.models.html#envinorma.models.arrete_ministeriel.add_metadata">[docs]</a><span class="k">def</span> <span class="nf">add_metadata</span><span class="p">(</span><span class="n">am</span><span class="p">:</span> <span class="n">ArreteMinisteriel</span><span class="p">,</span> <span class="n">metadata</span><span class="p">:</span> <span class="n">AMMetadata</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ArreteMinisteriel</span><span class="p">:</span>
+    <span class="n">am</span> <span class="o">=</span> <span class="n">copy</span><span class="p">(</span><span class="n">am</span><span class="p">)</span>
+    <span class="n">am</span><span class="o">.</span><span class="n">legifrance_url</span> <span class="o">=</span> <span class="n">_build_legifrance_url</span><span class="p">(</span><span class="n">metadata</span><span class="o">.</span><span class="n">cid</span><span class="p">)</span>
+    <span class="n">am</span><span class="o">.</span><span class="n">aida_url</span> <span class="o">=</span> <span class="n">_build_aida_url</span><span class="p">(</span><span class="n">metadata</span><span class="o">.</span><span class="n">aida_page</span><span class="p">)</span>
+    <span class="n">am</span><span class="o">.</span><span class="n">classements</span> <span class="o">=</span> <span class="n">metadata</span><span class="o">.</span><span class="n">classements</span>
+    <span class="n">am</span><span class="o">.</span><span class="n">classements_with_alineas</span> <span class="o">=</span> <span class="n">group_classements_by_alineas</span><span class="p">(</span><span class="n">metadata</span><span class="o">.</span><span class="n">classements</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">am</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, Envinorma.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

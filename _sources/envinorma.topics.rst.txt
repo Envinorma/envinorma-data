@@ -1,0 +1,37 @@
+envinorma.topics package
+========================
+
+Submodules
+----------
+
+envinorma.topics.pattern\_builder\_script module
+------------------------------------------------
+
+.. automodule:: envinorma.topics.pattern_builder_script
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+envinorma.topics.patterns module
+--------------------------------
+
+.. automodule:: envinorma.topics.patterns
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+envinorma.topics.topics module
+------------------------------
+
+.. automodule:: envinorma.topics.topics
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Module contents
+---------------
+
+.. automodule:: envinorma.topics
+   :members:
+   :undoc-members:
+   :show-inheritance:

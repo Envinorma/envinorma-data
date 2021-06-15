@@ -1,0 +1,85 @@
+envinorma.models package
+========================
+
+Submodules
+----------
+
+envinorma.models.am\_metadata module
+------------------------------------
+
+.. automodule:: envinorma.models.am_metadata
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+envinorma.models.arrete\_ministeriel module
+-------------------------------------------
+
+.. automodule:: envinorma.models.arrete_ministeriel
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+envinorma.models.classement module
+----------------------------------
+
+.. automodule:: envinorma.models.classement
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+envinorma.models.document module
+--------------------------------
+
+.. automodule:: envinorma.models.document
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+envinorma.models.installation module
+------------------------------------
+
+.. automodule:: envinorma.models.installation
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+envinorma.models.installation\_classement module
+------------------------------------------------
+
+.. automodule:: envinorma.models.installation_classement
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+envinorma.models.nomenclature module
+------------------------------------
+
+.. automodule:: envinorma.models.nomenclature
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+envinorma.models.structured\_text module
+----------------------------------------
+
+.. automodule:: envinorma.models.structured_text
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+envinorma.models.text\_elements module
+--------------------------------------
+
+.. automodule:: envinorma.models.text_elements
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Module contents
+---------------
+
+.. automodule:: envinorma.models
+   :members:
+   :undoc-members:
+   :show-inheritance:

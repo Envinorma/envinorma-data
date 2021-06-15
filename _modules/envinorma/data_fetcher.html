@@ -1,0 +1,516 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>envinorma.data_fetcher &mdash; Envinorma 0.0.0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> Envinorma
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.0.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../index.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../modules.html">Package modules</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../envinorma.html">envinorma package</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../envinorma.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../envinorma.enriching.html">envinorma.enriching package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../envinorma.from_legifrance.html">envinorma.from_legifrance package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../envinorma.io.html">envinorma.io package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../envinorma.models.html">envinorma.models package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../envinorma.parametrization.html">envinorma.parametrization package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../envinorma.topics.html">envinorma.topics package</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../envinorma.html#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../envinorma.html#module-envinorma.data_fetcher">envinorma.data_fetcher module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../envinorma.html#module-envinorma.structure">envinorma.structure module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../envinorma.html#module-envinorma.title_detection">envinorma.title_detection module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../envinorma.html#module-envinorma.utils">envinorma.utils module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../envinorma.html#module-envinorma">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Envinorma</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+          <li><a href="../envinorma.html">envinorma</a> &raquo;</li>
+        
+      <li>envinorma.data_fetcher</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for envinorma.data_fetcher</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Set</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Type</span><span class="p">,</span> <span class="n">TypeVar</span>
+
+<span class="kn">import</span> <span class="nn">psycopg2</span>
+
+<span class="kn">from</span> <span class="nn">envinorma.models.am_metadata</span> <span class="kn">import</span> <span class="n">AMMetadata</span><span class="p">,</span> <span class="n">AMState</span>
+<span class="kn">from</span> <span class="nn">envinorma.models.arrete_ministeriel</span> <span class="kn">import</span> <span class="n">ArreteMinisteriel</span>
+<span class="kn">from</span> <span class="nn">envinorma.parametrization.models.parametrization</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">AlternativeSection</span><span class="p">,</span>
+    <span class="n">AMWarning</span><span class="p">,</span>
+    <span class="n">InapplicableSection</span><span class="p">,</span>
+    <span class="n">ParameterObject</span><span class="p">,</span>
+    <span class="n">Parametrization</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">envinorma.utils</span> <span class="kn">import</span> <span class="n">AMStatus</span>
+
+
+<span class="k">def</span> <span class="nf">_ensure_len</span><span class="p">(</span><span class="n">list_</span><span class="p">:</span> <span class="n">List</span><span class="p">,</span> <span class="n">min_len</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">list_</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">min_len</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Expecting len(list_) &gt;= </span><span class="si">{</span><span class="n">min_len</span><span class="si">}</span><span class="s1">, got </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">list_</span><span class="p">)</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">_ensure_non_negative</span><span class="p">(</span><span class="n">int_</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">int_</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Expecting non negative int, got </span><span class="si">{</span><span class="n">int_</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">_ensure_one_variable</span><span class="p">(</span><span class="n">res</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Tuple</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">res</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">1</span> <span class="ow">or</span> <span class="nb">len</span><span class="p">(</span><span class="n">res</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Expecting only one value in res. Got :</span><span class="se">\n</span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">res</span><span class="p">)[:</span><span class="mi">280</span><span class="p">]</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">res</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+
+
+<span class="k">def</span> <span class="nf">_load_am_str</span><span class="p">(</span><span class="n">str_</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ArreteMinisteriel</span><span class="p">:</span>
+    <span class="k">return</span> <span class="n">ArreteMinisteriel</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">str_</span><span class="p">))</span>
+
+
+<span class="k">def</span> <span class="nf">_recreate_with_removed_parameter</span><span class="p">(</span>
+    <span class="n">object_type</span><span class="p">:</span> <span class="n">Type</span><span class="p">[</span><span class="n">ParameterObject</span><span class="p">],</span> <span class="n">parameter_rank</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">parametrization</span><span class="p">:</span> <span class="n">Parametrization</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Parametrization</span><span class="p">:</span>
+    <span class="n">new_sections</span> <span class="o">=</span> <span class="n">parametrization</span><span class="o">.</span><span class="n">alternative_sections</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    <span class="n">new_conditions</span> <span class="o">=</span> <span class="n">parametrization</span><span class="o">.</span><span class="n">inapplicable_sections</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    <span class="n">new_warnings</span> <span class="o">=</span> <span class="n">parametrization</span><span class="o">.</span><span class="n">warnings</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">object_type</span> <span class="o">==</span> <span class="n">InapplicableSection</span><span class="p">:</span>
+        <span class="n">_ensure_len</span><span class="p">(</span><span class="n">parametrization</span><span class="o">.</span><span class="n">inapplicable_sections</span><span class="p">,</span> <span class="n">parameter_rank</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="k">del</span> <span class="n">new_conditions</span><span class="p">[</span><span class="n">parameter_rank</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">object_type</span> <span class="o">==</span> <span class="n">AlternativeSection</span><span class="p">:</span>
+        <span class="n">_ensure_len</span><span class="p">(</span><span class="n">parametrization</span><span class="o">.</span><span class="n">alternative_sections</span><span class="p">,</span> <span class="n">parameter_rank</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="k">del</span> <span class="n">new_sections</span><span class="p">[</span><span class="n">parameter_rank</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">object_type</span> <span class="o">==</span> <span class="n">AMWarning</span><span class="p">:</span>
+        <span class="n">_ensure_len</span><span class="p">(</span><span class="n">parametrization</span><span class="o">.</span><span class="n">warnings</span><span class="p">,</span> <span class="n">parameter_rank</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="k">del</span> <span class="n">new_warnings</span><span class="p">[</span><span class="n">parameter_rank</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">Parametrization</span><span class="p">(</span><span class="n">new_conditions</span><span class="p">,</span> <span class="n">new_sections</span><span class="p">,</span> <span class="n">new_warnings</span><span class="p">)</span>
+
+
+<span class="n">T</span> <span class="o">=</span> <span class="n">TypeVar</span><span class="p">(</span><span class="s1">&#39;T&#39;</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">_replace_element_in_list_or_append_if_negative_rank</span><span class="p">(</span><span class="n">element</span><span class="p">:</span> <span class="n">T</span><span class="p">,</span> <span class="n">list_</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">T</span><span class="p">],</span> <span class="n">rank</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">T</span><span class="p">]:</span>
+    <span class="k">if</span> <span class="n">rank</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">[</span><span class="o">*</span><span class="n">list_</span><span class="p">,</span> <span class="n">element</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">rank</span> <span class="o">&gt;=</span> <span class="nb">len</span><span class="p">(</span><span class="n">list_</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Cannot replace element of rank </span><span class="si">{</span><span class="n">rank</span><span class="si">}</span><span class="s1"> in a list of size </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">list_</span><span class="p">)</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="p">[</span><span class="n">elt</span> <span class="k">if</span> <span class="n">i</span> <span class="o">!=</span> <span class="n">rank</span> <span class="k">else</span> <span class="n">element</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">elt</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">list_</span><span class="p">)]</span>
+
+
+<span class="k">def</span> <span class="nf">_recreate_with_upserted_parameter</span><span class="p">(</span>
+    <span class="n">new_parameter</span><span class="p">:</span> <span class="n">ParameterObject</span><span class="p">,</span> <span class="n">parameter_rank</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">parametrization</span><span class="p">:</span> <span class="n">Parametrization</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Parametrization</span><span class="p">:</span>
+    <span class="n">new_sections</span> <span class="o">=</span> <span class="n">parametrization</span><span class="o">.</span><span class="n">alternative_sections</span>
+    <span class="n">new_conditions</span> <span class="o">=</span> <span class="n">parametrization</span><span class="o">.</span><span class="n">inapplicable_sections</span>
+    <span class="n">new_warnings</span> <span class="o">=</span> <span class="n">parametrization</span><span class="o">.</span><span class="n">warnings</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">new_parameter</span><span class="p">,</span> <span class="n">InapplicableSection</span><span class="p">):</span>
+        <span class="n">new_conditions</span> <span class="o">=</span> <span class="n">_replace_element_in_list_or_append_if_negative_rank</span><span class="p">(</span>
+            <span class="n">new_parameter</span><span class="p">,</span> <span class="n">new_conditions</span><span class="p">,</span> <span class="n">parameter_rank</span>
+        <span class="p">)</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">new_parameter</span><span class="p">,</span> <span class="n">AlternativeSection</span><span class="p">):</span>
+        <span class="n">new_sections</span> <span class="o">=</span> <span class="n">_replace_element_in_list_or_append_if_negative_rank</span><span class="p">(</span><span class="n">new_parameter</span><span class="p">,</span> <span class="n">new_sections</span><span class="p">,</span> <span class="n">parameter_rank</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">new_warnings</span> <span class="o">=</span> <span class="n">_replace_element_in_list_or_append_if_negative_rank</span><span class="p">(</span><span class="n">new_parameter</span><span class="p">,</span> <span class="n">new_warnings</span><span class="p">,</span> <span class="n">parameter_rank</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">Parametrization</span><span class="p">(</span><span class="n">new_conditions</span><span class="p">,</span> <span class="n">new_sections</span><span class="p">,</span> <span class="n">new_warnings</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">_create_table_queries</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+    <span class="n">queries</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;CREATE TABLE IF NOT EXISTS am_status (am_id VARCHAR(255) PRIMARY KEY, status VARCHAR(255));&#39;</span><span class="p">]</span>
+    <span class="n">type_1_tables</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;am_metadata&#39;</span><span class="p">,</span> <span class="s1">&#39;initial_am&#39;</span><span class="p">,</span> <span class="s1">&#39;parametrization&#39;</span><span class="p">,</span> <span class="s1">&#39;structured_am&#39;</span><span class="p">]</span>
+    <span class="k">for</span> <span class="n">table</span> <span class="ow">in</span> <span class="n">type_1_tables</span><span class="p">:</span>
+        <span class="n">queries</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;CREATE TABLE IF NOT EXISTS </span><span class="si">{</span><span class="n">table</span><span class="si">}</span><span class="s1"> (am_id VARCHAR(255) PRIMARY KEY, data TEXT);&#39;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">queries</span>
+
+
+<div class="viewcode-block" id="create_tables"><a class="viewcode-back" href="../../envinorma.html#envinorma.data_fetcher.create_tables">[docs]</a><span class="k">def</span> <span class="nf">create_tables</span><span class="p">(</span><span class="n">psql_dsn</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Execute this function if you start the application from an empty database, or have missing tables.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">connection</span> <span class="o">=</span> <span class="n">psycopg2</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">psql_dsn</span><span class="p">)</span>
+    <span class="n">cursor</span> <span class="o">=</span> <span class="n">connection</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">query</span> <span class="ow">in</span> <span class="n">_create_table_queries</span><span class="p">():</span>
+        <span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="p">())</span>
+    <span class="n">connection</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+    <span class="n">cursor</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+    <span class="n">connection</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="DataFetcher"><a class="viewcode-back" href="../../envinorma.html#envinorma.data_fetcher.DataFetcher">[docs]</a><span class="k">class</span> <span class="nc">DataFetcher</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">psql_dsn</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">psql_dsn</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">psql_dsn</span>
+
+    <span class="k">def</span> <span class="nf">_exectute_select_query</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">query</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">values</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Tuple</span><span class="p">]:</span>
+        <span class="n">connection</span> <span class="o">=</span> <span class="n">psycopg2</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">psql_dsn</span><span class="p">)</span>
+        <span class="n">cursor</span> <span class="o">=</span> <span class="n">connection</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
+        <span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="n">values</span><span class="p">)</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">cursor</span><span class="o">.</span><span class="n">fetchall</span><span class="p">())</span>
+        <span class="n">cursor</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+        <span class="n">connection</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">res</span>
+
+    <span class="k">def</span> <span class="nf">_exectute_update_query</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">query</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">values</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">connection</span> <span class="o">=</span> <span class="n">psycopg2</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">psql_dsn</span><span class="p">)</span>
+        <span class="n">cursor</span> <span class="o">=</span> <span class="n">connection</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
+        <span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="n">values</span><span class="p">)</span>
+        <span class="n">connection</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+        <span class="n">cursor</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+        <span class="n">connection</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">_exectute_delete_query</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">query</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">values</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">connection</span> <span class="o">=</span> <span class="n">psycopg2</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">psql_dsn</span><span class="p">)</span>
+        <span class="n">cursor</span> <span class="o">=</span> <span class="n">connection</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
+        <span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="n">values</span><span class="p">)</span>
+        <span class="n">connection</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+        <span class="n">cursor</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+        <span class="n">connection</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+<div class="viewcode-block" id="DataFetcher.load_am_metadata"><a class="viewcode-back" href="../../envinorma.html#envinorma.data_fetcher.DataFetcher.load_am_metadata">[docs]</a>    <span class="k">def</span> <span class="nf">load_am_metadata</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">am_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">AMMetadata</span><span class="p">]:</span>
+        <span class="n">query</span> <span class="o">=</span> <span class="s1">&#39;SELECT data FROM am_metadata WHERE am_id = </span><span class="si">%s</span><span class="s1">;&#39;</span>
+        <span class="n">json_am</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_exectute_select_query</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="p">(</span><span class="n">am_id</span><span class="p">,))</span>
+        <span class="k">if</span> <span class="n">json_am</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">AMMetadata</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">_ensure_one_variable</span><span class="p">(</span><span class="n">json_am</span><span class="p">)))</span>
+        <span class="k">return</span> <span class="kc">None</span></div>
+
+<div class="viewcode-block" id="DataFetcher.load_all_am_metadata"><a class="viewcode-back" href="../../envinorma.html#envinorma.data_fetcher.DataFetcher.load_all_am_metadata">[docs]</a>    <span class="k">def</span> <span class="nf">load_all_am_metadata</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">with_deleted_ams</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">AMMetadata</span><span class="p">]:</span>
+        <span class="n">query</span> <span class="o">=</span> <span class="s1">&#39;SELECT am_id, data FROM am_metadata;&#39;</span>
+        <span class="n">tuples</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_exectute_select_query</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="p">())</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="p">{</span><span class="n">am_id</span><span class="p">:</span> <span class="n">AMMetadata</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">json_</span><span class="p">))</span> <span class="k">for</span> <span class="n">am_id</span><span class="p">,</span> <span class="n">json_</span> <span class="ow">in</span> <span class="n">tuples</span> <span class="ow">or</span> <span class="p">{}}</span>
+        <span class="k">if</span> <span class="n">with_deleted_ams</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">result</span>
+        <span class="k">return</span> <span class="p">{</span><span class="n">am_id</span><span class="p">:</span> <span class="n">am</span> <span class="k">for</span> <span class="n">am_id</span><span class="p">,</span> <span class="n">am</span> <span class="ow">in</span> <span class="n">result</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">am</span><span class="o">.</span><span class="n">state</span> <span class="o">==</span> <span class="n">am</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">VIGUEUR</span><span class="p">}</span></div>
+
+<div class="viewcode-block" id="DataFetcher.upsert_am"><a class="viewcode-back" href="../../envinorma.html#envinorma.data_fetcher.DataFetcher.upsert_am">[docs]</a>    <span class="k">def</span> <span class="nf">upsert_am</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">am_md</span><span class="p">:</span> <span class="n">AMMetadata</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">am_md</span><span class="o">.</span><span class="n">to_dict</span><span class="p">())</span>
+        <span class="n">query</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s1">&#39;INSERT INTO am_metadata(am_id, data) VALUES(</span><span class="si">%s</span><span class="s1">, </span><span class="si">%s</span><span class="s1">) ON CONFLICT (am_id)&#39;</span>
+            <span class="s1">&#39; DO UPDATE SET data = </span><span class="si">%s</span><span class="s1"> WHERE am_metadata.am_id = </span><span class="si">%s</span><span class="s1">;&#39;</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_exectute_update_query</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="p">(</span><span class="n">am_md</span><span class="o">.</span><span class="n">cid</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">am_md</span><span class="o">.</span><span class="n">cid</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="DataFetcher.delete_am"><a class="viewcode-back" href="../../envinorma.html#envinorma.data_fetcher.DataFetcher.delete_am">[docs]</a>    <span class="k">def</span> <span class="nf">delete_am</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">am_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">reason_deleted</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">am_metadata</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">load_am_metadata</span><span class="p">(</span><span class="n">am_id</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">am_metadata</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;AM with id </span><span class="si">{</span><span class="n">am_id</span><span class="si">}</span><span class="s1"> does not exist, cannot delete it.&#39;</span><span class="p">)</span>
+        <span class="n">am_metadata</span><span class="o">.</span><span class="n">state</span> <span class="o">=</span> <span class="n">AMState</span><span class="o">.</span><span class="n">DELETED</span>
+        <span class="n">am_metadata</span><span class="o">.</span><span class="n">reason_deleted</span> <span class="o">=</span> <span class="n">reason_deleted</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">upsert_am</span><span class="p">(</span><span class="n">am_metadata</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="DataFetcher.remove_parameter"><a class="viewcode-back" href="../../envinorma.html#envinorma.data_fetcher.DataFetcher.remove_parameter">[docs]</a>    <span class="k">def</span> <span class="nf">remove_parameter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">am_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">parameter_type</span><span class="p">:</span> <span class="n">Type</span><span class="p">[</span><span class="n">ParameterObject</span><span class="p">],</span> <span class="n">parameter_rank</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">_ensure_non_negative</span><span class="p">(</span><span class="n">parameter_rank</span><span class="p">)</span>
+        <span class="n">previous_parametrization</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_load_parametrization</span><span class="p">(</span><span class="n">am_id</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">previous_parametrization</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Expecting a non null parametrization.&#39;</span><span class="p">)</span>
+        <span class="n">parametrization</span> <span class="o">=</span> <span class="n">_recreate_with_removed_parameter</span><span class="p">(</span><span class="n">parameter_type</span><span class="p">,</span> <span class="n">parameter_rank</span><span class="p">,</span> <span class="n">previous_parametrization</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">upsert_new_parametrization</span><span class="p">(</span><span class="n">am_id</span><span class="p">,</span> <span class="n">parametrization</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="DataFetcher.upsert_new_parametrization"><a class="viewcode-back" href="../../envinorma.html#envinorma.data_fetcher.DataFetcher.upsert_new_parametrization">[docs]</a>    <span class="k">def</span> <span class="nf">upsert_new_parametrization</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">am_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">parametrization</span><span class="p">:</span> <span class="n">Parametrization</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">parametrization</span><span class="o">.</span><span class="n">to_dict</span><span class="p">())</span>
+        <span class="n">query</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s1">&#39;INSERT INTO parametrization(am_id, data) VALUES(</span><span class="si">%s</span><span class="s1">, </span><span class="si">%s</span><span class="s1">) ON CONFLICT (am_id)&#39;</span>
+            <span class="s1">&#39; DO UPDATE SET data = </span><span class="si">%s</span><span class="s1"> WHERE parametrization.am_id = </span><span class="si">%s</span><span class="s1">;&#39;</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_exectute_update_query</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="p">(</span><span class="n">am_id</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">am_id</span><span class="p">))</span></div>
+
+    <span class="k">def</span> <span class="nf">_load_parametrization</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">am_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Parametrization</span><span class="p">]:</span>
+        <span class="n">query</span> <span class="o">=</span> <span class="s1">&#39;SELECT data FROM parametrization where am_id = </span><span class="si">%s</span><span class="s1"> LIMIT 1;&#39;</span>
+        <span class="n">tuples</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_exectute_select_query</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="p">(</span><span class="n">am_id</span><span class="p">,))</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">tuples</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Parametrization not found, which should not happen.&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">tuples</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">tuples</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Expecting one value, received </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">tuples</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="si">}</span><span class="s1">.&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">Parametrization</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">tuples</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]))</span>
+
+<div class="viewcode-block" id="DataFetcher.load_or_init_parametrization"><a class="viewcode-back" href="../../envinorma.html#envinorma.data_fetcher.DataFetcher.load_or_init_parametrization">[docs]</a>    <span class="k">def</span> <span class="nf">load_or_init_parametrization</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">am_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Parametrization</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">load_parametrization</span><span class="p">(</span><span class="n">am_id</span><span class="p">)</span> <span class="ow">or</span> <span class="n">Parametrization</span><span class="p">([],</span> <span class="p">[],</span> <span class="p">[])</span></div>
+
+<div class="viewcode-block" id="DataFetcher.upsert_parameter"><a class="viewcode-back" href="../../envinorma.html#envinorma.data_fetcher.DataFetcher.upsert_parameter">[docs]</a>    <span class="k">def</span> <span class="nf">upsert_parameter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">am_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">new_parameter</span><span class="p">:</span> <span class="n">ParameterObject</span><span class="p">,</span> <span class="n">parameter_rank</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">previous_parametrization</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">load_or_init_parametrization</span><span class="p">(</span><span class="n">am_id</span><span class="p">)</span>
+        <span class="n">parametrization</span> <span class="o">=</span> <span class="n">_recreate_with_upserted_parameter</span><span class="p">(</span><span class="n">new_parameter</span><span class="p">,</span> <span class="n">parameter_rank</span><span class="p">,</span> <span class="n">previous_parametrization</span><span class="p">)</span>
+        <span class="n">parametrization</span><span class="o">.</span><span class="n">check_consistency</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">upsert_new_parametrization</span><span class="p">(</span><span class="n">am_id</span><span class="p">,</span> <span class="n">parametrization</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="DataFetcher.load_parametrization"><a class="viewcode-back" href="../../envinorma.html#envinorma.data_fetcher.DataFetcher.load_parametrization">[docs]</a>    <span class="k">def</span> <span class="nf">load_parametrization</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">am_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Parametrization</span><span class="p">]:</span>
+        <span class="n">query</span> <span class="o">=</span> <span class="s1">&#39;SELECT data FROM parametrization WHERE am_id = </span><span class="si">%s</span><span class="s1">;&#39;</span>
+        <span class="n">json_am</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_exectute_select_query</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="p">(</span><span class="n">am_id</span><span class="p">,))</span>
+        <span class="k">if</span> <span class="n">json_am</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">Parametrization</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">_ensure_one_variable</span><span class="p">(</span><span class="n">json_am</span><span class="p">)))</span>
+        <span class="k">return</span> <span class="kc">None</span></div>
+
+<div class="viewcode-block" id="DataFetcher.load_all_parametrizations"><a class="viewcode-back" href="../../envinorma.html#envinorma.data_fetcher.DataFetcher.load_all_parametrizations">[docs]</a>    <span class="k">def</span> <span class="nf">load_all_parametrizations</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Parametrization</span><span class="p">]:</span>
+        <span class="n">query</span> <span class="o">=</span> <span class="s1">&#39;SELECT am_id, data FROM parametrization;&#39;</span>
+        <span class="n">tuples</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_exectute_select_query</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="p">())</span>
+        <span class="k">return</span> <span class="p">{</span><span class="n">am_id</span><span class="p">:</span> <span class="n">Parametrization</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">json_</span><span class="p">))</span> <span class="k">for</span> <span class="n">am_id</span><span class="p">,</span> <span class="n">json_</span> <span class="ow">in</span> <span class="n">tuples</span> <span class="ow">or</span> <span class="p">{}}</span></div>
+
+<div class="viewcode-block" id="DataFetcher.load_structured_am"><a class="viewcode-back" href="../../envinorma.html#envinorma.data_fetcher.DataFetcher.load_structured_am">[docs]</a>    <span class="k">def</span> <span class="nf">load_structured_am</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">am_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">ArreteMinisteriel</span><span class="p">]:</span>
+        <span class="n">query</span> <span class="o">=</span> <span class="s1">&#39;SELECT data FROM structured_am WHERE am_id = </span><span class="si">%s</span><span class="s1">;&#39;</span>
+        <span class="n">json_am</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_exectute_select_query</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="p">(</span><span class="n">am_id</span><span class="p">,))</span>
+        <span class="k">if</span> <span class="n">json_am</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">_load_am_str</span><span class="p">(</span><span class="n">_ensure_one_variable</span><span class="p">(</span><span class="n">json_am</span><span class="p">))</span>
+        <span class="k">return</span> <span class="kc">None</span></div>
+
+<div class="viewcode-block" id="DataFetcher.delete_structured_am"><a class="viewcode-back" href="../../envinorma.html#envinorma.data_fetcher.DataFetcher.delete_structured_am">[docs]</a>    <span class="k">def</span> <span class="nf">delete_structured_am</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">am_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">query</span> <span class="o">=</span> <span class="s2">&quot;DELETE FROM structured_am WHERE am_id = </span><span class="si">%s</span><span class="s2">;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_exectute_delete_query</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="p">(</span><span class="n">am_id</span><span class="p">,))</span></div>
+
+<div class="viewcode-block" id="DataFetcher.upsert_structured_am"><a class="viewcode-back" href="../../envinorma.html#envinorma.data_fetcher.DataFetcher.upsert_structured_am">[docs]</a>    <span class="k">def</span> <span class="nf">upsert_structured_am</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">am_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">am</span><span class="p">:</span> <span class="n">ArreteMinisteriel</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">query</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s1">&#39;INSERT INTO structured_am(am_id, data) VALUES(</span><span class="si">%s</span><span class="s1">, </span><span class="si">%s</span><span class="s1">) ON CONFLICT (am_id)&#39;</span>
+            <span class="s1">&#39; DO UPDATE SET data = </span><span class="si">%s</span><span class="s1"> WHERE structured_am.am_id =</span><span class="si">%s</span><span class="s1">;&#39;</span>
+        <span class="p">)</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">am</span><span class="o">.</span><span class="n">to_dict</span><span class="p">())</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_exectute_update_query</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="p">(</span><span class="n">am_id</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">am_id</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="DataFetcher.load_initial_am"><a class="viewcode-back" href="../../envinorma.html#envinorma.data_fetcher.DataFetcher.load_initial_am">[docs]</a>    <span class="k">def</span> <span class="nf">load_initial_am</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">am_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">ArreteMinisteriel</span><span class="p">]:</span>
+        <span class="n">query</span> <span class="o">=</span> <span class="s1">&#39;SELECT data FROM initial_am WHERE am_id = </span><span class="si">%s</span><span class="s1">;&#39;</span>
+        <span class="n">json_am</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_exectute_select_query</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="p">(</span><span class="n">am_id</span><span class="p">,))</span>
+        <span class="k">if</span> <span class="n">json_am</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">_load_am_str</span><span class="p">(</span><span class="n">_ensure_one_variable</span><span class="p">(</span><span class="n">json_am</span><span class="p">))</span>
+        <span class="k">return</span> <span class="kc">None</span></div>
+
+<div class="viewcode-block" id="DataFetcher.delete_initial_am"><a class="viewcode-back" href="../../envinorma.html#envinorma.data_fetcher.DataFetcher.delete_initial_am">[docs]</a>    <span class="k">def</span> <span class="nf">delete_initial_am</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">am_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">query</span> <span class="o">=</span> <span class="s2">&quot;DELETE FROM initial_am WHERE am_id = </span><span class="si">%s</span><span class="s2">;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_exectute_delete_query</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="p">(</span><span class="n">am_id</span><span class="p">,))</span></div>
+
+<div class="viewcode-block" id="DataFetcher.upsert_initial_am"><a class="viewcode-back" href="../../envinorma.html#envinorma.data_fetcher.DataFetcher.upsert_initial_am">[docs]</a>    <span class="k">def</span> <span class="nf">upsert_initial_am</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">am_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">am</span><span class="p">:</span> <span class="n">ArreteMinisteriel</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">query</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s1">&#39;INSERT INTO initial_am(am_id, data) VALUES(</span><span class="si">%s</span><span class="s1">, </span><span class="si">%s</span><span class="s1">) ON CONFLICT (am_id)&#39;</span>
+            <span class="s1">&#39; DO UPDATE SET data = </span><span class="si">%s</span><span class="s1"> WHERE initial_am.am_id =</span><span class="si">%s</span><span class="s1">;&#39;</span>
+        <span class="p">)</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">am</span><span class="o">.</span><span class="n">to_dict</span><span class="p">())</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_exectute_update_query</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="p">(</span><span class="n">am_id</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">am_id</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="DataFetcher.load_most_advanced_am"><a class="viewcode-back" href="../../envinorma.html#envinorma.data_fetcher.DataFetcher.load_most_advanced_am">[docs]</a>    <span class="k">def</span> <span class="nf">load_most_advanced_am</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">am_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">ArreteMinisteriel</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">load_structured_am</span><span class="p">(</span><span class="n">am_id</span><span class="p">)</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">load_initial_am</span><span class="p">(</span><span class="n">am_id</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="DataFetcher.load_am_status"><a class="viewcode-back" href="../../envinorma.html#envinorma.data_fetcher.DataFetcher.load_am_status">[docs]</a>    <span class="k">def</span> <span class="nf">load_am_status</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">am_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">AMStatus</span><span class="p">:</span>
+        <span class="n">query</span> <span class="o">=</span> <span class="s1">&#39;SELECT status FROM am_status WHERE am_id = </span><span class="si">%s</span><span class="s1">;&#39;</span>
+        <span class="n">query_result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_exectute_select_query</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="p">(</span><span class="n">am_id</span><span class="p">,))</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">query_result</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">AMStatus</span><span class="o">.</span><span class="n">PENDING_INITIALIZATION</span>
+        <span class="n">status</span> <span class="o">=</span> <span class="n">_ensure_one_variable</span><span class="p">(</span><span class="n">query_result</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">AMStatus</span><span class="p">(</span><span class="n">status</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="DataFetcher.load_all_am_statuses"><a class="viewcode-back" href="../../envinorma.html#envinorma.data_fetcher.DataFetcher.load_all_am_statuses">[docs]</a>    <span class="k">def</span> <span class="nf">load_all_am_statuses</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">AMStatus</span><span class="p">]:</span>
+        <span class="n">query</span> <span class="o">=</span> <span class="s1">&#39;SELECT am_id, status FROM am_status&#39;</span>
+        <span class="k">return</span> <span class="p">{</span><span class="n">am_id</span><span class="p">:</span> <span class="n">AMStatus</span><span class="p">(</span><span class="n">status</span><span class="p">)</span> <span class="k">for</span> <span class="n">am_id</span><span class="p">,</span> <span class="n">status</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_exectute_select_query</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="p">())}</span></div>
+
+<div class="viewcode-block" id="DataFetcher.upsert_am_status"><a class="viewcode-back" href="../../envinorma.html#envinorma.data_fetcher.DataFetcher.upsert_am_status">[docs]</a>    <span class="k">def</span> <span class="nf">upsert_am_status</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">am_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">new_status</span><span class="p">:</span> <span class="n">AMStatus</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">query</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s1">&#39;INSERT INTO am_status(am_id, status) VALUES(</span><span class="si">%s</span><span class="s1">, </span><span class="si">%s</span><span class="s1">) ON CONFLICT (am_id)&#39;</span>
+            <span class="s1">&#39; DO UPDATE SET status = </span><span class="si">%s</span><span class="s1"> WHERE am_status.am_id =</span><span class="si">%s</span><span class="s1">;&#39;</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_exectute_update_query</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="p">(</span><span class="n">am_id</span><span class="p">,</span> <span class="n">new_status</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="n">new_status</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="n">am_id</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="DataFetcher.load_structured_ams"><a class="viewcode-back" href="../../envinorma.html#envinorma.data_fetcher.DataFetcher.load_structured_ams">[docs]</a>    <span class="k">def</span> <span class="nf">load_structured_ams</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">am_ids</span><span class="p">:</span> <span class="n">Set</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">ArreteMinisteriel</span><span class="p">]:</span>
+        <span class="n">query</span> <span class="o">=</span> <span class="s1">&#39;SELECT am_id, data FROM structured_am&#39;</span>
+        <span class="n">tuples</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_exectute_select_query</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="p">())</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">_load_am_str</span><span class="p">(</span><span class="n">json_am</span><span class="p">)</span> <span class="k">for</span> <span class="n">id_</span><span class="p">,</span> <span class="n">json_am</span> <span class="ow">in</span> <span class="n">tuples</span> <span class="k">if</span> <span class="n">id_</span> <span class="ow">in</span> <span class="n">am_ids</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="DataFetcher.load_initial_ams"><a class="viewcode-back" href="../../envinorma.html#envinorma.data_fetcher.DataFetcher.load_initial_ams">[docs]</a>    <span class="k">def</span> <span class="nf">load_initial_ams</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">am_ids</span><span class="p">:</span> <span class="n">Set</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">ArreteMinisteriel</span><span class="p">]:</span>
+        <span class="n">query</span> <span class="o">=</span> <span class="s1">&#39;SELECT am_id, data FROM initial_am&#39;</span>
+        <span class="n">tuples</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_exectute_select_query</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="p">())</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">_load_am_str</span><span class="p">(</span><span class="n">json_am</span><span class="p">)</span> <span class="k">for</span> <span class="n">id_</span><span class="p">,</span> <span class="n">json_am</span> <span class="ow">in</span> <span class="n">tuples</span> <span class="k">if</span> <span class="n">id_</span> <span class="ow">in</span> <span class="n">am_ids</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="DataFetcher.safe_load_most_advanced_am"><a class="viewcode-back" href="../../envinorma.html#envinorma.data_fetcher.DataFetcher.safe_load_most_advanced_am">[docs]</a>    <span class="k">def</span> <span class="nf">safe_load_most_advanced_am</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">am_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ArreteMinisteriel</span><span class="p">:</span>
+        <span class="n">am</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">load_most_advanced_am</span><span class="p">(</span><span class="n">am_id</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">am</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Expecting one AM to proceed.&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">am</span></div></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, Envinorma.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
