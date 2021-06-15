@@ -12,7 +12,7 @@ This repository is a library for manipulating enriched versions of regulation te
 
 # Envinorma (fr)
 
-Envinorma cherche à faciliter la préparation des inspections en simplifiant l'accès à la réglementation applicables aux industries en France (les [ICPE](https://fr.wikipedia.org/wiki/Installation_class%C3%A9e_pour_la_protection_de_l'environnement)).
+Envinorma cherche à faciliter la préparation des inspections en simplifiant l'accès à la réglementation applicable aux industries en France (les [ICPE](https://fr.wikipedia.org/wiki/Installation_class%C3%A9e_pour_la_protection_de_l'environnement)).
 
 Ce projet est réalisé dans le cadre du programme EIG, une page d'introduction est accessibile [ici](https://entrepreneur-interet-general.etalab.gouv.fr/defis/2020/envinorma.html).
 
@@ -80,7 +80,7 @@ print('\n'.join(arrete_ministeriel.to_text().text_lines()))
 Output
 
 ```markdown
-Arrêté du 11/04/17 relatif aux prescriptions générales applicable aux entrepôts couverts soumis à la rubrique 1510
+Arrêté du 11/04/17 relatif aux prescriptions générales applicables aux entrepôts couverts soumis à la rubrique 1510
 
 # Article 1
 
