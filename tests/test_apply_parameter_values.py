@@ -39,7 +39,7 @@ _AS = AlternativeSection
 
 
 def _random_string() -> str:
-    return ''.join([random.choice(ascii_letters) for _ in range(9)])
+    return ''.join([random.choice(ascii_letters) for _ in range(9)])  # noqa: S311
 
 
 def _random_enriched_string() -> EnrichedString:
@@ -67,7 +67,7 @@ def test_apply_parameter_values_to_am_whole_arrete():
     is_installation_old = Equal(parameter, False)
     source = ConditionSource(EntityReference(SectionReference((2,)), None))
     parametrization = Parametrization(
-        [_IS(EntityReference(SectionReference(tuple()), None), is_installation_old, source)], [], []
+        [_IS(EntityReference(SectionReference(()), None), is_installation_old, source)], [], []
     )
 
     new_am_1 = apply_parameter_values_to_am(am, parametrization, {parameter: False})
@@ -226,7 +226,7 @@ def test_generate_versions():
 
     res_2 = generate_versions(am, Parametrization([], [], []), False)
     assert len(res_2) == 1
-    assert tuple() in res_2
+    assert () in res_2
     exp = Applicability(active=True, modified=False, warnings=[], previous_version=None)
     assert res_2[()].sections[0].applicability == exp
 

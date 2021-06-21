@@ -53,7 +53,8 @@ def _manual_1510_post_process(am: ArreteMinisteriel, regime: str) -> ArreteMinis
 
 def _extract_regime(am_id: str, name: Tuple[str, ...]) -> Optional[str]:
     if am_id in AM1510_IDS:  # Hack for this very special AM
-        assert name[0][:4] == 'reg_'
+        if name[0][:4] != 'reg_':
+            raise AssertionError
         return name[0][4]
     return None
 

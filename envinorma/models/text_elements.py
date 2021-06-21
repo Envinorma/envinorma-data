@@ -93,7 +93,9 @@ def _split_html_in_lines(html: str) -> List[str]:
 
 @dataclass
 class EnrichedString:
-    """Dataclass for representing string potentially decorated with links and tables and
+    """Model for enriched strings.
+
+    It can represent strings potentially decorated with links and tables and
     potentially inapplicably in a certain context.
 
     Args:
@@ -137,7 +139,7 @@ class EnrichedString:
 
 
 def _random_string(size: int = 9) -> str:
-    return ''.join([random.choice(ascii_letters) for _ in range(size)])
+    return ''.join([random.choice(ascii_letters) for _ in range(size)])  # noqa: S311
 
 
 def _random_enriched_string() -> EnrichedString:

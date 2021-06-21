@@ -23,8 +23,9 @@ class Annotations:
 
 @dataclass
 class Applicability:
-    """Describes the applicability of a StructuredText. It can either be applicable,
-    inapplicable or applicable with modifications.
+    """Describes the applicability of a StructuredText.
+
+    A StructuredText can either be applicable, inapplicable or applicable with modifications.
 
     Args:
         active (bool = True):
@@ -96,7 +97,8 @@ class StructuredText:
     id: str = field(default_factory=random_id)
 
     def __post_init__(self):
-        assert isinstance(self.title, EnrichedString)
+        if not isinstance(self.title, EnrichedString):
+            raise TypeError
 
     def to_dict(self) -> Dict[str, Any]:
         res = asdict(self)

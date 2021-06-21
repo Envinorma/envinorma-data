@@ -1,12 +1,12 @@
 import pytest
 
-from envinorma.data_fetcher import _replace_element_in_list_or_append_if_negative_rank
+from envinorma.data_fetcher import _upsert_element
 
 
-def test_replace_element_in_list_or_append_if_negative_rank():
-    assert _replace_element_in_list_or_append_if_negative_rank('', [], -1) == ['']
+def test_upsert_element():
+    assert _upsert_element('', [], -1) == ['']
     with pytest.raises(ValueError):
-        _replace_element_in_list_or_append_if_negative_rank('', [], 0)
-    assert _replace_element_in_list_or_append_if_negative_rank('new', ['old'], 0) == ['new']
-    assert _replace_element_in_list_or_append_if_negative_rank('new', ['old', 'unchanged'], 0) == ['new', 'unchanged']
-    assert _replace_element_in_list_or_append_if_negative_rank('new', ['unchanged'], -1) == ['unchanged', 'new']
+        _upsert_element('', [], 0)
+    assert _upsert_element('new', ['old'], 0) == ['new']
+    assert _upsert_element('new', ['old', 'unchanged'], 0) == ['new', 'unchanged']
+    assert _upsert_element('new', ['unchanged'], -1) == ['unchanged', 'new']

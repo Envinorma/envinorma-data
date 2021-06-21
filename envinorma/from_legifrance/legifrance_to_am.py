@@ -248,7 +248,7 @@ def remove_summaries(alineas: List[str]) -> List[str]:
     if not found:
         return alineas
     for j in range(i + 1, len(alineas)):
-        if alineas[j] == 'Modalités de calcul du dimensionnement du plan d\'épandage.':
+        if alineas[j] == "Modalités de calcul du dimensionnement du plan d'épandage.":
             return alineas[:i] + alineas[j + 1 :]
     return alineas
 
@@ -287,7 +287,7 @@ _ALPHABET = '0123456789ABCDEF'
 
 
 def _generate_random_string(size: int) -> str:
-    return ''.join([random.choice(_ALPHABET) for _ in range(size)])
+    return ''.join([random.choice(_ALPHABET) for _ in range(size)])  # noqa: S311
 
 
 _REF_SIG_LEFT = '$$REF_L$$'
@@ -316,7 +316,7 @@ def _extract_links(text: str, add_legifrance_prefix: bool = True) -> EnrichedStr
     return EnrichedString(final_text, links)
 
 
-def _move_first_2_upper_alineas_to_title_in_annexe(alineas: List[EnrichedString]) -> Tuple[str, List[EnrichedString]]:
+def _move_upper_alineas_to_title_in_annexe(alineas: List[EnrichedString]) -> Tuple[str, List[EnrichedString]]:
     first_lines = []
     for i in [0, 1]:
         if len(alineas) > i and is_mainly_upper(alineas[i].text):
@@ -326,7 +326,7 @@ def _move_first_2_upper_alineas_to_title_in_annexe(alineas: List[EnrichedString]
     return ' '.join(first_lines), alineas[len(first_lines) :]
 
 
-def _move_first_2_upper_alineas_to_title_in_article(alineas: List[EnrichedString]) -> Tuple[str, List[EnrichedString]]:
+def _move_upper_alineas_to_title_in_article(alineas: List[EnrichedString]) -> Tuple[str, List[EnrichedString]]:
     if not alineas:
         return '', []
     if is_probably_title(alineas[0].text):
@@ -338,10 +338,10 @@ def _generate_article_title(
     article: LegifranceArticle, outer_alineas: List[EnrichedString]
 ) -> Tuple[EnrichedString, List[EnrichedString]]:
     if article.num and 'annexe' in article.num.lower():
-        title, new_outer_alineas = _move_first_2_upper_alineas_to_title_in_annexe(outer_alineas)
+        title, new_outer_alineas = _move_upper_alineas_to_title_in_annexe(outer_alineas)
         final_title = f'{article.num} - {title}' if title else article.num
         return EnrichedString(final_title), new_outer_alineas
-    title, new_outer_alineas = _move_first_2_upper_alineas_to_title_in_article(outer_alineas)
+    title, new_outer_alineas = _move_upper_alineas_to_title_in_article(outer_alineas)
     title_beginning = f'Article {article.num}' if article.num is not None else 'Article'
     title_end = f' - {title}' if title else ''
     return EnrichedString(title_beginning + title_end), new_outer_alineas
@@ -364,9 +364,7 @@ def _is_about_existing_installations(article: LegifranceArticle, ascendant_title
     return in_annexe and _EXISTING_INSTALLATIONS_PATTERN in article.content.lower()
 
 
-def _extract_structured_text_from_legifrance_article(
-    article: LegifranceArticle, ascendant_titles: List[str]
-) -> StructuredText:
+def _extract_text_from_legifrance_article(article: LegifranceArticle, ascendant_titles: List[str]) -> StructuredText:
     structured_text = _html_to_structured_text(
         article.content, not _is_about_existing_installations(article, ascendant_titles)
     )
@@ -376,9 +374,7 @@ def _extract_structured_text_from_legifrance_article(
     return StructuredText(_clean_title(title), outer_alineas, structured_text.sections, None)
 
 
-def _extract_structured_text_from_legifrance_section(
-    section: LegifranceSection, ascendant_titles: List[str]
-) -> StructuredText:
+def _extract_text_from_legifrance_section(section: LegifranceSection, ascendant_titles: List[str]) -> StructuredText:
     return StructuredText(
         _clean_title(_extract_links(section.title)),
         [],
@@ -391,10 +387,8 @@ def _extract_structured_text(
     section_or_article: Union[LegifranceSection, LegifranceArticle], ascendant_titles: List[str]
 ) -> StructuredText:
     if isinstance(section_or_article, LegifranceSection):
-        return _extract_structured_text_from_legifrance_section(
-            section_or_article, ascendant_titles + [section_or_article.title]
-        )
-    return _extract_structured_text_from_legifrance_article(section_or_article, ascendant_titles)
+        return _extract_text_from_legifrance_section(section_or_article, ascendant_titles + [section_or_article.title])
+    return _extract_text_from_legifrance_article(section_or_article, ascendant_titles)
 
 
 def _extract_sections(
@@ -489,7 +483,7 @@ def _handle_article_group(group: _ArticleGroup) -> LegifranceArticle:
 
 
 def _sort_with_int_ordre(articles: List[LegifranceArticle]) -> List[LegifranceArticle]:
-    return [art for art in sorted(articles, key=lambda x: x.int_ordre)]
+    return sorted(articles, key=lambda x: x.int_ordre)
 
 
 def _all_none_articles(articles: List[LegifranceArticle]) -> bool:

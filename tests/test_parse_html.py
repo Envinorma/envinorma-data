@@ -96,4 +96,4 @@ def test_extract_table():
 
 
 def test_extract_cell_data():
-    _extract_cell_data(_soup('<a>test</a>test')).text == 'testtest'
+    assert _extract_cell_data(_soup('<a>test</a>test')).text == 'testtest'

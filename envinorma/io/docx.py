@@ -14,7 +14,6 @@ from bs4 import BeautifulSoup
 from envinorma.models.structured_text import StructuredText
 from envinorma.models.text_elements import Cell, EnrichedString, Row, Table, TextElement, Title
 from envinorma.structure import build_structured_text
-from envinorma.utils import random_string
 
 
 def extract_all_xml_tags_from_tag(tag: bs4.Tag) -> List[str]:
@@ -33,8 +32,7 @@ TABLE_TAG = 'tbl'
 
 
 def extract_random_table(soup: BeautifulSoup) -> bs4.Tag:
-
-    return random.choice(list(soup.find_all(TABLE_TAG)))
+    return random.choice(list(soup.find_all(TABLE_TAG)))  # noqa: S311
 
 
 def find_table_containing_text(soup: BeautifulSoup, text: str) -> Optional[bs4.Tag]:
@@ -424,7 +422,7 @@ def extract_headers(soup: BeautifulSoup) -> List[str]:
 
 
 def _generate_reference() -> str:
-    return 'REF_' + ''.join([random.choice(string.ascii_letters) for _ in range(6)])
+    return 'REF_' + ''.join([random.choice(string.ascii_letters) for _ in range(6)])  # noqa: S311
 
 
 def _is_a_reference(candidate: str) -> bool:
@@ -587,6 +585,6 @@ def extract_text_from_file(filename: str) -> StructuredText:
 
 
 def extract_text(file_content: bytes) -> StructuredText:
-    filename = f'/tmp/tmp_{random_string()}'
-    open(filename, 'wb').write(file_content)
-    return extract_text_from_file(filename)
+    with tempfile.NamedTemporaryFile('wb', prefix='docx_extraction') as file_:
+        file_.write(file_content)
+        return extract_text_from_file(file_.name)

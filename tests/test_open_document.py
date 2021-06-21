@@ -435,7 +435,7 @@ def test_merge_children():
 
 
 def random_filename() -> str:
-    return ''.join([random.choice('abcdef') for _ in range(10)]) + '.odt'
+    return ''.join([random.choice('abcdef') for _ in range(10)]) + '.odt'  # noqa: S311
 
 
 def test_write_new_document():

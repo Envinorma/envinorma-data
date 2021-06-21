@@ -14,7 +14,6 @@ from bs4 import BeautifulSoup
 from envinorma.models.structured_text import StructuredText
 from envinorma.models.text_elements import Cell, EnrichedString, Linebreak, Row, Table, TextElement, Title
 from envinorma.structure import build_structured_text, structured_text_to_text_elements
-from envinorma.utils import random_string
 
 
 def _extract_title(tag: bs4.Tag) -> Title:
@@ -93,12 +92,12 @@ def _extract_string_from_tags(tags: List[Any]) -> str:
 def _extract_cell(tag: Any) -> Optional[Cell]:
     if not isinstance(tag, bs4.Tag):
         raise ValueError(f'Expecting tag as input, received element of type {type(tag)}')
-    _expected_names = (
+    expected_names = (
         ODFXMLTagNames.TABLE_CELL.value,
         ODFXMLTagNames.TABLE_COVERED_CELL.value,
     )
-    if _descriptor(tag) not in _expected_names:
-        raise ValueError(f'Expecting tag with name in {_expected_names}, tag with name {_descriptor(tag)}')
+    if _descriptor(tag) not in expected_names:
+        raise ValueError(f'Expecting tag with name in {expected_names}, tag with name {_descriptor(tag)}')
     if _descriptor(tag) == ODFXMLTagNames.TABLE_COVERED_CELL.value:
         return None
     row_span = int(tag.attrs.get(ODFXMLAttributes.TABLE_ROW_SPAN.value, 1))
@@ -118,14 +117,14 @@ def _extract_cells(tags: List[Any]) -> List[Cell]:
 def _extract_rows(tag: Any, is_header: bool = False) -> List[Row]:
     if not isinstance(tag, bs4.Tag):
         raise ValueError(f'Expecting tag as input, received element of type {type(tag)}')
-    _expected_names = (
+    expected_names = (
         ODFXMLTagNames.TABLE_COLUMN.value,
         ODFXMLTagNames.TABLE_ROW.value,
         ODFXMLTagNames.TEXT_SOFT_PAGE_BREAK.value,
         ODFXMLTagNames.TABLE_HEADER.value,
     )
-    if _descriptor(tag) not in _expected_names:
-        raise ValueError(f'Expecting tag with name in {_expected_names}, tag with name {_descriptor(tag)}')
+    if _descriptor(tag) not in expected_names:
+        raise ValueError(f'Expecting tag with name in {expected_names}, tag with name {_descriptor(tag)}')
     if _descriptor(tag) == ODFXMLTagNames.TABLE_HEADER.value:
         return [row for child in tag.children for row in _extract_rows(child, True)]
     if _descriptor(tag) in (ODFXMLTagNames.TABLE_COLUMN.value, ODFXMLTagNames.TEXT_SOFT_PAGE_BREAK.value):
@@ -143,9 +142,9 @@ def _extract_table(tag: bs4.Tag) -> Table:
 
 
 def _extract_list_item_text(tag: bs4.Tag) -> str:
-    _expected = (ODFXMLTagNames.TEXT_LIST_ITEM.value, ODFXMLTagNames.TEXT_LIST_HEADER.value)
-    if _descriptor(tag) not in _expected:
-        raise ValueError(f'Expecting tag in {_expected}, received tag with name {_descriptor(tag)}')
+    expected = (ODFXMLTagNames.TEXT_LIST_ITEM.value, ODFXMLTagNames.TEXT_LIST_HEADER.value)
+    if _descriptor(tag) not in expected:
+        raise ValueError(f'Expecting tag in {expected}, received tag with name {_descriptor(tag)}')
     return _extract_string_from_tag(tag)
 
 
@@ -276,9 +275,9 @@ def load_and_transform(filename: str, add_numbering: bool = False) -> Structured
 
 
 def extract_text(file_content: bytes) -> StructuredText:
-    filename = f'/tmp/tmp_{random_string()}'
-    open(filename, 'wb').write(file_content)
-    return _transform_odt(get_odt_xml(filename), False)
+    with tempfile.NamedTemporaryFile('wb', prefix='odt_extraction') as file_:
+        file_.write(file_content)
+        return _transform_odt(get_odt_xml(file_.name), False)
 
 
 def _extract_lines_from_page_element(page_element: Any) -> List[str]:
@@ -300,38 +299,38 @@ def _extract_lines(filename: str) -> List[str]:
 
 
 _XML_EMPTY_ODT = (
-    '''<?xml version="1.0" encoding="utf-8"?><office:document-content office:version="1.2" xmlns:chart="urn'''
-    ''':oasis:names:tc:opendocument:xmlns:chart:1.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dom='''
-    '''"http://www.w3.org/2001/xml-events" xmlns:dr3d="urn:oasis:names:tc:opendocument:xmlns:dr3d:1.0" xmln'''
-    '''s:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0" xmlns:field="urn:openoffice:names:experim'''
-    '''ental:ooo-ms-interop:xmlns:field:1.0" xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compati'''
-    '''ble:1.0" xmlns:form="urn:oasis:names:tc:opendocument:xmlns:form:1.0" xmlns:grddl="http://www.w3.org/'''
-    '''2003/g/data-view#" xmlns:math="http://www.w3.org/1998/Math/MathML" xmlns:meta="urn:oasis:names:tc:op'''
-    '''endocument:xmlns:meta:1.0" xmlns:number="urn:oasis:names:tc:opendocument:xmlns:datastyle:1.0" xmlns:'''
-    '''of="urn:oasis:names:tc:opendocument:xmlns:of:1.2" xmlns:office="urn:oasis:names:tc:opendocument:xmln'''
-    '''s:office:1.0" xmlns:ooo="http://openoffice.org/2004/office" xmlns:oooc="http://openoffice.org/2004/c'''
-    '''alc" xmlns:ooow="http://openoffice.org/2004/writer" xmlns:rpt="http://openoffice.org/2005/report" xm'''
-    '''lns:script="urn:oasis:names:tc:opendocument:xmlns:script:1.0" xmlns:style="urn:oasis:names:tc:opendo'''
-    '''cument:xmlns:style:1.0" xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0" xmlns:t'''
-    '''able="urn:oasis:names:tc:opendocument:xmlns:table:1.0" xmlns:tableooo="http://openoffice.org/2009/ta'''
-    '''ble" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:textooo="http://openoffice.or'''
-    '''g/2013/office" xmlns:xforms="http://www.w3.org/2002/xforms" xmlns:xhtml="http://www.w3.org/1999/xhtm'''
-    '''l" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi'''
-    '''="http://www.w3.org/2001/XMLSchema-instance"><office:scripts/><office:font-face-decls><style:font-fa'''
-    '''ce style:font-family-generic="swiss" style:name="Arial Unicode MS1" svg:font-family="'Arial Unicode '''
-    '''MS'"/><style:font-face style:font-family-generic="roman" style:font-pitch="variable" style:name="Lib'''
-    '''eration Serif" svg:font-family="'Liberation Serif'"/><style:font-face style:font-family-generic="swi'''
-    '''ss" style:font-pitch="variable" style:name="Liberation Sans" svg:font-family="'Liberation Sans'"/><s'''
-    '''tyle:font-face style:font-family-generic="system" style:font-pitch="variable" style:name="Arial Unic'''
-    '''ode MS" svg:font-family="'Arial Unicode MS'"/><style:font-face style:font-family-generic="system" st'''
-    '''yle:font-pitch="variable" style:name="PingFang SC" svg:font-family="'PingFang SC'"/><style:font-face'''
-    ''' style:font-family-generic="system" style:font-pitch="variable" style:name="Songti SC" svg:font-fami'''
-    '''ly="'Songti SC'"/></office:font-face-decls><office:automatic-styles/><office:body><office:text><text'''
-    ''':sequence-decls><text:sequence-decl text:display-outline-level="0" text:name="Illustration"/><text:s'''
-    '''equence-decl text:display-outline-level="0" text:name="Table"/><text:sequence-decl text:display-outl'''
-    '''ine-level="0" text:name="Text"/><text:sequence-decl text:display-outline-level="0" text:name="Drawin'''
-    '''g"/><text:sequence-decl text:display-outline-level="0" text:name="Figure"/></text:sequence-decls></o'''
-    '''ffice:text></office:body></office:document-content>'''
+    '<?xml version="1.0" encoding="utf-8"?><office:document-content office:version="1.2" xmlns:chart="urn'
+    ':oasis:names:tc:opendocument:xmlns:chart:1.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dom='
+    '"http://www.w3.org/2001/xml-events" xmlns:dr3d="urn:oasis:names:tc:opendocument:xmlns:dr3d:1.0" xmln'
+    's:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0" xmlns:field="urn:openoffice:names:experim'
+    'ental:ooo-ms-interop:xmlns:field:1.0" xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compati'
+    'ble:1.0" xmlns:form="urn:oasis:names:tc:opendocument:xmlns:form:1.0" xmlns:grddl="http://www.w3.org/'
+    '2003/g/data-view#" xmlns:math="http://www.w3.org/1998/Math/MathML" xmlns:meta="urn:oasis:names:tc:op'
+    'endocument:xmlns:meta:1.0" xmlns:number="urn:oasis:names:tc:opendocument:xmlns:datastyle:1.0" xmlns:'
+    'of="urn:oasis:names:tc:opendocument:xmlns:of:1.2" xmlns:office="urn:oasis:names:tc:opendocument:xmln'
+    's:office:1.0" xmlns:ooo="http://openoffice.org/2004/office" xmlns:oooc="http://openoffice.org/2004/c'
+    'alc" xmlns:ooow="http://openoffice.org/2004/writer" xmlns:rpt="http://openoffice.org/2005/report" xm'
+    'lns:script="urn:oasis:names:tc:opendocument:xmlns:script:1.0" xmlns:style="urn:oasis:names:tc:opendo'
+    'cument:xmlns:style:1.0" xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0" xmlns:t'
+    'able="urn:oasis:names:tc:opendocument:xmlns:table:1.0" xmlns:tableooo="http://openoffice.org/2009/ta'
+    'ble" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:textooo="http://openoffice.or'
+    'g/2013/office" xmlns:xforms="http://www.w3.org/2002/xforms" xmlns:xhtml="http://www.w3.org/1999/xhtm'
+    'l" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi'
+    '="http://www.w3.org/2001/XMLSchema-instance"><office:scripts/><office:font-face-decls><style:font-fa'
+    'ce style:font-family-generic="swiss" style:name="Arial Unicode MS1" svg:font-family="\'Arial Unicode '
+    'MS\'"/><style:font-face style:font-family-generic="roman" style:font-pitch="variable" style:name="Lib'
+    'eration Serif" svg:font-family="\'Liberation Serif\'"/><style:font-face style:font-family-generic="swi'
+    'ss" style:font-pitch="variable" style:name="Liberation Sans" svg:font-family="\'Liberation Sans\'"/><s'
+    'tyle:font-face style:font-family-generic="system" style:font-pitch="variable" style:name="Arial Unic'
+    'ode MS" svg:font-family="\'Arial Unicode MS\'"/><style:font-face style:font-family-generic="system" st'
+    'yle:font-pitch="variable" style:name="PingFang SC" svg:font-family="\'PingFang SC\'"/><style:font-face'
+    ' style:font-family-generic="system" style:font-pitch="variable" style:name="Songti SC" svg:font-fami'
+    'ly="\'Songti SC\'"/></office:font-face-decls><office:automatic-styles/><office:body><office:text><text'
+    ':sequence-decls><text:sequence-decl text:display-outline-level="0" text:name="Illustration"/><text:s'
+    'equence-decl text:display-outline-level="0" text:name="Table"/><text:sequence-decl text:display-outl'
+    'ine-level="0" text:name="Text"/><text:sequence-decl text:display-outline-level="0" text:name="Drawin'
+    'g"/><text:sequence-decl text:display-outline-level="0" text:name="Figure"/></text:sequence-decls></o'
+    'ffice:text></office:body></office:document-content>'
 )
 
 

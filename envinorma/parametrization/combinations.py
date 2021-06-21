@@ -65,7 +65,8 @@ def _extract_interval_midpoints(interval_sides: List[Any]) -> List[Any]:
 
 def _generate_equal_option_dicts(conditions: Union[List[Condition], List[LeafCondition]]) -> List[Tuple[str, Any]]:
     condition = conditions[0]
-    assert isinstance(condition, Equal)
+    if not isinstance(condition, Equal):
+        raise TypeError
     targets = list({cd.target for cd in conditions if isinstance(cd, Equal)})
     parameter = condition.parameter
     if len(targets) == 1:
@@ -99,7 +100,8 @@ def _generate_options_dict(conditions: Union[List[Condition], List[LeafCondition
         targets = extract_sorted_interval_sides_targets(conditions, True)
         values = _extract_interval_midpoints(targets)
         condition = conditions[0]
-        assert isinstance(condition, (Range, Greater, Littler))
+        if not isinstance(condition, (Range, Greater, Littler)):
+            raise TypeError
         parameter = condition.parameter
         param_names = _compute_parameter_names(targets, parameter)
         return [(param_name, value) for param_name, value in zip(param_names, values)]

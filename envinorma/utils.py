@@ -36,7 +36,7 @@ def write_json(obj: Union[Dict, List], filename: str, safe: bool = False, pretty
 
 
 def random_string(size: int = 6) -> str:
-    return ''.join([random.choice(string.ascii_letters) for _ in range(size)])
+    return ''.join([random.choice(string.ascii_letters) for _ in range(size)])  # noqa: S311
 
 
 T = TypeVar('T')
@@ -94,7 +94,7 @@ def safely_replace(string: str, replaced_substring: str, new_substring: str) -> 
 
 
 def random_id(size: int = 12) -> str:
-    return ''.join([random.choice(string.hexdigits) for _ in range(size)])
+    return ''.join([random.choice(string.hexdigits) for _ in range(size)])  # noqa: S311
 
 
 class AMStatus(Enum):

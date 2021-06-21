@@ -189,7 +189,7 @@ def _apply_parameter_values_in_text(
     else:
         text = _apply_satisfied_modificators(text, na_conditions, alternative_sections, parameter_values)
 
-    all_warnings = sorted(list(set(_ensure_applicabiliy(text.applicability).warnings + warnings)))
+    all_warnings = sorted(set(_ensure_applicabiliy(text.applicability).warnings + warnings))
     text.applicability = replace(_ensure_applicabiliy(text.applicability), warnings=all_warnings)
     return text
 
@@ -310,9 +310,9 @@ def _compute_am_version_descriptor(
     parametrization: Parametrization, parameter_values: Dict[Parameter, Any]
 ) -> VersionDescriptor:
     am_applicable, am_applicability_warnings = _compute_whole_text_applicability(
-        parametrization.path_to_conditions.get(tuple()) or [],
+        parametrization.path_to_conditions.get(()) or [],
         parameter_values,
-        parametrization.path_to_warnings.get(tuple()) or [],
+        parametrization.path_to_warnings.get(()) or [],
     )
     date_parameters = _date_parameters(parametrization, parameter_values)
     return VersionDescriptor(am_applicable, am_applicability_warnings, *date_parameters)

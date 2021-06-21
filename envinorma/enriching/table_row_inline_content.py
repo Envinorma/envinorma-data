@@ -7,9 +7,9 @@ from envinorma.models.structured_text import StructuredText
 from envinorma.models.text_elements import EnrichedString, Row, Table, table_to_list
 
 
-def _incorporate(elements: List[str], elements_: List[str]) -> List[str]:
+def _incorporate(elements: List[str], other_elements: List[str]) -> List[str]:
     lines = []
-    for elt, elt_ in zip(elements, elements_):
+    for elt, elt_ in zip(elements, other_elements):
         lines.append(elt)
         lines.append(elt_)
     return lines
@@ -36,13 +36,14 @@ def _build_texts_for_row_inline_content(headers: List[str], rows: List[Row]) -> 
 def _split_rows(rows: List[Row]) -> Tuple[List[Row], List[Row]]:
     if not rows:
         return [], []
-    i = 0
-    for i, row in enumerate(rows):
+    first_non_header_index = 0
+    for index, row in enumerate(rows):
+        first_non_header_index = index
         if not row.is_header:
             break
-    if rows[i].is_header:
-        i += 1
-    return rows[:i], rows[i:]
+    if rows[first_non_header_index].is_header:
+        first_non_header_index += 1
+    return rows[:first_non_header_index], rows[first_non_header_index:]
 
 
 def _extract_headers(rows: List[Row]) -> List[str]:

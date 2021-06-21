@@ -53,6 +53,15 @@ class TopicOntology:
         return detect_matched_patterns(self, text, topic, short_title)
 
     def deduce_main_topic(self, topics: Iterable[TopicName]) -> Optional[TopicName]:
+        """Deduce main topic from a list of topics.
+
+        Args:
+            topics (Iterable[TopicName]): list of input topics (not necessarily main topics)
+
+        Returns:
+            Optional[TopicName]: main topic of the list, if defined. (Main topic is the first
+                metatopic which is not DISPOSITIONS_GENERALES)
+        """
         if not topics:
             return None
         return _deduce_main_topic([self.topic_name_to_topic[name] for name in topics])
@@ -64,7 +73,7 @@ def _deduce_main_topic(topics: List[Topic]) -> TopicName:
     non_generic_metatopics = [topic.metatopic for topic in topics if topic != TopicName.DISPOSITIONS_GENERALES]
     if not non_generic_metatopics:
         return TopicName.DISPOSITIONS_GENERALES
-    return sorted([topic.metatopic for topic in topics], key=lambda x: x.value)[0]
+    return sorted([topic.metatopic for topic in topics], key=lambda topic: topic.value)[0]
 
 
 def _extract_substring(text: str, start: int, end: int) -> str:
@@ -74,6 +83,18 @@ def _extract_substring(text: str, start: int, end: int) -> str:
 def detect_matched_patterns(
     ontology: TopicOntology, text: str, topic: Optional[TopicName], short_title: bool = False
 ) -> Set[str]:
+    """Extract the list of patterns matched in a text.
+
+    Args:
+        ontology (TopicOntology): topic ontology to use for parsing.
+        text (str): text to parse.
+        topic (Optional[TopicName]): topic to search for. If None, all topics are searched.
+        short_title (bool): Set to True if text is a short title, in which case the model
+            is less doubtful. Defaults to False.
+
+    Returns:
+        Set[str]: set of matched strings
+    """
     normalized_text = normalize(text)
     if topic:
         pattern = re.compile(
@@ -90,6 +111,17 @@ def detect_matched_patterns(
 
 
 def parse(ontology: TopicOntology, text: str, short_title: bool = False) -> Set[TopicName]:
+    """Extract set of topics in a text.
+
+    Args:
+        ontology (TopicOntology): topic ontology to use for parsing.
+        text (str): text to parse.
+        short_title (bool): Set to True if text is a short title, in which case the model is less
+            doubtful. Defaults to False.
+
+    Returns:
+        Set[TopicName]: set of matched topics.
+    """
     return {ontology.pattern_to_topic[match] for match in detect_matched_patterns(ontology, text, None, short_title)}
 
 
