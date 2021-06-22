@@ -17,11 +17,12 @@ test_requirements = [
     "flake8>=3.8.3",
     "flake8-debugger>=3.2.1",
     "isort>=5.7.0",
+    "mypy>=0.800",
     "pytest>=6.2.1",
     "pytest-cov>=2.9.0",
     "pytest-raises>=0.11",
     "pytest-mypy>=0.8.0",
-    "mypy>=0.800",
+    "wemake-python-styleguide>=0.15.2",
 ]
 
 dev_requirements = [
