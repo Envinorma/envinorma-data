@@ -47,7 +47,8 @@ class AndCondition:
         return AndCondition([load_condition(cd) for cd in dict_['conditions']])
 
     def check(self) -> None:
-        assert self.type == ConditionType.AND
+        if self.type != ConditionType.AND:
+            raise ValueError(f'self.type is not as expected: {self.type}')
         for cd in self.conditions:
             cd.check()
 
@@ -77,7 +78,8 @@ class OrCondition:
         return OrCondition([load_condition(cd) for cd in dict_['conditions']])
 
     def check(self) -> None:
-        assert self.type == ConditionType.OR
+        if self.type != ConditionType.OR:
+            raise ValueError
         for cd in self.conditions:
             cd.check()
 
@@ -111,7 +113,8 @@ class Littler:
         return Littler(parameter, load_parameter_value(dict_['target'], parameter.type), dict_['strict'])
 
     def check(self) -> None:
-        assert self.type == ConditionType.LITTLER
+        if self.type != ConditionType.LITTLER:
+            raise ValueError(f'self.type is not as expected: {self.type}')
 
     def is_satisfied(self, parameter_values: Dict[Parameter, Any]) -> bool:
         if self.parameter not in parameter_values:
@@ -147,7 +150,8 @@ class Greater:
         return Greater(parameter, load_parameter_value(dict_['target'], parameter.type), dict_['strict'])
 
     def check(self) -> None:
-        assert self.type == ConditionType.GREATER
+        if self.type != ConditionType.GREATER:
+            raise ValueError(f'self.type is not as expected: {self.type}')
 
     def is_satisfied(self, parameter_values: Dict[Parameter, Any]) -> bool:
         if self.parameter not in parameter_values:
@@ -182,7 +186,8 @@ class Equal:
         return Equal(parameter, load_parameter_value(dict_['target'], parameter.type))
 
     def check(self) -> None:
-        assert self.type == ConditionType.EQUAL
+        if self.type != ConditionType.EQUAL:
+            raise ValueError(f'self.type is not as expected: {self.type}')
 
     def is_satisfied(self, parameter_values: Dict[Parameter, Any]) -> bool:
         if self.parameter not in parameter_values:
@@ -225,7 +230,8 @@ class Range:
         )
 
     def check(self) -> None:
-        assert self.type == ConditionType.RANGE
+        if self.type != ConditionType.RANGE:
+            raise ValueError(f'self.type is not as expected: {self.type}')
 
     def is_satisfied(self, parameter_values: Dict[Parameter, Any]) -> bool:
         if self.parameter not in parameter_values:
@@ -288,14 +294,22 @@ def extract_leaf_conditions(condition: Condition, parameter: Parameter) -> List[
     return []
 
 
+def _check_range_is_right_strict(range_: Range) -> None:
+    if range_.left_strict:
+        raise AssertionError
+    if not range_.right_strict:
+        raise AssertionError
+
+
 def _check_condition_is_right_strict(condition: Condition) -> None:
     if isinstance(condition, Range):
-        assert not condition.left_strict
-        assert condition.right_strict
+        _check_range_is_right_strict(condition)
     elif isinstance(condition, Littler):
-        assert condition.strict
+        if not condition.strict:
+            raise AssertionError
     elif isinstance(condition, Greater):
-        assert not condition.strict
+        if condition.strict:
+            raise AssertionError
     else:
         raise ValueError(f'Unexpected type {type(condition)}')
 
@@ -313,4 +327,4 @@ def extract_sorted_interval_sides_targets(
             targets.append(condition.target)
         else:
             targets.extend([condition.left, condition.right])
-    return list(sorted(list(set(targets))))
+    return sorted(set(targets))

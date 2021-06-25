@@ -335,7 +335,7 @@ def test_copy_soup():
 def test_docx_writing():
     filename = 'test_data/small_table.docx'
     xml = get_docx_xml(filename)
-    output = ''.join([random.choice('abcdef') for _ in range(10)]) + '.docx'
+    output = ''.join([random.choice('abcdef') for _ in range(10)]) + '.docx'  # noqa: S311
     write_new_document(filename, str(xml), output)
     xml_2 = get_docx_xml(output)
     assert xml == xml_2

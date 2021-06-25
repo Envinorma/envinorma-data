@@ -55,7 +55,8 @@ def divide_string(str_: str, hyphenations: List[int]) -> List[str]:
 def _add_links_to_relevant_pieces(pieces: List[str], links: List[Link], format_: DataFormat) -> List[str]:
     iso_pieces = pieces[0::2]
     changing_pieces = pieces[1::2]
-    assert len(changing_pieces) == len(links)
+    if len(changing_pieces) != len(links):
+        raise AssertionError()
     changed_pieces = [_make_url(str_, link.target, format_) for str_, link in zip(changing_pieces, links)]
     return _alternate_merge(iso_pieces, changed_pieces)
 

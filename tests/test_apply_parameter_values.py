@@ -7,10 +7,14 @@ from typing import List, Optional
 
 import pytest
 
-from envinorma.models.arrete_ministeriel import ArreteMinisteriel, DateParameterDescriptor
-from envinorma.models.classement import Regime
-from envinorma.models.structured_text import Applicability, StructuredText
-from envinorma.models.text_elements import EnrichedString
+from envinorma.models import (
+    Applicability,
+    ArreteMinisteriel,
+    DateParameterDescriptor,
+    EnrichedString,
+    Regime,
+    StructuredText,
+)
 from envinorma.parametrization.am_with_versions import generate_versions
 from envinorma.parametrization.apply_parameter_values import (
     _date_parameters,
@@ -22,14 +26,19 @@ from envinorma.parametrization.apply_parameter_values import (
     _used_date_parameter,
     apply_parameter_values_to_am,
 )
-from envinorma.parametrization.models.condition import AndCondition, Equal, Littler, OrCondition
-from envinorma.parametrization.models.parameter import Parameter, ParameterEnum, ParameterType
-from envinorma.parametrization.models.parametrization import (
+from envinorma.parametrization.models import (
     AlternativeSection,
     AMWarning,
+    AndCondition,
     ConditionSource,
     EntityReference,
+    Equal,
     InapplicableSection,
+    Littler,
+    OrCondition,
+    Parameter,
+    ParameterEnum,
+    ParameterType,
     Parametrization,
     SectionReference,
 )
@@ -39,7 +48,7 @@ _AS = AlternativeSection
 
 
 def _random_string() -> str:
-    return ''.join([random.choice(ascii_letters) for _ in range(9)])
+    return ''.join([random.choice(ascii_letters) for _ in range(9)])  # noqa: S311
 
 
 def _random_enriched_string() -> EnrichedString:
@@ -67,7 +76,7 @@ def test_apply_parameter_values_to_am_whole_arrete():
     is_installation_old = Equal(parameter, False)
     source = ConditionSource(EntityReference(SectionReference((2,)), None))
     parametrization = Parametrization(
-        [_IS(EntityReference(SectionReference(tuple()), None), is_installation_old, source)], [], []
+        [_IS(EntityReference(SectionReference(()), None), is_installation_old, source)], [], []
     )
 
     new_am_1 = apply_parameter_values_to_am(am, parametrization, {parameter: False})
@@ -226,7 +235,7 @@ def test_generate_versions():
 
     res_2 = generate_versions(am, Parametrization([], [], []), False)
     assert len(res_2) == 1
-    assert tuple() in res_2
+    assert () in res_2
     exp = Applicability(active=True, modified=False, warnings=[], previous_version=None)
     assert res_2[()].sections[0].applicability == exp
 

@@ -9,21 +9,20 @@ from typing import Any, Callable, Dict, List, Optional, Set, Tuple
 from zipfile import ZipFile
 
 import bs4
-from bs4 import BeautifulSoup
 
-from envinorma.models.structured_text import StructuredText
-from envinorma.models.text_elements import Cell, EnrichedString, Row, Table, TextElement, Title
+from envinorma.models import Cell, EnrichedString, Row, StructuredText, Table, TextElement, Title
 from envinorma.structure import build_structured_text
-from envinorma.utils import random_string
 
 
 def extract_all_xml_tags_from_tag(tag: bs4.Tag) -> List[str]:
+    if tag.prefix is None:
+        raise ValueError('Expecting non None prefix')
     return [tag.prefix + ':' + tag.name] + [
         name for child in tag.children if isinstance(child, bs4.Tag) for name in extract_all_xml_tags_from_tag(child)
     ]
 
 
-def extract_all_xml_tags(soup: BeautifulSoup) -> List[str]:
+def extract_all_xml_tags(soup: bs4.BeautifulSoup) -> List[str]:
     return [
         name for child in soup.children if isinstance(child, bs4.Tag) for name in extract_all_xml_tags_from_tag(child)
     ]
@@ -32,12 +31,11 @@ def extract_all_xml_tags(soup: BeautifulSoup) -> List[str]:
 TABLE_TAG = 'tbl'
 
 
-def extract_random_table(soup: BeautifulSoup) -> bs4.Tag:
+def extract_random_table(soup: bs4.BeautifulSoup) -> bs4.Tag:
+    return random.choice(list(soup.find_all(TABLE_TAG)))  # noqa: S311
 
-    return random.choice(list(soup.find_all(TABLE_TAG)))
 
-
-def find_table_containing_text(soup: BeautifulSoup, text: str) -> Optional[bs4.Tag]:
+def find_table_containing_text(soup: bs4.BeautifulSoup, text: str) -> Optional[bs4.Tag]:
     for table in soup.find_all(TABLE_TAG):
         if text in table.text:
             return table
@@ -126,7 +124,7 @@ def _estimate_text_length(tag: bs4.Tag) -> int:
     return len(tag.text.replace('\n', ' '))
 
 
-def extract_all_word_styles(soup: BeautifulSoup) -> List[Tuple[Style, int]]:
+def extract_all_word_styles(soup: bs4.BeautifulSoup) -> List[Tuple[Style, int]]:
     res: List[Tuple[Style, int]] = []
     for tag in soup.find_all('r'):
         style = extract_w_tag_style(tag)
@@ -135,7 +133,7 @@ def extract_all_word_styles(soup: BeautifulSoup) -> List[Tuple[Style, int]]:
     return res
 
 
-def extract_styles_to_nb_letters(soup: BeautifulSoup) -> Dict[Style, int]:
+def extract_styles_to_nb_letters(soup: bs4.BeautifulSoup) -> Dict[Style, int]:
     res: Dict[Style, int] = {}
     for style, nb_letters in extract_all_word_styles(soup):
         if style not in res:
@@ -161,7 +159,7 @@ class DocxNoTextError(DocxError):
     pass
 
 
-def _guess_body_font_size(soup: BeautifulSoup) -> int:
+def _guess_body_font_size(soup: bs4.BeautifulSoup) -> int:
     font_size_occurrences = _extract_font_size_occurrences(extract_styles_to_nb_letters(soup))
     if not font_size_occurrences:
         strings = '\n'.join(list(soup.stripped_strings))
@@ -180,8 +178,8 @@ def _is_body(style: Style, body_font_size: int) -> bool:
 
 
 def _replace_tables_and_body_text_with_empty_p(
-    soup: BeautifulSoup, body_font_size: Optional[int] = None
-) -> BeautifulSoup:
+    soup: bs4.BeautifulSoup, body_font_size: Optional[int] = None
+) -> bs4.BeautifulSoup:
     soup = _copy_soup(soup)
     body_font_size = _guess_body_font_size(soup) if body_font_size is None else body_font_size
     for tag in soup.find_all('w:tbl'):
@@ -305,8 +303,8 @@ def get_docx_xml(filename: str) -> str:
     return ZipFile(filename).read('word/document.xml').decode()
 
 
-def get_docx_xml_soup(filename: str) -> BeautifulSoup:
-    return BeautifulSoup(get_docx_xml(filename), 'lxml-xml')
+def get_docx_xml_soup(filename: str) -> bs4.BeautifulSoup:
+    return bs4.BeautifulSoup(get_docx_xml(filename), 'lxml-xml')
 
 
 def _is_table_small(table: Table) -> bool:
@@ -333,7 +331,7 @@ _PREFIX = (
 
 def _extract_p_tags_from_cells(table: Table) -> List[bs4.Tag]:
     cells = [cell for row in table.rows for cell in row.cells]
-    tags = [BeautifulSoup(_PREFIX + cell.content.text, 'lxml-xml').find('w:document') for cell in cells]
+    tags = [bs4.BeautifulSoup(_PREFIX + cell.content.text, 'lxml-xml').find('w:document') for cell in cells]
     p_tags: List[bs4.Tag] = []
     for tag in tags:
         if not isinstance(tag, bs4.Tag):
@@ -345,7 +343,7 @@ def _extract_p_tags_from_cells(table: Table) -> List[bs4.Tag]:
     return p_tags
 
 
-def _remove_table_inplace(soup: BeautifulSoup, table: Table, tag: bs4.Tag):
+def _remove_table_inplace(soup: bs4.BeautifulSoup, table: Table, tag: bs4.Tag):
     span_tag = soup.new_tag('w:p')
     if not isinstance(span_tag, bs4.Tag):
         raise ValueError(f'Expecting tag, received {type(tag)}')
@@ -358,12 +356,12 @@ def _remove_table_inplace(soup: BeautifulSoup, table: Table, tag: bs4.Tag):
     return soup
 
 
-def _copy_soup(soup: BeautifulSoup) -> BeautifulSoup:
+def _copy_soup(soup: bs4.BeautifulSoup) -> bs4.BeautifulSoup:
     # Hacky, avoid deepcopy and recursion errors
-    return BeautifulSoup(str(soup), soup.builder.NAME)
+    return bs4.BeautifulSoup(str(soup), soup.builder.NAME)
 
 
-def _replace_small_tables(soup: BeautifulSoup) -> BeautifulSoup:
+def _replace_small_tables(soup: bs4.BeautifulSoup) -> bs4.BeautifulSoup:
     soup = _copy_soup(soup)
     tables = [extract_table(tag) for tag in soup.find_all('w:tbl')]
     for tag, table in zip(soup.find_all('w:tbl'), tables):
@@ -404,18 +402,18 @@ def _group_strings(strings: List[str]) -> List[str]:
     return [' '.join(group) for group in groups if group]
 
 
-def _build_headers(soup: BeautifulSoup) -> List[str]:
+def _build_headers(soup: bs4.BeautifulSoup) -> List[str]:
     res = []
     for tag in soup.find_all('w:p'):
         res.extend(_group_strings(tag.stripped_strings))
     return [x for x in res if x]
 
 
-def empty_soup(soup: BeautifulSoup) -> bool:
+def empty_soup(soup: bs4.BeautifulSoup) -> bool:
     return ''.join(soup.stripped_strings) == ''
 
 
-def extract_headers(soup: BeautifulSoup) -> List[str]:
+def extract_headers(soup: bs4.BeautifulSoup) -> List[str]:
     if empty_soup(soup):
         return []
     clean_soup = _replace_small_tables(soup)
@@ -424,7 +422,7 @@ def extract_headers(soup: BeautifulSoup) -> List[str]:
 
 
 def _generate_reference() -> str:
-    return 'REF_' + ''.join([random.choice(string.ascii_letters) for _ in range(6)])
+    return 'REF_' + ''.join([random.choice(string.ascii_letters) for _ in range(6)])  # noqa: S311
 
 
 def _is_a_reference(candidate: str) -> bool:
@@ -432,8 +430,8 @@ def _is_a_reference(candidate: str) -> bool:
 
 
 def _extract_tags(
-    soup: BeautifulSoup, tag_finder: Callable[[BeautifulSoup], List[bs4.Tag]]
-) -> Tuple[BeautifulSoup, Dict[str, bs4.Tag]]:
+    soup: bs4.BeautifulSoup, tag_finder: Callable[[bs4.BeautifulSoup], List[bs4.Tag]]
+) -> Tuple[bs4.BeautifulSoup, Dict[str, bs4.Tag]]:
     soup = _copy_soup(soup)
     tags = tag_finder(soup)
     reference_to_tag: Dict[str, bs4.Tag] = {}
@@ -461,24 +459,26 @@ def _is_tag_body(tag: bs4.Tag, body_font_size: int) -> bool:
     return False
 
 
-def _find_table_tags(soup: BeautifulSoup) -> List[bs4.Tag]:
+def _find_table_tags(soup: bs4.BeautifulSoup) -> List[bs4.Tag]:
     return [_check_is_tag(tag) for tag in soup.find_all('tbl')]
 
 
-def _find_body_tags(soup: BeautifulSoup) -> List[bs4.Tag]:
+def _find_body_tags(soup: bs4.BeautifulSoup) -> List[bs4.Tag]:
     body_font_size = _guess_body_font_size(soup)
     body_tags = [_check_is_tag(tag) for tag in soup.find_all('w:r') if _is_tag_body(_check_is_tag(tag), body_font_size)]
     return body_tags
 
 
-def _remove_tables_and_bodies(soup: BeautifulSoup) -> Tuple[BeautifulSoup, Dict[str, bs4.Tag], Dict[str, bs4.Tag]]:
+def _remove_tables_and_bodies(
+    soup: bs4.BeautifulSoup,
+) -> Tuple[bs4.BeautifulSoup, Dict[str, bs4.Tag], Dict[str, bs4.Tag]]:
     soup, table_references = _extract_tags(soup, _find_table_tags)
     soup, body_references = _extract_tags(soup, _find_body_tags)
     return soup, table_references, body_references
 
 
 def _remove_xml_tags(str_: str) -> str:
-    return ' '.join(BeautifulSoup(str_, 'lxml-xml').stripped_strings)
+    return ' '.join(bs4.BeautifulSoup(str_, 'lxml-xml').stripped_strings)
 
 
 def _cleanup_cell(cell: Cell) -> Cell:
@@ -560,7 +560,7 @@ def _guess_and_add_title_levels(elements: List[TextElement]) -> List[TextElement
     ]
 
 
-def _extract_elements(soup: BeautifulSoup) -> List[TextElement]:
+def _extract_elements(soup: bs4.BeautifulSoup) -> List[TextElement]:
     titles = extract_headers(soup)
     soup, table_references, body_references = _remove_tables_and_bodies(soup)
     stripped_strings = list(soup.stripped_strings)
@@ -572,14 +572,14 @@ def _extract_elements(soup: BeautifulSoup) -> List[TextElement]:
     return _guess_and_add_title_levels(all_elements)
 
 
-def build_structured_text_from_soup(soup: BeautifulSoup) -> StructuredText:
+def build_structured_text_from_soup(soup: bs4.BeautifulSoup) -> StructuredText:
     clean_soup = _replace_small_tables(soup)
     elements = _extract_elements(clean_soup)
     return build_structured_text(None, elements)
 
 
 def build_structured_text_from_docx_xml(xml: str) -> StructuredText:
-    return build_structured_text_from_soup(BeautifulSoup(xml, 'lxml-xml'))
+    return build_structured_text_from_soup(bs4.BeautifulSoup(xml, 'lxml-xml'))
 
 
 def extract_text_from_file(filename: str) -> StructuredText:
@@ -587,6 +587,6 @@ def extract_text_from_file(filename: str) -> StructuredText:
 
 
 def extract_text(file_content: bytes) -> StructuredText:
-    filename = f'/tmp/tmp_{random_string()}'
-    open(filename, 'wb').write(file_content)
-    return extract_text_from_file(filename)
+    with tempfile.NamedTemporaryFile('wb', prefix='docx_extraction') as file_:
+        file_.write(file_content)
+        return extract_text_from_file(file_.name)

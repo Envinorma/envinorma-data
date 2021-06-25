@@ -24,8 +24,8 @@ def _extract_date_range(condition: LeafCondition) -> _DateRange:
 def _ranges_strictly_overlap(ranges: List[Tuple[float, float]]) -> bool:
     sorted_ranges = sorted(ranges)
     for ((x, y), (z, t)) in zip(sorted_ranges, sorted_ranges[1:]):
-        assert x <= y
-        assert z <= t
+        if x > y or z > t:
+            raise AssertionError
         if y > z:
             return True
     return False
@@ -39,7 +39,7 @@ def _date_ranges_strictly_overlap(ranges: List[_DateRange]) -> bool:
     return _ranges_strictly_overlap(timestamp_ranges)
 
 
-def _check_date_conditions_are_incompatible(all_conditions: List[Condition], parameter: Parameter) -> None:
+def _check_date_conditions_not_compatible(all_conditions: List[Condition], parameter: Parameter) -> None:
     leaf_conditions = [leaf for cd in all_conditions for leaf in extract_leaf_conditions(cd, parameter)]
     ranges: List[_DateRange] = []
     for condition in leaf_conditions:
@@ -66,7 +66,7 @@ def _extract_range(condition: LeafCondition) -> _Range:
     raise NotImplementedError(type(condition))
 
 
-def _check_real_number_conditions_are_incompatible(all_conditions: List[Condition], parameter: Parameter) -> None:
+def _check_real_number_conditions_not_compatible(all_conditions: List[Condition], parameter: Parameter) -> None:
     leaf_conditions = [leaf for cd in all_conditions for leaf in extract_leaf_conditions(cd, parameter)]
     ranges = [_extract_range(condition) for condition in leaf_conditions]
     if _ranges_strictly_overlap(ranges):
@@ -75,7 +75,7 @@ def _check_real_number_conditions_are_incompatible(all_conditions: List[Conditio
         )
 
 
-def _check_discrete_conditions_are_incompatible(all_conditions: List[Condition], parameter: Parameter) -> None:
+def _check_discrete_conditions_not_compatible(all_conditions: List[Condition], parameter: Parameter) -> None:
     leaf_conditions = [leaf for cd in all_conditions for leaf in extract_leaf_conditions(cd, parameter)]
     targets: Set = set()
     for condition in leaf_conditions:
@@ -86,7 +86,7 @@ def _check_discrete_conditions_are_incompatible(all_conditions: List[Condition],
         targets.add(condition.target)
 
 
-def _check_bool_conditions_are_incompatible(all_conditions: List[Condition], parameter: Parameter) -> None:
+def _check_bool_conditions_not_compatible(all_conditions: List[Condition], parameter: Parameter) -> None:
     leaf_conditions = [leaf for cd in all_conditions for leaf in extract_leaf_conditions(cd, parameter)]
     targets: Set[bool] = set()
     for condition in leaf_conditions:
@@ -97,18 +97,18 @@ def _check_bool_conditions_are_incompatible(all_conditions: List[Condition], par
         targets.add(condition.target)
 
 
-def check_conditions_are_incompatible(all_conditions: List[Condition], parameter: Parameter) -> None:
+def check_conditions_not_compatible(all_conditions: List[Condition], parameter: Parameter) -> None:
     if parameter.type == ParameterType.DATE:
-        _check_date_conditions_are_incompatible(all_conditions, parameter)
+        _check_date_conditions_not_compatible(all_conditions, parameter)
     elif parameter.type == ParameterType.REAL_NUMBER:
-        _check_real_number_conditions_are_incompatible(all_conditions, parameter)
+        _check_real_number_conditions_not_compatible(all_conditions, parameter)
     elif parameter.type == ParameterType.REGIME:
-        _check_discrete_conditions_are_incompatible(all_conditions, parameter)
+        _check_discrete_conditions_not_compatible(all_conditions, parameter)
     elif parameter.type == ParameterType.STRING:
-        _check_discrete_conditions_are_incompatible(all_conditions, parameter)
+        _check_discrete_conditions_not_compatible(all_conditions, parameter)
     elif parameter.type == ParameterType.RUBRIQUE:
-        _check_discrete_conditions_are_incompatible(all_conditions, parameter)
+        _check_discrete_conditions_not_compatible(all_conditions, parameter)
     elif parameter.type == ParameterType.BOOLEAN:
-        _check_bool_conditions_are_incompatible(all_conditions, parameter)
+        _check_bool_conditions_not_compatible(all_conditions, parameter)
     else:
         raise NotImplementedError(parameter.type)

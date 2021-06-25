@@ -26,7 +26,7 @@ class ActivityStatus(Enum):
     EN_FONCTIONNEMENT = 'En fonctionnement'
     EN_CONSTRUCTION = 'En construction'
     CESSATION_DECLAREE = 'Cessation déclarée'
-    A_L_ARRET = 'A l\'arrêt'
+    A_L_ARRET = "A l'arrêt"
     RECOLEMENT_FAIT = 'Récolement fait'
     EMPTY = ''
 
@@ -51,12 +51,15 @@ class Installation:
     code_naf: str
 
     def __post_init__(self) -> None:
-        assert len(self.num_dep) <= 4
-        assert isinstance(self.s3ic_id, str)
+        if len(self.num_dep) > 4:
+            raise AssertionError
+        if not isinstance(self.s3ic_id, str):
+            raise TypeError
         if self.last_inspection:
             if not isinstance(self.last_inspection, (date, datetime)):
                 print(self.last_inspection)
-            assert isinstance(self.last_inspection, (date, datetime))
+            if not isinstance(self.last_inspection, (date, datetime)):
+                raise TypeError
 
     @staticmethod
     def from_georisques_dict(dict_: Dict[str, Any]) -> 'Installation':

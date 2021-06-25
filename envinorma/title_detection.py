@@ -126,7 +126,7 @@ PATTERN_NAME_TO_LIST = {
 
 
 def _first_word(sentence: str) -> str:
-    return sentence.split(' ')[0].split('\'')[0]
+    return sentence.split(' ')[0].split("'")[0]
 
 
 _NON_TITLE_WORDS = {'le', 'la', 'les', 'l', 'un', 'une', 'pour', 'sur', 'sans'}

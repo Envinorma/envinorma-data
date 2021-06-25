@@ -4,7 +4,7 @@ from typing import Any, Callable, Dict, List, Optional, Set, Tuple, TypeVar, Uni
 from envinorma.models import Ints
 from envinorma.models.structured_text import StructuredText
 
-from ..consistency import check_conditions_are_incompatible
+from ..consistency import check_conditions_not_compatible
 from ..exceptions import ParametrizationError
 from .condition import Condition, LeafCondition, extract_leaf_conditions, load_condition
 from .parameter import Parameter
@@ -12,7 +12,7 @@ from .parameter import Parameter
 
 @dataclass
 class SectionReference:
-    """Reference of a section in an ArreteMinisteriel
+    """Reference of a section in an ArreteMinisteriel.
 
     Args:
         path (Tuple[int, ...]):
@@ -136,7 +136,7 @@ class AlternativeSection:
 
 @dataclass
 class AMWarning:
-    """Warning attached to a section of an arrete_ministeriel
+    """Warning attached to a section of an arrete_ministeriel.
 
     Args:
         targeted_section (SectionReference):
@@ -174,7 +174,7 @@ def _check_consistency_on_section(
         return  # complicated and infrequent, not checked for now
     if len(all_parameters) == 0:
         raise ParametrizationError('There should be at least one parameter in conditions.')
-    check_conditions_are_incompatible(all_conditions, list(all_parameters)[0])
+    check_conditions_not_compatible(all_conditions, list(all_parameters)[0])
 
 
 T = TypeVar('T')

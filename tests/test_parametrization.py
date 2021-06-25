@@ -24,7 +24,7 @@ _NAC = InapplicableSection
 
 
 def _random_string() -> str:
-    return ''.join([random.choice(ascii_letters) for _ in range(9)])
+    return ''.join([random.choice(ascii_letters) for _ in range(9)])  # noqa: S311
 
 
 def _random_enriched_string() -> EnrichedString:

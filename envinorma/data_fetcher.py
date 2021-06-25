@@ -56,12 +56,25 @@ def _recreate_with_removed_parameter(
 T = TypeVar('T')
 
 
-def _replace_element_in_list_or_append_if_negative_rank(element: T, list_: List[T], rank: int) -> List[T]:
+def _upsert_element(element: T, elements: List[T], rank: int) -> List[T]:
+    """Replace element in list if rank >= 0, otherwise append it.
+
+    Args:
+        element (T): element to insert
+        elements (List[T]): list of elements to modify
+        rank (int): rank of element is elements. If < 0, element should be appended.
+
+    Raises:
+        ValueError: when rank is not in range.
+
+    Returns:
+        List[T]: A new list with newly inserted element
+    """
     if rank < 0:
-        return [*list_, element]
-    if rank >= len(list_):
-        raise ValueError(f'Cannot replace element of rank {rank} in a list of size {len(list_)}')
-    return [elt if i != rank else element for i, elt in enumerate(list_)]
+        return [*elements, element]
+    if rank >= len(elements):
+        raise ValueError(f'Cannot replace element of rank {rank} in a list of size {len(elements)}')
+    return [elt if i != rank else element for i, elt in enumerate(elements)]
 
 
 def _recreate_with_upserted_parameter(
@@ -71,13 +84,11 @@ def _recreate_with_upserted_parameter(
     new_conditions = parametrization.inapplicable_sections
     new_warnings = parametrization.warnings
     if isinstance(new_parameter, InapplicableSection):
-        new_conditions = _replace_element_in_list_or_append_if_negative_rank(
-            new_parameter, new_conditions, parameter_rank
-        )
+        new_conditions = _upsert_element(new_parameter, new_conditions, parameter_rank)
     elif isinstance(new_parameter, AlternativeSection):
-        new_sections = _replace_element_in_list_or_append_if_negative_rank(new_parameter, new_sections, parameter_rank)
+        new_sections = _upsert_element(new_parameter, new_sections, parameter_rank)
     else:
-        new_warnings = _replace_element_in_list_or_append_if_negative_rank(new_parameter, new_warnings, parameter_rank)
+        new_warnings = _upsert_element(new_parameter, new_warnings, parameter_rank)
     return Parametrization(new_conditions, new_sections, new_warnings)
 
 
@@ -90,8 +101,10 @@ def _create_table_queries() -> List[str]:
 
 
 def create_tables(psql_dsn: str) -> None:
-    """
-    Execute this function if you start the application from an empty database, or have missing tables.
+    """Create tables required for starting the app.
+
+    Args:
+        psql_dsn (str): PostgreSQL DSN for connecting to the server.
     """
     connection = psycopg2.connect(psql_dsn)
     cursor = connection.cursor()
@@ -218,7 +231,7 @@ class DataFetcher:
         return None
 
     def delete_structured_am(self, am_id: str) -> None:
-        query = "DELETE FROM structured_am WHERE am_id = %s;"
+        query = 'DELETE FROM structured_am WHERE am_id = %s;'
         self._exectute_delete_query(query, (am_id,))
 
     def upsert_structured_am(self, am_id: str, am: ArreteMinisteriel) -> None:
@@ -237,7 +250,7 @@ class DataFetcher:
         return None
 
     def delete_initial_am(self, am_id: str) -> None:
-        query = "DELETE FROM initial_am WHERE am_id = %s;"
+        query = 'DELETE FROM initial_am WHERE am_id = %s;'
         self._exectute_delete_query(query, (am_id,))
 
     def upsert_initial_am(self, am_id: str, am: ArreteMinisteriel) -> None:

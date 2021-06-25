@@ -14,15 +14,23 @@ from .structured_text import StructuredText
 from .text_elements import EnrichedString
 
 
+def _check_date_not_datetime(date_: Optional[date]) -> None:
+    if date_:
+        if not isinstance(date_, date) or isinstance(date_, datetime):
+            raise ValueError('Expecting date, not datetime')
+
+
 @dataclass(eq=True, frozen=True)
 class DateParameterDescriptor:
-    """
-    Describes an AM version with regard to a specific date
-    (e.g. the AM applicable to classements having date_de_mise_en_service in a specific range.)
+    """Describes an AM version with regard to a specific date.
+
+    For example, is describes the AM applicable to classements having date_de_mise_en_service
+    in a specific range.
 
     Example:
         For an AM that changes version for date 2021-01-01, one of the generated version
         will have (
+
             is_used_in_parametrization=True,
 
             unknown_classement_date_version=False,
@@ -30,6 +38,7 @@ class DateParameterDescriptor:
             left_value=None,
 
             right_value=2021-01-01
+
         )
 
         It corresponds to the classements whose date is known and whose date value is smaller than 2021-01-01.
@@ -55,18 +64,17 @@ class DateParameterDescriptor:
     right_value: Optional[date] = None
 
     def __post_init__(self) -> None:
-        if self.left_value:
-            assert isinstance(self.left_value, date) and not isinstance(self.left_value, datetime)
-        if self.right_value:
-            assert isinstance(self.right_value, date) and not isinstance(self.right_value, datetime)
+        _check_date_not_datetime(self.left_value)
+        _check_date_not_datetime(self.right_value)
         if not self.is_used_in_parametrization:
-            assert self.unknown_classement_date_version is None
-            assert self.left_value is None
-            assert self.right_value is None
+            if any([self.unknown_classement_date_version, self.left_value, self.right_value]):
+                raise AssertionError
         if self.unknown_classement_date_version in {False, True}:
-            assert self.is_used_in_parametrization
+            if not self.is_used_in_parametrization:
+                raise AssertionError
         if self.is_used_in_parametrization and not self.unknown_classement_date_version:
-            assert self.left_value is not None or self.right_value is not None
+            if self.left_value is None and self.right_value is None:
+                raise AssertionError
 
     @classmethod
     def from_dict(cls, dict_: Dict[str, Any]) -> 'DateParameterDescriptor':
@@ -216,7 +224,7 @@ def extract_date_of_signature(input_title: str) -> date:
 
 @dataclass
 class ArreteMinisteriel:
-    """Dataclass for ICPE arrete ministeriels (AM)
+    """Dataclass for ICPE arrete ministeriels (AM).
 
     Args:
         title (EnrichedString):
@@ -263,10 +271,8 @@ class ArreteMinisteriel:
         self.title.text = _standardize_title_if_necessary(self.title.text)
         if self.date_of_signature is None:
             self.date_of_signature = extract_date_of_signature(self.title.text)
-        else:
-            assert self.date_of_signature == extract_date_of_signature(
-                self.title.text
-            ), f'{self.date_of_signature} and {self.title.text} are inconsistent'
+        elif self.date_of_signature != extract_date_of_signature(self.title.text):
+            raise AssertionError(f'{self.date_of_signature} and {self.title.text} are inconsistent')
 
         if not _is_probably_cid(self.id or ''):
             warnings.warn(f'AM id does not look like a CID : {self.id} (title={self.title.text})')
@@ -296,11 +302,11 @@ class ArreteMinisteriel:
         dict_['sections'] = [StructuredText.from_dict(sec) for sec in dict_['sections']]
         dict_['visa'] = [EnrichedString.from_dict(vu) for vu in dict_['visa']]
         classements = [Classement.from_dict(cl) for cl in dict_.get('classements') or []]
-        dict_['classements'] = list(sorted(classements, key=lambda x: x.regime.value))
+        dict_['classements'] = sorted(classements, key=lambda x: x.regime.value)
         classements_with_alineas = [
             ClassementWithAlineas.from_dict(cl) for cl in dict_.get('classements_with_alineas') or []
         ]
-        dict_['classements_with_alineas'] = list(sorted(classements_with_alineas, key=lambda x: x.regime.value))
+        dict_['classements_with_alineas'] = sorted(classements_with_alineas, key=lambda x: x.regime.value)
         dict_['version_descriptor'] = (
             VersionDescriptor.from_dict(dict_['version_descriptor']) if dict_.get('version_descriptor') else None
         )

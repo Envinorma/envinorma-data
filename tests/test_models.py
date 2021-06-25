@@ -22,7 +22,7 @@ from envinorma.topics.patterns import TopicName
 
 
 def _random_string() -> str:
-    return ''.join([random.choice(ascii_letters) for _ in range(9)])
+    return ''.join([random.choice(ascii_letters) for _ in range(9)])  # noqa: S311
 
 
 def _str(text: Optional[str] = None) -> EnrichedString:

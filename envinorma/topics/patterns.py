@@ -149,24 +149,24 @@ ALL_TOPICS = [
         TopicName.EAU,
         TopicName.EAU,
         [TopicName.EPANDAGE],
-        ["Eau"],
+        ['Eau'],
         [
-            "Collecte et rejet des effluents",
-            "Collecte des effluents",
-            "Réseau de collecte",
-            "lixiviats",
-            "eaux de ruissellement",
-            "eaux résiduaires",
+            'Collecte et rejet des effluents',
+            'Collecte des effluents',
+            'Réseau de collecte',
+            'lixiviats',
+            'eaux de ruissellement',
+            'eaux résiduaires',
             "effluents d'élevage",
-            "stockage des effluents",
+            'stockage des effluents',
             'RESSOURCE EN EAU',
             "Emissions dans l'eau",
-            "surveillance des eaux souterraines",
-            "bassin de stockage des eaux",
-            "eau de ruissellement",
-            "traitement des eaux",
-            "eaux de ressuyage",
-            "POLLUTION DES EAUX",
+            'surveillance des eaux souterraines',
+            'bassin de stockage des eaux',
+            'eau de ruissellement',
+            'traitement des eaux',
+            'eaux de ressuyage',
+            'POLLUTION DES EAUX',
             "EMISSIONS DANS L'EAU",
         ],
     ),
@@ -174,20 +174,20 @@ ALL_TOPICS = [
         TopicName.EPANDAGE,
         TopicName.EPANDAGE,
         [TopicName.EAU, TopicName.DECHETS],
-        ["Epandage"],
+        ['Epandage'],
         ["PLAN D'ÉPANDAGE", 'valorisées par épandage'],
     ),
     Topic.from_raw_patterns(
         TopicName.DECHETS,
         TopicName.DECHETS,
         [TopicName.EPANDAGE],
-        ["dechets", "dechet"],
+        ['dechets', 'dechet'],
         [
-            "entreposage de déchets",
+            'entreposage de déchets',
             'Stockage des déchets',
             'gestion des déchets',
             'Registre de sortie',
-            "ADMISSION DES DECHETS",
+            'ADMISSION DES DECHETS',
             'Déchets entrants',
             'Registre des déchets',
         ],
@@ -196,7 +196,7 @@ ALL_TOPICS = [
         TopicName.RISQUES,
         TopicName.RISQUES,
         [],
-        ["Risques", 'Consignes de sécurité', 'PRÉVENTION DES RISQUES'],
+        ['Risques', 'Consignes de sécurité', 'PRÉVENTION DES RISQUES'],
         ['permis de feu', 'RISQUES INDUSTRIELS'],
     ),
     Topic.from_raw_patterns(
@@ -209,7 +209,7 @@ ALL_TOPICS = [
             'Accessibilité',
             'DISPOSITIONS CONSTRUCTIVES',
             'Résistance au feu',
-            'CONSTRUCTION DE L\'INSTALLATION',
+            "CONSTRUCTION DE L'INSTALLATION",
         ],
         [],
     ),
@@ -247,7 +247,7 @@ ALL_TOPICS = [
         TopicName.AIR_ODEURS,
         TopicName.AIR_ODEURS,
         [],
-        ['Emissions dans l\'air', 'Odeurs', 'Air', 'Pollution de l\'air', 'Chlorure d\'hydrogène'],
+        ["Emissions dans l'air", 'Odeurs', 'Air', "Pollution de l'air", "Chlorure d'hydrogène"],
         [],
     ),
     Topic.from_raw_patterns(
@@ -280,7 +280,7 @@ ALL_TOPICS = [
         TopicName.SURVEILLANCE_EXPLOITATION,
         TopicName.DISPOSITIONS_GENERALES,
         [],
-        ['surveillance de l exploitation', 'Surveillance de l\'installation'],
+        ['surveillance de l exploitation', "Surveillance de l'installation"],
         ['personnes étrangères à l établissement', 'gardiennage ou télésurveillance'],
     ),
     Topic.from_raw_patterns(TopicName.CONSIGNES, TopicName.DISPOSITIONS_GENERALES, [], ['consignes'], []),
@@ -315,8 +315,8 @@ ALL_TOPICS = [
         TopicName.DISPOSITIONS_GENERALES,
         [],
         [
-            'conditions d\'application',
-            'champ d\'application',
+            "conditions d'application",
+            "champ d'application",
             'calendrier d application',
             'Modalités d application',
             'DISPOSITIONS APPLICABLES AUX INSTALLATIONS EXISTANTES',
@@ -354,7 +354,7 @@ ALL_TOPICS = [
     ),
     Topic.from_raw_patterns(TopicName.DECHETS_BANALS, TopicName.DECHETS, [], ['dechets banals'], []),
     Topic.from_raw_patterns(
-        TopicName.INCENDIE, TopicName.INCENDIE, [], ['incendie'], ['opérations d\'extinction', 'bouches d\'incendie']
+        TopicName.INCENDIE, TopicName.INCENDIE, [], ['incendie'], ["opérations d'extinction", "bouches d'incendie"]
     ),
     Topic.from_raw_patterns(
         TopicName.SECURITE,
@@ -379,7 +379,7 @@ ALL_TOPICS = [
         TopicName.DISPOSITIONS_GENERALES,
         [],
         [],
-        ['annexe est publiée au Bulletin officiel du ministère de l\'écologie'],
+        ["annexe est publiée au Bulletin officiel du ministère de l'écologie"],
     ),
     Topic.from_raw_patterns(
         TopicName.DEFINITIONS,
@@ -389,7 +389,7 @@ ALL_TOPICS = [
         ['Au sens du présent arrêté, on entend par'],
     ),
     Topic.from_raw_patterns(
-        TopicName.CHANGEMENT_EXPLOITANT, TopicName.DISPOSITIONS_GENERALES, [], ['changement d\'exploitant'], []
+        TopicName.CHANGEMENT_EXPLOITANT, TopicName.DISPOSITIONS_GENERALES, [], ["changement d'exploitant"], []
     ),
     Topic.from_raw_patterns(
         TopicName.RESERVES_DE_PRODUIT,
@@ -423,12 +423,12 @@ ALL_TOPICS = [
         TopicName.FIN_EXPLOITATION,
         TopicName.DISPOSITIONS_GENERALES,
         [],
-        ['fin d\'exploitation'],
+        ["fin d'exploitation"],
         ['en fin d exploitation'],
     ),
     Topic.from_raw_patterns(TopicName.SURVEILLANCE, TopicName.DISPOSITIONS_GENERALES, [], ['surveillance'], []),
     Topic.from_raw_patterns(
-        TopicName.CONSOMMATION_D_EAU, TopicName.EAU, [], ['consommation d\'eau'], ['limiter la quantité d\'eau']
+        TopicName.CONSOMMATION_D_EAU, TopicName.EAU, [], ["consommation d'eau"], ["limiter la quantité d'eau"]
     ),
     Topic.from_raw_patterns(
         TopicName.NORME_TRANSFORMATION, TopicName.DISPOSITIONS_GENERALES, [], ['NORMES DE TRANSFORMATION'], []

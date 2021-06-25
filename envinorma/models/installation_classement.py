@@ -11,7 +11,7 @@ from envinorma.models.classement import Regime
 class DetailedClassementState(Enum):
     EN_PROJET = 'En projet'
     EN_FONCTIONNEMENT = 'En fonctionnement'
-    A_L_ARRET = 'A l\'arrêt'
+    A_L_ARRET = "A l'arrêt"
     REPRISE = 'Reprise'
 
 

@@ -4,9 +4,7 @@ from typing import Dict, List, Optional, Set, Tuple
 
 from envinorma.enriching import enrich
 from envinorma.enriching.remove_null_applicabilities import remove_null_applicabilities
-from envinorma.models.am_metadata import AMMetadata
-from envinorma.models.arrete_ministeriel import ArreteMinisteriel
-from envinorma.models.classement import Classement, ClassementWithAlineas, Regime
+from envinorma.models import AMMetadata, ArreteMinisteriel, Classement, ClassementWithAlineas, Regime
 from envinorma.parametrization.combinations import generate_exhaustive_combinations
 from envinorma.utils import AM1510_IDS, ensure_not_none
 
@@ -53,7 +51,8 @@ def _manual_1510_post_process(am: ArreteMinisteriel, regime: str) -> ArreteMinis
 
 def _extract_regime(am_id: str, name: Tuple[str, ...]) -> Optional[str]:
     if am_id in AM1510_IDS:  # Hack for this very special AM
-        assert name[0][:4] == 'reg_'
+        if name[0][:4] != 'reg_':
+            raise AssertionError
         return name[0][4]
     return None
 

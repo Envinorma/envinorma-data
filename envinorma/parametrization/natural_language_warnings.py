@@ -19,16 +19,14 @@ from .models.condition import (
 )
 from .models.parameter import Parameter, ParameterEnum, ParameterType, parameter_value_to_str
 
-'''
-Missing parameter warning
-'''
+# Missing parameter warning
 
 
 def _parameter_id_to_str(parameter_id: str) -> str:
     if parameter_id == ParameterEnum.DATE_AUTORISATION.value.id:
-        return 'la date d\'autorisation'
+        return "la date d'autorisation"
     if parameter_id == ParameterEnum.DATE_ENREGISTREMENT.value.id:
-        return 'la date d\'enregistrement'
+        return "la date d'enregistrement"
     if parameter_id == ParameterEnum.DATE_DECLARATION.value.id:
         return 'la date de déclaration'
     if parameter_id == ParameterEnum.DATE_INSTALLATION.value.id:
@@ -38,7 +36,7 @@ def _parameter_id_to_str(parameter_id: str) -> str:
     if parameter_id == ParameterEnum.RUBRIQUE.value.id:
         return 'la rubrique'
     if parameter_id == ParameterEnum.ALINEA.value.id:
-        return 'l\'alinéa'
+        return "l'alinéa"
     if parameter_id == ParameterEnum.RUBRIQUE_QUANTITY.value.id:
         return 'la quantité associée à la rubrique'
     return f'la valeur du paramètre {parameter_id}'
@@ -75,7 +73,7 @@ def _generate_prefix(alineas: Optional[List[int]], modification: bool, whole_tex
     if not alineas:
         return 'Ce paragraphe pourrait ne pas être applicable'
     if len(alineas) == 1:
-        return f'L\'alinéa n°{alineas[0] + 1} de ce paragraphe pourrait ne pas être applicable'
+        return f"L'alinéa n°{alineas[0] + 1} de ce paragraphe pourrait ne pas être applicable"
     return f'{_alineas_prefix(alineas)} de ce paragraphe pourraient ne pas être applicables'
 
 
@@ -87,7 +85,7 @@ def generate_warning_missing_value(
     whole_text: bool,
 ) -> str:
     return (
-        f'{_generate_prefix(alineas, modification, whole_text)}. C\'est le cas '
+        f"{_generate_prefix(alineas, modification, whole_text)}. C'est le cas "
         f'pour les installations dont {_modification_warning(condition, parameter_values)}.'
     )
 
@@ -126,7 +124,7 @@ def _manual_active_conditions(parameter_id: str, condition: LeafCondition) -> Op
     if parameter_id == ParameterEnum.ALINEA.value.id:
         if isinstance(condition, Equal):
             regime_str = condition.target
-            return f'l\'alinéa de classement est l\'alinéa {condition.target}'
+            return f"l'alinéa de classement est l'alinéa {condition.target}"
 
     if parameter_id == ParameterEnum.RUBRIQUE_QUANTITY.value.id:
         prefix = 'la quantité associée à la rubrique'
@@ -158,9 +156,7 @@ def _warning_leaf(condition: LeafCondition) -> str:
     raise NotImplementedError(f'stringifying condition {type(condition)} is not implemented yet.')
 
 
-'''
-Modification to string
-'''
+# Modification to string
 
 
 def _ensure_leaf_condition(condition: Condition) -> LeafCondition:
@@ -176,7 +172,7 @@ def _has_non_leaf_condition(conditions: List[Condition]) -> bool:
 def _stringify_all_conditions(conditions: List[Condition], merge_type: MergeType) -> str:
     if _has_non_leaf_condition(conditions):
         str_ = [subcondition.to_str() for subcondition in conditions]
-        return 'les conditions d\'application suivantes sont remplies : ' + ', '.join(str_)
+        return "les conditions d'application suivantes sont remplies : " + ', '.join(str_)
     return _merge_words([_warning_leaf(_ensure_leaf_condition(cond)) for cond in conditions], merge_type)
 
 
@@ -185,7 +181,8 @@ def _warning_merge_condition(condition: MergeCondition, parameter_values: Dict[P
         if len(condition.conditions) == 1:
             return _modification_warning(condition.conditions[0], parameter_values)
         return _stringify_all_conditions(condition.conditions, 'AND')
-    assert isinstance(condition, OrCondition)
+    if not isinstance(condition, OrCondition):
+        raise TypeError
     fulfilled_conditions = [
         subcondition for subcondition in condition.conditions if subcondition.is_satisfied(parameter_values)
     ]
@@ -201,7 +198,7 @@ def _modification_warning(condition: Condition, parameter_values: Dict[Parameter
 
 
 def generate_modification_warning(condition: Condition, parameter_values: Dict[Parameter, Any]) -> str:
-    prefix = '''Ce paragraphe a été modifié pour cette installation car'''
+    prefix = 'Ce paragraphe a été modifié pour cette installation car'
     return f'{prefix} {_modification_warning(condition, parameter_values)}.'
 
 
@@ -211,9 +208,7 @@ def _date_to_human_str(value: Any) -> str:
     raise ValueError(f'Expecting datetime not {type(value)}')
 
 
-'''
-Inactive section to string
-'''
+# Inactive section to string
 
 
 def _inactive_warning(condition: Condition, parameter_values: Dict[Parameter, Any]) -> str:
@@ -226,10 +221,10 @@ def generate_inactive_warning(
     condition: Condition, parameter_values: Dict[Parameter, Any], all_alineas: bool, whole_text: bool
 ) -> str:
     if whole_text:
-        prefix = 'Cet arrêté ne s\'applique pas à cette installation car'
+        prefix = "Cet arrêté ne s'applique pas à cette installation car"
     else:
         if all_alineas:
-            prefix = '''Ce paragraphe ne s’applique pas à cette installation car'''
+            prefix = 'Ce paragraphe ne s’applique pas à cette installation car'
         else:
-            prefix = '''Une partie de ce paragraphe ne s’applique pas à cette installation car'''
+            prefix = 'Une partie de ce paragraphe ne s’applique pas à cette installation car'
     return f'{prefix} {_inactive_warning(condition, parameter_values)}.'

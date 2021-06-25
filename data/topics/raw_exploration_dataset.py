@@ -1,3 +1,4 @@
+"""Dataset for topic model assessment."""
 import json
 from pathlib import Path
 from typing import Dict, List, Set, Tuple
@@ -220,7 +221,7 @@ def _build_labelized_text(raw_text: Tuple[int, List[str], List[Dict]], labels: S
 def _load_dataset(
     texts: List[Tuple[int, List[str], List[Dict]]], labels: Dict[int, Set[TopicName]]
 ) -> List[_LabelizedText]:
-    return [_build_labelized_text(text, labels[i]) for i, text in enumerate(texts)]
+    return [_build_labelized_text(text, labels[index]) for index, text in enumerate(texts)]
 
 
 _PATH = Path(__file__).parent / 'raw_exploration_dataset.json'

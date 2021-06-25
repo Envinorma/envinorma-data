@@ -10,17 +10,17 @@ from envinorma.topics.topics import TopicOntology
 
 
 def _add_topic_in_text(text: StructuredText, topics: Dict[Ints, TopicName], path: Ints) -> StructuredText:
-    result = copy(text)
+    text_copy = copy(text)
     if path in topics:
-        result.annotations = replace(text.annotations or Annotations(), topic=topics[path])
-    result.sections = [_add_topic_in_text(sec, topics, path + (i,)) for i, sec in enumerate(text.sections)]
-    return result
+        text_copy.annotations = replace(text.annotations or Annotations(), topic=topics[path])
+    text_copy.sections = [_add_topic_in_text(sec, topics, path + (i,)) for i, sec in enumerate(text.sections)]
+    return text_copy
 
 
 def add_topics(am: ArreteMinisteriel, topics: Dict[Ints, TopicName]) -> ArreteMinisteriel:
-    result = copy(am)
-    result.sections = [_add_topic_in_text(sec, topics, (i,)) for i, sec in enumerate(am.sections)]
-    return result
+    am_copy = copy(am)
+    am_copy.sections = [_add_topic_in_text(sec, topics, (i,)) for i, sec in enumerate(am.sections)]
+    return am_copy
 
 
 def _is_sentence_short(title: str) -> bool:
@@ -57,16 +57,16 @@ def _detect_main_topic(text: StructuredText, parent_titles: List[str], ontology:
 
 
 def _detect_and_add_topic_in_text(text: StructuredText, ontology: TopicOntology, titles: List[str]) -> StructuredText:
-    result = copy(text)
+    text_copy = copy(text)
     title = text.title.text
     topic = _detect_main_topic(text, titles, ontology)
     if topic:
-        result.annotations = replace(text.annotations or Annotations(), topic=topic)
-    result.sections = [_detect_and_add_topic_in_text(sec, ontology, titles + [title]) for sec in text.sections]
-    return result
+        text_copy.annotations = replace(text.annotations or Annotations(), topic=topic)
+    text_copy.sections = [_detect_and_add_topic_in_text(sec, ontology, titles + [title]) for sec in text.sections]
+    return text_copy
 
 
 def detect_and_add_topics(am: ArreteMinisteriel, ontology: TopicOntology) -> ArreteMinisteriel:
-    result = copy(am)
-    result.sections = [_detect_and_add_topic_in_text(sec, ontology, []) for sec in am.sections]
-    return result
+    am_copy = copy(am)
+    am_copy.sections = [_detect_and_add_topic_in_text(sec, ontology, []) for sec in am.sections]
+    return am_copy

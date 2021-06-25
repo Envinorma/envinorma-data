@@ -8,11 +8,12 @@ from .arrete_ministeriel import (  # noqa: F401
     VersionDescriptor,
     add_metadata,
     extract_date_of_signature,
+    standardize_title_date,
 )
 from .classement import Classement, ClassementWithAlineas, Regime, ensure_rubrique  # noqa: F401
 from .installation_classement import DetailedClassement, DetailedClassementState, DetailedRegime  # noqa: F401
 from .structured_text import Annotations, Applicability, StructuredText  # noqa: F401
-from .text_elements import EnrichedString, Linebreak, Link, Table  # noqa: F401
+from .text_elements import Cell, EnrichedString, Linebreak, Link, Row, Table, TextElement, Title  # noqa: F401
 
 DELETE_REASON_MIN_NB_CHARS = 10
 

@@ -9,12 +9,9 @@ from typing import Any, Callable, Dict, List, Optional
 from zipfile import ZipFile
 
 import bs4
-from bs4 import BeautifulSoup
 
-from envinorma.models.structured_text import StructuredText
-from envinorma.models.text_elements import Cell, EnrichedString, Linebreak, Row, Table, TextElement, Title
+from envinorma.models import Cell, EnrichedString, Linebreak, Row, StructuredText, Table, TextElement, Title
 from envinorma.structure import build_structured_text, structured_text_to_text_elements
-from envinorma.utils import random_string
 
 
 def _extract_title(tag: bs4.Tag) -> Title:
@@ -93,12 +90,12 @@ def _extract_string_from_tags(tags: List[Any]) -> str:
 def _extract_cell(tag: Any) -> Optional[Cell]:
     if not isinstance(tag, bs4.Tag):
         raise ValueError(f'Expecting tag as input, received element of type {type(tag)}')
-    _expected_names = (
+    expected_names = (
         ODFXMLTagNames.TABLE_CELL.value,
         ODFXMLTagNames.TABLE_COVERED_CELL.value,
     )
-    if _descriptor(tag) not in _expected_names:
-        raise ValueError(f'Expecting tag with name in {_expected_names}, tag with name {_descriptor(tag)}')
+    if _descriptor(tag) not in expected_names:
+        raise ValueError(f'Expecting tag with name in {expected_names}, tag with name {_descriptor(tag)}')
     if _descriptor(tag) == ODFXMLTagNames.TABLE_COVERED_CELL.value:
         return None
     row_span = int(tag.attrs.get(ODFXMLAttributes.TABLE_ROW_SPAN.value, 1))
@@ -118,14 +115,14 @@ def _extract_cells(tags: List[Any]) -> List[Cell]:
 def _extract_rows(tag: Any, is_header: bool = False) -> List[Row]:
     if not isinstance(tag, bs4.Tag):
         raise ValueError(f'Expecting tag as input, received element of type {type(tag)}')
-    _expected_names = (
+    expected_names = (
         ODFXMLTagNames.TABLE_COLUMN.value,
         ODFXMLTagNames.TABLE_ROW.value,
         ODFXMLTagNames.TEXT_SOFT_PAGE_BREAK.value,
         ODFXMLTagNames.TABLE_HEADER.value,
     )
-    if _descriptor(tag) not in _expected_names:
-        raise ValueError(f'Expecting tag with name in {_expected_names}, tag with name {_descriptor(tag)}')
+    if _descriptor(tag) not in expected_names:
+        raise ValueError(f'Expecting tag with name in {expected_names}, tag with name {_descriptor(tag)}')
     if _descriptor(tag) == ODFXMLTagNames.TABLE_HEADER.value:
         return [row for child in tag.children for row in _extract_rows(child, True)]
     if _descriptor(tag) in (ODFXMLTagNames.TABLE_COLUMN.value, ODFXMLTagNames.TEXT_SOFT_PAGE_BREAK.value):
@@ -143,9 +140,9 @@ def _extract_table(tag: bs4.Tag) -> Table:
 
 
 def _extract_list_item_text(tag: bs4.Tag) -> str:
-    _expected = (ODFXMLTagNames.TEXT_LIST_ITEM.value, ODFXMLTagNames.TEXT_LIST_HEADER.value)
-    if _descriptor(tag) not in _expected:
-        raise ValueError(f'Expecting tag in {_expected}, received tag with name {_descriptor(tag)}')
+    expected = (ODFXMLTagNames.TEXT_LIST_ITEM.value, ODFXMLTagNames.TEXT_LIST_HEADER.value)
+    if _descriptor(tag) not in expected:
+        raise ValueError(f'Expecting tag in {expected}, received tag with name {_descriptor(tag)}')
     return _extract_string_from_tag(tag)
 
 
@@ -244,7 +241,7 @@ def _build_structured_text_from_soup(tag: bs4.Tag, with_numbering: bool) -> Stru
     return text
 
 
-def _extract_tag_from_soup(soup: BeautifulSoup) -> bs4.Tag:
+def _extract_tag_from_soup(soup: bs4.BeautifulSoup) -> bs4.Tag:
     tags: List[bs4.Tag] = []
     for child in soup.children:
         if isinstance(child, bs4.element.ProcessingInstruction):
@@ -262,7 +259,7 @@ def _extract_tag_from_soup(soup: BeautifulSoup) -> bs4.Tag:
 
 
 def _transform_odt(html: str, with_numbering: bool) -> StructuredText:
-    soup = BeautifulSoup(html, 'lxml-xml')
+    soup = bs4.BeautifulSoup(html, 'lxml-xml')
     tag = _extract_tag_from_soup(soup)  # expecting exactly one tag, might not hold True
     return _build_structured_text_from_soup(tag, with_numbering)
 
@@ -276,9 +273,9 @@ def load_and_transform(filename: str, add_numbering: bool = False) -> Structured
 
 
 def extract_text(file_content: bytes) -> StructuredText:
-    filename = f'/tmp/tmp_{random_string()}'
-    open(filename, 'wb').write(file_content)
-    return _transform_odt(get_odt_xml(filename), False)
+    with tempfile.NamedTemporaryFile('wb', prefix='odt_extraction') as file_:
+        file_.write(file_content)
+        return _transform_odt(get_odt_xml(file_.name), False)
 
 
 def _extract_lines_from_page_element(page_element: Any) -> List[str]:
@@ -289,49 +286,49 @@ def _extract_lines_from_page_element(page_element: Any) -> List[str]:
     raise ValueError(f'Unhandled type {type(page_element)}')
 
 
-def _extract_lines_from_soup(soup: BeautifulSoup) -> List[str]:
+def _extract_lines_from_soup(soup: bs4.BeautifulSoup) -> List[str]:
     return [line for child in soup.children for line in _extract_lines_from_page_element(child)]
 
 
 def _extract_lines(filename: str) -> List[str]:
     html = ZipFile(filename).read('content.xml').decode()
-    soup = BeautifulSoup(html)
+    soup = bs4.BeautifulSoup(html)
     return _extract_lines_from_soup(soup)
 
 
 _XML_EMPTY_ODT = (
-    '''<?xml version="1.0" encoding="utf-8"?><office:document-content office:version="1.2" xmlns:chart="urn'''
-    ''':oasis:names:tc:opendocument:xmlns:chart:1.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dom='''
-    '''"http://www.w3.org/2001/xml-events" xmlns:dr3d="urn:oasis:names:tc:opendocument:xmlns:dr3d:1.0" xmln'''
-    '''s:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0" xmlns:field="urn:openoffice:names:experim'''
-    '''ental:ooo-ms-interop:xmlns:field:1.0" xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compati'''
-    '''ble:1.0" xmlns:form="urn:oasis:names:tc:opendocument:xmlns:form:1.0" xmlns:grddl="http://www.w3.org/'''
-    '''2003/g/data-view#" xmlns:math="http://www.w3.org/1998/Math/MathML" xmlns:meta="urn:oasis:names:tc:op'''
-    '''endocument:xmlns:meta:1.0" xmlns:number="urn:oasis:names:tc:opendocument:xmlns:datastyle:1.0" xmlns:'''
-    '''of="urn:oasis:names:tc:opendocument:xmlns:of:1.2" xmlns:office="urn:oasis:names:tc:opendocument:xmln'''
-    '''s:office:1.0" xmlns:ooo="http://openoffice.org/2004/office" xmlns:oooc="http://openoffice.org/2004/c'''
-    '''alc" xmlns:ooow="http://openoffice.org/2004/writer" xmlns:rpt="http://openoffice.org/2005/report" xm'''
-    '''lns:script="urn:oasis:names:tc:opendocument:xmlns:script:1.0" xmlns:style="urn:oasis:names:tc:opendo'''
-    '''cument:xmlns:style:1.0" xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0" xmlns:t'''
-    '''able="urn:oasis:names:tc:opendocument:xmlns:table:1.0" xmlns:tableooo="http://openoffice.org/2009/ta'''
-    '''ble" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:textooo="http://openoffice.or'''
-    '''g/2013/office" xmlns:xforms="http://www.w3.org/2002/xforms" xmlns:xhtml="http://www.w3.org/1999/xhtm'''
-    '''l" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi'''
-    '''="http://www.w3.org/2001/XMLSchema-instance"><office:scripts/><office:font-face-decls><style:font-fa'''
-    '''ce style:font-family-generic="swiss" style:name="Arial Unicode MS1" svg:font-family="'Arial Unicode '''
-    '''MS'"/><style:font-face style:font-family-generic="roman" style:font-pitch="variable" style:name="Lib'''
-    '''eration Serif" svg:font-family="'Liberation Serif'"/><style:font-face style:font-family-generic="swi'''
-    '''ss" style:font-pitch="variable" style:name="Liberation Sans" svg:font-family="'Liberation Sans'"/><s'''
-    '''tyle:font-face style:font-family-generic="system" style:font-pitch="variable" style:name="Arial Unic'''
-    '''ode MS" svg:font-family="'Arial Unicode MS'"/><style:font-face style:font-family-generic="system" st'''
-    '''yle:font-pitch="variable" style:name="PingFang SC" svg:font-family="'PingFang SC'"/><style:font-face'''
-    ''' style:font-family-generic="system" style:font-pitch="variable" style:name="Songti SC" svg:font-fami'''
-    '''ly="'Songti SC'"/></office:font-face-decls><office:automatic-styles/><office:body><office:text><text'''
-    ''':sequence-decls><text:sequence-decl text:display-outline-level="0" text:name="Illustration"/><text:s'''
-    '''equence-decl text:display-outline-level="0" text:name="Table"/><text:sequence-decl text:display-outl'''
-    '''ine-level="0" text:name="Text"/><text:sequence-decl text:display-outline-level="0" text:name="Drawin'''
-    '''g"/><text:sequence-decl text:display-outline-level="0" text:name="Figure"/></text:sequence-decls></o'''
-    '''ffice:text></office:body></office:document-content>'''
+    '<?xml version="1.0" encoding="utf-8"?><office:document-content office:version="1.2" xmlns:chart="urn'
+    ':oasis:names:tc:opendocument:xmlns:chart:1.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dom='
+    '"http://www.w3.org/2001/xml-events" xmlns:dr3d="urn:oasis:names:tc:opendocument:xmlns:dr3d:1.0" xmln'
+    's:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0" xmlns:field="urn:openoffice:names:experim'
+    'ental:ooo-ms-interop:xmlns:field:1.0" xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compati'
+    'ble:1.0" xmlns:form="urn:oasis:names:tc:opendocument:xmlns:form:1.0" xmlns:grddl="http://www.w3.org/'
+    '2003/g/data-view#" xmlns:math="http://www.w3.org/1998/Math/MathML" xmlns:meta="urn:oasis:names:tc:op'
+    'endocument:xmlns:meta:1.0" xmlns:number="urn:oasis:names:tc:opendocument:xmlns:datastyle:1.0" xmlns:'
+    'of="urn:oasis:names:tc:opendocument:xmlns:of:1.2" xmlns:office="urn:oasis:names:tc:opendocument:xmln'
+    's:office:1.0" xmlns:ooo="http://openoffice.org/2004/office" xmlns:oooc="http://openoffice.org/2004/c'
+    'alc" xmlns:ooow="http://openoffice.org/2004/writer" xmlns:rpt="http://openoffice.org/2005/report" xm'
+    'lns:script="urn:oasis:names:tc:opendocument:xmlns:script:1.0" xmlns:style="urn:oasis:names:tc:opendo'
+    'cument:xmlns:style:1.0" xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0" xmlns:t'
+    'able="urn:oasis:names:tc:opendocument:xmlns:table:1.0" xmlns:tableooo="http://openoffice.org/2009/ta'
+    'ble" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:textooo="http://openoffice.or'
+    'g/2013/office" xmlns:xforms="http://www.w3.org/2002/xforms" xmlns:xhtml="http://www.w3.org/1999/xhtm'
+    'l" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi'
+    '="http://www.w3.org/2001/XMLSchema-instance"><office:scripts/><office:font-face-decls><style:font-fa'
+    'ce style:font-family-generic="swiss" style:name="Arial Unicode MS1" svg:font-family="\'Arial Unicode '
+    'MS\'"/><style:font-face style:font-family-generic="roman" style:font-pitch="variable" style:name="Lib'
+    'eration Serif" svg:font-family="\'Liberation Serif\'"/><style:font-face style:font-family-generic="swi'
+    'ss" style:font-pitch="variable" style:name="Liberation Sans" svg:font-family="\'Liberation Sans\'"/><s'
+    'tyle:font-face style:font-family-generic="system" style:font-pitch="variable" style:name="Arial Unic'
+    'ode MS" svg:font-family="\'Arial Unicode MS\'"/><style:font-face style:font-family-generic="system" st'
+    'yle:font-pitch="variable" style:name="PingFang SC" svg:font-family="\'PingFang SC\'"/><style:font-face'
+    ' style:font-family-generic="system" style:font-pitch="variable" style:name="Songti SC" svg:font-fami'
+    'ly="\'Songti SC\'"/></office:font-face-decls><office:automatic-styles/><office:body><office:text><text'
+    ':sequence-decls><text:sequence-decl text:display-outline-level="0" text:name="Illustration"/><text:s'
+    'equence-decl text:display-outline-level="0" text:name="Table"/><text:sequence-decl text:display-outl'
+    'ine-level="0" text:name="Text"/><text:sequence-decl text:display-outline-level="0" text:name="Drawin'
+    'g"/><text:sequence-decl text:display-outline-level="0" text:name="Figure"/></text:sequence-decls></o'
+    'ffice:text></office:body></office:document-content>'
 )
 
 
@@ -345,8 +342,8 @@ def _check_tag(candidate: Any) -> bs4.Tag:
     return candidate
 
 
-def _get_title_builder(title: Title) -> Callable[[BeautifulSoup], bs4.PageElement]:
-    def _add_title_tag(soup: BeautifulSoup) -> bs4.Tag:
+def _get_title_builder(title: Title) -> Callable[[bs4.BeautifulSoup], bs4.PageElement]:
+    def _add_title_tag(soup: bs4.BeautifulSoup) -> bs4.Tag:
         if title.level == 0:
             new_tag = soup.new_tag(ODFXMLTagNames.TEXT_P.value, attrs={ODFXMLAttributes.STYLE_NAME.value: 'Title'})
         else:
@@ -359,8 +356,8 @@ def _get_title_builder(title: Title) -> Callable[[BeautifulSoup], bs4.PageElemen
     return _add_title_tag
 
 
-def _get_cell_builder(cell: Cell) -> Callable[[BeautifulSoup], bs4.PageElement]:
-    def _add_tag(soup: BeautifulSoup) -> bs4.Tag:
+def _get_cell_builder(cell: Cell) -> Callable[[bs4.BeautifulSoup], bs4.PageElement]:
+    def _add_tag(soup: bs4.BeautifulSoup) -> bs4.Tag:
         new_tag = soup.new_tag(
             ODFXMLTagNames.TABLE_CELL.value,
             attrs={
@@ -376,8 +373,8 @@ def _get_cell_builder(cell: Cell) -> Callable[[BeautifulSoup], bs4.PageElement]:
     return _add_tag
 
 
-def _get_row_builder(row: Row) -> Callable[[BeautifulSoup], bs4.PageElement]:
-    def _add_tag(soup: BeautifulSoup) -> bs4.Tag:
+def _get_row_builder(row: Row) -> Callable[[bs4.BeautifulSoup], bs4.PageElement]:
+    def _add_tag(soup: bs4.BeautifulSoup) -> bs4.Tag:
         new_tag = soup.new_tag(ODFXMLTagNames.TABLE_ROW.value)
         for cell in row.cells:
             new_tag.append(_get_cell_builder(cell)(soup))
@@ -396,8 +393,8 @@ def _compute_nb_cols(table: Table) -> int:
     return sum([cell.colspan for cell in table.rows[0].cells])
 
 
-def _get_table_builder(table: Table) -> Callable[[BeautifulSoup], bs4.PageElement]:
-    def _add_tag(soup: BeautifulSoup) -> bs4.Tag:
+def _get_table_builder(table: Table) -> Callable[[bs4.BeautifulSoup], bs4.PageElement]:
+    def _add_tag(soup: bs4.BeautifulSoup) -> bs4.Tag:
         new_tag = soup.new_tag(ODFXMLTagNames.TABLE_TABLE.value)
         nb_cols = _compute_nb_cols(table)
         attrs = {ODFXMLAttributes.TABLE_COL_REPEATED.value: str(nb_cols)}
@@ -409,8 +406,8 @@ def _get_table_builder(table: Table) -> Callable[[BeautifulSoup], bs4.PageElemen
     return _add_tag
 
 
-def _get_body_builder(str_: str) -> Callable[[BeautifulSoup], bs4.PageElement]:
-    def _add_body_tag(soup: BeautifulSoup) -> bs4.Tag:
+def _get_body_builder(str_: str) -> Callable[[bs4.BeautifulSoup], bs4.PageElement]:
+    def _add_body_tag(soup: bs4.BeautifulSoup) -> bs4.Tag:
         new_tag = soup.new_tag(ODFXMLTagNames.TEXT_P.value)
         new_tag.append(soup.new_string(str_))
         return new_tag
@@ -418,7 +415,7 @@ def _get_body_builder(str_: str) -> Callable[[BeautifulSoup], bs4.PageElement]:
     return _add_body_tag
 
 
-def _get_soup_modifier(element: TextElement) -> Callable[[BeautifulSoup], bs4.PageElement]:
+def _get_soup_modifier(element: TextElement) -> Callable[[bs4.BeautifulSoup], bs4.PageElement]:
     if isinstance(element, Title):
         return _get_title_builder(element)
     if isinstance(element, Table):
@@ -430,7 +427,7 @@ def _get_soup_modifier(element: TextElement) -> Callable[[BeautifulSoup], bs4.Pa
 
 def _elements_to_open_document_content_xml(elements: List[TextElement]) -> str:
     empty_tree = _generate_empty_tree()
-    soup = BeautifulSoup(empty_tree, 'lxml-xml')
+    soup = bs4.BeautifulSoup(empty_tree, 'lxml-xml')
     tag = _check_tag(soup.find('office:text'))
     for element in elements:
         tag.append(_get_soup_modifier(element)(soup))

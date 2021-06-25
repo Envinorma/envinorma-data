@@ -75,7 +75,8 @@ def merge_between_linebreaks(elements: List[TextElement]) -> List[TextElement]:
             current_str = ''
             res.append(element)
         else:
-            assert isinstance(element, Linebreak)
+            if not isinstance(element, Linebreak):
+                raise AssertionError()
             if current_str:
                 res.append(current_str)
             current_str = ''
