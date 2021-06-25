@@ -209,11 +209,6 @@
 <span class="sig-prename descclassname"><span class="pre">envinorma.topics.pattern_builder_script.</span></span><span class="sig-name descname"><span class="pre">extract_topic_titles</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">topic</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dataset</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">Tuple</span><span class="p"><span class="pre">,</span> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><a class="reference internal" href="_modules/envinorma/topics/pattern_builder_script.html#extract_topic_titles"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#envinorma.topics.pattern_builder_script.extract_topic_titles" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="py function">
-<dt class="sig sig-object py" id="envinorma.topics.pattern_builder_script.pretty_print">
-<span class="sig-prename descclassname"><span class="pre">envinorma.topics.pattern_builder_script.</span></span><span class="sig-name descname"><span class="pre">pretty_print</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">topic</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="#envinorma.topics.patterns.TopicName" title="envinorma.topics.patterns.TopicName"><span class="pre">envinorma.topics.patterns.TopicName</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">texts</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span> </span><a class="reference internal" href="envinorma.models.html#envinorma.models.structured_text.StructuredText" title="envinorma.models.structured_text.StructuredText"><span class="pre">envinorma.models.structured_text.StructuredText</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">None</span><a class="reference internal" href="_modules/envinorma/topics/pattern_builder_script.html#pretty_print"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#envinorma.topics.pattern_builder_script.pretty_print" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
 </div>
 <div class="section" id="module-envinorma.topics.patterns">
 <span id="envinorma-topics-patterns-module"></span><h2>envinorma.topics.patterns module<a class="headerlink" href="#module-envinorma.topics.patterns" title="Permalink to this headline">¶</a></h2>
@@ -675,7 +670,17 @@
 <dl class="py method">
 <dt class="sig sig-object py" id="envinorma.topics.topics.TopicOntology.deduce_main_topic">
 <span class="sig-name descname"><span class="pre">deduce_main_topic</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">topics</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Iterable</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#envinorma.topics.patterns.TopicName" title="envinorma.topics.patterns.TopicName"><span class="pre">envinorma.topics.patterns.TopicName</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#envinorma.topics.patterns.TopicName" title="envinorma.topics.patterns.TopicName"><span class="pre">envinorma.topics.patterns.TopicName</span></a><span class="p"><span class="pre">]</span></span><a class="reference internal" href="_modules/envinorma/topics/topics.html#TopicOntology.deduce_main_topic"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#envinorma.topics.topics.TopicOntology.deduce_main_topic" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Deduce main topic from a list of topics.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>topics (Iterable[TopicName]): list of input topics (not necessarily main topics)</p>
+</dd>
+<dt>Returns:</dt><dd><dl class="simple">
+<dt>Optional[TopicName]: main topic of the list, if defined. (Main topic is the first</dt><dd><p>metatopic which is not DISPOSITIONS_GENERALES)</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="envinorma.topics.topics.TopicOntology.detect_matched_patterns">
@@ -722,12 +727,37 @@
 <dl class="py function">
 <dt class="sig sig-object py" id="envinorma.topics.topics.detect_matched_patterns">
 <span class="sig-prename descclassname"><span class="pre">envinorma.topics.topics.</span></span><span class="sig-name descname"><span class="pre">detect_matched_patterns</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ontology</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="#envinorma.topics.topics.TopicOntology" title="envinorma.topics.topics.TopicOntology"><span class="pre">envinorma.topics.topics.TopicOntology</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">text</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">topic</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#envinorma.topics.patterns.TopicName" title="envinorma.topics.patterns.TopicName"><span class="pre">envinorma.topics.patterns.TopicName</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">short_title</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">Set</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><a class="reference internal" href="_modules/envinorma/topics/topics.html#detect_matched_patterns"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#envinorma.topics.topics.detect_matched_patterns" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Extract the list of patterns matched in a text.</p>
+<dl>
+<dt>Args:</dt><dd><p>ontology (TopicOntology): topic ontology to use for parsing.
+text (str): text to parse.
+topic (Optional[TopicName]): topic to search for. If None, all topics are searched.
+short_title (bool): Set to True if text is a short title, in which case the model</p>
+<blockquote>
+<div><p>is less doubtful. Defaults to False.</p>
+</div></blockquote>
+</dd>
+<dt>Returns:</dt><dd><p>Set[str]: set of matched strings</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="envinorma.topics.topics.parse">
 <span class="sig-prename descclassname"><span class="pre">envinorma.topics.topics.</span></span><span class="sig-name descname"><span class="pre">parse</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ontology</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="#envinorma.topics.topics.TopicOntology" title="envinorma.topics.topics.TopicOntology"><span class="pre">envinorma.topics.topics.TopicOntology</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">text</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">short_title</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">Set</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#envinorma.topics.patterns.TopicName" title="envinorma.topics.patterns.TopicName"><span class="pre">envinorma.topics.patterns.TopicName</span></a><span class="p"><span class="pre">]</span></span><a class="reference internal" href="_modules/envinorma/topics/topics.html#parse"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#envinorma.topics.topics.parse" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Extract set of topics in a text.</p>
+<dl>
+<dt>Args:</dt><dd><p>ontology (TopicOntology): topic ontology to use for parsing.
+text (str): text to parse.
+short_title (bool): Set to True if text is a short title, in which case the model is less</p>
+<blockquote>
+<div><p>doubtful. Defaults to False.</p>
+</div></blockquote>
+</dd>
+<dt>Returns:</dt><dd><p>Set[TopicName]: set of matched topics.</p>
+</dd>
+</dl>
+</dd></dl>
 
 </div>
 <div class="section" id="module-envinorma.topics">

@@ -239,12 +239,25 @@
 <span class="n">T</span> <span class="o">=</span> <span class="n">TypeVar</span><span class="p">(</span><span class="s1">&#39;T&#39;</span><span class="p">)</span>
 
 
-<span class="k">def</span> <span class="nf">_replace_element_in_list_or_append_if_negative_rank</span><span class="p">(</span><span class="n">element</span><span class="p">:</span> <span class="n">T</span><span class="p">,</span> <span class="n">list_</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">T</span><span class="p">],</span> <span class="n">rank</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">T</span><span class="p">]:</span>
+<span class="k">def</span> <span class="nf">_upsert_element</span><span class="p">(</span><span class="n">element</span><span class="p">:</span> <span class="n">T</span><span class="p">,</span> <span class="n">elements</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">T</span><span class="p">],</span> <span class="n">rank</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">T</span><span class="p">]:</span>
+    <span class="sd">&quot;&quot;&quot;Replace element in list if rank &gt;= 0, otherwise append it.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        element (T): element to insert</span>
+<span class="sd">        elements (List[T]): list of elements to modify</span>
+<span class="sd">        rank (int): rank of element is elements. If &lt; 0, element should be appended.</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">        ValueError: when rank is not in range.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        List[T]: A new list with newly inserted element</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">rank</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
-        <span class="k">return</span> <span class="p">[</span><span class="o">*</span><span class="n">list_</span><span class="p">,</span> <span class="n">element</span><span class="p">]</span>
-    <span class="k">if</span> <span class="n">rank</span> <span class="o">&gt;=</span> <span class="nb">len</span><span class="p">(</span><span class="n">list_</span><span class="p">):</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Cannot replace element of rank </span><span class="si">{</span><span class="n">rank</span><span class="si">}</span><span class="s1"> in a list of size </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">list_</span><span class="p">)</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
-    <span class="k">return</span> <span class="p">[</span><span class="n">elt</span> <span class="k">if</span> <span class="n">i</span> <span class="o">!=</span> <span class="n">rank</span> <span class="k">else</span> <span class="n">element</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">elt</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">list_</span><span class="p">)]</span>
+        <span class="k">return</span> <span class="p">[</span><span class="o">*</span><span class="n">elements</span><span class="p">,</span> <span class="n">element</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">rank</span> <span class="o">&gt;=</span> <span class="nb">len</span><span class="p">(</span><span class="n">elements</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Cannot replace element of rank </span><span class="si">{</span><span class="n">rank</span><span class="si">}</span><span class="s1"> in a list of size </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">elements</span><span class="p">)</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="p">[</span><span class="n">elt</span> <span class="k">if</span> <span class="n">i</span> <span class="o">!=</span> <span class="n">rank</span> <span class="k">else</span> <span class="n">element</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">elt</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">elements</span><span class="p">)]</span>
 
 
 <span class="k">def</span> <span class="nf">_recreate_with_upserted_parameter</span><span class="p">(</span>
@@ -254,13 +267,11 @@
     <span class="n">new_conditions</span> <span class="o">=</span> <span class="n">parametrization</span><span class="o">.</span><span class="n">inapplicable_sections</span>
     <span class="n">new_warnings</span> <span class="o">=</span> <span class="n">parametrization</span><span class="o">.</span><span class="n">warnings</span>
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">new_parameter</span><span class="p">,</span> <span class="n">InapplicableSection</span><span class="p">):</span>
-        <span class="n">new_conditions</span> <span class="o">=</span> <span class="n">_replace_element_in_list_or_append_if_negative_rank</span><span class="p">(</span>
-            <span class="n">new_parameter</span><span class="p">,</span> <span class="n">new_conditions</span><span class="p">,</span> <span class="n">parameter_rank</span>
-        <span class="p">)</span>
+        <span class="n">new_conditions</span> <span class="o">=</span> <span class="n">_upsert_element</span><span class="p">(</span><span class="n">new_parameter</span><span class="p">,</span> <span class="n">new_conditions</span><span class="p">,</span> <span class="n">parameter_rank</span><span class="p">)</span>
     <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">new_parameter</span><span class="p">,</span> <span class="n">AlternativeSection</span><span class="p">):</span>
-        <span class="n">new_sections</span> <span class="o">=</span> <span class="n">_replace_element_in_list_or_append_if_negative_rank</span><span class="p">(</span><span class="n">new_parameter</span><span class="p">,</span> <span class="n">new_sections</span><span class="p">,</span> <span class="n">parameter_rank</span><span class="p">)</span>
+        <span class="n">new_sections</span> <span class="o">=</span> <span class="n">_upsert_element</span><span class="p">(</span><span class="n">new_parameter</span><span class="p">,</span> <span class="n">new_sections</span><span class="p">,</span> <span class="n">parameter_rank</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">new_warnings</span> <span class="o">=</span> <span class="n">_replace_element_in_list_or_append_if_negative_rank</span><span class="p">(</span><span class="n">new_parameter</span><span class="p">,</span> <span class="n">new_warnings</span><span class="p">,</span> <span class="n">parameter_rank</span><span class="p">)</span>
+        <span class="n">new_warnings</span> <span class="o">=</span> <span class="n">_upsert_element</span><span class="p">(</span><span class="n">new_parameter</span><span class="p">,</span> <span class="n">new_warnings</span><span class="p">,</span> <span class="n">parameter_rank</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">Parametrization</span><span class="p">(</span><span class="n">new_conditions</span><span class="p">,</span> <span class="n">new_sections</span><span class="p">,</span> <span class="n">new_warnings</span><span class="p">)</span>
 
 
@@ -273,8 +284,10 @@
 
 
 <div class="viewcode-block" id="create_tables"><a class="viewcode-back" href="../../envinorma.html#envinorma.data_fetcher.create_tables">[docs]</a><span class="k">def</span> <span class="nf">create_tables</span><span class="p">(</span><span class="n">psql_dsn</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Execute this function if you start the application from an empty database, or have missing tables.</span>
+    <span class="sd">&quot;&quot;&quot;Create tables required for starting the app.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        psql_dsn (str): PostgreSQL DSN for connecting to the server.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">connection</span> <span class="o">=</span> <span class="n">psycopg2</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">psql_dsn</span><span class="p">)</span>
     <span class="n">cursor</span> <span class="o">=</span> <span class="n">connection</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
@@ -401,7 +414,7 @@
         <span class="k">return</span> <span class="kc">None</span></div>
 
 <div class="viewcode-block" id="DataFetcher.delete_structured_am"><a class="viewcode-back" href="../../envinorma.html#envinorma.data_fetcher.DataFetcher.delete_structured_am">[docs]</a>    <span class="k">def</span> <span class="nf">delete_structured_am</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">am_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">query</span> <span class="o">=</span> <span class="s2">&quot;DELETE FROM structured_am WHERE am_id = </span><span class="si">%s</span><span class="s2">;&quot;</span>
+        <span class="n">query</span> <span class="o">=</span> <span class="s1">&#39;DELETE FROM structured_am WHERE am_id = </span><span class="si">%s</span><span class="s1">;&#39;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_exectute_delete_query</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="p">(</span><span class="n">am_id</span><span class="p">,))</span></div>
 
 <div class="viewcode-block" id="DataFetcher.upsert_structured_am"><a class="viewcode-back" href="../../envinorma.html#envinorma.data_fetcher.DataFetcher.upsert_structured_am">[docs]</a>    <span class="k">def</span> <span class="nf">upsert_structured_am</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">am_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">am</span><span class="p">:</span> <span class="n">ArreteMinisteriel</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
@@ -420,7 +433,7 @@
         <span class="k">return</span> <span class="kc">None</span></div>
 
 <div class="viewcode-block" id="DataFetcher.delete_initial_am"><a class="viewcode-back" href="../../envinorma.html#envinorma.data_fetcher.DataFetcher.delete_initial_am">[docs]</a>    <span class="k">def</span> <span class="nf">delete_initial_am</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">am_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">query</span> <span class="o">=</span> <span class="s2">&quot;DELETE FROM initial_am WHERE am_id = </span><span class="si">%s</span><span class="s2">;&quot;</span>
+        <span class="n">query</span> <span class="o">=</span> <span class="s1">&#39;DELETE FROM initial_am WHERE am_id = </span><span class="si">%s</span><span class="s1">;&#39;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_exectute_delete_query</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="p">(</span><span class="n">am_id</span><span class="p">,))</span></div>
 
 <div class="viewcode-block" id="DataFetcher.upsert_initial_am"><a class="viewcode-back" href="../../envinorma.html#envinorma.data_fetcher.DataFetcher.upsert_initial_am">[docs]</a>    <span class="k">def</span> <span class="nf">upsert_initial_am</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">am_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">am</span><span class="p">:</span> <span class="n">ArreteMinisteriel</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>

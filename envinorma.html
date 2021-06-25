@@ -212,6 +212,7 @@
 <li class="toctree-l2"><a class="reference internal" href="envinorma.from_legifrance.html#submodules">Submodules</a></li>
 <li class="toctree-l2"><a class="reference internal" href="envinorma.from_legifrance.html#module-envinorma.from_legifrance.legifrance_to_am">envinorma.from_legifrance.legifrance_to_am module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="envinorma.from_legifrance.html#module-envinorma.from_legifrance.numbering_exceptions">envinorma.from_legifrance.numbering_exceptions module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="envinorma.from_legifrance.html#module-envinorma.from_legifrance.text_proximity">envinorma.from_legifrance.text_proximity module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="envinorma.from_legifrance.html#module-envinorma.from_legifrance">Module contents</a></li>
 </ul>
 </li>
@@ -401,7 +402,11 @@
 <dl class="py function">
 <dt class="sig sig-object py" id="envinorma.data_fetcher.create_tables">
 <span class="sig-prename descclassname"><span class="pre">envinorma.data_fetcher.</span></span><span class="sig-name descname"><span class="pre">create_tables</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">psql_dsn</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">None</span><a class="reference internal" href="_modules/envinorma/data_fetcher.html#create_tables"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#envinorma.data_fetcher.create_tables" title="Permalink to this definition">¶</a></dt>
-<dd><p>Execute this function if you start the application from an empty database, or have missing tables.</p>
+<dd><p>Create tables required for starting the app.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>psql_dsn (str): PostgreSQL DSN for connecting to the server.</p>
+</dd>
+</dl>
 </dd></dl>
 
 </div>

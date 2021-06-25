@@ -191,11 +191,12 @@
     <span class="n">VersionDescriptor</span><span class="p">,</span>
     <span class="n">add_metadata</span><span class="p">,</span>
     <span class="n">extract_date_of_signature</span><span class="p">,</span>
+    <span class="n">standardize_title_date</span><span class="p">,</span>
 <span class="p">)</span>
 <span class="kn">from</span> <span class="nn">.classement</span> <span class="kn">import</span> <span class="n">Classement</span><span class="p">,</span> <span class="n">ClassementWithAlineas</span><span class="p">,</span> <span class="n">Regime</span><span class="p">,</span> <span class="n">ensure_rubrique</span>  <span class="c1"># noqa: F401</span>
 <span class="kn">from</span> <span class="nn">.installation_classement</span> <span class="kn">import</span> <span class="n">DetailedClassement</span><span class="p">,</span> <span class="n">DetailedClassementState</span><span class="p">,</span> <span class="n">DetailedRegime</span>  <span class="c1"># noqa: F401</span>
 <span class="kn">from</span> <span class="nn">.structured_text</span> <span class="kn">import</span> <span class="n">Annotations</span><span class="p">,</span> <span class="n">Applicability</span><span class="p">,</span> <span class="n">StructuredText</span>  <span class="c1"># noqa: F401</span>
-<span class="kn">from</span> <span class="nn">.text_elements</span> <span class="kn">import</span> <span class="n">EnrichedString</span><span class="p">,</span> <span class="n">Linebreak</span><span class="p">,</span> <span class="n">Link</span><span class="p">,</span> <span class="n">Table</span>  <span class="c1"># noqa: F401</span>
+<span class="kn">from</span> <span class="nn">.text_elements</span> <span class="kn">import</span> <span class="n">Cell</span><span class="p">,</span> <span class="n">EnrichedString</span><span class="p">,</span> <span class="n">Linebreak</span><span class="p">,</span> <span class="n">Link</span><span class="p">,</span> <span class="n">Row</span><span class="p">,</span> <span class="n">Table</span><span class="p">,</span> <span class="n">TextElement</span><span class="p">,</span> <span class="n">Title</span>  <span class="c1"># noqa: F401</span>
 
 <span class="n">DELETE_REASON_MIN_NB_CHARS</span> <span class="o">=</span> <span class="mi">10</span>
 

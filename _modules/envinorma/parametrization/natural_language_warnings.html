@@ -202,16 +202,14 @@
 <span class="p">)</span>
 <span class="kn">from</span> <span class="nn">.models.parameter</span> <span class="kn">import</span> <span class="n">Parameter</span><span class="p">,</span> <span class="n">ParameterEnum</span><span class="p">,</span> <span class="n">ParameterType</span><span class="p">,</span> <span class="n">parameter_value_to_str</span>
 
-<span class="sd">&#39;&#39;&#39;</span>
-<span class="sd">Missing parameter warning</span>
-<span class="sd">&#39;&#39;&#39;</span>
+<span class="c1"># Missing parameter warning</span>
 
 
 <span class="k">def</span> <span class="nf">_parameter_id_to_str</span><span class="p">(</span><span class="n">parameter_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
     <span class="k">if</span> <span class="n">parameter_id</span> <span class="o">==</span> <span class="n">ParameterEnum</span><span class="o">.</span><span class="n">DATE_AUTORISATION</span><span class="o">.</span><span class="n">value</span><span class="o">.</span><span class="n">id</span><span class="p">:</span>
-        <span class="k">return</span> <span class="s1">&#39;la date d</span><span class="se">\&#39;</span><span class="s1">autorisation&#39;</span>
+        <span class="k">return</span> <span class="s2">&quot;la date d&#39;autorisation&quot;</span>
     <span class="k">if</span> <span class="n">parameter_id</span> <span class="o">==</span> <span class="n">ParameterEnum</span><span class="o">.</span><span class="n">DATE_ENREGISTREMENT</span><span class="o">.</span><span class="n">value</span><span class="o">.</span><span class="n">id</span><span class="p">:</span>
-        <span class="k">return</span> <span class="s1">&#39;la date d</span><span class="se">\&#39;</span><span class="s1">enregistrement&#39;</span>
+        <span class="k">return</span> <span class="s2">&quot;la date d&#39;enregistrement&quot;</span>
     <span class="k">if</span> <span class="n">parameter_id</span> <span class="o">==</span> <span class="n">ParameterEnum</span><span class="o">.</span><span class="n">DATE_DECLARATION</span><span class="o">.</span><span class="n">value</span><span class="o">.</span><span class="n">id</span><span class="p">:</span>
         <span class="k">return</span> <span class="s1">&#39;la date de déclaration&#39;</span>
     <span class="k">if</span> <span class="n">parameter_id</span> <span class="o">==</span> <span class="n">ParameterEnum</span><span class="o">.</span><span class="n">DATE_INSTALLATION</span><span class="o">.</span><span class="n">value</span><span class="o">.</span><span class="n">id</span><span class="p">:</span>
@@ -221,7 +219,7 @@
     <span class="k">if</span> <span class="n">parameter_id</span> <span class="o">==</span> <span class="n">ParameterEnum</span><span class="o">.</span><span class="n">RUBRIQUE</span><span class="o">.</span><span class="n">value</span><span class="o">.</span><span class="n">id</span><span class="p">:</span>
         <span class="k">return</span> <span class="s1">&#39;la rubrique&#39;</span>
     <span class="k">if</span> <span class="n">parameter_id</span> <span class="o">==</span> <span class="n">ParameterEnum</span><span class="o">.</span><span class="n">ALINEA</span><span class="o">.</span><span class="n">value</span><span class="o">.</span><span class="n">id</span><span class="p">:</span>
-        <span class="k">return</span> <span class="s1">&#39;l</span><span class="se">\&#39;</span><span class="s1">alinéa&#39;</span>
+        <span class="k">return</span> <span class="s2">&quot;l&#39;alinéa&quot;</span>
     <span class="k">if</span> <span class="n">parameter_id</span> <span class="o">==</span> <span class="n">ParameterEnum</span><span class="o">.</span><span class="n">RUBRIQUE_QUANTITY</span><span class="o">.</span><span class="n">value</span><span class="o">.</span><span class="n">id</span><span class="p">:</span>
         <span class="k">return</span> <span class="s1">&#39;la quantité associée à la rubrique&#39;</span>
     <span class="k">return</span> <span class="sa">f</span><span class="s1">&#39;la valeur du paramètre </span><span class="si">{</span><span class="n">parameter_id</span><span class="si">}</span><span class="s1">&#39;</span>
@@ -258,7 +256,7 @@
     <span class="k">if</span> <span class="ow">not</span> <span class="n">alineas</span><span class="p">:</span>
         <span class="k">return</span> <span class="s1">&#39;Ce paragraphe pourrait ne pas être applicable&#39;</span>
     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">alineas</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
-        <span class="k">return</span> <span class="sa">f</span><span class="s1">&#39;L</span><span class="se">\&#39;</span><span class="s1">alinéa n°</span><span class="si">{</span><span class="n">alineas</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="si">}</span><span class="s1"> de ce paragraphe pourrait ne pas être applicable&#39;</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;L&#39;alinéa n°</span><span class="si">{</span><span class="n">alineas</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="si">}</span><span class="s2"> de ce paragraphe pourrait ne pas être applicable&quot;</span>
     <span class="k">return</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">_alineas_prefix</span><span class="p">(</span><span class="n">alineas</span><span class="p">)</span><span class="si">}</span><span class="s1"> de ce paragraphe pourraient ne pas être applicables&#39;</span>
 
 
@@ -270,7 +268,7 @@
     <span class="n">whole_text</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
     <span class="k">return</span> <span class="p">(</span>
-        <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">_generate_prefix</span><span class="p">(</span><span class="n">alineas</span><span class="p">,</span> <span class="n">modification</span><span class="p">,</span> <span class="n">whole_text</span><span class="p">)</span><span class="si">}</span><span class="s1">. C</span><span class="se">\&#39;</span><span class="s1">est le cas &#39;</span>
+        <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">_generate_prefix</span><span class="p">(</span><span class="n">alineas</span><span class="p">,</span> <span class="n">modification</span><span class="p">,</span> <span class="n">whole_text</span><span class="p">)</span><span class="si">}</span><span class="s2">. C&#39;est le cas &quot;</span>
         <span class="sa">f</span><span class="s1">&#39;pour les installations dont </span><span class="si">{</span><span class="n">_modification_warning</span><span class="p">(</span><span class="n">condition</span><span class="p">,</span> <span class="n">parameter_values</span><span class="p">)</span><span class="si">}</span><span class="s1">.&#39;</span>
     <span class="p">)</span></div>
 
@@ -309,7 +307,7 @@
     <span class="k">if</span> <span class="n">parameter_id</span> <span class="o">==</span> <span class="n">ParameterEnum</span><span class="o">.</span><span class="n">ALINEA</span><span class="o">.</span><span class="n">value</span><span class="o">.</span><span class="n">id</span><span class="p">:</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">condition</span><span class="p">,</span> <span class="n">Equal</span><span class="p">):</span>
             <span class="n">regime_str</span> <span class="o">=</span> <span class="n">condition</span><span class="o">.</span><span class="n">target</span>
-            <span class="k">return</span> <span class="sa">f</span><span class="s1">&#39;l</span><span class="se">\&#39;</span><span class="s1">alinéa de classement est l</span><span class="se">\&#39;</span><span class="s1">alinéa </span><span class="si">{</span><span class="n">condition</span><span class="o">.</span><span class="n">target</span><span class="si">}</span><span class="s1">&#39;</span>
+            <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;l&#39;alinéa de classement est l&#39;alinéa </span><span class="si">{</span><span class="n">condition</span><span class="o">.</span><span class="n">target</span><span class="si">}</span><span class="s2">&quot;</span>
 
     <span class="k">if</span> <span class="n">parameter_id</span> <span class="o">==</span> <span class="n">ParameterEnum</span><span class="o">.</span><span class="n">RUBRIQUE_QUANTITY</span><span class="o">.</span><span class="n">value</span><span class="o">.</span><span class="n">id</span><span class="p">:</span>
         <span class="n">prefix</span> <span class="o">=</span> <span class="s1">&#39;la quantité associée à la rubrique&#39;</span>
@@ -341,9 +339,7 @@
     <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;stringifying condition </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">condition</span><span class="p">)</span><span class="si">}</span><span class="s1"> is not implemented yet.&#39;</span><span class="p">)</span>
 
 
-<span class="sd">&#39;&#39;&#39;</span>
-<span class="sd">Modification to string</span>
-<span class="sd">&#39;&#39;&#39;</span>
+<span class="c1"># Modification to string</span>
 
 
 <span class="k">def</span> <span class="nf">_ensure_leaf_condition</span><span class="p">(</span><span class="n">condition</span><span class="p">:</span> <span class="n">Condition</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">LeafCondition</span><span class="p">:</span>
@@ -359,7 +355,7 @@
 <span class="k">def</span> <span class="nf">_stringify_all_conditions</span><span class="p">(</span><span class="n">conditions</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Condition</span><span class="p">],</span> <span class="n">merge_type</span><span class="p">:</span> <span class="n">MergeType</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
     <span class="k">if</span> <span class="n">_has_non_leaf_condition</span><span class="p">(</span><span class="n">conditions</span><span class="p">):</span>
         <span class="n">str_</span> <span class="o">=</span> <span class="p">[</span><span class="n">subcondition</span><span class="o">.</span><span class="n">to_str</span><span class="p">()</span> <span class="k">for</span> <span class="n">subcondition</span> <span class="ow">in</span> <span class="n">conditions</span><span class="p">]</span>
-        <span class="k">return</span> <span class="s1">&#39;les conditions d</span><span class="se">\&#39;</span><span class="s1">application suivantes sont remplies : &#39;</span> <span class="o">+</span> <span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">str_</span><span class="p">)</span>
+        <span class="k">return</span> <span class="s2">&quot;les conditions d&#39;application suivantes sont remplies : &quot;</span> <span class="o">+</span> <span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">str_</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">_merge_words</span><span class="p">([</span><span class="n">_warning_leaf</span><span class="p">(</span><span class="n">_ensure_leaf_condition</span><span class="p">(</span><span class="n">cond</span><span class="p">))</span> <span class="k">for</span> <span class="n">cond</span> <span class="ow">in</span> <span class="n">conditions</span><span class="p">],</span> <span class="n">merge_type</span><span class="p">)</span>
 
 
@@ -368,7 +364,8 @@
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">condition</span><span class="o">.</span><span class="n">conditions</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">_modification_warning</span><span class="p">(</span><span class="n">condition</span><span class="o">.</span><span class="n">conditions</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">parameter_values</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">_stringify_all_conditions</span><span class="p">(</span><span class="n">condition</span><span class="o">.</span><span class="n">conditions</span><span class="p">,</span> <span class="s1">&#39;AND&#39;</span><span class="p">)</span>
-    <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">condition</span><span class="p">,</span> <span class="n">OrCondition</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">condition</span><span class="p">,</span> <span class="n">OrCondition</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span>
     <span class="n">fulfilled_conditions</span> <span class="o">=</span> <span class="p">[</span>
         <span class="n">subcondition</span> <span class="k">for</span> <span class="n">subcondition</span> <span class="ow">in</span> <span class="n">condition</span><span class="o">.</span><span class="n">conditions</span> <span class="k">if</span> <span class="n">subcondition</span><span class="o">.</span><span class="n">is_satisfied</span><span class="p">(</span><span class="n">parameter_values</span><span class="p">)</span>
     <span class="p">]</span>
@@ -384,7 +381,7 @@
 
 
 <div class="viewcode-block" id="generate_modification_warning"><a class="viewcode-back" href="../../../envinorma.parametrization.html#envinorma.parametrization.natural_language_warnings.generate_modification_warning">[docs]</a><span class="k">def</span> <span class="nf">generate_modification_warning</span><span class="p">(</span><span class="n">condition</span><span class="p">:</span> <span class="n">Condition</span><span class="p">,</span> <span class="n">parameter_values</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="n">Parameter</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-    <span class="n">prefix</span> <span class="o">=</span> <span class="s1">&#39;&#39;&#39;Ce paragraphe a été modifié pour cette installation car&#39;&#39;&#39;</span>
+    <span class="n">prefix</span> <span class="o">=</span> <span class="s1">&#39;Ce paragraphe a été modifié pour cette installation car&#39;</span>
     <span class="k">return</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">prefix</span><span class="si">}</span><span class="s1"> </span><span class="si">{</span><span class="n">_modification_warning</span><span class="p">(</span><span class="n">condition</span><span class="p">,</span> <span class="n">parameter_values</span><span class="p">)</span><span class="si">}</span><span class="s1">.&#39;</span></div>
 
 
@@ -394,9 +391,7 @@
     <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Expecting datetime not </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">value</span><span class="p">)</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
 
 
-<span class="sd">&#39;&#39;&#39;</span>
-<span class="sd">Inactive section to string</span>
-<span class="sd">&#39;&#39;&#39;</span>
+<span class="c1"># Inactive section to string</span>
 
 
 <span class="k">def</span> <span class="nf">_inactive_warning</span><span class="p">(</span><span class="n">condition</span><span class="p">:</span> <span class="n">Condition</span><span class="p">,</span> <span class="n">parameter_values</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="n">Parameter</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
@@ -409,12 +404,12 @@
     <span class="n">condition</span><span class="p">:</span> <span class="n">Condition</span><span class="p">,</span> <span class="n">parameter_values</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="n">Parameter</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="n">all_alineas</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span> <span class="n">whole_text</span><span class="p">:</span> <span class="nb">bool</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
     <span class="k">if</span> <span class="n">whole_text</span><span class="p">:</span>
-        <span class="n">prefix</span> <span class="o">=</span> <span class="s1">&#39;Cet arrêté ne s</span><span class="se">\&#39;</span><span class="s1">applique pas à cette installation car&#39;</span>
+        <span class="n">prefix</span> <span class="o">=</span> <span class="s2">&quot;Cet arrêté ne s&#39;applique pas à cette installation car&quot;</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">all_alineas</span><span class="p">:</span>
-            <span class="n">prefix</span> <span class="o">=</span> <span class="s1">&#39;&#39;&#39;Ce paragraphe ne s’applique pas à cette installation car&#39;&#39;&#39;</span>
+            <span class="n">prefix</span> <span class="o">=</span> <span class="s1">&#39;Ce paragraphe ne s’applique pas à cette installation car&#39;</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">prefix</span> <span class="o">=</span> <span class="s1">&#39;&#39;&#39;Une partie de ce paragraphe ne s’applique pas à cette installation car&#39;&#39;&#39;</span>
+            <span class="n">prefix</span> <span class="o">=</span> <span class="s1">&#39;Une partie de ce paragraphe ne s’applique pas à cette installation car&#39;</span>
     <span class="k">return</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">prefix</span><span class="si">}</span><span class="s1"> </span><span class="si">{</span><span class="n">_inactive_warning</span><span class="p">(</span><span class="n">condition</span><span class="p">,</span> <span class="n">parameter_values</span><span class="p">)</span><span class="si">}</span><span class="s1">.&#39;</span></div>
 </pre></div>
 

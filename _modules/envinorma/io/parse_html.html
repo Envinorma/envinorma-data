@@ -258,7 +258,8 @@
             <span class="n">current_str</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
             <span class="n">res</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">element</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">element</span><span class="p">,</span> <span class="n">Linebreak</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">element</span><span class="p">,</span> <span class="n">Linebreak</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="ne">AssertionError</span><span class="p">()</span>
             <span class="k">if</span> <span class="n">current_str</span><span class="p">:</span>
                 <span class="n">res</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">current_str</span><span class="p">)</span>
             <span class="n">current_str</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>

@@ -20,6 +20,14 @@ envinorma.from\_legifrance.numbering\_exceptions module
    :undoc-members:
    :show-inheritance:
 
+envinorma.from\_legifrance.text\_proximity module
+-------------------------------------------------
+
+.. automodule:: envinorma.from_legifrance.text_proximity
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 Module contents
 ---------------
 

@@ -208,8 +208,9 @@
 
 <div class="viewcode-block" id="Applicability"><a class="viewcode-back" href="../../../envinorma.models.html#envinorma.models.structured_text.Applicability">[docs]</a><span class="nd">@dataclass</span>
 <span class="k">class</span> <span class="nc">Applicability</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;Describes the applicability of a StructuredText. It can either be applicable,</span>
-<span class="sd">    inapplicable or applicable with modifications.</span>
+    <span class="sd">&quot;&quot;&quot;Describes the applicability of a StructuredText.</span>
+
+<span class="sd">    A StructuredText can either be applicable, inapplicable or applicable with modifications.</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        active (bool = True):</span>
@@ -281,7 +282,8 @@
     <span class="nb">id</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="n">random_id</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">__post_init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">title</span><span class="p">,</span> <span class="n">EnrichedString</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">title</span><span class="p">,</span> <span class="n">EnrichedString</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span>
 
 <div class="viewcode-block" id="StructuredText.to_dict"><a class="viewcode-back" href="../../../envinorma.models.html#envinorma.models.structured_text.StructuredText.to_dict">[docs]</a>    <span class="k">def</span> <span class="nf">to_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
         <span class="n">res</span> <span class="o">=</span> <span class="n">asdict</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>

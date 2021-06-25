@@ -211,7 +211,7 @@
     <span class="n">EN_FONCTIONNEMENT</span> <span class="o">=</span> <span class="s1">&#39;En fonctionnement&#39;</span>
     <span class="n">EN_CONSTRUCTION</span> <span class="o">=</span> <span class="s1">&#39;En construction&#39;</span>
     <span class="n">CESSATION_DECLAREE</span> <span class="o">=</span> <span class="s1">&#39;Cessation déclarée&#39;</span>
-    <span class="n">A_L_ARRET</span> <span class="o">=</span> <span class="s1">&#39;A l</span><span class="se">\&#39;</span><span class="s1">arrêt&#39;</span>
+    <span class="n">A_L_ARRET</span> <span class="o">=</span> <span class="s2">&quot;A l&#39;arrêt&quot;</span>
     <span class="n">RECOLEMENT_FAIT</span> <span class="o">=</span> <span class="s1">&#39;Récolement fait&#39;</span>
     <span class="n">EMPTY</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span></div>
 
@@ -236,12 +236,15 @@
     <span class="n">code_naf</span><span class="p">:</span> <span class="nb">str</span>
 
     <span class="k">def</span> <span class="nf">__post_init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_dep</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="mi">4</span>
-        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">s3ic_id</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_dep</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">4</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">AssertionError</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">s3ic_id</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">last_inspection</span><span class="p">:</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">last_inspection</span><span class="p">,</span> <span class="p">(</span><span class="n">date</span><span class="p">,</span> <span class="n">datetime</span><span class="p">)):</span>
                 <span class="nb">print</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">last_inspection</span><span class="p">)</span>
-            <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">last_inspection</span><span class="p">,</span> <span class="p">(</span><span class="n">date</span><span class="p">,</span> <span class="n">datetime</span><span class="p">))</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">last_inspection</span><span class="p">,</span> <span class="p">(</span><span class="n">date</span><span class="p">,</span> <span class="n">datetime</span><span class="p">)):</span>
+                <span class="k">raise</span> <span class="ne">TypeError</span>
 
 <div class="viewcode-block" id="Installation.from_georisques_dict"><a class="viewcode-back" href="../../../envinorma.models.html#envinorma.models.installation.Installation.from_georisques_dict">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">from_georisques_dict</span><span class="p">(</span><span class="n">dict_</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="s1">&#39;Installation&#39;</span><span class="p">:</span>

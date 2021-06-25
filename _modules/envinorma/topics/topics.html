@@ -236,6 +236,15 @@
         <span class="k">return</span> <span class="n">detect_matched_patterns</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">,</span> <span class="n">topic</span><span class="p">,</span> <span class="n">short_title</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="TopicOntology.deduce_main_topic"><a class="viewcode-back" href="../../../envinorma.topics.html#envinorma.topics.topics.TopicOntology.deduce_main_topic">[docs]</a>    <span class="k">def</span> <span class="nf">deduce_main_topic</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">topics</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">TopicName</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">TopicName</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;Deduce main topic from a list of topics.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            topics (Iterable[TopicName]): list of input topics (not necessarily main topics)</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Optional[TopicName]: main topic of the list, if defined. (Main topic is the first</span>
+<span class="sd">                metatopic which is not DISPOSITIONS_GENERALES)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">topics</span><span class="p">:</span>
             <span class="k">return</span> <span class="kc">None</span>
         <span class="k">return</span> <span class="n">_deduce_main_topic</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">topic_name_to_topic</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">topics</span><span class="p">])</span></div></div>
@@ -247,7 +256,7 @@
     <span class="n">non_generic_metatopics</span> <span class="o">=</span> <span class="p">[</span><span class="n">topic</span><span class="o">.</span><span class="n">metatopic</span> <span class="k">for</span> <span class="n">topic</span> <span class="ow">in</span> <span class="n">topics</span> <span class="k">if</span> <span class="n">topic</span> <span class="o">!=</span> <span class="n">TopicName</span><span class="o">.</span><span class="n">DISPOSITIONS_GENERALES</span><span class="p">]</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">non_generic_metatopics</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">TopicName</span><span class="o">.</span><span class="n">DISPOSITIONS_GENERALES</span>
-    <span class="k">return</span> <span class="nb">sorted</span><span class="p">([</span><span class="n">topic</span><span class="o">.</span><span class="n">metatopic</span> <span class="k">for</span> <span class="n">topic</span> <span class="ow">in</span> <span class="n">topics</span><span class="p">],</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">value</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">return</span> <span class="nb">sorted</span><span class="p">([</span><span class="n">topic</span><span class="o">.</span><span class="n">metatopic</span> <span class="k">for</span> <span class="n">topic</span> <span class="ow">in</span> <span class="n">topics</span><span class="p">],</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">topic</span><span class="p">:</span> <span class="n">topic</span><span class="o">.</span><span class="n">value</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
 
 
 <span class="k">def</span> <span class="nf">_extract_substring</span><span class="p">(</span><span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">start</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">end</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
@@ -257,6 +266,18 @@
 <div class="viewcode-block" id="detect_matched_patterns"><a class="viewcode-back" href="../../../envinorma.topics.html#envinorma.topics.topics.detect_matched_patterns">[docs]</a><span class="k">def</span> <span class="nf">detect_matched_patterns</span><span class="p">(</span>
     <span class="n">ontology</span><span class="p">:</span> <span class="n">TopicOntology</span><span class="p">,</span> <span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">topic</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">TopicName</span><span class="p">],</span> <span class="n">short_title</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Set</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+    <span class="sd">&quot;&quot;&quot;Extract the list of patterns matched in a text.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        ontology (TopicOntology): topic ontology to use for parsing.</span>
+<span class="sd">        text (str): text to parse.</span>
+<span class="sd">        topic (Optional[TopicName]): topic to search for. If None, all topics are searched.</span>
+<span class="sd">        short_title (bool): Set to True if text is a short title, in which case the model</span>
+<span class="sd">            is less doubtful. Defaults to False.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Set[str]: set of matched strings</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">normalized_text</span> <span class="o">=</span> <span class="n">normalize</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">topic</span><span class="p">:</span>
         <span class="n">pattern</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span>
@@ -273,6 +294,17 @@
 
 
 <div class="viewcode-block" id="parse"><a class="viewcode-back" href="../../../envinorma.topics.html#envinorma.topics.topics.parse">[docs]</a><span class="k">def</span> <span class="nf">parse</span><span class="p">(</span><span class="n">ontology</span><span class="p">:</span> <span class="n">TopicOntology</span><span class="p">,</span> <span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">short_title</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Set</span><span class="p">[</span><span class="n">TopicName</span><span class="p">]:</span>
+    <span class="sd">&quot;&quot;&quot;Extract set of topics in a text.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        ontology (TopicOntology): topic ontology to use for parsing.</span>
+<span class="sd">        text (str): text to parse.</span>
+<span class="sd">        short_title (bool): Set to True if text is a short title, in which case the model is less</span>
+<span class="sd">            doubtful. Defaults to False.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Set[TopicName]: set of matched topics.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="p">{</span><span class="n">ontology</span><span class="o">.</span><span class="n">pattern_to_topic</span><span class="p">[</span><span class="n">match</span><span class="p">]</span> <span class="k">for</span> <span class="n">match</span> <span class="ow">in</span> <span class="n">detect_matched_patterns</span><span class="p">(</span><span class="n">ontology</span><span class="p">,</span> <span class="n">text</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">short_title</span><span class="p">)}</span></div>
 
 
