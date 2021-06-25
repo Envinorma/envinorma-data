@@ -4,9 +4,7 @@ from typing import Dict, List, Optional, Set, Tuple
 
 from envinorma.enriching import enrich
 from envinorma.enriching.remove_null_applicabilities import remove_null_applicabilities
-from envinorma.models.am_metadata import AMMetadata
-from envinorma.models.arrete_ministeriel import ArreteMinisteriel
-from envinorma.models.classement import Classement, ClassementWithAlineas, Regime
+from envinorma.models import AMMetadata, ArreteMinisteriel, Classement, ClassementWithAlineas, Regime
 from envinorma.parametrization.combinations import generate_exhaustive_combinations
 from envinorma.utils import AM1510_IDS, ensure_not_none
 

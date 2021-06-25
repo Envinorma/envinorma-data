@@ -16,7 +16,6 @@ from envinorma.from_legifrance.legifrance_to_am import (
     LinkReference,
     StructuredText,
     _add_links_if_any,
-    _compute_proximity,
     _delete_or_merge_articles,
     _extract_links,
     _find_references,
@@ -31,6 +30,7 @@ from envinorma.from_legifrance.legifrance_to_am import (
     remove_empty,
     remove_summaries,
     split_alineas_in_sections,
+    text_proximity,
 )
 from envinorma.utils import safely_replace
 
@@ -138,12 +138,12 @@ def test_weird_annexe_replacement():
         assert output == _replace_weird_annexe_words(input_)
 
 
-def test_compute_proximity():
+def test_text_proximity():
     sentence_1 = 'l\'exploitant informera immédiatement l\'inspection des installations classées en cas d\'accident'
     sentence_2 = 'l\'exploitant informera immédiatement l\'inspection des installations classées en cas d\'accident !'
-    assert _compute_proximity(sentence_1, '') == 0
-    assert _compute_proximity(sentence_1, 'Bonjour, comment allez vous ?') <= 0.5
-    assert _compute_proximity(sentence_1, sentence_2) >= 0.5
+    assert text_proximity(sentence_1, '') == 0
+    assert text_proximity(sentence_1, 'Bonjour, comment allez vous ?') <= 0.5
+    assert text_proximity(sentence_1, sentence_2) >= 0.5
 
 
 def test_group_articles_to_merge():

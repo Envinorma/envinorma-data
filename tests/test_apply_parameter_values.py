@@ -7,10 +7,14 @@ from typing import List, Optional
 
 import pytest
 
-from envinorma.models.arrete_ministeriel import ArreteMinisteriel, DateParameterDescriptor
-from envinorma.models.classement import Regime
-from envinorma.models.structured_text import Applicability, StructuredText
-from envinorma.models.text_elements import EnrichedString
+from envinorma.models import (
+    Applicability,
+    ArreteMinisteriel,
+    DateParameterDescriptor,
+    EnrichedString,
+    Regime,
+    StructuredText,
+)
 from envinorma.parametrization.am_with_versions import generate_versions
 from envinorma.parametrization.apply_parameter_values import (
     _date_parameters,
@@ -22,14 +26,19 @@ from envinorma.parametrization.apply_parameter_values import (
     _used_date_parameter,
     apply_parameter_values_to_am,
 )
-from envinorma.parametrization.models.condition import AndCondition, Equal, Littler, OrCondition
-from envinorma.parametrization.models.parameter import Parameter, ParameterEnum, ParameterType
-from envinorma.parametrization.models.parametrization import (
+from envinorma.parametrization.models import (
     AlternativeSection,
     AMWarning,
+    AndCondition,
     ConditionSource,
     EntityReference,
+    Equal,
     InapplicableSection,
+    Littler,
+    OrCondition,
+    Parameter,
+    ParameterEnum,
+    ParameterType,
     Parametrization,
     SectionReference,
 )

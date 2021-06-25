@@ -9,10 +9,8 @@ from typing import Any, Callable, Dict, List, Optional
 from zipfile import ZipFile
 
 import bs4
-from bs4 import BeautifulSoup
 
-from envinorma.models.structured_text import StructuredText
-from envinorma.models.text_elements import Cell, EnrichedString, Linebreak, Row, Table, TextElement, Title
+from envinorma.models import Cell, EnrichedString, Linebreak, Row, StructuredText, Table, TextElement, Title
 from envinorma.structure import build_structured_text, structured_text_to_text_elements
 
 
@@ -243,7 +241,7 @@ def _build_structured_text_from_soup(tag: bs4.Tag, with_numbering: bool) -> Stru
     return text
 
 
-def _extract_tag_from_soup(soup: BeautifulSoup) -> bs4.Tag:
+def _extract_tag_from_soup(soup: bs4.BeautifulSoup) -> bs4.Tag:
     tags: List[bs4.Tag] = []
     for child in soup.children:
         if isinstance(child, bs4.element.ProcessingInstruction):
@@ -261,7 +259,7 @@ def _extract_tag_from_soup(soup: BeautifulSoup) -> bs4.Tag:
 
 
 def _transform_odt(html: str, with_numbering: bool) -> StructuredText:
-    soup = BeautifulSoup(html, 'lxml-xml')
+    soup = bs4.BeautifulSoup(html, 'lxml-xml')
     tag = _extract_tag_from_soup(soup)  # expecting exactly one tag, might not hold True
     return _build_structured_text_from_soup(tag, with_numbering)
 
@@ -288,13 +286,13 @@ def _extract_lines_from_page_element(page_element: Any) -> List[str]:
     raise ValueError(f'Unhandled type {type(page_element)}')
 
 
-def _extract_lines_from_soup(soup: BeautifulSoup) -> List[str]:
+def _extract_lines_from_soup(soup: bs4.BeautifulSoup) -> List[str]:
     return [line for child in soup.children for line in _extract_lines_from_page_element(child)]
 
 
 def _extract_lines(filename: str) -> List[str]:
     html = ZipFile(filename).read('content.xml').decode()
-    soup = BeautifulSoup(html)
+    soup = bs4.BeautifulSoup(html)
     return _extract_lines_from_soup(soup)
 
 
@@ -344,8 +342,8 @@ def _check_tag(candidate: Any) -> bs4.Tag:
     return candidate
 
 
-def _get_title_builder(title: Title) -> Callable[[BeautifulSoup], bs4.PageElement]:
-    def _add_title_tag(soup: BeautifulSoup) -> bs4.Tag:
+def _get_title_builder(title: Title) -> Callable[[bs4.BeautifulSoup], bs4.PageElement]:
+    def _add_title_tag(soup: bs4.BeautifulSoup) -> bs4.Tag:
         if title.level == 0:
             new_tag = soup.new_tag(ODFXMLTagNames.TEXT_P.value, attrs={ODFXMLAttributes.STYLE_NAME.value: 'Title'})
         else:
@@ -358,8 +356,8 @@ def _get_title_builder(title: Title) -> Callable[[BeautifulSoup], bs4.PageElemen
     return _add_title_tag
 
 
-def _get_cell_builder(cell: Cell) -> Callable[[BeautifulSoup], bs4.PageElement]:
-    def _add_tag(soup: BeautifulSoup) -> bs4.Tag:
+def _get_cell_builder(cell: Cell) -> Callable[[bs4.BeautifulSoup], bs4.PageElement]:
+    def _add_tag(soup: bs4.BeautifulSoup) -> bs4.Tag:
         new_tag = soup.new_tag(
             ODFXMLTagNames.TABLE_CELL.value,
             attrs={
@@ -375,8 +373,8 @@ def _get_cell_builder(cell: Cell) -> Callable[[BeautifulSoup], bs4.PageElement]:
     return _add_tag
 
 
-def _get_row_builder(row: Row) -> Callable[[BeautifulSoup], bs4.PageElement]:
-    def _add_tag(soup: BeautifulSoup) -> bs4.Tag:
+def _get_row_builder(row: Row) -> Callable[[bs4.BeautifulSoup], bs4.PageElement]:
+    def _add_tag(soup: bs4.BeautifulSoup) -> bs4.Tag:
         new_tag = soup.new_tag(ODFXMLTagNames.TABLE_ROW.value)
         for cell in row.cells:
             new_tag.append(_get_cell_builder(cell)(soup))
@@ -395,8 +393,8 @@ def _compute_nb_cols(table: Table) -> int:
     return sum([cell.colspan for cell in table.rows[0].cells])
 
 
-def _get_table_builder(table: Table) -> Callable[[BeautifulSoup], bs4.PageElement]:
-    def _add_tag(soup: BeautifulSoup) -> bs4.Tag:
+def _get_table_builder(table: Table) -> Callable[[bs4.BeautifulSoup], bs4.PageElement]:
+    def _add_tag(soup: bs4.BeautifulSoup) -> bs4.Tag:
         new_tag = soup.new_tag(ODFXMLTagNames.TABLE_TABLE.value)
         nb_cols = _compute_nb_cols(table)
         attrs = {ODFXMLAttributes.TABLE_COL_REPEATED.value: str(nb_cols)}
@@ -408,8 +406,8 @@ def _get_table_builder(table: Table) -> Callable[[BeautifulSoup], bs4.PageElemen
     return _add_tag
 
 
-def _get_body_builder(str_: str) -> Callable[[BeautifulSoup], bs4.PageElement]:
-    def _add_body_tag(soup: BeautifulSoup) -> bs4.Tag:
+def _get_body_builder(str_: str) -> Callable[[bs4.BeautifulSoup], bs4.PageElement]:
+    def _add_body_tag(soup: bs4.BeautifulSoup) -> bs4.Tag:
         new_tag = soup.new_tag(ODFXMLTagNames.TEXT_P.value)
         new_tag.append(soup.new_string(str_))
         return new_tag
@@ -417,7 +415,7 @@ def _get_body_builder(str_: str) -> Callable[[BeautifulSoup], bs4.PageElement]:
     return _add_body_tag
 
 
-def _get_soup_modifier(element: TextElement) -> Callable[[BeautifulSoup], bs4.PageElement]:
+def _get_soup_modifier(element: TextElement) -> Callable[[bs4.BeautifulSoup], bs4.PageElement]:
     if isinstance(element, Title):
         return _get_title_builder(element)
     if isinstance(element, Table):
@@ -429,7 +427,7 @@ def _get_soup_modifier(element: TextElement) -> Callable[[BeautifulSoup], bs4.Pa
 
 def _elements_to_open_document_content_xml(elements: List[TextElement]) -> str:
     empty_tree = _generate_empty_tree()
-    soup = BeautifulSoup(empty_tree, 'lxml-xml')
+    soup = bs4.BeautifulSoup(empty_tree, 'lxml-xml')
     tag = _check_tag(soup.find('office:text'))
     for element in elements:
         tag.append(_get_soup_modifier(element)(soup))

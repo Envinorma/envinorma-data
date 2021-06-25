@@ -1,21 +1,18 @@
 import copy
 import random
-from collections import Counter
 from dataclasses import dataclass, replace
-from math import sqrt
-from typing import Dict, Iterable, List, Optional, Tuple, TypeVar, Union
+from typing import Iterable, List, Optional, Tuple, TypeVar, Union
 
 import bs4
-from bs4 import BeautifulSoup
 from leginorma import ArticleStatus, LegifranceArticle, LegifranceSection, LegifranceText
 
-from envinorma.from_legifrance.numbering_exceptions import EXCEPTION_PREFIXES, MAX_PREFIX_LEN
 from envinorma.io.parse_html import extract_table
-from envinorma.models.arrete_ministeriel import ArreteMinisteriel, standardize_title_date
-from envinorma.models.structured_text import StructuredText
-from envinorma.models.text_elements import EnrichedString, Link, Table
+from envinorma.models import ArreteMinisteriel, EnrichedString, Link, StructuredText, Table, standardize_title_date
 from envinorma.structure import split_alineas_in_sections
 from envinorma.title_detection import NumberingPattern, detect_patterns_if_exists, is_mainly_upper, is_probably_title
+
+from .numbering_exceptions import EXCEPTION_PREFIXES, MAX_PREFIX_LEN
+from .text_proximity import text_proximity
 
 
 @dataclass
@@ -53,11 +50,11 @@ def remove_empty(strs: List[str]) -> List[str]:
 
 
 def extract_alineas(html_text: str) -> List[str]:
-    soup = BeautifulSoup(html_text, 'html.parser')
+    soup = bs4.BeautifulSoup(html_text, 'html.parser')
     for tag_type in ['sup', 'sub', 'font', 'strong', 'b', 'i', 'em']:
         for tag in soup.find_all(tag_type):
             tag.unwrap()
-    return [str(sstr) for sstr in BeautifulSoup(str(soup), 'html.parser').stripped_strings]
+    return [str(sstr) for sstr in bs4.BeautifulSoup(str(soup), 'html.parser').stripped_strings]
 
 
 def _extract_placeholder_positions(text: str, placeholder: str) -> Tuple[str, List[int]]:
@@ -78,7 +75,7 @@ _BR_PLACEHOLDER = '{{BR_PLACEHOLDER}}'
 
 
 def _remove_tables(text: str) -> Tuple[str, List[TableReference]]:
-    soup = BeautifulSoup(text, 'html.parser')
+    soup = bs4.BeautifulSoup(text, 'html.parser')
     tables: List[Table] = []
     references: List[str] = []
     for div in soup.find_all('table'):
@@ -91,7 +88,7 @@ def _remove_tables(text: str) -> Tuple[str, List[TableReference]]:
 
 
 def _remove_links(text: str) -> Tuple[str, List[LinkReference]]:
-    soup = BeautifulSoup(text, 'html.parser')
+    soup = bs4.BeautifulSoup(text, 'html.parser')
     links: List[LinkReference] = []
     for tag in soup.find_all('a'):
         if 'href' not in tag.attrs:
@@ -308,7 +305,7 @@ def _replace_link(link_tag: bs4.Tag, placeholder: str, add_legifrance_prefix: bo
 
 
 def _extract_links(text: str, add_legifrance_prefix: bool = True) -> EnrichedString:
-    soup = BeautifulSoup(text, 'html.parser')
+    soup = bs4.BeautifulSoup(text, 'html.parser')
     placeholder = '{{{LINK}}}'
     raw_links = [_replace_link(tag, placeholder, add_legifrance_prefix) for tag in soup.find_all('a')]
     final_text, positions = _extract_placeholder_positions(soup.text, placeholder)
@@ -401,29 +398,12 @@ def _extract_sections(
     ]
 
 
-def _norm_2(dict_: Dict[str, int]) -> float:
-    return sqrt(sum([x ** 2 for x in dict_.values()]))
-
-
-def _normalized_scalar_product(dict_1: Dict[str, int], dict_2: Dict[str, int]) -> float:
-    common_keys = {*dict_1.keys(), *dict_2.keys()}
-    numerator = sum([dict_1.get(key, 0) * dict_2.get(key, 0) for key in common_keys])
-    denominator = (_norm_2(dict_1) * _norm_2(dict_2)) or 1
-    return numerator / denominator
-
-
-def _compute_proximity(str_1: str, str_2: str) -> float:
-    tokens_1 = Counter(str_1.split(' '))
-    tokens_2 = Counter(str_2.split(' '))
-    return _normalized_scalar_product(tokens_1, tokens_2)
-
-
 def _html_to_str(html: str) -> str:
-    return BeautifulSoup(html, 'html.parser').text
+    return bs4.BeautifulSoup(html, 'html.parser').text
 
 
 def _are_very_similar(article_1: LegifranceArticle, article_2: LegifranceArticle) -> bool:
-    return _compute_proximity(_html_to_str(article_1.content), _html_to_str(article_2.content)) >= 0.95
+    return text_proximity(_html_to_str(article_1.content), _html_to_str(article_2.content)) >= 0.95
 
 
 def _particular_case(article_1: LegifranceArticle, article_2: LegifranceArticle) -> bool:
