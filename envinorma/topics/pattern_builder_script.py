@@ -1,5 +1,5 @@
 from collections import Counter, defaultdict
-from typing import List, Set, Tuple
+from typing import Dict, List, Set, Tuple
 
 from data.topics.raw_exploration_dataset import DATASET, _LabelizedText
 from envinorma.models.structured_text import StructuredText
@@ -52,15 +52,7 @@ def _detect_title_matched_patterns(title: str, ontology: TopicOntology, topic: T
     return ontology.detect_matched_patterns(title, topic, _is_sentence_short(title))
 
 
-def _analyze_wrong_detection(
-    labels: Set[TopicName], titles: List[str], text: StructuredText, ontology: TopicOntology
-) -> List:
-    all_titles = titles + [text.title.text]
-    section_sentences = [al.text for al in text.outer_alineas if al.text]
-    detected_topics = _detect_in_titles(all_titles, ontology).union(
-        _detect_in_normal_texts(section_sentences, ontology)
-    )
-    wrong_detections = detected_topics - labels
+def _extract_wrong_patterns(wrong_detections, all_titles, ontology, section_sentences):
     sentence_and_wrong_patterns = []
     if wrong_detections:
         for topic in wrong_detections:
@@ -75,6 +67,18 @@ def _analyze_wrong_detection(
     return sentence_and_wrong_patterns
 
 
+def _analyze_wrong_detection(
+    labels: Set[TopicName], titles: List[str], text: StructuredText, ontology: TopicOntology
+) -> List:
+    all_titles = titles + [text.title.text]
+    section_sentences = [al.text for al in text.outer_alineas if al.text]
+    detected_topics = _detect_in_titles(all_titles, ontology).union(
+        _detect_in_normal_texts(section_sentences, ontology)
+    )
+    wrong_detections = detected_topics - labels
+    return _extract_wrong_patterns(wrong_detections, all_titles, ontology, section_sentences)
+
+
 def _analyze_missed_topics(
     labels: Set[TopicName], titles: List[str], text: StructuredText, ontology: TopicOntology
 ) -> Set[TopicName]:
@@ -85,7 +89,10 @@ def _analyze_missed_topics(
     return set()
 
 
-def pretty_print(topic: TopicName, texts: List[Tuple[int, List[str], StructuredText]]) -> None:
+_Text = Tuple[int, List[str], StructuredText]
+
+
+def _pretty_print(topic: TopicName, texts: List[_Text]) -> None:
     print(topic.value)
     for rank, titles, text in texts:
         print(rank)
@@ -99,11 +106,9 @@ def pretty_print(topic: TopicName, texts: List[Tuple[int, List[str], StructuredT
         print()
 
 
-def compute_detection_performance(dataset: List[_LabelizedText], ontology: TopicOntology):
-    all_labels = [label for _, label in dataset]
-    texts = [
-        (titles, StructuredText(EnrichedString(''), outer_alineas, [], None)) for (titles, outer_alineas), _ in dataset
-    ]
+def _missing_topics(
+    all_labels: List[Set[TopicName]], texts: List[Tuple[List[str], StructuredText]], ontology: TopicOntology
+) -> Dict[TopicName, List[_Text]]:
     missing_topics_to_elements = defaultdict(list)
     for rank, (labels, (titles, text)) in enumerate(zip(all_labels, texts)):
         wrong_detections = _analyze_wrong_detection(labels, titles, text, ontology)
@@ -114,8 +119,16 @@ def compute_detection_performance(dataset: List[_LabelizedText], ontology: Topic
             print(f'Missing: {missing_topics}')
         for topic in missing_topics:
             missing_topics_to_elements[topic].append((rank, titles, text))
-    for topic, texts_ in missing_topics_to_elements.items():
-        pretty_print(topic, texts_)
+    return missing_topics_to_elements
+
+
+def compute_detection_performance(dataset: List[_LabelizedText], ontology: TopicOntology):
+    all_labels = [label for _, label in dataset]
+    texts = [
+        (titles, StructuredText(EnrichedString(''), outer_alineas, [], None)) for (titles, outer_alineas), _ in dataset
+    ]
+    for topic, texts_ in _missing_topics(all_labels, texts, ontology).items():
+        _pretty_print(topic, texts_)
     predicted_labels = [_extract_topics(text, titles, ontology) for titles, text in texts]
     print(Counter([exp == pred for exp, pred in zip(all_labels, predicted_labels) if exp]))
 

@@ -15,6 +15,8 @@ from envinorma.structure import build_structured_text
 
 
 def extract_all_xml_tags_from_tag(tag: bs4.Tag) -> List[str]:
+    if tag.prefix is None:
+        raise ValueError('Expecting non None prefix')
     return [tag.prefix + ':' + tag.name] + [
         name for child in tag.children if isinstance(child, bs4.Tag) for name in extract_all_xml_tags_from_tag(child)
     ]

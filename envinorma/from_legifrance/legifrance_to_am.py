@@ -114,11 +114,12 @@ def _extract_first_non_null_elt(elements: List[TP]) -> Optional[TP]:
 
 
 def select_alineas_for_splitting(alineas: List[str], pattern_names: List[Optional[NumberingPattern]]) -> List[bool]:
-    if len(alineas) != len(pattern_names):
-        raise ValueError(f'Expecting same lengths, received {len(alineas)} and {len(pattern_names)}')
+    nb_alineas = len(alineas)
+    if nb_alineas != len(pattern_names):
+        raise ValueError(f'Expecting same lengths, received {nb_alineas} and {len(pattern_names)}')
     first_pattern = _extract_first_non_null_elt(pattern_names)
     if first_pattern is None:
-        return [False] * len(alineas)
+        return [False] * nb_alineas
     return [pattern == first_pattern for pattern in pattern_names]
 
 
@@ -309,8 +310,9 @@ def _extract_links(text: str, add_legifrance_prefix: bool = True) -> EnrichedStr
     placeholder = '{{{LINK}}}'
     raw_links = [_replace_link(tag, placeholder, add_legifrance_prefix) for tag in soup.find_all('a')]
     final_text, positions = _extract_placeholder_positions(soup.text, placeholder)
-    links = [Link(target, position, size) for (target, size), position in secure_zip(raw_links, positions)]
-    return EnrichedString(final_text, links)
+    return EnrichedString(
+        final_text, [Link(target, position, size) for (target, size), position in secure_zip(raw_links, positions)]
+    )
 
 
 def _move_upper_alineas_to_title_in_annexe(alineas: List[EnrichedString]) -> Tuple[str, List[EnrichedString]]:
