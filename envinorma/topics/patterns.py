@@ -13,7 +13,7 @@ class TopicName(Enum):
     DECHETS = 'DECHETS'
     EXECUTION = 'EXECUTION'
     RISQUES = 'RISQUES'
-    DISPOSITIONS_CONSTRUCTIVES_AMENAGEMENT = 'DISPOSITIONS_CONSTRUCTIVES_AMENAGEMENT'
+    IMPLANTATION_AMENAGEMENT = 'IMPLANTATION_AMENAGEMENT'
     DISPOSITIONS_GENERALES = 'DISPOSITIONS_GENERALES'
     BRUIT_VIBRATIONS = 'BRUIT_VIBRATIONS'
     AIR_ODEURS = 'AIR_ODEURS'
@@ -200,7 +200,7 @@ ALL_TOPICS = [
         ['permis de feu', 'RISQUES INDUSTRIELS'],
     ),
     Topic.from_raw_patterns(
-        TopicName.DISPOSITIONS_CONSTRUCTIVES_AMENAGEMENT,
+        TopicName.IMPLANTATION_AMENAGEMENT,
         TopicName.DISPOSITIONS_GENERALES,
         [],
         [
@@ -216,7 +216,7 @@ ALL_TOPICS = [
     Topic.from_raw_patterns(
         TopicName.DISPOSITIONS_GENERALES,
         TopicName.DISPOSITIONS_GENERALES,
-        [TopicName.DISPOSITIONS_CONSTRUCTIVES_AMENAGEMENT],
+        [TopicName.IMPLANTATION_AMENAGEMENT],
         ['Dispositions générales', 'remise en état', "Conditions d'exploitation"],
         [],
     ),
