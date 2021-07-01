@@ -39,15 +39,19 @@ def _detect(text: str) -> Optional[TopicName]:
     return None
 
 
-def _detect_matching_depth(section: _Section) -> Optional[int]:
+_MAX_DEPTH = 6
+_MIN_NB_MATCHES = 3
+
+
+def _detect_first_matching_depth(section: _Section) -> Optional[int]:
     titles = _extract_titles(section, 0)
     matching_titles = [title for title in titles if _detect(title.text)]
     depths = [title.level for title in matching_titles]
     if not depths:
         return None
     occurrences = Counter(depths)
-    for depth in range(1, 6):
-        if occurrences[depth] >= 3:
+    for depth in range(1, _MAX_DEPTH):
+        if occurrences[depth] >= _MIN_NB_MATCHES:
             return depth
     return None
 
@@ -63,15 +67,18 @@ def _detect_and_add_topics(section: StructuredText, matching_depth: int, current
 def add_simple_topics(am: ArreteMinisteriel) -> ArreteMinisteriel:
     """Add simple topics to AM sections.
 
+    We first look for the depth in the am structure at which at least 3 titles match the ontology.
+    Then we detect topics for all titles at this depth.
+
     Args:
         am (ArreteMinisteriel): arrete ministeriel to decorate.
 
     Returns:
         ArreteMinisteriel: arrete ministeriel with simple topics where detected.
     """
-    matching_depth = _detect_matching_depth(am)
-    if matching_depth is None or matching_depth == 0:
+    target_depth = _detect_first_matching_depth(am)
+    if target_depth is None or target_depth == 0:
         return am
     am = copy(am)
-    am.sections = [_detect_and_add_topics(sec, matching_depth, 1) for sec in am.sections]
+    am.sections = [_detect_and_add_topics(sec, target_depth, 1) for sec in am.sections]
     return am
