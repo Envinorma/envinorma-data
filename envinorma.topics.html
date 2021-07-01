@@ -384,11 +384,6 @@
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="envinorma.topics.patterns.TopicName.DISPOSITIONS_CONSTRUCTIVES_AMENAGEMENT">
-<span class="sig-name descname"><span class="pre">DISPOSITIONS_CONSTRUCTIVES_AMENAGEMENT</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'DISPOSITIONS_CONSTRUCTIVES_AMENAGEMENT'</span></em><a class="headerlink" href="#envinorma.topics.patterns.TopicName.DISPOSITIONS_CONSTRUCTIVES_AMENAGEMENT" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
 <dt class="sig sig-object py" id="envinorma.topics.patterns.TopicName.DISPOSITIONS_GENERALES">
 <span class="sig-name descname"><span class="pre">DISPOSITIONS_GENERALES</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'DISPOSITIONS_GENERALES'</span></em><a class="headerlink" href="#envinorma.topics.patterns.TopicName.DISPOSITIONS_GENERALES" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
@@ -486,6 +481,11 @@
 <dl class="py attribute">
 <dt class="sig sig-object py" id="envinorma.topics.patterns.TopicName.HAUTEUR_CHEMINEE">
 <span class="sig-name descname"><span class="pre">HAUTEUR_CHEMINEE</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'HAUTEUR_CHEMINEE'</span></em><a class="headerlink" href="#envinorma.topics.patterns.TopicName.HAUTEUR_CHEMINEE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="envinorma.topics.patterns.TopicName.IMPLANTATION_AMENAGEMENT">
+<span class="sig-name descname"><span class="pre">IMPLANTATION_AMENAGEMENT</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'IMPLANTATION_AMENAGEMENT'</span></em><a class="headerlink" href="#envinorma.topics.patterns.TopicName.IMPLANTATION_AMENAGEMENT" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
@@ -659,6 +659,24 @@
 <dt class="sig sig-object py" id="envinorma.topics.patterns.tokenize">
 <span class="sig-prename descclassname"><span class="pre">envinorma.topics.patterns.</span></span><span class="sig-name descname"><span class="pre">tokenize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">str_</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><a class="reference internal" href="_modules/envinorma/topics/patterns.html#tokenize"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#envinorma.topics.patterns.tokenize" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
+
+</div>
+<div class="section" id="module-envinorma.topics.simple_topics">
+<span id="envinorma-topics-simple-topics-module"></span><h2>envinorma.topics.simple_topics module<a class="headerlink" href="#module-envinorma.topics.simple_topics" title="Permalink to this headline">¶</a></h2>
+<p>Generate very simple topics for AMs.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="envinorma.topics.simple_topics.add_simple_topics">
+<span class="sig-prename descclassname"><span class="pre">envinorma.topics.simple_topics.</span></span><span class="sig-name descname"><span class="pre">add_simple_topics</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">am</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="envinorma.models.html#envinorma.models.arrete_ministeriel.ArreteMinisteriel" title="envinorma.models.arrete_ministeriel.ArreteMinisteriel"><span class="pre">envinorma.models.arrete_ministeriel.ArreteMinisteriel</span></a></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="envinorma.models.html#envinorma.models.arrete_ministeriel.ArreteMinisteriel" title="envinorma.models.arrete_ministeriel.ArreteMinisteriel"><span class="pre">envinorma.models.arrete_ministeriel.ArreteMinisteriel</span></a><a class="reference internal" href="_modules/envinorma/topics/simple_topics.html#add_simple_topics"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#envinorma.topics.simple_topics.add_simple_topics" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add simple topics to AM sections.</p>
+<p>We first look for the depth in the am structure at which at least 3 titles match the ontology.
+Then we detect topics for all titles at this depth.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>am (ArreteMinisteriel): arrete ministeriel to decorate.</p>
+</dd>
+<dt>Returns:</dt><dd><p>ArreteMinisteriel: arrete ministeriel with simple topics where detected.</p>
+</dd>
+</dl>
+</dd></dl>
 
 </div>
 <div class="section" id="module-envinorma.topics.topics">

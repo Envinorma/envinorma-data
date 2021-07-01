@@ -20,6 +20,14 @@ envinorma.topics.patterns module
    :undoc-members:
    :show-inheritance:
 
+envinorma.topics.simple\_topics module
+--------------------------------------
+
+.. automodule:: envinorma.topics.simple_topics
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 envinorma.topics.topics module
 ------------------------------
 
