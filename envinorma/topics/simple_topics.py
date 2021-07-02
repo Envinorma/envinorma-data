@@ -22,7 +22,7 @@ _ONTOLOGY_RAW = {
     TopicName.FIN_EXPLOITATION: ['remise en état', "Fin d'exploitation"],
 }
 
-_ONTOLOGY = {topic: merge_patterns(list(map(normalize, patterns))) for topic, patterns in _ONTOLOGY_RAW.items()}
+SIMPLE_ONTOLOGY = {topic: merge_patterns(list(map(normalize, patterns))) for topic, patterns in _ONTOLOGY_RAW.items()}
 
 
 def _extract_titles(section: _Section, depth: int) -> List[Title]:
@@ -33,7 +33,7 @@ def _extract_titles(section: _Section, depth: int) -> List[Title]:
 
 def _detect(text: str) -> Optional[TopicName]:
     prepared_text = normalize(text)
-    for topic, patterns in _ONTOLOGY.items():
+    for topic, patterns in SIMPLE_ONTOLOGY.items():
         if list(re.finditer(patterns, prepared_text)):
             return topic
     return None
