@@ -3,7 +3,7 @@ from datetime import date
 from typing import Dict, List, Optional, Set, Tuple
 
 from envinorma.enriching import enrich
-from envinorma.enriching.remove_null_applicabilities import remove_null_applicabilities
+from envinorma.enriching.remove_null_attributes import remove_null_attributes
 from envinorma.models import AMMetadata, ArreteMinisteriel, Classement, ClassementWithAlineas, Regime
 from envinorma.parametrization.combinations import generate_exhaustive_combinations
 from envinorma.utils import AM1510_IDS, ensure_not_none
@@ -96,7 +96,7 @@ def _generate_versions_and_postprocess(
 ) -> Optional[AMVersions]:
     if not am:
         return None
-    enriched_am = remove_null_applicabilities(am)
+    enriched_am = remove_null_attributes(am)
     manual_combinations = _get_manual_combinations(am_id)  # For AM 1510 mainly, none otherwise
     all_versions = generate_versions(enriched_am, parametrization, True, manual_combinations)
     return {
