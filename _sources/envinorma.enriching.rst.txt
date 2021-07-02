@@ -4,10 +4,10 @@ envinorma.enriching package
 Submodules
 ----------
 
-envinorma.enriching.remove\_null\_applicabilities module
---------------------------------------------------------
+envinorma.enriching.remove\_null\_attributes module
+---------------------------------------------------
 
-.. automodule:: envinorma.enriching.remove_null_applicabilities
+.. automodule:: envinorma.enriching.remove_null_attributes
    :members:
    :undoc-members:
    :show-inheritance:

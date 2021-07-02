@@ -186,7 +186,7 @@
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Set</span><span class="p">,</span> <span class="n">Tuple</span>
 
 <span class="kn">from</span> <span class="nn">envinorma.enriching</span> <span class="kn">import</span> <span class="n">enrich</span>
-<span class="kn">from</span> <span class="nn">envinorma.enriching.remove_null_applicabilities</span> <span class="kn">import</span> <span class="n">remove_null_applicabilities</span>
+<span class="kn">from</span> <span class="nn">envinorma.enriching.remove_null_attributes</span> <span class="kn">import</span> <span class="n">remove_null_attributes</span>
 <span class="kn">from</span> <span class="nn">envinorma.models</span> <span class="kn">import</span> <span class="n">AMMetadata</span><span class="p">,</span> <span class="n">ArreteMinisteriel</span><span class="p">,</span> <span class="n">Classement</span><span class="p">,</span> <span class="n">ClassementWithAlineas</span><span class="p">,</span> <span class="n">Regime</span>
 <span class="kn">from</span> <span class="nn">envinorma.parametrization.combinations</span> <span class="kn">import</span> <span class="n">generate_exhaustive_combinations</span>
 <span class="kn">from</span> <span class="nn">envinorma.utils</span> <span class="kn">import</span> <span class="n">AM1510_IDS</span><span class="p">,</span> <span class="n">ensure_not_none</span>
@@ -279,7 +279,7 @@
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">AMVersions</span><span class="p">]:</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">am</span><span class="p">:</span>
         <span class="k">return</span> <span class="kc">None</span>
-    <span class="n">enriched_am</span> <span class="o">=</span> <span class="n">remove_null_applicabilities</span><span class="p">(</span><span class="n">am</span><span class="p">)</span>
+    <span class="n">enriched_am</span> <span class="o">=</span> <span class="n">remove_null_attributes</span><span class="p">(</span><span class="n">am</span><span class="p">)</span>
     <span class="n">manual_combinations</span> <span class="o">=</span> <span class="n">_get_manual_combinations</span><span class="p">(</span><span class="n">am_id</span><span class="p">)</span>  <span class="c1"># For AM 1510 mainly, none otherwise</span>
     <span class="n">all_versions</span> <span class="o">=</span> <span class="n">generate_versions</span><span class="p">(</span><span class="n">enriched_am</span><span class="p">,</span> <span class="n">parametrization</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="n">manual_combinations</span><span class="p">)</span>
     <span class="k">return</span> <span class="p">{</span>

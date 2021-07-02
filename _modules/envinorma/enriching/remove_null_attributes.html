@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>envinorma.enriching.remove_null_applicabilities &mdash; Envinorma 0.0.0 documentation</title>
+  <title>envinorma.enriching.remove_null_attributes &mdash; Envinorma 0.0.0 documentation</title>
   
 
   
@@ -167,7 +167,7 @@
         
           <li><a href="../enriching.html">envinorma.enriching</a> &raquo;</li>
         
-      <li>envinorma.enriching.remove_null_applicabilities</li>
+      <li>envinorma.enriching.remove_null_attributes</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -182,24 +182,24 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <h1>Source code for envinorma.enriching.remove_null_applicabilities</h1><div class="highlight"><pre>
+  <h1>Source code for envinorma.enriching.remove_null_attributes</h1><div class="highlight"><pre>
 <span></span><span class="kn">from</span> <span class="nn">copy</span> <span class="kn">import</span> <span class="n">copy</span>
 
-<span class="kn">from</span> <span class="nn">envinorma.models.arrete_ministeriel</span> <span class="kn">import</span> <span class="n">ArreteMinisteriel</span>
-<span class="kn">from</span> <span class="nn">envinorma.models.structured_text</span> <span class="kn">import</span> <span class="n">Applicability</span><span class="p">,</span> <span class="n">StructuredText</span>
+<span class="kn">from</span> <span class="nn">envinorma.models</span> <span class="kn">import</span> <span class="n">Annotations</span><span class="p">,</span> <span class="n">Applicability</span><span class="p">,</span> <span class="n">ArreteMinisteriel</span><span class="p">,</span> <span class="n">StructuredText</span>
 
 
-<div class="viewcode-block" id="remove_null_applicabilities_in_section"><a class="viewcode-back" href="../../../envinorma.enriching.html#envinorma.enriching.remove_null_applicabilities.remove_null_applicabilities_in_section">[docs]</a><span class="k">def</span> <span class="nf">remove_null_applicabilities_in_section</span><span class="p">(</span><span class="n">paragraph</span><span class="p">:</span> <span class="n">StructuredText</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">StructuredText</span><span class="p">:</span>
+<div class="viewcode-block" id="remove_null_attributes_in_section"><a class="viewcode-back" href="../../../envinorma.enriching.html#envinorma.enriching.remove_null_attributes.remove_null_attributes_in_section">[docs]</a><span class="k">def</span> <span class="nf">remove_null_attributes_in_section</span><span class="p">(</span><span class="n">paragraph</span><span class="p">:</span> <span class="n">StructuredText</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">StructuredText</span><span class="p">:</span>
     <span class="n">new_paragraph</span> <span class="o">=</span> <span class="n">copy</span><span class="p">(</span><span class="n">paragraph</span><span class="p">)</span>
     <span class="k">del</span> <span class="n">paragraph</span>
+    <span class="n">new_paragraph</span><span class="o">.</span><span class="n">annotations</span> <span class="o">=</span> <span class="n">new_paragraph</span><span class="o">.</span><span class="n">annotations</span> <span class="ow">or</span> <span class="n">Annotations</span><span class="p">()</span>
     <span class="n">new_paragraph</span><span class="o">.</span><span class="n">applicability</span> <span class="o">=</span> <span class="n">new_paragraph</span><span class="o">.</span><span class="n">applicability</span> <span class="ow">or</span> <span class="n">Applicability</span><span class="p">()</span>
-    <span class="n">new_paragraph</span><span class="o">.</span><span class="n">sections</span> <span class="o">=</span> <span class="p">[</span><span class="n">remove_null_applicabilities_in_section</span><span class="p">(</span><span class="n">section</span><span class="p">)</span> <span class="k">for</span> <span class="n">section</span> <span class="ow">in</span> <span class="n">new_paragraph</span><span class="o">.</span><span class="n">sections</span><span class="p">]</span>
+    <span class="n">new_paragraph</span><span class="o">.</span><span class="n">sections</span> <span class="o">=</span> <span class="p">[</span><span class="n">remove_null_attributes_in_section</span><span class="p">(</span><span class="n">section</span><span class="p">)</span> <span class="k">for</span> <span class="n">section</span> <span class="ow">in</span> <span class="n">new_paragraph</span><span class="o">.</span><span class="n">sections</span><span class="p">]</span>
     <span class="k">return</span> <span class="n">new_paragraph</span></div>
 
 
-<div class="viewcode-block" id="remove_null_applicabilities"><a class="viewcode-back" href="../../../envinorma.enriching.html#envinorma.enriching.remove_null_applicabilities.remove_null_applicabilities">[docs]</a><span class="k">def</span> <span class="nf">remove_null_applicabilities</span><span class="p">(</span><span class="n">am</span><span class="p">:</span> <span class="n">ArreteMinisteriel</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ArreteMinisteriel</span><span class="p">:</span>
+<div class="viewcode-block" id="remove_null_attributes"><a class="viewcode-back" href="../../../envinorma.enriching.html#envinorma.enriching.remove_null_attributes.remove_null_attributes">[docs]</a><span class="k">def</span> <span class="nf">remove_null_attributes</span><span class="p">(</span><span class="n">am</span><span class="p">:</span> <span class="n">ArreteMinisteriel</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ArreteMinisteriel</span><span class="p">:</span>
     <span class="n">am</span> <span class="o">=</span> <span class="n">copy</span><span class="p">(</span><span class="n">am</span><span class="p">)</span>
-    <span class="n">am</span><span class="o">.</span><span class="n">sections</span> <span class="o">=</span> <span class="p">[</span><span class="n">remove_null_applicabilities_in_section</span><span class="p">(</span><span class="n">section</span><span class="p">)</span> <span class="k">for</span> <span class="n">section</span> <span class="ow">in</span> <span class="n">am</span><span class="o">.</span><span class="n">sections</span><span class="p">]</span>
+    <span class="n">am</span><span class="o">.</span><span class="n">sections</span> <span class="o">=</span> <span class="p">[</span><span class="n">remove_null_attributes_in_section</span><span class="p">(</span><span class="n">section</span><span class="p">)</span> <span class="k">for</span> <span class="n">section</span> <span class="ow">in</span> <span class="n">am</span><span class="o">.</span><span class="n">sections</span><span class="p">]</span>
     <span class="k">return</span> <span class="n">am</span></div>
 </pre></div>
 

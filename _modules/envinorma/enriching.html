@@ -181,19 +181,15 @@
            <div itemprop="articleBody">
             
   <h1>Source code for envinorma.enriching</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">envinorma.enriching.remove_null_applicabilities</span> <span class="kn">import</span> <span class="n">remove_null_applicabilities</span>
-<span class="kn">from</span> <span class="nn">envinorma.enriching.table_row_inline_content</span> <span class="kn">import</span> <span class="n">add_table_row_inline_content</span>
-<span class="kn">from</span> <span class="nn">envinorma.enriching.title_reference</span> <span class="kn">import</span> <span class="n">add_references</span>
-<span class="kn">from</span> <span class="nn">envinorma.enriching.topic_detection</span> <span class="kn">import</span> <span class="n">detect_and_add_topics</span>
-<span class="kn">from</span> <span class="nn">envinorma.models.am_metadata</span> <span class="kn">import</span> <span class="n">AMMetadata</span>
-<span class="kn">from</span> <span class="nn">envinorma.models.arrete_ministeriel</span> <span class="kn">import</span> <span class="n">ArreteMinisteriel</span><span class="p">,</span> <span class="n">add_metadata</span>
-<span class="kn">from</span> <span class="nn">envinorma.topics.topics</span> <span class="kn">import</span> <span class="n">TOPIC_ONTOLOGY</span>
+<span></span><span class="kn">from</span> <span class="nn">envinorma.models</span> <span class="kn">import</span> <span class="n">AMMetadata</span><span class="p">,</span> <span class="n">ArreteMinisteriel</span><span class="p">,</span> <span class="n">add_metadata</span>
+
+<span class="kn">from</span> <span class="nn">.remove_null_attributes</span> <span class="kn">import</span> <span class="n">remove_null_attributes</span>
+<span class="kn">from</span> <span class="nn">.table_row_inline_content</span> <span class="kn">import</span> <span class="n">add_table_row_inline_content</span>
+<span class="kn">from</span> <span class="nn">.title_reference</span> <span class="kn">import</span> <span class="n">add_references</span>
 
 
 <div class="viewcode-block" id="enrich"><a class="viewcode-back" href="../../envinorma.enriching.html#envinorma.enriching.enrich">[docs]</a><span class="k">def</span> <span class="nf">enrich</span><span class="p">(</span><span class="n">am</span><span class="p">:</span> <span class="n">ArreteMinisteriel</span><span class="p">,</span> <span class="n">metadata</span><span class="p">:</span> <span class="n">AMMetadata</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ArreteMinisteriel</span><span class="p">:</span>
-    <span class="k">return</span> <span class="n">remove_null_applicabilities</span><span class="p">(</span>
-        <span class="n">add_table_row_inline_content</span><span class="p">(</span><span class="n">detect_and_add_topics</span><span class="p">(</span><span class="n">add_references</span><span class="p">(</span><span class="n">add_metadata</span><span class="p">(</span><span class="n">am</span><span class="p">,</span> <span class="n">metadata</span><span class="p">)),</span> <span class="n">TOPIC_ONTOLOGY</span><span class="p">))</span>
-    <span class="p">)</span></div>
+    <span class="k">return</span> <span class="n">remove_null_attributes</span><span class="p">(</span><span class="n">add_table_row_inline_content</span><span class="p">(</span><span class="n">add_references</span><span class="p">(</span><span class="n">add_metadata</span><span class="p">(</span><span class="n">am</span><span class="p">,</span> <span class="n">metadata</span><span class="p">))))</span></div>
 </pre></div>
 
            </div>
