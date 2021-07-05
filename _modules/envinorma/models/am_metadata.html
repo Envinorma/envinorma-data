@@ -186,7 +186,7 @@
 <span></span><span class="kn">from</span> <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">asdict</span><span class="p">,</span> <span class="n">dataclass</span>
 <span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">date</span><span class="p">,</span> <span class="n">datetime</span>
 <span class="kn">from</span> <span class="nn">enum</span> <span class="kn">import</span> <span class="n">Enum</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Union</span>
 
 <span class="kn">from</span> <span class="nn">envinorma.models.classement</span> <span class="kn">import</span> <span class="n">Classement</span>
 
@@ -200,6 +200,12 @@
 <div class="viewcode-block" id="AMSource"><a class="viewcode-back" href="../../../envinorma.models.html#envinorma.models.am_metadata.AMSource">[docs]</a><span class="k">class</span> <span class="nc">AMSource</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
     <span class="n">LEGIFRANCE</span> <span class="o">=</span> <span class="s1">&#39;LEGIFRANCE&#39;</span>
     <span class="n">AIDA</span> <span class="o">=</span> <span class="s1">&#39;AIDA&#39;</span></div>
+
+
+<span class="k">def</span> <span class="nf">_parse_date</span><span class="p">(</span><span class="n">date_</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">date</span><span class="p">:</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">date_</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">datetime</span><span class="o">.</span><span class="n">fromtimestamp</span><span class="p">(</span><span class="n">date_</span> <span class="o">+</span> <span class="mi">12</span> <span class="o">*</span> <span class="mi">3600</span><span class="p">)</span><span class="o">.</span><span class="n">date</span><span class="p">()</span>  <span class="c1"># hack for retrocompatibility</span>
+    <span class="k">return</span> <span class="n">date</span><span class="o">.</span><span class="n">fromisoformat</span><span class="p">(</span><span class="n">date_</span><span class="p">)</span>
 
 
 <div class="viewcode-block" id="AMMetadata"><a class="viewcode-back" href="../../../envinorma.models.html#envinorma.models.am_metadata.AMMetadata">[docs]</a><span class="nd">@dataclass</span>
@@ -220,8 +226,7 @@
         <span class="n">dict_</span><span class="p">[</span><span class="s1">&#39;aida_page&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">dict_</span><span class="p">[</span><span class="s1">&#39;aida_page&#39;</span><span class="p">])</span>
         <span class="n">dict_</span><span class="p">[</span><span class="s1">&#39;state&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">AMState</span><span class="p">(</span><span class="n">dict_</span><span class="p">[</span><span class="s1">&#39;state&#39;</span><span class="p">])</span>
         <span class="n">dict_</span><span class="p">[</span><span class="s1">&#39;source&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">AMSource</span><span class="p">(</span><span class="n">dict_</span><span class="p">[</span><span class="s1">&#39;source&#39;</span><span class="p">])</span>
-        <span class="n">date_of_signature</span> <span class="o">=</span> <span class="n">date</span><span class="o">.</span><span class="n">fromtimestamp</span><span class="p">(</span><span class="n">dict_</span><span class="p">[</span><span class="s1">&#39;date_of_signature&#39;</span><span class="p">])</span>
-        <span class="n">dict_</span><span class="p">[</span><span class="s1">&#39;date_of_signature&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">date_of_signature</span>
+        <span class="n">dict_</span><span class="p">[</span><span class="s1">&#39;date_of_signature&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">_parse_date</span><span class="p">(</span><span class="n">dict_</span><span class="p">[</span><span class="s1">&#39;date_of_signature&#39;</span><span class="p">])</span>
         <span class="n">dict_</span><span class="p">[</span><span class="s1">&#39;classements&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">Classement</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">classement</span><span class="p">)</span> <span class="k">for</span> <span class="n">classement</span> <span class="ow">in</span> <span class="n">dict_</span><span class="p">[</span><span class="s1">&#39;classements&#39;</span><span class="p">]]</span>
         <span class="k">return</span> <span class="n">AMMetadata</span><span class="p">(</span><span class="o">**</span><span class="n">dict_</span><span class="p">)</span></div>
 
@@ -229,7 +234,7 @@
         <span class="n">dict_</span> <span class="o">=</span> <span class="n">asdict</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
         <span class="n">dict_</span><span class="p">[</span><span class="s1">&#39;state&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">value</span>
         <span class="n">dict_</span><span class="p">[</span><span class="s1">&#39;source&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">source</span><span class="o">.</span><span class="n">value</span>
-        <span class="n">dict_</span><span class="p">[</span><span class="s1">&#39;date_of_signature&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">fromordinal</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">date_of_signature</span><span class="o">.</span><span class="n">toordinal</span><span class="p">())</span><span class="o">.</span><span class="n">timestamp</span><span class="p">())</span>
+        <span class="n">dict_</span><span class="p">[</span><span class="s1">&#39;date_of_signature&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">date_of_signature</span><span class="p">)</span>
         <span class="n">dict_</span><span class="p">[</span><span class="s1">&#39;classements&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">classement</span><span class="o">.</span><span class="n">to_dict</span><span class="p">()</span> <span class="k">for</span> <span class="n">classement</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">classements</span><span class="p">]</span>
         <span class="k">return</span> <span class="n">dict_</span></div></div>
 </pre></div>
