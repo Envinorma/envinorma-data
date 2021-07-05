@@ -1,7 +1,7 @@
 from dataclasses import asdict, dataclass
 from datetime import date, datetime
 from enum import Enum
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List, Optional, Union
 
 from envinorma.models.classement import Classement
 
@@ -15,6 +15,12 @@ class AMState(Enum):
 class AMSource(Enum):
     LEGIFRANCE = 'LEGIFRANCE'
     AIDA = 'AIDA'
+
+
+def _parse_date(date_: Union[int, str]) -> date:
+    if isinstance(date_, int):
+        return datetime.fromtimestamp(date_ + 12 * 3600).date()  # hack for retrocompatibility
+    return date.fromisoformat(date_)
 
 
 @dataclass
@@ -35,8 +41,7 @@ class AMMetadata:
         dict_['aida_page'] = str(dict_['aida_page'])
         dict_['state'] = AMState(dict_['state'])
         dict_['source'] = AMSource(dict_['source'])
-        date_of_signature = date.fromtimestamp(dict_['date_of_signature'])
-        dict_['date_of_signature'] = date_of_signature
+        dict_['date_of_signature'] = _parse_date(dict_['date_of_signature'])
         dict_['classements'] = [Classement.from_dict(classement) for classement in dict_['classements']]
         return AMMetadata(**dict_)
 
@@ -44,6 +49,6 @@ class AMMetadata:
         dict_ = asdict(self)
         dict_['state'] = self.state.value
         dict_['source'] = self.source.value
-        dict_['date_of_signature'] = int(datetime.fromordinal(self.date_of_signature.toordinal()).timestamp())
+        dict_['date_of_signature'] = str(self.date_of_signature)
         dict_['classements'] = [classement.to_dict() for classement in self.classements]
         return dict_
