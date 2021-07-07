@@ -37,35 +37,38 @@ def test_generate_warning_missing_value():
         'Ce paragraphe pourrait être modifié. C\'est le cas pour les installations dont la date '
         'd\'autorisation est antérieure au 01/01/2019 et le régime est à autorisation.'
     )
-    assert generate_warning_missing_value(AndCondition([condition_3, condition_regime]), {}, None, True, False) == exp
+    warning_0 = generate_warning_missing_value(
+        AndCondition(frozenset([condition_3, condition_regime])), {}, None, True, False
+    )
+    assert warning_0 == exp
     exp = (
         'Ce paragraphe pourrait être modifié. C\'est le cas pour les installations dont la date'
-        ' d\'autorisation est postérieure au 01/01/2018, la date '
-        'd\'autorisation est antérieure au 01/01/2019 et le régime est à autorisation.'
+        ' d\'autorisation est antérieure au 01/01/2019, la date '
+        'd\'autorisation est postérieure au 01/01/2018 et le régime est à autorisation.'
     )
     res = generate_warning_missing_value(
-        AndCondition([condition_1, condition_3, condition_regime]), {}, None, True, False
+        AndCondition(frozenset([condition_1, condition_3, condition_regime])), {}, None, True, False
     )
     assert res == exp
 
     exp = (
         'Ce paragraphe pourrait ne pas être applicable. C\'est le cas pour les installations dont la date'
-        ' d\'autorisation est postérieure au 01/01/2018, la date '
-        'd\'autorisation est antérieure au 01/01/2019 et le régime est à autorisation.'
+        ' d\'autorisation est antérieure au 01/01/2019, la date '
+        'd\'autorisation est postérieure au 01/01/2018 et le régime est à autorisation.'
     )
     res = generate_warning_missing_value(
-        AndCondition([condition_1, condition_3, condition_regime]), {}, None, False, False
+        AndCondition(frozenset([condition_1, condition_3, condition_regime])), {}, None, False, False
     )
     assert res == exp
 
     exp = (
         'Les alinéas n°5 à 7 de ce paragraphe pourraient ne pas être applicables. C\'est le cas pour '
         'les installations dont la date'
-        ' d\'autorisation est postérieure au 01/01/2018, la date '
-        'd\'autorisation est antérieure au 01/01/2019 et le régime est à autorisation.'
+        ' d\'autorisation est antérieure au 01/01/2019, la date '
+        'd\'autorisation est postérieure au 01/01/2018 et le régime est à autorisation.'
     )
     res = generate_warning_missing_value(
-        AndCondition([condition_1, condition_3, condition_regime]), {}, [4, 5, 6], False, False
+        AndCondition(frozenset([condition_1, condition_3, condition_regime])), {}, [4, 5, 6], False, False
     )
     assert res == exp
 
@@ -74,28 +77,40 @@ def test_generate_warning_missing_value():
         'autorisation est antérieure au 01/01/2019 et le régime est à autorisation.'
     )
     val = {parameter: datetime.now()}
-    assert generate_warning_missing_value(AndCondition([condition_3, condition_regime]), val, None, True, False) == exp
+    warning = generate_warning_missing_value(
+        AndCondition(frozenset([condition_3, condition_regime])), val, None, True, False
+    )
+    assert warning == exp
 
     exp = (
         'Ce paragraphe pourrait être modifié. C\'est le cas pour les installations dont la date d\'autorisation'
         ' est antérieure au 01/01/2019 et le régime est à autorisation.'
     )
     val = {parameter_regime: Regime.E}
-    assert generate_warning_missing_value(AndCondition([condition_3, condition_regime]), val, None, True, False) == exp
+    warning_2 = generate_warning_missing_value(
+        AndCondition(frozenset([condition_3, condition_regime])), val, None, True, False
+    )
+    assert warning_2 == exp
 
     exp = (
         'Ce paragraphe pourrait être modifié. C\'est le cas pour les installations dont la date d\'autorisation'
         ' est antérieure au 01/01/2019 ou le régime est à autorisation.'
     )
     val = {parameter_regime: Regime.E}
-    assert generate_warning_missing_value(OrCondition([condition_3, condition_regime]), val, None, True, False) == exp
+    warning_3 = generate_warning_missing_value(
+        OrCondition(frozenset([condition_3, condition_regime])), val, None, True, False
+    )
+    assert warning_3 == exp
 
     exp = (
         'Ce paragraphe pourrait être modifié. C\'est le cas pour les installations dont la date d\'autorisation'
         ' est antérieure au 01/01/2019 ou le régime est à autorisation.'
     )
     val = {parameter_regime: Regime.E}
-    assert generate_warning_missing_value(OrCondition([condition_3, condition_regime]), val, None, True, False) == exp
+    warning_4 = generate_warning_missing_value(
+        OrCondition(frozenset([condition_3, condition_regime])), val, None, True, False
+    )
+    assert warning_4 == exp
 
 
 def test_generate_inactive_warning():
@@ -117,17 +132,20 @@ def test_generate_inactive_warning():
     exp = 'Une partie de ce paragraphe ne s’applique pas à cette installation car le régime est à' ' autorisation.'
     assert generate_inactive_warning(condition_regime, {}, False, False) == exp
     val = {parameter: datetime(2016, 6, 1), parameter_regime: Regime.A}
-    assert generate_inactive_warning(OrCondition([condition_2, condition_regime]), val, False, False) == exp
+    assert generate_inactive_warning(OrCondition(frozenset([condition_2, condition_regime])), val, False, False) == exp
 
     exp = (
         'Ce paragraphe ne s’applique pas à cette installation car la'
         ' date d\'autorisation est postérieure au 01/01/2018 et antérieure au 01/01/2019.'
     )
     assert generate_inactive_warning(condition_2, {}, True, False) == exp
-    assert generate_inactive_warning(AndCondition([condition_2]), {}, True, False) == exp
+    assert generate_inactive_warning(AndCondition(frozenset([condition_2])), {}, True, False) == exp
     val = {parameter_regime: Regime.E, parameter: datetime(2018, 6, 1)}
-    assert generate_inactive_warning(OrCondition([condition_2, condition_regime]), val, True, False) == exp
-    assert generate_inactive_warning(OrCondition([condition_2]), {parameter: datetime(2018, 6, 1)}, True, False) == exp
+    assert generate_inactive_warning(OrCondition(frozenset([condition_2, condition_regime])), val, True, False) == exp
+    warn_ = generate_inactive_warning(
+        OrCondition(frozenset([condition_2])), {parameter: datetime(2018, 6, 1)}, True, False
+    )
+    assert warn_ == exp
 
     exp = (
         'Ce paragraphe ne s’applique pas à cette installation car '
@@ -135,8 +153,8 @@ def test_generate_inactive_warning():
         'le régime est à autorisation.'
     )
     val = {parameter_regime: Regime.E, parameter: datetime(2016, 1, 1)}
-    assert generate_inactive_warning(AndCondition([condition_2, condition_regime]), val, True, False) == exp
-    assert generate_inactive_warning(AndCondition([condition_2, condition_regime]), {}, True, False) == exp
+    assert generate_inactive_warning(AndCondition(frozenset([condition_2, condition_regime])), val, True, False) == exp
+    assert generate_inactive_warning(AndCondition(frozenset([condition_2, condition_regime])), {}, True, False) == exp
 
     exp = (
         'Ce paragraphe ne s’applique pas à cette installation car '
@@ -144,21 +162,21 @@ def test_generate_inactive_warning():
         'le régime est à autorisation.'
     )
     val = {parameter_regime: Regime.A, parameter: datetime(2018, 1, 5)}
-    assert generate_inactive_warning(OrCondition([condition_2, condition_regime]), val, True, False) == exp
+    assert generate_inactive_warning(OrCondition(frozenset([condition_2, condition_regime])), val, True, False) == exp
 
     exp = (
         'Ce paragraphe ne s’applique pas à cette installation car '
         'la date d\'autorisation est postérieure au 01/01/2018 et antérieure au 01/01/2019.'
     )
     val = {parameter_regime: Regime.E, parameter: datetime(2018, 1, 5)}
-    assert generate_inactive_warning(OrCondition([condition_2, condition_regime]), val, True, False) == exp
+    assert generate_inactive_warning(OrCondition(frozenset([condition_2, condition_regime])), val, True, False) == exp
 
     exp = (
         'Cet arrêté ne s\'applique pas à cette installation car '
         'la date d\'autorisation est postérieure au 01/01/2018 et antérieure au 01/01/2019.'
     )
     val = {parameter_regime: Regime.E, parameter: datetime(2018, 1, 5)}
-    assert generate_inactive_warning(OrCondition([condition_2, condition_regime]), val, True, True) == exp
+    assert generate_inactive_warning(OrCondition(frozenset([condition_2, condition_regime])), val, True, True) == exp
 
 
 def test_generate_modification_warning():
@@ -180,17 +198,19 @@ def test_generate_modification_warning():
     exp = 'Ce paragraphe a été modifié pour cette installation car le régime est à ' 'autorisation.'
     assert generate_modification_warning(condition_regime, {}) == exp
     val = {parameter: datetime(2016, 6, 1), parameter_regime: Regime.A}
-    assert generate_modification_warning(OrCondition([condition_2, condition_regime]), val) == exp
+    assert generate_modification_warning(OrCondition(frozenset([condition_2, condition_regime])), val) == exp
 
     exp = (
         'Ce paragraphe a été modifié pour cette installation car la'
         ' date d\'autorisation est postérieure au 01/01/2018 et antérieure au 01/01/2019.'
     )
     assert generate_modification_warning(condition_2, {}) == exp
-    assert generate_modification_warning(AndCondition([condition_2]), {}) == exp
+    assert generate_modification_warning(AndCondition(frozenset([condition_2])), {}) == exp
     val = {parameter_regime: Regime.E, parameter: datetime(2018, 6, 1)}
-    assert generate_modification_warning(OrCondition([condition_2, condition_regime]), val) == exp
-    assert generate_modification_warning(OrCondition([condition_2]), {parameter: datetime(2018, 6, 1)}) == exp
+    assert generate_modification_warning(OrCondition(frozenset([condition_2, condition_regime])), val) == exp
+    assert (
+        generate_modification_warning(OrCondition(frozenset([condition_2])), {parameter: datetime(2018, 6, 1)}) == exp
+    )
 
     exp = (
         'Ce paragraphe a été modifié pour cette installation car'
@@ -198,8 +218,8 @@ def test_generate_modification_warning():
         '01/01/2019 et le régime est à autorisation.'
     )
     val = {parameter_regime: Regime.E, parameter: datetime(2016, 1, 1)}
-    assert generate_modification_warning(AndCondition([condition_2, condition_regime]), val) == exp
-    assert generate_modification_warning(AndCondition([condition_2, condition_regime]), {}) == exp
+    assert generate_modification_warning(AndCondition(frozenset([condition_2, condition_regime])), val) == exp
+    assert generate_modification_warning(AndCondition(frozenset([condition_2, condition_regime])), {}) == exp
 
     exp = (
         'Ce paragraphe a été modifié pour cette installation car'
@@ -207,7 +227,7 @@ def test_generate_modification_warning():
         '01/01/2019 ou le régime est à autorisation.'
     )
     val = {parameter_regime: Regime.A, parameter: datetime(2018, 1, 5)}
-    assert generate_modification_warning(OrCondition([condition_2, condition_regime]), val) == exp
+    assert generate_modification_warning(OrCondition(frozenset([condition_2, condition_regime])), val) == exp
 
 
 def test_parameter_id_to_str():

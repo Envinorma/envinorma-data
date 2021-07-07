@@ -27,18 +27,18 @@ def test_check_discrete_conditions_not_compatible():
     _check_discrete_conditions_not_compatible([Equal(reg, Regime.E), Equal(reg, Regime.D)], reg)
     _check_discrete_conditions_not_compatible([Equal(reg, Regime.E), Equal(reg, Regime.D), Equal(reg, Regime.A)], reg)
     _check_discrete_conditions_not_compatible(
-        [OrCondition([Equal(reg, Regime.E), Equal(reg, Regime.D), Equal(reg, Regime.A)])], reg
+        [OrCondition(frozenset([Equal(reg, Regime.E), Equal(reg, Regime.D), Equal(reg, Regime.A)]))], reg
     )
 
     with pytest.raises(ParametrizationError):
         _check_discrete_conditions_not_compatible([Equal(reg, Regime.E), Equal(reg, Regime.E)], reg)
     with pytest.raises(ParametrizationError):
         _check_discrete_conditions_not_compatible(
-            [OrCondition([Equal(reg, Regime.E), Equal(reg, Regime.D)]), Equal(reg, Regime.D)], reg
+            [OrCondition(frozenset([Equal(reg, Regime.E), Equal(reg, Regime.D)])), Equal(reg, Regime.D)], reg
         )
     with pytest.raises(ParametrizationError):
         _check_discrete_conditions_not_compatible(
-            [OrCondition([Littler(reg, Regime.E), Equal(reg, Regime.D)]), Equal(reg, Regime.A)], reg
+            [OrCondition(frozenset([Littler(reg, Regime.E), Equal(reg, Regime.D)])), Equal(reg, Regime.A)], reg
         )
 
 

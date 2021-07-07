@@ -4,7 +4,7 @@ from envinorma.structure import _build_enriched_alineas, _extract_highest_title_
 
 def test_build_enriched_alineas():
     assert _build_enriched_alineas(['Hello'])[0][0].text == 'Hello'
-    assert _build_enriched_alineas([Table([])])[0][0].table.rows == []
+    assert _build_enriched_alineas([Table([])])[0][0].table.rows == []  # type: ignore
 
 
 def test_extract_highest_title_level():

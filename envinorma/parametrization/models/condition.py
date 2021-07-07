@@ -1,6 +1,6 @@
 from dataclasses import asdict, dataclass
 from enum import Enum
-from typing import Any, Dict, List, Literal, Union
+from typing import Any, Dict, FrozenSet, List, Literal, Union
 
 from .parameter import Parameter, dump_parameter_value, load_parameter_value, parameter_value_to_str
 
@@ -31,9 +31,9 @@ def load_condition(dict_: Dict[str, Any]) -> 'Condition':
     raise ValueError(f'Unknown condition type {type_}')
 
 
-@dataclass
+@dataclass(eq=True, frozen=True)
 class AndCondition:
-    conditions: List['Condition']
+    conditions: FrozenSet['Condition']
     type: ConditionType = ConditionType.AND
 
     def to_dict(self) -> Dict[str, Any]:
@@ -44,7 +44,7 @@ class AndCondition:
 
     @classmethod
     def from_dict(cls, dict_: Dict[str, Any]) -> 'AndCondition':
-        return AndCondition([load_condition(cd) for cd in dict_['conditions']])
+        return AndCondition(frozenset([load_condition(cd) for cd in dict_['conditions']]))
 
     def check(self) -> None:
         if self.type != ConditionType.AND:
@@ -62,9 +62,9 @@ class AndCondition:
         return '(' + ') and ('.join([cd.to_str() for cd in self.conditions]) + ')'
 
 
-@dataclass
+@dataclass(eq=True, frozen=True)
 class OrCondition:
-    conditions: List['Condition']
+    conditions: FrozenSet['Condition']
     type: ConditionType = ConditionType.OR
 
     def to_dict(self) -> Dict[str, Any]:
@@ -75,7 +75,7 @@ class OrCondition:
 
     @classmethod
     def from_dict(cls, dict_: Dict[str, Any]) -> 'OrCondition':
-        return OrCondition([load_condition(cd) for cd in dict_['conditions']])
+        return OrCondition(frozenset([load_condition(cd) for cd in dict_['conditions']]))
 
     def check(self) -> None:
         if self.type != ConditionType.OR:
@@ -93,7 +93,7 @@ class OrCondition:
         return '(' + ') or ('.join([cd.to_str() for cd in self.conditions]) + ')'
 
 
-@dataclass
+@dataclass(eq=True, frozen=True)
 class Littler:
     parameter: Parameter
     target: Any
@@ -130,7 +130,7 @@ class Littler:
         return f'{self.parameter.id} {comp} {parameter_value_to_str(self.target)}'
 
 
-@dataclass
+@dataclass(eq=True, frozen=True)
 class Greater:
     parameter: Parameter
     target: Any
@@ -167,7 +167,7 @@ class Greater:
         return f'{self.parameter.id} {comp} {parameter_value_to_str(self.target)}'
 
 
-@dataclass
+@dataclass(eq=True, frozen=True)
 class Equal:
     parameter: Parameter
     target: Any
@@ -201,7 +201,7 @@ class Equal:
         return f'{self.parameter.id} == {parameter_value_to_str(self.target)}'
 
 
-@dataclass
+@dataclass(eq=True, frozen=True)
 class Range:
     parameter: Parameter
     left: Any

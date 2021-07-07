@@ -14,6 +14,7 @@ from envinorma.models import (
     EnrichedString,
     Regime,
     StructuredText,
+    VersionDescriptor,
 )
 from envinorma.parametrization.am_with_versions import generate_versions
 from envinorma.parametrization.apply_parameter_values import (
@@ -42,6 +43,7 @@ from envinorma.parametrization.models import (
     Parametrization,
     SectionReference,
 )
+from envinorma.utils import ensure_not_none
 
 _IS = InapplicableSection
 _AS = AlternativeSection
@@ -80,18 +82,21 @@ def test_apply_parameter_values_to_am_whole_arrete():
     )
 
     new_am_1 = apply_parameter_values_to_am(am, parametrization, {parameter: False})
-    assert not new_am_1.version_descriptor.applicable
-    assert new_am_1.version_descriptor.applicability_warnings == [
+    desc: VersionDescriptor = ensure_not_none(new_am_1.version_descriptor)
+    assert not desc.applicable
+    assert desc.applicability_warnings == [
         'Cet arrêté ne s\'applique pas à cette installation car le paramètre nouvelle-installation est égal à False.'
     ]
 
     new_am_2 = apply_parameter_values_to_am(am, parametrization, {parameter: True})
-    assert new_am_2.version_descriptor.applicable
-    assert new_am_2.version_descriptor.applicability_warnings == []
+    desc_2: VersionDescriptor = ensure_not_none(new_am_2.version_descriptor)
+    assert desc_2.applicable
+    assert desc_2.applicability_warnings == []
 
     new_am_3 = apply_parameter_values_to_am(am, parametrization, {})
-    assert new_am_3.version_descriptor.applicable
-    assert new_am_3.version_descriptor.applicability_warnings == [
+    desc_3: VersionDescriptor = ensure_not_none(new_am_3.version_descriptor)
+    assert desc_3.applicable
+    assert desc_3.applicability_warnings == [
         'Cet arrêté pourrait ne pas être applicable. C\'est le cas pour les installations dont le paramètre '
         'nouvelle-installation est égal à False.'
     ]
@@ -137,40 +142,49 @@ def test_apply_parameter_values_to_am():
     new_am_1 = apply_parameter_values_to_am(am, parametrization, {parameter: False})
 
     assert _all_alineas_inactive(new_am_1.sections[0])
-    assert len(new_am_1.sections[0].applicability.warnings) == 2
-    assert 'Fake warning' in itemgetter(0, 1)(new_am_1.sections[0].applicability.warnings)
+    app: Applicability = ensure_not_none(new_am_1.sections[0].applicability)
+    assert len(app.warnings) == 2
+    assert 'Fake warning' in itemgetter(0, 1)(app.warnings)
 
-    assert not new_am_1.sections[1].applicability.modified
-    assert len(new_am_1.sections[1].applicability.warnings) == 0
+    app_2: Applicability = ensure_not_none(new_am_1.sections[1].applicability)
+    assert not app_2.modified
+    assert len(app_2.warnings) == 0
 
+    app_3: Applicability = ensure_not_none(new_am_1.sections[3].applicability)
     assert not new_am_1.sections[3].outer_alineas[0].active
     assert new_am_1.sections[3].outer_alineas[1].active
-    assert len(new_am_1.sections[3].applicability.warnings) == 1
+    assert len(app_3.warnings) == 1
 
     new_am_2 = apply_parameter_values_to_am(am, parametrization, {parameter: True})
 
     assert _all_alineas_active(new_am_2.sections[0])
-    assert len(new_am_2.sections[0].applicability.warnings) == 1
+    app_4: Applicability = ensure_not_none(new_am_2.sections[0].applicability)
+    assert len(app_4.warnings) == 1
 
-    assert new_am_2.sections[1].applicability.modified
-    assert len(new_am_2.sections[1].applicability.warnings) == 1
+    app_5: Applicability = ensure_not_none(new_am_2.sections[1].applicability)
+    assert app_5.modified
+    assert len(app_5.warnings) == 1
     assert new_am_2.sections[1].outer_alineas[0].text == 'version modifiée'
-    assert new_am_2.sections[1].applicability.previous_version is not None
+    assert app_5.previous_version is not None
 
     assert new_am_2.sections[3].outer_alineas[0].active
     assert new_am_2.sections[3].outer_alineas[1].active
-    assert len(new_am_2.sections[3].applicability.warnings) == 0
+    app_6: Applicability = ensure_not_none(new_am_2.sections[3].applicability)
+    assert len(app_6.warnings) == 0
 
     new_am_3 = apply_parameter_values_to_am(am, parametrization, {})
     assert _all_alineas_active(new_am_3.sections[0])
-    assert len(new_am_3.sections[0].applicability.warnings) == 2
+    app_7: Applicability = ensure_not_none(new_am_3.sections[0].applicability)
+    assert len(app_7.warnings) == 2
 
-    assert not new_am_3.sections[1].applicability.modified
-    assert len(new_am_3.sections[1].applicability.warnings) == 1
+    app_8: Applicability = ensure_not_none(new_am_3.sections[1].applicability)
+    assert not app_8.modified
+    assert len(app_8.warnings) == 1
 
+    app_9: Applicability = ensure_not_none(new_am_3.sections[3].applicability)
     assert new_am_3.sections[3].outer_alineas[0].active
     assert new_am_3.sections[3].outer_alineas[1].active
-    assert len(new_am_3.sections[3].applicability.warnings) == 1
+    assert len(app_9.warnings) == 1
 
 
 def test_extract_parameters_from_parametrization():
@@ -231,7 +245,8 @@ def test_generate_versions():
     assert _all_alineas_inactive(res[('nouvelle-installation == False',)].sections[0])
     assert _all_alineas_active(res[('nouvelle-installation != False',)].sections[0])
     assert _all_alineas_active(res[()].sections[0])
-    assert len(res[()].sections[0].applicability.warnings) == 1
+    app: Applicability = ensure_not_none(res[()].sections[0].applicability)
+    assert len(app.warnings) == 1
 
     res_2 = generate_versions(am, Parametrization([], [], []), False)
     assert len(res_2) == 1
@@ -251,7 +266,7 @@ def test_deactivate_alineas():
         ConditionSource(EntityReference(SectionReference((1,)), None)),
     )
     res = _deactivate_alineas(_get_simple_text(), nac, {ParameterEnum.DATE_INSTALLATION.value: datetime(2020, 1, 1)})
-    assert not res.applicability.active
+    assert not res.applicability.active  # type: ignore
     assert all([not al.active for al in res.outer_alineas])
 
     nac = _IS(
@@ -260,7 +275,7 @@ def test_deactivate_alineas():
         ConditionSource(EntityReference(SectionReference((1,)), None)),
     )
     res = _deactivate_alineas(_get_simple_text(), nac, {ParameterEnum.DATE_INSTALLATION.value: datetime(2020, 1, 1)})
-    assert res.applicability.active
+    assert res.applicability.active  # type: ignore
     assert not res.outer_alineas[0].active
     assert res.outer_alineas[1].active
 
@@ -272,8 +287,8 @@ def test_deactivate_alineas():
     res = _deactivate_alineas(
         _get_simple_text([_get_simple_text()]), nac, {ParameterEnum.DATE_INSTALLATION.value: datetime(2020, 1, 1)}
     )
-    assert not res.applicability.active
-    assert not res.sections[0].applicability.active
+    assert not res.applicability.active  # type: ignore
+    assert not res.sections[0].applicability.active  # type: ignore
 
 
 def test_extract_surrounding_dates():
@@ -393,17 +408,17 @@ def test_is_satisfiable():
     condition = Equal(regime, Regime.A)
     assert not _is_satisfiable(condition, Regime.E)
 
-    condition = AndCondition([Equal(regime, Regime.A), Littler(enregistrement, date(2021, 1, 1))])
+    condition = AndCondition(frozenset([Equal(regime, Regime.A), Littler(enregistrement, date(2021, 1, 1))]))
     assert not _is_satisfiable(condition, Regime.E)
 
-    condition = OrCondition([Equal(regime, Regime.A), Littler(enregistrement, date(2021, 1, 1))])
+    condition = OrCondition(frozenset([Equal(regime, Regime.A), Littler(enregistrement, date(2021, 1, 1))]))
     assert _is_satisfiable(condition, Regime.E)
 
-    condition = AndCondition([Equal(regime, Regime.E), Littler(enregistrement, date(2021, 1, 1))])
+    condition = AndCondition(frozenset([Equal(regime, Regime.E), Littler(enregistrement, date(2021, 1, 1))]))
     assert _is_satisfiable(condition, Regime.E)
 
     with pytest.raises(ValueError):
-        condition = AndCondition([Littler(regime, Regime.E), Littler(enregistrement, date(2021, 1, 1))])
+        condition = AndCondition(frozenset([Littler(regime, Regime.E), Littler(enregistrement, date(2021, 1, 1))]))
         _is_satisfiable(condition, Regime.E)
 
 
@@ -426,7 +441,7 @@ def test_keep_satisfiable():
     installation = ParameterEnum.DATE_INSTALLATION.value
     dt_1 = Littler(installation, date(2021, 1, 1))
     dt_2 = Littler(installation, date(2022, 1, 1))
-    conditions = [dt_1, AndCondition([dt_2, Equal(regime, Regime.A)]), Equal(regime, Regime.A)]
+    conditions = [dt_1, AndCondition(frozenset([dt_2, Equal(regime, Regime.A)])), Equal(regime, Regime.A)]
     assert _keep_satisfiable(conditions, Regime.E) == [dt_1]
 
 
@@ -438,7 +453,7 @@ def test_used_date_parameter():
     dt_1 = Littler(installation, date(2021, 1, 1))
     dt_2 = Littler(installation, date(2022, 1, 1))
     nac_1 = _IS(target, dt_1, source)
-    nac_2 = _IS(target, AndCondition([dt_2, Equal(regime, Regime.A)]), source)
+    nac_2 = _IS(target, AndCondition(frozenset([dt_2, Equal(regime, Regime.A)])), source)
     nac_3 = _IS(target, Equal(regime, Regime.A), source)
     parametrization = Parametrization([nac_1, nac_2, nac_3], [], [])
 
