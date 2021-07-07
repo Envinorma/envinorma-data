@@ -56,7 +56,7 @@ def _add_prefix_and_suffix(xml: str) -> str:
 
 
 def _get_soup(xml: str) -> bs4.Tag:
-    return list(BeautifulSoup(_add_prefix_and_suffix(xml), 'lxml-xml').find('office:text').children)[0]
+    return list(BeautifulSoup(_add_prefix_and_suffix(xml), 'lxml-xml').find('office:text').children)[0]  # type: ignore
 
 
 def test_extract_title():

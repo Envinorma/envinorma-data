@@ -14,6 +14,7 @@ def test_add_topics():
     am_with_topics = add_topics(
         am, {(0,): TopicName.INCENDIE, (0, 0): TopicName.INCENDIE, (1,): TopicName.BRUIT_VIBRATIONS}
     )
-    assert am_with_topics.sections[0].annotations.topic == TopicName.INCENDIE
-    assert am_with_topics.sections[0].sections[0].annotations.topic == TopicName.INCENDIE
-    assert am_with_topics.sections[1].annotations.topic == TopicName.BRUIT_VIBRATIONS
+    sections = am_with_topics.sections
+    assert sections[0].annotations.topic == TopicName.INCENDIE  # type: ignore
+    assert sections[0].sections[0].annotations.topic == TopicName.INCENDIE  # type: ignore
+    assert sections[1].annotations.topic == TopicName.BRUIT_VIBRATIONS  # type: ignore

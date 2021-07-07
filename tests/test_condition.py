@@ -19,14 +19,14 @@ def test_is_satisfied():
     condition_1 = Equal(param_1, Regime.A)
     condition_2 = Equal(param_1, Regime.E)
     condition_3 = Littler(param_2, 1, True)
-    assert not AndCondition([condition_1]).is_satisfied({})
-    assert AndCondition([condition_1]).is_satisfied({param_1: Regime.A})
-    assert OrCondition([condition_1, condition_2]).is_satisfied({param_1: Regime.A})
-    assert OrCondition([condition_1, condition_3]).is_satisfied({param_1: Regime.A})
-    assert not AndCondition([condition_1, condition_2]).is_satisfied({param_1: Regime.A})
-    assert AndCondition([condition_1, condition_3]).is_satisfied({param_1: Regime.A, param_2: 0.5})
-    assert OrCondition([condition_2, condition_3]).is_satisfied({param_1: Regime.E, param_2: 0.5})
-    assert not OrCondition([condition_1, condition_3]).is_satisfied({param_1: Regime.E, param_2: 5})
+    assert not AndCondition(frozenset([condition_1])).is_satisfied({})
+    assert AndCondition(frozenset([condition_1])).is_satisfied({param_1: Regime.A})
+    assert OrCondition(frozenset([condition_1, condition_2])).is_satisfied({param_1: Regime.A})
+    assert OrCondition(frozenset([condition_1, condition_3])).is_satisfied({param_1: Regime.A})
+    assert not AndCondition(frozenset([condition_1, condition_2])).is_satisfied({param_1: Regime.A})
+    assert AndCondition(frozenset([condition_1, condition_3])).is_satisfied({param_1: Regime.A, param_2: 0.5})
+    assert OrCondition(frozenset([condition_2, condition_3])).is_satisfied({param_1: Regime.E, param_2: 0.5})
+    assert not OrCondition(frozenset([condition_1, condition_3])).is_satisfied({param_1: Regime.E, param_2: 5})
 
 
 def test_extract_sorted_interval_sides_targets():

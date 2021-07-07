@@ -38,7 +38,9 @@ _PARAMETRIZATION = Parametrization(
     inapplicable_sections=[
         InapplicableSection(
             targeted_entity=EntityReference(section=SectionReference(path=(0,)), outer_alinea_indices=None),
-            condition=AndCondition(conditions=[Littler(parameter=_DATE, target=date(2021, 1, 1), strict=True)]),
+            condition=AndCondition(
+                conditions=frozenset([Littler(parameter=_DATE, target=date(2021, 1, 1), strict=True)])
+            ),
             source=ConditionSource(
                 reference=EntityReference(section=SectionReference(path=(0,)), outer_alinea_indices=None),
             ),
@@ -48,7 +50,9 @@ _PARAMETRIZATION = Parametrization(
         AlternativeSection(
             targeted_section=SectionReference(path=(1, 0)),
             new_text=_NEW_TEXT,
-            condition=AndCondition(conditions=[Range(parameter=_DATE, left=date(2020, 1, 1), right=date(2021, 1, 1))]),
+            condition=AndCondition(
+                conditions=frozenset([Range(parameter=_DATE, left=date(2020, 1, 1), right=date(2021, 1, 1))])
+            ),
             source=ConditionSource(EntityReference(section=SectionReference(path=(1,)), outer_alinea_indices=None)),
         )
     ],

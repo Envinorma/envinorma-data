@@ -1,5 +1,5 @@
 from datetime import date, datetime
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, FrozenSet, List, Optional
 
 from envinorma.models.classement import Regime
 
@@ -165,21 +165,21 @@ def _ensure_leaf_condition(condition: Condition) -> LeafCondition:
     return condition
 
 
-def _has_non_leaf_condition(conditions: List[Condition]) -> bool:
+def _has_non_leaf_condition(conditions: FrozenSet[Condition]) -> bool:
     return any([not isinstance(cond, LeafConditions) for cond in conditions])
 
 
-def _stringify_all_conditions(conditions: List[Condition], merge_type: MergeType) -> str:
+def _stringify_all_conditions(conditions: FrozenSet[Condition], merge_type: MergeType) -> str:
     if _has_non_leaf_condition(conditions):
-        str_ = [subcondition.to_str() for subcondition in conditions]
+        str_ = sorted([subcondition.to_str() for subcondition in conditions])
         return "les conditions d'application suivantes sont remplies : " + ', '.join(str_)
-    return _merge_words([_warning_leaf(_ensure_leaf_condition(cond)) for cond in conditions], merge_type)
+    return _merge_words(sorted([_warning_leaf(_ensure_leaf_condition(cond)) for cond in conditions]), merge_type)
 
 
 def _warning_merge_condition(condition: MergeCondition, parameter_values: Dict[Parameter, Any]) -> str:
     if isinstance(condition, AndCondition):
         if len(condition.conditions) == 1:
-            return _modification_warning(condition.conditions[0], parameter_values)
+            return _modification_warning(list(condition.conditions)[0], parameter_values)
         return _stringify_all_conditions(condition.conditions, 'AND')
     if not isinstance(condition, OrCondition):
         raise TypeError
