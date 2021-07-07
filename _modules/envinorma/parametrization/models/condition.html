@@ -183,7 +183,7 @@
   <h1>Source code for envinorma.parametrization.models.condition</h1><div class="highlight"><pre>
 <span></span><span class="kn">from</span> <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">asdict</span><span class="p">,</span> <span class="n">dataclass</span>
 <span class="kn">from</span> <span class="nn">enum</span> <span class="kn">import</span> <span class="n">Enum</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Literal</span><span class="p">,</span> <span class="n">Union</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">FrozenSet</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Literal</span><span class="p">,</span> <span class="n">Union</span>
 
 <span class="kn">from</span> <span class="nn">.parameter</span> <span class="kn">import</span> <span class="n">Parameter</span><span class="p">,</span> <span class="n">dump_parameter_value</span><span class="p">,</span> <span class="n">load_parameter_value</span><span class="p">,</span> <span class="n">parameter_value_to_str</span>
 
@@ -214,9 +214,9 @@
     <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Unknown condition type </span><span class="si">{</span><span class="n">type_</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="AndCondition"><a class="viewcode-back" href="../../../../envinorma.parametrization.models.html#envinorma.parametrization.models.condition.AndCondition">[docs]</a><span class="nd">@dataclass</span>
+<div class="viewcode-block" id="AndCondition"><a class="viewcode-back" href="../../../../envinorma.parametrization.models.html#envinorma.parametrization.models.condition.AndCondition">[docs]</a><span class="nd">@dataclass</span><span class="p">(</span><span class="n">eq</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="k">class</span> <span class="nc">AndCondition</span><span class="p">:</span>
-    <span class="n">conditions</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="s1">&#39;Condition&#39;</span><span class="p">]</span>
+    <span class="n">conditions</span><span class="p">:</span> <span class="n">FrozenSet</span><span class="p">[</span><span class="s1">&#39;Condition&#39;</span><span class="p">]</span>
     <span class="nb">type</span><span class="p">:</span> <span class="n">ConditionType</span> <span class="o">=</span> <span class="n">ConditionType</span><span class="o">.</span><span class="n">AND</span>
 
 <div class="viewcode-block" id="AndCondition.to_dict"><a class="viewcode-back" href="../../../../envinorma.parametrization.models.html#envinorma.parametrization.models.condition.AndCondition.to_dict">[docs]</a>    <span class="k">def</span> <span class="nf">to_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
@@ -227,7 +227,7 @@
 
 <div class="viewcode-block" id="AndCondition.from_dict"><a class="viewcode-back" href="../../../../envinorma.parametrization.models.html#envinorma.parametrization.models.condition.AndCondition.from_dict">[docs]</a>    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">from_dict</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">dict_</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="s1">&#39;AndCondition&#39;</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">AndCondition</span><span class="p">([</span><span class="n">load_condition</span><span class="p">(</span><span class="n">cd</span><span class="p">)</span> <span class="k">for</span> <span class="n">cd</span> <span class="ow">in</span> <span class="n">dict_</span><span class="p">[</span><span class="s1">&#39;conditions&#39;</span><span class="p">]])</span></div>
+        <span class="k">return</span> <span class="n">AndCondition</span><span class="p">(</span><span class="nb">frozenset</span><span class="p">([</span><span class="n">load_condition</span><span class="p">(</span><span class="n">cd</span><span class="p">)</span> <span class="k">for</span> <span class="n">cd</span> <span class="ow">in</span> <span class="n">dict_</span><span class="p">[</span><span class="s1">&#39;conditions&#39;</span><span class="p">]]))</span></div>
 
 <div class="viewcode-block" id="AndCondition.check"><a class="viewcode-back" href="../../../../envinorma.parametrization.models.html#envinorma.parametrization.models.condition.AndCondition.check">[docs]</a>    <span class="k">def</span> <span class="nf">check</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">type</span> <span class="o">!=</span> <span class="n">ConditionType</span><span class="o">.</span><span class="n">AND</span><span class="p">:</span>
@@ -245,9 +245,9 @@
         <span class="k">return</span> <span class="s1">&#39;(&#39;</span> <span class="o">+</span> <span class="s1">&#39;) and (&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">cd</span><span class="o">.</span><span class="n">to_str</span><span class="p">()</span> <span class="k">for</span> <span class="n">cd</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">conditions</span><span class="p">])</span> <span class="o">+</span> <span class="s1">&#39;)&#39;</span></div></div>
 
 
-<div class="viewcode-block" id="OrCondition"><a class="viewcode-back" href="../../../../envinorma.parametrization.models.html#envinorma.parametrization.models.condition.OrCondition">[docs]</a><span class="nd">@dataclass</span>
+<div class="viewcode-block" id="OrCondition"><a class="viewcode-back" href="../../../../envinorma.parametrization.models.html#envinorma.parametrization.models.condition.OrCondition">[docs]</a><span class="nd">@dataclass</span><span class="p">(</span><span class="n">eq</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="k">class</span> <span class="nc">OrCondition</span><span class="p">:</span>
-    <span class="n">conditions</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="s1">&#39;Condition&#39;</span><span class="p">]</span>
+    <span class="n">conditions</span><span class="p">:</span> <span class="n">FrozenSet</span><span class="p">[</span><span class="s1">&#39;Condition&#39;</span><span class="p">]</span>
     <span class="nb">type</span><span class="p">:</span> <span class="n">ConditionType</span> <span class="o">=</span> <span class="n">ConditionType</span><span class="o">.</span><span class="n">OR</span>
 
 <div class="viewcode-block" id="OrCondition.to_dict"><a class="viewcode-back" href="../../../../envinorma.parametrization.models.html#envinorma.parametrization.models.condition.OrCondition.to_dict">[docs]</a>    <span class="k">def</span> <span class="nf">to_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
@@ -258,7 +258,7 @@
 
 <div class="viewcode-block" id="OrCondition.from_dict"><a class="viewcode-back" href="../../../../envinorma.parametrization.models.html#envinorma.parametrization.models.condition.OrCondition.from_dict">[docs]</a>    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">from_dict</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">dict_</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="s1">&#39;OrCondition&#39;</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">OrCondition</span><span class="p">([</span><span class="n">load_condition</span><span class="p">(</span><span class="n">cd</span><span class="p">)</span> <span class="k">for</span> <span class="n">cd</span> <span class="ow">in</span> <span class="n">dict_</span><span class="p">[</span><span class="s1">&#39;conditions&#39;</span><span class="p">]])</span></div>
+        <span class="k">return</span> <span class="n">OrCondition</span><span class="p">(</span><span class="nb">frozenset</span><span class="p">([</span><span class="n">load_condition</span><span class="p">(</span><span class="n">cd</span><span class="p">)</span> <span class="k">for</span> <span class="n">cd</span> <span class="ow">in</span> <span class="n">dict_</span><span class="p">[</span><span class="s1">&#39;conditions&#39;</span><span class="p">]]))</span></div>
 
 <div class="viewcode-block" id="OrCondition.check"><a class="viewcode-back" href="../../../../envinorma.parametrization.models.html#envinorma.parametrization.models.condition.OrCondition.check">[docs]</a>    <span class="k">def</span> <span class="nf">check</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">type</span> <span class="o">!=</span> <span class="n">ConditionType</span><span class="o">.</span><span class="n">OR</span><span class="p">:</span>
@@ -276,7 +276,7 @@
         <span class="k">return</span> <span class="s1">&#39;(&#39;</span> <span class="o">+</span> <span class="s1">&#39;) or (&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">cd</span><span class="o">.</span><span class="n">to_str</span><span class="p">()</span> <span class="k">for</span> <span class="n">cd</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">conditions</span><span class="p">])</span> <span class="o">+</span> <span class="s1">&#39;)&#39;</span></div></div>
 
 
-<div class="viewcode-block" id="Littler"><a class="viewcode-back" href="../../../../envinorma.parametrization.models.html#envinorma.parametrization.models.condition.Littler">[docs]</a><span class="nd">@dataclass</span>
+<div class="viewcode-block" id="Littler"><a class="viewcode-back" href="../../../../envinorma.parametrization.models.html#envinorma.parametrization.models.condition.Littler">[docs]</a><span class="nd">@dataclass</span><span class="p">(</span><span class="n">eq</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="k">class</span> <span class="nc">Littler</span><span class="p">:</span>
     <span class="n">parameter</span><span class="p">:</span> <span class="n">Parameter</span>
     <span class="n">target</span><span class="p">:</span> <span class="n">Any</span>
@@ -313,7 +313,7 @@
         <span class="k">return</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">parameter</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s1"> </span><span class="si">{</span><span class="n">comp</span><span class="si">}</span><span class="s1"> </span><span class="si">{</span><span class="n">parameter_value_to_str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">target</span><span class="p">)</span><span class="si">}</span><span class="s1">&#39;</span></div></div>
 
 
-<div class="viewcode-block" id="Greater"><a class="viewcode-back" href="../../../../envinorma.parametrization.models.html#envinorma.parametrization.models.condition.Greater">[docs]</a><span class="nd">@dataclass</span>
+<div class="viewcode-block" id="Greater"><a class="viewcode-back" href="../../../../envinorma.parametrization.models.html#envinorma.parametrization.models.condition.Greater">[docs]</a><span class="nd">@dataclass</span><span class="p">(</span><span class="n">eq</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="k">class</span> <span class="nc">Greater</span><span class="p">:</span>
     <span class="n">parameter</span><span class="p">:</span> <span class="n">Parameter</span>
     <span class="n">target</span><span class="p">:</span> <span class="n">Any</span>
@@ -350,7 +350,7 @@
         <span class="k">return</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">parameter</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s1"> </span><span class="si">{</span><span class="n">comp</span><span class="si">}</span><span class="s1"> </span><span class="si">{</span><span class="n">parameter_value_to_str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">target</span><span class="p">)</span><span class="si">}</span><span class="s1">&#39;</span></div></div>
 
 
-<div class="viewcode-block" id="Equal"><a class="viewcode-back" href="../../../../envinorma.parametrization.models.html#envinorma.parametrization.models.condition.Equal">[docs]</a><span class="nd">@dataclass</span>
+<div class="viewcode-block" id="Equal"><a class="viewcode-back" href="../../../../envinorma.parametrization.models.html#envinorma.parametrization.models.condition.Equal">[docs]</a><span class="nd">@dataclass</span><span class="p">(</span><span class="n">eq</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="k">class</span> <span class="nc">Equal</span><span class="p">:</span>
     <span class="n">parameter</span><span class="p">:</span> <span class="n">Parameter</span>
     <span class="n">target</span><span class="p">:</span> <span class="n">Any</span>
@@ -384,7 +384,7 @@
         <span class="k">return</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">parameter</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s1"> == </span><span class="si">{</span><span class="n">parameter_value_to_str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">target</span><span class="p">)</span><span class="si">}</span><span class="s1">&#39;</span></div></div>
 
 
-<div class="viewcode-block" id="Range"><a class="viewcode-back" href="../../../../envinorma.parametrization.models.html#envinorma.parametrization.models.condition.Range">[docs]</a><span class="nd">@dataclass</span>
+<div class="viewcode-block" id="Range"><a class="viewcode-back" href="../../../../envinorma.parametrization.models.html#envinorma.parametrization.models.condition.Range">[docs]</a><span class="nd">@dataclass</span><span class="p">(</span><span class="n">eq</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="k">class</span> <span class="nc">Range</span><span class="p">:</span>
     <span class="n">parameter</span><span class="p">:</span> <span class="n">Parameter</span>
     <span class="n">left</span><span class="p">:</span> <span class="n">Any</span>
