@@ -58,9 +58,9 @@ def _descriptor(tag: bs4.Tag) -> str:
 
 
 def _extract_string_from_tag(tag: Any) -> str:
-    if not isinstance(tag, (bs4.Tag, bs4.NavigableString)):
+    if not isinstance(tag, (bs4.Tag, bs4.NavigableString)):  # type: ignore
         raise ValueError(f'Expecting tag or NavigableString as input, received element of type {type(tag)}')
-    if isinstance(tag, bs4.NavigableString):
+    if isinstance(tag, bs4.NavigableString):  # type: ignore
         return str(tag).strip()
     if _descriptor(tag) == ODFXMLTagNames.TEXT_P.value:
         return _extract_string_from_tags(list(tag.children)) + '\n'
@@ -76,7 +76,7 @@ def _remove_last_line_break(str_: str) -> str:
 
 
 def _ensure_not_navigable_string(candidate: Any) -> str:
-    if isinstance(candidate, bs4.NavigableString) or not isinstance(candidate, str):
+    if isinstance(candidate, bs4.NavigableString) or not isinstance(candidate, str):  # type: ignore
         raise ValueError(f'Expecting str, not {type(candidate)}')
     return candidate
 
@@ -151,13 +151,13 @@ def _extract_list_elements(tag: bs4.Tag) -> List[str]:
         raise ValueError(f'Expecting {ODFXMLTagNames.TEXT_LIST.value} tag, received tag with name {_descriptor(tag)}')
     results: List[str] = []
     for child in tag.children:
-        text = '- ' + _extract_list_item_text(child)
+        text = '- ' + _extract_list_item_text(child)  # type: ignore
         results.append(text)
     return results
 
 
 def _is_independent_element(tag: Any) -> bool:
-    if isinstance(tag, bs4.NavigableString):
+    if isinstance(tag, bs4.NavigableString):  # type: ignore
         return False
     if not isinstance(tag, bs4.Tag):
         raise ValueError(f'Expecting tag as input, received element of type {type(tag)}')
@@ -195,7 +195,7 @@ def _merge_children(all_elements: List[List[TextElement]], can_be_merged_list: L
 
 
 def _extract_flattened_elements(tag: Any, group_children: bool = False) -> List[TextElement]:
-    if isinstance(tag, bs4.NavigableString):
+    if isinstance(tag, bs4.NavigableString):  # type: ignore
         return [str(tag)]
     if not isinstance(tag, bs4.Tag):
         raise ValueError(f'Expecting tag as input, received element of type {type(tag)}')

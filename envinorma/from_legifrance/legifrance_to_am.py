@@ -81,7 +81,7 @@ def _remove_tables(text: str) -> Tuple[str, List[TableReference]]:
     for div in soup.find_all('table'):
         reference = _generate_reference()
         tables.append(extract_table(str(div)))
-        div.replace_with(f'{_BR_PLACEHOLDER}{reference}{_BR_PLACEHOLDER}')
+        div.replace_with(f'{_BR_PLACEHOLDER}{reference}{_BR_PLACEHOLDER}')  # type: ignore
         references.append(reference)
     table_refs = [TableReference(table, reference) for table, reference in zip(tables, references)]
     return str(soup).replace(_BR_PLACEHOLDER, '<br/>'), table_refs
@@ -91,11 +91,11 @@ def _remove_links(text: str) -> Tuple[str, List[LinkReference]]:
     soup = bs4.BeautifulSoup(text, 'html.parser')
     links: List[LinkReference] = []
     for tag in soup.find_all('a'):
-        if 'href' not in tag.attrs:
+        if 'href' not in tag.attrs:  # type: ignore
             continue
         reference = _generate_reference()
-        links.append(LinkReference(reference, _BASE_LEGIFRANCE_URL + tag['href'], tag.text))
-        tag.replace_with(reference)
+        links.append(LinkReference(reference, _BASE_LEGIFRANCE_URL + tag['href'], tag.text))  # type: ignore
+        tag.replace_with(reference)  # type: ignore
     return str(soup), links
 
 
@@ -301,14 +301,14 @@ _BASE_LEGIFRANCE_URL = 'https://www.legifrance.gouv.fr'
 
 def _replace_link(link_tag: bs4.Tag, placeholder: str, add_legifrance_prefix: bool) -> Tuple[str, int]:  # side effects
     link_text = link_tag.text
-    link_tag.replace_with(placeholder + link_text)
-    return (_BASE_LEGIFRANCE_URL if add_legifrance_prefix else '') + link_tag['href'], len(link_text)
+    link_tag.replace_with(placeholder + link_text)  # type: ignore
+    return (_BASE_LEGIFRANCE_URL if add_legifrance_prefix else '') + link_tag['href'], len(link_text)  # type: ignore
 
 
 def _extract_links(text: str, add_legifrance_prefix: bool = True) -> EnrichedString:
     soup = bs4.BeautifulSoup(text, 'html.parser')
     placeholder = '{{{LINK}}}'
-    raw_links = [_replace_link(tag, placeholder, add_legifrance_prefix) for tag in soup.find_all('a')]
+    raw_links = [_replace_link(tag, placeholder, add_legifrance_prefix) for tag in soup.find_all('a')]  # type: ignore
     final_text, positions = _extract_placeholder_positions(soup.text, placeholder)
     return EnrichedString(
         final_text, [Link(target, position, size) for (target, size), position in secure_zip(raw_links, positions)]

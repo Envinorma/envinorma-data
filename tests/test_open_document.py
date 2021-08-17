@@ -452,8 +452,8 @@ def test_write_new_document():
     new_soup = BeautifulSoup(xml_2, 'lxml-xml')
     res = list(new_soup.find_all('text:p'))
     assert len(res) == 2
-    assert res[0].text == 'Bonjour'
-    assert res[1].text == 'World'
+    assert res[0].text == 'Bonjour'  # type: ignore
+    assert res[1].text == 'World'  # type: ignore
     os.remove(output)
 
 
