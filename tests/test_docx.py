@@ -281,13 +281,13 @@ def test_extract_row():
     xml = open('test_data/table_docx.xml').read()
     soup = BeautifulSoup(xml, 'lxml-xml')
     rows = list(soup.find_all('w:tr'))
-    assert len(extract_row(rows[0])[0].cells) == 3
-    assert extract_row(rows[0])[0].is_header
-    assert len(extract_row(rows[1])[0].cells) == 2
-    assert len(extract_row(rows[2])[0].cells) == 3
-    assert len(extract_row(rows[3])[0].cells) == 3
+    assert len(extract_row(rows[0])[0].cells) == 3  # type: ignore
+    assert extract_row(rows[0])[0].is_header  # type: ignore
+    assert len(extract_row(rows[1])[0].cells) == 2  # type: ignore
+    assert len(extract_row(rows[2])[0].cells) == 3  # type: ignore
+    assert len(extract_row(rows[3])[0].cells) == 3  # type: ignore
     for row in rows[1:]:
-        assert not extract_row(row)[0].is_header
+        assert not extract_row(row)[0].is_header  # type: ignore
 
 
 def test_get_docx_xml():

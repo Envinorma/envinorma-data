@@ -27,7 +27,7 @@ def _is_header(row: bs4.Tag) -> bool:
 def _extract_row_data(row: bs4.Tag) -> Row:
     cell_iterator = row.find_all('td' if row.find('td') else 'th')
     res = [
-        Cell(_extract_cell_data(cell), int(cell.get('colspan') or 1), int(cell.get('rowspan') or 1))
+        Cell(_extract_cell_data(cell), int(cell.get('colspan') or 1), int(cell.get('rowspan') or 1))  # type: ignore
         for cell in cell_iterator
     ]
     return Row(res, _is_header(row))
@@ -35,7 +35,7 @@ def _extract_row_data(row: bs4.Tag) -> Row:
 
 def extract_table_from_soup(soup: Union[BeautifulSoup, bs4.Tag]) -> Table:
     row_iterator = soup.find_all('tr')
-    table_data = [_extract_row_data(row) for row in row_iterator]
+    table_data = [_extract_row_data(row) for row in row_iterator]  # type: ignore
     return Table(table_data)
 
 
@@ -49,7 +49,8 @@ def _extract_text_elements_with_linebreaks(content: Any) -> List[TextElement]:
         return [content]
     if isinstance(content, bs4.Tag):
         if content.name in ('h1', 'h2', 'h3', 'h4', 'h5', 'h6'):
-            return [Title(' '.join(content.stripped_strings), level=int(content.name[1]), id=content.get('id'))]
+            id_ = content.get('id')
+            return [Title(' '.join(content.stripped_strings), level=int(content.name[1]), id=id_)]  # type: ignore
         if content.name == 'br':
             return [Linebreak()]
         if content.name == 'table':

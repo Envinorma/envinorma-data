@@ -32,13 +32,13 @@ TABLE_TAG = 'tbl'
 
 
 def extract_random_table(soup: bs4.BeautifulSoup) -> bs4.Tag:
-    return random.choice(list(soup.find_all(TABLE_TAG)))  # noqa: S311
+    return random.choice(list(soup.find_all(TABLE_TAG)))  # type: ignore # noqa: S311
 
 
 def find_table_containing_text(soup: bs4.BeautifulSoup, text: str) -> Optional[bs4.Tag]:
     for table in soup.find_all(TABLE_TAG):
-        if text in table.text:
-            return table
+        if text in table.text:  # type: ignore
+            return table  # type: ignore
     return None
 
 
@@ -127,9 +127,9 @@ def _estimate_text_length(tag: bs4.Tag) -> int:
 def extract_all_word_styles(soup: bs4.BeautifulSoup) -> List[Tuple[Style, int]]:
     res: List[Tuple[Style, int]] = []
     for tag in soup.find_all('r'):
-        style = extract_w_tag_style(tag)
+        style = extract_w_tag_style(tag)  # type: ignore
         if style:
-            res.append((style, _estimate_text_length(tag)))
+            res.append((style, _estimate_text_length(tag)))  # type: ignore
     return res
 
 
@@ -185,7 +185,7 @@ def _replace_tables_and_body_text_with_empty_p(
     for tag in soup.find_all('w:tbl'):
         tag.replace_with(soup.new_tag('w:p'))
     for tag in soup.find_all('w:r'):
-        style = extract_w_tag_style(tag)
+        style = extract_w_tag_style(tag)  # type: ignore
         if style and _is_body(style, body_font_size):
             tag.replace_with(soup.new_tag('w:p'))
     return soup
@@ -206,7 +206,7 @@ def print_table_properties(tag: bs4.Tag, verbose: bool = False) -> None:
         for j, cell in enumerate(row.find_all('w:tc')):
             print(f'Row {i}, cell {j}')
             if verbose:
-                print(remove_duplicate_line_break(cell.text))
+                print(remove_duplicate_line_break(cell.text))  # type: ignore
 
 
 def _is_header_cell(properties: bs4.Tag) -> bool:
@@ -220,7 +220,7 @@ def _is_header(cell_tag: bs4.Tag) -> bool:
     properties = cell_tag.find_all('w:pPr')
     if len(properties) == 0:
         return False
-    return all([_is_header_cell(prop) for prop in properties])
+    return all([_is_header_cell(prop) for prop in properties])  # type: ignore
 
 
 def extract_cell(cell_tag: bs4.Tag) -> Tuple[bool, Cell, Optional[str]]:
@@ -363,7 +363,7 @@ def _copy_soup(soup: bs4.BeautifulSoup) -> bs4.BeautifulSoup:
 
 def _replace_small_tables(soup: bs4.BeautifulSoup) -> bs4.BeautifulSoup:
     soup = _copy_soup(soup)
-    tables = [extract_table(tag) for tag in soup.find_all('w:tbl')]
+    tables = [extract_table(tag) for tag in soup.find_all('w:tbl')]  # type: ignore
     for tag, table in zip(soup.find_all('w:tbl'), tables):
         if not isinstance(tag, bs4.Tag):
             raise ValueError(f'Expecting tag, received {type(tag)}')
@@ -405,7 +405,7 @@ def _group_strings(strings: List[str]) -> List[str]:
 def _build_headers(soup: bs4.BeautifulSoup) -> List[str]:
     res = []
     for tag in soup.find_all('w:p'):
-        res.extend(_group_strings(tag.stripped_strings))
+        res.extend(_group_strings(tag.stripped_strings))  # type: ignore
     return [x for x in res if x]
 
 
