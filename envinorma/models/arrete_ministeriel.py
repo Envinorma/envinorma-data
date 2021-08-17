@@ -250,6 +250,8 @@ class ArreteMinisteriel:
         version_descriptor (Optional[VersionDescriptor]):
             If None, the AM is in a generic version.
             Otherwise, version_descriptor describes to which caracteristics this version corresponds
+        is_transverse (bool):
+            True if the AM is transverse.
     """
 
     title: EnrichedString
@@ -262,6 +264,7 @@ class ArreteMinisteriel:
     classements_with_alineas: List[ClassementWithAlineas] = field(default_factory=list)
     id: Optional[str] = field(default_factory=random_id)
     version_descriptor: Optional[VersionDescriptor] = None
+    is_transverse: bool = False
 
     @property
     def short_title(self) -> str:
@@ -331,4 +334,5 @@ def add_metadata(am: ArreteMinisteriel, metadata: AMMetadata) -> ArreteMinisteri
     am.aida_url = _build_aida_url(metadata.aida_page)
     am.classements = metadata.classements
     am.classements_with_alineas = group_classements_by_alineas(metadata.classements)
+    am.is_transverse = metadata.is_transverse
     return am
