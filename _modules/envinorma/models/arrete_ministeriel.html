@@ -437,6 +437,8 @@
 <span class="sd">            Otherwise, version_descriptor describes to which caracteristics this version corresponds</span>
 <span class="sd">        is_transverse (bool):</span>
 <span class="sd">            True if the AM is transverse.</span>
+<span class="sd">        nickname (Optional[str]):</span>
+<span class="sd">            Optional nickname for the AM. (mainly for transverse AMs)</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">title</span><span class="p">:</span> <span class="n">EnrichedString</span>
@@ -450,6 +452,7 @@
     <span class="nb">id</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="n">random_id</span><span class="p">)</span>
     <span class="n">version_descriptor</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">VersionDescriptor</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="n">is_transverse</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="n">nickname</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">short_title</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
@@ -520,6 +523,7 @@
     <span class="n">am</span><span class="o">.</span><span class="n">classements</span> <span class="o">=</span> <span class="n">metadata</span><span class="o">.</span><span class="n">classements</span>
     <span class="n">am</span><span class="o">.</span><span class="n">classements_with_alineas</span> <span class="o">=</span> <span class="n">group_classements_by_alineas</span><span class="p">(</span><span class="n">metadata</span><span class="o">.</span><span class="n">classements</span><span class="p">)</span>
     <span class="n">am</span><span class="o">.</span><span class="n">is_transverse</span> <span class="o">=</span> <span class="n">metadata</span><span class="o">.</span><span class="n">is_transverse</span>
+    <span class="n">am</span><span class="o">.</span><span class="n">nickname</span> <span class="o">=</span> <span class="n">metadata</span><span class="o">.</span><span class="n">nickname</span>
     <span class="k">return</span> <span class="n">am</span></div>
 </pre></div>
 
