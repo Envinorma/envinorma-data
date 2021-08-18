@@ -35,6 +35,7 @@ class AMMetadata:
     nor: Optional[str] = None
     reason_deleted: Optional[str] = None
     is_transverse: bool = False
+    nickname: Optional[str] = None
 
     @staticmethod
     def from_dict(dict_: Dict[str, Any]) -> 'AMMetadata':
