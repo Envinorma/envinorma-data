@@ -252,6 +252,8 @@ class ArreteMinisteriel:
             Otherwise, version_descriptor describes to which caracteristics this version corresponds
         is_transverse (bool):
             True if the AM is transverse.
+        nickname (Optional[str]):
+            Optional nickname for the AM. (mainly for transverse AMs)
     """
 
     title: EnrichedString
@@ -265,6 +267,7 @@ class ArreteMinisteriel:
     id: Optional[str] = field(default_factory=random_id)
     version_descriptor: Optional[VersionDescriptor] = None
     is_transverse: bool = False
+    nickname: Optional[str] = None
 
     @property
     def short_title(self) -> str:
@@ -335,4 +338,5 @@ def add_metadata(am: ArreteMinisteriel, metadata: AMMetadata) -> ArreteMinisteri
     am.classements = metadata.classements
     am.classements_with_alineas = group_classements_by_alineas(metadata.classements)
     am.is_transverse = metadata.is_transverse
+    am.nickname = metadata.nickname
     return am
