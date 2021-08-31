@@ -2,7 +2,7 @@ from datetime import date, datetime, timedelta
 from typing import Any, List, Optional, Set, Tuple, Union
 
 from envinorma.models.classement import Regime
-from envinorma.parametrization.models.condition import (
+from envinorma.models.condition import (
     Condition,
     ConditionType,
     Equal,
@@ -12,8 +12,8 @@ from envinorma.parametrization.models.condition import (
     Range,
     extract_sorted_interval_sides_targets,
 )
+from envinorma.models.parameter import AED_PARAMETERS, Parameter, ParameterEnum, ParameterType
 
-from .models.parameter import AED_PARAMETERS, Parameter, ParameterEnum, ParameterType
 from .models.parametrization import Combinations, Parametrization, extract_conditions_from_parametrization
 
 _Options = Tuple[Parameter, List[Tuple[str, Any]]]

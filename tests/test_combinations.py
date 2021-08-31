@@ -4,6 +4,8 @@ from typing import List
 import pytest
 
 from envinorma.models import Regime
+from envinorma.models.condition import Condition, Equal, Greater, Littler, Range
+from envinorma.models.parameter import Parameter, ParameterEnum, ParameterType
 from envinorma.parametrization.combinations import (
     _change_value,
     _extract_interval_midpoints,
@@ -13,8 +15,6 @@ from envinorma.parametrization.combinations import (
     _keep_aed_parameter,
     _mean,
 )
-from envinorma.parametrization.models.condition import Condition, Equal, Greater, Littler, Range
-from envinorma.parametrization.models.parameter import Parameter, ParameterEnum, ParameterType
 from envinorma.parametrization.models.parametrization import Combinations
 
 

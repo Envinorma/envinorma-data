@@ -3,12 +3,8 @@ from dataclasses import replace
 from datetime import date, datetime
 from typing import Any, Dict, List, Optional, Tuple
 
-from envinorma.models import Ints
-from envinorma.models.arrete_ministeriel import ArreteMinisteriel, DateParameterDescriptor, VersionDescriptor
-from envinorma.models.classement import Regime
-from envinorma.models.structured_text import Applicability, StructuredText
-
-from .models.condition import (
+from envinorma.models import ArreteMinisteriel, DateParameterDescriptor, Ints, Regime, VersionDescriptor
+from envinorma.models.condition import (
     AndCondition,
     Condition,
     Greater,
@@ -18,7 +14,9 @@ from .models.condition import (
     extract_leaf_conditions,
     extract_sorted_interval_sides_targets,
 )
-from .models.parameter import AED_PARAMETERS, Parameter, ParameterEnum
+from envinorma.models.parameter import AED_PARAMETERS, Parameter, ParameterEnum
+from envinorma.models.structured_text import Applicability, StructuredText
+
 from .models.parametrization import (
     AlternativeSection,
     AMWarning,

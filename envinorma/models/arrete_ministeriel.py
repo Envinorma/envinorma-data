@@ -6,10 +6,11 @@ from datetime import date, datetime
 from operator import attrgetter
 from typing import Any, Dict, List, Optional
 
-from envinorma.models.classement import Classement, ClassementWithAlineas, group_classements_by_alineas
 from envinorma.utils import AIDA_URL, LEGIFRANCE_LODA_BASE_URL, random_id
 
 from .am_metadata import AMMetadata
+from .classement import Classement, ClassementWithAlineas, group_classements_by_alineas
+from .condition import Condition, load_condition
 from .structured_text import StructuredText
 from .text_elements import EnrichedString
 
@@ -223,6 +224,25 @@ def extract_date_of_signature(input_title: str) -> date:
 
 
 @dataclass
+class AMApplicability:
+    warnings: List[str] = field(default_factory=list)
+    conditions_of_inapplicability: List[Condition] = field(default_factory=list)
+
+    def to_dict(self) -> Dict[str, Any]:
+        res = asdict(self)
+        res['conditions_of_inapplicability'] = [c.to_dict() for c in self.conditions_of_inapplicability]
+        return res
+
+    @classmethod
+    def from_dict(cls, dict_: Dict[str, Any]) -> 'AMApplicability':
+        dict_ = dict_.copy()
+        dict_['conditions_of_inapplicability'] = [
+            load_condition(condition) for condition in dict_['conditions_of_inapplicability']
+        ]
+        return cls(**dict_)
+
+
+@dataclass
 class ArreteMinisteriel:
     """Dataclass for ICPE arrete ministeriels (AM).
 
@@ -254,6 +274,8 @@ class ArreteMinisteriel:
             True if the AM is transverse.
         nickname (Optional[str]):
             Optional nickname for the AM. (mainly for transverse AMs)
+        applicability (Optional[AMApplicability]):
+            Optional applicability descriptor of the AM.
     """
 
     title: EnrichedString
@@ -268,6 +290,7 @@ class ArreteMinisteriel:
     version_descriptor: Optional[VersionDescriptor] = None
     is_transverse: bool = False
     nickname: Optional[str] = None
+    applicability: AMApplicability = field(default_factory=AMApplicability)
 
     @property
     def short_title(self) -> str:
@@ -294,6 +317,7 @@ class ArreteMinisteriel:
         res['classements_with_alineas'] = [cl.to_dict() for cl in self.classements_with_alineas]
         if self.version_descriptor:
             res['version_descriptor'] = self.version_descriptor.to_dict()
+        res['applicability'] = self.applicability.to_dict()
         return res
 
     @classmethod
@@ -316,6 +340,8 @@ class ArreteMinisteriel:
         dict_['version_descriptor'] = (
             VersionDescriptor.from_dict(dict_['version_descriptor']) if dict_.get('version_descriptor') else None
         )
+        if 'applicability' in dict_:
+            dict_['applicability'] = AMApplicability.from_dict(dict_['applicability'])
         fields_ = set(map(attrgetter('name'), fields(cls)))
         return cls(**{key: value for key, value in dict_.items() if key in fields_})
 

@@ -3,6 +3,8 @@ from datetime import date
 from envinorma.models.am_metadata import AMMetadata, AMSource, AMState
 from envinorma.models.arrete_ministeriel import ArreteMinisteriel
 from envinorma.models.classement import Classement, Regime
+from envinorma.models.condition import AndCondition, Littler, Range, extract_leaf_conditions
+from envinorma.models.parameter import Parameter, ParameterType
 from envinorma.models.structured_text import StructuredText
 from envinorma.models.text_elements import Cell, EnrichedString, Row, Table
 from envinorma.parametrization.am_with_versions import (
@@ -11,8 +13,6 @@ from envinorma.parametrization.am_with_versions import (
     generate_versions,
 )
 from envinorma.parametrization.combinations import _generate_options_dicts, generate_exhaustive_combinations
-from envinorma.parametrization.models.condition import AndCondition, Littler, Range, extract_leaf_conditions
-from envinorma.parametrization.models.parameter import Parameter, ParameterType
 from envinorma.parametrization.models.parametrization import (
     AlternativeSection,
     AMWarning,

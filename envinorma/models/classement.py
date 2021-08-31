@@ -2,13 +2,7 @@ from dataclasses import asdict, dataclass
 from enum import Enum
 from typing import Any, Dict, List, Optional, Tuple
 
-
-class Regime(Enum):
-    A = 'A'
-    E = 'E'
-    D = 'D'
-    DC = 'DC'
-    NC = 'NC'
+from .regime import Regime
 
 
 class ClassementState(Enum):

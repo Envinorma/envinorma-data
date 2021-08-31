@@ -1,4 +1,5 @@
-from .condition import (  # noqa: F401
+from ...models import Parameter, ParameterEnum, ParameterType, parameter_value_to_str  # noqa: F401
+from ...models.condition import (  # noqa: F401
     AndCondition,
     Condition,
     Conditions,
@@ -16,7 +17,6 @@ from .condition import (  # noqa: F401
     Range,
     ensure_mono_conditions,
 )
-from .parameter import Parameter, ParameterEnum, ParameterType, parameter_value_to_str  # noqa: F401
 from .parametrization import (  # noqa: F401
     AlternativeSection,
     AMWarning,

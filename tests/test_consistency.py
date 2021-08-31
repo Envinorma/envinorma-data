@@ -3,6 +3,8 @@ from datetime import datetime, timedelta
 import pytest
 
 from envinorma.models.classement import Regime
+from envinorma.models.condition import Equal, Greater, Littler, OrCondition, Range
+from envinorma.models.parameter import ParameterEnum
 from envinorma.parametrization.consistency import (
     _check_date_conditions_not_compatible,
     _check_discrete_conditions_not_compatible,
@@ -12,8 +14,6 @@ from envinorma.parametrization.consistency import (
     check_conditions_not_compatible,
 )
 from envinorma.parametrization.exceptions import ParametrizationError
-from envinorma.parametrization.models.condition import Equal, Greater, Littler, OrCondition, Range
-from envinorma.parametrization.models.parameter import ParameterEnum
 
 
 def test_check_conditions_not_compatible():

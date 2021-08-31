@@ -1,8 +1,8 @@
 from datetime import datetime
 
 from envinorma.models.classement import Regime
-from envinorma.parametrization.models.condition import AndCondition, Equal, Greater, Littler, OrCondition, Range
-from envinorma.parametrization.models.parameter import ParameterEnum
+from envinorma.models.condition import AndCondition, Equal, Greater, Littler, OrCondition, Range
+from envinorma.models.parameter import ParameterEnum
 from envinorma.parametrization.natural_language_warnings import (
     _alineas_prefix,
     _generate_prefix,

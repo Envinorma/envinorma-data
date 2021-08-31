@@ -8,8 +8,8 @@ from envinorma.models import AMMetadata, ArreteMinisteriel, Classement, Classeme
 from envinorma.parametrization.combinations import generate_exhaustive_combinations
 from envinorma.utils import AM1510_IDS, ensure_not_none
 
+from ..models import ParameterEnum
 from .apply_parameter_values import apply_parameter_values_to_am
-from .models.parameter import ParameterEnum
 from .models.parametrization import Combinations, Parametrization
 
 AMVersions = Dict[Tuple[str, ...], ArreteMinisteriel]
