@@ -60,30 +60,30 @@ _PARAMETRIZATION = Parametrization(
 )
 
 _STRUCTURED_AM = ArreteMinisteriel(
-    title=EnrichedString(text='Arrêté du 15/12/20', links=[], table=None, active=True),
+    title=EnrichedString(text='Arrêté du 15/12/20'),
     sections=[
         StructuredText(
-            title=EnrichedString(text='Article 1', links=[], table=None, active=True),
+            title=EnrichedString(text='Article 1'),
             outer_alineas=[],
             sections=[
                 StructuredText(
-                    title=EnrichedString(text='Article 1.1', links=[], table=None, active=True),
+                    title=EnrichedString(text='Article 1.1'),
                     outer_alineas=[],
                     sections=[
                         StructuredText(
-                            title=EnrichedString(text='I.', links=[], table=None, active=True),
+                            title=EnrichedString(text='I.'),
                             outer_alineas=[
-                                EnrichedString(text='Test', links=[], table=None, active=True),
-                                EnrichedString(text='ceci est le I', links=[], table=None, active=True),
+                                EnrichedString(text='Test'),
+                                EnrichedString(text='ceci est le I'),
                             ],
                             sections=[],
                             applicability=None,
                         ),
                         StructuredText(
-                            title=EnrichedString(text='II.', links=[], table=None, active=True),
+                            title=EnrichedString(text='II.'),
                             outer_alineas=[
-                                EnrichedString(text='Test', links=[], table=None, active=True),
-                                EnrichedString(text='ceci est le II', links=[], table=None, active=True),
+                                EnrichedString(text='Test'),
+                                EnrichedString(text='ceci est le II'),
                             ],
                             sections=[],
                             applicability=None,
@@ -95,13 +95,13 @@ _STRUCTURED_AM = ArreteMinisteriel(
             applicability=None,
         ),
         StructuredText(
-            title=EnrichedString(text='Article 2', links=[], table=None, active=True),
+            title=EnrichedString(text='Article 2'),
             outer_alineas=[],
             sections=[
                 StructuredText(
-                    title=EnrichedString(text='Article 2.1', links=[], table=None, active=True),
+                    title=EnrichedString(text='Article 2.1'),
                     outer_alineas=[
-                        EnrichedString(text='Contenu', links=[], table=None, active=True),
+                        EnrichedString(text='Contenu'),
                         EnrichedString(
                             text='',
                             links=[],
@@ -110,9 +110,7 @@ _STRUCTURED_AM = ArreteMinisteriel(
                                     Row(
                                         cells=[
                                             Cell(
-                                                content=EnrichedString(
-                                                    text='Cellule 1', links=[], table=None, active=True
-                                                ),
+                                                content=EnrichedString(text='Cellule 1'),
                                                 colspan=1,
                                                 rowspan=1,
                                             )
@@ -122,9 +120,7 @@ _STRUCTURED_AM = ArreteMinisteriel(
                                     Row(
                                         cells=[
                                             Cell(
-                                                content=EnrichedString(
-                                                    text='Cellule 2', links=[], table=None, active=True
-                                                ),
+                                                content=EnrichedString(text='Cellule 2'),
                                                 colspan=1,
                                                 rowspan=1,
                                             )
@@ -133,7 +129,6 @@ _STRUCTURED_AM = ArreteMinisteriel(
                                     ),
                                 ]
                             ),
-                            active=True,
                         ),
                     ],
                     sections=[],

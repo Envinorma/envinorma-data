@@ -144,12 +144,10 @@ def _get_simple_text() -> StructuredText:
 
 
 _TEXT_A = StructuredText(
-    title=EnrichedString(
-        text='6. Schématisation des différents types de joints mentionnés :', links=[], table=None, active=True
-    ),
+    title=EnrichedString(text='6. Schématisation des différents types de joints mentionnés :'),
     outer_alineas=[
-        EnrichedString(text='Vous pouvez consulter les schémas dans le', links=[], table=None, active=True),
-        EnrichedString(text='JO\nn° 265 du 16/11/2010 texte numéro 21', links=[], table=None, active=True),
+        EnrichedString(text='Vous pouvez consulter les schémas dans le'),
+        EnrichedString(text='JO\nn° 265 du 16/11/2010 texte numéro 21'),
     ],
     sections=[],
     applicability=None,
@@ -158,12 +156,10 @@ _TEXT_A = StructuredText(
     id='0bEB0b14A96f',
 )
 _TEXT_B = StructuredText(
-    title=EnrichedString(
-        text='6. Schématisation des différents types de joints mentionnés :', links=[], table=None, active=True
-    ),
+    title=EnrichedString(text='6. Schématisation des différents types de joints mentionnés :'),
     outer_alineas=[
-        EnrichedString(text='Vous pouvez consulter les schémas dans le', links=[], table=None, active=True),
-        EnrichedString(text='JO n° 265 du 16/11/2010 texte numéro 21', links=[], table=None, active=True),
+        EnrichedString(text='Vous pouvez consulter les schémas dans le'),
+        EnrichedString(text='JO n° 265 du 16/11/2010 texte numéro 21'),
     ],
     sections=[],
     applicability=None,

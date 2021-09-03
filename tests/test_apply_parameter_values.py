@@ -50,13 +50,15 @@ def _str(text: Optional[str] = None) -> EnrichedString:
 
 
 def _all_alineas_inactive(text: StructuredText) -> bool:
-    return all([not al.active for al in text.outer_alineas]) and all(
+    return all([al.inactive for al in text.outer_alineas]) and all(
         [_all_alineas_inactive(sec) for sec in text.sections]
     )
 
 
 def _all_alineas_active(text: StructuredText) -> bool:
-    return all([al.active for al in text.outer_alineas]) and all([_all_alineas_active(sec) for sec in text.sections])
+    return all([not al.inactive for al in text.outer_alineas]) and all(
+        [_all_alineas_active(sec) for sec in text.sections]
+    )
 
 
 def test_apply_parameter_values_to_am():
@@ -98,8 +100,8 @@ def test_apply_parameter_values_to_am():
     assert len(app_2.warnings) == 0
 
     app_3: Applicability = ensure_not_none(new_am_1.sections[3].applicability)
-    assert not new_am_1.sections[3].outer_alineas[0].active
-    assert new_am_1.sections[3].outer_alineas[1].active
+    assert new_am_1.sections[3].outer_alineas[0].inactive
+    assert not new_am_1.sections[3].outer_alineas[1].inactive
     assert len(app_3.warnings) == 1
 
     new_am_2 = apply_parameter_values_to_am(am, parametrization, {parameter: True})
@@ -114,8 +116,8 @@ def test_apply_parameter_values_to_am():
     assert new_am_2.sections[1].outer_alineas[0].text == 'version modifiée'
     assert app_5.previous_version is not None
 
-    assert new_am_2.sections[3].outer_alineas[0].active
-    assert new_am_2.sections[3].outer_alineas[1].active
+    assert not new_am_2.sections[3].outer_alineas[0].inactive
+    assert not new_am_2.sections[3].outer_alineas[1].inactive
     app_6: Applicability = ensure_not_none(new_am_2.sections[3].applicability)
     assert len(app_6.warnings) == 0
 
@@ -129,8 +131,8 @@ def test_apply_parameter_values_to_am():
     assert len(app_8.warnings) == 1
 
     app_9: Applicability = ensure_not_none(new_am_3.sections[3].applicability)
-    assert new_am_3.sections[3].outer_alineas[0].active
-    assert new_am_3.sections[3].outer_alineas[1].active
+    assert not new_am_3.sections[3].outer_alineas[0].inactive
+    assert not new_am_3.sections[3].outer_alineas[1].inactive
     assert len(app_9.warnings) == 1
 
 
@@ -214,7 +216,7 @@ def test_deactivate_alineas():
     )
     res = _deactivate_alineas(_get_simple_text(), nac, {ParameterEnum.DATE_INSTALLATION.value: datetime(2020, 1, 1)})
     assert not res.applicability.active  # type: ignore
-    assert all([not al.active for al in res.outer_alineas])
+    assert all([al.inactive for al in res.outer_alineas])
 
     nac = _IS(
         EntityReference(SectionReference((0,)), [0]),
@@ -223,8 +225,8 @@ def test_deactivate_alineas():
     )
     res = _deactivate_alineas(_get_simple_text(), nac, {ParameterEnum.DATE_INSTALLATION.value: datetime(2020, 1, 1)})
     assert res.applicability.active  # type: ignore
-    assert not res.outer_alineas[0].active
-    assert res.outer_alineas[1].active
+    assert res.outer_alineas[0].inactive
+    assert not res.outer_alineas[1].inactive
 
     nac = _IS(
         EntityReference(SectionReference((0,)), None),

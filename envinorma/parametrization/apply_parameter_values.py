@@ -86,7 +86,7 @@ def _deactivate_child_section(section: StructuredText, all_inactive: bool) -> St
     else:
         section.applicability = Applicability(active=not all_inactive)
     section.sections = [_deactivate_child_section(sec, all_inactive) for sec in section.sections]
-    section.outer_alineas = [replace(al, active=False) for al in section.outer_alineas]
+    section.outer_alineas = [replace(al, inactive=True) for al in section.outer_alineas]
     return section
 
 
@@ -101,11 +101,9 @@ def _deactivate_alineas(
     )
     if inactive_alineas is not None:
         inactive_alineas_set = set(inactive_alineas)
-        new_outer_alineas = [
-            replace(al, active=i not in inactive_alineas_set) for i, al in enumerate(text.outer_alineas)
-        ]
+        new_outer_alineas = [replace(al, inactive=i in inactive_alineas_set) for i, al in enumerate(text.outer_alineas)]
     else:
-        new_outer_alineas = [replace(al, active=False) for al in text.outer_alineas]
+        new_outer_alineas = [replace(al, inactive=True) for al in text.outer_alineas]
     text.applicability = Applicability(active=not all_inactive, warnings=[warning])
     text.sections = [_deactivate_child_section(section, all_inactive=all_inactive) for section in text.sections]
     text.outer_alineas = new_outer_alineas
