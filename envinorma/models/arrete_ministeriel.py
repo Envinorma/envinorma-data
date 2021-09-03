@@ -226,19 +226,19 @@ def extract_date_of_signature(input_title: str) -> date:
 @dataclass
 class AMApplicability:
     warnings: List[str] = field(default_factory=list)
-    conditions_of_inapplicability: List[Condition] = field(default_factory=list)
+    condition_of_inapplicability: Optional[Condition] = None
 
     def to_dict(self) -> Dict[str, Any]:
         res = asdict(self)
-        res['conditions_of_inapplicability'] = [c.to_dict() for c in self.conditions_of_inapplicability]
+        if self.condition_of_inapplicability:
+            res['condition_of_inapplicability'] = self.condition_of_inapplicability.to_dict()
         return res
 
     @classmethod
     def from_dict(cls, dict_: Dict[str, Any]) -> 'AMApplicability':
         dict_ = dict_.copy()
-        dict_['conditions_of_inapplicability'] = [
-            load_condition(condition) for condition in dict_['conditions_of_inapplicability']
-        ]
+        if dict_.get('condition_of_inapplicability'):
+            dict_['condition_of_inapplicability'] = load_condition(dict_['condition_of_inapplicability'])
         return cls(**dict_)
 
 
@@ -267,9 +267,6 @@ class ArreteMinisteriel:
             List of classements for which this AM is applicable, groupped by (Rubrique, Regime) couples
         id (Optional[str]):
             CID of the AM (of the form JORFTEXT... or LEGITEXT...)
-        version_descriptor (Optional[VersionDescriptor]):
-            If None, the AM is in a generic version.
-            Otherwise, version_descriptor describes to which caracteristics this version corresponds
         is_transverse (bool):
             True if the AM is transverse.
         nickname (Optional[str]):
@@ -287,7 +284,6 @@ class ArreteMinisteriel:
     classements: List[Classement] = field(default_factory=list)
     classements_with_alineas: List[ClassementWithAlineas] = field(default_factory=list)
     id: Optional[str] = field(default_factory=random_id)
-    version_descriptor: Optional[VersionDescriptor] = None
     is_transverse: bool = False
     nickname: Optional[str] = None
     applicability: AMApplicability = field(default_factory=AMApplicability)
@@ -315,8 +311,6 @@ class ArreteMinisteriel:
         res['sections'] = [section.to_dict() for section in self.sections]
         res['classements'] = [cl.to_dict() for cl in self.classements]
         res['classements_with_alineas'] = [cl.to_dict() for cl in self.classements_with_alineas]
-        if self.version_descriptor:
-            res['version_descriptor'] = self.version_descriptor.to_dict()
         res['applicability'] = self.applicability.to_dict()
         return res
 
@@ -337,9 +331,6 @@ class ArreteMinisteriel:
             ClassementWithAlineas.from_dict(cl) for cl in dict_.get('classements_with_alineas') or []
         ]
         dict_['classements_with_alineas'] = sorted(classements_with_alineas, key=lambda x: x.regime.value)
-        dict_['version_descriptor'] = (
-            VersionDescriptor.from_dict(dict_['version_descriptor']) if dict_.get('version_descriptor') else None
-        )
         if 'applicability' in dict_:
             dict_['applicability'] = AMApplicability.from_dict(dict_['applicability'])
         fields_ = set(map(attrgetter('name'), fields(cls)))

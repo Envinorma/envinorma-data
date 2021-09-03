@@ -238,84 +238,6 @@ def _is_satisfiable(condition: Condition, regime_target: Regime) -> bool:
     return regime_target == condition.target
 
 
-def _keep_satisfiable(conditions: List[Condition], regime_target: Regime) -> List[Condition]:
-    if not isinstance(regime_target, Regime):
-        raise ValueError(f'regime_target must be an instance of Regime, not {type(regime_target)}')
-    return [condition for condition in conditions if _is_satisfiable(condition, regime_target)]
-
-
-def _convert_to_date(element: Any) -> date:
-    if isinstance(element, datetime):
-        return element.date()
-    if isinstance(element, date):
-        return element
-    raise ValueError(f'Expecting date or datetime, got {type(element)}')
-
-
-def _convert_to_dates(elements: List[Any]) -> List[date]:
-    return [_convert_to_date(el) for el in elements]
-
-
-def _used_date_parameter(
-    searched_date_parameter: Parameter, parametrization: Parametrization, parameter_values: Dict[Parameter, Any]
-) -> DateParameterDescriptor:
-    conditions = parametrization.extract_conditions()
-    if ParameterEnum.REGIME.value in parameter_values:
-        conditions = _keep_satisfiable(conditions, parameter_values[ParameterEnum.REGIME.value])
-    leaf_conditions = [leaf for cd in conditions for leaf in extract_leaf_conditions(cd, searched_date_parameter)]
-    if not leaf_conditions:
-        return DateParameterDescriptor(False)
-    if searched_date_parameter not in parameter_values:
-        return DateParameterDescriptor(True, True)
-    value = _convert_to_date(parameter_values[searched_date_parameter])
-    limit_dates = _convert_to_dates(extract_sorted_interval_sides_targets(leaf_conditions, True))
-    date_left, date_right = _extract_surrounding_dates(value, limit_dates)
-    return DateParameterDescriptor(True, False, date_left, date_right)
-
-
-def _date_de_mise_en_service_parameter(
-    parametrization: Parametrization, parameter_values: Dict[Parameter, Any]
-) -> DateParameterDescriptor:
-    return _used_date_parameter(ParameterEnum.DATE_INSTALLATION.value, parametrization, parameter_values)
-
-
-def _find_used_date(parametrization: Parametrization) -> Parameter:
-    used_date_parameters = parametrization.extract_parameters().intersection(AED_PARAMETERS)
-    if not used_date_parameters:
-        return ParameterEnum.DATE_DECLARATION.value
-    if len(used_date_parameters) == 1:
-        return used_date_parameters.pop()
-    raise ValueError(f'Cannot handle several AED dates in the same parametrization, got {used_date_parameters}.')
-
-
-def _aed_date_parameter(
-    parametrization: Parametrization, parameter_values: Dict[Parameter, Any]
-) -> DateParameterDescriptor:
-    used_date = _find_used_date(parametrization)
-    return _used_date_parameter(used_date, parametrization, parameter_values)
-
-
-def _date_parameters(
-    parametrization: Parametrization, parameter_values: Dict[Parameter, Any]
-) -> Tuple[DateParameterDescriptor, DateParameterDescriptor]:
-    return (
-        _aed_date_parameter(parametrization, parameter_values),
-        _date_de_mise_en_service_parameter(parametrization, parameter_values),
-    )
-
-
-def _compute_am_version_descriptor(
-    parametrization: Parametrization, parameter_values: Dict[Parameter, Any]
-) -> VersionDescriptor:
-    am_applicable, am_applicability_warnings = _compute_whole_text_applicability(
-        parametrization.path_to_conditions.get(()) or [],
-        parameter_values,
-        parametrization.path_to_warnings.get(()) or [],
-    )
-    date_parameters = _date_parameters(parametrization, parameter_values)
-    return VersionDescriptor(am_applicable, am_applicability_warnings, *date_parameters)
-
-
 def apply_parameter_values_to_am(
     am: ArreteMinisteriel, parametrization: Parametrization, parameter_values: Dict[Parameter, Any]
 ) -> ArreteMinisteriel:
@@ -324,5 +246,4 @@ def apply_parameter_values_to_am(
         _apply_parameter_values_in_text(section, parametrization, parameter_values, (i,))
         for i, section in enumerate(am.sections)
     ]
-    am.version_descriptor = _compute_am_version_descriptor(parametrization, parameter_values)
     return am

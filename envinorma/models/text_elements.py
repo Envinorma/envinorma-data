@@ -43,20 +43,15 @@ def _cells_to_html(cells: List[Cell], is_header: bool, with_links: bool = False)
 class Row:
     cells: List[Cell]
     is_header: bool
-    inline_content: Optional[str] = None
 
     @classmethod
     def from_dict(cls, dict_: Dict) -> 'Row':
         dict_ = dict_.copy()
         dict_['cells'] = [Cell.from_dict(cell) for cell in dict_['cells']]
-        dict_['inline_content'] = dict_['text_in_inspection_sheet']
-        del dict_['text_in_inspection_sheet']
         return cls(**dict_)
 
     def to_dict(self) -> Dict[str, Any]:
         dict_ = asdict(self)
-        dict_['text_in_inspection_sheet'] = dict_['inline_content']
-        del dict_['inline_content']
         return dict_
 
     def to_html(self, with_links: bool = False) -> str:
@@ -120,7 +115,7 @@ class EnrichedString:
     def from_dict(cls, dict_: Dict[str, Any]) -> 'EnrichedString':
         dict_ = dict_.copy()
         dict_['links'] = [Link.from_dict(link) for link in dict_.get('links', [])]
-        dict_['table'] = Table.from_dict(dict_['table']) if dict_['table'] else None
+        dict_['table'] = Table.from_dict(dict_['table']) if dict_.get('table') else None
         if 'id' in dict_:
             del dict_['id']
         return cls(**dict_)
@@ -128,6 +123,8 @@ class EnrichedString:
     def to_dict(self) -> Dict[str, Any]:
         dict_ = asdict(self)
         dict_['table'] = self.table.to_dict() if self.table else None
+        if not dict_['table']:
+            del dict_['table']
         if not self.links:
             del dict_['links']
         return dict_

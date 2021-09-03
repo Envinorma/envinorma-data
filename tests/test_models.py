@@ -69,9 +69,6 @@ def test_arrete_ministeriel():
         classements=[Classement('1510', Regime.A, 'al')],
         classements_with_alineas=[ClassementWithAlineas('1510', Regime.A, ['al', 'albis'])],
         id='JORFTEXTid',
-        version_descriptor=VersionDescriptor(
-            True, [], DateParameterDescriptor(False), DateParameterDescriptor(True, True, None, date(2020, 1, 1))
-        ),
     )
     dict_ = am.to_dict()
     new_dict = ArreteMinisteriel.from_dict(json.loads(json.dumps(dict_))).to_dict()
