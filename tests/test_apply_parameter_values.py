@@ -1,6 +1,6 @@
 import random
 from copy import copy
-from datetime import date, datetime, timedelta
+from datetime import date, datetime
 from operator import itemgetter
 from string import ascii_letters
 from typing import List, Optional
@@ -11,7 +11,6 @@ from envinorma.models import Applicability, ArreteMinisteriel, EnrichedString, R
 from envinorma.parametrization.am_with_versions import generate_versions
 from envinorma.parametrization.apply_parameter_values import (
     _deactivate_alineas,
-    _extract_surrounding_dates,
     _is_satisfiable,
     apply_parameter_values_to_am,
 )
@@ -238,17 +237,6 @@ def test_deactivate_alineas():
     )
     assert not res.applicability.active  # type: ignore
     assert not res.sections[0].applicability.active  # type: ignore
-
-
-def test_extract_surrounding_dates():
-    assert _extract_surrounding_dates(date.today(), []) == (None, None)
-
-    dates = [date.today() + timedelta(days=2 * i + 1) for i in range(3)]
-    assert _extract_surrounding_dates(date.today(), dates) == (None, dates[0])
-    assert _extract_surrounding_dates(date.today() + timedelta(1), dates) == (dates[0], dates[1])
-    assert _extract_surrounding_dates(date.today() + timedelta(2), dates) == (dates[0], dates[1])
-    assert _extract_surrounding_dates(date.today() + timedelta(4), dates) == (dates[1], dates[2])
-    assert _extract_surrounding_dates(date.today() + timedelta(6), dates) == (dates[2], None)
 
 
 def test_is_satisfiable():

@@ -1,7 +1,6 @@
 from copy import copy
-from dataclasses import replace
-from datetime import date
-from typing import Any, Dict, List, Optional, Tuple
+from dataclasses import dataclass, replace
+from typing import Any, Dict, List, Tuple
 
 from envinorma.models import ArreteMinisteriel, Ints, Regime
 from envinorma.models.condition import AndCondition, Condition, Greater, Littler, OrCondition, Range
@@ -204,17 +203,6 @@ def _compute_whole_text_applicability(
     return False, [description]
 
 
-def _extract_surrounding_dates(target_date: date, limit_dates: List[date]) -> Tuple[Optional[date], Optional[date]]:
-    if not limit_dates:
-        return None, None
-    if target_date < limit_dates[0]:
-        return (None, limit_dates[0])
-    for date_before, date_after in zip(limit_dates, limit_dates[1:]):
-        if target_date < date_after:
-            return (date_before, date_after)
-    return limit_dates[-1], None
-
-
 def _is_satisfiable(condition: Condition, regime_target: Regime) -> bool:
     if isinstance(condition, AndCondition):
         return all([_is_satisfiable(cd, regime_target) for cd in condition.conditions])
@@ -236,3 +224,32 @@ def apply_parameter_values_to_am(
         for i, section in enumerate(am.sections)
     ]
     return am
+
+
+@dataclass
+class AMWithApplicability:
+    arrete: ArreteMinisteriel
+    applicable: bool
+    warnings: List[str]
+
+    @classmethod
+    def from_dict(cls, dict: Dict[str, Any]) -> 'AMWithApplicability':
+        return cls(
+            arrete=ArreteMinisteriel.from_dict(dict['am']), applicable=dict['applicable'], warnings=dict['warnings']
+        )
+
+    def to_dict(self) -> Dict[str, Any]:
+        return {'am': self.arrete.to_dict(), 'applicable': self.applicable, 'warnings': self.warnings}
+
+
+def build_am_with_applicability(
+    am: ArreteMinisteriel, parametrization: Parametrization, parameter_values: Dict[Parameter, Any]
+) -> AMWithApplicability:
+    applicable, warnings = _compute_whole_text_applicability(
+        parametrization.path_to_conditions.get((), []), parameter_values, parametrization.path_to_warnings.get((), [])
+    )
+    return AMWithApplicability(
+        arrete=apply_parameter_values_to_am(am, parametrization, parameter_values),
+        applicable=applicable,
+        warnings=warnings,
+    )
