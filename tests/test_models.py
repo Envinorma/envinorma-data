@@ -8,8 +8,6 @@ import pytest
 
 from envinorma.models.arrete_ministeriel import (
     ArreteMinisteriel,
-    DateParameterDescriptor,
-    VersionDescriptor,
     _contains_human_date,
     _is_probably_cid,
     extract_date_of_signature,

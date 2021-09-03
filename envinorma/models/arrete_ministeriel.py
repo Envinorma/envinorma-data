@@ -3,7 +3,6 @@ import warnings
 from copy import copy
 from dataclasses import asdict, dataclass, field, fields
 from datetime import date, datetime
-from operator import attrgetter
 from typing import Any, Dict, List, Optional
 
 from envinorma.utils import AIDA_URL, LEGIFRANCE_LODA_BASE_URL, random_id
@@ -13,120 +12,6 @@ from .classement import Classement, ClassementWithAlineas, group_classements_by_
 from .condition import Condition, load_condition
 from .structured_text import StructuredText
 from .text_elements import EnrichedString
-
-
-def _check_date_not_datetime(date_: Optional[date]) -> None:
-    if date_:
-        if not isinstance(date_, date) or isinstance(date_, datetime):
-            raise ValueError('Expecting date, not datetime')
-
-
-@dataclass(eq=True, frozen=True)
-class DateParameterDescriptor:
-    """Describes an AM version with regard to a specific date.
-
-    For example, is describes the AM applicable to classements having date_de_mise_en_service
-    in a specific range.
-
-    Example:
-        For an AM that changes version for date 2021-01-01, one of the generated version
-        will have (
-
-            is_used_in_parametrization=True,
-
-            unknown_classement_date_version=False,
-
-            left_value=None,
-
-            right_value=2021-01-01
-
-        )
-
-        It corresponds to the classements whose date is known and whose date value is smaller than 2021-01-01.
-
-    Args:
-        is_used_in_parametrization (bool):
-            is True if the corresponding date was used in the parametrization of the AM
-        unknown_classement_date_version (Optional[bool]):
-            is defined if is_used_in_parametrization is True. It is true for the AM version
-            corresponding to an unknown value of the date for the given classement.
-        left_value (Optional[date]):
-            is defined if is_used_in_parametrization is True. With right_value, it describes the date range of
-            applicability of the AM. None corresponds to -infinity.
-        right_value (Optional[date]):
-            is defined if is_used_in_parametrization is True. With left_value, it describes the date range of
-            applicability of the AM. None corresponds to +infinity.
-
-    """
-
-    is_used_in_parametrization: bool
-    unknown_classement_date_version: Optional[bool] = None
-    left_value: Optional[date] = None
-    right_value: Optional[date] = None
-
-    def __post_init__(self) -> None:
-        _check_date_not_datetime(self.left_value)
-        _check_date_not_datetime(self.right_value)
-        if not self.is_used_in_parametrization:
-            if any([self.unknown_classement_date_version, self.left_value, self.right_value]):
-                raise AssertionError
-        if self.unknown_classement_date_version in {False, True}:
-            if not self.is_used_in_parametrization:
-                raise AssertionError
-        if self.is_used_in_parametrization and not self.unknown_classement_date_version:
-            if self.left_value is None and self.right_value is None:
-                raise AssertionError
-
-    @classmethod
-    def from_dict(cls, dict_: Dict[str, Any]) -> 'DateParameterDescriptor':
-        dict_ = dict_.copy()
-        for key in ('left_value', 'right_value'):
-            dict_[key] = date.fromisoformat(dict_[key]) if dict_[key] else None
-        return cls(**dict_)
-
-    def to_dict(self) -> Dict[str, Any]:
-        res = asdict(self)
-        res['left_value'] = str(self.left_value) if self.left_value else None
-        res['right_value'] = str(self.right_value) if self.right_value else None
-        return res
-
-
-@dataclass
-class VersionDescriptor:
-    """Describes an AM version (e.g. the AM applicable to classements with specific date values).
-
-    Args:
-        applicable (bool) :
-            True if this specific AM version is applicable (some AM are not applicable for specific
-            date ranges, this parameter makes this fact explicit)
-        applicability_warnings (List[str]) :
-            list of warnings corresponding the this specific AM version. If applicable == False,
-            it explains why it is so. Otherwise, it mainly explains why the AM could be inapplicable.
-        aed_date (DateParameterDescriptor) :
-            descriptor of the range of values of date_autorisation to which this version
-            corresponds.
-        date_de_mise_en_service (DateParameterDescriptor) :
-            descriptor of the range of values of date_de_mise_en_service to which this
-            version corresponds.
-
-    """
-
-    applicable: bool
-    applicability_warnings: List[str]
-    aed_date: DateParameterDescriptor
-    date_de_mise_en_service: DateParameterDescriptor
-
-    @classmethod
-    def from_dict(cls, dict_: Dict[str, Any]) -> 'VersionDescriptor':
-        for key in ['aed_date', 'date_de_mise_en_service']:
-            dict_[key] = DateParameterDescriptor.from_dict(dict_[key])
-        return cls(**dict_)
-
-    def to_dict(self) -> Dict[str, Any]:
-        res = asdict(self)
-        res['aed_date'] = self.aed_date.to_dict()
-        res['date_de_mise_en_service'] = self.date_de_mise_en_service.to_dict()
-        return res
 
 
 def _is_probably_cid(candidate: str) -> bool:
@@ -333,7 +218,7 @@ class ArreteMinisteriel:
         dict_['classements_with_alineas'] = sorted(classements_with_alineas, key=lambda x: x.regime.value)
         if 'applicability' in dict_:
             dict_['applicability'] = AMApplicability.from_dict(dict_['applicability'])
-        fields_ = set(map(attrgetter('name'), fields(cls)))
+        fields_ = {field_.name for field_ in fields(cls)}
         return cls(**{key: value for key, value in dict_.items() if key in fields_})
 
     def to_text(self) -> StructuredText:

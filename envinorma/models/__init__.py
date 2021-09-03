@@ -4,8 +4,6 @@ from typing import Tuple
 from .am_metadata import AMMetadata, AMSource, AMState  # noqa: F401
 from .arrete_ministeriel import (  # noqa: F401
     ArreteMinisteriel,
-    DateParameterDescriptor,
-    VersionDescriptor,
     add_metadata,
     extract_date_of_signature,
     standardize_title_date,

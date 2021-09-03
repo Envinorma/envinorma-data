@@ -7,13 +7,7 @@ from typing import List, Optional
 
 import pytest
 
-from envinorma.models import (
-    Applicability,
-    ArreteMinisteriel,
-    EnrichedString,
-    Regime,
-    StructuredText,
-)
+from envinorma.models import Applicability, ArreteMinisteriel, EnrichedString, Regime, StructuredText
 from envinorma.parametrization.am_with_versions import generate_versions
 from envinorma.parametrization.apply_parameter_values import (
     _deactivate_alineas,
