@@ -120,14 +120,14 @@ Module contenant les schemas de données, en particulier la classe `StructuredTe
 
 Module de gestion de la couche de parametrage d'un `StructuredText`.
 
-## [envinorma.from_legifrance](envinorma/from_legifrance/README.md)
+## [envinorma.from_legifrance](https://envinorma.github.io/envinorma-data/envinorma.from_legifrance)
 
 Module pour transformer un texte légifrance en `ArreteMinisteriel`.
 
-## [envinorma.io](envinorma/io/README.md)
+## [envinorma.io](https://envinorma.github.io/envinorma-data/envinorma.io)
 
 Ensemble de modules pour convertir des `StructuredText` en fichier `.docx`, `.odt`, `html` ou `markdown`.
 
-## [envinorma.topics](envinorma/topics/README.md)
+## [envinorma.topics](https://envinorma.github.io/envinorma-data/envinorma.topics)
 
 Module de détection de thème dans un `StructuredText`.
