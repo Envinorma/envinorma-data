@@ -60,6 +60,14 @@ envinorma.parametrization.resync module
    :undoc-members:
    :show-inheritance:
 
+envinorma.parametrization.tie\_parametrization module
+-----------------------------------------------------
+
+.. automodule:: envinorma.parametrization.tie_parametrization
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 Module contents
 ---------------
 
