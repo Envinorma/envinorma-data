@@ -8,7 +8,6 @@ from typing import List, Optional
 import pytest
 
 from envinorma.models import Applicability, ArreteMinisteriel, EnrichedString, Regime, StructuredText
-from envinorma.parametrization.am_with_versions import generate_versions
 from envinorma.parametrization.apply_parameter_values import (
     _deactivate_alineas,
     _is_satisfiable,
@@ -170,37 +169,6 @@ def test_extract_parameters_from_parametrization_2():
     assert len(parameters) == 2
     assert copy(parameter_1) in parameters
     assert copy(parameter_2) in parameters
-
-
-def test_generate_versions():
-    sections = [
-        StructuredText(_str('Art. 1'), [_str('Initial version 1')], [], None),
-        StructuredText(_str('Art. 2'), [_str('Initial version 2')], [], None),
-        StructuredText(_str('Art. 3'), [_str('condition source')], [], None),
-    ]
-    am = ArreteMinisteriel(_str('Arrete du 10/10/10'), sections, [], None, id='FAKE_ID')
-
-    parameter = Parameter('nouvelle-installation', ParameterType.BOOLEAN)
-    condition = Equal(parameter, False)
-    source = ConditionSource(EntityReference(SectionReference((2,)), None))
-    parametrization = Parametrization([_IS(EntityReference(SectionReference((0,)), None), condition, source)], [], [])
-
-    res = generate_versions(am, parametrization, False)
-    assert len(res) == 3
-    assert ('nouvelle-installation != False',) in res
-    assert ('nouvelle-installation == False',) in res
-    assert () in res
-    assert _all_alineas_inactive(res[('nouvelle-installation == False',)].sections[0])
-    assert _all_alineas_active(res[('nouvelle-installation != False',)].sections[0])
-    assert _all_alineas_active(res[()].sections[0])
-    app: Applicability = ensure_not_none(res[()].sections[0].applicability)
-    assert len(app.warnings) == 1
-
-    res_2 = generate_versions(am, Parametrization([], [], []), False)
-    assert len(res_2) == 1
-    assert () in res_2
-    exp = Applicability(active=True, modified=False, warnings=[], previous_version=None)
-    assert res_2[()].sections[0].applicability == exp
 
 
 def _get_simple_text(sections: Optional[List[StructuredText]] = None) -> StructuredText:

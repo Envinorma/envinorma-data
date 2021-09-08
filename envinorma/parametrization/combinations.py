@@ -1,5 +1,5 @@
 from datetime import date, datetime, timedelta
-from typing import Any, List, Optional, Set, Tuple, Union
+from typing import Any, List, Tuple, Union
 
 from envinorma.models.classement import Regime
 from envinorma.models.condition import (
@@ -12,7 +12,7 @@ from envinorma.models.condition import (
     Range,
     extract_sorted_interval_sides_targets,
 )
-from envinorma.models.parameter import AED_PARAMETERS, Parameter, ParameterEnum, ParameterType
+from envinorma.models.parameter import Parameter, ParameterType
 
 from .models.parametrization import Combinations, Parametrization, extract_conditions_from_parametrization
 
@@ -108,39 +108,8 @@ def _generate_options_dict(conditions: Union[List[Condition], List[LeafCondition
     raise NotImplementedError(f'Option dict generation not implemented for conditions with types {types}')
 
 
-def _keep_aed_parameter(parameters: Set[Parameter], am_regime: Optional[Regime]) -> Optional[Parameter]:
-    aed_parameters = AED_PARAMETERS.intersection(parameters)
-    if len(aed_parameters) == 0:
-        return None
-    if len(aed_parameters) == 1:
-        return list(aed_parameters)[0]
-    if not am_regime:
-        raise ValueError('Cannot extract AED date parameter without a known regime')
-    if am_regime == Regime.A:
-        candidate = ParameterEnum.DATE_AUTORISATION.value
-    elif am_regime == Regime.E:
-        candidate = ParameterEnum.DATE_ENREGISTREMENT.value
-    elif am_regime in {Regime.D, Regime.DC}:
-        candidate = ParameterEnum.DATE_DECLARATION.value
-    else:
-        return None
-    return candidate if candidate in parameters else None
-
-
-def _keep_relevant_date_parameters(parameters: Set[Parameter], am_regime: Optional[Regime]) -> Set[Parameter]:
-    result = {ParameterEnum.DATE_INSTALLATION.value}.intersection(parameters)
-    aed_parameter = _keep_aed_parameter(parameters, am_regime)
-    if aed_parameter:
-        result.add(aed_parameter)
-    return result
-
-
-def _generate_options_dicts(
-    parametrization: Parametrization, date_only: bool, am_regime: Optional[Regime]
-) -> List[_Options]:
+def _generate_options_dicts(parametrization: Parametrization) -> List[_Options]:
     parameters = parametrization.extract_parameters()
-    if date_only:
-        parameters = _keep_relevant_date_parameters(parameters, am_regime)
     options_dicts: List[_Options] = []
     for parameter in parameters:
         conditions = extract_conditions_from_parametrization(parameter, parametrization)
@@ -148,10 +117,8 @@ def _generate_options_dicts(
     return options_dicts
 
 
-def generate_exhaustive_combinations(
-    parametrization: Parametrization, date_only: bool, am_regime: Optional[Regime]
-) -> Combinations:
-    options_dicts = _generate_options_dicts(parametrization, date_only, am_regime)
+def generate_exhaustive_combinations(parametrization: Parametrization) -> Combinations:
+    options_dicts = _generate_options_dicts(parametrization)
     if not options_dicts:
         return {}
     combinations = _generate_combinations(options_dicts, True)

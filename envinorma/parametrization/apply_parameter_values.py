@@ -233,9 +233,9 @@ class AMWithApplicability:
     warnings: List[str]
 
     @classmethod
-    def from_dict(cls, dict: Dict[str, Any]) -> 'AMWithApplicability':
+    def from_dict(cls, dict_: Dict[str, Any]) -> 'AMWithApplicability':
         return cls(
-            arrete=ArreteMinisteriel.from_dict(dict['am']), applicable=dict['applicable'], warnings=dict['warnings']
+            arrete=ArreteMinisteriel.from_dict(dict_['am']), applicable=dict_['applicable'], warnings=dict_['warnings']
         )
 
     def to_dict(self) -> Dict[str, Any]:

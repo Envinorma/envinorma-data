@@ -47,13 +47,6 @@ class ParameterEnum(Enum):
         return f'ParameterEnum("{self.value}")'
 
 
-AED_PARAMETERS = {
-    ParameterEnum.DATE_AUTORISATION.value,
-    ParameterEnum.DATE_ENREGISTREMENT.value,
-    ParameterEnum.DATE_DECLARATION.value,
-}
-
-
 def dump_parameter_value(value: Any, type_: ParameterType) -> Any:
     if type_ == ParameterType.DATE:
         if isinstance(value, datetime):
