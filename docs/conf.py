@@ -44,6 +44,7 @@ extensions = [
     'm2r2',
 ]
 
+add_module_names = False
 # Control napoleon
 napoleon_google_docstring = False
 napolean_include_init_with_doc = True
