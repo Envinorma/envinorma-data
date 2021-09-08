@@ -5,6 +5,8 @@ import psycopg2
 
 from envinorma.models.am_metadata import AMMetadata, AMState
 from envinorma.models.arrete_ministeriel import ArreteMinisteriel
+from envinorma.enriching import enrich
+from envinorma.parametrization.tie_parametrization import add_parametrization
 from envinorma.parametrization.models.parametrization import (
     AlternativeSection,
     AMWarning,
@@ -115,6 +117,14 @@ def create_tables(psql_dsn: str) -> None:
     connection.close()
 
 
+def _enrich_and_add_parametrization(
+    am: ArreteMinisteriel, metadata: AMMetadata, parametrization: Parametrization
+) -> ArreteMinisteriel:
+    enriched_am = enrich(am, metadata)
+    add_parametrization(enriched_am, parametrization)
+    return enriched_am
+
+
 class DataFetcher:
     def __init__(self, psql_dsn: str) -> None:
         self.psql_dsn: str = psql_dsn
@@ -151,13 +161,15 @@ class DataFetcher:
             return AMMetadata.from_dict(json.loads(_ensure_one_variable(json_am)))
         return None
 
-    def load_all_am_metadata(self, with_deleted_ams: bool = False) -> Dict[str, AMMetadata]:
+    def load_all_am_metadata(self, with_deleted_ams: bool = False, with_fake: bool = True) -> Dict[str, AMMetadata]:
         query = 'SELECT am_id, data FROM am_metadata;'
         tuples = self._exectute_select_query(query, ())
         result = {am_id: AMMetadata.from_dict(json.loads(json_)) for am_id, json_ in tuples or {}}
-        if with_deleted_ams:
-            return result
-        return {am_id: am for am_id, am in result.items() if am.state == am.state.VIGUEUR}
+        if not with_fake:
+            result = {am_id: metadata for am_id, metadata in result.items() if not am_id.startswith('FAKE')}
+        if not with_deleted_ams:
+            result = {am_id: am for am_id, am in result.items() if am.state == am.state.VIGUEUR}
+        return result
 
     def upsert_am(self, am_md: AMMetadata) -> None:
         data = json.dumps(am_md.to_dict())
@@ -298,3 +310,35 @@ class DataFetcher:
         if not am:
             raise ValueError('Expecting one AM to proceed.')
         return am
+
+    def load_id_to_most_advanced_am(self, ids: Optional[Set[str]] = None) -> Dict[str, ArreteMinisteriel]:
+        ids = ids or set(self.load_all_am_metadata().keys())
+        structured_texts = self.load_structured_ams(ids)
+        id_to_structured_text = {text.id or '': text for text in structured_texts}
+        initial_texts = self.load_initial_ams(ids)
+        id_to_initial_text = {text.id or '': text for text in initial_texts}
+        return {
+            id_: id_to_structured_text.get(id_) or id_to_initial_text[id_]
+            for id_ in ids
+            if id_ in id_to_structured_text or id_ in id_to_initial_text
+        }
+
+    def _load_validated_parametrizations(self) -> Dict[str, Parametrization]:
+        parametizations = self.load_all_parametrizations()
+        statuses = self.load_all_am_statuses()
+        return {
+            am_id: parametization
+            for am_id, parametization in parametizations.items()
+            if statuses[am_id] == AMStatus.VALIDATED
+        }
+
+    def build_enriched_ams(self, with_deleted_ams: bool = False, with_fake: bool = False) -> List[ArreteMinisteriel]:
+        metadata = self.load_all_am_metadata(with_deleted_ams, with_fake)
+        id_to_am = self.load_id_to_most_advanced_am()
+        parametizations = self._load_validated_parametrizations()
+        return [
+            _enrich_and_add_parametrization(
+                am, metadata[am_id], parametizations.get(am_id) or Parametrization([], [], [])
+            )
+            for am_id, am in id_to_am.items()
+        ]
