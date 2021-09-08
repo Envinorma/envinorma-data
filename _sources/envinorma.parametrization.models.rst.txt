@@ -4,22 +4,6 @@ envinorma.parametrization.models package
 Submodules
 ----------
 
-envinorma.parametrization.models.condition module
--------------------------------------------------
-
-.. automodule:: envinorma.parametrization.models.condition
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-envinorma.parametrization.models.parameter module
--------------------------------------------------
-
-.. automodule:: envinorma.parametrization.models.parameter
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
 envinorma.parametrization.models.parametrization module
 -------------------------------------------------------
 

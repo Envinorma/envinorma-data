@@ -187,14 +187,31 @@
 <span class="kn">from</span> <span class="nn">.am_metadata</span> <span class="kn">import</span> <span class="n">AMMetadata</span><span class="p">,</span> <span class="n">AMSource</span><span class="p">,</span> <span class="n">AMState</span>  <span class="c1"># noqa: F401</span>
 <span class="kn">from</span> <span class="nn">.arrete_ministeriel</span> <span class="kn">import</span> <span class="p">(</span>  <span class="c1"># noqa: F401</span>
     <span class="n">ArreteMinisteriel</span><span class="p">,</span>
-    <span class="n">DateParameterDescriptor</span><span class="p">,</span>
-    <span class="n">VersionDescriptor</span><span class="p">,</span>
     <span class="n">add_metadata</span><span class="p">,</span>
     <span class="n">extract_date_of_signature</span><span class="p">,</span>
     <span class="n">standardize_title_date</span><span class="p">,</span>
 <span class="p">)</span>
 <span class="kn">from</span> <span class="nn">.classement</span> <span class="kn">import</span> <span class="n">Classement</span><span class="p">,</span> <span class="n">ClassementWithAlineas</span><span class="p">,</span> <span class="n">Regime</span><span class="p">,</span> <span class="n">ensure_rubrique</span>  <span class="c1"># noqa: F401</span>
+<span class="kn">from</span> <span class="nn">.condition</span> <span class="kn">import</span> <span class="p">(</span>  <span class="c1"># noqa: F401</span>
+    <span class="n">AndCondition</span><span class="p">,</span>
+    <span class="n">Condition</span><span class="p">,</span>
+    <span class="n">Conditions</span><span class="p">,</span>
+    <span class="n">ConditionType</span><span class="p">,</span>
+    <span class="n">Equal</span><span class="p">,</span>
+    <span class="n">Greater</span><span class="p">,</span>
+    <span class="n">LeafCondition</span><span class="p">,</span>
+    <span class="n">LeafConditions</span><span class="p">,</span>
+    <span class="n">Littler</span><span class="p">,</span>
+    <span class="n">MergeCondition</span><span class="p">,</span>
+    <span class="n">MergeConditions</span><span class="p">,</span>
+    <span class="n">MergeType</span><span class="p">,</span>
+    <span class="n">MonoCondition</span><span class="p">,</span>
+    <span class="n">OrCondition</span><span class="p">,</span>
+    <span class="n">Range</span><span class="p">,</span>
+    <span class="n">ensure_mono_conditions</span><span class="p">,</span>
+<span class="p">)</span>
 <span class="kn">from</span> <span class="nn">.installation_classement</span> <span class="kn">import</span> <span class="n">DetailedClassement</span><span class="p">,</span> <span class="n">DetailedClassementState</span><span class="p">,</span> <span class="n">DetailedRegime</span>  <span class="c1"># noqa: F401</span>
+<span class="kn">from</span> <span class="nn">.parameter</span> <span class="kn">import</span> <span class="n">Parameter</span><span class="p">,</span> <span class="n">ParameterEnum</span><span class="p">,</span> <span class="n">ParameterType</span><span class="p">,</span> <span class="n">parameter_value_to_str</span>  <span class="c1"># noqa: F401</span>
 <span class="kn">from</span> <span class="nn">.structured_text</span> <span class="kn">import</span> <span class="n">Annotations</span><span class="p">,</span> <span class="n">Applicability</span><span class="p">,</span> <span class="n">StructuredText</span>  <span class="c1"># noqa: F401</span>
 <span class="kn">from</span> <span class="nn">.text_elements</span> <span class="kn">import</span> <span class="n">Cell</span><span class="p">,</span> <span class="n">EnrichedString</span><span class="p">,</span> <span class="n">Linebreak</span><span class="p">,</span> <span class="n">Link</span><span class="p">,</span> <span class="n">Row</span><span class="p">,</span> <span class="n">Table</span><span class="p">,</span> <span class="n">TextElement</span><span class="p">,</span> <span class="n">Title</span>  <span class="c1"># noqa: F401</span>
 

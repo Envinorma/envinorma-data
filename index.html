@@ -252,7 +252,8 @@ black . --check --exclude venv -S -l <span class="m">120</span>
 </div>
 <div class="section" id="exemples-d-utilisation">
 <h1>Exemples d’utilisation<a class="headerlink" href="#exemples-d-utilisation" title="Permalink to this headline">¶</a></h1>
-<p><span class="raw-html-m2r"><strong>1. Télécharger, structurer et afficher un texte depuis Légifrance</strong></span></p>
+<div class="section" id="telecharger-structurer-et-afficher-un-texte-depuis-legifrance">
+<h2>1. Télécharger, structurer et afficher un texte depuis Légifrance<a class="headerlink" href="#telecharger-structurer-et-afficher-un-texte-depuis-legifrance" title="Permalink to this headline">¶</a></h2>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">envinorma.from_legifrance.legifrance_to_am</span> <span class="kn">import</span> <span class="n">legifrance_to_arrete_ministeriel</span>
 <span class="kn">from</span> <span class="nn">leginorma</span> <span class="kn">import</span> <span class="n">LegifranceClient</span><span class="p">,</span> <span class="n">LegifranceText</span>
 
@@ -270,7 +271,9 @@ Le présent arrêté s&#39;applique aux entrepôts couverts déclarés, enregist
 [...]
 </pre></div>
 </div>
-<p><span class="raw-html-m2r"><strong>2. Appliquer un jeu de paramètres à un arrêté ministériel paramétré</strong></span></p>
+</div>
+<div class="section" id="appliquer-un-jeu-de-parametres-a-un-arrete-ministeriel-parametre">
+<h2>2. Appliquer un jeu de paramètres à un arrêté ministériel paramétré<a class="headerlink" href="#appliquer-un-jeu-de-parametres-a-un-arrete-ministeriel-parametre" title="Permalink to this headline">¶</a></h2>
 <p>Ce script peut être exécuté à partir des arrêtés ministériels contenus dans le dépôt <a class="reference external" href="https://github.com/Envinorma/arretes-ministeriels">arretes-ministeriels</a>.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">date</span>
 
@@ -286,6 +289,7 @@ Le présent arrêté s&#39;applique aux entrepôts couverts déclarés, enregist
 <span class="n">parameter_values</span> <span class="o">=</span> <span class="p">{</span><span class="n">ParameterEnum</span><span class="o">.</span><span class="n">DATE_AUTORISATION</span><span class="o">.</span><span class="n">value</span><span class="p">:</span> <span class="n">date</span><span class="o">.</span><span class="n">today</span><span class="p">()}</span>
 <span class="n">am_with_warnings</span> <span class="o">=</span> <span class="n">apply_parameter_values_to_am</span><span class="p">(</span><span class="n">base_am</span><span class="p">,</span> <span class="n">parametrization</span><span class="p">,</span> <span class="n">parameter_values</span><span class="p">)</span>
 </pre></div>
+</div>
 </div>
 </div>
 <div class="section" id="modules-principaux">

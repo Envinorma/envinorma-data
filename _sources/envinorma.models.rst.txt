@@ -28,6 +28,14 @@ envinorma.models.classement module
    :undoc-members:
    :show-inheritance:
 
+envinorma.models.condition module
+---------------------------------
+
+.. automodule:: envinorma.models.condition
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 envinorma.models.document module
 --------------------------------
 
@@ -56,6 +64,22 @@ envinorma.models.nomenclature module
 ------------------------------------
 
 .. automodule:: envinorma.models.nomenclature
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+envinorma.models.parameter module
+---------------------------------
+
+.. automodule:: envinorma.models.parameter
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+envinorma.models.regime module
+------------------------------
+
+.. automodule:: envinorma.models.regime
    :members:
    :undoc-members:
    :show-inheritance:

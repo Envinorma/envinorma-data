@@ -185,12 +185,12 @@
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Set</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">TypeVar</span><span class="p">,</span> <span class="n">Union</span>
 
 <span class="kn">from</span> <span class="nn">envinorma.models</span> <span class="kn">import</span> <span class="n">Ints</span>
+<span class="kn">from</span> <span class="nn">envinorma.models.condition</span> <span class="kn">import</span> <span class="n">Condition</span><span class="p">,</span> <span class="n">LeafCondition</span><span class="p">,</span> <span class="n">extract_leaf_conditions</span><span class="p">,</span> <span class="n">load_condition</span>
+<span class="kn">from</span> <span class="nn">envinorma.models.parameter</span> <span class="kn">import</span> <span class="n">Parameter</span>
 <span class="kn">from</span> <span class="nn">envinorma.models.structured_text</span> <span class="kn">import</span> <span class="n">StructuredText</span>
 
 <span class="kn">from</span> <span class="nn">..consistency</span> <span class="kn">import</span> <span class="n">check_conditions_not_compatible</span>
 <span class="kn">from</span> <span class="nn">..exceptions</span> <span class="kn">import</span> <span class="n">ParametrizationError</span>
-<span class="kn">from</span> <span class="nn">.condition</span> <span class="kn">import</span> <span class="n">Condition</span><span class="p">,</span> <span class="n">LeafCondition</span><span class="p">,</span> <span class="n">extract_leaf_conditions</span><span class="p">,</span> <span class="n">load_condition</span>
-<span class="kn">from</span> <span class="nn">.parameter</span> <span class="kn">import</span> <span class="n">Parameter</span>
 
 
 <div class="viewcode-block" id="SectionReference"><a class="viewcode-back" href="../../../../envinorma.parametrization.models.html#envinorma.parametrization.models.parametrization.SectionReference">[docs]</a><span class="nd">@dataclass</span>

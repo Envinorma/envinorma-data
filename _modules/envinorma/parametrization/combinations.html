@@ -182,10 +182,10 @@
             
   <h1>Source code for envinorma.parametrization.combinations</h1><div class="highlight"><pre>
 <span></span><span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">date</span><span class="p">,</span> <span class="n">datetime</span><span class="p">,</span> <span class="n">timedelta</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Set</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Union</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Union</span>
 
 <span class="kn">from</span> <span class="nn">envinorma.models.classement</span> <span class="kn">import</span> <span class="n">Regime</span>
-<span class="kn">from</span> <span class="nn">envinorma.parametrization.models.condition</span> <span class="kn">import</span> <span class="p">(</span>
+<span class="kn">from</span> <span class="nn">envinorma.models.condition</span> <span class="kn">import</span> <span class="p">(</span>
     <span class="n">Condition</span><span class="p">,</span>
     <span class="n">ConditionType</span><span class="p">,</span>
     <span class="n">Equal</span><span class="p">,</span>
@@ -195,8 +195,8 @@
     <span class="n">Range</span><span class="p">,</span>
     <span class="n">extract_sorted_interval_sides_targets</span><span class="p">,</span>
 <span class="p">)</span>
+<span class="kn">from</span> <span class="nn">envinorma.models.parameter</span> <span class="kn">import</span> <span class="n">Parameter</span><span class="p">,</span> <span class="n">ParameterType</span>
 
-<span class="kn">from</span> <span class="nn">.models.parameter</span> <span class="kn">import</span> <span class="n">AED_PARAMETERS</span><span class="p">,</span> <span class="n">Parameter</span><span class="p">,</span> <span class="n">ParameterEnum</span><span class="p">,</span> <span class="n">ParameterType</span>
 <span class="kn">from</span> <span class="nn">.models.parametrization</span> <span class="kn">import</span> <span class="n">Combinations</span><span class="p">,</span> <span class="n">Parametrization</span><span class="p">,</span> <span class="n">extract_conditions_from_parametrization</span>
 
 <span class="n">_Options</span> <span class="o">=</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Parameter</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]]</span>
@@ -291,39 +291,8 @@
     <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Option dict generation not implemented for conditions with types </span><span class="si">{</span><span class="n">types</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
 
 
-<span class="k">def</span> <span class="nf">_keep_aed_parameter</span><span class="p">(</span><span class="n">parameters</span><span class="p">:</span> <span class="n">Set</span><span class="p">[</span><span class="n">Parameter</span><span class="p">],</span> <span class="n">am_regime</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Regime</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Parameter</span><span class="p">]:</span>
-    <span class="n">aed_parameters</span> <span class="o">=</span> <span class="n">AED_PARAMETERS</span><span class="o">.</span><span class="n">intersection</span><span class="p">(</span><span class="n">parameters</span><span class="p">)</span>
-    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">aed_parameters</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-        <span class="k">return</span> <span class="kc">None</span>
-    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">aed_parameters</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
-        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="n">aed_parameters</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">am_regime</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Cannot extract AED date parameter without a known regime&#39;</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">am_regime</span> <span class="o">==</span> <span class="n">Regime</span><span class="o">.</span><span class="n">A</span><span class="p">:</span>
-        <span class="n">candidate</span> <span class="o">=</span> <span class="n">ParameterEnum</span><span class="o">.</span><span class="n">DATE_AUTORISATION</span><span class="o">.</span><span class="n">value</span>
-    <span class="k">elif</span> <span class="n">am_regime</span> <span class="o">==</span> <span class="n">Regime</span><span class="o">.</span><span class="n">E</span><span class="p">:</span>
-        <span class="n">candidate</span> <span class="o">=</span> <span class="n">ParameterEnum</span><span class="o">.</span><span class="n">DATE_ENREGISTREMENT</span><span class="o">.</span><span class="n">value</span>
-    <span class="k">elif</span> <span class="n">am_regime</span> <span class="ow">in</span> <span class="p">{</span><span class="n">Regime</span><span class="o">.</span><span class="n">D</span><span class="p">,</span> <span class="n">Regime</span><span class="o">.</span><span class="n">DC</span><span class="p">}:</span>
-        <span class="n">candidate</span> <span class="o">=</span> <span class="n">ParameterEnum</span><span class="o">.</span><span class="n">DATE_DECLARATION</span><span class="o">.</span><span class="n">value</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="k">return</span> <span class="kc">None</span>
-    <span class="k">return</span> <span class="n">candidate</span> <span class="k">if</span> <span class="n">candidate</span> <span class="ow">in</span> <span class="n">parameters</span> <span class="k">else</span> <span class="kc">None</span>
-
-
-<span class="k">def</span> <span class="nf">_keep_relevant_date_parameters</span><span class="p">(</span><span class="n">parameters</span><span class="p">:</span> <span class="n">Set</span><span class="p">[</span><span class="n">Parameter</span><span class="p">],</span> <span class="n">am_regime</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Regime</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Set</span><span class="p">[</span><span class="n">Parameter</span><span class="p">]:</span>
-    <span class="n">result</span> <span class="o">=</span> <span class="p">{</span><span class="n">ParameterEnum</span><span class="o">.</span><span class="n">DATE_INSTALLATION</span><span class="o">.</span><span class="n">value</span><span class="p">}</span><span class="o">.</span><span class="n">intersection</span><span class="p">(</span><span class="n">parameters</span><span class="p">)</span>
-    <span class="n">aed_parameter</span> <span class="o">=</span> <span class="n">_keep_aed_parameter</span><span class="p">(</span><span class="n">parameters</span><span class="p">,</span> <span class="n">am_regime</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">aed_parameter</span><span class="p">:</span>
-        <span class="n">result</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">aed_parameter</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">result</span>
-
-
-<span class="k">def</span> <span class="nf">_generate_options_dicts</span><span class="p">(</span>
-    <span class="n">parametrization</span><span class="p">:</span> <span class="n">Parametrization</span><span class="p">,</span> <span class="n">date_only</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span> <span class="n">am_regime</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Regime</span><span class="p">]</span>
-<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">_Options</span><span class="p">]:</span>
+<span class="k">def</span> <span class="nf">_generate_options_dicts</span><span class="p">(</span><span class="n">parametrization</span><span class="p">:</span> <span class="n">Parametrization</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">_Options</span><span class="p">]:</span>
     <span class="n">parameters</span> <span class="o">=</span> <span class="n">parametrization</span><span class="o">.</span><span class="n">extract_parameters</span><span class="p">()</span>
-    <span class="k">if</span> <span class="n">date_only</span><span class="p">:</span>
-        <span class="n">parameters</span> <span class="o">=</span> <span class="n">_keep_relevant_date_parameters</span><span class="p">(</span><span class="n">parameters</span><span class="p">,</span> <span class="n">am_regime</span><span class="p">)</span>
     <span class="n">options_dicts</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">_Options</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="k">for</span> <span class="n">parameter</span> <span class="ow">in</span> <span class="n">parameters</span><span class="p">:</span>
         <span class="n">conditions</span> <span class="o">=</span> <span class="n">extract_conditions_from_parametrization</span><span class="p">(</span><span class="n">parameter</span><span class="p">,</span> <span class="n">parametrization</span><span class="p">)</span>
@@ -331,10 +300,8 @@
     <span class="k">return</span> <span class="n">options_dicts</span>
 
 
-<div class="viewcode-block" id="generate_exhaustive_combinations"><a class="viewcode-back" href="../../../envinorma.parametrization.html#envinorma.parametrization.combinations.generate_exhaustive_combinations">[docs]</a><span class="k">def</span> <span class="nf">generate_exhaustive_combinations</span><span class="p">(</span>
-    <span class="n">parametrization</span><span class="p">:</span> <span class="n">Parametrization</span><span class="p">,</span> <span class="n">date_only</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span> <span class="n">am_regime</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Regime</span><span class="p">]</span>
-<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Combinations</span><span class="p">:</span>
-    <span class="n">options_dicts</span> <span class="o">=</span> <span class="n">_generate_options_dicts</span><span class="p">(</span><span class="n">parametrization</span><span class="p">,</span> <span class="n">date_only</span><span class="p">,</span> <span class="n">am_regime</span><span class="p">)</span>
+<div class="viewcode-block" id="generate_exhaustive_combinations"><a class="viewcode-back" href="../../../envinorma.parametrization.html#envinorma.parametrization.combinations.generate_exhaustive_combinations">[docs]</a><span class="k">def</span> <span class="nf">generate_exhaustive_combinations</span><span class="p">(</span><span class="n">parametrization</span><span class="p">:</span> <span class="n">Parametrization</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Combinations</span><span class="p">:</span>
+    <span class="n">options_dicts</span> <span class="o">=</span> <span class="n">_generate_options_dicts</span><span class="p">(</span><span class="n">parametrization</span><span class="p">)</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">options_dicts</span><span class="p">:</span>
         <span class="k">return</span> <span class="p">{}</span>
     <span class="n">combinations</span> <span class="o">=</span> <span class="n">_generate_combinations</span><span class="p">(</span><span class="n">options_dicts</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>

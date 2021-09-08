@@ -12,14 +12,6 @@ Subpackages
 Submodules
 ----------
 
-envinorma.parametrization.am\_with\_versions module
----------------------------------------------------
-
-.. automodule:: envinorma.parametrization.am_with_versions
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
 envinorma.parametrization.apply\_parameter\_values module
 ---------------------------------------------------------
 
