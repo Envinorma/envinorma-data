@@ -4,12 +4,10 @@ Un arrêté ministériel peut être paramétré (schéma [Parametrization](https
 
 ![Arrete Ministeriel et Parametrization](../../_static/parametrized_am.jpg)
 
-À partir d'une _Parametrization_ et d'un _ArreteMinisteriel_, on peut générer toutes les versions possibles d'un arrêté ministériel.
+À partir d'une _Parametrization_, d'un _ArreteMinisteriel_ et des valeurs des paramètres d'une installation, on peut générer la version de l'AM qui s'applique.
 
-![Versions d'un arrêté ministériels](../../_static/am_with_versions.jpg)
+## Application d'un jeu de paramètres à un AM
 
-## Versions generator
-
-Pour passer d'un couple (ArreteMinisteriel, Parametrization) à la liste des versions de l'arrêté ministériel, on utilise la fonction [generate_am_with_versions](envinorma.parametrization.html?highlight=generate_am_with_versions#envinorma.parametrization.am_with_versions.generate_am_with_versions), dont le principe est explicité ci dessous:
+Pour passer d'un triplet (ArreteMinisteriel, Parametrization, parameter_values) à la version correspondante de l'arrêté ministériel, on utilise la fonction [build_am_with_applicability](https://envinorma.github.io/envinorma-data/envinorma.parametrization.html?#envinorma.parametrization.apply_parameter_values.build_am_with_applicability), dont le principe est explicité ci dessous:
 
 ![Générateur des versions d'un arrêté ministériels](../../_static/versions_generator.jpg)
