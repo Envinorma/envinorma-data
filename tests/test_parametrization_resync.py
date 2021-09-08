@@ -3,10 +3,10 @@ from datetime import datetime, timedelta
 import pytest
 
 from envinorma.models.arrete_ministeriel import ArreteMinisteriel
+from envinorma.models.condition import Greater, Range
+from envinorma.models.parameter import ParameterEnum
 from envinorma.models.structured_text import StructuredText
 from envinorma.models.text_elements import estr
-from envinorma.parametrization.models.condition import Greater, Range
-from envinorma.parametrization.models.parameter import ParameterEnum
 from envinorma.parametrization.models.parametrization import (
     AlternativeSection,
     ConditionSource,

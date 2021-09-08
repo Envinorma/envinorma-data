@@ -8,8 +8,6 @@ import pytest
 
 from envinorma.models.arrete_ministeriel import (
     ArreteMinisteriel,
-    DateParameterDescriptor,
-    VersionDescriptor,
     _contains_human_date,
     _is_probably_cid,
     extract_date_of_signature,
@@ -69,9 +67,6 @@ def test_arrete_ministeriel():
         classements=[Classement('1510', Regime.A, 'al')],
         classements_with_alineas=[ClassementWithAlineas('1510', Regime.A, ['al', 'albis'])],
         id='JORFTEXTid',
-        version_descriptor=VersionDescriptor(
-            True, [], DateParameterDescriptor(False), DateParameterDescriptor(True, True, None, date(2020, 1, 1))
-        ),
     )
     dict_ = am.to_dict()
     new_dict = ArreteMinisteriel.from_dict(json.loads(json.dumps(dict_))).to_dict()
@@ -149,12 +144,10 @@ def _get_simple_text() -> StructuredText:
 
 
 _TEXT_A = StructuredText(
-    title=EnrichedString(
-        text='6. Schématisation des différents types de joints mentionnés :', links=[], table=None, active=True
-    ),
+    title=EnrichedString(text='6. Schématisation des différents types de joints mentionnés :'),
     outer_alineas=[
-        EnrichedString(text='Vous pouvez consulter les schémas dans le', links=[], table=None, active=True),
-        EnrichedString(text='JO\nn° 265 du 16/11/2010 texte numéro 21', links=[], table=None, active=True),
+        EnrichedString(text='Vous pouvez consulter les schémas dans le'),
+        EnrichedString(text='JO\nn° 265 du 16/11/2010 texte numéro 21'),
     ],
     sections=[],
     applicability=None,
@@ -163,12 +156,10 @@ _TEXT_A = StructuredText(
     id='0bEB0b14A96f',
 )
 _TEXT_B = StructuredText(
-    title=EnrichedString(
-        text='6. Schématisation des différents types de joints mentionnés :', links=[], table=None, active=True
-    ),
+    title=EnrichedString(text='6. Schématisation des différents types de joints mentionnés :'),
     outer_alineas=[
-        EnrichedString(text='Vous pouvez consulter les schémas dans le', links=[], table=None, active=True),
-        EnrichedString(text='JO n° 265 du 16/11/2010 texte numéro 21', links=[], table=None, active=True),
+        EnrichedString(text='Vous pouvez consulter les schémas dans le'),
+        EnrichedString(text='JO n° 265 du 16/11/2010 texte numéro 21'),
     ],
     sections=[],
     applicability=None,

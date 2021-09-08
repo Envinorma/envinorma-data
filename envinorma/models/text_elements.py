@@ -28,6 +28,13 @@ class Cell:
         dict_['content'] = EnrichedString.from_dict(dict_['content'])
         return cls(**dict_)
 
+    def to_dict(self) -> Dict[str, Any]:
+        return {
+            'content': self.content.to_dict(),
+            'colspan': self.colspan,
+            'rowspan': self.rowspan,
+        }
+
     def to_html(self, is_header: bool, with_links: bool = False) -> str:
         tag = 'th' if is_header else 'td'
         colspan_attr = f' colspan="{self.colspan}"' if self.colspan != 1 else ''
@@ -43,21 +50,16 @@ def _cells_to_html(cells: List[Cell], is_header: bool, with_links: bool = False)
 class Row:
     cells: List[Cell]
     is_header: bool
-    inline_content: Optional[str] = None
 
     @classmethod
     def from_dict(cls, dict_: Dict) -> 'Row':
-        dict_ = dict_.copy()
-        dict_['cells'] = [Cell.from_dict(cell) for cell in dict_['cells']]
-        dict_['inline_content'] = dict_['text_in_inspection_sheet']
-        del dict_['text_in_inspection_sheet']
-        return cls(**dict_)
+        return cls(cells=[Cell.from_dict(cell) for cell in dict_['cells']], is_header=dict_['is_header'])
 
     def to_dict(self) -> Dict[str, Any]:
-        dict_ = asdict(self)
-        dict_['text_in_inspection_sheet'] = dict_['inline_content']
-        del dict_['inline_content']
-        return dict_
+        return {
+            'cells': [cell.to_dict() for cell in self.cells],
+            'is_header': self.is_header,
+        }
 
     def to_html(self, with_links: bool = False) -> str:
         return f'<tr>{_cells_to_html(self.cells, self.is_header, with_links)}</tr>'
@@ -105,8 +107,8 @@ class EnrichedString:
             list of links decorating text
         table (Optional[Table] = None):
             if not None, the string actually is a table
-        active (Optional[bool] = True):
-            if False, the string is inactive in the context of its usage
+        inactive (bool = False):
+            if True, the string is inactive in the context of its usage
             (example : inapplicable alinea in an AM)
 
     """
@@ -114,22 +116,26 @@ class EnrichedString:
     text: str
     links: List[Link] = field(default_factory=empty_link_list)
     table: Optional[Table] = None
-    active: Optional[bool] = True
+    inactive: bool = False
 
     @classmethod
     def from_dict(cls, dict_: Dict[str, Any]) -> 'EnrichedString':
-        dict_ = dict_.copy()
-        dict_['links'] = [Link.from_dict(link) for link in dict_.get('links', [])]
-        dict_['table'] = Table.from_dict(dict_['table']) if dict_['table'] else None
-        if 'id' in dict_:
-            del dict_['id']
-        return cls(**dict_)
+        return cls(
+            text=dict_['text'],
+            links=[Link.from_dict(link) for link in dict_.get('links', [])],
+            table=Table.from_dict(dict_['table']) if dict_.get('table') else None,
+            inactive=dict_.get('inactive', False),
+        )
 
     def to_dict(self) -> Dict[str, Any]:
         dict_ = asdict(self)
         dict_['table'] = self.table.to_dict() if self.table else None
+        if not dict_['table']:
+            del dict_['table']
         if not self.links:
             del dict_['links']
+        if not self.inactive:
+            del dict_['inactive']
         return dict_
 
     def text_lines(self) -> List[str]:

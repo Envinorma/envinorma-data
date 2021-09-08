@@ -1,20 +1,17 @@
 from datetime import date, datetime
 from typing import List
 
-import pytest
-
 from envinorma.models import Regime
+from envinorma.models.condition import Condition, Equal, Greater, Littler, Range
+from envinorma.models.parameter import Parameter, ParameterType
 from envinorma.parametrization.combinations import (
     _change_value,
     _extract_interval_midpoints,
     _generate_combinations,
     _generate_equal_option_dicts,
     _generate_options_dict,
-    _keep_aed_parameter,
     _mean,
 )
-from envinorma.parametrization.models.condition import Condition, Equal, Greater, Littler, Range
-from envinorma.parametrization.models.parameter import Parameter, ParameterEnum, ParameterType
 from envinorma.parametrization.models.parametrization import Combinations
 
 
@@ -113,22 +110,3 @@ def test_generate_combinations():
         ('test_1 >= a', 'test_2 != True'): {parameter_1: datetime(2022, 1, 1), parameter_2: False},
     }
     assert expected == res
-
-
-def test_keep_aed_parameter():
-    declaration = ParameterEnum.DATE_DECLARATION.value
-    enregistrement = ParameterEnum.DATE_ENREGISTREMENT.value
-    autorisation = ParameterEnum.DATE_AUTORISATION.value
-
-    assert _keep_aed_parameter(set(), None) is None
-    assert _keep_aed_parameter(set(), Regime.A) is None
-    assert _keep_aed_parameter(set(), Regime.D) is None
-    assert _keep_aed_parameter({declaration}, Regime.D) == declaration
-    assert _keep_aed_parameter({enregistrement}, None) == enregistrement
-    assert _keep_aed_parameter({declaration, enregistrement}, Regime.D) == declaration
-    assert _keep_aed_parameter({declaration, enregistrement}, Regime.A) is None
-    assert _keep_aed_parameter({declaration, autorisation}, Regime.A) == autorisation
-    with pytest.raises(ValueError):
-        _keep_aed_parameter({declaration, autorisation}, None)
-    with pytest.raises(ValueError):
-        _keep_aed_parameter({autorisation, enregistrement}, None)

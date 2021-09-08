@@ -1,24 +1,12 @@
 from copy import copy
-from dataclasses import replace
-from datetime import date, datetime
-from typing import Any, Dict, List, Optional, Tuple
+from dataclasses import dataclass, replace
+from typing import Any, Dict, List, Tuple
 
-from envinorma.models import Ints
-from envinorma.models.arrete_ministeriel import ArreteMinisteriel, DateParameterDescriptor, VersionDescriptor
-from envinorma.models.classement import Regime
+from envinorma.models import ArreteMinisteriel, Ints, Regime
+from envinorma.models.condition import AndCondition, Condition, Greater, Littler, OrCondition, Range
+from envinorma.models.parameter import Parameter, ParameterEnum
 from envinorma.models.structured_text import Applicability, StructuredText
 
-from .models.condition import (
-    AndCondition,
-    Condition,
-    Greater,
-    Littler,
-    OrCondition,
-    Range,
-    extract_leaf_conditions,
-    extract_sorted_interval_sides_targets,
-)
-from .models.parameter import AED_PARAMETERS, Parameter, ParameterEnum
 from .models.parametrization import (
     AlternativeSection,
     AMWarning,
@@ -97,7 +85,7 @@ def _deactivate_child_section(section: StructuredText, all_inactive: bool) -> St
     else:
         section.applicability = Applicability(active=not all_inactive)
     section.sections = [_deactivate_child_section(sec, all_inactive) for sec in section.sections]
-    section.outer_alineas = [replace(al, active=False) for al in section.outer_alineas]
+    section.outer_alineas = [replace(al, inactive=True) for al in section.outer_alineas]
     return section
 
 
@@ -112,11 +100,9 @@ def _deactivate_alineas(
     )
     if inactive_alineas is not None:
         inactive_alineas_set = set(inactive_alineas)
-        new_outer_alineas = [
-            replace(al, active=i not in inactive_alineas_set) for i, al in enumerate(text.outer_alineas)
-        ]
+        new_outer_alineas = [replace(al, inactive=i in inactive_alineas_set) for i, al in enumerate(text.outer_alineas)]
     else:
-        new_outer_alineas = [replace(al, active=False) for al in text.outer_alineas]
+        new_outer_alineas = [replace(al, inactive=True) for al in text.outer_alineas]
     text.applicability = Applicability(active=not all_inactive, warnings=[warning])
     text.sections = [_deactivate_child_section(section, all_inactive=all_inactive) for section in text.sections]
     text.outer_alineas = new_outer_alineas
@@ -217,17 +203,6 @@ def _compute_whole_text_applicability(
     return False, [description]
 
 
-def _extract_surrounding_dates(target_date: date, limit_dates: List[date]) -> Tuple[Optional[date], Optional[date]]:
-    if not limit_dates:
-        return None, None
-    if target_date < limit_dates[0]:
-        return (None, limit_dates[0])
-    for date_before, date_after in zip(limit_dates, limit_dates[1:]):
-        if target_date < date_after:
-            return (date_before, date_after)
-    return limit_dates[-1], None
-
-
 def _is_satisfiable(condition: Condition, regime_target: Regime) -> bool:
     if isinstance(condition, AndCondition):
         return all([_is_satisfiable(cd, regime_target) for cd in condition.conditions])
@@ -240,84 +215,6 @@ def _is_satisfiable(condition: Condition, regime_target: Regime) -> bool:
     return regime_target == condition.target
 
 
-def _keep_satisfiable(conditions: List[Condition], regime_target: Regime) -> List[Condition]:
-    if not isinstance(regime_target, Regime):
-        raise ValueError(f'regime_target must be an instance of Regime, not {type(regime_target)}')
-    return [condition for condition in conditions if _is_satisfiable(condition, regime_target)]
-
-
-def _convert_to_date(element: Any) -> date:
-    if isinstance(element, datetime):
-        return element.date()
-    if isinstance(element, date):
-        return element
-    raise ValueError(f'Expecting date or datetime, got {type(element)}')
-
-
-def _convert_to_dates(elements: List[Any]) -> List[date]:
-    return [_convert_to_date(el) for el in elements]
-
-
-def _used_date_parameter(
-    searched_date_parameter: Parameter, parametrization: Parametrization, parameter_values: Dict[Parameter, Any]
-) -> DateParameterDescriptor:
-    conditions = parametrization.extract_conditions()
-    if ParameterEnum.REGIME.value in parameter_values:
-        conditions = _keep_satisfiable(conditions, parameter_values[ParameterEnum.REGIME.value])
-    leaf_conditions = [leaf for cd in conditions for leaf in extract_leaf_conditions(cd, searched_date_parameter)]
-    if not leaf_conditions:
-        return DateParameterDescriptor(False)
-    if searched_date_parameter not in parameter_values:
-        return DateParameterDescriptor(True, True)
-    value = _convert_to_date(parameter_values[searched_date_parameter])
-    limit_dates = _convert_to_dates(extract_sorted_interval_sides_targets(leaf_conditions, True))
-    date_left, date_right = _extract_surrounding_dates(value, limit_dates)
-    return DateParameterDescriptor(True, False, date_left, date_right)
-
-
-def _date_de_mise_en_service_parameter(
-    parametrization: Parametrization, parameter_values: Dict[Parameter, Any]
-) -> DateParameterDescriptor:
-    return _used_date_parameter(ParameterEnum.DATE_INSTALLATION.value, parametrization, parameter_values)
-
-
-def _find_used_date(parametrization: Parametrization) -> Parameter:
-    used_date_parameters = parametrization.extract_parameters().intersection(AED_PARAMETERS)
-    if not used_date_parameters:
-        return ParameterEnum.DATE_DECLARATION.value
-    if len(used_date_parameters) == 1:
-        return used_date_parameters.pop()
-    raise ValueError(f'Cannot handle several AED dates in the same parametrization, got {used_date_parameters}.')
-
-
-def _aed_date_parameter(
-    parametrization: Parametrization, parameter_values: Dict[Parameter, Any]
-) -> DateParameterDescriptor:
-    used_date = _find_used_date(parametrization)
-    return _used_date_parameter(used_date, parametrization, parameter_values)
-
-
-def _date_parameters(
-    parametrization: Parametrization, parameter_values: Dict[Parameter, Any]
-) -> Tuple[DateParameterDescriptor, DateParameterDescriptor]:
-    return (
-        _aed_date_parameter(parametrization, parameter_values),
-        _date_de_mise_en_service_parameter(parametrization, parameter_values),
-    )
-
-
-def _compute_am_version_descriptor(
-    parametrization: Parametrization, parameter_values: Dict[Parameter, Any]
-) -> VersionDescriptor:
-    am_applicable, am_applicability_warnings = _compute_whole_text_applicability(
-        parametrization.path_to_conditions.get(()) or [],
-        parameter_values,
-        parametrization.path_to_warnings.get(()) or [],
-    )
-    date_parameters = _date_parameters(parametrization, parameter_values)
-    return VersionDescriptor(am_applicable, am_applicability_warnings, *date_parameters)
-
-
 def apply_parameter_values_to_am(
     am: ArreteMinisteriel, parametrization: Parametrization, parameter_values: Dict[Parameter, Any]
 ) -> ArreteMinisteriel:
@@ -326,5 +223,33 @@ def apply_parameter_values_to_am(
         _apply_parameter_values_in_text(section, parametrization, parameter_values, (i,))
         for i, section in enumerate(am.sections)
     ]
-    am.version_descriptor = _compute_am_version_descriptor(parametrization, parameter_values)
     return am
+
+
+@dataclass
+class AMWithApplicability:
+    arrete: ArreteMinisteriel
+    applicable: bool
+    warnings: List[str]
+
+    @classmethod
+    def from_dict(cls, dict_: Dict[str, Any]) -> 'AMWithApplicability':
+        return cls(
+            arrete=ArreteMinisteriel.from_dict(dict_['am']), applicable=dict_['applicable'], warnings=dict_['warnings']
+        )
+
+    def to_dict(self) -> Dict[str, Any]:
+        return {'am': self.arrete.to_dict(), 'applicable': self.applicable, 'warnings': self.warnings}
+
+
+def build_am_with_applicability(
+    am: ArreteMinisteriel, parametrization: Parametrization, parameter_values: Dict[Parameter, Any]
+) -> AMWithApplicability:
+    applicable, warnings = _compute_whole_text_applicability(
+        parametrization.path_to_conditions.get((), []), parameter_values, parametrization.path_to_warnings.get((), [])
+    )
+    return AMWithApplicability(
+        arrete=apply_parameter_values_to_am(am, parametrization, parameter_values),
+        applicable=applicable,
+        warnings=warnings,
+    )

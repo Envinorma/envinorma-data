@@ -1,18 +1,10 @@
 from datetime import date
 
-from envinorma.models.am_metadata import AMMetadata, AMSource, AMState
-from envinorma.models.arrete_ministeriel import ArreteMinisteriel
-from envinorma.models.classement import Classement, Regime
+from envinorma.models.condition import AndCondition, Littler, Range, extract_leaf_conditions
+from envinorma.models.parameter import Parameter, ParameterType
 from envinorma.models.structured_text import StructuredText
-from envinorma.models.text_elements import Cell, EnrichedString, Row, Table
-from envinorma.parametrization.am_with_versions import (
-    _extract_am_regime,
-    _generate_versions_and_postprocess,
-    generate_versions,
-)
+from envinorma.models.text_elements import EnrichedString
 from envinorma.parametrization.combinations import _generate_options_dicts, generate_exhaustive_combinations
-from envinorma.parametrization.models.condition import AndCondition, Littler, Range, extract_leaf_conditions
-from envinorma.parametrization.models.parameter import Parameter, ParameterType
 from envinorma.parametrization.models.parametrization import (
     AlternativeSection,
     AMWarning,
@@ -59,127 +51,14 @@ _PARAMETRIZATION = Parametrization(
     warnings=[AMWarning(SectionReference(()), 'AM warning')],
 )
 
-_STRUCTURED_AM = ArreteMinisteriel(
-    title=EnrichedString(text='Arrêté du 15/12/20', links=[], table=None, active=True),
-    sections=[
-        StructuredText(
-            title=EnrichedString(text='Article 1', links=[], table=None, active=True),
-            outer_alineas=[],
-            sections=[
-                StructuredText(
-                    title=EnrichedString(text='Article 1.1', links=[], table=None, active=True),
-                    outer_alineas=[],
-                    sections=[
-                        StructuredText(
-                            title=EnrichedString(text='I.', links=[], table=None, active=True),
-                            outer_alineas=[
-                                EnrichedString(text='Test', links=[], table=None, active=True),
-                                EnrichedString(text='ceci est le I', links=[], table=None, active=True),
-                            ],
-                            sections=[],
-                            applicability=None,
-                        ),
-                        StructuredText(
-                            title=EnrichedString(text='II.', links=[], table=None, active=True),
-                            outer_alineas=[
-                                EnrichedString(text='Test', links=[], table=None, active=True),
-                                EnrichedString(text='ceci est le II', links=[], table=None, active=True),
-                            ],
-                            sections=[],
-                            applicability=None,
-                        ),
-                    ],
-                    applicability=None,
-                )
-            ],
-            applicability=None,
-        ),
-        StructuredText(
-            title=EnrichedString(text='Article 2', links=[], table=None, active=True),
-            outer_alineas=[],
-            sections=[
-                StructuredText(
-                    title=EnrichedString(text='Article 2.1', links=[], table=None, active=True),
-                    outer_alineas=[
-                        EnrichedString(text='Contenu', links=[], table=None, active=True),
-                        EnrichedString(
-                            text='',
-                            links=[],
-                            table=Table(
-                                rows=[
-                                    Row(
-                                        cells=[
-                                            Cell(
-                                                content=EnrichedString(
-                                                    text='Cellule 1', links=[], table=None, active=True
-                                                ),
-                                                colspan=1,
-                                                rowspan=1,
-                                            )
-                                        ],
-                                        is_header=False,
-                                    ),
-                                    Row(
-                                        cells=[
-                                            Cell(
-                                                content=EnrichedString(
-                                                    text='Cellule 2', links=[], table=None, active=True
-                                                ),
-                                                colspan=1,
-                                                rowspan=1,
-                                            )
-                                        ],
-                                        is_header=False,
-                                    ),
-                                ]
-                            ),
-                            active=True,
-                        ),
-                    ],
-                    sections=[],
-                    applicability=None,
-                )
-            ],
-            applicability=None,
-        ),
-    ],
-    visa=[],
-    date_of_signature=date(2020, 12, 15),
-    aida_url=None,
-    legifrance_url=None,
-    classements=[],
-    classements_with_alineas=[],
-    id='FAKE_ID',
-)
-
-
-def test_apply_parametrization():
-    md = AMMetadata(
-        aida_page='5619',
-        title='Faux Arrêté du 01/02/21 relatif aux tests',
-        nor='FAKE_NOR',
-        classements=[Classement(regime=Regime('E'), rubrique='5000', alinea='A.2')],
-        cid='FAKE_CID',
-        state=AMState('VIGUEUR'),
-        date_of_signature=date.fromtimestamp(1612195449),
-        source=AMSource('LEGIFRANCE'),
-    )
-    res = _generate_versions_and_postprocess('FACE_CID', _STRUCTURED_AM, _PARAMETRIZATION, md)
-    assert res and len(res) == 4
-
-
-def test_generate_versions_and_postprocess():
-    res = generate_versions(_STRUCTURED_AM, _PARAMETRIZATION, True)
-    assert len(res) == 4
-
 
 def test_generate_exhaustive_combinations():
-    res = generate_exhaustive_combinations(_PARAMETRIZATION, True, None)
+    res = generate_exhaustive_combinations(_PARAMETRIZATION)
     assert len(res) == 4
 
 
 def test_generate_options_dicts():
-    res = _generate_options_dicts(_PARAMETRIZATION, True, None)
+    res = _generate_options_dicts(_PARAMETRIZATION)
     expected = [
         'date-d-installation < 2020-01-01',
         '2020-01-01 <= date-d-installation < 2021-01-01',
@@ -208,15 +87,3 @@ def test_extract_leaf_conditions():
 
     res = extract_leaf_conditions(_PARAMETRIZATION.alternative_sections[0].condition, _DATE)
     assert len(res) == 1
-
-
-def _generate_classement(regime: str) -> Classement:
-    return Classement('1234', Regime(regime), None)
-
-
-def test_extract_am_regime():
-    assert _extract_am_regime([]) is None
-    assert _extract_am_regime([_generate_classement('A')]) == Regime.A
-    assert _extract_am_regime([_generate_classement('E')]) == Regime.E
-    assert _extract_am_regime([_generate_classement('D')]) == Regime.D
-    assert _extract_am_regime([_generate_classement('D'), _generate_classement('A')]) is None

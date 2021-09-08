@@ -3,7 +3,7 @@ from datetime import date, datetime
 from enum import Enum
 from typing import Any, Dict
 
-from envinorma.models import Regime
+from .regime import Regime
 
 
 class ParameterType(Enum):
@@ -45,13 +45,6 @@ class ParameterEnum(Enum):
 
     def __repr__(self):
         return f'ParameterEnum("{self.value}")'
-
-
-AED_PARAMETERS = {
-    ParameterEnum.DATE_AUTORISATION.value,
-    ParameterEnum.DATE_ENREGISTREMENT.value,
-    ParameterEnum.DATE_DECLARATION.value,
-}
 
 
 def dump_parameter_value(value: Any, type_: ParameterType) -> Any:

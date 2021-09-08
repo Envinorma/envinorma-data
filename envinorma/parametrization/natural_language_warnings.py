@@ -2,8 +2,7 @@ from datetime import date, datetime
 from typing import Any, Dict, FrozenSet, List, Optional
 
 from envinorma.models.classement import Regime
-
-from .models.condition import (
+from envinorma.models.condition import (
     AndCondition,
     Condition,
     Equal,
@@ -17,7 +16,7 @@ from .models.condition import (
     OrCondition,
     Range,
 )
-from .models.parameter import Parameter, ParameterEnum, ParameterType, parameter_value_to_str
+from envinorma.models.parameter import Parameter, ParameterEnum, ParameterType, parameter_value_to_str
 
 # Missing parameter warning
 

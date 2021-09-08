@@ -5,11 +5,11 @@ from typing import Optional
 
 import pytest
 
+from envinorma.models.condition import Condition, Greater, Littler, Range
+from envinorma.models.parameter import ParameterEnum
 from envinorma.models.structured_text import StructuredText
 from envinorma.models.text_elements import EnrichedString
 from envinorma.parametrization.exceptions import ParametrizationError
-from envinorma.parametrization.models.condition import Condition, Greater, Littler, Range
-from envinorma.parametrization.models.parameter import ParameterEnum
 from envinorma.parametrization.models.parametrization import (
     AlternativeSection,
     ConditionSource,

@@ -1,6 +1,7 @@
 from dataclasses import asdict, dataclass, field
 from typing import Any, Dict, List, Optional
 
+from envinorma.models.condition import Condition, load_condition
 from envinorma.models.text_elements import EnrichedString
 from envinorma.topics.patterns import TopicName
 from envinorma.utils import random_id
@@ -68,6 +69,67 @@ class Applicability:
 
 
 @dataclass
+class PotentialInapplicability:
+    condition: Condition
+    alineas: Optional[List[int]]
+
+    def to_dict(self) -> Dict[str, Any]:
+        return {
+            'condition': self.condition.to_dict(),
+            'alineas': self.alineas,
+        }
+
+    @classmethod
+    def from_dict(cls, dict_: Dict) -> 'PotentialInapplicability':
+        dict_ = dict_.copy()
+        dict_['condition'] = load_condition(dict_['condition'])
+        return cls(**dict_)
+
+
+@dataclass
+class PotentialModification:
+    condition: Condition
+    new_version: 'StructuredText'
+
+    def to_dict(self) -> Dict[str, Any]:
+        return {
+            'condition': self.condition.to_dict(),
+            'new_version': self.new_version.to_dict(),
+        }
+
+    @classmethod
+    def from_dict(cls, dict_: Dict) -> 'PotentialModification':
+        dict_ = dict_.copy()
+        dict_['condition'] = load_condition(dict_['condition'])
+        dict_['new_version'] = StructuredText.from_dict(dict_['new_version'])
+        return cls(**dict_)
+
+
+@dataclass
+class SectionParametrization:
+    potential_inapplicabilities: List[PotentialInapplicability] = field(default_factory=list)
+    potential_modifications: List[PotentialModification] = field(default_factory=list)
+    warnings: List[str] = field(default_factory=list)
+
+    def to_dict(self) -> Dict[str, Any]:
+        dict_ = asdict(self)
+        dict_['potential_inapplicabilities'] = [p.to_dict() for p in self.potential_inapplicabilities]
+        dict_['potential_modifications'] = [p.to_dict() for p in self.potential_modifications]
+        return dict_
+
+    @classmethod
+    def from_dict(cls, dict_: Dict) -> 'SectionParametrization':
+        dict_ = dict_.copy()
+        dict_['potential_inapplicabilities'] = [
+            PotentialInapplicability.from_dict(p) for p in dict_['potential_inapplicabilities']
+        ]
+        dict_['potential_modifications'] = [
+            PotentialModification.from_dict(p) for p in dict_['potential_modifications']
+        ]
+        return cls(**dict_)
+
+
+@dataclass
 class StructuredText:
     """Section of a text. This data structure can contain sections itself.
 
@@ -95,6 +157,7 @@ class StructuredText:
     reference_str: Optional[str] = None
     annotations: Optional[Annotations] = None
     id: str = field(default_factory=random_id)
+    parametrization: SectionParametrization = field(default_factory=SectionParametrization)
 
     def __post_init__(self):
         if not isinstance(self.title, EnrichedString):
@@ -107,6 +170,7 @@ class StructuredText:
         res['sections'] = [se.to_dict() for se in self.sections]
         res['applicability'] = self.applicability.to_dict() if self.applicability else None
         res['annotations'] = self.annotations.to_dict() if self.annotations else None
+        res['parametrization'] = self.parametrization.to_dict()
         return res
 
     @classmethod
@@ -117,6 +181,8 @@ class StructuredText:
         dict_['sections'] = [StructuredText.from_dict(sec) for sec in dict_['sections']]
         dict_['applicability'] = Applicability.from_dict(dict_['applicability']) if dict_.get('applicability') else None
         dict_['annotations'] = Annotations.from_dict(dict_['annotations']) if dict_.get('annotations') else None
+        if 'parametrization' in dict_:
+            dict_['parametrization'] = SectionParametrization.from_dict(dict_['parametrization'])
         if 'lf_id' in dict_:
             del dict_['lf_id']  # retrocompatibility
         return cls(**dict_)

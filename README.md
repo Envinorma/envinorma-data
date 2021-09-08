@@ -64,7 +64,7 @@ black . --check --exclude venv -S -l 120
 
 # Exemples d'utilisation
 
-<strong>1. Télécharger, structurer et afficher un texte depuis Légifrance</strong>
+## 1. Télécharger, structurer et afficher un texte depuis Légifrance
 
 ```python
 
@@ -88,7 +88,7 @@ Le présent arrêté s'applique aux entrepôts couverts déclarés, enregistrés
 [...]
 ```
 
-<strong>2. Appliquer un jeu de paramètres à un arrêté ministériel paramétré</strong>
+## 2. Appliquer un jeu de paramètres à un arrêté ministériel paramétré
 
 Ce script peut être exécuté à partir des arrêtés ministériels contenus dans le dépôt [arretes-ministeriels](https://github.com/Envinorma/arretes-ministeriels).
 

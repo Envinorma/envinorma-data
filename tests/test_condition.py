@@ -1,7 +1,7 @@
 from datetime import datetime
 
 from envinorma.models import Regime
-from envinorma.parametrization.models.condition import (
+from envinorma.models.condition import (
     AndCondition,
     Equal,
     Greater,
@@ -10,7 +10,7 @@ from envinorma.parametrization.models.condition import (
     Range,
     extract_sorted_interval_sides_targets,
 )
-from envinorma.parametrization.models.parameter import Parameter, ParameterType
+from envinorma.models.parameter import Parameter, ParameterType
 
 
 def test_is_satisfied():
