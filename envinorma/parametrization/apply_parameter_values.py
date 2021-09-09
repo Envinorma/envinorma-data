@@ -1,33 +1,35 @@
 from copy import copy
 from dataclasses import dataclass, replace
-from typing import Any, Dict, List, Tuple
+from typing import Any, Dict, List, Optional, Tuple, Union
 
-from envinorma.models import ArreteMinisteriel, Ints, Regime
+from envinorma.models import ArreteMinisteriel, Regime
+from envinorma.models.arrete_ministeriel import AMApplicability
 from envinorma.models.condition import AndCondition, Condition, Greater, Littler, OrCondition, Range
 from envinorma.models.parameter import Parameter, ParameterEnum
-from envinorma.models.structured_text import Applicability, StructuredText
-
-from .models.parametrization import (
-    AlternativeSection,
-    AMWarning,
-    InapplicableSection,
-    ParameterObjectWithCondition,
-    Parametrization,
+from envinorma.models.structured_text import (
+    Applicability,
+    PotentialInapplicability,
+    PotentialModification,
+    SectionParametrization,
+    StructuredText,
 )
+
+from .models.parametrization import Parametrization
 from .natural_language_warnings import (
     generate_inactive_warning,
     generate_modification_warning,
     generate_warning_missing_value,
 )
+from .tie_parametrization import add_parametrization
 
 
 def _build_alternative_text(
-    text: StructuredText, alternative_section: AlternativeSection, parameter_values: Dict[Parameter, Any]
+    text: StructuredText, modification: PotentialModification, parameter_values: Dict[Parameter, Any]
 ) -> StructuredText:
-    new_text = copy(alternative_section.new_text)
+    new_text = copy(modification.new_version)
     new_text.applicability = Applicability(
         modified=True,
-        warnings=[generate_modification_warning(alternative_section.condition, parameter_values)],
+        warnings=[generate_modification_warning(modification.condition, parameter_values)],
         previous_version=text,
     )
     return new_text
@@ -40,12 +42,15 @@ def _has_undefined_parameters(condition: Condition, parameter_values: Dict[Param
     return False
 
 
+_SectionParameter = Union[PotentialInapplicability, PotentialModification]
+
+
 def _compute_warnings(
-    parameter: ParameterObjectWithCondition, parameter_values: Dict[Parameter, Any], whole_text: bool
+    parameter: _SectionParameter, parameter_values: Dict[Parameter, Any], whole_text: bool
 ) -> List[str]:
     if _has_undefined_parameters(parameter.condition, parameter_values):
-        modification = isinstance(parameter, AlternativeSection)
-        alineas = None if isinstance(parameter, AlternativeSection) else parameter.targeted_entity.outer_alinea_indices
+        modification = isinstance(parameter, PotentialModification)
+        alineas = None if isinstance(parameter, PotentialModification) else parameter.alineas
         return [
             generate_warning_missing_value(parameter.condition, parameter_values, alineas, modification, whole_text)
         ]
@@ -53,9 +58,9 @@ def _compute_warnings(
 
 
 def _keep_satisfied_conditions(
-    inapplicable_sections: List[InapplicableSection], parameter_values: Dict[Parameter, Any], whole_text: bool
-) -> Tuple[List[InapplicableSection], List[str]]:
-    satisfied: List[InapplicableSection] = []
+    inapplicable_sections: List[PotentialInapplicability], parameter_values: Dict[Parameter, Any], whole_text: bool
+) -> Tuple[List[PotentialInapplicability], List[str]]:
+    satisfied: List[PotentialInapplicability] = []
     warnings: List[str] = []
     for inapplicable_section in inapplicable_sections:
         if inapplicable_section.condition.is_satisfied(parameter_values):
@@ -66,9 +71,9 @@ def _keep_satisfied_conditions(
 
 
 def _keep_satisfied_mofications(
-    alternative_sections: List[AlternativeSection], parameter_values: Dict[Parameter, Any]
-) -> Tuple[List[AlternativeSection], List[str]]:
-    satisfied: List[AlternativeSection] = []
+    alternative_sections: List[PotentialModification], parameter_values: Dict[Parameter, Any]
+) -> Tuple[List[PotentialModification], List[str]]:
+    satisfied: List[PotentialModification] = []
     warnings: List[str] = []
     for alt in alternative_sections:
         if alt.condition.is_satisfied(parameter_values):
@@ -90,13 +95,13 @@ def _deactivate_child_section(section: StructuredText, all_inactive: bool) -> St
 
 
 def _deactivate_alineas(
-    text: StructuredText, satisfied: InapplicableSection, parameter_values: Dict[Parameter, Any]
+    text: StructuredText, inapplicability: PotentialInapplicability, parameter_values: Dict[Parameter, Any]
 ) -> StructuredText:
     text = copy(text)
-    inactive_alineas = satisfied.targeted_entity.outer_alinea_indices
+    inactive_alineas = inapplicability.alineas
     all_inactive = inactive_alineas is None
     warning = generate_inactive_warning(
-        satisfied.condition, parameter_values, all_alineas=all_inactive, whole_text=False
+        inapplicability.condition, parameter_values, all_alineas=all_inactive, whole_text=False
     )
     if inactive_alineas is not None:
         inactive_alineas_set = set(inactive_alineas)
@@ -111,31 +116,31 @@ def _deactivate_alineas(
 
 def _apply_satisfied_modificators(
     text: StructuredText,
-    inapplicable_sections: List[InapplicableSection],
-    alternative_sections: List[AlternativeSection],
+    inapplicabilities: List[PotentialInapplicability],
+    modifications: List[PotentialModification],
     parameter_values: Dict[Parameter, Any],
 ) -> StructuredText:
-    if inapplicable_sections and alternative_sections:
+    if inapplicabilities and modifications:
         raise NotImplementedError(
-            f'Cannot apply conditions and alternative sections on one section. (Section title: {text.title.text})\n'
-            f'Non applicable condition: {inapplicable_sections[0].condition}\n'
-            f'Modification condition: {alternative_sections[0].condition}\n'
+            f'Cannot handle inapplicability and modification on one section. (Section title: {text.title.text})\n'
+            f'Inapplicability condition: {inapplicabilities[0].condition}\n'
+            f'Modification condition: {modifications[0].condition}\n'
         )
-    if alternative_sections:
-        if len(alternative_sections) > 1:
+    if modifications:
+        if len(modifications) > 1:
             raise ValueError(
                 f'Cannot handle more than 1 applicable modification on one section. '
-                f'Here, {len(alternative_sections)} are applicable.'
+                f'Here, {len(modifications)} are applicable.'
             )
-        return _build_alternative_text(text, alternative_sections[0], parameter_values)
-    if inapplicable_sections:
-        if len(inapplicable_sections) > 1:
+        return _build_alternative_text(text, modifications[0], parameter_values)
+    if inapplicabilities:
+        if len(inapplicabilities) > 1:
             raise ValueError(
                 f'Cannot handle more than 1 non-applicability conditions on one section. '
-                f'Here, {len(inapplicable_sections)} conditions are applicable.'
+                f'Here, {len(inapplicabilities)} conditions are applicable.'
                 f'\n{parameter_values}\n{text}'
             )
-        return _deactivate_alineas(text, inapplicable_sections[0], parameter_values)
+        return _deactivate_alineas(text, inapplicabilities[0], parameter_values)
     return text
 
 
@@ -146,34 +151,28 @@ def _ensure_applicabiliy(candidate: Any) -> Applicability:
 
 
 def _extract_satisfied_objects_and_warnings(
-    parametrization: Parametrization, parameter_values: Dict[Parameter, Any], path: Ints
-) -> Tuple[List[InapplicableSection], List[AlternativeSection], List[str]]:
+    parametrization: SectionParametrization, parameter_values: Dict[Parameter, Any]
+) -> Tuple[List[PotentialInapplicability], List[PotentialModification], List[str]]:
     na_conditions, warnings_1 = _keep_satisfied_conditions(
-        parametrization.path_to_conditions.get(path) or [], parameter_values, whole_text=False
+        parametrization.potential_inapplicabilities, parameter_values, whole_text=False
     )
     alternative_sections, warnings_2 = _keep_satisfied_mofications(
-        parametrization.path_to_alternative_sections.get(path) or [], parameter_values
+        parametrization.potential_modifications, parameter_values
     )
-    warnings_3 = [x.text for x in parametrization.path_to_warnings.get(path) or []]
-    all_warnings = warnings_1 + warnings_2 + warnings_3
+    all_warnings = warnings_1 + warnings_2 + parametrization.warnings
     return na_conditions, alternative_sections, sorted(all_warnings)
 
 
-def _apply_parameter_values_in_text(
-    text: StructuredText, parametrization: Parametrization, parameter_values: Dict[Parameter, Any], path: Ints
-) -> StructuredText:
-    na_conditions, alternative_sections, warnings = _extract_satisfied_objects_and_warnings(
-        parametrization, parameter_values, path
+def _apply_parameter_values_in_text(text: StructuredText, parameter_values: Dict[Parameter, Any]) -> StructuredText:
+    na_conditions, modifications, warnings = _extract_satisfied_objects_and_warnings(
+        text.parametrization, parameter_values
     )
     text = copy(text)
-    if not na_conditions and not alternative_sections:
-        text.sections = [
-            _apply_parameter_values_in_text(section, parametrization, parameter_values, path + (i,))
-            for i, section in enumerate(text.sections)
-        ]
+    if not na_conditions and not modifications:
+        text.sections = [_apply_parameter_values_in_text(section, parameter_values) for section in text.sections]
         text.applicability = Applicability()
     else:
-        text = _apply_satisfied_modificators(text, na_conditions, alternative_sections, parameter_values)
+        text = _apply_satisfied_modificators(text, na_conditions, modifications, parameter_values)
 
     all_warnings = sorted(set(_ensure_applicabiliy(text.applicability).warnings + warnings))
     text.applicability = replace(_ensure_applicabiliy(text.applicability), warnings=all_warnings)
@@ -185,22 +184,17 @@ def _generate_whole_text_reason_inactive(condition: Condition, parameter_values:
 
 
 def _compute_whole_text_applicability(
-    inapplicable_sections: List[InapplicableSection],
-    parameter_values: Dict[Parameter, Any],
-    simple_warnings: List[AMWarning],
+    applicability: AMApplicability, parameter_values: Dict[Parameter, Any]
 ) -> Tuple[bool, List[str]]:
-    na_conditions, warnings = _keep_satisfied_conditions(inapplicable_sections, parameter_values, whole_text=True)
-    if len(na_conditions) > 1:
-        raise ValueError(
-            f'Cannot handle more than one inapplicability on the whole text. '
-            f'Here, {len(na_conditions)} inapplicability conditions are fulfilled.'
-        )
-    if not na_conditions:
-        return True, warnings + [x.text for x in simple_warnings]
-    if inapplicable_sections[0].targeted_entity.outer_alinea_indices:
-        raise ValueError('Can only deactivate the whole AM, not particular alineas.')
-    description = _generate_whole_text_reason_inactive(na_conditions[0].condition, parameter_values)
-    return False, [description]
+    condition = applicability.condition_of_inapplicability
+    if not condition:
+        return True, applicability.warnings
+    if condition.is_satisfied(parameter_values):
+        return False, [_generate_whole_text_reason_inactive(condition, parameter_values)]
+    warnings = applicability.warnings
+    if _has_undefined_parameters(condition, parameter_values):
+        warnings.append(generate_warning_missing_value(condition, parameter_values, None, False, True))
+    return True, warnings
 
 
 def _is_satisfiable(condition: Condition, regime_target: Regime) -> bool:
@@ -216,13 +210,12 @@ def _is_satisfiable(condition: Condition, regime_target: Regime) -> bool:
 
 
 def apply_parameter_values_to_am(
-    am: ArreteMinisteriel, parametrization: Parametrization, parameter_values: Dict[Parameter, Any]
+    am: ArreteMinisteriel, parameter_values: Dict[Parameter, Any], parametrization: Optional[Parametrization] = None
 ) -> ArreteMinisteriel:
+    if parametrization:
+        add_parametrization(am, parametrization)
     am = copy(am)
-    am.sections = [
-        _apply_parameter_values_in_text(section, parametrization, parameter_values, (i,))
-        for i, section in enumerate(am.sections)
-    ]
+    am.sections = [_apply_parameter_values_in_text(section, parameter_values) for section in am.sections]
     return am
 
 
@@ -243,13 +236,12 @@ class AMWithApplicability:
 
 
 def build_am_with_applicability(
-    am: ArreteMinisteriel, parametrization: Parametrization, parameter_values: Dict[Parameter, Any]
+    am: ArreteMinisteriel, parametrization: Optional[Parametrization], parameter_values: Dict[Parameter, Any]
 ) -> AMWithApplicability:
-    applicable, warnings = _compute_whole_text_applicability(
-        parametrization.path_to_conditions.get((), []), parameter_values, parametrization.path_to_warnings.get((), [])
-    )
+    if parametrization:
+        add_parametrization(am, parametrization)
+
+    applicable, warnings = _compute_whole_text_applicability(am.applicability, parameter_values)
     return AMWithApplicability(
-        arrete=apply_parameter_values_to_am(am, parametrization, parameter_values),
-        applicable=applicable,
-        warnings=warnings,
+        arrete=apply_parameter_values_to_am(am, parameter_values), applicable=applicable, warnings=warnings
     )

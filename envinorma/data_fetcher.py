@@ -3,10 +3,9 @@ from typing import Any, Dict, List, Optional, Set, Tuple, Type, TypeVar
 
 import psycopg2
 
+from envinorma.enriching import enrich
 from envinorma.models.am_metadata import AMMetadata, AMState
 from envinorma.models.arrete_ministeriel import ArreteMinisteriel
-from envinorma.enriching import enrich
-from envinorma.parametrization.tie_parametrization import add_parametrization
 from envinorma.parametrization.models.parametrization import (
     AlternativeSection,
     AMWarning,
@@ -14,6 +13,7 @@ from envinorma.parametrization.models.parametrization import (
     ParameterObject,
     Parametrization,
 )
+from envinorma.parametrization.tie_parametrization import add_parametrization
 from envinorma.utils import AMStatus
 
 
@@ -338,7 +338,8 @@ class DataFetcher:
         parametizations = self._load_validated_parametrizations()
         return [
             _enrich_and_add_parametrization(
-                am, metadata[am_id], parametizations.get(am_id) or Parametrization([], [], [])
+                id_to_am[am_id], am_md, parametizations.get(am_id) or Parametrization([], [], [])
             )
-            for am_id, am in id_to_am.items()
+            for am_id, am_md in metadata.items()
+            if am_id in id_to_am
         ]

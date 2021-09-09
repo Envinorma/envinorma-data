@@ -101,11 +101,10 @@ from envinorma.parametrization.apply_parameter_values import apply_parameter_val
 
 am_folder = 'TODO' # Replace with the folder containing AMs
 am_id = 'JORFTEXT000018332514'
-parametrization = Parametrization.from_dict(json.load(open(f'{am_folder}/parametrizations/{am_id}.json')))
-base_am = ArreteMinisteriel.from_dict(json.load(open(f'{am_folder}/base_ams/{am_id}.json')))
+base_am = ArreteMinisteriel.from_dict(json.load(open(f'{am_folder}/ams/{am_id}.json')))
 
 parameter_values = {ParameterEnum.DATE_AUTORISATION.value: date.today()}
-am_with_warnings = apply_parameter_values_to_am(base_am, parametrization, parameter_values)
+am_with_warnings = apply_parameter_values_to_am(base_am, parameter_values)
 
 
 ```

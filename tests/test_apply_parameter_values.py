@@ -8,6 +8,7 @@ from typing import List, Optional
 import pytest
 
 from envinorma.models import Applicability, ArreteMinisteriel, EnrichedString, Regime, StructuredText
+from envinorma.models.structured_text import PotentialInapplicability
 from envinorma.parametrization.apply_parameter_values import (
     _deactivate_alineas,
     _is_satisfiable,
@@ -86,7 +87,7 @@ def test_apply_parameter_values_to_am():
         [AMWarning(SectionReference((0,)), 'Fake warning')],
     )
 
-    new_am_1 = apply_parameter_values_to_am(am, parametrization, {parameter: False})
+    new_am_1 = apply_parameter_values_to_am(am, {parameter: False}, parametrization)
 
     assert _all_alineas_inactive(new_am_1.sections[0])
     app: Applicability = ensure_not_none(new_am_1.sections[0].applicability)
@@ -102,7 +103,7 @@ def test_apply_parameter_values_to_am():
     assert not new_am_1.sections[3].outer_alineas[1].inactive
     assert len(app_3.warnings) == 1
 
-    new_am_2 = apply_parameter_values_to_am(am, parametrization, {parameter: True})
+    new_am_2 = apply_parameter_values_to_am(am, {parameter: True}, parametrization)
 
     assert _all_alineas_active(new_am_2.sections[0])
     app_4: Applicability = ensure_not_none(new_am_2.sections[0].applicability)
@@ -119,7 +120,7 @@ def test_apply_parameter_values_to_am():
     app_6: Applicability = ensure_not_none(new_am_2.sections[3].applicability)
     assert len(app_6.warnings) == 0
 
-    new_am_3 = apply_parameter_values_to_am(am, parametrization, {})
+    new_am_3 = apply_parameter_values_to_am(am, {}, parametrization)
     assert _all_alineas_active(new_am_3.sections[0])
     app_7: Applicability = ensure_not_none(new_am_3.sections[0].applicability)
     assert len(app_7.warnings) == 2
@@ -175,34 +176,26 @@ def _get_simple_text(sections: Optional[List[StructuredText]] = None) -> Structu
     return StructuredText(_str('Conditions d\'application'), [_str('al 1'), _str('al 2')], sections or [], None)
 
 
+def _litter_condition() -> Littler:
+    return Littler(ParameterEnum.DATE_INSTALLATION.value, datetime(2021, 1, 1))
+
+
 def test_deactivate_alineas():
-    nac = _IS(
-        EntityReference(SectionReference((0,)), None),
-        Littler(ParameterEnum.DATE_INSTALLATION.value, datetime(2021, 1, 1)),
-        ConditionSource(EntityReference(SectionReference((1,)), None)),
-    )
-    res = _deactivate_alineas(_get_simple_text(), nac, {ParameterEnum.DATE_INSTALLATION.value: datetime(2020, 1, 1)})
+    date_ = ParameterEnum.DATE_INSTALLATION.value
+
+    inapplicability = PotentialInapplicability(alineas=None, condition=_litter_condition())
+    res = _deactivate_alineas(_get_simple_text(), inapplicability, {date_: datetime(2020, 1, 1)})
     assert not res.applicability.active  # type: ignore
     assert all([al.inactive for al in res.outer_alineas])
 
-    nac = _IS(
-        EntityReference(SectionReference((0,)), [0]),
-        Littler(ParameterEnum.DATE_INSTALLATION.value, datetime(2021, 1, 1)),
-        ConditionSource(EntityReference(SectionReference((1,)), None)),
-    )
-    res = _deactivate_alineas(_get_simple_text(), nac, {ParameterEnum.DATE_INSTALLATION.value: datetime(2020, 1, 1)})
+    inapplicability = PotentialInapplicability(alineas=[0], condition=_litter_condition())
+    res = _deactivate_alineas(_get_simple_text(), inapplicability, {date_: datetime(2020, 1, 1)})
     assert res.applicability.active  # type: ignore
     assert res.outer_alineas[0].inactive
     assert not res.outer_alineas[1].inactive
 
-    nac = _IS(
-        EntityReference(SectionReference((0,)), None),
-        Littler(ParameterEnum.DATE_INSTALLATION.value, datetime(2021, 1, 1)),
-        ConditionSource(EntityReference(SectionReference((1,)), None)),
-    )
-    res = _deactivate_alineas(
-        _get_simple_text([_get_simple_text()]), nac, {ParameterEnum.DATE_INSTALLATION.value: datetime(2020, 1, 1)}
-    )
+    inapplicability = PotentialInapplicability(alineas=None, condition=_litter_condition())
+    res = _deactivate_alineas(_get_simple_text([_get_simple_text()]), inapplicability, {date_: datetime(2020, 1, 1)})
     assert not res.applicability.active  # type: ignore
     assert not res.sections[0].applicability.active  # type: ignore
 

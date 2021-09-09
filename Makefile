@@ -39,9 +39,12 @@ docs: ## generate Sphinx HTML documentation, including API docs, and serve to br
 	make gen-docs
 	$(BROWSER) docs/_build/html/index.html
 
+test:
+	venv/bin/pytest --mypy-ignore-missing-imports
+
 
 test-and-lint:
-	venv/bin/pytest --mypy-ignore-missing-imports
+	make test
 	venv/bin/flake8 --count --verbose --show-source --statistics
 	venv/bin/black . --check -S -l 120
 	venv/bin/isort . --profile black -l 120
