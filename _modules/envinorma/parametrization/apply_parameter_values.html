@@ -183,34 +183,36 @@
   <h1>Source code for envinorma.parametrization.apply_parameter_values</h1><div class="highlight"><pre>
 <span></span><span class="kn">from</span> <span class="nn">copy</span> <span class="kn">import</span> <span class="n">copy</span>
 <span class="kn">from</span> <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">dataclass</span><span class="p">,</span> <span class="n">replace</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Tuple</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Union</span>
 
-<span class="kn">from</span> <span class="nn">envinorma.models</span> <span class="kn">import</span> <span class="n">ArreteMinisteriel</span><span class="p">,</span> <span class="n">Ints</span><span class="p">,</span> <span class="n">Regime</span>
+<span class="kn">from</span> <span class="nn">envinorma.models</span> <span class="kn">import</span> <span class="n">ArreteMinisteriel</span><span class="p">,</span> <span class="n">Regime</span>
+<span class="kn">from</span> <span class="nn">envinorma.models.arrete_ministeriel</span> <span class="kn">import</span> <span class="n">AMApplicability</span>
 <span class="kn">from</span> <span class="nn">envinorma.models.condition</span> <span class="kn">import</span> <span class="n">AndCondition</span><span class="p">,</span> <span class="n">Condition</span><span class="p">,</span> <span class="n">Greater</span><span class="p">,</span> <span class="n">Littler</span><span class="p">,</span> <span class="n">OrCondition</span><span class="p">,</span> <span class="n">Range</span>
 <span class="kn">from</span> <span class="nn">envinorma.models.parameter</span> <span class="kn">import</span> <span class="n">Parameter</span><span class="p">,</span> <span class="n">ParameterEnum</span>
-<span class="kn">from</span> <span class="nn">envinorma.models.structured_text</span> <span class="kn">import</span> <span class="n">Applicability</span><span class="p">,</span> <span class="n">StructuredText</span>
-
-<span class="kn">from</span> <span class="nn">.models.parametrization</span> <span class="kn">import</span> <span class="p">(</span>
-    <span class="n">AlternativeSection</span><span class="p">,</span>
-    <span class="n">AMWarning</span><span class="p">,</span>
-    <span class="n">InapplicableSection</span><span class="p">,</span>
-    <span class="n">ParameterObjectWithCondition</span><span class="p">,</span>
-    <span class="n">Parametrization</span><span class="p">,</span>
+<span class="kn">from</span> <span class="nn">envinorma.models.structured_text</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">Applicability</span><span class="p">,</span>
+    <span class="n">PotentialInapplicability</span><span class="p">,</span>
+    <span class="n">PotentialModification</span><span class="p">,</span>
+    <span class="n">SectionParametrization</span><span class="p">,</span>
+    <span class="n">StructuredText</span><span class="p">,</span>
 <span class="p">)</span>
+
+<span class="kn">from</span> <span class="nn">.models.parametrization</span> <span class="kn">import</span> <span class="n">Parametrization</span>
 <span class="kn">from</span> <span class="nn">.natural_language_warnings</span> <span class="kn">import</span> <span class="p">(</span>
     <span class="n">generate_inactive_warning</span><span class="p">,</span>
     <span class="n">generate_modification_warning</span><span class="p">,</span>
     <span class="n">generate_warning_missing_value</span><span class="p">,</span>
 <span class="p">)</span>
+<span class="kn">from</span> <span class="nn">.tie_parametrization</span> <span class="kn">import</span> <span class="n">add_parametrization</span>
 
 
 <span class="k">def</span> <span class="nf">_build_alternative_text</span><span class="p">(</span>
-    <span class="n">text</span><span class="p">:</span> <span class="n">StructuredText</span><span class="p">,</span> <span class="n">alternative_section</span><span class="p">:</span> <span class="n">AlternativeSection</span><span class="p">,</span> <span class="n">parameter_values</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="n">Parameter</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span>
+    <span class="n">text</span><span class="p">:</span> <span class="n">StructuredText</span><span class="p">,</span> <span class="n">modification</span><span class="p">:</span> <span class="n">PotentialModification</span><span class="p">,</span> <span class="n">parameter_values</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="n">Parameter</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">StructuredText</span><span class="p">:</span>
-    <span class="n">new_text</span> <span class="o">=</span> <span class="n">copy</span><span class="p">(</span><span class="n">alternative_section</span><span class="o">.</span><span class="n">new_text</span><span class="p">)</span>
+    <span class="n">new_text</span> <span class="o">=</span> <span class="n">copy</span><span class="p">(</span><span class="n">modification</span><span class="o">.</span><span class="n">new_version</span><span class="p">)</span>
     <span class="n">new_text</span><span class="o">.</span><span class="n">applicability</span> <span class="o">=</span> <span class="n">Applicability</span><span class="p">(</span>
         <span class="n">modified</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-        <span class="n">warnings</span><span class="o">=</span><span class="p">[</span><span class="n">generate_modification_warning</span><span class="p">(</span><span class="n">alternative_section</span><span class="o">.</span><span class="n">condition</span><span class="p">,</span> <span class="n">parameter_values</span><span class="p">)],</span>
+        <span class="n">warnings</span><span class="o">=</span><span class="p">[</span><span class="n">generate_modification_warning</span><span class="p">(</span><span class="n">modification</span><span class="o">.</span><span class="n">condition</span><span class="p">,</span> <span class="n">parameter_values</span><span class="p">)],</span>
         <span class="n">previous_version</span><span class="o">=</span><span class="n">text</span><span class="p">,</span>
     <span class="p">)</span>
     <span class="k">return</span> <span class="n">new_text</span>
@@ -223,12 +225,15 @@
     <span class="k">return</span> <span class="kc">False</span>
 
 
+<span class="n">_SectionParameter</span> <span class="o">=</span> <span class="n">Union</span><span class="p">[</span><span class="n">PotentialInapplicability</span><span class="p">,</span> <span class="n">PotentialModification</span><span class="p">]</span>
+
+
 <span class="k">def</span> <span class="nf">_compute_warnings</span><span class="p">(</span>
-    <span class="n">parameter</span><span class="p">:</span> <span class="n">ParameterObjectWithCondition</span><span class="p">,</span> <span class="n">parameter_values</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="n">Parameter</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="n">whole_text</span><span class="p">:</span> <span class="nb">bool</span>
+    <span class="n">parameter</span><span class="p">:</span> <span class="n">_SectionParameter</span><span class="p">,</span> <span class="n">parameter_values</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="n">Parameter</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="n">whole_text</span><span class="p">:</span> <span class="nb">bool</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
     <span class="k">if</span> <span class="n">_has_undefined_parameters</span><span class="p">(</span><span class="n">parameter</span><span class="o">.</span><span class="n">condition</span><span class="p">,</span> <span class="n">parameter_values</span><span class="p">):</span>
-        <span class="n">modification</span> <span class="o">=</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">parameter</span><span class="p">,</span> <span class="n">AlternativeSection</span><span class="p">)</span>
-        <span class="n">alineas</span> <span class="o">=</span> <span class="kc">None</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">parameter</span><span class="p">,</span> <span class="n">AlternativeSection</span><span class="p">)</span> <span class="k">else</span> <span class="n">parameter</span><span class="o">.</span><span class="n">targeted_entity</span><span class="o">.</span><span class="n">outer_alinea_indices</span>
+        <span class="n">modification</span> <span class="o">=</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">parameter</span><span class="p">,</span> <span class="n">PotentialModification</span><span class="p">)</span>
+        <span class="n">alineas</span> <span class="o">=</span> <span class="kc">None</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">parameter</span><span class="p">,</span> <span class="n">PotentialModification</span><span class="p">)</span> <span class="k">else</span> <span class="n">parameter</span><span class="o">.</span><span class="n">alineas</span>
         <span class="k">return</span> <span class="p">[</span>
             <span class="n">generate_warning_missing_value</span><span class="p">(</span><span class="n">parameter</span><span class="o">.</span><span class="n">condition</span><span class="p">,</span> <span class="n">parameter_values</span><span class="p">,</span> <span class="n">alineas</span><span class="p">,</span> <span class="n">modification</span><span class="p">,</span> <span class="n">whole_text</span><span class="p">)</span>
         <span class="p">]</span>
@@ -236,9 +241,9 @@
 
 
 <span class="k">def</span> <span class="nf">_keep_satisfied_conditions</span><span class="p">(</span>
-    <span class="n">inapplicable_sections</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">InapplicableSection</span><span class="p">],</span> <span class="n">parameter_values</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="n">Parameter</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="n">whole_text</span><span class="p">:</span> <span class="nb">bool</span>
-<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">InapplicableSection</span><span class="p">],</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]:</span>
-    <span class="n">satisfied</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">InapplicableSection</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">inapplicable_sections</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">PotentialInapplicability</span><span class="p">],</span> <span class="n">parameter_values</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="n">Parameter</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="n">whole_text</span><span class="p">:</span> <span class="nb">bool</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">PotentialInapplicability</span><span class="p">],</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]:</span>
+    <span class="n">satisfied</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">PotentialInapplicability</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="n">warnings</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="k">for</span> <span class="n">inapplicable_section</span> <span class="ow">in</span> <span class="n">inapplicable_sections</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">inapplicable_section</span><span class="o">.</span><span class="n">condition</span><span class="o">.</span><span class="n">is_satisfied</span><span class="p">(</span><span class="n">parameter_values</span><span class="p">):</span>
@@ -249,9 +254,9 @@
 
 
 <span class="k">def</span> <span class="nf">_keep_satisfied_mofications</span><span class="p">(</span>
-    <span class="n">alternative_sections</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">AlternativeSection</span><span class="p">],</span> <span class="n">parameter_values</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="n">Parameter</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span>
-<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">AlternativeSection</span><span class="p">],</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]:</span>
-    <span class="n">satisfied</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">AlternativeSection</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">alternative_sections</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">PotentialModification</span><span class="p">],</span> <span class="n">parameter_values</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="n">Parameter</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">PotentialModification</span><span class="p">],</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]:</span>
+    <span class="n">satisfied</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">PotentialModification</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="n">warnings</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="k">for</span> <span class="n">alt</span> <span class="ow">in</span> <span class="n">alternative_sections</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">alt</span><span class="o">.</span><span class="n">condition</span><span class="o">.</span><span class="n">is_satisfied</span><span class="p">(</span><span class="n">parameter_values</span><span class="p">):</span>
@@ -273,13 +278,13 @@
 
 
 <span class="k">def</span> <span class="nf">_deactivate_alineas</span><span class="p">(</span>
-    <span class="n">text</span><span class="p">:</span> <span class="n">StructuredText</span><span class="p">,</span> <span class="n">satisfied</span><span class="p">:</span> <span class="n">InapplicableSection</span><span class="p">,</span> <span class="n">parameter_values</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="n">Parameter</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span>
+    <span class="n">text</span><span class="p">:</span> <span class="n">StructuredText</span><span class="p">,</span> <span class="n">inapplicability</span><span class="p">:</span> <span class="n">PotentialInapplicability</span><span class="p">,</span> <span class="n">parameter_values</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="n">Parameter</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">StructuredText</span><span class="p">:</span>
     <span class="n">text</span> <span class="o">=</span> <span class="n">copy</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
-    <span class="n">inactive_alineas</span> <span class="o">=</span> <span class="n">satisfied</span><span class="o">.</span><span class="n">targeted_entity</span><span class="o">.</span><span class="n">outer_alinea_indices</span>
+    <span class="n">inactive_alineas</span> <span class="o">=</span> <span class="n">inapplicability</span><span class="o">.</span><span class="n">alineas</span>
     <span class="n">all_inactive</span> <span class="o">=</span> <span class="n">inactive_alineas</span> <span class="ow">is</span> <span class="kc">None</span>
     <span class="n">warning</span> <span class="o">=</span> <span class="n">generate_inactive_warning</span><span class="p">(</span>
-        <span class="n">satisfied</span><span class="o">.</span><span class="n">condition</span><span class="p">,</span> <span class="n">parameter_values</span><span class="p">,</span> <span class="n">all_alineas</span><span class="o">=</span><span class="n">all_inactive</span><span class="p">,</span> <span class="n">whole_text</span><span class="o">=</span><span class="kc">False</span>
+        <span class="n">inapplicability</span><span class="o">.</span><span class="n">condition</span><span class="p">,</span> <span class="n">parameter_values</span><span class="p">,</span> <span class="n">all_alineas</span><span class="o">=</span><span class="n">all_inactive</span><span class="p">,</span> <span class="n">whole_text</span><span class="o">=</span><span class="kc">False</span>
     <span class="p">)</span>
     <span class="k">if</span> <span class="n">inactive_alineas</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">inactive_alineas_set</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">inactive_alineas</span><span class="p">)</span>
@@ -294,31 +299,31 @@
 
 <span class="k">def</span> <span class="nf">_apply_satisfied_modificators</span><span class="p">(</span>
     <span class="n">text</span><span class="p">:</span> <span class="n">StructuredText</span><span class="p">,</span>
-    <span class="n">inapplicable_sections</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">InapplicableSection</span><span class="p">],</span>
-    <span class="n">alternative_sections</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">AlternativeSection</span><span class="p">],</span>
+    <span class="n">inapplicabilities</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">PotentialInapplicability</span><span class="p">],</span>
+    <span class="n">modifications</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">PotentialModification</span><span class="p">],</span>
     <span class="n">parameter_values</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="n">Parameter</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">StructuredText</span><span class="p">:</span>
-    <span class="k">if</span> <span class="n">inapplicable_sections</span> <span class="ow">and</span> <span class="n">alternative_sections</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">inapplicabilities</span> <span class="ow">and</span> <span class="n">modifications</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span>
-            <span class="sa">f</span><span class="s1">&#39;Cannot apply conditions and alternative sections on one section. (Section title: </span><span class="si">{</span><span class="n">text</span><span class="o">.</span><span class="n">title</span><span class="o">.</span><span class="n">text</span><span class="si">}</span><span class="s1">)</span><span class="se">\n</span><span class="s1">&#39;</span>
-            <span class="sa">f</span><span class="s1">&#39;Non applicable condition: </span><span class="si">{</span><span class="n">inapplicable_sections</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">condition</span><span class="si">}</span><span class="se">\n</span><span class="s1">&#39;</span>
-            <span class="sa">f</span><span class="s1">&#39;Modification condition: </span><span class="si">{</span><span class="n">alternative_sections</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">condition</span><span class="si">}</span><span class="se">\n</span><span class="s1">&#39;</span>
+            <span class="sa">f</span><span class="s1">&#39;Cannot handle inapplicability and modification on one section. (Section title: </span><span class="si">{</span><span class="n">text</span><span class="o">.</span><span class="n">title</span><span class="o">.</span><span class="n">text</span><span class="si">}</span><span class="s1">)</span><span class="se">\n</span><span class="s1">&#39;</span>
+            <span class="sa">f</span><span class="s1">&#39;Inapplicability condition: </span><span class="si">{</span><span class="n">inapplicabilities</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">condition</span><span class="si">}</span><span class="se">\n</span><span class="s1">&#39;</span>
+            <span class="sa">f</span><span class="s1">&#39;Modification condition: </span><span class="si">{</span><span class="n">modifications</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">condition</span><span class="si">}</span><span class="se">\n</span><span class="s1">&#39;</span>
         <span class="p">)</span>
-    <span class="k">if</span> <span class="n">alternative_sections</span><span class="p">:</span>
-        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">alternative_sections</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">modifications</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">modifications</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
                 <span class="sa">f</span><span class="s1">&#39;Cannot handle more than 1 applicable modification on one section. &#39;</span>
-                <span class="sa">f</span><span class="s1">&#39;Here, </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">alternative_sections</span><span class="p">)</span><span class="si">}</span><span class="s1"> are applicable.&#39;</span>
+                <span class="sa">f</span><span class="s1">&#39;Here, </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">modifications</span><span class="p">)</span><span class="si">}</span><span class="s1"> are applicable.&#39;</span>
             <span class="p">)</span>
-        <span class="k">return</span> <span class="n">_build_alternative_text</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">alternative_sections</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">parameter_values</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">inapplicable_sections</span><span class="p">:</span>
-        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">inapplicable_sections</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">_build_alternative_text</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">modifications</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">parameter_values</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">inapplicabilities</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">inapplicabilities</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
                 <span class="sa">f</span><span class="s1">&#39;Cannot handle more than 1 non-applicability conditions on one section. &#39;</span>
-                <span class="sa">f</span><span class="s1">&#39;Here, </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">inapplicable_sections</span><span class="p">)</span><span class="si">}</span><span class="s1"> conditions are applicable.&#39;</span>
+                <span class="sa">f</span><span class="s1">&#39;Here, </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">inapplicabilities</span><span class="p">)</span><span class="si">}</span><span class="s1"> conditions are applicable.&#39;</span>
                 <span class="sa">f</span><span class="s1">&#39;</span><span class="se">\n</span><span class="si">{</span><span class="n">parameter_values</span><span class="si">}</span><span class="se">\n</span><span class="si">{</span><span class="n">text</span><span class="si">}</span><span class="s1">&#39;</span>
             <span class="p">)</span>
-        <span class="k">return</span> <span class="n">_deactivate_alineas</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">inapplicable_sections</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">parameter_values</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">_deactivate_alineas</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">inapplicabilities</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">parameter_values</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">text</span>
 
 
@@ -329,34 +334,28 @@
 
 
 <span class="k">def</span> <span class="nf">_extract_satisfied_objects_and_warnings</span><span class="p">(</span>
-    <span class="n">parametrization</span><span class="p">:</span> <span class="n">Parametrization</span><span class="p">,</span> <span class="n">parameter_values</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="n">Parameter</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="n">path</span><span class="p">:</span> <span class="n">Ints</span>
-<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">InapplicableSection</span><span class="p">],</span> <span class="n">List</span><span class="p">[</span><span class="n">AlternativeSection</span><span class="p">],</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]:</span>
+    <span class="n">parametrization</span><span class="p">:</span> <span class="n">SectionParametrization</span><span class="p">,</span> <span class="n">parameter_values</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="n">Parameter</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">PotentialInapplicability</span><span class="p">],</span> <span class="n">List</span><span class="p">[</span><span class="n">PotentialModification</span><span class="p">],</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]:</span>
     <span class="n">na_conditions</span><span class="p">,</span> <span class="n">warnings_1</span> <span class="o">=</span> <span class="n">_keep_satisfied_conditions</span><span class="p">(</span>
-        <span class="n">parametrization</span><span class="o">.</span><span class="n">path_to_conditions</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">path</span><span class="p">)</span> <span class="ow">or</span> <span class="p">[],</span> <span class="n">parameter_values</span><span class="p">,</span> <span class="n">whole_text</span><span class="o">=</span><span class="kc">False</span>
+        <span class="n">parametrization</span><span class="o">.</span><span class="n">potential_inapplicabilities</span><span class="p">,</span> <span class="n">parameter_values</span><span class="p">,</span> <span class="n">whole_text</span><span class="o">=</span><span class="kc">False</span>
     <span class="p">)</span>
     <span class="n">alternative_sections</span><span class="p">,</span> <span class="n">warnings_2</span> <span class="o">=</span> <span class="n">_keep_satisfied_mofications</span><span class="p">(</span>
-        <span class="n">parametrization</span><span class="o">.</span><span class="n">path_to_alternative_sections</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">path</span><span class="p">)</span> <span class="ow">or</span> <span class="p">[],</span> <span class="n">parameter_values</span>
+        <span class="n">parametrization</span><span class="o">.</span><span class="n">potential_modifications</span><span class="p">,</span> <span class="n">parameter_values</span>
     <span class="p">)</span>
-    <span class="n">warnings_3</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span><span class="o">.</span><span class="n">text</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">parametrization</span><span class="o">.</span><span class="n">path_to_warnings</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">path</span><span class="p">)</span> <span class="ow">or</span> <span class="p">[]]</span>
-    <span class="n">all_warnings</span> <span class="o">=</span> <span class="n">warnings_1</span> <span class="o">+</span> <span class="n">warnings_2</span> <span class="o">+</span> <span class="n">warnings_3</span>
+    <span class="n">all_warnings</span> <span class="o">=</span> <span class="n">warnings_1</span> <span class="o">+</span> <span class="n">warnings_2</span> <span class="o">+</span> <span class="n">parametrization</span><span class="o">.</span><span class="n">warnings</span>
     <span class="k">return</span> <span class="n">na_conditions</span><span class="p">,</span> <span class="n">alternative_sections</span><span class="p">,</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">all_warnings</span><span class="p">)</span>
 
 
-<span class="k">def</span> <span class="nf">_apply_parameter_values_in_text</span><span class="p">(</span>
-    <span class="n">text</span><span class="p">:</span> <span class="n">StructuredText</span><span class="p">,</span> <span class="n">parametrization</span><span class="p">:</span> <span class="n">Parametrization</span><span class="p">,</span> <span class="n">parameter_values</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="n">Parameter</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="n">path</span><span class="p">:</span> <span class="n">Ints</span>
-<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">StructuredText</span><span class="p">:</span>
-    <span class="n">na_conditions</span><span class="p">,</span> <span class="n">alternative_sections</span><span class="p">,</span> <span class="n">warnings</span> <span class="o">=</span> <span class="n">_extract_satisfied_objects_and_warnings</span><span class="p">(</span>
-        <span class="n">parametrization</span><span class="p">,</span> <span class="n">parameter_values</span><span class="p">,</span> <span class="n">path</span>
+<span class="k">def</span> <span class="nf">_apply_parameter_values_in_text</span><span class="p">(</span><span class="n">text</span><span class="p">:</span> <span class="n">StructuredText</span><span class="p">,</span> <span class="n">parameter_values</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="n">Parameter</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">StructuredText</span><span class="p">:</span>
+    <span class="n">na_conditions</span><span class="p">,</span> <span class="n">modifications</span><span class="p">,</span> <span class="n">warnings</span> <span class="o">=</span> <span class="n">_extract_satisfied_objects_and_warnings</span><span class="p">(</span>
+        <span class="n">text</span><span class="o">.</span><span class="n">parametrization</span><span class="p">,</span> <span class="n">parameter_values</span>
     <span class="p">)</span>
     <span class="n">text</span> <span class="o">=</span> <span class="n">copy</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">na_conditions</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">alternative_sections</span><span class="p">:</span>
-        <span class="n">text</span><span class="o">.</span><span class="n">sections</span> <span class="o">=</span> <span class="p">[</span>
-            <span class="n">_apply_parameter_values_in_text</span><span class="p">(</span><span class="n">section</span><span class="p">,</span> <span class="n">parametrization</span><span class="p">,</span> <span class="n">parameter_values</span><span class="p">,</span> <span class="n">path</span> <span class="o">+</span> <span class="p">(</span><span class="n">i</span><span class="p">,))</span>
-            <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">section</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">text</span><span class="o">.</span><span class="n">sections</span><span class="p">)</span>
-        <span class="p">]</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">na_conditions</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">modifications</span><span class="p">:</span>
+        <span class="n">text</span><span class="o">.</span><span class="n">sections</span> <span class="o">=</span> <span class="p">[</span><span class="n">_apply_parameter_values_in_text</span><span class="p">(</span><span class="n">section</span><span class="p">,</span> <span class="n">parameter_values</span><span class="p">)</span> <span class="k">for</span> <span class="n">section</span> <span class="ow">in</span> <span class="n">text</span><span class="o">.</span><span class="n">sections</span><span class="p">]</span>
         <span class="n">text</span><span class="o">.</span><span class="n">applicability</span> <span class="o">=</span> <span class="n">Applicability</span><span class="p">()</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">text</span> <span class="o">=</span> <span class="n">_apply_satisfied_modificators</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">na_conditions</span><span class="p">,</span> <span class="n">alternative_sections</span><span class="p">,</span> <span class="n">parameter_values</span><span class="p">)</span>
+        <span class="n">text</span> <span class="o">=</span> <span class="n">_apply_satisfied_modificators</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">na_conditions</span><span class="p">,</span> <span class="n">modifications</span><span class="p">,</span> <span class="n">parameter_values</span><span class="p">)</span>
 
     <span class="n">all_warnings</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">_ensure_applicabiliy</span><span class="p">(</span><span class="n">text</span><span class="o">.</span><span class="n">applicability</span><span class="p">)</span><span class="o">.</span><span class="n">warnings</span> <span class="o">+</span> <span class="n">warnings</span><span class="p">))</span>
     <span class="n">text</span><span class="o">.</span><span class="n">applicability</span> <span class="o">=</span> <span class="n">replace</span><span class="p">(</span><span class="n">_ensure_applicabiliy</span><span class="p">(</span><span class="n">text</span><span class="o">.</span><span class="n">applicability</span><span class="p">),</span> <span class="n">warnings</span><span class="o">=</span><span class="n">all_warnings</span><span class="p">)</span>
@@ -368,22 +367,17 @@
 
 
 <span class="k">def</span> <span class="nf">_compute_whole_text_applicability</span><span class="p">(</span>
-    <span class="n">inapplicable_sections</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">InapplicableSection</span><span class="p">],</span>
-    <span class="n">parameter_values</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="n">Parameter</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span>
-    <span class="n">simple_warnings</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">AMWarning</span><span class="p">],</span>
+    <span class="n">applicability</span><span class="p">:</span> <span class="n">AMApplicability</span><span class="p">,</span> <span class="n">parameter_values</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="n">Parameter</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">bool</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]:</span>
-    <span class="n">na_conditions</span><span class="p">,</span> <span class="n">warnings</span> <span class="o">=</span> <span class="n">_keep_satisfied_conditions</span><span class="p">(</span><span class="n">inapplicable_sections</span><span class="p">,</span> <span class="n">parameter_values</span><span class="p">,</span> <span class="n">whole_text</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">na_conditions</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-            <span class="sa">f</span><span class="s1">&#39;Cannot handle more than one inapplicability on the whole text. &#39;</span>
-            <span class="sa">f</span><span class="s1">&#39;Here, </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">na_conditions</span><span class="p">)</span><span class="si">}</span><span class="s1"> inapplicability conditions are fulfilled.&#39;</span>
-        <span class="p">)</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">na_conditions</span><span class="p">:</span>
-        <span class="k">return</span> <span class="kc">True</span><span class="p">,</span> <span class="n">warnings</span> <span class="o">+</span> <span class="p">[</span><span class="n">x</span><span class="o">.</span><span class="n">text</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">simple_warnings</span><span class="p">]</span>
-    <span class="k">if</span> <span class="n">inapplicable_sections</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">targeted_entity</span><span class="o">.</span><span class="n">outer_alinea_indices</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Can only deactivate the whole AM, not particular alineas.&#39;</span><span class="p">)</span>
-    <span class="n">description</span> <span class="o">=</span> <span class="n">_generate_whole_text_reason_inactive</span><span class="p">(</span><span class="n">na_conditions</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">condition</span><span class="p">,</span> <span class="n">parameter_values</span><span class="p">)</span>
-    <span class="k">return</span> <span class="kc">False</span><span class="p">,</span> <span class="p">[</span><span class="n">description</span><span class="p">]</span>
+    <span class="n">condition</span> <span class="o">=</span> <span class="n">applicability</span><span class="o">.</span><span class="n">condition_of_inapplicability</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">condition</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">True</span><span class="p">,</span> <span class="n">applicability</span><span class="o">.</span><span class="n">warnings</span>
+    <span class="k">if</span> <span class="n">condition</span><span class="o">.</span><span class="n">is_satisfied</span><span class="p">(</span><span class="n">parameter_values</span><span class="p">):</span>
+        <span class="k">return</span> <span class="kc">False</span><span class="p">,</span> <span class="p">[</span><span class="n">_generate_whole_text_reason_inactive</span><span class="p">(</span><span class="n">condition</span><span class="p">,</span> <span class="n">parameter_values</span><span class="p">)]</span>
+    <span class="n">warnings</span> <span class="o">=</span> <span class="n">applicability</span><span class="o">.</span><span class="n">warnings</span>
+    <span class="k">if</span> <span class="n">_has_undefined_parameters</span><span class="p">(</span><span class="n">condition</span><span class="p">,</span> <span class="n">parameter_values</span><span class="p">):</span>
+        <span class="n">warnings</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">generate_warning_missing_value</span><span class="p">(</span><span class="n">condition</span><span class="p">,</span> <span class="n">parameter_values</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">True</span><span class="p">))</span>
+    <span class="k">return</span> <span class="kc">True</span><span class="p">,</span> <span class="n">warnings</span>
 
 
 <span class="k">def</span> <span class="nf">_is_satisfiable</span><span class="p">(</span><span class="n">condition</span><span class="p">:</span> <span class="n">Condition</span><span class="p">,</span> <span class="n">regime_target</span><span class="p">:</span> <span class="n">Regime</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
@@ -399,13 +393,12 @@
 
 
 <div class="viewcode-block" id="apply_parameter_values_to_am"><a class="viewcode-back" href="../../../envinorma.parametrization.html#envinorma.parametrization.apply_parameter_values.apply_parameter_values_to_am">[docs]</a><span class="k">def</span> <span class="nf">apply_parameter_values_to_am</span><span class="p">(</span>
-    <span class="n">am</span><span class="p">:</span> <span class="n">ArreteMinisteriel</span><span class="p">,</span> <span class="n">parametrization</span><span class="p">:</span> <span class="n">Parametrization</span><span class="p">,</span> <span class="n">parameter_values</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="n">Parameter</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span>
+    <span class="n">am</span><span class="p">:</span> <span class="n">ArreteMinisteriel</span><span class="p">,</span> <span class="n">parameter_values</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="n">Parameter</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="n">parametrization</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Parametrization</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ArreteMinisteriel</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">parametrization</span><span class="p">:</span>
+        <span class="n">add_parametrization</span><span class="p">(</span><span class="n">am</span><span class="p">,</span> <span class="n">parametrization</span><span class="p">)</span>
     <span class="n">am</span> <span class="o">=</span> <span class="n">copy</span><span class="p">(</span><span class="n">am</span><span class="p">)</span>
-    <span class="n">am</span><span class="o">.</span><span class="n">sections</span> <span class="o">=</span> <span class="p">[</span>
-        <span class="n">_apply_parameter_values_in_text</span><span class="p">(</span><span class="n">section</span><span class="p">,</span> <span class="n">parametrization</span><span class="p">,</span> <span class="n">parameter_values</span><span class="p">,</span> <span class="p">(</span><span class="n">i</span><span class="p">,))</span>
-        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">section</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">am</span><span class="o">.</span><span class="n">sections</span><span class="p">)</span>
-    <span class="p">]</span>
+    <span class="n">am</span><span class="o">.</span><span class="n">sections</span> <span class="o">=</span> <span class="p">[</span><span class="n">_apply_parameter_values_in_text</span><span class="p">(</span><span class="n">section</span><span class="p">,</span> <span class="n">parameter_values</span><span class="p">)</span> <span class="k">for</span> <span class="n">section</span> <span class="ow">in</span> <span class="n">am</span><span class="o">.</span><span class="n">sections</span><span class="p">]</span>
     <span class="k">return</span> <span class="n">am</span></div>
 
 
@@ -426,15 +419,14 @@
 
 
 <div class="viewcode-block" id="build_am_with_applicability"><a class="viewcode-back" href="../../../envinorma.parametrization.html#envinorma.parametrization.apply_parameter_values.build_am_with_applicability">[docs]</a><span class="k">def</span> <span class="nf">build_am_with_applicability</span><span class="p">(</span>
-    <span class="n">am</span><span class="p">:</span> <span class="n">ArreteMinisteriel</span><span class="p">,</span> <span class="n">parametrization</span><span class="p">:</span> <span class="n">Parametrization</span><span class="p">,</span> <span class="n">parameter_values</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="n">Parameter</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span>
+    <span class="n">am</span><span class="p">:</span> <span class="n">ArreteMinisteriel</span><span class="p">,</span> <span class="n">parametrization</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Parametrization</span><span class="p">],</span> <span class="n">parameter_values</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="n">Parameter</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">AMWithApplicability</span><span class="p">:</span>
-    <span class="n">applicable</span><span class="p">,</span> <span class="n">warnings</span> <span class="o">=</span> <span class="n">_compute_whole_text_applicability</span><span class="p">(</span>
-        <span class="n">parametrization</span><span class="o">.</span><span class="n">path_to_conditions</span><span class="o">.</span><span class="n">get</span><span class="p">((),</span> <span class="p">[]),</span> <span class="n">parameter_values</span><span class="p">,</span> <span class="n">parametrization</span><span class="o">.</span><span class="n">path_to_warnings</span><span class="o">.</span><span class="n">get</span><span class="p">((),</span> <span class="p">[])</span>
-    <span class="p">)</span>
+    <span class="k">if</span> <span class="n">parametrization</span><span class="p">:</span>
+        <span class="n">add_parametrization</span><span class="p">(</span><span class="n">am</span><span class="p">,</span> <span class="n">parametrization</span><span class="p">)</span>
+
+    <span class="n">applicable</span><span class="p">,</span> <span class="n">warnings</span> <span class="o">=</span> <span class="n">_compute_whole_text_applicability</span><span class="p">(</span><span class="n">am</span><span class="o">.</span><span class="n">applicability</span><span class="p">,</span> <span class="n">parameter_values</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">AMWithApplicability</span><span class="p">(</span>
-        <span class="n">arrete</span><span class="o">=</span><span class="n">apply_parameter_values_to_am</span><span class="p">(</span><span class="n">am</span><span class="p">,</span> <span class="n">parametrization</span><span class="p">,</span> <span class="n">parameter_values</span><span class="p">),</span>
-        <span class="n">applicable</span><span class="o">=</span><span class="n">applicable</span><span class="p">,</span>
-        <span class="n">warnings</span><span class="o">=</span><span class="n">warnings</span><span class="p">,</span>
+        <span class="n">arrete</span><span class="o">=</span><span class="n">apply_parameter_values_to_am</span><span class="p">(</span><span class="n">am</span><span class="p">,</span> <span class="n">parameter_values</span><span class="p">),</span> <span class="n">applicable</span><span class="o">=</span><span class="n">applicable</span><span class="p">,</span> <span class="n">warnings</span><span class="o">=</span><span class="n">warnings</span>
     <span class="p">)</span></div>
 </pre></div>
 
