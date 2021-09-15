@@ -1,130 +1,28 @@
-import re
 import warnings
 from copy import copy
 from dataclasses import asdict, dataclass, field, fields
-from datetime import date, datetime
-from typing import Any, Dict, List, Optional
+from datetime import date
+from typing import Any, Dict, List, Optional, Tuple
 
-from envinorma.utils import AIDA_URL, LEGIFRANCE_LODA_BASE_URL, random_id
+from envinorma.topics.patterns import TopicName
+from envinorma.utils import random_id
 
-from .am_metadata import AMMetadata
-from .classement import Classement, ClassementWithAlineas, group_classements_by_alineas
-from .condition import Condition, load_condition
-from .structured_text import StructuredText
-from .text_elements import EnrichedString
+from .am_applicability import AMApplicability
+from .classement import Classement, ClassementWithAlineas
+from .helpers import (
+    standardize_title_if_necessary,
+    transfer_ids_based_on_other_am,
+    extract_date_of_signature,
+    extract_short_title,
+)
+from .lost_topic import LostTopic
+from .structured_text import Annotations, EnrichedString, StructuredText
 
 
 def _is_probably_cid(candidate: str) -> bool:
     if 'FAKE' in candidate:
         return True  # for avoiding warning for fake cids, which contain FAKE by convention
     return candidate.startswith('JORFTEXT') or candidate.startswith('LEGITEXT')
-
-
-_MONTHS = r'(janvier|février|mars|avril|mai|juin|juillet|août|septembre|octobre|novembre|décembre)'
-_PATTERN = r'Arrêté du (1er|[0-9]*) ' + _MONTHS + ' [0-9]{4}'
-
-
-def _contains_human_date(title: str) -> bool:
-    return re.match(_PATTERN, title) is not None
-
-
-def _year(year_str: str) -> int:
-    if not year_str.isdigit():
-        raise ValueError(f'Expecting {year_str} to be a digit')
-    return int(year_str)
-
-
-_MONTH_TO_MONTH_RANK = {
-    'janvier': 1,
-    'février': 2,
-    'mars': 3,
-    'avril': 4,
-    'mai': 5,
-    'juin': 6,
-    'juillet': 7,
-    'août': 8,
-    'septembre': 9,
-    'octobre': 10,
-    'novembre': 11,
-    'décembre': 12,
-}
-
-
-def _month(french_month: str) -> int:
-    if french_month not in _MONTH_TO_MONTH_RANK:
-        raise ValueError(f'Expecting month to be in {_MONTH_TO_MONTH_RANK} got {french_month}')
-    return _MONTH_TO_MONTH_RANK[french_month]
-
-
-def _day(day_str: str) -> int:
-    if day_str == '1er':
-        return 1
-    if not day_str.isdigit():
-        raise ValueError(f'Expecting {day_str} to be a digit')
-    return int(day_str)
-
-
-def _read_human_french_date(day_str: str, french_month: str, year_str: str) -> date:
-    return date(_year(year_str), _month(french_month), _day(day_str))
-
-
-def _standardize_date(day_str: str, french_month: str, year_str: str) -> str:
-    date_ = _read_human_french_date(day_str, french_month, year_str)
-    return date_.strftime('%d/%m/%y')
-
-
-def standardize_title_date(title: str) -> str:
-    words = title.split()
-    if len(words) <= 5:
-        raise ValueError(f'Expecting title to have at least 5 words, got {len(words)} (title={title}).')
-    new_words = words[:2] + [_standardize_date(*words[2:5])] + words[5:]
-    return ' '.join(new_words)
-
-
-def _standardize_title_if_necessary(title: str) -> str:
-    if title == 'Faux arrêté':  # Edge case for test text
-        return 'Faux arrêté du 10/10/10'
-    if _contains_human_date(title):
-        return standardize_title_date(title)
-    return title
-
-
-def extract_short_title(input_title: str) -> str:
-    return input_title.split('relatif')[0].split('fixant')[0].strip()
-
-
-_DATE_PATTERN = r'^[0-9]{2}/[0-9]{2}/[0-9]{2}$'
-
-
-def _extract_date(candidate_date: str) -> date:
-    if not re.match(_DATE_PATTERN, candidate_date):
-        raise ValueError(f'Expecting format {_DATE_PATTERN}. Got {candidate_date}.')
-    return datetime.strptime(candidate_date, '%d/%m/%y').date()
-
-
-def extract_date_of_signature(input_title: str) -> date:
-    short_title = extract_short_title(input_title)
-    candidate_date = (short_title.split() or [''])[-1]
-    return _extract_date(candidate_date)
-
-
-@dataclass
-class AMApplicability:
-    warnings: List[str] = field(default_factory=list)
-    condition_of_inapplicability: Optional[Condition] = None
-
-    def to_dict(self) -> Dict[str, Any]:
-        res = asdict(self)
-        if self.condition_of_inapplicability:
-            res['condition_of_inapplicability'] = self.condition_of_inapplicability.to_dict()
-        return res
-
-    @classmethod
-    def from_dict(cls, dict_: Dict[str, Any]) -> 'AMApplicability':
-        dict_ = dict_.copy()
-        if dict_.get('condition_of_inapplicability'):
-            dict_['condition_of_inapplicability'] = load_condition(dict_['condition_of_inapplicability'])
-        return cls(**dict_)
 
 
 @dataclass
@@ -158,6 +56,8 @@ class ArreteMinisteriel:
             Optional nickname for the AM. (mainly for transverse AMs)
         applicability (Optional[AMApplicability]):
             Optional applicability descriptor of the AM.
+        orphan_titles (Optional[Dict[str, str]]):
+            TODO
     """
 
     title: EnrichedString
@@ -172,13 +72,14 @@ class ArreteMinisteriel:
     is_transverse: bool = False
     nickname: Optional[str] = None
     applicability: AMApplicability = field(default_factory=AMApplicability)
+    orphan_titles: Optional[Dict[str, List[str]]] = None
 
     @property
     def short_title(self) -> str:
         return extract_short_title(self.title.text)
 
     def __post_init__(self):
-        self.title.text = _standardize_title_if_necessary(self.title.text)
+        self.title.text = standardize_title_if_necessary(self.title.text)
         if self.date_of_signature is None:
             self.date_of_signature = extract_date_of_signature(self.title.text)
         elif self.date_of_signature != extract_date_of_signature(self.title.text):
@@ -224,21 +125,49 @@ class ArreteMinisteriel:
     def to_text(self) -> StructuredText:
         return StructuredText(self.title, [], self.sections, None)
 
+    def descendent_sections(self) -> List[StructuredText]:
+        descendent_sections = self.sections.copy()
+        for section in self.sections:
+            descendent_sections.extend(section.descendent_sections())
+        return descendent_sections
 
-def _build_legifrance_url(cid: str) -> str:
-    return LEGIFRANCE_LODA_BASE_URL + cid
+    def section_id_to_topic(self) -> Dict[str, TopicName]:
+        return {
+            section.id: section.annotations.topic
+            for section in self.descendent_sections()
+            if section.annotations and section.annotations.topic
+        }
 
+    def titles_sequences(self) -> Dict[str, List[str]]:
+        return {
+            section_id: titles_sequence
+            for section in self.sections
+            for section_id, titles_sequence in section.titles_sequences().items()
+        }
 
-def _build_aida_url(page: str) -> str:
-    return AIDA_URL + page
+    def _lost_topics(self, not_found_topics: Dict[str, TopicName]) -> List[LostTopic]:
+        if not not_found_topics:
+            return []
+        return [LostTopic(topic, (self.orphan_titles or {})[id_], id_) for id_, topic in not_found_topics.items()]
 
+    def set_topics(self, section_id_to_topic: Dict[str, TopicName]) -> List[LostTopic]:
+        descendent_sections = self.descendent_sections()
+        for section in descendent_sections:
+            section.annotations = section.annotations or Annotations()
+            section.annotations.topic = section_id_to_topic.get(section.id)
+        section_ids = {section.id for section in descendent_sections}
+        not_found_topics = {id_: topic for id_, topic in section_id_to_topic.items() if id_ not in section_ids}
+        return self._lost_topics(not_found_topics)
 
-def add_metadata(am: ArreteMinisteriel, metadata: AMMetadata) -> ArreteMinisteriel:
-    am = copy(am)
-    am.legifrance_url = _build_legifrance_url(metadata.cid)
-    am.aida_url = _build_aida_url(metadata.aida_page)
-    am.classements = metadata.classements
-    am.classements_with_alineas = group_classements_by_alineas(metadata.classements)
-    am.is_transverse = metadata.is_transverse
-    am.nickname = metadata.nickname
-    return am
+    def change_ids_based_on_other_am(self, am: 'ArreteMinisteriel') -> None:
+        self.orphan_titles = transfer_ids_based_on_other_am(self, am)
+
+    def create_copy_with_new_content(
+        self, new_sections: List[StructuredText]
+    ) -> Tuple['ArreteMinisteriel', List[LostTopic]]:
+        section_id_to_topic = self.section_id_to_topic()
+        new_am = copy(self)
+        new_am.sections = new_sections
+        new_am.change_ids_based_on_other_am(self)
+        lost_topics = new_am.set_topics(section_id_to_topic)
+        return new_am, lost_topics

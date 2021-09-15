@@ -8,11 +8,10 @@ import pytest
 
 from envinorma.models.arrete_ministeriel import (
     ArreteMinisteriel,
-    _contains_human_date,
     _is_probably_cid,
     extract_date_of_signature,
-    standardize_title_date,
 )
+from envinorma.models.helpers.date_helpers import _contains_human_date, standardize_title_date
 from envinorma.models.classement import Classement, ClassementWithAlineas, Regime, group_classements_by_alineas
 from envinorma.models.structured_text import Annotations, Applicability, StructuredText
 from envinorma.models.text_elements import Cell, EnrichedString, Link, Row, Table, estr

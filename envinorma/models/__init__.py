@@ -2,12 +2,9 @@ import json
 from typing import Tuple
 
 from .am_metadata import AMMetadata, AMSource, AMState  # noqa: F401
-from .arrete_ministeriel import (  # noqa: F401
-    ArreteMinisteriel,
-    add_metadata,
-    extract_date_of_signature,
-    standardize_title_date,
-)
+from .am_applicability import AMApplicability  # noqa: F401
+from .arrete_ministeriel import ArreteMinisteriel, extract_date_of_signature  # noqa: F401
+from .helpers.date_helpers import standardize_title_date  # noqa: F401
 from .classement import Classement, ClassementWithAlineas, Regime, ensure_rubrique  # noqa: F401
 from .condition import (  # noqa: F401
     AndCondition,

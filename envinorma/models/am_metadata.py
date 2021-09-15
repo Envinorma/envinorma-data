@@ -7,6 +7,7 @@ from envinorma.models.classement import Classement
 
 
 class AMState(Enum):
+    EN_CREATION = 'EN_CREATION'
     VIGUEUR = 'VIGUEUR'
     ABROGE = 'ABROGE'
     DELETED = 'DELETED'

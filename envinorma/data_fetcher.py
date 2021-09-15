@@ -14,7 +14,6 @@ from envinorma.parametrization.models.parametrization import (
     Parametrization,
 )
 from envinorma.parametrization.tie_parametrization import add_parametrization
-from envinorma.utils import AMStatus
 
 
 def _ensure_len(list_: List, min_len: int) -> None:
@@ -276,25 +275,6 @@ class DataFetcher:
     def load_most_advanced_am(self, am_id: str) -> Optional[ArreteMinisteriel]:
         return self.load_structured_am(am_id) or self.load_initial_am(am_id)
 
-    def load_am_status(self, am_id: str) -> AMStatus:
-        query = 'SELECT status FROM am_status WHERE am_id = %s;'
-        query_result = self._exectute_select_query(query, (am_id,))
-        if not query_result:
-            return AMStatus.PENDING_INITIALIZATION
-        status = _ensure_one_variable(query_result)
-        return AMStatus(status)
-
-    def load_all_am_statuses(self) -> Dict[str, AMStatus]:
-        query = 'SELECT am_id, status FROM am_status'
-        return {am_id: AMStatus(status) for am_id, status in self._exectute_select_query(query, ())}
-
-    def upsert_am_status(self, am_id: str, new_status: AMStatus) -> None:
-        query = (
-            'INSERT INTO am_status(am_id, status) VALUES(%s, %s) ON CONFLICT (am_id)'
-            ' DO UPDATE SET status = %s WHERE am_status.am_id =%s;'
-        )
-        self._exectute_update_query(query, (am_id, new_status.value, new_status.value, am_id))
-
     def load_structured_ams(self, am_ids: Set[str]) -> List[ArreteMinisteriel]:
         query = 'SELECT am_id, data FROM structured_am'
         tuples = self._exectute_select_query(query, ())
@@ -325,11 +305,11 @@ class DataFetcher:
 
     def _load_validated_parametrizations(self) -> Dict[str, Parametrization]:
         parametizations = self.load_all_parametrizations()
-        statuses = self.load_all_am_statuses()
+        statuses = self.load_all_am_metadata()
         return {
             am_id: parametization
             for am_id, parametization in parametizations.items()
-            if statuses[am_id] == AMStatus.VALIDATED
+            if statuses[am_id].state == AMState.VIGUEUR
         }
 
     def build_enriched_ams(self, with_deleted_ams: bool = False, with_fake: bool = False) -> List[ArreteMinisteriel]:

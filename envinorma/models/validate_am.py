@@ -26,7 +26,7 @@ def _print_input_id(func):
     def _func(am: ArreteMinisteriel):
         try:
             func(am)
-        except:  # noqa: E722
+        except Exception:  # noqa: E722
             print(am.id)
             raise
 
@@ -41,19 +41,24 @@ def _check_date_of_signature(date_of_signature: Optional[date]):
 def _check_regimes(am: ArreteMinisteriel) -> None:
     # Regime must be A, E or D
     for classement in am.classements:
-        assert classement.regime.value in 'AED', f'Invalid regime {classement.regime.value}'
+        if classement.regime.value not in 'AED':
+            raise ValueError(f'Invalid regime {classement.regime.value}')
 
 
 def _check_non_none_fields(am: ArreteMinisteriel) -> None:
-    assert am.legifrance_url is not None
-    assert am.aida_url is not None
+    if am.legifrance_url is None:
+        raise ValueError('Expecting legifrance_url to be defined')
+
+    if am.aida_url is None:
+        raise ValueError('Expecting aida_url to be defined')
 
 
 _REGEXP = re.compile(r'^(JORFTEXT|LEGITEXT)[0-9]{12}$')
 
 
 def _check_am_id_format(am_id: str) -> None:
-    assert _REGEXP.match(am_id) is not None, f'Invalid AM ID format: {am_id}'
+    if _REGEXP.match(am_id) is None:
+        raise ValueError(f'Invalid AM ID format: {am_id}')
 
 
 @_print_input_id

@@ -4,7 +4,6 @@ import random
 import string
 import traceback
 from datetime import datetime
-from enum import Enum
 from typing import Dict, Iterable, List, Optional, TypeVar, Union
 
 from tqdm import tqdm
@@ -94,21 +93,3 @@ def safely_replace(string: str, replaced_substring: str, new_substring: str) -> 
 
 def random_id(size: int = 12) -> str:
     return ''.join([random.choice(string.hexdigits) for _ in range(size)])  # noqa: S311
-
-
-class AMStatus(Enum):
-    PENDING_INITIALIZATION = 'pending-initialization'
-    PENDING_STRUCTURE_VALIDATION = 'pending-structure-validation'
-    PENDING_PARAMETRIZATION = 'pending-enrichment'
-    VALIDATED = 'validated'
-
-    def step(self) -> int:
-        if self == AMStatus.PENDING_INITIALIZATION:
-            return 0
-        if self == AMStatus.PENDING_STRUCTURE_VALIDATION:
-            return 1
-        if self == AMStatus.PENDING_PARAMETRIZATION:
-            return 2
-        if self == AMStatus.VALIDATED:
-            return 3
-        raise NotImplementedError()
