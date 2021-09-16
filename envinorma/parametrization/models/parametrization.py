@@ -139,12 +139,12 @@ class Parametrization:
     inapplicable_sections: List[InapplicableSection]
     alternative_sections: List[AlternativeSection]
     warnings: List[AMWarning]
-    id_to_conditions: Dict[str, List[InapplicableSection]] = field(init=False)
+    id_to_inapplicabilities: Dict[str, List[InapplicableSection]] = field(init=False)
     id_to_alternative_sections: Dict[str, List[AlternativeSection]] = field(init=False)
     id_to_warnings: Dict[str, List[AMWarning]] = field(init=False)
 
     def __post_init__(self):
-        self.id_to_conditions = _group(self.inapplicable_sections, lambda x: x.section_id)
+        self.id_to_inapplicabilities = _group(self.inapplicable_sections, lambda x: x.section_id)
         self.id_to_alternative_sections = _group(self.alternative_sections, lambda x: x.section_id)
         self.id_to_warnings = _group(self.warnings, lambda x: x.section_id)
         self.check()
@@ -183,13 +183,13 @@ class Parametrization:
             condition.check()
 
     def _extract_all_ids(self) -> Set[str]:
-        return set(self.id_to_alternative_sections.keys()).union(set(self.id_to_conditions.keys()))
+        return set(self.id_to_alternative_sections.keys()).union(set(self.id_to_inapplicabilities.keys()))
 
     def check_consistency(self) -> None:
         all_ids = self._extract_all_ids()
         for id_ in all_ids:
             _check_consistency_on_section(
-                self.id_to_conditions.get(id_, []), self.id_to_alternative_sections.get(id_, [])
+                self.id_to_inapplicabilities.get(id_, []), self.id_to_alternative_sections.get(id_, [])
             )
 
 

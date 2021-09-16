@@ -31,7 +31,7 @@ def _warnings(warnings: List[AMWarning]) -> List[str]:
 
 def _init_section_parametrization(parametrization: Parametrization, section_id: str) -> SectionParametrization:
     return SectionParametrization(
-        _inapplicabilities(parametrization.id_to_conditions.get(section_id, [])),
+        _inapplicabilities(parametrization.id_to_inapplicabilities.get(section_id, [])),
         _modifications(parametrization.id_to_alternative_sections.get(section_id, [])),
         _warnings(parametrization.id_to_warnings.get(section_id, [])),
     )

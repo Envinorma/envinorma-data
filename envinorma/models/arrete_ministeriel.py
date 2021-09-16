@@ -56,8 +56,10 @@ class ArreteMinisteriel:
             Optional nickname for the AM. (mainly for transverse AMs)
         applicability (Optional[AMApplicability]):
             Optional applicability descriptor of the AM.
-        orphan_titles (Optional[Dict[str, str]]):
-            TODO
+        orphan_titles (Optional[Dict[str, List[str]]]):
+            Optional map of section ids to list of titles that were not found in the AM
+            during the last edition of the AM content. It is used to track lost topics and parametrizations
+            (ie. topics that were not found in the AM during the last edition of the AM content).
     """
 
     title: EnrichedString
