@@ -70,7 +70,7 @@ source_suffix = {
 master_doc = 'index'
 
 # General information about the project.
-project = u'Envinorma'
+project = u'Envinorma-data'
 copyright = u'2021, Envinorma'
 author = u'Envinorma'
 
