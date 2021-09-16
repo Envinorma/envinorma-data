@@ -1,4 +1,5 @@
 from copy import copy
+
 from envinorma.models import AMMetadata, ArreteMinisteriel
 from envinorma.models.classement import group_classements_by_alineas
 from envinorma.utils import AIDA_URL, LEGIFRANCE_LODA_BASE_URL

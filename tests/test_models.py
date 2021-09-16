@@ -6,13 +6,9 @@ from typing import Optional
 
 import pytest
 
-from envinorma.models.arrete_ministeriel import (
-    ArreteMinisteriel,
-    _is_probably_cid,
-    extract_date_of_signature,
-)
-from envinorma.models.helpers.date_helpers import _contains_human_date, standardize_title_date
+from envinorma.models.arrete_ministeriel import ArreteMinisteriel, _is_probably_cid, extract_date_of_signature
 from envinorma.models.classement import Classement, ClassementWithAlineas, Regime, group_classements_by_alineas
+from envinorma.models.helpers.date_helpers import _contains_human_date, standardize_title_date
 from envinorma.models.structured_text import Annotations, Applicability, StructuredText
 from envinorma.models.text_elements import Cell, EnrichedString, Link, Row, Table, estr
 from envinorma.topics.patterns import TopicName

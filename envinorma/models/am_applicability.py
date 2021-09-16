@@ -1,7 +1,6 @@
 from dataclasses import asdict, dataclass, field
 from typing import Any, Dict, List, Optional
 
-
 from .condition import Condition, load_condition
 
 

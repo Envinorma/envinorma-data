@@ -1,13 +1,13 @@
-from envinorma.models.text_elements import EnrichedString
-from envinorma.models.structured_text import StructuredText
 from envinorma.models.arrete_ministeriel import ArreteMinisteriel
 from envinorma.models.helpers.am_transfer_ids import (
-    _elements_present_once,
-    _common_unique_titles,
-    _common_unique_title_pairs,
     _build_titles_to_id_map,
+    _common_unique_title_pairs,
+    _common_unique_titles,
+    _elements_present_once,
     transfer_ids_based_on_other_am,
 )
+from envinorma.models.structured_text import StructuredText
+from envinorma.models.text_elements import EnrichedString
 
 
 def test_elements_present_once():

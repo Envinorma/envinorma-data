@@ -10,10 +10,10 @@ from envinorma.utils import random_id
 from .am_applicability import AMApplicability
 from .classement import Classement, ClassementWithAlineas
 from .helpers import (
-    standardize_title_if_necessary,
-    transfer_ids_based_on_other_am,
     extract_date_of_signature,
     extract_short_title,
+    standardize_title_if_necessary,
+    transfer_ids_based_on_other_am,
 )
 from .lost_topic import LostTopic
 from .structured_text import Annotations, EnrichedString, StructuredText

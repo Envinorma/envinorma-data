@@ -1,13 +1,13 @@
 from dataclasses import dataclass, field
 from typing import Any, Callable, Dict, List, Optional, Set, Tuple, TypeVar, Union
+
 from envinorma.models.condition import Condition, LeafCondition, extract_leaf_conditions, load_condition
 from envinorma.models.parameter import Parameter
 from envinorma.models.structured_text import StructuredText
+from envinorma.utils import random_id
 
 from ..consistency import check_conditions_not_compatible
 from ..exceptions import ParametrizationError
-
-from envinorma.utils import random_id
 
 
 @dataclass

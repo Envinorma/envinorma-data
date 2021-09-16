@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+
 import pytest
 
 from envinorma.data_fetcher import _upsert_element
