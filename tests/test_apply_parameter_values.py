@@ -18,8 +18,6 @@ from envinorma.parametrization.models import (
     AlternativeSection,
     AMWarning,
     AndCondition,
-    ConditionSource,
-    EntityReference,
     Equal,
     InapplicableSection,
     Littler,
@@ -28,7 +26,6 @@ from envinorma.parametrization.models import (
     ParameterEnum,
     ParameterType,
     Parametrization,
-    SectionReference,
 )
 from envinorma.utils import ensure_not_none
 
@@ -76,15 +73,11 @@ def test_apply_parameter_values_to_am():
     parameter = Parameter('nouvelle-installation', ParameterType.BOOLEAN)
     is_installation_old = Equal(parameter, False)
     is_installation_new = Equal(parameter, True)
-    source = ConditionSource(EntityReference(SectionReference((2,)), None))
     new_text = StructuredText(_str('Art. 2'), [_str('version modifiée')], [], None)
     parametrization = Parametrization(
-        [
-            _IS(EntityReference(SectionReference((0,)), None), is_installation_old, source),
-            _IS(EntityReference(SectionReference((3,)), [0]), is_installation_old, source),
-        ],
-        [_AS(SectionReference((1,)), new_text, is_installation_new, source)],
-        [AMWarning(SectionReference((0,)), 'Fake warning')],
+        [_IS(sections[0].id, None, is_installation_old), _IS(sections[3].id, [0], is_installation_old)],
+        [_AS(sections[1].id, new_text, is_installation_new)],
+        [AMWarning(sections[0].id, 'Fake warning')],
     )
 
     new_am_1 = apply_parameter_values_to_am(am, {parameter: False}, parametrization)
@@ -140,13 +133,8 @@ def test_extract_parameters_from_parametrization():
     condition_1 = Equal(parameter_1, True)
     parameter_2 = Parameter('nouvelle-installation', ParameterType.BOOLEAN)
     condition_2 = Equal(parameter_2, True)
-    source = ConditionSource(EntityReference(SectionReference((2,)), None))
     new_text = StructuredText(_str('Art. 2'), [_str('version modifiée')], [], None)
-    parametrization = Parametrization(
-        [_IS(EntityReference(SectionReference((0,)), None), condition_1, source)],
-        [_AS(SectionReference((1,)), new_text, condition_2, source)],
-        [],
-    )
+    parametrization = Parametrization([_IS('a', None, condition_1)], [_AS('b', new_text, condition_2)], [])
 
     parameters = parametrization.extract_parameters()
     assert len(parameters) == 1
@@ -158,13 +146,8 @@ def test_extract_parameters_from_parametrization_2():
     condition_1 = Equal(parameter_1, True)
     parameter_2 = Parameter('nouvelle-installation-2', ParameterType.BOOLEAN)
     condition_2 = Equal(parameter_2, True)
-    source = ConditionSource(EntityReference(SectionReference((2,)), None))
     new_text = StructuredText(_str('Art. 2'), [_str('version modifiée')], [], None)
-    parametrization = Parametrization(
-        [_IS(EntityReference(SectionReference((0,)), None), condition_1, source)],
-        [_AS(SectionReference((1,)), new_text, condition_2, source)],
-        [],
-    )
+    parametrization = Parametrization([_IS('', None, condition_1)], [_AS('', new_text, condition_2)], [])
 
     parameters = parametrization.extract_parameters()
     assert len(parameters) == 2

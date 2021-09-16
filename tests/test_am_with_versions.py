@@ -8,11 +8,8 @@ from envinorma.parametrization.combinations import _generate_options_dicts, gene
 from envinorma.parametrization.models.parametrization import (
     AlternativeSection,
     AMWarning,
-    ConditionSource,
-    EntityReference,
     InapplicableSection,
     Parametrization,
-    SectionReference,
     extract_conditions_from_parametrization,
 )
 
@@ -29,26 +26,23 @@ _NEW_TEXT = StructuredText(
 _PARAMETRIZATION = Parametrization(
     inapplicable_sections=[
         InapplicableSection(
-            targeted_entity=EntityReference(section=SectionReference(path=(0,)), outer_alinea_indices=None),
+            section_id='abcdef',
+            alineas=None,
             condition=AndCondition(
                 conditions=frozenset([Littler(parameter=_DATE, target=date(2021, 1, 1), strict=True)])
-            ),
-            source=ConditionSource(
-                reference=EntityReference(section=SectionReference(path=(0,)), outer_alinea_indices=None),
             ),
         )
     ],
     alternative_sections=[
         AlternativeSection(
-            targeted_section=SectionReference(path=(1, 0)),
+            section_id='123456',
             new_text=_NEW_TEXT,
             condition=AndCondition(
                 conditions=frozenset([Range(parameter=_DATE, left=date(2020, 1, 1), right=date(2021, 1, 1))])
             ),
-            source=ConditionSource(EntityReference(section=SectionReference(path=(1,)), outer_alinea_indices=None)),
         )
     ],
-    warnings=[AMWarning(SectionReference(()), 'AM warning')],
+    warnings=[AMWarning('ABCDEF', 'AM warning')],
 )
 
 

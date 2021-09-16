@@ -1,7 +1,5 @@
-from dataclasses import asdict, dataclass, field
+from dataclasses import dataclass, field
 from typing import Any, Callable, Dict, List, Optional, Set, Tuple, TypeVar, Union
-
-from envinorma.models import Ints
 from envinorma.models.condition import Condition, LeafCondition, extract_leaf_conditions, load_condition
 from envinorma.models.parameter import Parameter
 from envinorma.models.structured_text import StructuredText
@@ -9,152 +7,85 @@ from envinorma.models.structured_text import StructuredText
 from ..consistency import check_conditions_not_compatible
 from ..exceptions import ParametrizationError
 
-
-@dataclass
-class SectionReference:
-    """Reference of a section in an ArreteMinisteriel.
-
-    Args:
-        path (Tuple[int, ...]):
-            path to the section in the tree structure of the ArreteMinisteriel
-            e.g. (0, 1, 0) matches section: arrete_ministeriel.sections[0].sections[1].sections[0]
-        titles_sequence (Optional[List[str]]):
-            path to the section in the tree structure of the ArreteMinisteriel following
-            section titles, useful when modifications are made in the AM that break the
-            path search.
-    """
-
-    path: Ints
-    titles_sequence: Optional[List[str]] = None
-
-    def to_dict(self) -> Dict[str, Any]:
-        return asdict(self)
-
-    @classmethod
-    def from_dict(cls, dict_: Dict[str, Any]) -> 'SectionReference':
-        return cls(tuple(dict_['path']), dict_.get('titles_sequence'))
-
-
-@dataclass
-class EntityReference:
-    section: SectionReference
-    outer_alinea_indices: Optional[List[int]]
-
-    def to_dict(self) -> Dict[str, Any]:
-        res = asdict(self)
-        return res
-
-    @classmethod
-    def from_dict(cls, dict_: Dict[str, Any]) -> 'EntityReference':
-        return EntityReference(SectionReference.from_dict(dict_['section']), dict_['outer_alinea_indices'])
-
-
-@dataclass
-class ConditionSource:
-    reference: EntityReference
-
-    def to_dict(self) -> Dict[str, Any]:
-        res = asdict(self)
-        return res
-
-    @classmethod
-    def from_dict(cls, dict_: Dict[str, Any]) -> 'ConditionSource':
-        return ConditionSource(EntityReference.from_dict(dict_['reference']))
+from envinorma.utils import random_id
 
 
 @dataclass
 class InapplicableSection:
-    """Description of a potential inapplicable section in a ArreteMinisteriel under some condition.
+    """Description of a potential inapplicable section in a ArreteMinisteriel under some condition."""
 
-    Args:
-        targeted_entity (EntityReference):
-            Section and alineas potentially inapplicable
-        condition (Condition):
-            Condition to which the targeted section is modified
-        source (ConditionSource):
-            Description of where the condition was found in the arrete
-    """
-
-    targeted_entity: EntityReference
+    section_id: str
+    alineas: Optional[List[int]]
     condition: Condition
-    source: ConditionSource
+    id: str = field(default_factory=random_id)
 
     def to_dict(self) -> Dict[str, Any]:
         return {
-            'targeted_entity': self.targeted_entity.to_dict(),
+            'id': self.id,
+            'section_id': self.section_id,
+            'alineas': self.alineas,
             'condition': self.condition.to_dict(),
-            'source': self.source.to_dict(),
         }
 
     @classmethod
     def from_dict(cls, dict_: Dict[str, Any]) -> 'InapplicableSection':
         return InapplicableSection(
-            EntityReference.from_dict(dict_['targeted_entity']),
+            dict_['section_id'],
+            dict_['alineas'],
             load_condition(dict_['condition']),
-            ConditionSource.from_dict(dict_['source']),
+            dict_['id'],
         )
 
 
 @dataclass
 class AlternativeSection:
-    """Description of a potential modification in a ArreteMinisteriel, applied at some condition.
+    """Description of a potential modification in a ArreteMinisteriel, applied at some condition."""
 
-    Args:
-        targeted_section (SectionReference):
-            Section potentially modified
-        new_text (StructuredText):
-            New version of the section when condition is met
-        condition (Condition):
-            Condition to which the targeted section is modified
-        source (ConditionSource):
-            Description of where the condition was found in the arrete
-
-    """
-
-    targeted_section: SectionReference
+    section_id: str
     new_text: StructuredText
     condition: Condition
-    source: ConditionSource
+    id: str = field(default_factory=random_id)
 
     def to_dict(self) -> Dict[str, Any]:
         return {
-            'targeted_section': self.targeted_section.to_dict(),
+            'section_id': self.section_id,
             'new_text': self.new_text.to_dict(),
             'condition': self.condition.to_dict(),
-            'source': self.source.to_dict(),
+            'id': self.id,
         }
 
     @classmethod
     def from_dict(cls, dict_: Dict[str, Any]) -> 'AlternativeSection':
         return AlternativeSection(
-            SectionReference.from_dict(dict_['targeted_section']),
+            dict_['section_id'],
             StructuredText.from_dict(dict_['new_text']),
             load_condition(dict_['condition']),
-            ConditionSource.from_dict(dict_['source']),
+            dict_['id'],
         )
 
 
 @dataclass
 class AMWarning:
-    """Warning attached to a section of an arrete_ministeriel.
+    """Warning attached to a section of an arrete_ministeriel."""
 
-    Args:
-        targeted_section (SectionReference):
-            Section to which the warning is attached
-        text (str):
-            Content of the warning
-
-    """
-
-    targeted_section: SectionReference
+    section_id: str
     text: str
+    id: str = field(default_factory=random_id)
 
     def to_dict(self) -> Dict[str, Any]:
-        return {'targeted_section': self.targeted_section.to_dict(), 'text': self.text}
+        return {
+            'section_id': self.section_id,
+            'text': self.text,
+            'id': self.id,
+        }
 
     @classmethod
     def from_dict(cls, dict_: Dict[str, Any]) -> 'AMWarning':
-        return AMWarning(SectionReference.from_dict(dict_['targeted_section']), dict_['text'])
+        return AMWarning(
+            dict_['section_id'],
+            dict_['text'],
+            dict_['id'],
+        )
 
 
 def extract_conditions_from_parametrization(
@@ -208,14 +139,14 @@ class Parametrization:
     inapplicable_sections: List[InapplicableSection]
     alternative_sections: List[AlternativeSection]
     warnings: List[AMWarning]
-    path_to_conditions: Dict[Ints, List[InapplicableSection]] = field(init=False)
-    path_to_alternative_sections: Dict[Ints, List[AlternativeSection]] = field(init=False)
-    path_to_warnings: Dict[Ints, List[AMWarning]] = field(init=False)
+    id_to_conditions: Dict[str, List[InapplicableSection]] = field(init=False)
+    id_to_alternative_sections: Dict[str, List[AlternativeSection]] = field(init=False)
+    id_to_warnings: Dict[str, List[AMWarning]] = field(init=False)
 
     def __post_init__(self):
-        self.path_to_conditions = _group(self.inapplicable_sections, lambda x: x.targeted_entity.section.path)
-        self.path_to_alternative_sections = _group(self.alternative_sections, lambda x: x.targeted_section.path)
-        self.path_to_warnings = _group(self.warnings, lambda x: x.targeted_section.path)
+        self.id_to_conditions = _group(self.inapplicable_sections, lambda x: x.section_id)
+        self.id_to_alternative_sections = _group(self.alternative_sections, lambda x: x.section_id)
+        self.id_to_warnings = _group(self.warnings, lambda x: x.section_id)
         self.check()
         self.check_consistency()
 
@@ -248,19 +179,17 @@ class Parametrization:
         return {parameter for condition in self.extract_conditions() for parameter in condition.parameters()}
 
     def check(self) -> None:
-        for app in self.inapplicable_sections:
-            app.condition.check()
-        for sec in self.alternative_sections:
-            sec.condition.check()
+        for condition in self.extract_conditions():
+            condition.check()
 
-    def _extract_all_paths(self) -> Set[Ints]:
-        return set(self.path_to_alternative_sections.keys()).union(set(self.path_to_conditions.keys()))
+    def _extract_all_ids(self) -> Set[str]:
+        return set(self.id_to_alternative_sections.keys()).union(set(self.id_to_conditions.keys()))
 
     def check_consistency(self) -> None:
-        all_paths = self._extract_all_paths()
-        for path in all_paths:
+        all_ids = self._extract_all_ids()
+        for id_ in all_ids:
             _check_consistency_on_section(
-                self.path_to_conditions.get(path, []), self.path_to_alternative_sections.get(path, [])
+                self.id_to_conditions.get(id_, []), self.id_to_alternative_sections.get(id_, [])
             )
 
 

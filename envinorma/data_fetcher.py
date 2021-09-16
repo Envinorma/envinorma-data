@@ -16,16 +16,6 @@ from envinorma.parametrization.models.parametrization import (
 from envinorma.parametrization.tie_parametrization import add_parametrization
 
 
-def _ensure_len(list_: List, min_len: int) -> None:
-    if len(list_) < min_len:
-        raise ValueError(f'Expecting len(list_) >= {min_len}, got {len(list_)}')
-
-
-def _ensure_non_negative(int_: int) -> None:
-    if int_ < 0:
-        raise ValueError(f'Expecting non negative int, got {int_}')
-
-
 def _ensure_one_variable(res: List[Tuple]) -> Any:
     if len(res) != 1 or len(res[0]) != 1:
         raise ValueError(f'Expecting only one value in res. Got :\n{str(res)[:280]}')
@@ -37,59 +27,57 @@ def _load_am_str(str_: str) -> ArreteMinisteriel:
 
 
 def _recreate_with_removed_parameter(
-    object_type: Type[ParameterObject], parameter_rank: int, parametrization: Parametrization
+    object_type: Type[ParameterObject], parameter_id: str, parametrization: Parametrization
 ) -> Parametrization:
+    new_inapplicabilities = parametrization.inapplicable_sections.copy()
     new_sections = parametrization.alternative_sections.copy()
-    new_conditions = parametrization.inapplicable_sections.copy()
     new_warnings = parametrization.warnings.copy()
     if object_type == InapplicableSection:
-        _ensure_len(parametrization.inapplicable_sections, parameter_rank + 1)
-        del new_conditions[parameter_rank]
+        new_inapplicabilities = [i for i in new_inapplicabilities if i.id != parameter_id]
     if object_type == AlternativeSection:
-        _ensure_len(parametrization.alternative_sections, parameter_rank + 1)
-        del new_sections[parameter_rank]
+        new_sections = [s for s in new_sections if s.id != parameter_id]
     if object_type == AMWarning:
-        _ensure_len(parametrization.warnings, parameter_rank + 1)
-        del new_warnings[parameter_rank]
-    return Parametrization(new_conditions, new_sections, new_warnings)
+        new_warnings = [w for w in new_warnings if w.id != parameter_id]
+    return Parametrization(new_inapplicabilities, new_sections, new_warnings)
 
 
 T = TypeVar('T')
 
 
-def _upsert_element(element: T, elements: List[T], rank: int) -> List[T]:
-    """Replace element in list if rank >= 0, otherwise append it.
+def _upsert_element(element: T, elements: List[T], identifier: Optional[str]) -> List[T]:
+    """Replace element in list if element contains identifier, otherwise append it.
 
     Args:
         element (T): element to insert
         elements (List[T]): list of elements to modify
-        rank (int): rank of element is elements. If < 0, element should be appended.
+        identifier (Optional[str]): identifier of element to replace. If None, element should be appended.
 
     Raises:
-        ValueError: when rank is not in range.
+        ValueError: when identifier is not None but not found.
 
     Returns:
-        List[T]: A new list with newly inserted element
+        List[T]: A new list with newly upserted element.
     """
-    if rank < 0:
+    if identifier is None:
         return [*elements, element]
-    if rank >= len(elements):
-        raise ValueError(f'Cannot replace element of rank {rank} in a list of size {len(elements)}')
-    return [elt if i != rank else element for i, elt in enumerate(elements)]
+    element_ids = {e.id for e in elements}  # type: ignore
+    if identifier not in element_ids:
+        raise ValueError(f'Expecting id_ to be in {element_ids}')
+    return [elt if elt.id != identifier else element for elt in elements]  # type: ignore
 
 
 def _recreate_with_upserted_parameter(
-    new_parameter: ParameterObject, parameter_rank: int, parametrization: Parametrization
+    new_parameter: ParameterObject, parameter_id: Optional[str], parametrization: Parametrization
 ) -> Parametrization:
     new_sections = parametrization.alternative_sections
     new_conditions = parametrization.inapplicable_sections
     new_warnings = parametrization.warnings
     if isinstance(new_parameter, InapplicableSection):
-        new_conditions = _upsert_element(new_parameter, new_conditions, parameter_rank)
+        new_conditions = _upsert_element(new_parameter, new_conditions, parameter_id)
     elif isinstance(new_parameter, AlternativeSection):
-        new_sections = _upsert_element(new_parameter, new_sections, parameter_rank)
+        new_sections = _upsert_element(new_parameter, new_sections, parameter_id)
     else:
-        new_warnings = _upsert_element(new_parameter, new_warnings, parameter_rank)
+        new_warnings = _upsert_element(new_parameter, new_warnings, parameter_id)
     return Parametrization(new_conditions, new_sections, new_warnings)
 
 
@@ -186,12 +174,11 @@ class DataFetcher:
         am_metadata.reason_deleted = reason_deleted
         self.upsert_am(am_metadata)
 
-    def remove_parameter(self, am_id: str, parameter_type: Type[ParameterObject], parameter_rank: int) -> None:
-        _ensure_non_negative(parameter_rank)
+    def remove_parameter(self, am_id: str, parameter_type: Type[ParameterObject], parameter_id: str) -> None:
         previous_parametrization = self._load_parametrization(am_id)
         if not previous_parametrization:
             raise ValueError('Expecting a non null parametrization.')
-        parametrization = _recreate_with_removed_parameter(parameter_type, parameter_rank, previous_parametrization)
+        parametrization = _recreate_with_removed_parameter(parameter_type, parameter_id, previous_parametrization)
         self.upsert_new_parametrization(am_id, parametrization)
 
     def upsert_new_parametrization(self, am_id: str, parametrization: Parametrization) -> None:
@@ -216,9 +203,9 @@ class DataFetcher:
     def load_or_init_parametrization(self, am_id: str) -> Parametrization:
         return self.load_parametrization(am_id) or Parametrization([], [], [])
 
-    def upsert_parameter(self, am_id: str, new_parameter: ParameterObject, parameter_rank: int) -> None:
+    def upsert_parameter(self, am_id: str, new_parameter: ParameterObject, parameter_id: Optional[str]) -> None:
         previous_parametrization = self.load_or_init_parametrization(am_id)
-        parametrization = _recreate_with_upserted_parameter(new_parameter, parameter_rank, previous_parametrization)
+        parametrization = _recreate_with_upserted_parameter(new_parameter, parameter_id, previous_parametrization)
         parametrization.check_consistency()
         self.upsert_new_parametrization(am_id, parametrization)
 

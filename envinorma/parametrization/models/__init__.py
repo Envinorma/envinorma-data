@@ -20,11 +20,8 @@ from ...models.condition import (  # noqa: F401
 from .parametrization import (  # noqa: F401
     AlternativeSection,
     AMWarning,
-    ConditionSource,
-    EntityReference,
     InapplicableSection,
     ParameterObject,
     ParameterObjectWithCondition,
     Parametrization,
-    SectionReference,
 )

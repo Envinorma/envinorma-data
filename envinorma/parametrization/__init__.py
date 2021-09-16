@@ -5,9 +5,7 @@ from .models import (  # noqa: F401
     AndCondition,
     Condition,
     Conditions,
-    ConditionSource,
     ConditionType,
-    EntityReference,
     Equal,
     Greater,
     InapplicableSection,
@@ -26,6 +24,5 @@ from .models import (  # noqa: F401
     ParameterType,
     Parametrization,
     Range,
-    SectionReference,
     ensure_mono_conditions,
 )
