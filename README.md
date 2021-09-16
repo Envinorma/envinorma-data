@@ -2,21 +2,10 @@
 
 [![Documentation](https://github.com/envinorma/envinorma-data/workflows/Documentation/badge.svg)](https://envinorma.github.io/envinorma-data/)
 
-# Envinorma (en)
+# Envinorma-data
+([Introduction au projet Envinorma](https://envinorma.github.io))
 
-Envinorma is a project which aims at helping people find applicable regulations to French non-nuclear industries ([ICPE](https://fr.wikipedia.org/wiki/Installation_class%C3%A9e_pour_la_protection_de_l'environnement)).
-
-Read the [project description](https://entrepreneur-interet-general.etalab.gouv.fr/defis/2020/envinorma.html) on the EIG Program website.
-
-This repository is a library for manipulating enriched versions of regulation texts, in particular texts called _Arrêtés Ministériels_ (AM).
-
-# Envinorma (fr)
-
-Envinorma cherche à faciliter la préparation des inspections en simplifiant l'accès à la réglementation applicable aux industries en France (les [ICPE](https://fr.wikipedia.org/wiki/Installation_class%C3%A9e_pour_la_protection_de_l'environnement)).
-
-Ce projet est réalisé dans le cadre du programme EIG, une page d'introduction est accessibile [ici](https://entrepreneur-interet-general.etalab.gouv.fr/defis/2020/envinorma.html).
-
-Ce dépôt est permet de manipuler des _Arrêtés Ministériels_ (AM).
+Ce dépôt permet de manipuler des _Arrêtés Ministériels_ (AM).
 
 # Composants
 
