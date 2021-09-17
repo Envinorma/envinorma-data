@@ -260,11 +260,7 @@ class DataFetcher:
         ids = ids or set(self.load_all_am_metadata().keys())
         structured_texts = self.load_structured_ams(ids)
         id_to_structured_text = {text.id or '': text for text in structured_texts}
-        return {
-            id_: id_to_structured_text[id_]
-            for id_ in ids
-            if id_ in id_to_structured_text
-        }
+        return {id_: id_to_structured_text[id_] for id_ in ids if id_ in id_to_structured_text}
 
     def _load_validated_parametrizations(self) -> Dict[str, Parametrization]:
         parametizations = self.load_all_parametrizations()
