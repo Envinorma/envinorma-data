@@ -118,7 +118,7 @@
     <span class="k">def</span> <span class="nf">_func</span><span class="p">(</span><span class="n">am</span><span class="p">:</span> <span class="n">ArreteMinisteriel</span><span class="p">):</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="n">func</span><span class="p">(</span><span class="n">am</span><span class="p">)</span>
-        <span class="k">except</span><span class="p">:</span>  <span class="c1"># noqa: E722</span>
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>  <span class="c1"># noqa: E722</span>
             <span class="nb">print</span><span class="p">(</span><span class="n">am</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
             <span class="k">raise</span>
 
@@ -133,19 +133,24 @@
 <span class="k">def</span> <span class="nf">_check_regimes</span><span class="p">(</span><span class="n">am</span><span class="p">:</span> <span class="n">ArreteMinisteriel</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
     <span class="c1"># Regime must be A, E or D</span>
     <span class="k">for</span> <span class="n">classement</span> <span class="ow">in</span> <span class="n">am</span><span class="o">.</span><span class="n">classements</span><span class="p">:</span>
-        <span class="k">assert</span> <span class="n">classement</span><span class="o">.</span><span class="n">regime</span><span class="o">.</span><span class="n">value</span> <span class="ow">in</span> <span class="s1">&#39;AED&#39;</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;Invalid regime </span><span class="si">{</span><span class="n">classement</span><span class="o">.</span><span class="n">regime</span><span class="o">.</span><span class="n">value</span><span class="si">}</span><span class="s1">&#39;</span>
+        <span class="k">if</span> <span class="n">classement</span><span class="o">.</span><span class="n">regime</span><span class="o">.</span><span class="n">value</span> <span class="ow">not</span> <span class="ow">in</span> <span class="s1">&#39;AED&#39;</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Invalid regime </span><span class="si">{</span><span class="n">classement</span><span class="o">.</span><span class="n">regime</span><span class="o">.</span><span class="n">value</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
 
 
 <span class="k">def</span> <span class="nf">_check_non_none_fields</span><span class="p">(</span><span class="n">am</span><span class="p">:</span> <span class="n">ArreteMinisteriel</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-    <span class="k">assert</span> <span class="n">am</span><span class="o">.</span><span class="n">legifrance_url</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
-    <span class="k">assert</span> <span class="n">am</span><span class="o">.</span><span class="n">aida_url</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+    <span class="k">if</span> <span class="n">am</span><span class="o">.</span><span class="n">legifrance_url</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Expecting legifrance_url to be defined&#39;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">am</span><span class="o">.</span><span class="n">aida_url</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Expecting aida_url to be defined&#39;</span><span class="p">)</span>
 
 
 <span class="n">_REGEXP</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;^(JORFTEXT|LEGITEXT)[0-9]</span><span class="si">{12}</span><span class="s1">$&#39;</span><span class="p">)</span>
 
 
 <span class="k">def</span> <span class="nf">_check_am_id_format</span><span class="p">(</span><span class="n">am_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-    <span class="k">assert</span> <span class="n">_REGEXP</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">am_id</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;Invalid AM ID format: </span><span class="si">{</span><span class="n">am_id</span><span class="si">}</span><span class="s1">&#39;</span>
+    <span class="k">if</span> <span class="n">_REGEXP</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">am_id</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Invalid AM ID format: </span><span class="si">{</span><span class="n">am_id</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
 
 
 <div class="viewcode-block" id="check_am"><a class="viewcode-back" href="../../../envinorma.models.html#envinorma.models.validate_am.check_am">[docs]</a><span class="nd">@_print_input_id</span>

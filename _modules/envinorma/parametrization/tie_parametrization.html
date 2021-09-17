@@ -91,8 +91,7 @@
   <h1>Source code for envinorma.parametrization.tie_parametrization</h1><div class="highlight"><pre>
 <span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span>
 
-<span class="kn">from</span> <span class="nn">envinorma.models</span> <span class="kn">import</span> <span class="n">ArreteMinisteriel</span><span class="p">,</span> <span class="n">Ints</span>
-<span class="kn">from</span> <span class="nn">envinorma.models.condition</span> <span class="kn">import</span> <span class="n">OrCondition</span>
+<span class="kn">from</span> <span class="nn">envinorma.models</span> <span class="kn">import</span> <span class="n">ArreteMinisteriel</span>
 <span class="kn">from</span> <span class="nn">envinorma.models.structured_text</span> <span class="kn">import</span> <span class="p">(</span>
     <span class="n">PotentialInapplicability</span><span class="p">,</span>
     <span class="n">PotentialModification</span><span class="p">,</span>
@@ -105,9 +104,7 @@
 
 <span class="k">def</span> <span class="nf">_inapplicabilities</span><span class="p">(</span><span class="n">inapplicable_sections</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">InapplicableSection</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">PotentialInapplicability</span><span class="p">]:</span>
     <span class="k">return</span> <span class="p">[</span>
-        <span class="n">PotentialInapplicability</span><span class="p">(</span>
-            <span class="n">inapplicable_section</span><span class="o">.</span><span class="n">condition</span><span class="p">,</span> <span class="n">inapplicable_section</span><span class="o">.</span><span class="n">targeted_entity</span><span class="o">.</span><span class="n">outer_alinea_indices</span>
-        <span class="p">)</span>
+        <span class="n">PotentialInapplicability</span><span class="p">(</span><span class="n">inapplicable_section</span><span class="o">.</span><span class="n">condition</span><span class="p">,</span> <span class="n">inapplicable_section</span><span class="o">.</span><span class="n">alineas</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">inapplicable_section</span> <span class="ow">in</span> <span class="n">inapplicable_sections</span>
     <span class="p">]</span>
 
@@ -123,29 +120,16 @@
     <span class="k">return</span> <span class="p">[</span><span class="n">warning</span><span class="o">.</span><span class="n">text</span> <span class="k">for</span> <span class="n">warning</span> <span class="ow">in</span> <span class="n">warnings</span><span class="p">]</span>
 
 
-<span class="k">def</span> <span class="nf">_init_section_parametrization</span><span class="p">(</span><span class="n">parametrization</span><span class="p">:</span> <span class="n">Parametrization</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="n">Ints</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SectionParametrization</span><span class="p">:</span>
+<span class="k">def</span> <span class="nf">_init_section_parametrization</span><span class="p">(</span><span class="n">parametrization</span><span class="p">:</span> <span class="n">Parametrization</span><span class="p">,</span> <span class="n">section_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SectionParametrization</span><span class="p">:</span>
     <span class="k">return</span> <span class="n">SectionParametrization</span><span class="p">(</span>
-        <span class="n">_inapplicabilities</span><span class="p">(</span><span class="n">parametrization</span><span class="o">.</span><span class="n">path_to_conditions</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="p">[])),</span>
-        <span class="n">_modifications</span><span class="p">(</span><span class="n">parametrization</span><span class="o">.</span><span class="n">path_to_alternative_sections</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="p">[])),</span>
-        <span class="n">_warnings</span><span class="p">(</span><span class="n">parametrization</span><span class="o">.</span><span class="n">path_to_warnings</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="p">[])),</span>
+        <span class="n">_inapplicabilities</span><span class="p">(</span><span class="n">parametrization</span><span class="o">.</span><span class="n">id_to_inapplicabilities</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">section_id</span><span class="p">,</span> <span class="p">[])),</span>
+        <span class="n">_modifications</span><span class="p">(</span><span class="n">parametrization</span><span class="o">.</span><span class="n">id_to_alternative_sections</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">section_id</span><span class="p">,</span> <span class="p">[])),</span>
+        <span class="n">_warnings</span><span class="p">(</span><span class="n">parametrization</span><span class="o">.</span><span class="n">id_to_warnings</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">section_id</span><span class="p">,</span> <span class="p">[])),</span>
     <span class="p">)</span>
 
 
-<span class="k">def</span> <span class="nf">_add_parametrization_in_section</span><span class="p">(</span><span class="n">text</span><span class="p">:</span> <span class="n">StructuredText</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="n">Ints</span><span class="p">,</span> <span class="n">parametrization</span><span class="p">:</span> <span class="n">Parametrization</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-    <span class="n">text</span><span class="o">.</span><span class="n">parametrization</span> <span class="o">=</span> <span class="n">_init_section_parametrization</span><span class="p">(</span><span class="n">parametrization</span><span class="p">,</span> <span class="n">path</span><span class="p">)</span>
-    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">section</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">text</span><span class="o">.</span><span class="n">sections</span><span class="p">):</span>
-        <span class="n">_add_parametrization_in_section</span><span class="p">(</span><span class="n">section</span><span class="p">,</span> <span class="n">path</span> <span class="o">+</span> <span class="p">(</span><span class="n">i</span><span class="p">,),</span> <span class="n">parametrization</span><span class="p">)</span>
-
-
-<span class="k">def</span> <span class="nf">_am_inapplicabilities</span><span class="p">(</span><span class="n">am</span><span class="p">:</span> <span class="n">ArreteMinisteriel</span><span class="p">,</span> <span class="n">parametrization</span><span class="p">:</span> <span class="n">Parametrization</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-    <span class="n">am</span><span class="o">.</span><span class="n">applicability</span><span class="o">.</span><span class="n">warnings</span> <span class="o">=</span> <span class="n">_warnings</span><span class="p">(</span><span class="n">parametrization</span><span class="o">.</span><span class="n">path_to_warnings</span><span class="o">.</span><span class="n">get</span><span class="p">((),</span> <span class="p">[]))</span>
-    <span class="n">conditions</span> <span class="o">=</span> <span class="p">[</span><span class="n">cd</span><span class="o">.</span><span class="n">condition</span> <span class="k">for</span> <span class="n">cd</span> <span class="ow">in</span> <span class="n">parametrization</span><span class="o">.</span><span class="n">path_to_conditions</span><span class="o">.</span><span class="n">get</span><span class="p">((),</span> <span class="p">[])]</span>
-    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">conditions</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">2</span><span class="p">:</span>
-        <span class="n">am</span><span class="o">.</span><span class="n">applicability</span><span class="o">.</span><span class="n">condition_of_inapplicability</span> <span class="o">=</span> <span class="n">OrCondition</span><span class="p">(</span><span class="nb">frozenset</span><span class="p">(</span><span class="n">conditions</span><span class="p">))</span>
-    <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">conditions</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
-        <span class="n">am</span><span class="o">.</span><span class="n">applicability</span><span class="o">.</span><span class="n">condition_of_inapplicability</span> <span class="o">=</span> <span class="n">conditions</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">am</span><span class="o">.</span><span class="n">applicability</span><span class="o">.</span><span class="n">condition_of_inapplicability</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="k">def</span> <span class="nf">_add_parametrization_in_section</span><span class="p">(</span><span class="n">text</span><span class="p">:</span> <span class="n">StructuredText</span><span class="p">,</span> <span class="n">parametrization</span><span class="p">:</span> <span class="n">Parametrization</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="n">text</span><span class="o">.</span><span class="n">parametrization</span> <span class="o">=</span> <span class="n">_init_section_parametrization</span><span class="p">(</span><span class="n">parametrization</span><span class="p">,</span> <span class="n">text</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
 
 
 <div class="viewcode-block" id="add_parametrization"><a class="viewcode-back" href="../../../envinorma.parametrization.html#envinorma.parametrization.tie_parametrization.add_parametrization">[docs]</a><span class="k">def</span> <span class="nf">add_parametrization</span><span class="p">(</span><span class="n">am</span><span class="p">:</span> <span class="n">ArreteMinisteriel</span><span class="p">,</span> <span class="n">parametrization</span><span class="p">:</span> <span class="n">Parametrization</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
@@ -155,9 +139,8 @@
 <span class="sd">        am (ArreteMinisteriel): ArreteMinisteriel to which parametrization is tied.</span>
 <span class="sd">        parametrization (Parametrization): parametrization to be tied.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">_am_inapplicabilities</span><span class="p">(</span><span class="n">am</span><span class="p">,</span> <span class="n">parametrization</span><span class="p">)</span>
-    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">section</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">am</span><span class="o">.</span><span class="n">sections</span><span class="p">):</span>
-        <span class="n">_add_parametrization_in_section</span><span class="p">(</span><span class="n">section</span><span class="p">,</span> <span class="p">(</span><span class="n">i</span><span class="p">,),</span> <span class="n">parametrization</span><span class="p">)</span></div>
+    <span class="k">for</span> <span class="n">section</span> <span class="ow">in</span> <span class="n">am</span><span class="o">.</span><span class="n">descendent_sections</span><span class="p">():</span>
+        <span class="n">_add_parametrization_in_section</span><span class="p">(</span><span class="n">section</span><span class="p">,</span> <span class="n">parametrization</span><span class="p">)</span></div>
 </pre></div>
 
            </div>

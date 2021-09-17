@@ -90,133 +90,31 @@
            <div itemprop="articleBody">
              
   <h1>Source code for envinorma.models.arrete_ministeriel</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">re</span>
-<span class="kn">import</span> <span class="nn">warnings</span>
+<span></span><span class="kn">import</span> <span class="nn">warnings</span>
 <span class="kn">from</span> <span class="nn">copy</span> <span class="kn">import</span> <span class="n">copy</span>
 <span class="kn">from</span> <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">asdict</span><span class="p">,</span> <span class="n">dataclass</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">fields</span>
-<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">date</span><span class="p">,</span> <span class="n">datetime</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span>
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">date</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span>
 
-<span class="kn">from</span> <span class="nn">envinorma.utils</span> <span class="kn">import</span> <span class="n">AIDA_URL</span><span class="p">,</span> <span class="n">LEGIFRANCE_LODA_BASE_URL</span><span class="p">,</span> <span class="n">random_id</span>
+<span class="kn">from</span> <span class="nn">envinorma.topics.patterns</span> <span class="kn">import</span> <span class="n">TopicName</span>
+<span class="kn">from</span> <span class="nn">envinorma.utils</span> <span class="kn">import</span> <span class="n">random_id</span>
 
-<span class="kn">from</span> <span class="nn">.am_metadata</span> <span class="kn">import</span> <span class="n">AMMetadata</span>
-<span class="kn">from</span> <span class="nn">.classement</span> <span class="kn">import</span> <span class="n">Classement</span><span class="p">,</span> <span class="n">ClassementWithAlineas</span><span class="p">,</span> <span class="n">group_classements_by_alineas</span>
-<span class="kn">from</span> <span class="nn">.condition</span> <span class="kn">import</span> <span class="n">Condition</span><span class="p">,</span> <span class="n">load_condition</span>
-<span class="kn">from</span> <span class="nn">.structured_text</span> <span class="kn">import</span> <span class="n">StructuredText</span>
-<span class="kn">from</span> <span class="nn">.text_elements</span> <span class="kn">import</span> <span class="n">EnrichedString</span>
+<span class="kn">from</span> <span class="nn">.am_applicability</span> <span class="kn">import</span> <span class="n">AMApplicability</span>
+<span class="kn">from</span> <span class="nn">.classement</span> <span class="kn">import</span> <span class="n">Classement</span><span class="p">,</span> <span class="n">ClassementWithAlineas</span>
+<span class="kn">from</span> <span class="nn">.helpers</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">extract_date_of_signature</span><span class="p">,</span>
+    <span class="n">extract_short_title</span><span class="p">,</span>
+    <span class="n">standardize_title_if_necessary</span><span class="p">,</span>
+    <span class="n">transfer_ids_based_on_other_am</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">.lost_topic</span> <span class="kn">import</span> <span class="n">LostTopic</span>
+<span class="kn">from</span> <span class="nn">.structured_text</span> <span class="kn">import</span> <span class="n">Annotations</span><span class="p">,</span> <span class="n">EnrichedString</span><span class="p">,</span> <span class="n">StructuredText</span>
 
 
 <span class="k">def</span> <span class="nf">_is_probably_cid</span><span class="p">(</span><span class="n">candidate</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
     <span class="k">if</span> <span class="s1">&#39;FAKE&#39;</span> <span class="ow">in</span> <span class="n">candidate</span><span class="p">:</span>
         <span class="k">return</span> <span class="kc">True</span>  <span class="c1"># for avoiding warning for fake cids, which contain FAKE by convention</span>
     <span class="k">return</span> <span class="n">candidate</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;JORFTEXT&#39;</span><span class="p">)</span> <span class="ow">or</span> <span class="n">candidate</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;LEGITEXT&#39;</span><span class="p">)</span>
-
-
-<span class="n">_MONTHS</span> <span class="o">=</span> <span class="sa">r</span><span class="s1">&#39;(janvier|février|mars|avril|mai|juin|juillet|août|septembre|octobre|novembre|décembre)&#39;</span>
-<span class="n">_PATTERN</span> <span class="o">=</span> <span class="sa">r</span><span class="s1">&#39;Arrêté du (1er|[0-9]*) &#39;</span> <span class="o">+</span> <span class="n">_MONTHS</span> <span class="o">+</span> <span class="s1">&#39; [0-9]</span><span class="si">{4}</span><span class="s1">&#39;</span>
-
-
-<span class="k">def</span> <span class="nf">_contains_human_date</span><span class="p">(</span><span class="n">title</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-    <span class="k">return</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">_PATTERN</span><span class="p">,</span> <span class="n">title</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
-
-
-<span class="k">def</span> <span class="nf">_year</span><span class="p">(</span><span class="n">year_str</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">year_str</span><span class="o">.</span><span class="n">isdigit</span><span class="p">():</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Expecting </span><span class="si">{</span><span class="n">year_str</span><span class="si">}</span><span class="s1"> to be a digit&#39;</span><span class="p">)</span>
-    <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">year_str</span><span class="p">)</span>
-
-
-<span class="n">_MONTH_TO_MONTH_RANK</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s1">&#39;janvier&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
-    <span class="s1">&#39;février&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
-    <span class="s1">&#39;mars&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>
-    <span class="s1">&#39;avril&#39;</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span>
-    <span class="s1">&#39;mai&#39;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span>
-    <span class="s1">&#39;juin&#39;</span><span class="p">:</span> <span class="mi">6</span><span class="p">,</span>
-    <span class="s1">&#39;juillet&#39;</span><span class="p">:</span> <span class="mi">7</span><span class="p">,</span>
-    <span class="s1">&#39;août&#39;</span><span class="p">:</span> <span class="mi">8</span><span class="p">,</span>
-    <span class="s1">&#39;septembre&#39;</span><span class="p">:</span> <span class="mi">9</span><span class="p">,</span>
-    <span class="s1">&#39;octobre&#39;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
-    <span class="s1">&#39;novembre&#39;</span><span class="p">:</span> <span class="mi">11</span><span class="p">,</span>
-    <span class="s1">&#39;décembre&#39;</span><span class="p">:</span> <span class="mi">12</span><span class="p">,</span>
-<span class="p">}</span>
-
-
-<span class="k">def</span> <span class="nf">_month</span><span class="p">(</span><span class="n">french_month</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
-    <span class="k">if</span> <span class="n">french_month</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">_MONTH_TO_MONTH_RANK</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Expecting month to be in </span><span class="si">{</span><span class="n">_MONTH_TO_MONTH_RANK</span><span class="si">}</span><span class="s1"> got </span><span class="si">{</span><span class="n">french_month</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">_MONTH_TO_MONTH_RANK</span><span class="p">[</span><span class="n">french_month</span><span class="p">]</span>
-
-
-<span class="k">def</span> <span class="nf">_day</span><span class="p">(</span><span class="n">day_str</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
-    <span class="k">if</span> <span class="n">day_str</span> <span class="o">==</span> <span class="s1">&#39;1er&#39;</span><span class="p">:</span>
-        <span class="k">return</span> <span class="mi">1</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">day_str</span><span class="o">.</span><span class="n">isdigit</span><span class="p">():</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Expecting </span><span class="si">{</span><span class="n">day_str</span><span class="si">}</span><span class="s1"> to be a digit&#39;</span><span class="p">)</span>
-    <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">day_str</span><span class="p">)</span>
-
-
-<span class="k">def</span> <span class="nf">_read_human_french_date</span><span class="p">(</span><span class="n">day_str</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">french_month</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">year_str</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">date</span><span class="p">:</span>
-    <span class="k">return</span> <span class="n">date</span><span class="p">(</span><span class="n">_year</span><span class="p">(</span><span class="n">year_str</span><span class="p">),</span> <span class="n">_month</span><span class="p">(</span><span class="n">french_month</span><span class="p">),</span> <span class="n">_day</span><span class="p">(</span><span class="n">day_str</span><span class="p">))</span>
-
-
-<span class="k">def</span> <span class="nf">_standardize_date</span><span class="p">(</span><span class="n">day_str</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">french_month</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">year_str</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-    <span class="n">date_</span> <span class="o">=</span> <span class="n">_read_human_french_date</span><span class="p">(</span><span class="n">day_str</span><span class="p">,</span> <span class="n">french_month</span><span class="p">,</span> <span class="n">year_str</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">date_</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%d</span><span class="s1">/%m/%y&#39;</span><span class="p">)</span>
-
-
-<div class="viewcode-block" id="standardize_title_date"><a class="viewcode-back" href="../../../envinorma.models.html#envinorma.models.arrete_ministeriel.standardize_title_date">[docs]</a><span class="k">def</span> <span class="nf">standardize_title_date</span><span class="p">(</span><span class="n">title</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-    <span class="n">words</span> <span class="o">=</span> <span class="n">title</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
-    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">words</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="mi">5</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Expecting title to have at least 5 words, got </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">words</span><span class="p">)</span><span class="si">}</span><span class="s1"> (title=</span><span class="si">{</span><span class="n">title</span><span class="si">}</span><span class="s1">).&#39;</span><span class="p">)</span>
-    <span class="n">new_words</span> <span class="o">=</span> <span class="n">words</span><span class="p">[:</span><span class="mi">2</span><span class="p">]</span> <span class="o">+</span> <span class="p">[</span><span class="n">_standardize_date</span><span class="p">(</span><span class="o">*</span><span class="n">words</span><span class="p">[</span><span class="mi">2</span><span class="p">:</span><span class="mi">5</span><span class="p">])]</span> <span class="o">+</span> <span class="n">words</span><span class="p">[</span><span class="mi">5</span><span class="p">:]</span>
-    <span class="k">return</span> <span class="s1">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">new_words</span><span class="p">)</span></div>
-
-
-<span class="k">def</span> <span class="nf">_standardize_title_if_necessary</span><span class="p">(</span><span class="n">title</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-    <span class="k">if</span> <span class="n">title</span> <span class="o">==</span> <span class="s1">&#39;Faux arrêté&#39;</span><span class="p">:</span>  <span class="c1"># Edge case for test text</span>
-        <span class="k">return</span> <span class="s1">&#39;Faux arrêté du 10/10/10&#39;</span>
-    <span class="k">if</span> <span class="n">_contains_human_date</span><span class="p">(</span><span class="n">title</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">standardize_title_date</span><span class="p">(</span><span class="n">title</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">title</span>
-
-
-<div class="viewcode-block" id="extract_short_title"><a class="viewcode-back" href="../../../envinorma.models.html#envinorma.models.arrete_ministeriel.extract_short_title">[docs]</a><span class="k">def</span> <span class="nf">extract_short_title</span><span class="p">(</span><span class="n">input_title</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-    <span class="k">return</span> <span class="n">input_title</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;relatif&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;fixant&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span></div>
-
-
-<span class="n">_DATE_PATTERN</span> <span class="o">=</span> <span class="sa">r</span><span class="s1">&#39;^[0-9]</span><span class="si">{2}</span><span class="s1">/[0-9]</span><span class="si">{2}</span><span class="s1">/[0-9]</span><span class="si">{2}</span><span class="s1">$&#39;</span>
-
-
-<span class="k">def</span> <span class="nf">_extract_date</span><span class="p">(</span><span class="n">candidate_date</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">date</span><span class="p">:</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">_DATE_PATTERN</span><span class="p">,</span> <span class="n">candidate_date</span><span class="p">):</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Expecting format </span><span class="si">{</span><span class="n">_DATE_PATTERN</span><span class="si">}</span><span class="s1">. Got </span><span class="si">{</span><span class="n">candidate_date</span><span class="si">}</span><span class="s1">.&#39;</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">datetime</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span><span class="n">candidate_date</span><span class="p">,</span> <span class="s1">&#39;</span><span class="si">%d</span><span class="s1">/%m/%y&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">date</span><span class="p">()</span>
-
-
-<div class="viewcode-block" id="extract_date_of_signature"><a class="viewcode-back" href="../../../envinorma.models.html#envinorma.models.arrete_ministeriel.extract_date_of_signature">[docs]</a><span class="k">def</span> <span class="nf">extract_date_of_signature</span><span class="p">(</span><span class="n">input_title</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">date</span><span class="p">:</span>
-    <span class="n">short_title</span> <span class="o">=</span> <span class="n">extract_short_title</span><span class="p">(</span><span class="n">input_title</span><span class="p">)</span>
-    <span class="n">candidate_date</span> <span class="o">=</span> <span class="p">(</span><span class="n">short_title</span><span class="o">.</span><span class="n">split</span><span class="p">()</span> <span class="ow">or</span> <span class="p">[</span><span class="s1">&#39;&#39;</span><span class="p">])[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
-    <span class="k">return</span> <span class="n">_extract_date</span><span class="p">(</span><span class="n">candidate_date</span><span class="p">)</span></div>
-
-
-<div class="viewcode-block" id="AMApplicability"><a class="viewcode-back" href="../../../envinorma.models.html#envinorma.models.arrete_ministeriel.AMApplicability">[docs]</a><span class="nd">@dataclass</span>
-<span class="k">class</span> <span class="nc">AMApplicability</span><span class="p">:</span>
-    <span class="n">warnings</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">)</span>
-    <span class="n">condition_of_inapplicability</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Condition</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
-
-<div class="viewcode-block" id="AMApplicability.to_dict"><a class="viewcode-back" href="../../../envinorma.models.html#envinorma.models.arrete_ministeriel.AMApplicability.to_dict">[docs]</a>    <span class="k">def</span> <span class="nf">to_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
-        <span class="n">res</span> <span class="o">=</span> <span class="n">asdict</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">condition_of_inapplicability</span><span class="p">:</span>
-            <span class="n">res</span><span class="p">[</span><span class="s1">&#39;condition_of_inapplicability&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">condition_of_inapplicability</span><span class="o">.</span><span class="n">to_dict</span><span class="p">()</span>
-        <span class="k">return</span> <span class="n">res</span></div>
-
-<div class="viewcode-block" id="AMApplicability.from_dict"><a class="viewcode-back" href="../../../envinorma.models.html#envinorma.models.arrete_ministeriel.AMApplicability.from_dict">[docs]</a>    <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">from_dict</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">dict_</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="s1">&#39;AMApplicability&#39;</span><span class="p">:</span>
-        <span class="n">dict_</span> <span class="o">=</span> <span class="n">dict_</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
-        <span class="k">if</span> <span class="n">dict_</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;condition_of_inapplicability&#39;</span><span class="p">):</span>
-            <span class="n">dict_</span><span class="p">[</span><span class="s1">&#39;condition_of_inapplicability&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">load_condition</span><span class="p">(</span><span class="n">dict_</span><span class="p">[</span><span class="s1">&#39;condition_of_inapplicability&#39;</span><span class="p">])</span>
-        <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="o">**</span><span class="n">dict_</span><span class="p">)</span></div></div>
 
 
 <div class="viewcode-block" id="ArreteMinisteriel"><a class="viewcode-back" href="../../../envinorma.models.html#envinorma.models.arrete_ministeriel.ArreteMinisteriel">[docs]</a><span class="nd">@dataclass</span>
@@ -250,6 +148,10 @@
 <span class="sd">            Optional nickname for the AM. (mainly for transverse AMs)</span>
 <span class="sd">        applicability (Optional[AMApplicability]):</span>
 <span class="sd">            Optional applicability descriptor of the AM.</span>
+<span class="sd">        orphan_titles (Optional[Dict[str, List[str]]]):</span>
+<span class="sd">            Optional map of section ids to list of titles that were not found in the AM</span>
+<span class="sd">            during the last edition of the AM content. It is used to track lost topics and parametrizations</span>
+<span class="sd">            (ie. topics that were not found in the AM during the last edition of the AM content).</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">title</span><span class="p">:</span> <span class="n">EnrichedString</span>
@@ -264,13 +166,14 @@
     <span class="n">is_transverse</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
     <span class="n">nickname</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="n">applicability</span><span class="p">:</span> <span class="n">AMApplicability</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="n">AMApplicability</span><span class="p">)</span>
+    <span class="n">orphan_titles</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]]</span> <span class="o">=</span> <span class="kc">None</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">short_title</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">extract_short_title</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">title</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">__post_init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">title</span><span class="o">.</span><span class="n">text</span> <span class="o">=</span> <span class="n">_standardize_title_if_necessary</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">title</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">title</span><span class="o">.</span><span class="n">text</span> <span class="o">=</span> <span class="n">standardize_title_if_necessary</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">title</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">date_of_signature</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">date_of_signature</span> <span class="o">=</span> <span class="n">extract_date_of_signature</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">title</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
         <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">date_of_signature</span> <span class="o">!=</span> <span class="n">extract_date_of_signature</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">title</span><span class="o">.</span><span class="n">text</span><span class="p">):</span>
@@ -314,26 +217,54 @@
         <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="o">**</span><span class="p">{</span><span class="n">key</span><span class="p">:</span> <span class="n">value</span> <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">dict_</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">fields_</span><span class="p">})</span></div>
 
 <div class="viewcode-block" id="ArreteMinisteriel.to_text"><a class="viewcode-back" href="../../../envinorma.models.html#envinorma.models.arrete_ministeriel.ArreteMinisteriel.to_text">[docs]</a>    <span class="k">def</span> <span class="nf">to_text</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">StructuredText</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">StructuredText</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">title</span><span class="p">,</span> <span class="p">[],</span> <span class="bp">self</span><span class="o">.</span><span class="n">sections</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span></div></div>
+        <span class="k">return</span> <span class="n">StructuredText</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">title</span><span class="p">,</span> <span class="p">[],</span> <span class="bp">self</span><span class="o">.</span><span class="n">sections</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span></div>
 
+<div class="viewcode-block" id="ArreteMinisteriel.descendent_sections"><a class="viewcode-back" href="../../../envinorma.models.html#envinorma.models.arrete_ministeriel.ArreteMinisteriel.descendent_sections">[docs]</a>    <span class="k">def</span> <span class="nf">descendent_sections</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">StructuredText</span><span class="p">]:</span>
+        <span class="n">descendent_sections</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sections</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">section</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">sections</span><span class="p">:</span>
+            <span class="n">descendent_sections</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">section</span><span class="o">.</span><span class="n">descendent_sections</span><span class="p">())</span>
+        <span class="k">return</span> <span class="n">descendent_sections</span></div>
 
-<span class="k">def</span> <span class="nf">_build_legifrance_url</span><span class="p">(</span><span class="n">cid</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-    <span class="k">return</span> <span class="n">LEGIFRANCE_LODA_BASE_URL</span> <span class="o">+</span> <span class="n">cid</span>
+<div class="viewcode-block" id="ArreteMinisteriel.section_id_to_topic"><a class="viewcode-back" href="../../../envinorma.models.html#envinorma.models.arrete_ministeriel.ArreteMinisteriel.section_id_to_topic">[docs]</a>    <span class="k">def</span> <span class="nf">section_id_to_topic</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">TopicName</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="n">section</span><span class="o">.</span><span class="n">id</span><span class="p">:</span> <span class="n">section</span><span class="o">.</span><span class="n">annotations</span><span class="o">.</span><span class="n">topic</span>
+            <span class="k">for</span> <span class="n">section</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">descendent_sections</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">section</span><span class="o">.</span><span class="n">annotations</span> <span class="ow">and</span> <span class="n">section</span><span class="o">.</span><span class="n">annotations</span><span class="o">.</span><span class="n">topic</span>
+        <span class="p">}</span></div>
 
+<div class="viewcode-block" id="ArreteMinisteriel.titles_sequences"><a class="viewcode-back" href="../../../envinorma.models.html#envinorma.models.arrete_ministeriel.ArreteMinisteriel.titles_sequences">[docs]</a>    <span class="k">def</span> <span class="nf">titles_sequences</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]:</span>
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="n">section_id</span><span class="p">:</span> <span class="n">titles_sequence</span>
+            <span class="k">for</span> <span class="n">section</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">sections</span>
+            <span class="k">for</span> <span class="n">section_id</span><span class="p">,</span> <span class="n">titles_sequence</span> <span class="ow">in</span> <span class="n">section</span><span class="o">.</span><span class="n">titles_sequences</span><span class="p">()</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
+        <span class="p">}</span></div>
 
-<span class="k">def</span> <span class="nf">_build_aida_url</span><span class="p">(</span><span class="n">page</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-    <span class="k">return</span> <span class="n">AIDA_URL</span> <span class="o">+</span> <span class="n">page</span>
+    <span class="k">def</span> <span class="nf">_lost_topics</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">not_found_topics</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">TopicName</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">LostTopic</span><span class="p">]:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">not_found_topics</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">[]</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">LostTopic</span><span class="p">(</span><span class="n">topic</span><span class="p">,</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">orphan_titles</span> <span class="ow">or</span> <span class="p">{})[</span><span class="n">id_</span><span class="p">],</span> <span class="n">id_</span><span class="p">)</span> <span class="k">for</span> <span class="n">id_</span><span class="p">,</span> <span class="n">topic</span> <span class="ow">in</span> <span class="n">not_found_topics</span><span class="o">.</span><span class="n">items</span><span class="p">()]</span>
 
+<div class="viewcode-block" id="ArreteMinisteriel.set_topics"><a class="viewcode-back" href="../../../envinorma.models.html#envinorma.models.arrete_ministeriel.ArreteMinisteriel.set_topics">[docs]</a>    <span class="k">def</span> <span class="nf">set_topics</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">section_id_to_topic</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">TopicName</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">LostTopic</span><span class="p">]:</span>
+        <span class="n">descendent_sections</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">descendent_sections</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">section</span> <span class="ow">in</span> <span class="n">descendent_sections</span><span class="p">:</span>
+            <span class="n">section</span><span class="o">.</span><span class="n">annotations</span> <span class="o">=</span> <span class="n">section</span><span class="o">.</span><span class="n">annotations</span> <span class="ow">or</span> <span class="n">Annotations</span><span class="p">()</span>
+            <span class="n">section</span><span class="o">.</span><span class="n">annotations</span><span class="o">.</span><span class="n">topic</span> <span class="o">=</span> <span class="n">section_id_to_topic</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">section</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
+        <span class="n">section_ids</span> <span class="o">=</span> <span class="p">{</span><span class="n">section</span><span class="o">.</span><span class="n">id</span> <span class="k">for</span> <span class="n">section</span> <span class="ow">in</span> <span class="n">descendent_sections</span><span class="p">}</span>
+        <span class="n">not_found_topics</span> <span class="o">=</span> <span class="p">{</span><span class="n">id_</span><span class="p">:</span> <span class="n">topic</span> <span class="k">for</span> <span class="n">id_</span><span class="p">,</span> <span class="n">topic</span> <span class="ow">in</span> <span class="n">section_id_to_topic</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">id_</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">section_ids</span><span class="p">}</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_lost_topics</span><span class="p">(</span><span class="n">not_found_topics</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="add_metadata"><a class="viewcode-back" href="../../../envinorma.models.html#envinorma.models.arrete_ministeriel.add_metadata">[docs]</a><span class="k">def</span> <span class="nf">add_metadata</span><span class="p">(</span><span class="n">am</span><span class="p">:</span> <span class="n">ArreteMinisteriel</span><span class="p">,</span> <span class="n">metadata</span><span class="p">:</span> <span class="n">AMMetadata</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ArreteMinisteriel</span><span class="p">:</span>
-    <span class="n">am</span> <span class="o">=</span> <span class="n">copy</span><span class="p">(</span><span class="n">am</span><span class="p">)</span>
-    <span class="n">am</span><span class="o">.</span><span class="n">legifrance_url</span> <span class="o">=</span> <span class="n">_build_legifrance_url</span><span class="p">(</span><span class="n">metadata</span><span class="o">.</span><span class="n">cid</span><span class="p">)</span>
-    <span class="n">am</span><span class="o">.</span><span class="n">aida_url</span> <span class="o">=</span> <span class="n">_build_aida_url</span><span class="p">(</span><span class="n">metadata</span><span class="o">.</span><span class="n">aida_page</span><span class="p">)</span>
-    <span class="n">am</span><span class="o">.</span><span class="n">classements</span> <span class="o">=</span> <span class="n">metadata</span><span class="o">.</span><span class="n">classements</span>
-    <span class="n">am</span><span class="o">.</span><span class="n">classements_with_alineas</span> <span class="o">=</span> <span class="n">group_classements_by_alineas</span><span class="p">(</span><span class="n">metadata</span><span class="o">.</span><span class="n">classements</span><span class="p">)</span>
-    <span class="n">am</span><span class="o">.</span><span class="n">is_transverse</span> <span class="o">=</span> <span class="n">metadata</span><span class="o">.</span><span class="n">is_transverse</span>
-    <span class="n">am</span><span class="o">.</span><span class="n">nickname</span> <span class="o">=</span> <span class="n">metadata</span><span class="o">.</span><span class="n">nickname</span>
-    <span class="k">return</span> <span class="n">am</span></div>
+<div class="viewcode-block" id="ArreteMinisteriel.change_ids_based_on_other_am"><a class="viewcode-back" href="../../../envinorma.models.html#envinorma.models.arrete_ministeriel.ArreteMinisteriel.change_ids_based_on_other_am">[docs]</a>    <span class="k">def</span> <span class="nf">change_ids_based_on_other_am</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">am</span><span class="p">:</span> <span class="s1">&#39;ArreteMinisteriel&#39;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">orphan_titles</span> <span class="o">=</span> <span class="n">transfer_ids_based_on_other_am</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">am</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="ArreteMinisteriel.create_copy_with_new_content"><a class="viewcode-back" href="../../../envinorma.models.html#envinorma.models.arrete_ministeriel.ArreteMinisteriel.create_copy_with_new_content">[docs]</a>    <span class="k">def</span> <span class="nf">create_copy_with_new_content</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">new_sections</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">StructuredText</span><span class="p">]</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="s1">&#39;ArreteMinisteriel&#39;</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="n">LostTopic</span><span class="p">]]:</span>
+        <span class="n">section_id_to_topic</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">section_id_to_topic</span><span class="p">()</span>
+        <span class="n">new_am</span> <span class="o">=</span> <span class="n">copy</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="n">new_am</span><span class="o">.</span><span class="n">sections</span> <span class="o">=</span> <span class="n">new_sections</span>
+        <span class="n">new_am</span><span class="o">.</span><span class="n">change_ids_based_on_other_am</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="n">lost_topics</span> <span class="o">=</span> <span class="n">new_am</span><span class="o">.</span><span class="n">set_topics</span><span class="p">(</span><span class="n">section_id_to_topic</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">new_am</span><span class="p">,</span> <span class="n">lost_topics</span></div></div>
 </pre></div>
 
            </div>

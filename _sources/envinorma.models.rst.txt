@@ -1,8 +1,24 @@
 envinorma.models package
 ========================
 
+Subpackages
+-----------
+
+.. toctree::
+   :maxdepth: 4
+
+   envinorma.models.helpers
+
 Submodules
 ----------
+
+envinorma.models.am\_applicability module
+-----------------------------------------
+
+.. automodule:: envinorma.models.am_applicability
+   :members:
+   :undoc-members:
+   :show-inheritance:
 
 envinorma.models.am\_metadata module
 ------------------------------------
@@ -56,6 +72,14 @@ envinorma.models.installation\_classement module
 ------------------------------------------------
 
 .. automodule:: envinorma.models.installation_classement
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+envinorma.models.lost\_topic module
+-----------------------------------
+
+.. automodule:: envinorma.models.lost_topic
    :members:
    :undoc-members:
    :show-inheritance:

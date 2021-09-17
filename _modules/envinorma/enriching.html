@@ -89,10 +89,33 @@
            <div itemprop="articleBody">
              
   <h1>Source code for envinorma.enriching</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">envinorma.models</span> <span class="kn">import</span> <span class="n">AMMetadata</span><span class="p">,</span> <span class="n">ArreteMinisteriel</span><span class="p">,</span> <span class="n">add_metadata</span>
+<span></span><span class="kn">from</span> <span class="nn">copy</span> <span class="kn">import</span> <span class="n">copy</span>
+
+<span class="kn">from</span> <span class="nn">envinorma.models</span> <span class="kn">import</span> <span class="n">AMMetadata</span><span class="p">,</span> <span class="n">ArreteMinisteriel</span>
+<span class="kn">from</span> <span class="nn">envinorma.models.classement</span> <span class="kn">import</span> <span class="n">group_classements_by_alineas</span>
+<span class="kn">from</span> <span class="nn">envinorma.utils</span> <span class="kn">import</span> <span class="n">AIDA_URL</span><span class="p">,</span> <span class="n">LEGIFRANCE_LODA_BASE_URL</span>
 
 <span class="kn">from</span> <span class="nn">.remove_null_attributes</span> <span class="kn">import</span> <span class="n">remove_null_attributes</span>
 <span class="kn">from</span> <span class="nn">.title_reference</span> <span class="kn">import</span> <span class="n">add_references</span>
+
+
+<span class="k">def</span> <span class="nf">_build_legifrance_url</span><span class="p">(</span><span class="n">cid</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">return</span> <span class="n">LEGIFRANCE_LODA_BASE_URL</span> <span class="o">+</span> <span class="n">cid</span>
+
+
+<span class="k">def</span> <span class="nf">_build_aida_url</span><span class="p">(</span><span class="n">page</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">return</span> <span class="n">AIDA_URL</span> <span class="o">+</span> <span class="n">page</span>
+
+
+<div class="viewcode-block" id="add_metadata"><a class="viewcode-back" href="../../envinorma.enriching.html#envinorma.enriching.add_metadata">[docs]</a><span class="k">def</span> <span class="nf">add_metadata</span><span class="p">(</span><span class="n">am</span><span class="p">:</span> <span class="n">ArreteMinisteriel</span><span class="p">,</span> <span class="n">metadata</span><span class="p">:</span> <span class="n">AMMetadata</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ArreteMinisteriel</span><span class="p">:</span>
+    <span class="n">am</span> <span class="o">=</span> <span class="n">copy</span><span class="p">(</span><span class="n">am</span><span class="p">)</span>
+    <span class="n">am</span><span class="o">.</span><span class="n">legifrance_url</span> <span class="o">=</span> <span class="n">_build_legifrance_url</span><span class="p">(</span><span class="n">metadata</span><span class="o">.</span><span class="n">cid</span><span class="p">)</span>
+    <span class="n">am</span><span class="o">.</span><span class="n">aida_url</span> <span class="o">=</span> <span class="n">_build_aida_url</span><span class="p">(</span><span class="n">metadata</span><span class="o">.</span><span class="n">aida_page</span><span class="p">)</span>
+    <span class="n">am</span><span class="o">.</span><span class="n">classements</span> <span class="o">=</span> <span class="n">metadata</span><span class="o">.</span><span class="n">classements</span>
+    <span class="n">am</span><span class="o">.</span><span class="n">classements_with_alineas</span> <span class="o">=</span> <span class="n">group_classements_by_alineas</span><span class="p">(</span><span class="n">metadata</span><span class="o">.</span><span class="n">classements</span><span class="p">)</span>
+    <span class="n">am</span><span class="o">.</span><span class="n">is_transverse</span> <span class="o">=</span> <span class="n">metadata</span><span class="o">.</span><span class="n">is_transverse</span>
+    <span class="n">am</span><span class="o">.</span><span class="n">nickname</span> <span class="o">=</span> <span class="n">metadata</span><span class="o">.</span><span class="n">nickname</span>
+    <span class="k">return</span> <span class="n">am</span></div>
 
 
 <div class="viewcode-block" id="enrich"><a class="viewcode-back" href="../../envinorma.enriching.html#envinorma.enriching.enrich">[docs]</a><span class="k">def</span> <span class="nf">enrich</span><span class="p">(</span><span class="n">am</span><span class="p">:</span> <span class="n">ArreteMinisteriel</span><span class="p">,</span> <span class="n">metadata</span><span class="p">:</span> <span class="n">AMMetadata</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ArreteMinisteriel</span><span class="p">:</span>

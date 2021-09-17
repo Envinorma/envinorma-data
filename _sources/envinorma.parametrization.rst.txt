@@ -52,14 +52,6 @@ envinorma.parametrization.natural\_language\_warnings module
    :undoc-members:
    :show-inheritance:
 
-envinorma.parametrization.resync module
----------------------------------------
-
-.. automodule:: envinorma.parametrization.resync
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
 envinorma.parametrization.tie\_parametrization module
 -----------------------------------------------------
 

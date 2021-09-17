@@ -18,7 +18,7 @@
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="envinorma.parametrization package" href="envinorma.parametrization.html" />
+    <link rel="next" title="envinorma.models.helpers package" href="envinorma.models.helpers.html" />
     <link rel="prev" title="envinorma.io package" href="envinorma.io.html" /> 
 </head>
 
@@ -88,7 +88,7 @@
       </li>
   </ul><div class="rst-breadcrumbs-buttons" role="navigation" aria-label="Sequential page navigation">
         <a href="envinorma.io.html" class="btn btn-neutral float-left" title="envinorma.io package" accesskey="p"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="envinorma.parametrization.html" class="btn btn-neutral float-right" title="envinorma.parametrization package" accesskey="n">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="envinorma.models.helpers.html" class="btn btn-neutral float-right" title="envinorma.models.helpers package" accesskey="n">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
   </div>
   <hr/>
 </div>
@@ -97,8 +97,51 @@
              
   <section id="envinorma-models-package">
 <h1>envinorma.models package<a class="headerlink" href="#envinorma-models-package" title="Permalink to this headline"></a></h1>
+<section id="subpackages">
+<h2>Subpackages<a class="headerlink" href="#subpackages" title="Permalink to this headline"></a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="envinorma.models.helpers.html">envinorma.models.helpers package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="envinorma.models.helpers.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="envinorma.models.helpers.html#module-envinorma.models.helpers.am_transfer_ids">envinorma.models.helpers.am_transfer_ids module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="envinorma.models.helpers.html#module-envinorma.models.helpers.date_helpers">envinorma.models.helpers.date_helpers module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="envinorma.models.helpers.html#module-envinorma.models.helpers">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
 <section id="submodules">
 <h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline"></a></h2>
+</section>
+<section id="module-envinorma.models.am_applicability">
+<span id="envinorma-models-am-applicability-module"></span><h2>envinorma.models.am_applicability module<a class="headerlink" href="#module-envinorma.models.am_applicability" title="Permalink to this headline"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="envinorma.models.am_applicability.AMApplicability">
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">AMApplicability</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">warnings:</span> <span class="pre">List[str]</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;</span></em>, <em class="sig-param"><span class="pre">condition_of_inapplicability:</span> <span class="pre">Union[envinorma.models.condition.Equal</span></em>, <em class="sig-param"><span class="pre">envinorma.models.condition.Range</span></em>, <em class="sig-param"><span class="pre">envinorma.models.condition.Greater</span></em>, <em class="sig-param"><span class="pre">envinorma.models.condition.Littler</span></em>, <em class="sig-param"><span class="pre">envinorma.models.condition.AndCondition</span></em>, <em class="sig-param"><span class="pre">envinorma.models.condition.OrCondition</span></em>, <em class="sig-param"><span class="pre">NoneType]</span> <span class="pre">=</span> <span class="pre">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/envinorma/models/am_applicability.html#AMApplicability"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#envinorma.models.am_applicability.AMApplicability" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="envinorma.models.am_applicability.AMApplicability.condition_of_inapplicability">
+<span class="sig-name descname"><span class="pre">condition_of_inapplicability</span></span><em class="property"><span class="pre">:</span> <span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#envinorma.models.condition.Equal" title="envinorma.models.condition.Equal"><span class="pre">envinorma.models.condition.Equal</span></a><span class="p"><span class="pre">,</span> </span><a class="reference internal" href="#envinorma.models.condition.Range" title="envinorma.models.condition.Range"><span class="pre">envinorma.models.condition.Range</span></a><span class="p"><span class="pre">,</span> </span><a class="reference internal" href="#envinorma.models.condition.Greater" title="envinorma.models.condition.Greater"><span class="pre">envinorma.models.condition.Greater</span></a><span class="p"><span class="pre">,</span> </span><a class="reference internal" href="#envinorma.models.condition.Littler" title="envinorma.models.condition.Littler"><span class="pre">envinorma.models.condition.Littler</span></a><span class="p"><span class="pre">,</span> </span><a class="reference internal" href="#envinorma.models.condition.AndCondition" title="envinorma.models.condition.AndCondition"><span class="pre">envinorma.models.condition.AndCondition</span></a><span class="p"><span class="pre">,</span> </span><a class="reference internal" href="#envinorma.models.condition.OrCondition" title="envinorma.models.condition.OrCondition"><span class="pre">envinorma.models.condition.OrCondition</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><em class="property"> <span class="pre">=</span> <span class="pre">None</span></em><a class="headerlink" href="#envinorma.models.am_applicability.AMApplicability.condition_of_inapplicability" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="envinorma.models.am_applicability.AMApplicability.from_dict">
+<em class="property"><span class="pre">classmethod</span> </em><span class="sig-name descname"><span class="pre">from_dict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dict_</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#envinorma.models.am_applicability.AMApplicability" title="envinorma.models.am_applicability.AMApplicability"><span class="pre">envinorma.models.am_applicability.AMApplicability</span></a></span></span><a class="reference internal" href="_modules/envinorma/models/am_applicability.html#AMApplicability.from_dict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#envinorma.models.am_applicability.AMApplicability.from_dict" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="envinorma.models.am_applicability.AMApplicability.to_dict">
+<span class="sig-name descname"><span class="pre">to_dict</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/envinorma/models/am_applicability.html#AMApplicability.to_dict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#envinorma.models.am_applicability.AMApplicability.to_dict" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="envinorma.models.am_applicability.AMApplicability.warnings">
+<span class="sig-name descname"><span class="pre">warnings</span></span><em class="property"><span class="pre">:</span> <span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#envinorma.models.am_applicability.AMApplicability.warnings" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
 </section>
 <section id="module-envinorma.models.am_metadata">
 <span id="envinorma-models-am-metadata-module"></span><h2>envinorma.models.am_metadata module<a class="headerlink" href="#module-envinorma.models.am_metadata" title="Permalink to this headline"></a></h2>
@@ -206,6 +249,11 @@
 <dd></dd></dl>
 
 <dl class="py attribute">
+<dt class="sig sig-object py" id="envinorma.models.am_metadata.AMState.EN_CREATION">
+<span class="sig-name descname"><span class="pre">EN_CREATION</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'EN_CREATION'</span></em><a class="headerlink" href="#envinorma.models.am_metadata.AMState.EN_CREATION" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
 <dt class="sig sig-object py" id="envinorma.models.am_metadata.AMState.VIGUEUR">
 <span class="sig-name descname"><span class="pre">VIGUEUR</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'VIGUEUR'</span></em><a class="headerlink" href="#envinorma.models.am_metadata.AMState.VIGUEUR" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
@@ -216,34 +264,8 @@
 <section id="module-envinorma.models.arrete_ministeriel">
 <span id="envinorma-models-arrete-ministeriel-module"></span><h2>envinorma.models.arrete_ministeriel module<a class="headerlink" href="#module-envinorma.models.arrete_ministeriel" title="Permalink to this headline"></a></h2>
 <dl class="py class">
-<dt class="sig sig-object py" id="envinorma.models.arrete_ministeriel.AMApplicability">
-<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">AMApplicability</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">warnings:</span> <span class="pre">List[str]</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;</span></em>, <em class="sig-param"><span class="pre">condition_of_inapplicability:</span> <span class="pre">Union[envinorma.models.condition.Equal</span></em>, <em class="sig-param"><span class="pre">envinorma.models.condition.Range</span></em>, <em class="sig-param"><span class="pre">envinorma.models.condition.Greater</span></em>, <em class="sig-param"><span class="pre">envinorma.models.condition.Littler</span></em>, <em class="sig-param"><span class="pre">envinorma.models.condition.AndCondition</span></em>, <em class="sig-param"><span class="pre">envinorma.models.condition.OrCondition</span></em>, <em class="sig-param"><span class="pre">NoneType]</span> <span class="pre">=</span> <span class="pre">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/envinorma/models/arrete_ministeriel.html#AMApplicability"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#envinorma.models.arrete_ministeriel.AMApplicability" title="Permalink to this definition"></a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<dl class="py attribute">
-<dt class="sig sig-object py" id="envinorma.models.arrete_ministeriel.AMApplicability.condition_of_inapplicability">
-<span class="sig-name descname"><span class="pre">condition_of_inapplicability</span></span><em class="property"><span class="pre">:</span> <span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#envinorma.models.condition.Equal" title="envinorma.models.condition.Equal"><span class="pre">envinorma.models.condition.Equal</span></a><span class="p"><span class="pre">,</span> </span><a class="reference internal" href="#envinorma.models.condition.Range" title="envinorma.models.condition.Range"><span class="pre">envinorma.models.condition.Range</span></a><span class="p"><span class="pre">,</span> </span><a class="reference internal" href="#envinorma.models.condition.Greater" title="envinorma.models.condition.Greater"><span class="pre">envinorma.models.condition.Greater</span></a><span class="p"><span class="pre">,</span> </span><a class="reference internal" href="#envinorma.models.condition.Littler" title="envinorma.models.condition.Littler"><span class="pre">envinorma.models.condition.Littler</span></a><span class="p"><span class="pre">,</span> </span><a class="reference internal" href="#envinorma.models.condition.AndCondition" title="envinorma.models.condition.AndCondition"><span class="pre">envinorma.models.condition.AndCondition</span></a><span class="p"><span class="pre">,</span> </span><a class="reference internal" href="#envinorma.models.condition.OrCondition" title="envinorma.models.condition.OrCondition"><span class="pre">envinorma.models.condition.OrCondition</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><em class="property"> <span class="pre">=</span> <span class="pre">None</span></em><a class="headerlink" href="#envinorma.models.arrete_ministeriel.AMApplicability.condition_of_inapplicability" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="envinorma.models.arrete_ministeriel.AMApplicability.from_dict">
-<em class="property"><span class="pre">classmethod</span> </em><span class="sig-name descname"><span class="pre">from_dict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dict_</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#envinorma.models.arrete_ministeriel.AMApplicability" title="envinorma.models.arrete_ministeriel.AMApplicability"><span class="pre">envinorma.models.arrete_ministeriel.AMApplicability</span></a></span></span><a class="reference internal" href="_modules/envinorma/models/arrete_ministeriel.html#AMApplicability.from_dict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#envinorma.models.arrete_ministeriel.AMApplicability.from_dict" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="envinorma.models.arrete_ministeriel.AMApplicability.to_dict">
-<span class="sig-name descname"><span class="pre">to_dict</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/envinorma/models/arrete_ministeriel.html#AMApplicability.to_dict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#envinorma.models.arrete_ministeriel.AMApplicability.to_dict" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="envinorma.models.arrete_ministeriel.AMApplicability.warnings">
-<span class="sig-name descname"><span class="pre">warnings</span></span><em class="property"><span class="pre">:</span> <span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#envinorma.models.arrete_ministeriel.AMApplicability.warnings" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
 <dt class="sig sig-object py" id="envinorma.models.arrete_ministeriel.ArreteMinisteriel">
-<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">ArreteMinisteriel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">title:</span> <span class="pre">envinorma.models.text_elements.EnrichedString,</span> <span class="pre">sections:</span> <span class="pre">List[envinorma.models.structured_text.StructuredText],</span> <span class="pre">visa:</span> <span class="pre">List[envinorma.models.text_elements.EnrichedString],</span> <span class="pre">date_of_signature:</span> <span class="pre">Optional[datetime.date]</span> <span class="pre">=</span> <span class="pre">None,</span> <span class="pre">aida_url:</span> <span class="pre">Optional[str]</span> <span class="pre">=</span> <span class="pre">None,</span> <span class="pre">legifrance_url:</span> <span class="pre">Optional[str]</span> <span class="pre">=</span> <span class="pre">None,</span> <span class="pre">classements:</span> <span class="pre">List[envinorma.models.classement.Classement]</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;,</span> <span class="pre">classements_with_alineas:</span> <span class="pre">List[envinorma.models.classement.ClassementWithAlineas]</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;,</span> <span class="pre">id:</span> <span class="pre">Optional[str]</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;,</span> <span class="pre">is_transverse:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">False,</span> <span class="pre">nickname:</span> <span class="pre">Optional[str]</span> <span class="pre">=</span> <span class="pre">None,</span> <span class="pre">applicability:</span> <span class="pre">envinorma.models.arrete_ministeriel.AMApplicability</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/envinorma/models/arrete_ministeriel.html#ArreteMinisteriel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#envinorma.models.arrete_ministeriel.ArreteMinisteriel" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">ArreteMinisteriel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">title:</span> <span class="pre">envinorma.models.text_elements.EnrichedString,</span> <span class="pre">sections:</span> <span class="pre">List[envinorma.models.structured_text.StructuredText],</span> <span class="pre">visa:</span> <span class="pre">List[envinorma.models.text_elements.EnrichedString],</span> <span class="pre">date_of_signature:</span> <span class="pre">Optional[datetime.date]</span> <span class="pre">=</span> <span class="pre">None,</span> <span class="pre">aida_url:</span> <span class="pre">Optional[str]</span> <span class="pre">=</span> <span class="pre">None,</span> <span class="pre">legifrance_url:</span> <span class="pre">Optional[str]</span> <span class="pre">=</span> <span class="pre">None,</span> <span class="pre">classements:</span> <span class="pre">List[envinorma.models.classement.Classement]</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;,</span> <span class="pre">classements_with_alineas:</span> <span class="pre">List[envinorma.models.classement.ClassementWithAlineas]</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;,</span> <span class="pre">id:</span> <span class="pre">Optional[str]</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;,</span> <span class="pre">is_transverse:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">False,</span> <span class="pre">nickname:</span> <span class="pre">Optional[str]</span> <span class="pre">=</span> <span class="pre">None,</span> <span class="pre">applicability:</span> <span class="pre">envinorma.models.am_applicability.AMApplicability</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;,</span> <span class="pre">orphan_titles:</span> <span class="pre">Optional[Dict[str,</span> <span class="pre">List[str]]]</span> <span class="pre">=</span> <span class="pre">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/envinorma/models/arrete_ministeriel.html#ArreteMinisteriel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#envinorma.models.arrete_ministeriel.ArreteMinisteriel" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Dataclass for ICPE arrete ministeriels (AM).</p>
 <dl class="simple">
@@ -274,6 +296,10 @@ repeated for several alineas</p>
 </dd>
 <dt>applicability (Optional[AMApplicability]):</dt><dd><p>Optional applicability descriptor of the AM.</p>
 </dd>
+<dt>orphan_titles (Optional[Dict[str, List[str]]]):</dt><dd><p>Optional map of section ids to list of titles that were not found in the AM
+during the last edition of the AM content. It is used to track lost topics and parametrizations
+(ie. topics that were not found in the AM during the last edition of the AM content).</p>
+</dd>
 </dl>
 </dd>
 </dl>
@@ -284,7 +310,12 @@ repeated for several alineas</p>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="envinorma.models.arrete_ministeriel.ArreteMinisteriel.applicability">
-<span class="sig-name descname"><span class="pre">applicability</span></span><em class="property"><span class="pre">:</span> <a class="reference internal" href="#envinorma.models.arrete_ministeriel.AMApplicability" title="envinorma.models.arrete_ministeriel.AMApplicability"><span class="pre">envinorma.models.arrete_ministeriel.AMApplicability</span></a></em><a class="headerlink" href="#envinorma.models.arrete_ministeriel.ArreteMinisteriel.applicability" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">applicability</span></span><em class="property"><span class="pre">:</span> <a class="reference internal" href="#envinorma.models.am_applicability.AMApplicability" title="envinorma.models.am_applicability.AMApplicability"><span class="pre">envinorma.models.am_applicability.AMApplicability</span></a></em><a class="headerlink" href="#envinorma.models.arrete_ministeriel.ArreteMinisteriel.applicability" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="envinorma.models.arrete_ministeriel.ArreteMinisteriel.change_ids_based_on_other_am">
+<span class="sig-name descname"><span class="pre">change_ids_based_on_other_am</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">am</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="#envinorma.models.arrete_ministeriel.ArreteMinisteriel" title="envinorma.models.arrete_ministeriel.ArreteMinisteriel"><span class="pre">envinorma.models.arrete_ministeriel.ArreteMinisteriel</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/envinorma/models/arrete_ministeriel.html#ArreteMinisteriel.change_ids_based_on_other_am"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#envinorma.models.arrete_ministeriel.ArreteMinisteriel.change_ids_based_on_other_am" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
@@ -297,9 +328,19 @@ repeated for several alineas</p>
 <span class="sig-name descname"><span class="pre">classements_with_alineas</span></span><em class="property"><span class="pre">:</span> <span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#envinorma.models.classement.ClassementWithAlineas" title="envinorma.models.classement.ClassementWithAlineas"><span class="pre">envinorma.models.classement.ClassementWithAlineas</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#envinorma.models.arrete_ministeriel.ArreteMinisteriel.classements_with_alineas" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
+<dl class="py method">
+<dt class="sig sig-object py" id="envinorma.models.arrete_ministeriel.ArreteMinisteriel.create_copy_with_new_content">
+<span class="sig-name descname"><span class="pre">create_copy_with_new_content</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">new_sections</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#envinorma.models.structured_text.StructuredText" title="envinorma.models.structured_text.StructuredText"><span class="pre">envinorma.models.structured_text.StructuredText</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#envinorma.models.arrete_ministeriel.ArreteMinisteriel" title="envinorma.models.arrete_ministeriel.ArreteMinisteriel"><span class="pre">envinorma.models.arrete_ministeriel.ArreteMinisteriel</span></a><span class="p"><span class="pre">,</span> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#envinorma.models.lost_topic.LostTopic" title="envinorma.models.lost_topic.LostTopic"><span class="pre">envinorma.models.lost_topic.LostTopic</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/envinorma/models/arrete_ministeriel.html#ArreteMinisteriel.create_copy_with_new_content"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#envinorma.models.arrete_ministeriel.ArreteMinisteriel.create_copy_with_new_content" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
 <dl class="py attribute">
 <dt class="sig sig-object py" id="envinorma.models.arrete_ministeriel.ArreteMinisteriel.date_of_signature">
 <span class="sig-name descname"><span class="pre">date_of_signature</span></span><em class="property"><span class="pre">:</span> <span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">datetime.date</span><span class="p"><span class="pre">]</span></span></em><em class="property"> <span class="pre">=</span> <span class="pre">None</span></em><a class="headerlink" href="#envinorma.models.arrete_ministeriel.ArreteMinisteriel.date_of_signature" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="envinorma.models.arrete_ministeriel.ArreteMinisteriel.descendent_sections">
+<span class="sig-name descname"><span class="pre">descendent_sections</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#envinorma.models.structured_text.StructuredText" title="envinorma.models.structured_text.StructuredText"><span class="pre">envinorma.models.structured_text.StructuredText</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/envinorma/models/arrete_ministeriel.html#ArreteMinisteriel.descendent_sections"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#envinorma.models.arrete_ministeriel.ArreteMinisteriel.descendent_sections" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
@@ -328,8 +369,23 @@ repeated for several alineas</p>
 <dd></dd></dl>
 
 <dl class="py attribute">
+<dt class="sig sig-object py" id="envinorma.models.arrete_ministeriel.ArreteMinisteriel.orphan_titles">
+<span class="sig-name descname"><span class="pre">orphan_titles</span></span><em class="property"><span class="pre">:</span> <span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><em class="property"> <span class="pre">=</span> <span class="pre">None</span></em><a class="headerlink" href="#envinorma.models.arrete_ministeriel.ArreteMinisteriel.orphan_titles" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="envinorma.models.arrete_ministeriel.ArreteMinisteriel.section_id_to_topic">
+<span class="sig-name descname"><span class="pre">section_id_to_topic</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span> </span><a class="reference internal" href="envinorma.topics.html#envinorma.topics.patterns.TopicName" title="envinorma.topics.patterns.TopicName"><span class="pre">envinorma.topics.patterns.TopicName</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/envinorma/models/arrete_ministeriel.html#ArreteMinisteriel.section_id_to_topic"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#envinorma.models.arrete_ministeriel.ArreteMinisteriel.section_id_to_topic" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
 <dt class="sig sig-object py" id="envinorma.models.arrete_ministeriel.ArreteMinisteriel.sections">
 <span class="sig-name descname"><span class="pre">sections</span></span><em class="property"><span class="pre">:</span> <span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#envinorma.models.structured_text.StructuredText" title="envinorma.models.structured_text.StructuredText"><span class="pre">envinorma.models.structured_text.StructuredText</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#envinorma.models.arrete_ministeriel.ArreteMinisteriel.sections" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="envinorma.models.arrete_ministeriel.ArreteMinisteriel.set_topics">
+<span class="sig-name descname"><span class="pre">set_topics</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">section_id_to_topic</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span> </span><a class="reference internal" href="envinorma.topics.html#envinorma.topics.patterns.TopicName" title="envinorma.topics.patterns.TopicName"><span class="pre">envinorma.topics.patterns.TopicName</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#envinorma.models.lost_topic.LostTopic" title="envinorma.models.lost_topic.LostTopic"><span class="pre">envinorma.models.lost_topic.LostTopic</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/envinorma/models/arrete_ministeriel.html#ArreteMinisteriel.set_topics"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#envinorma.models.arrete_ministeriel.ArreteMinisteriel.set_topics" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py property">
@@ -340,6 +396,11 @@ repeated for several alineas</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="envinorma.models.arrete_ministeriel.ArreteMinisteriel.title">
 <span class="sig-name descname"><span class="pre">title</span></span><em class="property"><span class="pre">:</span> <a class="reference internal" href="#envinorma.models.text_elements.EnrichedString" title="envinorma.models.text_elements.EnrichedString"><span class="pre">envinorma.models.text_elements.EnrichedString</span></a></em><a class="headerlink" href="#envinorma.models.arrete_ministeriel.ArreteMinisteriel.title" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="envinorma.models.arrete_ministeriel.ArreteMinisteriel.titles_sequences">
+<span class="sig-name descname"><span class="pre">titles_sequences</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/envinorma/models/arrete_ministeriel.html#ArreteMinisteriel.titles_sequences"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#envinorma.models.arrete_ministeriel.ArreteMinisteriel.titles_sequences" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
@@ -358,26 +419,6 @@ repeated for several alineas</p>
 <dd></dd></dl>
 
 </dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="envinorma.models.arrete_ministeriel.add_metadata">
-<span class="sig-name descname"><span class="pre">add_metadata</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">am</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="#envinorma.models.arrete_ministeriel.ArreteMinisteriel" title="envinorma.models.arrete_ministeriel.ArreteMinisteriel"><span class="pre">envinorma.models.arrete_ministeriel.ArreteMinisteriel</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">metadata</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="#envinorma.models.am_metadata.AMMetadata" title="envinorma.models.am_metadata.AMMetadata"><span class="pre">envinorma.models.am_metadata.AMMetadata</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#envinorma.models.arrete_ministeriel.ArreteMinisteriel" title="envinorma.models.arrete_ministeriel.ArreteMinisteriel"><span class="pre">envinorma.models.arrete_ministeriel.ArreteMinisteriel</span></a></span></span><a class="reference internal" href="_modules/envinorma/models/arrete_ministeriel.html#add_metadata"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#envinorma.models.arrete_ministeriel.add_metadata" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="envinorma.models.arrete_ministeriel.extract_date_of_signature">
-<span class="sig-name descname"><span class="pre">extract_date_of_signature</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_title</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">datetime.date</span></span></span><a class="reference internal" href="_modules/envinorma/models/arrete_ministeriel.html#extract_date_of_signature"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#envinorma.models.arrete_ministeriel.extract_date_of_signature" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="envinorma.models.arrete_ministeriel.extract_short_title">
-<span class="sig-name descname"><span class="pre">extract_short_title</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_title</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/envinorma/models/arrete_ministeriel.html#extract_short_title"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#envinorma.models.arrete_ministeriel.extract_short_title" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="envinorma.models.arrete_ministeriel.standardize_title_date">
-<span class="sig-name descname"><span class="pre">standardize_title_date</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/envinorma/models/arrete_ministeriel.html#standardize_title_date"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#envinorma.models.arrete_ministeriel.standardize_title_date" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
 
 </section>
 <section id="module-envinorma.models.classement">
@@ -1329,6 +1370,30 @@ repeated for several alineas</p>
 </dd></dl>
 
 </section>
+<section id="module-envinorma.models.lost_topic">
+<span id="envinorma-models-lost-topic-module"></span><h2>envinorma.models.lost_topic module<a class="headerlink" href="#module-envinorma.models.lost_topic" title="Permalink to this headline"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="envinorma.models.lost_topic.LostTopic">
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">LostTopic</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">topic</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="envinorma.topics.html#envinorma.topics.patterns.TopicName" title="envinorma.topics.patterns.TopicName"><span class="pre">envinorma.topics.patterns.TopicName</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">section_titles</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">section_id</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/envinorma/models/lost_topic.html#LostTopic"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#envinorma.models.lost_topic.LostTopic" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="envinorma.models.lost_topic.LostTopic.section_id">
+<span class="sig-name descname"><span class="pre">section_id</span></span><em class="property"><span class="pre">:</span> <span class="pre">str</span></em><a class="headerlink" href="#envinorma.models.lost_topic.LostTopic.section_id" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="envinorma.models.lost_topic.LostTopic.section_titles">
+<span class="sig-name descname"><span class="pre">section_titles</span></span><em class="property"><span class="pre">:</span> <span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#envinorma.models.lost_topic.LostTopic.section_titles" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="envinorma.models.lost_topic.LostTopic.topic">
+<span class="sig-name descname"><span class="pre">topic</span></span><em class="property"><span class="pre">:</span> <a class="reference internal" href="envinorma.topics.html#envinorma.topics.patterns.TopicName" title="envinorma.topics.patterns.TopicName"><span class="pre">envinorma.topics.patterns.TopicName</span></a></em><a class="headerlink" href="#envinorma.models.lost_topic.LostTopic.topic" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
 <section id="module-envinorma.models.nomenclature">
 <span id="envinorma-models-nomenclature-module"></span><h2>envinorma.models.nomenclature module<a class="headerlink" href="#module-envinorma.models.nomenclature" title="Permalink to this headline"></a></h2>
 <dl class="py class">
@@ -1767,6 +1832,11 @@ of why it is inactive.</p>
 <dd></dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="envinorma.models.structured_text.StructuredText.descendent_sections">
+<span class="sig-name descname"><span class="pre">descendent_sections</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#envinorma.models.structured_text.StructuredText" title="envinorma.models.structured_text.StructuredText"><span class="pre">envinorma.models.structured_text.StructuredText</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/envinorma/models/structured_text.html#StructuredText.descendent_sections"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#envinorma.models.structured_text.StructuredText.descendent_sections" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="envinorma.models.structured_text.StructuredText.from_dict">
 <em class="property"><span class="pre">classmethod</span> </em><span class="sig-name descname"><span class="pre">from_dict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dict_</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#envinorma.models.structured_text.StructuredText" title="envinorma.models.structured_text.StructuredText"><span class="pre">envinorma.models.structured_text.StructuredText</span></a></span></span><a class="reference internal" href="_modules/envinorma/models/structured_text.html#StructuredText.from_dict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#envinorma.models.structured_text.StructuredText.from_dict" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
@@ -1804,6 +1874,11 @@ of why it is inactive.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="envinorma.models.structured_text.StructuredText.title">
 <span class="sig-name descname"><span class="pre">title</span></span><em class="property"><span class="pre">:</span> <a class="reference internal" href="#envinorma.models.text_elements.EnrichedString" title="envinorma.models.text_elements.EnrichedString"><span class="pre">envinorma.models.text_elements.EnrichedString</span></a></em><a class="headerlink" href="#envinorma.models.structured_text.StructuredText.title" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="envinorma.models.structured_text.StructuredText.titles_sequences">
+<span class="sig-name descname"><span class="pre">titles_sequences</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/envinorma/models/structured_text.html#StructuredText.titles_sequences"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#envinorma.models.structured_text.StructuredText.titles_sequences" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py method">

@@ -89,163 +89,94 @@
            <div itemprop="articleBody">
              
   <h1>Source code for envinorma.parametrization.models.parametrization</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">asdict</span><span class="p">,</span> <span class="n">dataclass</span><span class="p">,</span> <span class="n">field</span>
+<span></span><span class="kn">from</span> <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">dataclass</span><span class="p">,</span> <span class="n">field</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Set</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">TypeVar</span><span class="p">,</span> <span class="n">Union</span>
 
-<span class="kn">from</span> <span class="nn">envinorma.models</span> <span class="kn">import</span> <span class="n">Ints</span>
 <span class="kn">from</span> <span class="nn">envinorma.models.condition</span> <span class="kn">import</span> <span class="n">Condition</span><span class="p">,</span> <span class="n">LeafCondition</span><span class="p">,</span> <span class="n">extract_leaf_conditions</span><span class="p">,</span> <span class="n">load_condition</span>
 <span class="kn">from</span> <span class="nn">envinorma.models.parameter</span> <span class="kn">import</span> <span class="n">Parameter</span>
 <span class="kn">from</span> <span class="nn">envinorma.models.structured_text</span> <span class="kn">import</span> <span class="n">StructuredText</span>
+<span class="kn">from</span> <span class="nn">envinorma.utils</span> <span class="kn">import</span> <span class="n">random_id</span>
 
 <span class="kn">from</span> <span class="nn">..consistency</span> <span class="kn">import</span> <span class="n">check_conditions_not_compatible</span>
 <span class="kn">from</span> <span class="nn">..exceptions</span> <span class="kn">import</span> <span class="n">ParametrizationError</span>
 
 
-<div class="viewcode-block" id="SectionReference"><a class="viewcode-back" href="../../../../envinorma.parametrization.models.html#envinorma.parametrization.models.parametrization.SectionReference">[docs]</a><span class="nd">@dataclass</span>
-<span class="k">class</span> <span class="nc">SectionReference</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;Reference of a section in an ArreteMinisteriel.</span>
-
-<span class="sd">    Args:</span>
-<span class="sd">        path (Tuple[int, ...]):</span>
-<span class="sd">            path to the section in the tree structure of the ArreteMinisteriel</span>
-<span class="sd">            e.g. (0, 1, 0) matches section: arrete_ministeriel.sections[0].sections[1].sections[0]</span>
-<span class="sd">        titles_sequence (Optional[List[str]]):</span>
-<span class="sd">            path to the section in the tree structure of the ArreteMinisteriel following</span>
-<span class="sd">            section titles, useful when modifications are made in the AM that break the</span>
-<span class="sd">            path search.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="n">path</span><span class="p">:</span> <span class="n">Ints</span>
-    <span class="n">titles_sequence</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span>
-
-<div class="viewcode-block" id="SectionReference.to_dict"><a class="viewcode-back" href="../../../../envinorma.parametrization.models.html#envinorma.parametrization.models.parametrization.SectionReference.to_dict">[docs]</a>    <span class="k">def</span> <span class="nf">to_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
-        <span class="k">return</span> <span class="n">asdict</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></div>
-
-<div class="viewcode-block" id="SectionReference.from_dict"><a class="viewcode-back" href="../../../../envinorma.parametrization.models.html#envinorma.parametrization.models.parametrization.SectionReference.from_dict">[docs]</a>    <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">from_dict</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">dict_</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="s1">&#39;SectionReference&#39;</span><span class="p">:</span>
-        <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="nb">tuple</span><span class="p">(</span><span class="n">dict_</span><span class="p">[</span><span class="s1">&#39;path&#39;</span><span class="p">]),</span> <span class="n">dict_</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;titles_sequence&#39;</span><span class="p">))</span></div></div>
-
-
-<div class="viewcode-block" id="EntityReference"><a class="viewcode-back" href="../../../../envinorma.parametrization.models.html#envinorma.parametrization.models.parametrization.EntityReference">[docs]</a><span class="nd">@dataclass</span>
-<span class="k">class</span> <span class="nc">EntityReference</span><span class="p">:</span>
-    <span class="n">section</span><span class="p">:</span> <span class="n">SectionReference</span>
-    <span class="n">outer_alinea_indices</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]]</span>
-
-<div class="viewcode-block" id="EntityReference.to_dict"><a class="viewcode-back" href="../../../../envinorma.parametrization.models.html#envinorma.parametrization.models.parametrization.EntityReference.to_dict">[docs]</a>    <span class="k">def</span> <span class="nf">to_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
-        <span class="n">res</span> <span class="o">=</span> <span class="n">asdict</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">res</span></div>
-
-<div class="viewcode-block" id="EntityReference.from_dict"><a class="viewcode-back" href="../../../../envinorma.parametrization.models.html#envinorma.parametrization.models.parametrization.EntityReference.from_dict">[docs]</a>    <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">from_dict</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">dict_</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="s1">&#39;EntityReference&#39;</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">EntityReference</span><span class="p">(</span><span class="n">SectionReference</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">dict_</span><span class="p">[</span><span class="s1">&#39;section&#39;</span><span class="p">]),</span> <span class="n">dict_</span><span class="p">[</span><span class="s1">&#39;outer_alinea_indices&#39;</span><span class="p">])</span></div></div>
-
-
-<div class="viewcode-block" id="ConditionSource"><a class="viewcode-back" href="../../../../envinorma.parametrization.models.html#envinorma.parametrization.models.parametrization.ConditionSource">[docs]</a><span class="nd">@dataclass</span>
-<span class="k">class</span> <span class="nc">ConditionSource</span><span class="p">:</span>
-    <span class="n">reference</span><span class="p">:</span> <span class="n">EntityReference</span>
-
-<div class="viewcode-block" id="ConditionSource.to_dict"><a class="viewcode-back" href="../../../../envinorma.parametrization.models.html#envinorma.parametrization.models.parametrization.ConditionSource.to_dict">[docs]</a>    <span class="k">def</span> <span class="nf">to_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
-        <span class="n">res</span> <span class="o">=</span> <span class="n">asdict</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">res</span></div>
-
-<div class="viewcode-block" id="ConditionSource.from_dict"><a class="viewcode-back" href="../../../../envinorma.parametrization.models.html#envinorma.parametrization.models.parametrization.ConditionSource.from_dict">[docs]</a>    <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">from_dict</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">dict_</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="s1">&#39;ConditionSource&#39;</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">ConditionSource</span><span class="p">(</span><span class="n">EntityReference</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">dict_</span><span class="p">[</span><span class="s1">&#39;reference&#39;</span><span class="p">]))</span></div></div>
-
-
 <div class="viewcode-block" id="InapplicableSection"><a class="viewcode-back" href="../../../../envinorma.parametrization.models.html#envinorma.parametrization.models.parametrization.InapplicableSection">[docs]</a><span class="nd">@dataclass</span>
 <span class="k">class</span> <span class="nc">InapplicableSection</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;Description of a potential inapplicable section in a ArreteMinisteriel under some condition.</span>
+    <span class="sd">&quot;&quot;&quot;Description of a potential inapplicable section in a ArreteMinisteriel under some condition.&quot;&quot;&quot;</span>
 
-<span class="sd">    Args:</span>
-<span class="sd">        targeted_entity (EntityReference):</span>
-<span class="sd">            Section and alineas potentially inapplicable</span>
-<span class="sd">        condition (Condition):</span>
-<span class="sd">            Condition to which the targeted section is modified</span>
-<span class="sd">        source (ConditionSource):</span>
-<span class="sd">            Description of where the condition was found in the arrete</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="n">targeted_entity</span><span class="p">:</span> <span class="n">EntityReference</span>
+    <span class="n">section_id</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">alineas</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]]</span>
     <span class="n">condition</span><span class="p">:</span> <span class="n">Condition</span>
-    <span class="n">source</span><span class="p">:</span> <span class="n">ConditionSource</span>
+    <span class="nb">id</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="n">random_id</span><span class="p">)</span>
 
 <div class="viewcode-block" id="InapplicableSection.to_dict"><a class="viewcode-back" href="../../../../envinorma.parametrization.models.html#envinorma.parametrization.models.parametrization.InapplicableSection.to_dict">[docs]</a>    <span class="k">def</span> <span class="nf">to_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
         <span class="k">return</span> <span class="p">{</span>
-            <span class="s1">&#39;targeted_entity&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">targeted_entity</span><span class="o">.</span><span class="n">to_dict</span><span class="p">(),</span>
+            <span class="s1">&#39;id&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
+            <span class="s1">&#39;section_id&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">section_id</span><span class="p">,</span>
+            <span class="s1">&#39;alineas&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">alineas</span><span class="p">,</span>
             <span class="s1">&#39;condition&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">condition</span><span class="o">.</span><span class="n">to_dict</span><span class="p">(),</span>
-            <span class="s1">&#39;source&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">source</span><span class="o">.</span><span class="n">to_dict</span><span class="p">(),</span>
         <span class="p">}</span></div>
 
 <div class="viewcode-block" id="InapplicableSection.from_dict"><a class="viewcode-back" href="../../../../envinorma.parametrization.models.html#envinorma.parametrization.models.parametrization.InapplicableSection.from_dict">[docs]</a>    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">from_dict</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">dict_</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="s1">&#39;InapplicableSection&#39;</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">InapplicableSection</span><span class="p">(</span>
-            <span class="n">EntityReference</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">dict_</span><span class="p">[</span><span class="s1">&#39;targeted_entity&#39;</span><span class="p">]),</span>
+            <span class="n">dict_</span><span class="p">[</span><span class="s1">&#39;section_id&#39;</span><span class="p">],</span>
+            <span class="n">dict_</span><span class="p">[</span><span class="s1">&#39;alineas&#39;</span><span class="p">],</span>
             <span class="n">load_condition</span><span class="p">(</span><span class="n">dict_</span><span class="p">[</span><span class="s1">&#39;condition&#39;</span><span class="p">]),</span>
-            <span class="n">ConditionSource</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">dict_</span><span class="p">[</span><span class="s1">&#39;source&#39;</span><span class="p">]),</span>
+            <span class="n">dict_</span><span class="p">[</span><span class="s1">&#39;id&#39;</span><span class="p">],</span>
         <span class="p">)</span></div></div>
 
 
 <div class="viewcode-block" id="AlternativeSection"><a class="viewcode-back" href="../../../../envinorma.parametrization.models.html#envinorma.parametrization.models.parametrization.AlternativeSection">[docs]</a><span class="nd">@dataclass</span>
 <span class="k">class</span> <span class="nc">AlternativeSection</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;Description of a potential modification in a ArreteMinisteriel, applied at some condition.</span>
+    <span class="sd">&quot;&quot;&quot;Description of a potential modification in a ArreteMinisteriel, applied at some condition.&quot;&quot;&quot;</span>
 
-<span class="sd">    Args:</span>
-<span class="sd">        targeted_section (SectionReference):</span>
-<span class="sd">            Section potentially modified</span>
-<span class="sd">        new_text (StructuredText):</span>
-<span class="sd">            New version of the section when condition is met</span>
-<span class="sd">        condition (Condition):</span>
-<span class="sd">            Condition to which the targeted section is modified</span>
-<span class="sd">        source (ConditionSource):</span>
-<span class="sd">            Description of where the condition was found in the arrete</span>
-
-<span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="n">targeted_section</span><span class="p">:</span> <span class="n">SectionReference</span>
+    <span class="n">section_id</span><span class="p">:</span> <span class="nb">str</span>
     <span class="n">new_text</span><span class="p">:</span> <span class="n">StructuredText</span>
     <span class="n">condition</span><span class="p">:</span> <span class="n">Condition</span>
-    <span class="n">source</span><span class="p">:</span> <span class="n">ConditionSource</span>
+    <span class="nb">id</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="n">random_id</span><span class="p">)</span>
 
 <div class="viewcode-block" id="AlternativeSection.to_dict"><a class="viewcode-back" href="../../../../envinorma.parametrization.models.html#envinorma.parametrization.models.parametrization.AlternativeSection.to_dict">[docs]</a>    <span class="k">def</span> <span class="nf">to_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
         <span class="k">return</span> <span class="p">{</span>
-            <span class="s1">&#39;targeted_section&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">targeted_section</span><span class="o">.</span><span class="n">to_dict</span><span class="p">(),</span>
+            <span class="s1">&#39;section_id&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">section_id</span><span class="p">,</span>
             <span class="s1">&#39;new_text&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">new_text</span><span class="o">.</span><span class="n">to_dict</span><span class="p">(),</span>
             <span class="s1">&#39;condition&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">condition</span><span class="o">.</span><span class="n">to_dict</span><span class="p">(),</span>
-            <span class="s1">&#39;source&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">source</span><span class="o">.</span><span class="n">to_dict</span><span class="p">(),</span>
+            <span class="s1">&#39;id&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
         <span class="p">}</span></div>
 
 <div class="viewcode-block" id="AlternativeSection.from_dict"><a class="viewcode-back" href="../../../../envinorma.parametrization.models.html#envinorma.parametrization.models.parametrization.AlternativeSection.from_dict">[docs]</a>    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">from_dict</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">dict_</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="s1">&#39;AlternativeSection&#39;</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">AlternativeSection</span><span class="p">(</span>
-            <span class="n">SectionReference</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">dict_</span><span class="p">[</span><span class="s1">&#39;targeted_section&#39;</span><span class="p">]),</span>
+            <span class="n">dict_</span><span class="p">[</span><span class="s1">&#39;section_id&#39;</span><span class="p">],</span>
             <span class="n">StructuredText</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">dict_</span><span class="p">[</span><span class="s1">&#39;new_text&#39;</span><span class="p">]),</span>
             <span class="n">load_condition</span><span class="p">(</span><span class="n">dict_</span><span class="p">[</span><span class="s1">&#39;condition&#39;</span><span class="p">]),</span>
-            <span class="n">ConditionSource</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">dict_</span><span class="p">[</span><span class="s1">&#39;source&#39;</span><span class="p">]),</span>
+            <span class="n">dict_</span><span class="p">[</span><span class="s1">&#39;id&#39;</span><span class="p">],</span>
         <span class="p">)</span></div></div>
 
 
 <div class="viewcode-block" id="AMWarning"><a class="viewcode-back" href="../../../../envinorma.parametrization.models.html#envinorma.parametrization.models.parametrization.AMWarning">[docs]</a><span class="nd">@dataclass</span>
 <span class="k">class</span> <span class="nc">AMWarning</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;Warning attached to a section of an arrete_ministeriel.</span>
+    <span class="sd">&quot;&quot;&quot;Warning attached to a section of an arrete_ministeriel.&quot;&quot;&quot;</span>
 
-<span class="sd">    Args:</span>
-<span class="sd">        targeted_section (SectionReference):</span>
-<span class="sd">            Section to which the warning is attached</span>
-<span class="sd">        text (str):</span>
-<span class="sd">            Content of the warning</span>
-
-<span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="n">targeted_section</span><span class="p">:</span> <span class="n">SectionReference</span>
+    <span class="n">section_id</span><span class="p">:</span> <span class="nb">str</span>
     <span class="n">text</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="nb">id</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="n">random_id</span><span class="p">)</span>
 
 <div class="viewcode-block" id="AMWarning.to_dict"><a class="viewcode-back" href="../../../../envinorma.parametrization.models.html#envinorma.parametrization.models.parametrization.AMWarning.to_dict">[docs]</a>    <span class="k">def</span> <span class="nf">to_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
-        <span class="k">return</span> <span class="p">{</span><span class="s1">&#39;targeted_section&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">targeted_section</span><span class="o">.</span><span class="n">to_dict</span><span class="p">(),</span> <span class="s1">&#39;text&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">text</span><span class="p">}</span></div>
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="s1">&#39;section_id&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">section_id</span><span class="p">,</span>
+            <span class="s1">&#39;text&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">text</span><span class="p">,</span>
+            <span class="s1">&#39;id&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
+        <span class="p">}</span></div>
 
 <div class="viewcode-block" id="AMWarning.from_dict"><a class="viewcode-back" href="../../../../envinorma.parametrization.models.html#envinorma.parametrization.models.parametrization.AMWarning.from_dict">[docs]</a>    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">from_dict</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">dict_</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="s1">&#39;AMWarning&#39;</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">AMWarning</span><span class="p">(</span><span class="n">SectionReference</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">dict_</span><span class="p">[</span><span class="s1">&#39;targeted_section&#39;</span><span class="p">]),</span> <span class="n">dict_</span><span class="p">[</span><span class="s1">&#39;text&#39;</span><span class="p">])</span></div></div>
+        <span class="k">return</span> <span class="n">AMWarning</span><span class="p">(</span>
+            <span class="n">dict_</span><span class="p">[</span><span class="s1">&#39;section_id&#39;</span><span class="p">],</span>
+            <span class="n">dict_</span><span class="p">[</span><span class="s1">&#39;text&#39;</span><span class="p">],</span>
+            <span class="n">dict_</span><span class="p">[</span><span class="s1">&#39;id&#39;</span><span class="p">],</span>
+        <span class="p">)</span></div></div>
 
 
 <div class="viewcode-block" id="extract_conditions_from_parametrization"><a class="viewcode-back" href="../../../../envinorma.parametrization.models.html#envinorma.parametrization.models.parametrization.extract_conditions_from_parametrization">[docs]</a><span class="k">def</span> <span class="nf">extract_conditions_from_parametrization</span><span class="p">(</span>
@@ -282,6 +213,11 @@
     <span class="k">return</span> <span class="n">groups</span>
 
 
+<span class="n">ParameterElementWithCondition</span> <span class="o">=</span> <span class="n">Union</span><span class="p">[</span><span class="n">InapplicableSection</span><span class="p">,</span> <span class="n">AlternativeSection</span><span class="p">]</span>
+<span class="n">ParameterElement</span> <span class="o">=</span> <span class="n">Union</span><span class="p">[</span><span class="n">ParameterElementWithCondition</span><span class="p">,</span> <span class="n">AMWarning</span><span class="p">]</span>
+<span class="n">Combinations</span> <span class="o">=</span> <span class="n">Dict</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="o">...</span><span class="p">],</span> <span class="n">Dict</span><span class="p">[</span><span class="n">Parameter</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span>
+
+
 <div class="viewcode-block" id="Parametrization"><a class="viewcode-back" href="../../../../envinorma.parametrization.models.html#envinorma.parametrization.models.parametrization.Parametrization">[docs]</a><span class="nd">@dataclass</span>
 <span class="k">class</span> <span class="nc">Parametrization</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;Data class for describing parametrization of an arrete ministeriel.</span>
@@ -299,14 +235,14 @@
     <span class="n">inapplicable_sections</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">InapplicableSection</span><span class="p">]</span>
     <span class="n">alternative_sections</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">AlternativeSection</span><span class="p">]</span>
     <span class="n">warnings</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">AMWarning</span><span class="p">]</span>
-    <span class="n">path_to_conditions</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="n">Ints</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="n">InapplicableSection</span><span class="p">]]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">init</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-    <span class="n">path_to_alternative_sections</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="n">Ints</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="n">AlternativeSection</span><span class="p">]]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">init</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-    <span class="n">path_to_warnings</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="n">Ints</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="n">AMWarning</span><span class="p">]]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">init</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">id_to_inapplicabilities</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="n">InapplicableSection</span><span class="p">]]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">init</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">id_to_alternative_sections</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="n">AlternativeSection</span><span class="p">]]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">init</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">id_to_warnings</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="n">AMWarning</span><span class="p">]]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">init</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">__post_init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">path_to_conditions</span> <span class="o">=</span> <span class="n">_group</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">inapplicable_sections</span><span class="p">,</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">targeted_entity</span><span class="o">.</span><span class="n">section</span><span class="o">.</span><span class="n">path</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">path_to_alternative_sections</span> <span class="o">=</span> <span class="n">_group</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">alternative_sections</span><span class="p">,</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">targeted_section</span><span class="o">.</span><span class="n">path</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">path_to_warnings</span> <span class="o">=</span> <span class="n">_group</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">warnings</span><span class="p">,</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">targeted_section</span><span class="o">.</span><span class="n">path</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">id_to_inapplicabilities</span> <span class="o">=</span> <span class="n">_group</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">inapplicable_sections</span><span class="p">,</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">section_id</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">id_to_alternative_sections</span> <span class="o">=</span> <span class="n">_group</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">alternative_sections</span><span class="p">,</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">section_id</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">id_to_warnings</span> <span class="o">=</span> <span class="n">_group</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">warnings</span><span class="p">,</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">section_id</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">check</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">check_consistency</span><span class="p">()</span>
 
@@ -316,6 +252,9 @@
         <span class="n">res</span><span class="p">[</span><span class="s1">&#39;alternative_sections&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">sec</span><span class="o">.</span><span class="n">to_dict</span><span class="p">()</span> <span class="k">for</span> <span class="n">sec</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">alternative_sections</span><span class="p">]</span>
         <span class="n">res</span><span class="p">[</span><span class="s1">&#39;warnings&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">warning</span><span class="o">.</span><span class="n">to_dict</span><span class="p">()</span> <span class="k">for</span> <span class="n">warning</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">warnings</span><span class="p">]</span>
         <span class="k">return</span> <span class="n">res</span></div>
+
+<div class="viewcode-block" id="Parametrization.elements"><a class="viewcode-back" href="../../../../envinorma.parametrization.models.html#envinorma.parametrization.models.parametrization.Parametrization.elements">[docs]</a>    <span class="k">def</span> <span class="nf">elements</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">ParameterElement</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="p">[</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">alternative_sections</span><span class="p">,</span> <span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">inapplicable_sections</span><span class="p">,</span> <span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">warnings</span><span class="p">]</span></div>
 
 <div class="viewcode-block" id="Parametrization.from_dict"><a class="viewcode-back" href="../../../../envinorma.parametrization.models.html#envinorma.parametrization.models.parametrization.Parametrization.from_dict">[docs]</a>    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">from_dict</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">dict_</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="s1">&#39;Parametrization&#39;</span><span class="p">:</span>
@@ -339,25 +278,18 @@
         <span class="k">return</span> <span class="p">{</span><span class="n">parameter</span> <span class="k">for</span> <span class="n">condition</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">extract_conditions</span><span class="p">()</span> <span class="k">for</span> <span class="n">parameter</span> <span class="ow">in</span> <span class="n">condition</span><span class="o">.</span><span class="n">parameters</span><span class="p">()}</span></div>
 
 <div class="viewcode-block" id="Parametrization.check"><a class="viewcode-back" href="../../../../envinorma.parametrization.models.html#envinorma.parametrization.models.parametrization.Parametrization.check">[docs]</a>    <span class="k">def</span> <span class="nf">check</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="k">for</span> <span class="n">app</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">inapplicable_sections</span><span class="p">:</span>
-            <span class="n">app</span><span class="o">.</span><span class="n">condition</span><span class="o">.</span><span class="n">check</span><span class="p">()</span>
-        <span class="k">for</span> <span class="n">sec</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">alternative_sections</span><span class="p">:</span>
-            <span class="n">sec</span><span class="o">.</span><span class="n">condition</span><span class="o">.</span><span class="n">check</span><span class="p">()</span></div>
+        <span class="k">for</span> <span class="n">condition</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">extract_conditions</span><span class="p">():</span>
+            <span class="n">condition</span><span class="o">.</span><span class="n">check</span><span class="p">()</span></div>
 
-    <span class="k">def</span> <span class="nf">_extract_all_paths</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Set</span><span class="p">[</span><span class="n">Ints</span><span class="p">]:</span>
-        <span class="k">return</span> <span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">path_to_alternative_sections</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span><span class="o">.</span><span class="n">union</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">path_to_conditions</span><span class="o">.</span><span class="n">keys</span><span class="p">()))</span>
+    <span class="k">def</span> <span class="nf">_extract_all_ids</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Set</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">id_to_alternative_sections</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span><span class="o">.</span><span class="n">union</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">id_to_inapplicabilities</span><span class="o">.</span><span class="n">keys</span><span class="p">()))</span>
 
 <div class="viewcode-block" id="Parametrization.check_consistency"><a class="viewcode-back" href="../../../../envinorma.parametrization.models.html#envinorma.parametrization.models.parametrization.Parametrization.check_consistency">[docs]</a>    <span class="k">def</span> <span class="nf">check_consistency</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">all_paths</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_extract_all_paths</span><span class="p">()</span>
-        <span class="k">for</span> <span class="n">path</span> <span class="ow">in</span> <span class="n">all_paths</span><span class="p">:</span>
+        <span class="n">all_ids</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_extract_all_ids</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">id_</span> <span class="ow">in</span> <span class="n">all_ids</span><span class="p">:</span>
             <span class="n">_check_consistency_on_section</span><span class="p">(</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">path_to_conditions</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="p">[]),</span> <span class="bp">self</span><span class="o">.</span><span class="n">path_to_alternative_sections</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="p">[])</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">id_to_inapplicabilities</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">id_</span><span class="p">,</span> <span class="p">[]),</span> <span class="bp">self</span><span class="o">.</span><span class="n">id_to_alternative_sections</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">id_</span><span class="p">,</span> <span class="p">[])</span>
             <span class="p">)</span></div></div>
-
-
-<span class="n">ParameterObjectWithCondition</span> <span class="o">=</span> <span class="n">Union</span><span class="p">[</span><span class="n">InapplicableSection</span><span class="p">,</span> <span class="n">AlternativeSection</span><span class="p">]</span>
-<span class="n">ParameterObject</span> <span class="o">=</span> <span class="n">Union</span><span class="p">[</span><span class="n">ParameterObjectWithCondition</span><span class="p">,</span> <span class="n">AMWarning</span><span class="p">]</span>
-<span class="n">Combinations</span> <span class="o">=</span> <span class="n">Dict</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="o">...</span><span class="p">],</span> <span class="n">Dict</span><span class="p">[</span><span class="n">Parameter</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span>
 </pre></div>
 
            </div>
