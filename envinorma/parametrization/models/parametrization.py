@@ -122,6 +122,11 @@ def _group(elements: List[T], groupper: Callable[[T], K]) -> Dict[K, List[T]]:
     return groups
 
 
+ParameterElementWithCondition = Union[InapplicableSection, AlternativeSection]
+ParameterElement = Union[ParameterElementWithCondition, AMWarning]
+Combinations = Dict[Tuple[str, ...], Dict[Parameter, Any]]
+
+
 @dataclass
 class Parametrization:
     """Data class for describing parametrization of an arrete ministeriel.
@@ -157,6 +162,9 @@ class Parametrization:
         res['warnings'] = [warning.to_dict() for warning in self.warnings]
         return res
 
+    def elements(self) -> List[ParameterElement]:
+        return [*self.alternative_sections, *self.inapplicable_sections, *self.warnings]
+
     @classmethod
     def from_dict(cls, dict_: Dict[str, Any]) -> 'Parametrization':
         # field renaming
@@ -191,8 +199,3 @@ class Parametrization:
             _check_consistency_on_section(
                 self.id_to_inapplicabilities.get(id_, []), self.id_to_alternative_sections.get(id_, [])
             )
-
-
-ParameterObjectWithCondition = Union[InapplicableSection, AlternativeSection]
-ParameterObject = Union[ParameterObjectWithCondition, AMWarning]
-Combinations = Dict[Tuple[str, ...], Dict[Parameter, Any]]

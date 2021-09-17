@@ -21,7 +21,7 @@ from .parametrization import (  # noqa: F401
     AlternativeSection,
     AMWarning,
     InapplicableSection,
-    ParameterObject,
-    ParameterObjectWithCondition,
+    ParameterElement,
+    ParameterElementWithCondition,
     Parametrization,
 )

@@ -10,7 +10,7 @@ from envinorma.parametrization.models.parametrization import (
     AlternativeSection,
     AMWarning,
     InapplicableSection,
-    ParameterObject,
+    ParameterElement,
     Parametrization,
 )
 from envinorma.parametrization.tie_parametrization import add_parametrization
@@ -27,7 +27,7 @@ def _load_am_str(str_: str) -> ArreteMinisteriel:
 
 
 def _recreate_with_removed_parameter(
-    object_type: Type[ParameterObject], parameter_id: str, parametrization: Parametrization
+    object_type: Type[ParameterElement], parameter_id: str, parametrization: Parametrization
 ) -> Parametrization:
     new_inapplicabilities = parametrization.inapplicable_sections.copy()
     new_sections = parametrization.alternative_sections.copy()
@@ -67,7 +67,7 @@ def _upsert_element(element: T, elements: List[T], identifier: Optional[str]) ->
 
 
 def _recreate_with_upserted_parameter(
-    new_parameter: ParameterObject, parameter_id: Optional[str], parametrization: Parametrization
+    new_parameter: ParameterElement, parameter_id: Optional[str], parametrization: Parametrization
 ) -> Parametrization:
     new_sections = parametrization.alternative_sections
     new_conditions = parametrization.inapplicable_sections
@@ -174,7 +174,7 @@ class DataFetcher:
         am_metadata.reason_deleted = reason_deleted
         self.upsert_am(am_metadata)
 
-    def remove_parameter(self, am_id: str, parameter_type: Type[ParameterObject], parameter_id: str) -> None:
+    def remove_parameter(self, am_id: str, parameter_type: Type[ParameterElement], parameter_id: str) -> None:
         previous_parametrization = self._load_parametrization(am_id)
         if not previous_parametrization:
             raise ValueError('Expecting a non null parametrization.')
@@ -203,7 +203,7 @@ class DataFetcher:
     def load_or_init_parametrization(self, am_id: str) -> Parametrization:
         return self.load_parametrization(am_id) or Parametrization([], [], [])
 
-    def upsert_parameter(self, am_id: str, new_parameter: ParameterObject, parameter_id: Optional[str]) -> None:
+    def upsert_parameter(self, am_id: str, new_parameter: ParameterElement, parameter_id: Optional[str]) -> None:
         previous_parametrization = self.load_or_init_parametrization(am_id)
         parametrization = _recreate_with_upserted_parameter(new_parameter, parameter_id, previous_parametrization)
         parametrization.check_consistency()

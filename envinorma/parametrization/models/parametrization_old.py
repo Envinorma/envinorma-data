@@ -1,5 +1,5 @@
 from dataclasses import asdict, dataclass, field
-from typing import Any, Callable, Dict, List, Optional, Set, Tuple, TypeVar, Union
+from typing import Any, Callable, Dict, List, Optional, Set, TypeVar
 
 from envinorma.models import Ints
 from envinorma.models.condition import Condition, LeafCondition, extract_leaf_conditions, load_condition
@@ -262,8 +262,3 @@ class ParametrizationOld:
             _check_consistency_on_section(
                 self.path_to_conditions.get(path, []), self.path_to_alternative_sections.get(path, [])
             )
-
-
-ParameterObjectWithCondition = Union[InapplicableSectionOld, AlternativeSectionOld]
-ParameterObject = Union[ParameterObjectWithCondition, AMWarningOld]
-Combinations = Dict[Tuple[str, ...], Dict[Parameter, Any]]
