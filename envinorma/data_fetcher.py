@@ -82,11 +82,10 @@ def _recreate_with_upserted_parameter(
 
 
 def _create_table_queries() -> List[str]:
-    queries = ['CREATE TABLE IF NOT EXISTS am_status (am_id VARCHAR(255) PRIMARY KEY, status VARCHAR(255));']
-    type_1_tables = ['am_metadata', 'initial_am', 'parametrization', 'structured_am']
-    for table in type_1_tables:
-        queries.append(f'CREATE TABLE IF NOT EXISTS {table} (am_id VARCHAR(255) PRIMARY KEY, data TEXT);')
-    return queries
+    type_1_tables = ['am_metadata', 'parametrization', 'structured_am']
+    return [
+        f'CREATE TABLE IF NOT EXISTS {table} (am_id VARCHAR(255) PRIMARY KEY, data TEXT);' for table in type_1_tables
+    ]
 
 
 def create_tables(psql_dsn: str) -> None:
@@ -240,35 +239,11 @@ class DataFetcher:
         data = json.dumps(am.to_dict())
         self._exectute_update_query(query, (am_id, data, data, am_id))
 
-    def load_initial_am(self, am_id: str) -> Optional[ArreteMinisteriel]:
-        query = 'SELECT data FROM initial_am WHERE am_id = %s;'
-        json_am = self._exectute_select_query(query, (am_id,))
-        if json_am:
-            return _load_am_str(_ensure_one_variable(json_am))
-        return None
-
-    def delete_initial_am(self, am_id: str) -> None:
-        query = 'DELETE FROM initial_am WHERE am_id = %s;'
-        self._exectute_delete_query(query, (am_id,))
-
-    def upsert_initial_am(self, am_id: str, am: ArreteMinisteriel) -> None:
-        query = (
-            'INSERT INTO initial_am(am_id, data) VALUES(%s, %s) ON CONFLICT (am_id)'
-            ' DO UPDATE SET data = %s WHERE initial_am.am_id =%s;'
-        )
-        data = json.dumps(am.to_dict())
-        self._exectute_update_query(query, (am_id, data, data, am_id))
-
     def load_most_advanced_am(self, am_id: str) -> Optional[ArreteMinisteriel]:
-        return self.load_structured_am(am_id) or self.load_initial_am(am_id)
+        return self.load_structured_am(am_id)
 
     def load_structured_ams(self, am_ids: Set[str]) -> List[ArreteMinisteriel]:
         query = 'SELECT am_id, data FROM structured_am'
-        tuples = self._exectute_select_query(query, ())
-        return [_load_am_str(json_am) for id_, json_am in tuples if id_ in am_ids]
-
-    def load_initial_ams(self, am_ids: Set[str]) -> List[ArreteMinisteriel]:
-        query = 'SELECT am_id, data FROM initial_am'
         tuples = self._exectute_select_query(query, ())
         return [_load_am_str(json_am) for id_, json_am in tuples if id_ in am_ids]
 
@@ -279,15 +254,16 @@ class DataFetcher:
         return am
 
     def load_id_to_most_advanced_am(self, ids: Optional[Set[str]] = None) -> Dict[str, ArreteMinisteriel]:
+        return self.load_id_to_most_advanced_am(ids)
+
+    def load_id_to_am(self, ids: Optional[Set[str]] = None) -> Dict[str, ArreteMinisteriel]:
         ids = ids or set(self.load_all_am_metadata().keys())
         structured_texts = self.load_structured_ams(ids)
         id_to_structured_text = {text.id or '': text for text in structured_texts}
-        initial_texts = self.load_initial_ams(ids)
-        id_to_initial_text = {text.id or '': text for text in initial_texts}
         return {
-            id_: id_to_structured_text.get(id_) or id_to_initial_text[id_]
+            id_: id_to_structured_text[id_]
             for id_ in ids
-            if id_ in id_to_structured_text or id_ in id_to_initial_text
+            if id_ in id_to_structured_text
         }
 
     def _load_validated_parametrizations(self) -> Dict[str, Parametrization]:
