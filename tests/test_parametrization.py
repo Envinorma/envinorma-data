@@ -12,11 +12,8 @@ from envinorma.models.text_elements import EnrichedString
 from envinorma.parametrization.exceptions import ParametrizationError
 from envinorma.parametrization.models.parametrization import (
     AlternativeSection,
-    ConditionSource,
-    EntityReference,
     InapplicableSection,
     Parametrization,
-    SectionReference,
     _group,
 )
 
@@ -45,25 +42,18 @@ def test_check_parametrization_consistency():
     cd_4 = Greater(date_, dt_2)
     cd_5 = Littler(date_, dt_2)
     cd_6 = Greater(date_, dt_1)
-    source = ConditionSource(EntityReference(SectionReference((2,)), None))
-    unique_path = (0,)
-    entity = EntityReference(SectionReference(unique_path), None)
     new_text = StructuredText(_str('Art. 2'), [_str('version modifiée')], [], None)
     Parametrization(
-        [_NAC(entity, cd_1, source), _NAC(entity, cd_3, source)],
-        [AlternativeSection(entity.section, new_text, cd_4, source)],
-        [],
+        [_NAC('', None, cd_1), _NAC('', None, cd_3)], [AlternativeSection('', new_text, cd_4)], []
     ).check_consistency()
 
-    Parametrization([_NAC(entity, cd_3, source)], [], []).check_consistency()
+    Parametrization([_NAC('', None, cd_3)], [], []).check_consistency()
     with pytest.raises(ParametrizationError):
         Parametrization(
-            [_NAC(entity, cd_1, source), _NAC(entity, cd_5, source)],
-            [AlternativeSection(entity.section, new_text, cd_6, source)],
-            [],
+            [_NAC('', None, cd_1), _NAC('', None, cd_5)], [AlternativeSection('', new_text, cd_6)], []
         ).check_consistency()
     with pytest.raises(ParametrizationError):
-        Parametrization([_NAC(entity, cd_1, source), _NAC(entity, cd_1, source)], [], []).check_consistency()
+        Parametrization([_NAC('', None, cd_1), _NAC('', None, cd_1)], [], []).check_consistency()
 
 
 def test_group():
@@ -74,9 +64,7 @@ def test_group():
 
 
 def _simple_nac(condition: Condition) -> InapplicableSection:
-    source = ConditionSource(EntityReference(SectionReference((0, 1)), None))
-    target = EntityReference(SectionReference((0,)), None)
-    return _NAC(target, condition, source)
+    return _NAC('', None, condition)
 
 
 def test_extract_conditions():

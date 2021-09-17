@@ -192,3 +192,18 @@ class StructuredText:
         alinea_lines = [line.strip() for al in self.outer_alineas for line in al.text_lines()]
         section_lines = [line for sec in self.sections for line in sec.text_lines(level + 1)]
         return title_lines + alinea_lines + section_lines
+
+    def descendent_sections(self) -> List['StructuredText']:
+        descendent_sections = self.sections.copy()
+        for section in self.sections:
+            descendent_sections.extend(section.descendent_sections())
+        return descendent_sections
+
+    def titles_sequences(self) -> Dict[str, List[str]]:
+        result = {
+            section_id: [self.title.text] + titles_sequence
+            for section in self.sections
+            for section_id, titles_sequence in section.titles_sequences().items()
+        }
+        result[self.id] = [self.title.text]
+        return result
