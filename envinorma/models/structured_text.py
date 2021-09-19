@@ -72,11 +72,13 @@ class Applicability:
 class PotentialInapplicability:
     condition: Condition
     alineas: Optional[List[int]]
+    subsections_are_inapplicable: bool
 
     def to_dict(self) -> Dict[str, Any]:
         return {
             'condition': self.condition.to_dict(),
             'alineas': self.alineas,
+            'subsections_are_inapplicable': self.subsections_are_inapplicable,
         }
 
     @classmethod
