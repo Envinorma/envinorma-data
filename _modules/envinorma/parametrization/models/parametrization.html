@@ -103,18 +103,34 @@
 
 <div class="viewcode-block" id="InapplicableSection"><a class="viewcode-back" href="../../../../envinorma.parametrization.models.html#envinorma.parametrization.models.parametrization.InapplicableSection">[docs]</a><span class="nd">@dataclass</span>
 <span class="k">class</span> <span class="nc">InapplicableSection</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;Description of a potential inapplicable section in a ArreteMinisteriel under some condition.&quot;&quot;&quot;</span>
+    <span class="sd">&quot;&quot;&quot;Description of a potential inapplicable section in a ArreteMinisteriel under some condition.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        section_id (str):</span>
+<span class="sd">            The id of the section that is potentially inapplicable.</span>
+<span class="sd">        alineas (Optional[List[int]]):</span>
+<span class="sd">            The alineas that are potentially inapplicable.</span>
+<span class="sd">            If None, all alineas are inapplicable.</span>
+<span class="sd">        condition (Condition):</span>
+<span class="sd">            The condition that must be satisfied for the section to be inapplicable.</span>
+<span class="sd">        id (Optional[str]):</span>
+<span class="sd">            The id of the inapplicable section. If None, a random id is generated.</span>
+<span class="sd">        subsections_are_inapplicable (bool):</span>
+<span class="sd">            If True, all subsections are inapplicable if condition is met.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">section_id</span><span class="p">:</span> <span class="nb">str</span>
     <span class="n">alineas</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]]</span>
     <span class="n">condition</span><span class="p">:</span> <span class="n">Condition</span>
     <span class="nb">id</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="n">random_id</span><span class="p">)</span>
+    <span class="n">subsections_are_inapplicable</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
 
 <div class="viewcode-block" id="InapplicableSection.to_dict"><a class="viewcode-back" href="../../../../envinorma.parametrization.models.html#envinorma.parametrization.models.parametrization.InapplicableSection.to_dict">[docs]</a>    <span class="k">def</span> <span class="nf">to_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
         <span class="k">return</span> <span class="p">{</span>
             <span class="s1">&#39;id&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
             <span class="s1">&#39;section_id&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">section_id</span><span class="p">,</span>
             <span class="s1">&#39;alineas&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">alineas</span><span class="p">,</span>
+            <span class="s1">&#39;subsections_are_inapplicable&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">subsections_are_inapplicable</span><span class="p">,</span>
             <span class="s1">&#39;condition&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">condition</span><span class="o">.</span><span class="n">to_dict</span><span class="p">(),</span>
         <span class="p">}</span></div>
 
@@ -125,12 +141,20 @@
             <span class="n">dict_</span><span class="p">[</span><span class="s1">&#39;alineas&#39;</span><span class="p">],</span>
             <span class="n">load_condition</span><span class="p">(</span><span class="n">dict_</span><span class="p">[</span><span class="s1">&#39;condition&#39;</span><span class="p">]),</span>
             <span class="n">dict_</span><span class="p">[</span><span class="s1">&#39;id&#39;</span><span class="p">],</span>
+            <span class="n">dict_</span><span class="p">[</span><span class="s1">&#39;subsections_are_inapplicable&#39;</span><span class="p">]</span> <span class="k">if</span> <span class="s1">&#39;subsections_are_inapplicable&#39;</span> <span class="ow">in</span> <span class="n">dict_</span> <span class="k">else</span> <span class="kc">True</span><span class="p">,</span>
         <span class="p">)</span></div></div>
 
 
 <div class="viewcode-block" id="AlternativeSection"><a class="viewcode-back" href="../../../../envinorma.parametrization.models.html#envinorma.parametrization.models.parametrization.AlternativeSection">[docs]</a><span class="nd">@dataclass</span>
 <span class="k">class</span> <span class="nc">AlternativeSection</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;Description of a potential modification in a ArreteMinisteriel, applied at some condition.&quot;&quot;&quot;</span>
+    <span class="sd">&quot;&quot;&quot;Description of a potential modification in a ArreteMinisteriel, applied at some condition.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        section_id (str): The id of the section that is potentially modified.</span>
+<span class="sd">        new_text (StructuredText): The new text if the condition is met.</span>
+<span class="sd">        condition (Condition): The condition that must be satisfied for the section to be modified.</span>
+<span class="sd">        id (str): The id of the modification. If None, a random id is generated.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">section_id</span><span class="p">:</span> <span class="nb">str</span>
     <span class="n">new_text</span><span class="p">:</span> <span class="n">StructuredText</span>
@@ -157,7 +181,13 @@
 
 <div class="viewcode-block" id="AMWarning"><a class="viewcode-back" href="../../../../envinorma.parametrization.models.html#envinorma.parametrization.models.parametrization.AMWarning">[docs]</a><span class="nd">@dataclass</span>
 <span class="k">class</span> <span class="nc">AMWarning</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;Warning attached to a section of an arrete_ministeriel.&quot;&quot;&quot;</span>
+    <span class="sd">&quot;&quot;&quot;Warning attached to a section of an arrete_ministeriel.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        section_id (str): The id of the section to which the warning is attached.</span>
+<span class="sd">        text (str): The content of the warning.</span>
+<span class="sd">        id (str): The id of the warning. If None, a random id is generated.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">section_id</span><span class="p">:</span> <span class="nb">str</span>
     <span class="n">text</span><span class="p">:</span> <span class="nb">str</span>
@@ -229,7 +259,6 @@
 <span class="sd">            list of potentially inapplicable modified sections of an ArreteMinisteriel</span>
 <span class="sd">        warnings (List[AMWarning])</span>
 <span class="sd">            list of non conditionned warnings associated with an ArreteMinisteriel</span>
-
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">inapplicable_sections</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">InapplicableSection</span><span class="p">]</span>

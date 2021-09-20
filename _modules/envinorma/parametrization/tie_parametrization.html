@@ -104,7 +104,11 @@
 
 <span class="k">def</span> <span class="nf">_inapplicabilities</span><span class="p">(</span><span class="n">inapplicable_sections</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">InapplicableSection</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">PotentialInapplicability</span><span class="p">]:</span>
     <span class="k">return</span> <span class="p">[</span>
-        <span class="n">PotentialInapplicability</span><span class="p">(</span><span class="n">inapplicable_section</span><span class="o">.</span><span class="n">condition</span><span class="p">,</span> <span class="n">inapplicable_section</span><span class="o">.</span><span class="n">alineas</span><span class="p">)</span>
+        <span class="n">PotentialInapplicability</span><span class="p">(</span>
+            <span class="n">inapplicable_section</span><span class="o">.</span><span class="n">condition</span><span class="p">,</span>
+            <span class="n">inapplicable_section</span><span class="o">.</span><span class="n">alineas</span><span class="p">,</span>
+            <span class="n">inapplicable_section</span><span class="o">.</span><span class="n">subsections_are_inapplicable</span><span class="p">,</span>
+        <span class="p">)</span>
         <span class="k">for</span> <span class="n">inapplicable_section</span> <span class="ow">in</span> <span class="n">inapplicable_sections</span>
     <span class="p">]</span>
 

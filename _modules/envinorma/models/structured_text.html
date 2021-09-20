@@ -164,11 +164,13 @@
 <span class="k">class</span> <span class="nc">PotentialInapplicability</span><span class="p">:</span>
     <span class="n">condition</span><span class="p">:</span> <span class="n">Condition</span>
     <span class="n">alineas</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]]</span>
+    <span class="n">subsections_are_inapplicable</span><span class="p">:</span> <span class="nb">bool</span>
 
 <div class="viewcode-block" id="PotentialInapplicability.to_dict"><a class="viewcode-back" href="../../../envinorma.models.html#envinorma.models.structured_text.PotentialInapplicability.to_dict">[docs]</a>    <span class="k">def</span> <span class="nf">to_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
         <span class="k">return</span> <span class="p">{</span>
             <span class="s1">&#39;condition&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">condition</span><span class="o">.</span><span class="n">to_dict</span><span class="p">(),</span>
             <span class="s1">&#39;alineas&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">alineas</span><span class="p">,</span>
+            <span class="s1">&#39;subsections_are_inapplicable&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">subsections_are_inapplicable</span><span class="p">,</span>
         <span class="p">}</span></div>
 
 <div class="viewcode-block" id="PotentialInapplicability.from_dict"><a class="viewcode-back" href="../../../envinorma.models.html#envinorma.models.structured_text.PotentialInapplicability.from_dict">[docs]</a>    <span class="nd">@classmethod</span>

@@ -108,6 +108,12 @@
 <em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">AMWarning</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">section_id:</span> <span class="pre">str</span></em>, <em class="sig-param"><span class="pre">text:</span> <span class="pre">str</span></em>, <em class="sig-param"><span class="pre">id:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/envinorma/parametrization/models/parametrization.html#AMWarning"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#envinorma.parametrization.models.parametrization.AMWarning" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Warning attached to a section of an arrete_ministeriel.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>section_id (str): The id of the section to which the warning is attached.
+text (str): The content of the warning.
+id (str): The id of the warning. If None, a random id is generated.</p>
+</dd>
+</dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="envinorma.parametrization.models.parametrization.AMWarning.from_dict">
 <em class="property"><span class="pre">classmethod</span> </em><span class="sig-name descname"><span class="pre">from_dict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dict_</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#envinorma.parametrization.models.parametrization.AMWarning" title="envinorma.parametrization.models.parametrization.AMWarning"><span class="pre">envinorma.parametrization.models.parametrization.AMWarning</span></a></span></span><a class="reference internal" href="_modules/envinorma/parametrization/models/parametrization.html#AMWarning.from_dict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#envinorma.parametrization.models.parametrization.AMWarning.from_dict" title="Permalink to this definition"></a></dt>
@@ -140,6 +146,13 @@
 <em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">AlternativeSection</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">section_id:</span> <span class="pre">str,</span> <span class="pre">new_text:</span> <span class="pre">envinorma.models.structured_text.StructuredText,</span> <span class="pre">condition:</span> <span class="pre">Union[envinorma.models.condition.Equal,</span> <span class="pre">envinorma.models.condition.Range,</span> <span class="pre">envinorma.models.condition.Greater,</span> <span class="pre">envinorma.models.condition.Littler,</span> <span class="pre">envinorma.models.condition.AndCondition,</span> <span class="pre">envinorma.models.condition.OrCondition],</span> <span class="pre">id:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/envinorma/parametrization/models/parametrization.html#AlternativeSection"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#envinorma.parametrization.models.parametrization.AlternativeSection" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Description of a potential modification in a ArreteMinisteriel, applied at some condition.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>section_id (str): The id of the section that is potentially modified.
+new_text (StructuredText): The new text if the condition is met.
+condition (Condition): The condition that must be satisfied for the section to be modified.
+id (str): The id of the modification. If None, a random id is generated.</p>
+</dd>
+</dl>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="envinorma.parametrization.models.parametrization.AlternativeSection.condition">
 <span class="sig-name descname"><span class="pre">condition</span></span><em class="property"><span class="pre">:</span> <span class="pre">Union</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="envinorma.models.html#envinorma.models.condition.Equal" title="envinorma.models.condition.Equal"><span class="pre">envinorma.models.condition.Equal</span></a><span class="p"><span class="pre">,</span> </span><a class="reference internal" href="envinorma.models.html#envinorma.models.condition.Range" title="envinorma.models.condition.Range"><span class="pre">envinorma.models.condition.Range</span></a><span class="p"><span class="pre">,</span> </span><a class="reference internal" href="envinorma.models.html#envinorma.models.condition.Greater" title="envinorma.models.condition.Greater"><span class="pre">envinorma.models.condition.Greater</span></a><span class="p"><span class="pre">,</span> </span><a class="reference internal" href="envinorma.models.html#envinorma.models.condition.Littler" title="envinorma.models.condition.Littler"><span class="pre">envinorma.models.condition.Littler</span></a><span class="p"><span class="pre">,</span> </span><a class="reference internal" href="envinorma.models.html#envinorma.models.condition.AndCondition" title="envinorma.models.condition.AndCondition"><span class="pre">envinorma.models.condition.AndCondition</span></a><span class="p"><span class="pre">,</span> </span><a class="reference internal" href="envinorma.models.html#envinorma.models.condition.OrCondition" title="envinorma.models.condition.OrCondition"><span class="pre">envinorma.models.condition.OrCondition</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#envinorma.parametrization.models.parametrization.AlternativeSection.condition" title="Permalink to this definition"></a></dt>
@@ -174,9 +187,25 @@
 
 <dl class="py class">
 <dt class="sig sig-object py" id="envinorma.parametrization.models.parametrization.InapplicableSection">
-<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">InapplicableSection</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">section_id:</span> <span class="pre">str,</span> <span class="pre">alineas:</span> <span class="pre">Optional[List[int]],</span> <span class="pre">condition:</span> <span class="pre">Union[envinorma.models.condition.Equal,</span> <span class="pre">envinorma.models.condition.Range,</span> <span class="pre">envinorma.models.condition.Greater,</span> <span class="pre">envinorma.models.condition.Littler,</span> <span class="pre">envinorma.models.condition.AndCondition,</span> <span class="pre">envinorma.models.condition.OrCondition],</span> <span class="pre">id:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/envinorma/parametrization/models/parametrization.html#InapplicableSection"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#envinorma.parametrization.models.parametrization.InapplicableSection" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">InapplicableSection</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">section_id:</span> <span class="pre">str,</span> <span class="pre">alineas:</span> <span class="pre">Optional[List[int]],</span> <span class="pre">condition:</span> <span class="pre">Union[envinorma.models.condition.Equal,</span> <span class="pre">envinorma.models.condition.Range,</span> <span class="pre">envinorma.models.condition.Greater,</span> <span class="pre">envinorma.models.condition.Littler,</span> <span class="pre">envinorma.models.condition.AndCondition,</span> <span class="pre">envinorma.models.condition.OrCondition],</span> <span class="pre">id:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;,</span> <span class="pre">subsections_are_inapplicable:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">True</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/envinorma/parametrization/models/parametrization.html#InapplicableSection"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#envinorma.parametrization.models.parametrization.InapplicableSection" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Description of a potential inapplicable section in a ArreteMinisteriel under some condition.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><dl class="simple">
+<dt>section_id (str):</dt><dd><p>The id of the section that is potentially inapplicable.</p>
+</dd>
+<dt>alineas (Optional[List[int]]):</dt><dd><p>The alineas that are potentially inapplicable.
+If None, all alineas are inapplicable.</p>
+</dd>
+<dt>condition (Condition):</dt><dd><p>The condition that must be satisfied for the section to be inapplicable.</p>
+</dd>
+<dt>id (Optional[str]):</dt><dd><p>The id of the inapplicable section. If None, a random id is generated.</p>
+</dd>
+<dt>subsections_are_inapplicable (bool):</dt><dd><p>If True, all subsections are inapplicable if condition is met.</p>
+</dd>
+</dl>
+</dd>
+</dl>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="envinorma.parametrization.models.parametrization.InapplicableSection.alineas">
 <span class="sig-name descname"><span class="pre">alineas</span></span><em class="property"><span class="pre">:</span> <span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#envinorma.parametrization.models.parametrization.InapplicableSection.alineas" title="Permalink to this definition"></a></dt>
@@ -200,6 +229,11 @@
 <dl class="py attribute">
 <dt class="sig sig-object py" id="envinorma.parametrization.models.parametrization.InapplicableSection.section_id">
 <span class="sig-name descname"><span class="pre">section_id</span></span><em class="property"><span class="pre">:</span> <span class="pre">str</span></em><a class="headerlink" href="#envinorma.parametrization.models.parametrization.InapplicableSection.section_id" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="envinorma.parametrization.models.parametrization.InapplicableSection.subsections_are_inapplicable">
+<span class="sig-name descname"><span class="pre">subsections_are_inapplicable</span></span><em class="property"><span class="pre">:</span> <span class="pre">bool</span></em><em class="property"> <span class="pre">=</span> <span class="pre">True</span></em><a class="headerlink" href="#envinorma.parametrization.models.parametrization.InapplicableSection.subsections_are_inapplicable" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
