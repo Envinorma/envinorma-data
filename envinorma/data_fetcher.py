@@ -157,7 +157,7 @@ class DataFetcher:
             result = {am_id: am for am_id, am in result.items() if am.state == am.state.VIGUEUR}
         return result
 
-    def upsert_am(self, am_md: AMMetadata) -> None:
+    def upsert_am_metadata(self, am_md: AMMetadata) -> None:
         data = json.dumps(am_md.to_dict())
         query = (
             'INSERT INTO am_metadata(am_id, data) VALUES(%s, %s) ON CONFLICT (am_id)'
@@ -165,13 +165,13 @@ class DataFetcher:
         )
         self._exectute_update_query(query, (am_md.cid, data, data, am_md.cid))
 
-    def delete_am(self, am_id: str, reason_deleted: str) -> None:
+    def delete_am_metadata(self, am_id: str, reason_deleted: str) -> None:
         am_metadata = self.load_am_metadata(am_id)
         if not am_metadata:
             raise ValueError(f'AM with id {am_id} does not exist, cannot delete it.')
         am_metadata.state = AMState.DELETED
         am_metadata.reason_deleted = reason_deleted
-        self.upsert_am(am_metadata)
+        self.upsert_am_metadata(am_metadata)
 
     def remove_parameter(self, am_id: str, parameter_type: Type[ParameterElement], parameter_id: str) -> None:
         previous_parametrization = self._load_parametrization(am_id)
@@ -220,18 +220,18 @@ class DataFetcher:
         tuples = self._exectute_select_query(query, ())
         return {am_id: Parametrization.from_dict(json.loads(json_)) for am_id, json_ in tuples or {}}
 
-    def load_structured_am(self, am_id: str) -> Optional[ArreteMinisteriel]:
+    def load_am(self, am_id: str) -> Optional[ArreteMinisteriel]:
         query = 'SELECT data FROM structured_am WHERE am_id = %s;'
         json_am = self._exectute_select_query(query, (am_id,))
         if json_am:
             return _load_am_str(_ensure_one_variable(json_am))
         return None
 
-    def delete_structured_am(self, am_id: str) -> None:
+    def delete_am(self, am_id: str) -> None:
         query = 'DELETE FROM structured_am WHERE am_id = %s;'
         self._exectute_delete_query(query, (am_id,))
 
-    def upsert_structured_am(self, am_id: str, am: ArreteMinisteriel) -> None:
+    def upsert_am(self, am_id: str, am: ArreteMinisteriel) -> None:
         query = (
             'INSERT INTO structured_am(am_id, data) VALUES(%s, %s) ON CONFLICT (am_id)'
             ' DO UPDATE SET data = %s WHERE structured_am.am_id =%s;'
@@ -239,33 +239,31 @@ class DataFetcher:
         data = json.dumps(am.to_dict())
         self._exectute_update_query(query, (am_id, data, data, am_id))
 
-    def load_most_advanced_am(self, am_id: str) -> Optional[ArreteMinisteriel]:
-        return self.load_structured_am(am_id)
-
-    def load_structured_ams(self, am_ids: Set[str]) -> List[ArreteMinisteriel]:
+    def load_ams(self, am_ids: Set[str]) -> List[ArreteMinisteriel]:
         query = 'SELECT am_id, data FROM structured_am'
         tuples = self._exectute_select_query(query, ())
         return [_load_am_str(json_am) for id_, json_am in tuples if id_ in am_ids]
 
-    def safe_load_most_advanced_am(self, am_id: str) -> ArreteMinisteriel:
-        am = self.load_most_advanced_am(am_id)
+    def safe_load_am(self, am_id: str) -> ArreteMinisteriel:
+        am = self.load_am(am_id)
         if not am:
             raise ValueError('Expecting one AM to proceed.')
         return am
 
     def load_id_to_am(self, ids: Optional[Set[str]] = None) -> Dict[str, ArreteMinisteriel]:
         ids = ids or set(self.load_all_am_metadata().keys())
-        structured_texts = self.load_structured_ams(ids)
+        structured_texts = self.load_ams(ids)
         id_to_structured_text = {text.id or '': text for text in structured_texts}
         return {id_: id_to_structured_text[id_] for id_ in ids if id_ in id_to_structured_text}
 
     def _load_validated_parametrizations(self) -> Dict[str, Parametrization]:
         parametizations = self.load_all_parametrizations()
-        statuses = self.load_all_am_metadata()
+        all_metadata = self.load_all_am_metadata()  # only state == 'VIGUEUR'
         return {
             am_id: parametization
             for am_id, parametization in parametizations.items()
-            if statuses[am_id].state == AMState.VIGUEUR
+            if am_id in all_metadata
+            if all_metadata[am_id].state == AMState.VIGUEUR
         }
 
     def build_enriched_ams(self, with_deleted_ams: bool = False, with_fake: bool = False) -> List[ArreteMinisteriel]:
