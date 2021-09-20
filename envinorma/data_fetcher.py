@@ -262,8 +262,7 @@ class DataFetcher:
         return {
             am_id: parametization
             for am_id, parametization in parametizations.items()
-            if am_id in all_metadata
-            if all_metadata[am_id].state == AMState.VIGUEUR
+            if am_id in all_metadata and all_metadata[am_id].state == AMState.VIGUEUR
         }
 
     def build_enriched_ams(self, with_deleted_ams: bool = False, with_fake: bool = False) -> List[ArreteMinisteriel]:
