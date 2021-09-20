@@ -1,8 +1,8 @@
 import os
 import random
 
-import bs4
 from bs4 import BeautifulSoup
+from bs4.element import Tag
 
 from envinorma.io.open_document import (
     _build_structured_text_from_soup,
@@ -55,7 +55,7 @@ def _add_prefix_and_suffix(xml: str) -> str:
     return f'{_XML_PREFIX}{xml}{_XML_SUFFIX}'
 
 
-def _get_soup(xml: str) -> bs4.Tag:
+def _get_soup(xml: str) -> Tag:
     return list(BeautifulSoup(_add_prefix_and_suffix(xml), 'lxml-xml').find('office:text').children)[0]  # type: ignore
 
 

@@ -2,9 +2,9 @@ import os
 import random
 from typing import List
 
-import bs4
 import pytest
-from bs4 import BeautifulSoup, Tag
+from bs4 import BeautifulSoup
+from bs4.element import Tag
 
 from envinorma.io.docx import (
     DocxNoTextError,
@@ -432,7 +432,7 @@ def test_is_a_reference():
     assert not _is_a_reference('EZREZRR')
 
 
-def _find_first_r_tag(soup: BeautifulSoup) -> List[bs4.Tag]:
+def _find_first_r_tag(soup: BeautifulSoup) -> List[Tag]:
     return [_check_is_tag(soup.find('w:r'))]
 
 

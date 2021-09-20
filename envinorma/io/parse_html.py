@@ -1,7 +1,7 @@
 from typing import Any, List, Union
 
-import bs4
 from bs4 import BeautifulSoup
+from bs4.element import Tag
 
 from envinorma.models.text_elements import Cell, EnrichedString, Linebreak, Row, Table, TextElement, Title
 
@@ -16,15 +16,15 @@ def _ensure_strs_and_join(elements: List[TextElement]) -> str:
     return '\n'.join([_ensure_str(x).strip() for x in elements])
 
 
-def _extract_cell_data(cell: bs4.Tag) -> EnrichedString:
+def _extract_cell_data(cell: Tag) -> EnrichedString:
     return EnrichedString(_ensure_strs_and_join(merge_between_linebreaks(_extract_text_elements_with_linebreaks(cell))))
 
 
-def _is_header(row: bs4.Tag) -> bool:
+def _is_header(row: Tag) -> bool:
     return row.find('th') is not None
 
 
-def _extract_row_data(row: bs4.Tag) -> Row:
+def _extract_row_data(row: Tag) -> Row:
     cell_iterator = row.find_all('td' if row.find('td') else 'th')
     res = [
         Cell(_extract_cell_data(cell), int(cell.get('colspan') or 1), int(cell.get('rowspan') or 1))  # type: ignore
@@ -33,7 +33,7 @@ def _extract_row_data(row: bs4.Tag) -> Row:
     return Row(res, _is_header(row))
 
 
-def extract_table_from_soup(soup: Union[BeautifulSoup, bs4.Tag]) -> Table:
+def extract_table_from_soup(soup: Union[BeautifulSoup, Tag]) -> Table:
     row_iterator = soup.find_all('tr')
     table_data = [_extract_row_data(row) for row in row_iterator]  # type: ignore
     return Table(table_data)
@@ -47,7 +47,7 @@ def extract_table(html: str) -> Table:
 def _extract_text_elements_with_linebreaks(content: Any) -> List[TextElement]:
     if isinstance(content, str):
         return [content]
-    if isinstance(content, bs4.Tag):
+    if isinstance(content, Tag):
         if content.name in ('h1', 'h2', 'h3', 'h4', 'h5', 'h6'):
             id_ = content.get('id')
             return [Title(' '.join(content.stripped_strings), level=int(content.name[1]), id=id_)]  # type: ignore

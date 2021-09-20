@@ -8,13 +8,14 @@ from enum import Enum
 from typing import Any, Callable, Dict, List, Optional
 from zipfile import ZipFile
 
-import bs4
+from bs4 import BeautifulSoup
+from bs4.element import NavigableString, PageElement, ProcessingInstruction, Tag
 
 from envinorma.models import Cell, EnrichedString, Linebreak, Row, StructuredText, Table, TextElement, Title
 from envinorma.structure import build_structured_text, structured_text_to_text_elements
 
 
-def _extract_title(tag: bs4.Tag) -> Title:
+def _extract_title(tag: Tag) -> Title:
     level_str = tag.attrs.get(ODFXMLAttributes.TITLE_LEVEL.value)
     if not isinstance(level_str, str) or not level_str.isdigit():
         raise ValueError(
@@ -53,14 +54,14 @@ class ODFXMLAttributes(Enum):
     STYLE_NAME = 'text:style-name'
 
 
-def _descriptor(tag: bs4.Tag) -> str:
+def _descriptor(tag: Tag) -> str:
     return f'{tag.prefix}:{tag.name}'
 
 
 def _extract_string_from_tag(tag: Any) -> str:
-    if not isinstance(tag, (bs4.Tag, bs4.NavigableString)):  # type: ignore
+    if not isinstance(tag, (Tag, NavigableString)):
         raise ValueError(f'Expecting tag or NavigableString as input, received element of type {type(tag)}')
-    if isinstance(tag, bs4.NavigableString):  # type: ignore
+    if isinstance(tag, NavigableString):
         return str(tag).strip()
     if _descriptor(tag) == ODFXMLTagNames.TEXT_P.value:
         return _extract_string_from_tags(list(tag.children)) + '\n'
@@ -76,7 +77,7 @@ def _remove_last_line_break(str_: str) -> str:
 
 
 def _ensure_not_navigable_string(candidate: Any) -> str:
-    if isinstance(candidate, bs4.NavigableString) or not isinstance(candidate, str):  # type: ignore
+    if isinstance(candidate, NavigableString) or not isinstance(candidate, str):
         raise ValueError(f'Expecting str, not {type(candidate)}')
     return candidate
 
@@ -88,7 +89,7 @@ def _extract_string_from_tags(tags: List[Any]) -> str:
 
 
 def _extract_cell(tag: Any) -> Optional[Cell]:
-    if not isinstance(tag, bs4.Tag):
+    if not isinstance(tag, Tag):
         raise ValueError(f'Expecting tag as input, received element of type {type(tag)}')
     expected_names = (
         ODFXMLTagNames.TABLE_CELL.value,
@@ -113,7 +114,7 @@ def _extract_cells(tags: List[Any]) -> List[Cell]:
 
 
 def _extract_rows(tag: Any, is_header: bool = False) -> List[Row]:
-    if not isinstance(tag, bs4.Tag):
+    if not isinstance(tag, Tag):
         raise ValueError(f'Expecting tag as input, received element of type {type(tag)}')
     expected_names = (
         ODFXMLTagNames.TABLE_COLUMN.value,
@@ -130,7 +131,7 @@ def _extract_rows(tag: Any, is_header: bool = False) -> List[Row]:
     return [Row(_extract_cells(list(tag.children)), is_header)]
 
 
-def _extract_table(tag: bs4.Tag) -> Table:
+def _extract_table(tag: Tag) -> Table:
     if _descriptor(tag) != ODFXMLTagNames.TABLE_TABLE.value:
         raise ValueError(f'Expecting table tag, received tag with name {_descriptor(tag)}')
     rows: List[Row] = []
@@ -139,14 +140,14 @@ def _extract_table(tag: bs4.Tag) -> Table:
     return Table(rows)
 
 
-def _extract_list_item_text(tag: bs4.Tag) -> str:
+def _extract_list_item_text(tag: Tag) -> str:
     expected = (ODFXMLTagNames.TEXT_LIST_ITEM.value, ODFXMLTagNames.TEXT_LIST_HEADER.value)
     if _descriptor(tag) not in expected:
         raise ValueError(f'Expecting tag in {expected}, received tag with name {_descriptor(tag)}')
     return _extract_string_from_tag(tag)
 
 
-def _extract_list_elements(tag: bs4.Tag) -> List[str]:
+def _extract_list_elements(tag: Tag) -> List[str]:
     if _descriptor(tag) != ODFXMLTagNames.TEXT_LIST.value:
         raise ValueError(f'Expecting {ODFXMLTagNames.TEXT_LIST.value} tag, received tag with name {_descriptor(tag)}')
     results: List[str] = []
@@ -157,9 +158,9 @@ def _extract_list_elements(tag: bs4.Tag) -> List[str]:
 
 
 def _is_independent_element(tag: Any) -> bool:
-    if isinstance(tag, bs4.NavigableString):  # type: ignore
+    if isinstance(tag, NavigableString):
         return False
-    if not isinstance(tag, bs4.Tag):
+    if not isinstance(tag, Tag):
         raise ValueError(f'Expecting tag as input, received element of type {type(tag)}')
     independent_elements = (
         ODFXMLTagNames.TABLE_TABLE.value,
@@ -195,9 +196,9 @@ def _merge_children(all_elements: List[List[TextElement]], can_be_merged_list: L
 
 
 def _extract_flattened_elements(tag: Any, group_children: bool = False) -> List[TextElement]:
-    if isinstance(tag, bs4.NavigableString):  # type: ignore
+    if isinstance(tag, NavigableString):
         return [str(tag)]
-    if not isinstance(tag, bs4.Tag):
+    if not isinstance(tag, Tag):
         raise ValueError(f'Expecting tag as input, received element of type {type(tag)}')
     tags_to_skip_with_line_break = (
         ODFXMLTagNames.TEXT_TRACKED_CHANGES.value,
@@ -233,7 +234,7 @@ def _add_title_default_numbering(text: StructuredText, prefix: str = '', rank: i
     return text
 
 
-def _build_structured_text_from_soup(tag: bs4.Tag, with_numbering: bool) -> StructuredText:
+def _build_structured_text_from_soup(tag: Tag, with_numbering: bool) -> StructuredText:
     elements = _extract_flattened_elements(tag)
     text = build_structured_text(None, elements)
     if with_numbering:
@@ -241,15 +242,15 @@ def _build_structured_text_from_soup(tag: bs4.Tag, with_numbering: bool) -> Stru
     return text
 
 
-def _extract_tag_from_soup(soup: bs4.BeautifulSoup) -> bs4.Tag:
-    tags: List[bs4.Tag] = []
+def _extract_tag_from_soup(soup: BeautifulSoup) -> Tag:
+    tags: List[Tag] = []
     for child in soup.children:
-        if isinstance(child, bs4.element.ProcessingInstruction):
+        if isinstance(child, ProcessingInstruction):
             continue
-        if isinstance(child, bs4.element.NavigableString):
+        if isinstance(child, NavigableString):
             if child.strip():
                 raise ValueError(f'Unexpected non-void string at top level of soup: {child.strip()}')
-        elif isinstance(child, bs4.Tag):
+        elif isinstance(child, Tag):
             tags.append(child)
         else:
             raise ValueError(f'Unexpected bs4 type {type(child)}')
@@ -259,7 +260,7 @@ def _extract_tag_from_soup(soup: bs4.BeautifulSoup) -> bs4.Tag:
 
 
 def _transform_odt(html: str, with_numbering: bool) -> StructuredText:
-    soup = bs4.BeautifulSoup(html, 'lxml-xml')
+    soup = BeautifulSoup(html, 'lxml-xml')
     tag = _extract_tag_from_soup(soup)  # expecting exactly one tag, might not hold True
     return _build_structured_text_from_soup(tag, with_numbering)
 
@@ -281,18 +282,18 @@ def extract_text(file_content: bytes) -> StructuredText:
 def _extract_lines_from_page_element(page_element: Any) -> List[str]:
     if isinstance(page_element, str):
         return [page_element]
-    if isinstance(page_element, bs4.Tag):
+    if isinstance(page_element, Tag):
         return [line for child in page_element.children for line in _extract_lines_from_page_element(child)]
     raise ValueError(f'Unhandled type {type(page_element)}')
 
 
-def _extract_lines_from_soup(soup: bs4.BeautifulSoup) -> List[str]:
+def _extract_lines_from_soup(soup: BeautifulSoup) -> List[str]:
     return [line for child in soup.children for line in _extract_lines_from_page_element(child)]
 
 
 def _extract_lines(filename: str) -> List[str]:
     html = ZipFile(filename).read('content.xml').decode()
-    soup = bs4.BeautifulSoup(html)
+    soup = BeautifulSoup(html)
     return _extract_lines_from_soup(soup)
 
 
@@ -336,14 +337,14 @@ def _generate_empty_tree() -> str:
     return _XML_EMPTY_ODT
 
 
-def _check_tag(candidate: Any) -> bs4.Tag:
-    if not isinstance(candidate, bs4.Tag):
-        raise ValueError(f'Expecting type bs4.Tag, received {type(candidate)}.')
+def _check_tag(candidate: Any) -> Tag:
+    if not isinstance(candidate, Tag):
+        raise ValueError(f'Expecting type Tag, received {type(candidate)}.')
     return candidate
 
 
-def _get_title_builder(title: Title) -> Callable[[bs4.BeautifulSoup], bs4.PageElement]:
-    def _add_title_tag(soup: bs4.BeautifulSoup) -> bs4.Tag:
+def _get_title_builder(title: Title) -> Callable[[BeautifulSoup], PageElement]:
+    def _add_title_tag(soup: BeautifulSoup) -> Tag:
         if title.level == 0:
             new_tag = soup.new_tag(ODFXMLTagNames.TEXT_P.value, attrs={ODFXMLAttributes.STYLE_NAME.value: 'Title'})
         else:
@@ -356,8 +357,8 @@ def _get_title_builder(title: Title) -> Callable[[bs4.BeautifulSoup], bs4.PageEl
     return _add_title_tag
 
 
-def _get_cell_builder(cell: Cell) -> Callable[[bs4.BeautifulSoup], bs4.PageElement]:
-    def _add_tag(soup: bs4.BeautifulSoup) -> bs4.Tag:
+def _get_cell_builder(cell: Cell) -> Callable[[BeautifulSoup], PageElement]:
+    def _add_tag(soup: BeautifulSoup) -> Tag:
         new_tag = soup.new_tag(
             ODFXMLTagNames.TABLE_CELL.value,
             attrs={
@@ -373,8 +374,8 @@ def _get_cell_builder(cell: Cell) -> Callable[[bs4.BeautifulSoup], bs4.PageEleme
     return _add_tag
 
 
-def _get_row_builder(row: Row) -> Callable[[bs4.BeautifulSoup], bs4.PageElement]:
-    def _add_tag(soup: bs4.BeautifulSoup) -> bs4.Tag:
+def _get_row_builder(row: Row) -> Callable[[BeautifulSoup], PageElement]:
+    def _add_tag(soup: BeautifulSoup) -> Tag:
         new_tag = soup.new_tag(ODFXMLTagNames.TABLE_ROW.value)
         for cell in row.cells:
             new_tag.append(_get_cell_builder(cell)(soup))
@@ -393,8 +394,8 @@ def _compute_nb_cols(table: Table) -> int:
     return sum([cell.colspan for cell in table.rows[0].cells])
 
 
-def _get_table_builder(table: Table) -> Callable[[bs4.BeautifulSoup], bs4.PageElement]:
-    def _add_tag(soup: bs4.BeautifulSoup) -> bs4.Tag:
+def _get_table_builder(table: Table) -> Callable[[BeautifulSoup], PageElement]:
+    def _add_tag(soup: BeautifulSoup) -> Tag:
         new_tag = soup.new_tag(ODFXMLTagNames.TABLE_TABLE.value)
         nb_cols = _compute_nb_cols(table)
         attrs = {ODFXMLAttributes.TABLE_COL_REPEATED.value: str(nb_cols)}
@@ -406,8 +407,8 @@ def _get_table_builder(table: Table) -> Callable[[bs4.BeautifulSoup], bs4.PageEl
     return _add_tag
 
 
-def _get_body_builder(str_: str) -> Callable[[bs4.BeautifulSoup], bs4.PageElement]:
-    def _add_body_tag(soup: bs4.BeautifulSoup) -> bs4.Tag:
+def _get_body_builder(str_: str) -> Callable[[BeautifulSoup], PageElement]:
+    def _add_body_tag(soup: BeautifulSoup) -> Tag:
         new_tag = soup.new_tag(ODFXMLTagNames.TEXT_P.value)
         new_tag.append(soup.new_string(str_))
         return new_tag
@@ -415,7 +416,7 @@ def _get_body_builder(str_: str) -> Callable[[bs4.BeautifulSoup], bs4.PageElemen
     return _add_body_tag
 
 
-def _get_soup_modifier(element: TextElement) -> Callable[[bs4.BeautifulSoup], bs4.PageElement]:
+def _get_soup_modifier(element: TextElement) -> Callable[[BeautifulSoup], PageElement]:
     if isinstance(element, Title):
         return _get_title_builder(element)
     if isinstance(element, Table):
@@ -427,7 +428,7 @@ def _get_soup_modifier(element: TextElement) -> Callable[[bs4.BeautifulSoup], bs
 
 def _elements_to_open_document_content_xml(elements: List[TextElement]) -> str:
     empty_tree = _generate_empty_tree()
-    soup = bs4.BeautifulSoup(empty_tree, 'lxml-xml')
+    soup = BeautifulSoup(empty_tree, 'lxml-xml')
     tag = _check_tag(soup.find('office:text'))
     for element in elements:
         tag.append(_get_soup_modifier(element)(soup))

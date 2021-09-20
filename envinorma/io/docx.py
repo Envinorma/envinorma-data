@@ -8,41 +8,40 @@ from dataclasses import dataclass, replace
 from typing import Any, Callable, Dict, List, Optional, Set, Tuple
 from zipfile import ZipFile
 
-import bs4
+from bs4 import BeautifulSoup
+from bs4.element import Tag
 
 from envinorma.models import Cell, EnrichedString, Row, StructuredText, Table, TextElement, Title
 from envinorma.structure import build_structured_text
 
 
-def extract_all_xml_tags_from_tag(tag: bs4.Tag) -> List[str]:
+def extract_all_xml_tags_from_tag(tag: Tag) -> List[str]:
     if tag.prefix is None:
         raise ValueError('Expecting non None prefix')
     return [tag.prefix + ':' + tag.name] + [
-        name for child in tag.children if isinstance(child, bs4.Tag) for name in extract_all_xml_tags_from_tag(child)
+        name for child in tag.children if isinstance(child, Tag) for name in extract_all_xml_tags_from_tag(child)
     ]
 
 
-def extract_all_xml_tags(soup: bs4.BeautifulSoup) -> List[str]:
-    return [
-        name for child in soup.children if isinstance(child, bs4.Tag) for name in extract_all_xml_tags_from_tag(child)
-    ]
+def extract_all_xml_tags(soup: BeautifulSoup) -> List[str]:
+    return [name for child in soup.children if isinstance(child, Tag) for name in extract_all_xml_tags_from_tag(child)]
 
 
 TABLE_TAG = 'tbl'
 
 
-def extract_random_table(soup: bs4.BeautifulSoup) -> bs4.Tag:
+def extract_random_table(soup: BeautifulSoup) -> Tag:
     return random.choice(list(soup.find_all(TABLE_TAG)))  # type: ignore # noqa: S311
 
 
-def find_table_containing_text(soup: bs4.BeautifulSoup, text: str) -> Optional[bs4.Tag]:
+def find_table_containing_text(soup: BeautifulSoup, text: str) -> Optional[Tag]:
     for table in soup.find_all(TABLE_TAG):
         if text in table.text:  # type: ignore
             return table  # type: ignore
     return None
 
 
-def write_xml(tag: bs4.Tag, filename: str) -> None:
+def write_xml(tag: Tag, filename: str) -> None:
     to_write = tag.prettify()
     if isinstance(to_write, bytes):
         raise ValueError('Expecting str')
@@ -58,16 +57,16 @@ class Style:
     color: str
 
 
-def _extract_property_value(properties: bs4.Tag, tag_name: str, attribute_name: str = 'w:val') -> Optional[str]:
+def _extract_property_value(properties: Tag, tag_name: str, attribute_name: str = 'w:val') -> Optional[str]:
     tag = properties.find(tag_name)
     if not tag:
         raise ValueError(f'Tag {tag_name} not found in {properties}')
-    if not isinstance(tag, bs4.Tag):
-        raise ValueError(f'Expected type bs4.Tag, received {type(tag)}')
+    if not isinstance(tag, Tag):
+        raise ValueError(f'Expected type Tag, received {type(tag)}')
     return tag.attrs.get(attribute_name)
 
 
-def _extract_bool_property_value(properties: bs4.Tag, tag_name: str) -> bool:
+def _extract_bool_property_value(properties: Tag, tag_name: str) -> bool:
     if not properties.find(tag_name):
         return False
     value = _extract_property_value(properties, tag_name)
@@ -76,41 +75,41 @@ def _extract_bool_property_value(properties: bs4.Tag, tag_name: str) -> bool:
     return value != '0'
 
 
-def _extract_bold(properties: bs4.Tag) -> bool:
+def _extract_bold(properties: Tag) -> bool:
     return _extract_bool_property_value(properties, 'b')
 
 
-def _extract_italic(properties: bs4.Tag) -> bool:
+def _extract_italic(properties: Tag) -> bool:
     return _extract_bool_property_value(properties, 'i')
 
 
-def _extract_size(properties: bs4.Tag) -> int:
+def _extract_size(properties: Tag) -> int:
     value = _extract_property_value(properties, 'sz')
     if not value or not value.isdigit():
         raise ValueError(f'Expecting digit string, got {value}.')
     return int(value)
 
 
-def _extract_font_name(properties: bs4.Tag) -> str:
+def _extract_font_name(properties: Tag) -> str:
     value = _extract_property_value(properties, 'rFonts', 'w:ascii')
     if not value:
         raise ValueError('Expecting non empty string.')
     return value
 
 
-def _extract_color(properties: bs4.Tag) -> str:
+def _extract_color(properties: Tag) -> str:
     value = _extract_property_value(properties, 'color')
     if not value or len(value) != 6:
         raise ValueError(f'Expecting 6-digit string. Got {value}.')
     return value
 
 
-def extract_w_tag_style(tag: bs4.Tag) -> Optional[Style]:
+def extract_w_tag_style(tag: Tag) -> Optional[Style]:
     properties = tag.find('rPr')
     if not properties:
         return None
-    if not isinstance(properties, bs4.Tag):
-        raise ValueError(f'Expecting type bs4.Tag, received type {type(properties)}')
+    if not isinstance(properties, Tag):
+        raise ValueError(f'Expecting type Tag, received type {type(properties)}')
     return Style(
         _extract_bold(properties),
         _extract_italic(properties),
@@ -120,11 +119,11 @@ def extract_w_tag_style(tag: bs4.Tag) -> Optional[Style]:
     )
 
 
-def _estimate_text_length(tag: bs4.Tag) -> int:
+def _estimate_text_length(tag: Tag) -> int:
     return len(tag.text.replace('\n', ' '))
 
 
-def extract_all_word_styles(soup: bs4.BeautifulSoup) -> List[Tuple[Style, int]]:
+def extract_all_word_styles(soup: BeautifulSoup) -> List[Tuple[Style, int]]:
     res: List[Tuple[Style, int]] = []
     for tag in soup.find_all('r'):
         style = extract_w_tag_style(tag)  # type: ignore
@@ -133,7 +132,7 @@ def extract_all_word_styles(soup: bs4.BeautifulSoup) -> List[Tuple[Style, int]]:
     return res
 
 
-def extract_styles_to_nb_letters(soup: bs4.BeautifulSoup) -> Dict[Style, int]:
+def extract_styles_to_nb_letters(soup: BeautifulSoup) -> Dict[Style, int]:
     res: Dict[Style, int] = {}
     for style, nb_letters in extract_all_word_styles(soup):
         if style not in res:
@@ -159,7 +158,7 @@ class DocxNoTextError(DocxError):
     pass
 
 
-def _guess_body_font_size(soup: bs4.BeautifulSoup) -> int:
+def _guess_body_font_size(soup: BeautifulSoup) -> int:
     font_size_occurrences = _extract_font_size_occurrences(extract_styles_to_nb_letters(soup))
     if not font_size_occurrences:
         strings = '\n'.join(list(soup.stripped_strings))
@@ -178,8 +177,8 @@ def _is_body(style: Style, body_font_size: int) -> bool:
 
 
 def _replace_tables_and_body_text_with_empty_p(
-    soup: bs4.BeautifulSoup, body_font_size: Optional[int] = None
-) -> bs4.BeautifulSoup:
+    soup: BeautifulSoup, body_font_size: Optional[int] = None
+) -> BeautifulSoup:
     soup = _copy_soup(soup)
     body_font_size = _guess_body_font_size(soup) if body_font_size is None else body_font_size
     for tag in soup.find_all('w:tbl'):
@@ -199,9 +198,9 @@ def remove_duplicate_line_break(str_: str) -> str:
     return '\n'.join(remove_empty(str_.split('\n')))
 
 
-def print_table_properties(tag: bs4.Tag, verbose: bool = False) -> None:
+def print_table_properties(tag: Tag, verbose: bool = False) -> None:
     for i, row in enumerate(tag.find_all('w:tr')):
-        if not isinstance(row, bs4.Tag):
+        if not isinstance(row, Tag):
             raise ValueError()
         for j, cell in enumerate(row.find_all('w:tc')):
             print(f'Row {i}, cell {j}')
@@ -209,21 +208,21 @@ def print_table_properties(tag: bs4.Tag, verbose: bool = False) -> None:
                 print(remove_duplicate_line_break(cell.text))  # type: ignore
 
 
-def _is_header_cell(properties: bs4.Tag) -> bool:
+def _is_header_cell(properties: Tag) -> bool:
     tag_name = 'w:pStyle'
     if not properties.find(tag_name):
         return False
     return _extract_property_value(properties, tag_name) == 'TableHeading'
 
 
-def _is_header(cell_tag: bs4.Tag) -> bool:
+def _is_header(cell_tag: Tag) -> bool:
     properties = cell_tag.find_all('w:pPr')
     if len(properties) == 0:
         return False
     return all([_is_header_cell(prop) for prop in properties])  # type: ignore
 
 
-def extract_cell(cell_tag: bs4.Tag) -> Tuple[bool, Cell, Optional[str]]:
+def extract_cell(cell_tag: Tag) -> Tuple[bool, Cell, Optional[str]]:
     v_merge = _extract_property_value(cell_tag, 'w:vMerge') if cell_tag.find('w:vMerge') else None
     str_colspan = _extract_property_value(cell_tag, 'w:gridSpan') if cell_tag.find('w:gridSpan') else None
     colspan = int(str_colspan or 1)
@@ -231,12 +230,12 @@ def extract_cell(cell_tag: bs4.Tag) -> Tuple[bool, Cell, Optional[str]]:
     return _is_header(cell_tag), Cell(EnrichedString(str(cell_tag)), colspan, rowspan), v_merge
 
 
-def extract_row(row_tag: bs4.Tag) -> Tuple[Row, List[Optional[str]]]:
+def extract_row(row_tag: Tag) -> Tuple[Row, List[Optional[str]]]:
     cells: List[Cell] = []
     are_header: List[bool] = []
     v_merge_values: List[Optional[str]] = []
     for cell_tag in row_tag.find_all('w:tc'):
-        if not isinstance(cell_tag, bs4.Tag):
+        if not isinstance(cell_tag, Tag):
             raise ValueError(f'Expecting tag, received {type(cell_tag)}')
         is_header, cell, v_merge_value = extract_cell(cell_tag)
         v_merge_values.append(v_merge_value)
@@ -287,11 +286,11 @@ def _build_table_with_correct_rowspan(rows: List[Row], v_merge_values: List[List
     )
 
 
-def extract_table(tag: bs4.Tag) -> Table:
+def extract_table(tag: Tag) -> Table:
     rows: List[Row] = []
     v_merge_values: List[List[Optional[str]]] = []
     for row_tag in tag.find_all('w:tr'):
-        if not isinstance(row_tag, bs4.Tag):
+        if not isinstance(row_tag, Tag):
             raise ValueError(f'Expecting tag, received {type(row_tag)}')
         row, v_merge = extract_row(row_tag)
         rows.append(row)
@@ -303,8 +302,8 @@ def get_docx_xml(filename: str) -> str:
     return ZipFile(filename).read('word/document.xml').decode()
 
 
-def get_docx_xml_soup(filename: str) -> bs4.BeautifulSoup:
-    return bs4.BeautifulSoup(get_docx_xml(filename), 'lxml-xml')
+def get_docx_xml_soup(filename: str) -> BeautifulSoup:
+    return BeautifulSoup(get_docx_xml(filename), 'lxml-xml')
 
 
 def _is_table_small(table: Table) -> bool:
@@ -329,23 +328,23 @@ _PREFIX = (
 )
 
 
-def _extract_p_tags_from_cells(table: Table) -> List[bs4.Tag]:
+def _extract_p_tags_from_cells(table: Table) -> List[Tag]:
     cells = [cell for row in table.rows for cell in row.cells]
-    tags = [bs4.BeautifulSoup(_PREFIX + cell.content.text, 'lxml-xml').find('w:document') for cell in cells]
-    p_tags: List[bs4.Tag] = []
+    tags = [BeautifulSoup(_PREFIX + cell.content.text, 'lxml-xml').find('w:document') for cell in cells]
+    p_tags: List[Tag] = []
     for tag in tags:
-        if not isinstance(tag, bs4.Tag):
+        if not isinstance(tag, Tag):
             raise ValueError()
         for p_tag in tag.find_all('w:p'):
-            if not isinstance(p_tag, bs4.Tag):
+            if not isinstance(p_tag, Tag):
                 raise ValueError()
             p_tags.append(p_tag.extract())
     return p_tags
 
 
-def _remove_table_inplace(soup: bs4.BeautifulSoup, table: Table, tag: bs4.Tag):
+def _remove_table_inplace(soup: BeautifulSoup, table: Table, tag: Tag):
     span_tag = soup.new_tag('w:p')
-    if not isinstance(span_tag, bs4.Tag):
+    if not isinstance(span_tag, Tag):
         raise ValueError(f'Expecting tag, received {type(tag)}')
     tag.wrap(span_tag)
     tag.extract()
@@ -356,16 +355,16 @@ def _remove_table_inplace(soup: bs4.BeautifulSoup, table: Table, tag: bs4.Tag):
     return soup
 
 
-def _copy_soup(soup: bs4.BeautifulSoup) -> bs4.BeautifulSoup:
+def _copy_soup(soup: BeautifulSoup) -> BeautifulSoup:
     # Hacky, avoid deepcopy and recursion errors
-    return bs4.BeautifulSoup(str(soup), soup.builder.NAME)
+    return BeautifulSoup(str(soup), soup.builder.NAME)
 
 
-def _replace_small_tables(soup: bs4.BeautifulSoup) -> bs4.BeautifulSoup:
+def _replace_small_tables(soup: BeautifulSoup) -> BeautifulSoup:
     soup = _copy_soup(soup)
     tables = [extract_table(tag) for tag in soup.find_all('w:tbl')]  # type: ignore
     for tag, table in zip(soup.find_all('w:tbl'), tables):
-        if not isinstance(tag, bs4.Tag):
+        if not isinstance(tag, Tag):
             raise ValueError(f'Expecting tag, received {type(tag)}')
         if _is_table_small(table):
             _remove_table_inplace(soup, table, tag)
@@ -402,18 +401,18 @@ def _group_strings(strings: List[str]) -> List[str]:
     return [' '.join(group) for group in groups if group]
 
 
-def _build_headers(soup: bs4.BeautifulSoup) -> List[str]:
+def _build_headers(soup: BeautifulSoup) -> List[str]:
     res = []
     for tag in soup.find_all('w:p'):
         res.extend(_group_strings(tag.stripped_strings))  # type: ignore
     return [x for x in res if x]
 
 
-def empty_soup(soup: bs4.BeautifulSoup) -> bool:
+def empty_soup(soup: BeautifulSoup) -> bool:
     return ''.join(soup.stripped_strings) == ''
 
 
-def extract_headers(soup: bs4.BeautifulSoup) -> List[str]:
+def extract_headers(soup: BeautifulSoup) -> List[str]:
     if empty_soup(soup):
         return []
     clean_soup = _replace_small_tables(soup)
@@ -430,11 +429,11 @@ def _is_a_reference(candidate: str) -> bool:
 
 
 def _extract_tags(
-    soup: bs4.BeautifulSoup, tag_finder: Callable[[bs4.BeautifulSoup], List[bs4.Tag]]
-) -> Tuple[bs4.BeautifulSoup, Dict[str, bs4.Tag]]:
+    soup: BeautifulSoup, tag_finder: Callable[[BeautifulSoup], List[Tag]]
+) -> Tuple[BeautifulSoup, Dict[str, Tag]]:
     soup = _copy_soup(soup)
     tags = tag_finder(soup)
-    reference_to_tag: Dict[str, bs4.Tag] = {}
+    reference_to_tag: Dict[str, Tag] = {}
     for tag in tags:
         ref = _generate_reference()
         str_ = soup.new_string(ref)
@@ -446,39 +445,39 @@ def _extract_tags(
     return soup, reference_to_tag
 
 
-def _check_is_tag(candidate: Any) -> bs4.Tag:
-    if not isinstance(candidate, bs4.Tag):
+def _check_is_tag(candidate: Any) -> Tag:
+    if not isinstance(candidate, Tag):
         raise ValueError(f'Expecting type Tag, not {type(candidate)}')
     return candidate
 
 
-def _is_tag_body(tag: bs4.Tag, body_font_size: int) -> bool:
+def _is_tag_body(tag: Tag, body_font_size: int) -> bool:
     style = extract_w_tag_style(tag)
     if style and _is_body(style, body_font_size):
         return True
     return False
 
 
-def _find_table_tags(soup: bs4.BeautifulSoup) -> List[bs4.Tag]:
+def _find_table_tags(soup: BeautifulSoup) -> List[Tag]:
     return [_check_is_tag(tag) for tag in soup.find_all('tbl')]
 
 
-def _find_body_tags(soup: bs4.BeautifulSoup) -> List[bs4.Tag]:
+def _find_body_tags(soup: BeautifulSoup) -> List[Tag]:
     body_font_size = _guess_body_font_size(soup)
     body_tags = [_check_is_tag(tag) for tag in soup.find_all('w:r') if _is_tag_body(_check_is_tag(tag), body_font_size)]
     return body_tags
 
 
 def _remove_tables_and_bodies(
-    soup: bs4.BeautifulSoup,
-) -> Tuple[bs4.BeautifulSoup, Dict[str, bs4.Tag], Dict[str, bs4.Tag]]:
+    soup: BeautifulSoup,
+) -> Tuple[BeautifulSoup, Dict[str, Tag], Dict[str, Tag]]:
     soup, table_references = _extract_tags(soup, _find_table_tags)
     soup, body_references = _extract_tags(soup, _find_body_tags)
     return soup, table_references, body_references
 
 
 def _remove_xml_tags(str_: str) -> str:
-    return ' '.join(bs4.BeautifulSoup(str_, 'lxml-xml').stripped_strings)
+    return ' '.join(BeautifulSoup(str_, 'lxml-xml').stripped_strings)
 
 
 def _cleanup_cell(cell: Cell) -> Cell:
@@ -497,7 +496,7 @@ def _count_cells(table: Table) -> int:
     return sum([len(row.cells) for row in table.rows])
 
 
-def _safely_extract_table(tag: bs4.Tag, min_nb_cells: int) -> Table:
+def _safely_extract_table(tag: Tag, min_nb_cells: int) -> Table:
     table = _cleanup_table_cells(extract_table(tag))
     nb_cells = _count_cells(table)
     if nb_cells < min_nb_cells:
@@ -505,14 +504,14 @@ def _safely_extract_table(tag: bs4.Tag, min_nb_cells: int) -> Table:
     return table
 
 
-def _extract_strings(tag: bs4.Tag) -> List[str]:
+def _extract_strings(tag: Tag) -> List[str]:
     return [' '.join(tag.stripped_strings)]
 
 
 def _build_elements(
     str_: str,
-    table_references: Dict[str, bs4.Tag],
-    body_references: Dict[str, bs4.Tag],
+    table_references: Dict[str, Tag],
+    body_references: Dict[str, Tag],
     titles: List[str],
     title_cursor: Tuple[int, int],
 ) -> Tuple[List[TextElement], Tuple[int, int]]:
@@ -560,7 +559,7 @@ def _guess_and_add_title_levels(elements: List[TextElement]) -> List[TextElement
     ]
 
 
-def _extract_elements(soup: bs4.BeautifulSoup) -> List[TextElement]:
+def _extract_elements(soup: BeautifulSoup) -> List[TextElement]:
     titles = extract_headers(soup)
     soup, table_references, body_references = _remove_tables_and_bodies(soup)
     stripped_strings = list(soup.stripped_strings)
@@ -572,14 +571,14 @@ def _extract_elements(soup: bs4.BeautifulSoup) -> List[TextElement]:
     return _guess_and_add_title_levels(all_elements)
 
 
-def build_structured_text_from_soup(soup: bs4.BeautifulSoup) -> StructuredText:
+def build_structured_text_from_soup(soup: BeautifulSoup) -> StructuredText:
     clean_soup = _replace_small_tables(soup)
     elements = _extract_elements(clean_soup)
     return build_structured_text(None, elements)
 
 
 def build_structured_text_from_docx_xml(xml: str) -> StructuredText:
-    return build_structured_text_from_soup(bs4.BeautifulSoup(xml, 'lxml-xml'))
+    return build_structured_text_from_soup(BeautifulSoup(xml, 'lxml-xml'))
 
 
 def extract_text_from_file(filename: str) -> StructuredText:
