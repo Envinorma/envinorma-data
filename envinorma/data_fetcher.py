@@ -253,9 +253,6 @@ class DataFetcher:
             raise ValueError('Expecting one AM to proceed.')
         return am
 
-    def load_id_to_most_advanced_am(self, ids: Optional[Set[str]] = None) -> Dict[str, ArreteMinisteriel]:
-        return self.load_id_to_most_advanced_am(ids)
-
     def load_id_to_am(self, ids: Optional[Set[str]] = None) -> Dict[str, ArreteMinisteriel]:
         ids = ids or set(self.load_all_am_metadata().keys())
         structured_texts = self.load_structured_ams(ids)
@@ -273,7 +270,7 @@ class DataFetcher:
 
     def build_enriched_ams(self, with_deleted_ams: bool = False, with_fake: bool = False) -> List[ArreteMinisteriel]:
         metadata = self.load_all_am_metadata(with_deleted_ams, with_fake)
-        id_to_am = self.load_id_to_most_advanced_am()
+        id_to_am = self.load_id_to_am()
         parametizations = self._load_validated_parametrizations()
         return [
             _enrich_and_add_parametrization(
