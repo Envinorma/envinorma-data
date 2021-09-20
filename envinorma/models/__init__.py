@@ -26,7 +26,7 @@ from .condition import (  # noqa: F401
 from .helpers.date_helpers import standardize_title_date  # noqa: F401
 from .installation_classement import DetailedClassement, DetailedClassementState, DetailedRegime  # noqa: F401
 from .parameter import Parameter, ParameterEnum, ParameterType, parameter_value_to_str  # noqa: F401
-from .structured_text import Annotations, Applicability, StructuredText  # noqa: F401
+from .structured_text import Reference, Annotations, Applicability, StructuredText  # noqa: F401
 from .text_elements import Cell, EnrichedString, Linebreak, Link, Row, Table, TextElement, Title  # noqa: F401
 
 DELETE_REASON_MIN_NB_CHARS = 10

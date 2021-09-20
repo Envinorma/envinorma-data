@@ -132,6 +132,22 @@ class SectionParametrization:
 
 
 @dataclass
+class Reference:
+    nb: str
+    name: str
+
+    def to_dict(self) -> Dict[str, Any]:
+        return {
+            'nb': self.nb,
+            'name': self.name,
+        }
+
+    @classmethod
+    def from_dict(cls, dict_: Dict) -> 'Reference':
+        return cls(**dict_)
+
+
+@dataclass
 class StructuredText:
     """Section of a text. This data structure can contain sections itself.
 
@@ -144,7 +160,7 @@ class StructuredText:
             list of subsections contained after alineas
         applicability (Optional[Applicability]):
             describes the applicability of the text in a certain context
-        reference_str (Optional[str] = None):
+        reference (Optional[Reference] = None):
             reference of the current section in the section tree (for human reader)
         annotations (Optional[Annotations] = None):
             misc annotations for enriching purposes
@@ -156,7 +172,7 @@ class StructuredText:
     outer_alineas: List[EnrichedString]
     sections: List['StructuredText']
     applicability: Optional[Applicability]
-    reference_str: Optional[str] = None
+    reference: Optional[Reference] = None
     annotations: Optional[Annotations] = None
     id: str = field(default_factory=random_id)
     parametrization: SectionParametrization = field(default_factory=SectionParametrization)
@@ -173,6 +189,7 @@ class StructuredText:
         res['applicability'] = self.applicability.to_dict() if self.applicability else None
         res['annotations'] = self.annotations.to_dict() if self.annotations else None
         res['parametrization'] = self.parametrization.to_dict()
+        res['reference'] = self.reference.to_dict() if self.reference else None
         return res
 
     @classmethod
@@ -185,6 +202,8 @@ class StructuredText:
         dict_['annotations'] = Annotations.from_dict(dict_['annotations']) if dict_.get('annotations') else None
         if 'parametrization' in dict_:
             dict_['parametrization'] = SectionParametrization.from_dict(dict_['parametrization'])
+        if dict_.get('reference'):
+            dict_['reference'] = Reference.from_dict(dict_['reference'])
         if 'lf_id' in dict_:
             del dict_['lf_id']  # retrocompatibility
         return cls(**dict_)

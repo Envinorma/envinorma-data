@@ -1,12 +1,13 @@
 import re
 from datetime import date
 from typing import List, Optional
+from envinorma.utils import ensure_not_none
 
-from . import ArreteMinisteriel, StructuredText
+from . import ArreteMinisteriel, StructuredText, Reference
 
 
-def _extract_all_references(sections: List[StructuredText]) -> List[Optional[str]]:
-    return [section.reference_str for section in sections] + [
+def _extract_all_references(sections: List[StructuredText]) -> List[Reference]:
+    return [ensure_not_none(section.reference) for section in sections] + [
         ref for section in sections for ref in _extract_all_references(section.sections)
     ]
 

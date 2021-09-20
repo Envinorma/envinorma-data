@@ -1,5 +1,5 @@
 import re
-from typing import List
+from typing import List, Tuple
 
 from envinorma.from_legifrance.numbering_exceptions import EXCEPTION_PREFIXES, MAX_PREFIX_LEN
 from envinorma.title_detection import (
@@ -74,11 +74,14 @@ def test_is_valid():
 
 
 def test_detect_longest_matched_pattern():
-    assert _detect_longest_matched_pattern('1. 1. bnjr') == NumberingPattern.NUMERIC_D2_SPACE
-    assert _detect_longest_matched_pattern('1. 2. 3. bnjr') == NumberingPattern.NUMERIC_D3_SPACE
-    assert _detect_longest_matched_pattern('1. 2.3. bnjr') == NumberingPattern.NUMERIC_D1
-    assert _detect_longest_matched_pattern('1.') is None
-    assert _detect_longest_matched_pattern('') is None
+    names_and_patterns = NUMBERING_PATTERNS.items()
+    names = [name for name, _ in names_and_patterns]
+    patterns = [pattern for _, pattern in names_and_patterns]
+    assert names[_detect_longest_matched_pattern('1. 1. bnjr', patterns) or 0] == NumberingPattern.NUMERIC_D2_SPACE
+    assert names[_detect_longest_matched_pattern('1. 2. 3. bnjr', patterns) or 0] == NumberingPattern.NUMERIC_D3_SPACE
+    assert names[_detect_longest_matched_pattern('1. 2.3. bnjr', patterns) or 0] == NumberingPattern.NUMERIC_D1
+    assert _detect_longest_matched_pattern('1.', patterns) is None
+    assert _detect_longest_matched_pattern('', patterns) is None
 
 
 def test_exceptions():
@@ -146,8 +149,9 @@ def test_detect_longest_matched_string():
         '1. 15. Bonjour': '1. 15. ',
     }
 
+    patterns = list(NUMBERING_PATTERNS.values())
     for title, target in titles_to_target.items():
-        assert detect_longest_matched_string(title) == target
+        assert detect_longest_matched_string(title, patterns) == target
 
 
 _IS_TITLE = {

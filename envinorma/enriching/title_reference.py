@@ -1,13 +1,20 @@
+import unicodedata
 import re
 from dataclasses import replace
-from typing import List, Optional
+from typing import List, Optional, Tuple
 
 from envinorma.models.arrete_ministeriel import ArreteMinisteriel
-from envinorma.models.structured_text import StructuredText
-from envinorma.title_detection import NUMBERING_PATTERNS, ROMAN_PATTERN, NumberingPattern, detect_longest_matched_string
+from envinorma.models.structured_text import Reference, StructuredText
+from envinorma.title_detection import ROMAN_PATTERN, detect_longest_matched_string
+
+
+def _any_alphanumeric(candidate: str) -> bool:
+    return len([c for c in candidate if c.isalnum()]) > 0
 
 
 def _is_probably_section_number(candidate: str) -> bool:
+    if not _any_alphanumeric(candidate):
+        return False
     if not candidate.isalpha():
         return True
     if len(candidate) <= 2:
@@ -22,13 +29,13 @@ def _extract_article_prefix(title: str) -> Optional[str]:
     if len(split) == 0:
         return None
     if len(split) == 1:
-        return 'Art.'
+        return 'Article'
     if split[1].lower() == 'annexe':
         return _extract_annexe_prefix(' '.join(split[1:]))
     article_number = split[1]
     if _is_probably_section_number(article_number):
-        return 'Art. ' + article_number
-    return 'Art. ?'
+        return 'Article ' + article_number
+    return 'Article'
 
 
 def _extract_annexe_prefix(title: str) -> Optional[str]:
@@ -40,7 +47,7 @@ def _extract_annexe_prefix(title: str) -> Optional[str]:
     annexe_number = split[1]
     if _is_probably_section_number(annexe_number):
         return 'Annexe ' + annexe_number
-    return 'Annexe ?'
+    return 'Annexe'
 
 
 def _extract_special_prefix(title: str) -> Optional[str]:
@@ -51,25 +58,62 @@ def _extract_special_prefix(title: str) -> Optional[str]:
     return None
 
 
-def _extract_prefix(title: str) -> Optional[str]:
+def _extract_raw_number_prefix(title: str) -> Tuple[bool, Optional[str]]:
     special_prefix = _extract_special_prefix(title)
     if special_prefix:
-        return special_prefix
-    res = detect_longest_matched_string(title)
-    return res.replace(' ', '') if res else res
+        return True, special_prefix
+    return False, detect_longest_matched_string(title, _NUMBERING_PATTERNS)
+
+
+def _extract_prefix(title: str) -> Optional[str]:
+    special, raw_prefix = _extract_raw_number_prefix(title)
+    return raw_prefix.replace(' ', '') if raw_prefix and not special else raw_prefix
+
+
+def _clean_suffix(suffix: str) -> str:
+    stripped = suffix.strip()
+    for char in '-:':
+        if stripped.startswith(char):
+            stripped = stripped[1:].strip()
+        if stripped.endswith(char):
+            stripped = stripped[:-1].strip()
+    return stripped
+
+
+def _extract_suffix(title: str) -> Optional[str]:
+    _, raw_prefix = _extract_raw_number_prefix(title)
+    if not raw_prefix:
+        return title
+    return _clean_suffix(title[len(raw_prefix) :])
 
 
 _VERBOSE_NUMBERING_PATTERNS = [
-    NUMBERING_PATTERNS[_pat].replace(' ', '')
-    for _pat in (
-        NumberingPattern.NUMERIC_D1,
-        NumberingPattern.NUMERIC_D2,
-        NumberingPattern.NUMERIC_D3,
-        NumberingPattern.NUMERIC_D3_SPACE,
-        NumberingPattern.NUMERIC_D4_SPACE,
-        NumberingPattern.NUMERIC_D2_DASH,
-        NumberingPattern.NUMERIC_D3_DASH,
-    )
+    r'^[0-9]+\.',
+    r'^[0-9]+\.[0-9]+',
+    r'^([0-9]+\.){2}',
+    r'^([0-9]+\.){3}',
+    r'^([0-9]+\. ){3}',
+    r'^([0-9]+\. ){4}',
+    r'^[0-9]+\-[0-9]+\.',
+    r'^[0-9]+\-[0-9]+\-[0-9]+\.',
+    rf'^{ROMAN_PATTERN}\-[0-9]+\.',
+    rf'^{ROMAN_PATTERN}\-[0-9]+\.[0-9]+\.',
+]
+_NUMBERING_PATTERNS = _VERBOSE_NUMBERING_PATTERNS + [
+    rf'^{ROMAN_PATTERN}',
+    rf'^{ROMAN_PATTERN}\.',
+    rf'^{ROMAN_PATTERN}\-',
+    rf'^{ROMAN_PATTERN}\-[0-9]+\.',
+    rf'^{ROMAN_PATTERN}\-[0-9]+\.[0-9]+\.',
+    r'^[0-9]+\)',
+    r'^([0-9]+\. ){2}',
+    r'^[0-9]+\-[0-9]+\.',
+    r'^([0-9]+\. ){3}',
+    r'^[0-9]+\-[0-9]+\-[0-9]+\.',
+    r'^([0-9]+\.){4}',
+    r'^[0-9]+°',
+    r'^[a-z]\)',
+    r'^[A-Z]\.',
 ]
 
 
@@ -122,21 +166,36 @@ def _merge_prefixes(prefixes: List[Optional[str]]) -> str:
     return _PREFIX_SEPARATOR.join(to_merge)
 
 
-def _merge_titles(titles: List[str]) -> str:
+def _post_merge_cleanup(prefix: str) -> str:
+    if prefix.lower().startswith('annexe article annexe'):
+        return prefix[len('annexe article ') :]
+    return prefix
+
+
+def _last_suffix(titles: List[Optional[str]]) -> Optional[str]:
+    for title in reversed(titles):
+        if title:
+            return title
+    return None
+
+
+def _extract_reference(titles: List[str]) -> Reference:
     if len(titles) == 0:
         raise ValueError('should have at least one prefix')
-    filtered_titles = _cut_before_annexe_or_article(titles)
+    clean_titles = [unicodedata.normalize('NFKD', title).strip() for title in titles]
+    filtered_titles = _cut_before_annexe_or_article(clean_titles)
     if len(filtered_titles) == 0:
-        return ''
+        return Reference('', '')
     prefixes = [_extract_prefix(title) for title in filtered_titles]
-    return _merge_prefixes(prefixes)
+    suffixes = [_extract_suffix(title) for title in filtered_titles]
+    return Reference(_post_merge_cleanup(_merge_prefixes(prefixes)), _last_suffix(suffixes) or '')
 
 
 def _add_references_in_section(text: StructuredText, titles: List[str]) -> StructuredText:
     titles = titles + [text.title.text]
     return replace(
         text,
-        reference_str=_merge_titles(titles),
+        reference=_extract_reference(titles),
         sections=[_add_references_in_section(section, titles) for section in text.sections],
     )
 
