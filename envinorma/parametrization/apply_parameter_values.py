@@ -109,7 +109,8 @@ def _deactivate_alineas(
     else:
         new_outer_alineas = [replace(al, inactive=True) for al in text.outer_alineas]
     text.applicability = Applicability(active=not all_inactive, warnings=[warning])
-    text.sections = [_deactivate_child_section(section, all_inactive=all_inactive) for section in text.sections]
+    if inapplicability.subsections_are_inapplicable:
+        text.sections = [_deactivate_child_section(section, all_inactive=all_inactive) for section in text.sections]
     text.outer_alineas = new_outer_alineas
     return text
 

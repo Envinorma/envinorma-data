@@ -13,7 +13,11 @@ from envinorma.parametrization.models.parametrization import AlternativeSection,
 
 def _inapplicabilities(inapplicable_sections: List[InapplicableSection]) -> List[PotentialInapplicability]:
     return [
-        PotentialInapplicability(inapplicable_section.condition, inapplicable_section.alineas)
+        PotentialInapplicability(
+            inapplicable_section.condition,
+            inapplicable_section.alineas,
+            inapplicable_section.subsections_are_inapplicable,
+        )
         for inapplicable_section in inapplicable_sections
     ]
 

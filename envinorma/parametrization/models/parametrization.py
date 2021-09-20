@@ -12,18 +12,34 @@ from ..exceptions import ParametrizationError
 
 @dataclass
 class InapplicableSection:
-    """Description of a potential inapplicable section in a ArreteMinisteriel under some condition."""
+    """Description of a potential inapplicable section in a ArreteMinisteriel under some condition.
+
+    Args:
+        section_id (str):
+            The id of the section that is potentially inapplicable.
+        alineas (Optional[List[int]]):
+            The alineas that are potentially inapplicable.
+            If None, all alineas are inapplicable.
+        condition (Condition):
+            The condition that must be satisfied for the section to be inapplicable.
+        id (Optional[str]):
+            The id of the inapplicable section. If None, a random id is generated.
+        subsections_are_inapplicable (bool):
+            If True, all subsections are inapplicable if condition is met.
+    """
 
     section_id: str
     alineas: Optional[List[int]]
     condition: Condition
     id: str = field(default_factory=random_id)
+    subsections_are_inapplicable: bool = True
 
     def to_dict(self) -> Dict[str, Any]:
         return {
             'id': self.id,
             'section_id': self.section_id,
             'alineas': self.alineas,
+            'subsections_are_inapplicable': self.subsections_are_inapplicable,
             'condition': self.condition.to_dict(),
         }
 
@@ -34,12 +50,20 @@ class InapplicableSection:
             dict_['alineas'],
             load_condition(dict_['condition']),
             dict_['id'],
+            dict_['subsections_are_inapplicable'] if 'subsections_are_inapplicable' in dict_ else True,
         )
 
 
 @dataclass
 class AlternativeSection:
-    """Description of a potential modification in a ArreteMinisteriel, applied at some condition."""
+    """Description of a potential modification in a ArreteMinisteriel, applied at some condition.
+
+    Args:
+        section_id (str): The id of the section that is potentially modified.
+        new_text (StructuredText): The new text if the condition is met.
+        condition (Condition): The condition that must be satisfied for the section to be modified.
+        id (str): The id of the modification. If None, a random id is generated.
+    """
 
     section_id: str
     new_text: StructuredText
@@ -66,7 +90,13 @@ class AlternativeSection:
 
 @dataclass
 class AMWarning:
-    """Warning attached to a section of an arrete_ministeriel."""
+    """Warning attached to a section of an arrete_ministeriel.
+
+    Args:
+        section_id (str): The id of the section to which the warning is attached.
+        text (str): The content of the warning.
+        id (str): The id of the warning. If None, a random id is generated.
+    """
 
     section_id: str
     text: str
@@ -138,7 +168,6 @@ class Parametrization:
             list of potentially inapplicable modified sections of an ArreteMinisteriel
         warnings (List[AMWarning])
             list of non conditionned warnings associated with an ArreteMinisteriel
-
     """
 
     inapplicable_sections: List[InapplicableSection]

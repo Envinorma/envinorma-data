@@ -166,18 +166,24 @@ def _litter_condition() -> Littler:
 def test_deactivate_alineas():
     date_ = ParameterEnum.DATE_INSTALLATION.value
 
-    inapplicability = PotentialInapplicability(alineas=None, condition=_litter_condition())
+    inapplicability = PotentialInapplicability(
+        alineas=None, condition=_litter_condition(), subsections_are_inapplicable=True
+    )
     res = _deactivate_alineas(_get_simple_text(), inapplicability, {date_: datetime(2020, 1, 1)})
     assert not res.applicability.active  # type: ignore
     assert all([al.inactive for al in res.outer_alineas])
 
-    inapplicability = PotentialInapplicability(alineas=[0], condition=_litter_condition())
+    inapplicability = PotentialInapplicability(
+        alineas=[0], condition=_litter_condition(), subsections_are_inapplicable=True
+    )
     res = _deactivate_alineas(_get_simple_text(), inapplicability, {date_: datetime(2020, 1, 1)})
     assert res.applicability.active  # type: ignore
     assert res.outer_alineas[0].inactive
     assert not res.outer_alineas[1].inactive
 
-    inapplicability = PotentialInapplicability(alineas=None, condition=_litter_condition())
+    inapplicability = PotentialInapplicability(
+        alineas=None, condition=_litter_condition(), subsections_are_inapplicable=True
+    )
     res = _deactivate_alineas(_get_simple_text([_get_simple_text()]), inapplicability, {date_: datetime(2020, 1, 1)})
     assert not res.applicability.active  # type: ignore
     assert not res.sections[0].applicability.active  # type: ignore
