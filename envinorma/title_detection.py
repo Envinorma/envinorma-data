@@ -163,7 +163,7 @@ def _smart_detect_pattern(
         if string[:max_prefix_len] in exceptions:
             pattern = exceptions[string[:max_prefix_len]]
             return NumberingPattern(pattern) if pattern else None
-    pattern_names, patterns = list(zip(*NUMBERING_PATTERNS.items()))
+    pattern_names, patterns = list(zip(*NUMBERING_PATTERNS.items()))  # type: ignore
     pattern_index = _detect_longest_matched_pattern(string, patterns)  # type: ignore
     if pattern_index is None:
         return None

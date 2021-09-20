@@ -1,5 +1,5 @@
 import re
-from typing import List, Tuple
+from typing import List
 
 from envinorma.from_legifrance.numbering_exceptions import EXCEPTION_PREFIXES, MAX_PREFIX_LEN
 from envinorma.title_detection import (

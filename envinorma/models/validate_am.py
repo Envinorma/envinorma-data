@@ -1,9 +1,10 @@
 import re
 from datetime import date
 from typing import List, Optional
+
 from envinorma.utils import ensure_not_none
 
-from . import ArreteMinisteriel, StructuredText, Reference
+from . import ArreteMinisteriel, Reference, StructuredText
 
 
 def _extract_all_references(sections: List[StructuredText]) -> List[Reference]:

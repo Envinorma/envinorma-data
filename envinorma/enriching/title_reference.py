@@ -1,5 +1,5 @@
-import unicodedata
 import re
+import unicodedata
 from dataclasses import replace
 from typing import List, Optional, Tuple
 

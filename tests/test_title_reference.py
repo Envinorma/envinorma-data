@@ -1,20 +1,20 @@
-from envinorma.utils import ensure_not_none
 import json
 from typing import List, Tuple
 
 from envinorma.enriching.title_reference import (
+    _any_alphanumeric,
     _extract_prefix,
+    _extract_reference,
     _extract_special_prefix,
     _is_prefix,
     _is_probably_section_number,
     _merge_prefixes,
-    _extract_reference,
     add_references,
-    _any_alphanumeric,
 )
 from envinorma.models.arrete_ministeriel import ArreteMinisteriel
 from envinorma.models.structured_text import StructuredText
 from envinorma.models.text_elements import estr
+from envinorma.utils import ensure_not_none
 
 
 def test_any_alphanumeric():
@@ -207,8 +207,6 @@ def test_extract_reference_numbers():
 
 def test_extract_reference_names():
     titles_and_references = json.load(open('test_data/titles_name_reference.json'))
-    # res = [(titles, _extract_reference(titles)[1]) for titles, _ in titles_and_references]
-    # json.dump(res, open('test_data/titles_name_reference.json', 'w'), ensure_ascii=False)
     for titles, reference in titles_and_references:
         assert _extract_reference(titles).name == reference
 
