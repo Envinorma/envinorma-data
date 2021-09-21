@@ -194,19 +194,18 @@ class StructuredText:
 
     @classmethod
     def from_dict(cls, dict_: Dict[str, Any]) -> 'StructuredText':
-        dict_ = dict_.copy()
-        dict_['title'] = EnrichedString.from_dict(dict_['title'])
-        dict_['outer_alineas'] = [EnrichedString.from_dict(al) for al in dict_['outer_alineas']]
-        dict_['sections'] = [StructuredText.from_dict(sec) for sec in dict_['sections']]
-        dict_['applicability'] = Applicability.from_dict(dict_['applicability']) if dict_.get('applicability') else None
-        dict_['annotations'] = Annotations.from_dict(dict_['annotations']) if dict_.get('annotations') else None
-        if 'parametrization' in dict_:
-            dict_['parametrization'] = SectionParametrization.from_dict(dict_['parametrization'])
-        if dict_.get('reference'):
-            dict_['reference'] = Reference.from_dict(dict_['reference'])
-        if 'lf_id' in dict_:
-            del dict_['lf_id']  # retrocompatibility
-        return cls(**dict_)
+        return cls(
+            title=EnrichedString.from_dict(dict_['title']),
+            outer_alineas=[EnrichedString.from_dict(al) for al in dict_['outer_alineas']],
+            sections=[StructuredText.from_dict(sec) for sec in dict_['sections']],
+            applicability=Applicability.from_dict(dict_['applicability']) if dict_.get('applicability') else None,
+            reference=Reference.from_dict(dict_['reference']) if dict_.get('reference') else None,
+            annotations=Annotations.from_dict(dict_['annotations']) if dict_.get('annotations') else None,
+            id=dict_['id'] if 'id' in dict_ else random_id(),
+            parametrization=SectionParametrization.from_dict(dict_['parametrization'])
+            if dict_.get('parametrization')
+            else SectionParametrization(),
+        )
 
     def text_lines(self, level: int = 0) -> List[str]:
         title_lines = ['#' * level + (' ' if level else '') + self.title.text.strip()]

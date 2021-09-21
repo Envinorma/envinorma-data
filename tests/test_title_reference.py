@@ -3,14 +3,14 @@ from typing import List, Tuple
 
 from envinorma.enriching.title_reference import (
     _any_alphanumeric,
-    _remove_special_words,
-    _remove_special_words_and_numbering,
     _extract_prefix,
     _extract_reference,
     _extract_special_prefix,
     _is_prefix,
     _is_probably_section_number,
     _merge_prefixes,
+    _remove_special_words,
+    _remove_special_words_and_numbering,
     add_references,
 )
 from envinorma.models.arrete_ministeriel import ArreteMinisteriel
@@ -74,8 +74,8 @@ def test_is_prefix():
 def test_merge_prefix_list():
     assert _merge_prefixes(['1.', '2.', '3.', '4.']) == '1. 2. 3. 4.'
     assert _merge_prefixes(['1.', '1.1.', '1.1.1.']) == '1.1.1.'
-    assert _merge_prefixes(['Article 1.', '2.', '2. 1.']) == 'Article 1. 2. 1.'
-    assert _merge_prefixes(['Annexe II', 'a)']) == 'Annexe II a)'
+    assert _merge_prefixes(['Article 1.', '2.', '2. 1.']) == 'Article 1. > 2. 1.'
+    assert _merge_prefixes(['Annexe II', 'a)']) == 'Annexe II > a)'
     assert _merge_prefixes(['Section II', 'Chapitre 4', 'Article 10']) == 'Section II Chapitre 4 Article 10'
 
 
@@ -111,9 +111,9 @@ def test_add_references():
     am_with_references = add_references(am)
     secs = am_with_references.sections
     assert ensure_not_none(secs[0].reference).nb == 'Article 1.'
-    assert ensure_not_none(secs[0].sections[0].reference).nb == 'Article 1. 1.'
-    assert ensure_not_none(secs[0].sections[0].sections[0].reference).nb == 'Article 1. 1.1.'
-    assert ensure_not_none(secs[0].sections[0].sections[1].reference).nb == 'Article 1. 1.2.'
+    assert ensure_not_none(secs[0].sections[0].reference).nb == 'Article 1. > 1.'
+    assert ensure_not_none(secs[0].sections[0].sections[0].reference).nb == 'Article 1. > 1.1.'
+    assert ensure_not_none(secs[0].sections[0].sections[1].reference).nb == 'Article 1. > 1.2.'
     assert ensure_not_none(secs[1].reference).nb == '2.'
     assert ensure_not_none(secs[2].reference).nb == 'A.'
     assert ensure_not_none(secs[3].reference).nb == 'a)'
@@ -181,10 +181,10 @@ def test_add_references_2():
         ('Article 20', 'Article 20'),
         ('Section VI : Pollutions accidentelles', ''),
         ('Article 21', 'Article 21'),
-        ("I. ― Tout stockage d'un liquide susceptible", 'Article 21 I.'),
-        ("II. ― La capacité de rétention est étanche ", 'Article 21 II.'),
-        ('III. ― Rétention et confinement.', 'Article 21 III.'),
-        ("IV. ― Isolement des réseaux d'eau.", 'Article 21 IV.'),
+        ("I. ― Tout stockage d'un liquide susceptible", 'Article 21 > I.'),
+        ("II. ― La capacité de rétention est étanche ", 'Article 21 > II.'),
+        ('III. ― Rétention et confinement.', 'Article 21 > III.'),
+        ("IV. ― Isolement des réseaux d'eau.", 'Article 21 > IV.'),
         ("Chapitre III : Emissions dans l'eau", ''),
         ('Section I : Principes généraux', ''),
         ('Article 22', 'Article 22'),
@@ -215,8 +215,8 @@ def test_add_references_2():
         ("Section III : Valeurs limites d'émission", ''),
         ('Article 40', 'Article 40'),
         ('Article 41', 'Article 41'),
-        ("a) Capacité d'aspiration supérieure à 7 000 m³/h.", 'Article 41 a)'),
-        ("b) Capacité d'aspiration inférieure ou égale à 7 000 m3/h.", 'Article 41 b)'),
+        ("a) Capacité d'aspiration supérieure à 7 000 m³/h.", 'Article 41 > a)'),
+        ("b) Capacité d'aspiration inférieure ou égale à 7 000 m3/h.", 'Article 41 > b)'),
         ('Article 42', 'Article 42'),
         ('Chapitre V : Emissions dans les sols', ''),
         ('Article 43', 'Article 43'),
@@ -229,13 +229,13 @@ def test_add_references_2():
         ('Article 49', 'Article 49'),
         ('Article 50', 'Article 50'),
         ('Article 51', 'Article 51'),
-        ('1. Eléments de base.', 'Article 51 1.'),
-        ('2. Appareillage de mesure.', 'Article 51 2.'),
-        ('3. Précautions opératoires.', 'Article 51 3.'),
+        ('1. Eléments de base.', 'Article 51 > 1.'),
+        ('2. Appareillage de mesure.', 'Article 51 > 2.'),
+        ('3. Précautions opératoires.', 'Article 51 > 3.'),
         ('Article 52', 'Article 52'),
-        ('1. Pour les établissements existants :', 'Article 52 1.'),
-        ('2. Pour les nouvelles installations :', 'Article 52 2.'),
-        ("3. Pour les installations fonctionnant sur une ", 'Article 52 3.'),
+        ('1. Pour les établissements existants :', 'Article 52 > 1.'),
+        ('2. Pour les nouvelles installations :', 'Article 52 > 2.'),
+        ("3. Pour les installations fonctionnant sur une ", 'Article 52 > 3.'),
         ('Chapitre VII : Déchets', ''),
         ('Article 53', 'Article 53'),
         ('Article 54', 'Article 54'),
@@ -253,30 +253,30 @@ def test_add_references_2():
         ('Article 60', 'Article 60'),
         ('Annexes', 'Annexe'),
         ('Article Annexe I', 'Annexe I'),
-        ('1. Définitions.', 'Annexe I 1.'),
-        ('1.1. Niveau de pression acoustique continu équivalent pondéré A " court ", LAeq, t.', 'Annexe I 1.1.'),
-        ('1.2. Niveau acoustique fractile, LAN, t.', 'Annexe I 1.2.'),
-        ('1.3. Intervalle de mesurage.', 'Annexe I 1.3.'),
-        ("1.4. Intervalle d'observation.", 'Annexe I 1.4.'),
-        ('1.5. Intervalle de référence.', 'Annexe I 1.5.'),
-        ('1.6. Bruit ambiant.', 'Annexe I 1.6.'),
-        ('1.7. Bruit particulier (1).', 'Annexe I 1.7.'),
-        ('1.8. Bruit résiduel.', 'Annexe I 1.8.'),
-        ('1.9. Tonalité marquée.', 'Annexe I 1.9.'),
-        ("2. Méthode d'expertise (point 6 de la norme).", 'Annexe I 2.'),
-        ('2.1. Appareillage de mesure (point 6.1 de la norme).', 'Annexe I 2.1.'),
-        ('2.2. Conditions de mesurage (point 6.2 de la norme).', 'Annexe I 2.2.'),
-        ('2.3. Gamme de fréquence (point 6.3 de la norme).', 'Annexe I 2.3.'),
-        ('2.4. Conditions météorologiques (point 6.4 de la norme).', 'Annexe I 2.4.'),
-        ('2.5. Indicateurs (point 6.5 de la norme).', 'Annexe I 2.5.'),
-        ('a) Contrôle des niveaux de bruit admissibles en limites de propriété.', 'Annexe I 2.5. a)'),
-        ("b) Contrôle de l'émergence.", 'Annexe I 2.5. b)'),
-        ("2.6. Acquisitions des données, choix ", 'Annexe I 2.6.'),
-        ('3. Méthode de contrôle (point 5 de la norme).', 'Annexe I 3.'),
-        ('4. Rapport de mesurage (point 7 de la norme).', 'Annexe I 4.'),
+        ('1. Définitions.', 'Annexe I > 1.'),
+        ('1.1. Niveau de pression acoustique continu équivalent pondéré A " court ", LAeq, t.', 'Annexe I > 1.1.'),
+        ('1.2. Niveau acoustique fractile, LAN, t.', 'Annexe I > 1.2.'),
+        ('1.3. Intervalle de mesurage.', 'Annexe I > 1.3.'),
+        ("1.4. Intervalle d'observation.", 'Annexe I > 1.4.'),
+        ('1.5. Intervalle de référence.', 'Annexe I > 1.5.'),
+        ('1.6. Bruit ambiant.', 'Annexe I > 1.6.'),
+        ('1.7. Bruit particulier (1).', 'Annexe I > 1.7.'),
+        ('1.8. Bruit résiduel.', 'Annexe I > 1.8.'),
+        ('1.9. Tonalité marquée.', 'Annexe I > 1.9.'),
+        ("2. Méthode d'expertise (point 6 de la norme).", 'Annexe I > 2.'),
+        ('2.1. Appareillage de mesure (point 6.1 de la norme).', 'Annexe I > 2.1.'),
+        ('2.2. Conditions de mesurage (point 6.2 de la norme).', 'Annexe I > 2.2.'),
+        ('2.3. Gamme de fréquence (point 6.3 de la norme).', 'Annexe I > 2.3.'),
+        ('2.4. Conditions météorologiques (point 6.4 de la norme).', 'Annexe I > 2.4.'),
+        ('2.5. Indicateurs (point 6.5 de la norme).', 'Annexe I > 2.5.'),
+        ('a) Contrôle des niveaux de bruit admissibles en limites de propriété.', 'Annexe I > 2.5. a)'),
+        ("b) Contrôle de l'émergence.", 'Annexe I > 2.5. b)'),
+        ("2.6. Acquisitions des données, choix ", 'Annexe I > 2.6.'),
+        ('3. Méthode de contrôle (point 5 de la norme).', 'Annexe I > 3.'),
+        ('4. Rapport de mesurage (point 7 de la norme).', 'Annexe I > 4.'),
         ('Article Annexe II', 'Annexe II'),
     ]
     res = extract_titles_and_reference_pairs(add_references(am))
     for exp, computed in zip(expected, res):
-        assert exp[0][:10] == computed[0][:10]
-        assert exp[1][:10] == computed[1][:10]
+        assert exp[0][:15] == computed[0][:15]
+        assert exp[1][:15] == computed[1][:15]

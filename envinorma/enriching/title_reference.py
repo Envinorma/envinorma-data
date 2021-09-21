@@ -154,8 +154,6 @@ def _are_consecutive_verbose_numbering(str_1: str, str_2: str) -> bool:
 def _is_prefix(candidate: Optional[str], long_word: Optional[str]) -> bool:
     if not candidate or not long_word:
         return False
-    if candidate.lower().startswith('annexe') and long_word.lower().startswith('annexe'):
-        return True
     candidate_strip = candidate.replace(' ', '')
     long_word_strip = long_word.replace(' ', '')
     return _are_consecutive_verbose_numbering(candidate_strip, long_word_strip)
@@ -185,12 +183,16 @@ def _remove_empty(elements: List[str]) -> List[str]:
 
 
 def _merge_prefixes(prefixes: List[Optional[str]]) -> str:
+    if not prefixes:
+        raise ValueError('prefixes cannot be empty')
+    first_prefix = prefixes[0] or ''
     if len(prefixes) == 1:
-        return prefixes[0] or ''
-    if _is_prefix(prefixes[0], prefixes[1]):
+        return first_prefix or ''
+    if _is_prefix(first_prefix, prefixes[1]):
         return _merge_prefixes(prefixes[1:])
-    to_merge = _remove_empty([prefixes[0] or '', _merge_prefixes(prefixes[1:])])
-    return _PREFIX_SEPARATOR.join(to_merge)
+    separator = ' > ' if _annexe_or_article(first_prefix) else _PREFIX_SEPARATOR
+    to_merge = _remove_empty([first_prefix, _merge_prefixes(prefixes[1:])])
+    return separator.join(to_merge)
 
 
 def _last_suffix(titles: List[Optional[str]]) -> Optional[str]:
