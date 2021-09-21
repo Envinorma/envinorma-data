@@ -19,7 +19,7 @@ _NEW_TEXT = StructuredText(
     outer_alineas=[EnrichedString(text='Contenu nouveau')],
     sections=[],
     applicability=None,
-    reference_str=None,
+    reference=None,
     annotations=None,
     id='d16d0fE7C7fc',
 )

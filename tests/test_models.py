@@ -9,7 +9,7 @@ import pytest
 from envinorma.models.arrete_ministeriel import ArreteMinisteriel, _is_probably_cid, extract_date_of_signature
 from envinorma.models.classement import Classement, ClassementWithAlineas, Regime, group_classements_by_alineas
 from envinorma.models.helpers.date_helpers import _contains_human_date, standardize_title_date
-from envinorma.models.structured_text import Annotations, Applicability, StructuredText
+from envinorma.models.structured_text import Annotations, Applicability, Reference, StructuredText
 from envinorma.models.text_elements import Cell, EnrichedString, Link, Row, Table, estr
 from envinorma.topics.patterns import TopicName
 
@@ -37,7 +37,7 @@ def _enriched_string_links() -> EnrichedString:
 def _leaf_section() -> StructuredText:
     app = Applicability(True, True, ['beware'], StructuredText(_str('abc'), [], [], None))
     annotations = Annotations(TopicName.AIR_ODEURS)
-    return StructuredText(_str('abc'), [_str('abc')], [], app, 'ref', annotations)
+    return StructuredText(_str('abc'), [_str('abc')], [], app, Reference('ref', 'name'), annotations)
 
 
 def _node_section() -> StructuredText:
@@ -46,7 +46,7 @@ def _node_section() -> StructuredText:
         [_str('abc'), _enriched_string_table()],
         [_leaf_section()],
         None,
-        'ref',
+        Reference('ref', 'name'),
         Annotations(None),
     )
 
@@ -146,7 +146,7 @@ _TEXT_A = StructuredText(
     ],
     sections=[],
     applicability=None,
-    reference_str='Annexe 2 6.',
+    reference=Reference('ref', 'name'),
     annotations=None,
     id='0bEB0b14A96f',
 )
@@ -158,7 +158,7 @@ _TEXT_B = StructuredText(
     ],
     sections=[],
     applicability=None,
-    reference_str=None,
+    reference=None,
     annotations=None,
     id='AA51E55feD6F',
 )

@@ -3,7 +3,8 @@ import random
 from dataclasses import dataclass, replace
 from typing import Iterable, List, Optional, Tuple, TypeVar, Union
 
-import bs4
+from bs4 import BeautifulSoup
+from bs4.element import Tag
 from leginorma import ArticleStatus, LegifranceArticle, LegifranceSection, LegifranceText
 
 from envinorma.io.parse_html import extract_table
@@ -50,11 +51,11 @@ def remove_empty(strs: List[str]) -> List[str]:
 
 
 def extract_alineas(html_text: str) -> List[str]:
-    soup = bs4.BeautifulSoup(html_text, 'html.parser')
+    soup = BeautifulSoup(html_text, 'html.parser')
     for tag_type in ['sup', 'sub', 'font', 'strong', 'b', 'i', 'em']:
         for tag in soup.find_all(tag_type):
             tag.unwrap()
-    return [str(sstr) for sstr in bs4.BeautifulSoup(str(soup), 'html.parser').stripped_strings]
+    return [str(sstr) for sstr in BeautifulSoup(str(soup), 'html.parser').stripped_strings]
 
 
 def _extract_placeholder_positions(text: str, placeholder: str) -> Tuple[str, List[int]]:
@@ -75,7 +76,7 @@ _BR_PLACEHOLDER = '{{BR_PLACEHOLDER}}'
 
 
 def _remove_tables(text: str) -> Tuple[str, List[TableReference]]:
-    soup = bs4.BeautifulSoup(text, 'html.parser')
+    soup = BeautifulSoup(text, 'html.parser')
     tables: List[Table] = []
     references: List[str] = []
     for div in soup.find_all('table'):
@@ -88,7 +89,7 @@ def _remove_tables(text: str) -> Tuple[str, List[TableReference]]:
 
 
 def _remove_links(text: str) -> Tuple[str, List[LinkReference]]:
-    soup = bs4.BeautifulSoup(text, 'html.parser')
+    soup = BeautifulSoup(text, 'html.parser')
     links: List[LinkReference] = []
     for tag in soup.find_all('a'):
         if 'href' not in tag.attrs:  # type: ignore
@@ -299,14 +300,14 @@ def _generate_reference() -> str:
 _BASE_LEGIFRANCE_URL = 'https://www.legifrance.gouv.fr'
 
 
-def _replace_link(link_tag: bs4.Tag, placeholder: str, add_legifrance_prefix: bool) -> Tuple[str, int]:  # side effects
+def _replace_link(link_tag: Tag, placeholder: str, add_legifrance_prefix: bool) -> Tuple[str, int]:  # side effects
     link_text = link_tag.text
     link_tag.replace_with(placeholder + link_text)  # type: ignore
     return (_BASE_LEGIFRANCE_URL if add_legifrance_prefix else '') + link_tag['href'], len(link_text)  # type: ignore
 
 
 def _extract_links(text: str, add_legifrance_prefix: bool = True) -> EnrichedString:
-    soup = bs4.BeautifulSoup(text, 'html.parser')
+    soup = BeautifulSoup(text, 'html.parser')
     placeholder = '{{{LINK}}}'
     raw_links = [_replace_link(tag, placeholder, add_legifrance_prefix) for tag in soup.find_all('a')]  # type: ignore
     final_text, positions = _extract_placeholder_positions(soup.text, placeholder)
@@ -401,7 +402,7 @@ def _extract_sections(
 
 
 def _html_to_str(html: str) -> str:
-    return bs4.BeautifulSoup(html, 'html.parser').text
+    return BeautifulSoup(html, 'html.parser').text
 
 
 def _are_very_similar(article_1: LegifranceArticle, article_2: LegifranceArticle) -> bool:

@@ -64,16 +64,16 @@ def _match_size(match: re.Match) -> int:
     return y - x
 
 
-def _detect_longest_matched_pattern(string: str) -> Optional[NumberingPattern]:
+def _detect_longest_matched_pattern(string: str, patterns: List[str]) -> Optional[int]:
     max_size = -1
     argmax = None
-    for pattern_name, pattern in NUMBERING_PATTERNS.items():
+    for pattern_index, pattern in enumerate(patterns):
         match = re.match(pattern, string)
         if not match:
             continue
         size = _match_size(match)
         if _match_size(match) > max_size:
-            argmax = pattern_name
+            argmax = pattern_index
             max_size = size
     return argmax
 
@@ -84,11 +84,11 @@ def _extract_matched_str(string: str, match: Optional[re.Match]) -> Optional[str
     return string[match.span()[0] : match.span()[1]]
 
 
-def detect_longest_matched_string(string: str) -> Optional[str]:
-    pattern_name = _detect_longest_matched_pattern(string)
-    if not pattern_name:
+def detect_longest_matched_string(string: str, patterns: List[str]) -> Optional[str]:
+    pattern_index = _detect_longest_matched_pattern(string, patterns)
+    if pattern_index is None:
         return None
-    pattern = NUMBERING_PATTERNS[pattern_name]
+    pattern = patterns[pattern_index]
     return _extract_matched_str(string, re.match(pattern, string))
 
 
@@ -163,7 +163,11 @@ def _smart_detect_pattern(
         if string[:max_prefix_len] in exceptions:
             pattern = exceptions[string[:max_prefix_len]]
             return NumberingPattern(pattern) if pattern else None
-    return _detect_longest_matched_pattern(string)
+    pattern_names, patterns = list(zip(*NUMBERING_PATTERNS.items()))  # type: ignore
+    pattern_index = _detect_longest_matched_pattern(string, patterns)  # type: ignore
+    if pattern_index is None:
+        return None
+    return pattern_names[pattern_index]  # type: ignore
 
 
 def detect_patterns_if_exists(

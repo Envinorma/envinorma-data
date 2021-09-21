@@ -21,14 +21,14 @@ def write_file(text: str, filename: str) -> None:
         file_.write(text)
 
 
-def write_json(obj: Union[Dict, List], filename: str, safe: bool = False, pretty: bool = True) -> None:
-    indent = 4 if pretty else None
+def write_json(obj: Union[Dict, List], filename: str, safe: bool = False, pretty: bool = True, indent: int = 4) -> None:
+    indent_ = indent if pretty else None
     with open(filename, 'w') as file_:
         if not safe:
-            json.dump(obj, file_, indent=indent, sort_keys=True, ensure_ascii=False)
+            json.dump(obj, file_, indent=indent_, sort_keys=True, ensure_ascii=False)
         else:
             try:
-                json.dump(obj, file_, indent=indent, sort_keys=True, ensure_ascii=False)
+                json.dump(obj, file_, indent=indent_, sort_keys=True, ensure_ascii=False)
             except Exception:  # pylint: disable=broad-except
                 print(traceback.format_exc())
 

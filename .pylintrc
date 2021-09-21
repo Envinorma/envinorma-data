@@ -4,3 +4,6 @@ max-line-length=120
 
 [MESSAGES CONTROL]
 disable=missing-function-docstring,missing-class-docstring,missing-module-docstring,bad-continuation,invalid-name
+
+[MASTER]
+ignore-patterns=.eggs
