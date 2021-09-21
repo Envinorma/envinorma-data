@@ -88,8 +88,6 @@ def test_extract_reference_numbers():
 def test_extract_reference_names():
     titles_and_references = json.load(open('test_data/titles_name_reference.json'))
     for titles, reference in titles_and_references:
-        if _extract_reference(titles).name != reference:
-            print(titles)
         assert _extract_reference(titles).name == reference
 
 
