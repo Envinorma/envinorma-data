@@ -3,6 +3,8 @@ from typing import List, Tuple
 
 from envinorma.enriching.title_reference import (
     _any_alphanumeric,
+    _remove_special_words,
+    _remove_special_words_and_numbering,
     _extract_prefix,
     _extract_reference,
     _extract_special_prefix,
@@ -77,128 +79,6 @@ def test_merge_prefix_list():
     assert _merge_prefixes(['Section II', 'Chapitre 4', 'Article 10']) == 'Section II Chapitre 4 Article 10'
 
 
-def test_extract_reference():
-    tuples = [
-        (
-            [
-                'TITRE III : RÉSERVOIRS DE STOCKAGE ET POSTES DE CHARGEMENT/DÉCHARGEMENT',
-                'Chapitre Ier : Réservoirs et équipements associés.',
-                'Article 4',
-            ],
-            'Article 4',
-        ),
-        (
-            ["Chapitre III : Emissions dans l'eau", 'Section 3 : Collecte et rejet des effluents', 'Article 29'],
-            'Article 29',
-        ),
-        (
-            [
-                "Annexe II - ANNEXE À L'ARRÊTÉ DU 29 MAI 2000 AUX PRESCRIPTIONS GÉNÉRALES APPLIC"
-                "ABLES AUX INSTALLATIONS CLASSÉES POUR LA PROTECTION DE L'ENVIRONNEMENT"
-                " SOUMISES À DÉCLARATION SOUS LA RUBRIQUE N° 2925"
-            ],
-            'Annexe II',
-        ),
-        (
-            [
-                'Chapitre II : Prévention des accidents et des pollutions',
-                'Section 2 : Dispositions constructives',
-                'Article 12',
-                'I. ― Accessibilité :',
-            ],
-            'Article 12 I.',
-        ),
-        (["Chapitre III : Prélèvement et consommation d'eau.", 'Article 21'], 'Article 21'),
-        (['Article 4'], 'Article 4'),
-        (['Annexes', 'Annexe I', '4. Risques', '4.1. Localisation des risques'], 'Annexe I 4.1.'),
-        (
-            [
-                'Titre II : PRÉVENTION DE LA POLLUTION ATMOSPHÉRIQUE',
-                "Chapitre V : Surveillance des rejets atmosphériques et de l'impact sur l'environnement",
-                'Section 3 : Conditions de respect des valeurs limites',
-            ],
-            '',
-        ),
-        (
-            [
-                'Annexe I : Prescriptions générales applicables aux installations classées pour la protection'
-                ' de l’environnement soumises à déclaration sous la rubrique n° 2560',
-                '2.Implantation - aménagement',
-                '2.4.Comportement au feu des locaux',
-                '2.4.4.Désenfumage',
-            ],
-            'Annexe I 2.4.4.',
-        ),
-        (
-            [
-                'Annexe I : Prescriptions générales applicables et faisant l’objet du contrôle périodique '
-                'applicables aux installations classées soumises à déclaration sous la rubrique n°2930',
-                '1. Dispositions générales',
-                "1.7. Cessation d'activité",
-            ],
-            'Annexe I 1.7.',
-        ),
-        (["Chapitre IV : Émissions dans l'eau et les sols"], ''),
-        (
-            [
-                'Annexes',
-                'Annexe I',
-                '2. Implantation aménagement',
-                '2.4. Comportement au feu des bâtiments',
-                '2.4.1. Réaction au feu',
-            ],
-            'Annexe I 2.4.1.',
-        ),
-        (
-            ['Annexe', '1. Dispositions générales', "1.5. Déclaration d'accident ou de pollution accidentelle"],
-            'Annexe 1.5.',
-        ),
-        (['Annexes'], 'Annexe'),
-        (
-            [
-                'Annexes',
-                'Annexe I - PRESCRIPTIONS GÉNÉRALES APPLICABLES AUX INSTALLATIONS CLASSÉES SOUMISES À DÉCLARATION'
-                ' SOUS LA RUBRIQUE N° 2921',
-                '8. Bruit et vibrations',
-                '8.3. Vibrations',
-            ],
-            'Annexe I 8.3.',
-        ),
-        (
-            ["TITRE VIII : RISQUES INDUSTRIELS LORS D'UN DYSFONCTIONNEMENT DE L'INSTALLATION.", 'Article 50'],
-            'Article 50',
-        ),
-        (
-            ['Chapitre VII : Bruit et vibrations', 'Article 7.3 - Vibrations.', '7.3.2. Sources impulsionnelles :'],
-            'Article 7.3 7.3.2.',
-        ),
-        (['Annexe I', '7. Déchets'], 'Annexe I 7.'),
-        (
-            [
-                'Annexes',
-                "Annexe II - PRESCRIPTIONS GÉNÉRALES APPLICABLES AUX INSTALLATIONS CLASSÉES POUR LA PROTECTION DE"
-                " L'ENVIRONNEMENT SOUMISES À LA RUBRIQUE 1510",
-                '1. Dispositions générales',
-                '1.8. Dispositions générales pour les installations soumises à déclaration',
-                '1.8.3. Contenu de la déclaration',
-            ],
-            'Annexe II 1.8.3.',
-        ),
-        (['Article 4'], 'Article 4'),
-        (
-            [
-                'Annexe I : Prescriptions générales et faisant l’objet du contrôle périodique applicables aux '
-                'installations classées soumises à déclaration sous la rubrique 2940',
-                '5. Eau',
-                '5.6 . Interdiction des rejets en nappe',
-            ],
-            'Annexe I 5.6',
-        ),
-    ]
-    for titles, expected in tuples:
-        assert _extract_reference(titles).nb == expected
-
-
 def test_extract_reference_numbers():
     titles_and_references = json.load(open('test_data/titles_number_reference.json'))
     for titles, reference in titles_and_references:
@@ -208,6 +88,8 @@ def test_extract_reference_numbers():
 def test_extract_reference_names():
     titles_and_references = json.load(open('test_data/titles_name_reference.json'))
     for titles, reference in titles_and_references:
+        if _extract_reference(titles).name != reference:
+            print(titles)
         assert _extract_reference(titles).name == reference
 
 
@@ -234,13 +116,29 @@ def test_add_references():
     assert ensure_not_none(secs[0].sections[0].reference).nb == 'Article 1. 1.'
     assert ensure_not_none(secs[0].sections[0].sections[0].reference).nb == 'Article 1. 1.1.'
     assert ensure_not_none(secs[0].sections[0].sections[1].reference).nb == 'Article 1. 1.2.'
-    assert ensure_not_none(secs[1].reference).nb == ''
-    assert ensure_not_none(secs[2].reference).nb == ''
-    assert ensure_not_none(secs[3].reference).nb == ''
-    assert ensure_not_none(secs[4].reference).nb == ''
+    assert ensure_not_none(secs[1].reference).nb == '2.'
+    assert ensure_not_none(secs[2].reference).nb == 'A.'
+    assert ensure_not_none(secs[3].reference).nb == 'a)'
+    assert ensure_not_none(secs[4].reference).nb == 'V.'
     assert ensure_not_none(secs[5].reference).nb == 'Annexe I'
     assert ensure_not_none(secs[6].reference).nb == 'Article 18.1'
     assert ensure_not_none(secs[7].reference).nb == 'Article 1'
+
+
+def test_remove_special_words():
+    assert _remove_special_words('') == ''
+    assert _remove_special_words('annexes I') == 'I'
+    assert _remove_special_words('annexes article I') == 'I'
+    assert _remove_special_words('Chapitre II Section A') == 'II Section A'
+    assert _remove_special_words('Section I : titre') == 'I : titre'
+
+
+def test_remove_special_words_and_numbering():
+    assert _remove_special_words_and_numbering('') == ''
+    assert _remove_special_words_and_numbering('annexes I') == ''
+    assert _remove_special_words_and_numbering('annexes article I') == ''
+    assert _remove_special_words_and_numbering('Chapitre II Section A') == 'Section A'
+    assert _remove_special_words_and_numbering('Section I : titre') == ': titre'
 
 
 def _extract_titles_and_reference_pairs_from_section(text: StructuredText) -> List[Tuple[str, str]]:

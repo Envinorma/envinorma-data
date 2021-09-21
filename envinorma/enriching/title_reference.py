@@ -80,11 +80,37 @@ def _clean_suffix(suffix: str) -> str:
     return stripped
 
 
-def _extract_suffix(title: str) -> Optional[str]:
-    _, raw_prefix = _extract_raw_number_prefix(title)
-    if not raw_prefix:
+_SPECIAL_WORDS = ['titre', 'chapitre', 'section', 'annexes', 'annexe', 'article']
+
+
+def _remove_special_words(title: str) -> str:
+    new_title = title
+    for word in _SPECIAL_WORDS:
+        if new_title.lower().startswith(word):
+            new_title = new_title[len(word) :].strip()
+    if new_title != title:
+        return _remove_special_words(new_title)
+    return new_title
+
+
+def _remove_special_words_and_numbering(title: str) -> str:
+    new_title = _remove_special_words(title)
+    if new_title == title:
         return title
-    return _clean_suffix(title[len(raw_prefix) :])
+    words = new_title.split()
+    if not words:
+        return new_title
+    if _is_probably_section_number(words[0]):
+        return new_title[len(words[0]) :].strip()
+    return new_title
+
+
+def _extract_suffix(title: str) -> Optional[str]:
+    clean_title = _remove_special_words_and_numbering(title)
+    raw_prefix = detect_longest_matched_string(clean_title, _NUMBERING_PATTERNS)
+    if raw_prefix:
+        clean_title = clean_title[len(raw_prefix) :]
+    return _clean_suffix(clean_title)
 
 
 _VERBOSE_NUMBERING_PATTERNS = [
@@ -147,10 +173,11 @@ def _annexe_or_article(title: str) -> bool:
 
 
 def _cut_before_annexe_or_article(titles: List[str]) -> List[str]:
+    cut_at = 0
     for i, title in enumerate(titles):
         if _annexe_or_article(title):
-            return titles[i:]
-    return []
+            cut_at = i
+    return titles[cut_at:]
 
 
 def _remove_empty(elements: List[str]) -> List[str]:
@@ -164,12 +191,6 @@ def _merge_prefixes(prefixes: List[Optional[str]]) -> str:
         return _merge_prefixes(prefixes[1:])
     to_merge = _remove_empty([prefixes[0] or '', _merge_prefixes(prefixes[1:])])
     return _PREFIX_SEPARATOR.join(to_merge)
-
-
-def _post_merge_cleanup(prefix: str) -> str:
-    if prefix.lower().startswith('annexe article annexe'):
-        return prefix[len('annexe article ') :]
-    return prefix
 
 
 def _last_suffix(titles: List[Optional[str]]) -> Optional[str]:
@@ -187,8 +208,8 @@ def _extract_reference(titles: List[str]) -> Reference:
     if len(filtered_titles) == 0:
         return Reference('', '')
     prefixes = [_extract_prefix(title) for title in filtered_titles]
-    suffixes = [_extract_suffix(title) for title in filtered_titles]
-    return Reference(_post_merge_cleanup(_merge_prefixes(prefixes)), _last_suffix(suffixes) or '')
+    suffixes = [_extract_suffix(title) for title in clean_titles]
+    return Reference(_merge_prefixes(prefixes), _last_suffix(suffixes) or '')
 
 
 def _add_references_in_section(text: StructuredText, titles: List[str]) -> StructuredText:
