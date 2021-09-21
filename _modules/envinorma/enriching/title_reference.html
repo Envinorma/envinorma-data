@@ -91,15 +91,22 @@
              
   <h1>Source code for envinorma.enriching.title_reference</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">import</span> <span class="nn">unicodedata</span>
 <span class="kn">from</span> <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">replace</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span>
 
 <span class="kn">from</span> <span class="nn">envinorma.models.arrete_ministeriel</span> <span class="kn">import</span> <span class="n">ArreteMinisteriel</span>
-<span class="kn">from</span> <span class="nn">envinorma.models.structured_text</span> <span class="kn">import</span> <span class="n">StructuredText</span>
-<span class="kn">from</span> <span class="nn">envinorma.title_detection</span> <span class="kn">import</span> <span class="n">NUMBERING_PATTERNS</span><span class="p">,</span> <span class="n">ROMAN_PATTERN</span><span class="p">,</span> <span class="n">NumberingPattern</span><span class="p">,</span> <span class="n">detect_longest_matched_string</span>
+<span class="kn">from</span> <span class="nn">envinorma.models.structured_text</span> <span class="kn">import</span> <span class="n">Reference</span><span class="p">,</span> <span class="n">StructuredText</span>
+<span class="kn">from</span> <span class="nn">envinorma.title_detection</span> <span class="kn">import</span> <span class="n">ROMAN_PATTERN</span><span class="p">,</span> <span class="n">detect_longest_matched_string</span>
+
+
+<span class="k">def</span> <span class="nf">_any_alphanumeric</span><span class="p">(</span><span class="n">candidate</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+    <span class="k">return</span> <span class="nb">len</span><span class="p">([</span><span class="n">c</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">candidate</span> <span class="k">if</span> <span class="n">c</span><span class="o">.</span><span class="n">isalnum</span><span class="p">()])</span> <span class="o">&gt;</span> <span class="mi">0</span>
 
 
 <span class="k">def</span> <span class="nf">_is_probably_section_number</span><span class="p">(</span><span class="n">candidate</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">_any_alphanumeric</span><span class="p">(</span><span class="n">candidate</span><span class="p">):</span>
+        <span class="k">return</span> <span class="kc">False</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">candidate</span><span class="o">.</span><span class="n">isalpha</span><span class="p">():</span>
         <span class="k">return</span> <span class="kc">True</span>
     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">candidate</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="mi">2</span><span class="p">:</span>
@@ -114,13 +121,13 @@
     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">split</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
         <span class="k">return</span> <span class="kc">None</span>
     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">split</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
-        <span class="k">return</span> <span class="s1">&#39;Art.&#39;</span>
+        <span class="k">return</span> <span class="s1">&#39;Article&#39;</span>
     <span class="k">if</span> <span class="n">split</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s1">&#39;annexe&#39;</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">_extract_annexe_prefix</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">split</span><span class="p">[</span><span class="mi">1</span><span class="p">:]))</span>
     <span class="n">article_number</span> <span class="o">=</span> <span class="n">split</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
     <span class="k">if</span> <span class="n">_is_probably_section_number</span><span class="p">(</span><span class="n">article_number</span><span class="p">):</span>
-        <span class="k">return</span> <span class="s1">&#39;Art. &#39;</span> <span class="o">+</span> <span class="n">article_number</span>
-    <span class="k">return</span> <span class="s1">&#39;Art. ?&#39;</span>
+        <span class="k">return</span> <span class="s1">&#39;Article &#39;</span> <span class="o">+</span> <span class="n">article_number</span>
+    <span class="k">return</span> <span class="s1">&#39;Article&#39;</span>
 
 
 <span class="k">def</span> <span class="nf">_extract_annexe_prefix</span><span class="p">(</span><span class="n">title</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
@@ -132,7 +139,7 @@
     <span class="n">annexe_number</span> <span class="o">=</span> <span class="n">split</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
     <span class="k">if</span> <span class="n">_is_probably_section_number</span><span class="p">(</span><span class="n">annexe_number</span><span class="p">):</span>
         <span class="k">return</span> <span class="s1">&#39;Annexe &#39;</span> <span class="o">+</span> <span class="n">annexe_number</span>
-    <span class="k">return</span> <span class="s1">&#39;Annexe ?&#39;</span>
+    <span class="k">return</span> <span class="s1">&#39;Annexe&#39;</span>
 
 
 <span class="k">def</span> <span class="nf">_extract_special_prefix</span><span class="p">(</span><span class="n">title</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
@@ -143,25 +150,88 @@
     <span class="k">return</span> <span class="kc">None</span>
 
 
-<span class="k">def</span> <span class="nf">_extract_prefix</span><span class="p">(</span><span class="n">title</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<span class="k">def</span> <span class="nf">_extract_raw_number_prefix</span><span class="p">(</span><span class="n">title</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">bool</span><span class="p">,</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]]:</span>
     <span class="n">special_prefix</span> <span class="o">=</span> <span class="n">_extract_special_prefix</span><span class="p">(</span><span class="n">title</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">special_prefix</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">special_prefix</span>
-    <span class="n">res</span> <span class="o">=</span> <span class="n">detect_longest_matched_string</span><span class="p">(</span><span class="n">title</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">res</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span> <span class="k">if</span> <span class="n">res</span> <span class="k">else</span> <span class="n">res</span>
+        <span class="k">return</span> <span class="kc">True</span><span class="p">,</span> <span class="n">special_prefix</span>
+    <span class="k">return</span> <span class="kc">False</span><span class="p">,</span> <span class="n">detect_longest_matched_string</span><span class="p">(</span><span class="n">title</span><span class="p">,</span> <span class="n">_NUMBERING_PATTERNS</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">_extract_prefix</span><span class="p">(</span><span class="n">title</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+    <span class="n">special</span><span class="p">,</span> <span class="n">raw_prefix</span> <span class="o">=</span> <span class="n">_extract_raw_number_prefix</span><span class="p">(</span><span class="n">title</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">raw_prefix</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span> <span class="k">if</span> <span class="n">raw_prefix</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">special</span> <span class="k">else</span> <span class="n">raw_prefix</span>
+
+
+<span class="k">def</span> <span class="nf">_clean_suffix</span><span class="p">(</span><span class="n">suffix</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="n">stripped</span> <span class="o">=</span> <span class="n">suffix</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">char</span> <span class="ow">in</span> <span class="s1">&#39;-:&#39;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">stripped</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">char</span><span class="p">):</span>
+            <span class="n">stripped</span> <span class="o">=</span> <span class="n">stripped</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">stripped</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="n">char</span><span class="p">):</span>
+            <span class="n">stripped</span> <span class="o">=</span> <span class="n">stripped</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">stripped</span>
+
+
+<span class="n">_SPECIAL_WORDS</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;titre&#39;</span><span class="p">,</span> <span class="s1">&#39;chapitre&#39;</span><span class="p">,</span> <span class="s1">&#39;section&#39;</span><span class="p">,</span> <span class="s1">&#39;annexes&#39;</span><span class="p">,</span> <span class="s1">&#39;annexe&#39;</span><span class="p">,</span> <span class="s1">&#39;article&#39;</span><span class="p">]</span>
+
+
+<span class="k">def</span> <span class="nf">_remove_special_words</span><span class="p">(</span><span class="n">title</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="n">new_title</span> <span class="o">=</span> <span class="n">title</span>
+    <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">_SPECIAL_WORDS</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">new_title</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">word</span><span class="p">):</span>
+            <span class="n">new_title</span> <span class="o">=</span> <span class="n">new_title</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">word</span><span class="p">)</span> <span class="p">:]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">new_title</span> <span class="o">!=</span> <span class="n">title</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">_remove_special_words</span><span class="p">(</span><span class="n">new_title</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">new_title</span>
+
+
+<span class="k">def</span> <span class="nf">_remove_special_words_and_numbering</span><span class="p">(</span><span class="n">title</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="n">new_title</span> <span class="o">=</span> <span class="n">_remove_special_words</span><span class="p">(</span><span class="n">title</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">new_title</span> <span class="o">==</span> <span class="n">title</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">title</span>
+    <span class="n">words</span> <span class="o">=</span> <span class="n">new_title</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">words</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">new_title</span>
+    <span class="k">if</span> <span class="n">_is_probably_section_number</span><span class="p">(</span><span class="n">words</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+        <span class="k">return</span> <span class="n">new_title</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">words</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="p">:]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">new_title</span>
+
+
+<span class="k">def</span> <span class="nf">_extract_suffix</span><span class="p">(</span><span class="n">title</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+    <span class="n">clean_title</span> <span class="o">=</span> <span class="n">_remove_special_words_and_numbering</span><span class="p">(</span><span class="n">title</span><span class="p">)</span>
+    <span class="n">raw_prefix</span> <span class="o">=</span> <span class="n">detect_longest_matched_string</span><span class="p">(</span><span class="n">clean_title</span><span class="p">,</span> <span class="n">_NUMBERING_PATTERNS</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">raw_prefix</span><span class="p">:</span>
+        <span class="n">clean_title</span> <span class="o">=</span> <span class="n">clean_title</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">raw_prefix</span><span class="p">)</span> <span class="p">:]</span>
+    <span class="k">return</span> <span class="n">_clean_suffix</span><span class="p">(</span><span class="n">clean_title</span><span class="p">)</span>
 
 
 <span class="n">_VERBOSE_NUMBERING_PATTERNS</span> <span class="o">=</span> <span class="p">[</span>
-    <span class="n">NUMBERING_PATTERNS</span><span class="p">[</span><span class="n">_pat</span><span class="p">]</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
-    <span class="k">for</span> <span class="n">_pat</span> <span class="ow">in</span> <span class="p">(</span>
-        <span class="n">NumberingPattern</span><span class="o">.</span><span class="n">NUMERIC_D1</span><span class="p">,</span>
-        <span class="n">NumberingPattern</span><span class="o">.</span><span class="n">NUMERIC_D2</span><span class="p">,</span>
-        <span class="n">NumberingPattern</span><span class="o">.</span><span class="n">NUMERIC_D3</span><span class="p">,</span>
-        <span class="n">NumberingPattern</span><span class="o">.</span><span class="n">NUMERIC_D3_SPACE</span><span class="p">,</span>
-        <span class="n">NumberingPattern</span><span class="o">.</span><span class="n">NUMERIC_D4_SPACE</span><span class="p">,</span>
-        <span class="n">NumberingPattern</span><span class="o">.</span><span class="n">NUMERIC_D2_DASH</span><span class="p">,</span>
-        <span class="n">NumberingPattern</span><span class="o">.</span><span class="n">NUMERIC_D3_DASH</span><span class="p">,</span>
-    <span class="p">)</span>
+    <span class="sa">r</span><span class="s1">&#39;^[0-9]+\.&#39;</span><span class="p">,</span>
+    <span class="sa">r</span><span class="s1">&#39;^[0-9]+\.[0-9]+&#39;</span><span class="p">,</span>
+    <span class="sa">r</span><span class="s1">&#39;^([0-9]+\.)</span><span class="si">{2}</span><span class="s1">&#39;</span><span class="p">,</span>
+    <span class="sa">r</span><span class="s1">&#39;^([0-9]+\.)</span><span class="si">{3}</span><span class="s1">&#39;</span><span class="p">,</span>
+    <span class="sa">r</span><span class="s1">&#39;^([0-9]+\. )</span><span class="si">{3}</span><span class="s1">&#39;</span><span class="p">,</span>
+    <span class="sa">r</span><span class="s1">&#39;^([0-9]+\. )</span><span class="si">{4}</span><span class="s1">&#39;</span><span class="p">,</span>
+    <span class="sa">r</span><span class="s1">&#39;^[0-9]+\-[0-9]+\.&#39;</span><span class="p">,</span>
+    <span class="sa">r</span><span class="s1">&#39;^[0-9]+\-[0-9]+\-[0-9]+\.&#39;</span><span class="p">,</span>
+    <span class="sa">rf</span><span class="s1">&#39;^</span><span class="si">{</span><span class="n">ROMAN_PATTERN</span><span class="si">}</span><span class="s1">\-[0-9]+\.&#39;</span><span class="p">,</span>
+    <span class="sa">rf</span><span class="s1">&#39;^</span><span class="si">{</span><span class="n">ROMAN_PATTERN</span><span class="si">}</span><span class="s1">\-[0-9]+\.[0-9]+\.&#39;</span><span class="p">,</span>
+<span class="p">]</span>
+<span class="n">_NUMBERING_PATTERNS</span> <span class="o">=</span> <span class="n">_VERBOSE_NUMBERING_PATTERNS</span> <span class="o">+</span> <span class="p">[</span>
+    <span class="sa">rf</span><span class="s1">&#39;^</span><span class="si">{</span><span class="n">ROMAN_PATTERN</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span>
+    <span class="sa">rf</span><span class="s1">&#39;^</span><span class="si">{</span><span class="n">ROMAN_PATTERN</span><span class="si">}</span><span class="s1">\.&#39;</span><span class="p">,</span>
+    <span class="sa">rf</span><span class="s1">&#39;^</span><span class="si">{</span><span class="n">ROMAN_PATTERN</span><span class="si">}</span><span class="s1">\-&#39;</span><span class="p">,</span>
+    <span class="sa">rf</span><span class="s1">&#39;^</span><span class="si">{</span><span class="n">ROMAN_PATTERN</span><span class="si">}</span><span class="s1">\-[0-9]+\.&#39;</span><span class="p">,</span>
+    <span class="sa">rf</span><span class="s1">&#39;^</span><span class="si">{</span><span class="n">ROMAN_PATTERN</span><span class="si">}</span><span class="s1">\-[0-9]+\.[0-9]+\.&#39;</span><span class="p">,</span>
+    <span class="sa">r</span><span class="s1">&#39;^[0-9]+\)&#39;</span><span class="p">,</span>
+    <span class="sa">r</span><span class="s1">&#39;^([0-9]+\. )</span><span class="si">{2}</span><span class="s1">&#39;</span><span class="p">,</span>
+    <span class="sa">r</span><span class="s1">&#39;^[0-9]+\-[0-9]+\.&#39;</span><span class="p">,</span>
+    <span class="sa">r</span><span class="s1">&#39;^([0-9]+\. )</span><span class="si">{3}</span><span class="s1">&#39;</span><span class="p">,</span>
+    <span class="sa">r</span><span class="s1">&#39;^[0-9]+\-[0-9]+\-[0-9]+\.&#39;</span><span class="p">,</span>
+    <span class="sa">r</span><span class="s1">&#39;^([0-9]+\.)</span><span class="si">{4}</span><span class="s1">&#39;</span><span class="p">,</span>
+    <span class="sa">r</span><span class="s1">&#39;^[0-9]+°&#39;</span><span class="p">,</span>
+    <span class="sa">r</span><span class="s1">&#39;^[a-z]\)&#39;</span><span class="p">,</span>
+    <span class="sa">r</span><span class="s1">&#39;^[A-Z]\.&#39;</span><span class="p">,</span>
 <span class="p">]</span>
 
 
@@ -176,8 +246,6 @@
 <span class="k">def</span> <span class="nf">_is_prefix</span><span class="p">(</span><span class="n">candidate</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">long_word</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">candidate</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">long_word</span><span class="p">:</span>
         <span class="k">return</span> <span class="kc">False</span>
-    <span class="k">if</span> <span class="n">candidate</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;annexe&#39;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">long_word</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;annexe&#39;</span><span class="p">):</span>
-        <span class="k">return</span> <span class="kc">True</span>
     <span class="n">candidate_strip</span> <span class="o">=</span> <span class="n">candidate</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
     <span class="n">long_word_strip</span> <span class="o">=</span> <span class="n">long_word</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">_are_consecutive_verbose_numbering</span><span class="p">(</span><span class="n">candidate_strip</span><span class="p">,</span> <span class="n">long_word_strip</span><span class="p">)</span>
@@ -195,10 +263,11 @@
 
 
 <span class="k">def</span> <span class="nf">_cut_before_annexe_or_article</span><span class="p">(</span><span class="n">titles</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+    <span class="n">cut_at</span> <span class="o">=</span> <span class="mi">0</span>
     <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">title</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">titles</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">_annexe_or_article</span><span class="p">(</span><span class="n">title</span><span class="p">):</span>
-            <span class="k">return</span> <span class="n">titles</span><span class="p">[</span><span class="n">i</span><span class="p">:]</span>
-    <span class="k">return</span> <span class="p">[]</span>
+            <span class="n">cut_at</span> <span class="o">=</span> <span class="n">i</span>
+    <span class="k">return</span> <span class="n">titles</span><span class="p">[</span><span class="n">cut_at</span><span class="p">:]</span>
 
 
 <span class="k">def</span> <span class="nf">_remove_empty</span><span class="p">(</span><span class="n">elements</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
@@ -206,29 +275,42 @@
 
 
 <span class="k">def</span> <span class="nf">_merge_prefixes</span><span class="p">(</span><span class="n">prefixes</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]])</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">prefixes</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;prefixes cannot be empty&#39;</span><span class="p">)</span>
+    <span class="n">first_prefix</span> <span class="o">=</span> <span class="n">prefixes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">or</span> <span class="s1">&#39;&#39;</span>
     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">prefixes</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">prefixes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">or</span> <span class="s1">&#39;&#39;</span>
-    <span class="k">if</span> <span class="n">_is_prefix</span><span class="p">(</span><span class="n">prefixes</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">prefixes</span><span class="p">[</span><span class="mi">1</span><span class="p">]):</span>
+        <span class="k">return</span> <span class="n">first_prefix</span> <span class="ow">or</span> <span class="s1">&#39;&#39;</span>
+    <span class="k">if</span> <span class="n">_is_prefix</span><span class="p">(</span><span class="n">first_prefix</span><span class="p">,</span> <span class="n">prefixes</span><span class="p">[</span><span class="mi">1</span><span class="p">]):</span>
         <span class="k">return</span> <span class="n">_merge_prefixes</span><span class="p">(</span><span class="n">prefixes</span><span class="p">[</span><span class="mi">1</span><span class="p">:])</span>
-    <span class="n">to_merge</span> <span class="o">=</span> <span class="n">_remove_empty</span><span class="p">([</span><span class="n">prefixes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">or</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">_merge_prefixes</span><span class="p">(</span><span class="n">prefixes</span><span class="p">[</span><span class="mi">1</span><span class="p">:])])</span>
-    <span class="k">return</span> <span class="n">_PREFIX_SEPARATOR</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">to_merge</span><span class="p">)</span>
+    <span class="n">separator</span> <span class="o">=</span> <span class="s1">&#39; &gt; &#39;</span> <span class="k">if</span> <span class="n">_annexe_or_article</span><span class="p">(</span><span class="n">first_prefix</span><span class="p">)</span> <span class="k">else</span> <span class="n">_PREFIX_SEPARATOR</span>
+    <span class="n">to_merge</span> <span class="o">=</span> <span class="n">_remove_empty</span><span class="p">([</span><span class="n">first_prefix</span><span class="p">,</span> <span class="n">_merge_prefixes</span><span class="p">(</span><span class="n">prefixes</span><span class="p">[</span><span class="mi">1</span><span class="p">:])])</span>
+    <span class="k">return</span> <span class="n">separator</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">to_merge</span><span class="p">)</span>
 
 
-<span class="k">def</span> <span class="nf">_merge_titles</span><span class="p">(</span><span class="n">titles</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="k">def</span> <span class="nf">_last_suffix</span><span class="p">(</span><span class="n">titles</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]])</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+    <span class="k">for</span> <span class="n">title</span> <span class="ow">in</span> <span class="nb">reversed</span><span class="p">(</span><span class="n">titles</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">title</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">title</span>
+    <span class="k">return</span> <span class="kc">None</span>
+
+
+<span class="k">def</span> <span class="nf">_extract_reference</span><span class="p">(</span><span class="n">titles</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Reference</span><span class="p">:</span>
     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">titles</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;should have at least one prefix&#39;</span><span class="p">)</span>
-    <span class="n">filtered_titles</span> <span class="o">=</span> <span class="n">_cut_before_annexe_or_article</span><span class="p">(</span><span class="n">titles</span><span class="p">)</span>
+    <span class="n">clean_titles</span> <span class="o">=</span> <span class="p">[</span><span class="n">unicodedata</span><span class="o">.</span><span class="n">normalize</span><span class="p">(</span><span class="s1">&#39;NFKD&#39;</span><span class="p">,</span> <span class="n">title</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="k">for</span> <span class="n">title</span> <span class="ow">in</span> <span class="n">titles</span><span class="p">]</span>
+    <span class="n">filtered_titles</span> <span class="o">=</span> <span class="n">_cut_before_annexe_or_article</span><span class="p">(</span><span class="n">clean_titles</span><span class="p">)</span>
     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">filtered_titles</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-        <span class="k">return</span> <span class="s1">&#39;&#39;</span>
+        <span class="k">return</span> <span class="n">Reference</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
     <span class="n">prefixes</span> <span class="o">=</span> <span class="p">[</span><span class="n">_extract_prefix</span><span class="p">(</span><span class="n">title</span><span class="p">)</span> <span class="k">for</span> <span class="n">title</span> <span class="ow">in</span> <span class="n">filtered_titles</span><span class="p">]</span>
-    <span class="k">return</span> <span class="n">_merge_prefixes</span><span class="p">(</span><span class="n">prefixes</span><span class="p">)</span>
+    <span class="n">suffixes</span> <span class="o">=</span> <span class="p">[</span><span class="n">_extract_suffix</span><span class="p">(</span><span class="n">title</span><span class="p">)</span> <span class="k">for</span> <span class="n">title</span> <span class="ow">in</span> <span class="n">clean_titles</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">Reference</span><span class="p">(</span><span class="n">_merge_prefixes</span><span class="p">(</span><span class="n">prefixes</span><span class="p">),</span> <span class="n">_last_suffix</span><span class="p">(</span><span class="n">suffixes</span><span class="p">)</span> <span class="ow">or</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
 
 
 <span class="k">def</span> <span class="nf">_add_references_in_section</span><span class="p">(</span><span class="n">text</span><span class="p">:</span> <span class="n">StructuredText</span><span class="p">,</span> <span class="n">titles</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">StructuredText</span><span class="p">:</span>
     <span class="n">titles</span> <span class="o">=</span> <span class="n">titles</span> <span class="o">+</span> <span class="p">[</span><span class="n">text</span><span class="o">.</span><span class="n">title</span><span class="o">.</span><span class="n">text</span><span class="p">]</span>
     <span class="k">return</span> <span class="n">replace</span><span class="p">(</span>
         <span class="n">text</span><span class="p">,</span>
-        <span class="n">reference_str</span><span class="o">=</span><span class="n">_merge_titles</span><span class="p">(</span><span class="n">titles</span><span class="p">),</span>
+        <span class="n">reference</span><span class="o">=</span><span class="n">_extract_reference</span><span class="p">(</span><span class="n">titles</span><span class="p">),</span>
         <span class="n">sections</span><span class="o">=</span><span class="p">[</span><span class="n">_add_references_in_section</span><span class="p">(</span><span class="n">section</span><span class="p">,</span> <span class="n">titles</span><span class="p">)</span> <span class="k">for</span> <span class="n">section</span> <span class="ow">in</span> <span class="n">text</span><span class="o">.</span><span class="n">sections</span><span class="p">],</span>
     <span class="p">)</span>
 

@@ -1772,6 +1772,32 @@ of why it is inactive.</p>
 </dd></dl>
 
 <dl class="py class">
+<dt class="sig sig-object py" id="envinorma.models.structured_text.Reference">
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">Reference</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nb</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/envinorma/models/structured_text.html#Reference"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#envinorma.models.structured_text.Reference" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="envinorma.models.structured_text.Reference.from_dict">
+<em class="property"><span class="pre">classmethod</span> </em><span class="sig-name descname"><span class="pre">from_dict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dict_</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Dict</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#envinorma.models.structured_text.Reference" title="envinorma.models.structured_text.Reference"><span class="pre">envinorma.models.structured_text.Reference</span></a></span></span><a class="reference internal" href="_modules/envinorma/models/structured_text.html#Reference.from_dict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#envinorma.models.structured_text.Reference.from_dict" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="envinorma.models.structured_text.Reference.name">
+<span class="sig-name descname"><span class="pre">name</span></span><em class="property"><span class="pre">:</span> <span class="pre">str</span></em><a class="headerlink" href="#envinorma.models.structured_text.Reference.name" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="envinorma.models.structured_text.Reference.nb">
+<span class="sig-name descname"><span class="pre">nb</span></span><em class="property"><span class="pre">:</span> <span class="pre">str</span></em><a class="headerlink" href="#envinorma.models.structured_text.Reference.nb" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="envinorma.models.structured_text.Reference.to_dict">
+<span class="sig-name descname"><span class="pre">to_dict</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/envinorma/models/structured_text.html#Reference.to_dict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#envinorma.models.structured_text.Reference.to_dict" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
 <dt class="sig sig-object py" id="envinorma.models.structured_text.SectionParametrization">
 <em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">SectionParametrization</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">potential_inapplicabilities:</span> <span class="pre">List[envinorma.models.structured_text.PotentialInapplicability]</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;</span></em>, <em class="sig-param"><span class="pre">potential_modifications:</span> <span class="pre">List[envinorma.models.structured_text.PotentialModification]</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;</span></em>, <em class="sig-param"><span class="pre">warnings:</span> <span class="pre">List[str]</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/envinorma/models/structured_text.html#SectionParametrization"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#envinorma.models.structured_text.SectionParametrization" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
@@ -1804,7 +1830,7 @@ of why it is inactive.</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="envinorma.models.structured_text.StructuredText">
-<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">StructuredText</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">title:</span> <span class="pre">envinorma.models.text_elements.EnrichedString,</span> <span class="pre">outer_alineas:</span> <span class="pre">List[envinorma.models.text_elements.EnrichedString],</span> <span class="pre">sections:</span> <span class="pre">List[envinorma.models.structured_text.StructuredText],</span> <span class="pre">applicability:</span> <span class="pre">Optional[envinorma.models.structured_text.Applicability],</span> <span class="pre">reference_str:</span> <span class="pre">Optional[str]</span> <span class="pre">=</span> <span class="pre">None,</span> <span class="pre">annotations:</span> <span class="pre">Optional[envinorma.models.structured_text.Annotations]</span> <span class="pre">=</span> <span class="pre">None,</span> <span class="pre">id:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;,</span> <span class="pre">parametrization:</span> <span class="pre">envinorma.models.structured_text.SectionParametrization</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/envinorma/models/structured_text.html#StructuredText"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#envinorma.models.structured_text.StructuredText" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">StructuredText</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">title:</span> <span class="pre">envinorma.models.text_elements.EnrichedString,</span> <span class="pre">outer_alineas:</span> <span class="pre">List[envinorma.models.text_elements.EnrichedString],</span> <span class="pre">sections:</span> <span class="pre">List[envinorma.models.structured_text.StructuredText],</span> <span class="pre">applicability:</span> <span class="pre">Optional[envinorma.models.structured_text.Applicability],</span> <span class="pre">reference:</span> <span class="pre">Optional[envinorma.models.structured_text.Reference]</span> <span class="pre">=</span> <span class="pre">None,</span> <span class="pre">annotations:</span> <span class="pre">Optional[envinorma.models.structured_text.Annotations]</span> <span class="pre">=</span> <span class="pre">None,</span> <span class="pre">id:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;,</span> <span class="pre">parametrization:</span> <span class="pre">envinorma.models.structured_text.SectionParametrization</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/envinorma/models/structured_text.html#StructuredText"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#envinorma.models.structured_text.StructuredText" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Section of a text. This data structure can contain sections itself.</p>
 <dl class="simple">
@@ -1817,7 +1843,7 @@ of why it is inactive.</p>
 </dd>
 <dt>applicability (Optional[Applicability]):</dt><dd><p>describes the applicability of the text in a certain context</p>
 </dd>
-<dt>reference_str (Optional[str] = None):</dt><dd><p>reference of the current section in the section tree (for human reader)</p>
+<dt>reference (Optional[Reference] = None):</dt><dd><p>reference of the current section in the section tree (for human reader)</p>
 </dd>
 <dt>annotations (Optional[Annotations] = None):</dt><dd><p>misc annotations for enriching purposes</p>
 </dd>
@@ -1862,8 +1888,8 @@ of why it is inactive.</p>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="envinorma.models.structured_text.StructuredText.reference_str">
-<span class="sig-name descname"><span class="pre">reference_str</span></span><em class="property"><span class="pre">:</span> <span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><em class="property"> <span class="pre">=</span> <span class="pre">None</span></em><a class="headerlink" href="#envinorma.models.structured_text.StructuredText.reference_str" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="envinorma.models.structured_text.StructuredText.reference">
+<span class="sig-name descname"><span class="pre">reference</span></span><em class="property"><span class="pre">:</span> <span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#envinorma.models.structured_text.Reference" title="envinorma.models.structured_text.Reference"><span class="pre">envinorma.models.structured_text.Reference</span></a><span class="p"><span class="pre">]</span></span></em><em class="property"> <span class="pre">=</span> <span class="pre">None</span></em><a class="headerlink" href="#envinorma.models.structured_text.StructuredText.reference" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
