@@ -31,6 +31,10 @@ def load_condition(dict_: Dict[str, Any]) -> 'Condition':
     raise ValueError(f'Unknown condition type {type_}')
 
 
+def _sort_conditions(conditions: FrozenSet['Condition']) -> List['Condition']:
+    return sorted(conditions, key=lambda x: str(x))
+
+
 @dataclass(eq=True, frozen=True)
 class AndCondition:
     conditions: FrozenSet['Condition']
@@ -39,7 +43,7 @@ class AndCondition:
     def to_dict(self) -> Dict[str, Any]:
         res = asdict(self)
         res['type'] = self.type.value
-        res['conditions'] = [cd.to_dict() for cd in self.conditions]
+        res['conditions'] = [cd.to_dict() for cd in _sort_conditions(self.conditions)]
         return res
 
     @classmethod
@@ -70,7 +74,7 @@ class OrCondition:
     def to_dict(self) -> Dict[str, Any]:
         res = asdict(self)
         res['type'] = self.type.value
-        res['conditions'] = [cd.to_dict() for cd in self.conditions]
+        res['conditions'] = [cd.to_dict() for cd in _sort_conditions(self.conditions)]
         return res
 
     @classmethod
