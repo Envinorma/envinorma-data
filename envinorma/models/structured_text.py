@@ -1,10 +1,12 @@
 from dataclasses import asdict, dataclass, field
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List, Optional, Union
 
-from envinorma.models.condition import Condition, load_condition
-from envinorma.models.text_elements import EnrichedString
 from envinorma.topics.patterns import TopicName
 from envinorma.utils import random_id
+
+from .condition import Condition, load_condition
+from .helpers.condition_satisfiability import could_be_simultaneously_satisfied_with
+from .text_elements import EnrichedString
 
 
 @dataclass
@@ -87,6 +89,42 @@ class PotentialInapplicability:
         dict_['condition'] = load_condition(dict_['condition'])
         return cls(**dict_)
 
+    def similar_to(self, other: 'PotentialInapplicability') -> bool:
+        """Whether the two potential inapplicabilities are equal except for the condition.
+
+        Returns:
+            whether the two potential inapplicabilities are equal except for the condition.
+        """
+        if self.alineas != other.alineas:
+            return False
+        if self.subsections_are_inapplicable != other.subsections_are_inapplicable:
+            return False
+        return True
+
+    def is_compatible_with(self, other: 'InapplicabilityOrModification') -> bool:
+        """Whether the two objects are compatible.
+
+        The two objects are compatible if they are similar or if the conditions of the object
+        cannot be simultaneously satisfied.
+
+        Returns:
+            Whether the two objects are compatible.
+        """
+        if isinstance(other, PotentialInapplicability):
+            if self.similar_to(other):
+                return True
+        return not could_be_simultaneously_satisfied_with(self.condition, other.condition)
+
+
+def _alinea_content(string: EnrichedString) -> str:
+    if string.table:
+        return string.table.to_html()
+    return string.text
+
+
+def _alineas_content(strings: List[EnrichedString]) -> List[str]:
+    return [_alinea_content(str_) for str_ in strings]
+
 
 @dataclass
 class PotentialModification:
@@ -105,6 +143,35 @@ class PotentialModification:
         dict_['condition'] = load_condition(dict_['condition'])
         dict_['new_version'] = StructuredText.from_dict(dict_['new_version'])
         return cls(**dict_)
+
+    def similar_to(self, other: 'PotentialModification') -> bool:
+        """Whether the two potential modifications are equal except for the condition.
+
+        Returns:
+            whether the two potential modifications are equal except for the condition.
+        """
+        if self.new_version.title.text != other.new_version.title.text:
+            return False
+        if _alineas_content(self.new_version.outer_alineas) != _alineas_content(other.new_version.outer_alineas):
+            return False
+        return True
+
+    def is_compatible_with(self, other: 'InapplicabilityOrModification') -> bool:
+        """Whether the two objects are compatible.
+
+        The two objects are compatible if they are similar or if the conditions of the object
+        cannot be simultaneously satisfied.
+
+        Returns:
+            Whether the two objects are compatible.
+        """
+        if isinstance(other, PotentialModification):
+            if self.similar_to(other):
+                return True
+        return not could_be_simultaneously_satisfied_with(self.condition, other.condition)
+
+
+InapplicabilityOrModification = Union[PotentialInapplicability, PotentialModification]
 
 
 @dataclass
@@ -227,3 +294,10 @@ class StructuredText:
         }
         result[self.id] = [self.title.text]
         return result
+
+    def parametrization_elements_are_compatible(self) -> bool:
+        elts: List[InapplicabilityOrModification] = [
+            *self.parametrization.potential_inapplicabilities,
+            *self.parametrization.potential_modifications,
+        ]
+        return all([elts[i].is_compatible_with(elts[j]) for i in range(len(elts) - 1) for j in range(i + 1, len(elts))])
