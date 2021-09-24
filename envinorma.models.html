@@ -104,6 +104,7 @@
 <li class="toctree-l1"><a class="reference internal" href="envinorma.models.helpers.html">envinorma.models.helpers package</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="envinorma.models.helpers.html#submodules">Submodules</a></li>
 <li class="toctree-l2"><a class="reference internal" href="envinorma.models.helpers.html#module-envinorma.models.helpers.am_transfer_ids">envinorma.models.helpers.am_transfer_ids module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="envinorma.models.helpers.html#module-envinorma.models.helpers.condition_satisfiability">envinorma.models.helpers.condition_satisfiability module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="envinorma.models.helpers.html#module-envinorma.models.helpers.date_helpers">envinorma.models.helpers.date_helpers module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="envinorma.models.helpers.html#module-envinorma.models.helpers">Module contents</a></li>
 </ul>
@@ -1733,6 +1734,28 @@ of why it is inactive.</p>
 <em class="property"><span class="pre">classmethod</span> </em><span class="sig-name descname"><span class="pre">from_dict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dict_</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Dict</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#envinorma.models.structured_text.PotentialInapplicability" title="envinorma.models.structured_text.PotentialInapplicability"><span class="pre">envinorma.models.structured_text.PotentialInapplicability</span></a></span></span><a class="reference internal" href="_modules/envinorma/models/structured_text.html#PotentialInapplicability.from_dict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#envinorma.models.structured_text.PotentialInapplicability.from_dict" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
+<dl class="py method">
+<dt class="sig sig-object py" id="envinorma.models.structured_text.PotentialInapplicability.is_compatible_with">
+<span class="sig-name descname"><span class="pre">is_compatible_with</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#envinorma.models.structured_text.PotentialInapplicability" title="envinorma.models.structured_text.PotentialInapplicability"><span class="pre">envinorma.models.structured_text.PotentialInapplicability</span></a><span class="p"><span class="pre">,</span> </span><a class="reference internal" href="#envinorma.models.structured_text.PotentialModification" title="envinorma.models.structured_text.PotentialModification"><span class="pre">envinorma.models.structured_text.PotentialModification</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="_modules/envinorma/models/structured_text.html#PotentialInapplicability.is_compatible_with"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#envinorma.models.structured_text.PotentialInapplicability.is_compatible_with" title="Permalink to this definition"></a></dt>
+<dd><p>Whether the two objects are compatible.</p>
+<p>The two objects are compatible if they are similar or if the conditions of the object
+cannot be simultaneously satisfied.</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>Whether the two objects are compatible.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="envinorma.models.structured_text.PotentialInapplicability.similar_to">
+<span class="sig-name descname"><span class="pre">similar_to</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="#envinorma.models.structured_text.PotentialInapplicability" title="envinorma.models.structured_text.PotentialInapplicability"><span class="pre">envinorma.models.structured_text.PotentialInapplicability</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="_modules/envinorma/models/structured_text.html#PotentialInapplicability.similar_to"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#envinorma.models.structured_text.PotentialInapplicability.similar_to" title="Permalink to this definition"></a></dt>
+<dd><p>Whether the two potential inapplicabilities are equal except for the condition.</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>whether the two potential inapplicabilities are equal except for the condition.</p>
+</dd>
+</dl>
+</dd></dl>
+
 <dl class="py attribute">
 <dt class="sig sig-object py" id="envinorma.models.structured_text.PotentialInapplicability.subsections_are_inapplicable">
 <span class="sig-name descname"><span class="pre">subsections_are_inapplicable</span></span><em class="property"><span class="pre">:</span> <span class="pre">bool</span></em><a class="headerlink" href="#envinorma.models.structured_text.PotentialInapplicability.subsections_are_inapplicable" title="Permalink to this definition"></a></dt>
@@ -1759,10 +1782,32 @@ of why it is inactive.</p>
 <em class="property"><span class="pre">classmethod</span> </em><span class="sig-name descname"><span class="pre">from_dict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dict_</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Dict</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#envinorma.models.structured_text.PotentialModification" title="envinorma.models.structured_text.PotentialModification"><span class="pre">envinorma.models.structured_text.PotentialModification</span></a></span></span><a class="reference internal" href="_modules/envinorma/models/structured_text.html#PotentialModification.from_dict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#envinorma.models.structured_text.PotentialModification.from_dict" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
+<dl class="py method">
+<dt class="sig sig-object py" id="envinorma.models.structured_text.PotentialModification.is_compatible_with">
+<span class="sig-name descname"><span class="pre">is_compatible_with</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#envinorma.models.structured_text.PotentialInapplicability" title="envinorma.models.structured_text.PotentialInapplicability"><span class="pre">envinorma.models.structured_text.PotentialInapplicability</span></a><span class="p"><span class="pre">,</span> </span><a class="reference internal" href="#envinorma.models.structured_text.PotentialModification" title="envinorma.models.structured_text.PotentialModification"><span class="pre">envinorma.models.structured_text.PotentialModification</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="_modules/envinorma/models/structured_text.html#PotentialModification.is_compatible_with"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#envinorma.models.structured_text.PotentialModification.is_compatible_with" title="Permalink to this definition"></a></dt>
+<dd><p>Whether the two objects are compatible.</p>
+<p>The two objects are compatible if they are similar or if the conditions of the object
+cannot be simultaneously satisfied.</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>Whether the two objects are compatible.</p>
+</dd>
+</dl>
+</dd></dl>
+
 <dl class="py attribute">
 <dt class="sig sig-object py" id="envinorma.models.structured_text.PotentialModification.new_version">
 <span class="sig-name descname"><span class="pre">new_version</span></span><em class="property"><span class="pre">:</span> <a class="reference internal" href="#envinorma.models.structured_text.StructuredText" title="envinorma.models.structured_text.StructuredText"><span class="pre">envinorma.models.structured_text.StructuredText</span></a></em><a class="headerlink" href="#envinorma.models.structured_text.PotentialModification.new_version" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="envinorma.models.structured_text.PotentialModification.similar_to">
+<span class="sig-name descname"><span class="pre">similar_to</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="#envinorma.models.structured_text.PotentialModification" title="envinorma.models.structured_text.PotentialModification"><span class="pre">envinorma.models.structured_text.PotentialModification</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="_modules/envinorma/models/structured_text.html#PotentialModification.similar_to"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#envinorma.models.structured_text.PotentialModification.similar_to" title="Permalink to this definition"></a></dt>
+<dd><p>Whether the two potential modifications are equal except for the condition.</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>whether the two potential modifications are equal except for the condition.</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="envinorma.models.structured_text.PotentialModification.to_dict">
@@ -1885,6 +1930,11 @@ of why it is inactive.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="envinorma.models.structured_text.StructuredText.parametrization">
 <span class="sig-name descname"><span class="pre">parametrization</span></span><em class="property"><span class="pre">:</span> <a class="reference internal" href="#envinorma.models.structured_text.SectionParametrization" title="envinorma.models.structured_text.SectionParametrization"><span class="pre">envinorma.models.structured_text.SectionParametrization</span></a></em><a class="headerlink" href="#envinorma.models.structured_text.StructuredText.parametrization" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="envinorma.models.structured_text.StructuredText.parametrization_elements_are_compatible">
+<span class="sig-name descname"><span class="pre">parametrization_elements_are_compatible</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="_modules/envinorma/models/structured_text.html#StructuredText.parametrization_elements_are_compatible"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#envinorma.models.structured_text.StructuredText.parametrization_elements_are_compatible" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">

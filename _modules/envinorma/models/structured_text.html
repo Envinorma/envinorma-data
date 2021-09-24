@@ -91,12 +91,14 @@
              
   <h1>Source code for envinorma.models.structured_text</h1><div class="highlight"><pre>
 <span></span><span class="kn">from</span> <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">asdict</span><span class="p">,</span> <span class="n">dataclass</span><span class="p">,</span> <span class="n">field</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Union</span>
 
-<span class="kn">from</span> <span class="nn">envinorma.models.condition</span> <span class="kn">import</span> <span class="n">Condition</span><span class="p">,</span> <span class="n">load_condition</span>
-<span class="kn">from</span> <span class="nn">envinorma.models.text_elements</span> <span class="kn">import</span> <span class="n">EnrichedString</span>
 <span class="kn">from</span> <span class="nn">envinorma.topics.patterns</span> <span class="kn">import</span> <span class="n">TopicName</span>
 <span class="kn">from</span> <span class="nn">envinorma.utils</span> <span class="kn">import</span> <span class="n">random_id</span>
+
+<span class="kn">from</span> <span class="nn">.condition</span> <span class="kn">import</span> <span class="n">Condition</span><span class="p">,</span> <span class="n">load_condition</span>
+<span class="kn">from</span> <span class="nn">.helpers.condition_satisfiability</span> <span class="kn">import</span> <span class="n">could_be_simultaneously_satisfied_with</span>
+<span class="kn">from</span> <span class="nn">.text_elements</span> <span class="kn">import</span> <span class="n">EnrichedString</span>
 
 
 <div class="viewcode-block" id="Annotations"><a class="viewcode-back" href="../../../envinorma.models.html#envinorma.models.structured_text.Annotations">[docs]</a><span class="nd">@dataclass</span>
@@ -177,7 +179,43 @@
     <span class="k">def</span> <span class="nf">from_dict</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">dict_</span><span class="p">:</span> <span class="n">Dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s1">&#39;PotentialInapplicability&#39;</span><span class="p">:</span>
         <span class="n">dict_</span> <span class="o">=</span> <span class="n">dict_</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
         <span class="n">dict_</span><span class="p">[</span><span class="s1">&#39;condition&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">load_condition</span><span class="p">(</span><span class="n">dict_</span><span class="p">[</span><span class="s1">&#39;condition&#39;</span><span class="p">])</span>
-        <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="o">**</span><span class="n">dict_</span><span class="p">)</span></div></div>
+        <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="o">**</span><span class="n">dict_</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="PotentialInapplicability.similar_to"><a class="viewcode-back" href="../../../envinorma.models.html#envinorma.models.structured_text.PotentialInapplicability.similar_to">[docs]</a>    <span class="k">def</span> <span class="nf">similar_to</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="s1">&#39;PotentialInapplicability&#39;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Whether the two potential inapplicabilities are equal except for the condition.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            whether the two potential inapplicabilities are equal except for the condition.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">alineas</span> <span class="o">!=</span> <span class="n">other</span><span class="o">.</span><span class="n">alineas</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">subsections_are_inapplicable</span> <span class="o">!=</span> <span class="n">other</span><span class="o">.</span><span class="n">subsections_are_inapplicable</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span>
+        <span class="k">return</span> <span class="kc">True</span></div>
+
+<div class="viewcode-block" id="PotentialInapplicability.is_compatible_with"><a class="viewcode-back" href="../../../envinorma.models.html#envinorma.models.structured_text.PotentialInapplicability.is_compatible_with">[docs]</a>    <span class="k">def</span> <span class="nf">is_compatible_with</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="s1">&#39;InapplicabilityOrModification&#39;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Whether the two objects are compatible.</span>
+
+<span class="sd">        The two objects are compatible if they are similar or if the conditions of the object</span>
+<span class="sd">        cannot be simultaneously satisfied.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Whether the two objects are compatible.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="n">PotentialInapplicability</span><span class="p">):</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">similar_to</span><span class="p">(</span><span class="n">other</span><span class="p">):</span>
+                <span class="k">return</span> <span class="kc">True</span>
+        <span class="k">return</span> <span class="ow">not</span> <span class="n">could_be_simultaneously_satisfied_with</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">condition</span><span class="p">,</span> <span class="n">other</span><span class="o">.</span><span class="n">condition</span><span class="p">)</span></div></div>
+
+
+<span class="k">def</span> <span class="nf">_alinea_content</span><span class="p">(</span><span class="n">string</span><span class="p">:</span> <span class="n">EnrichedString</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">string</span><span class="o">.</span><span class="n">table</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">string</span><span class="o">.</span><span class="n">table</span><span class="o">.</span><span class="n">to_html</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">string</span><span class="o">.</span><span class="n">text</span>
+
+
+<span class="k">def</span> <span class="nf">_alineas_content</span><span class="p">(</span><span class="n">strings</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">EnrichedString</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+    <span class="k">return</span> <span class="p">[</span><span class="n">_alinea_content</span><span class="p">(</span><span class="n">str_</span><span class="p">)</span> <span class="k">for</span> <span class="n">str_</span> <span class="ow">in</span> <span class="n">strings</span><span class="p">]</span>
 
 
 <div class="viewcode-block" id="PotentialModification"><a class="viewcode-back" href="../../../envinorma.models.html#envinorma.models.structured_text.PotentialModification">[docs]</a><span class="nd">@dataclass</span>
@@ -196,7 +234,36 @@
         <span class="n">dict_</span> <span class="o">=</span> <span class="n">dict_</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
         <span class="n">dict_</span><span class="p">[</span><span class="s1">&#39;condition&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">load_condition</span><span class="p">(</span><span class="n">dict_</span><span class="p">[</span><span class="s1">&#39;condition&#39;</span><span class="p">])</span>
         <span class="n">dict_</span><span class="p">[</span><span class="s1">&#39;new_version&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">StructuredText</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">dict_</span><span class="p">[</span><span class="s1">&#39;new_version&#39;</span><span class="p">])</span>
-        <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="o">**</span><span class="n">dict_</span><span class="p">)</span></div></div>
+        <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="o">**</span><span class="n">dict_</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="PotentialModification.similar_to"><a class="viewcode-back" href="../../../envinorma.models.html#envinorma.models.structured_text.PotentialModification.similar_to">[docs]</a>    <span class="k">def</span> <span class="nf">similar_to</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="s1">&#39;PotentialModification&#39;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Whether the two potential modifications are equal except for the condition.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            whether the two potential modifications are equal except for the condition.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">new_version</span><span class="o">.</span><span class="n">title</span><span class="o">.</span><span class="n">text</span> <span class="o">!=</span> <span class="n">other</span><span class="o">.</span><span class="n">new_version</span><span class="o">.</span><span class="n">title</span><span class="o">.</span><span class="n">text</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span>
+        <span class="k">if</span> <span class="n">_alineas_content</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">new_version</span><span class="o">.</span><span class="n">outer_alineas</span><span class="p">)</span> <span class="o">!=</span> <span class="n">_alineas_content</span><span class="p">(</span><span class="n">other</span><span class="o">.</span><span class="n">new_version</span><span class="o">.</span><span class="n">outer_alineas</span><span class="p">):</span>
+            <span class="k">return</span> <span class="kc">False</span>
+        <span class="k">return</span> <span class="kc">True</span></div>
+
+<div class="viewcode-block" id="PotentialModification.is_compatible_with"><a class="viewcode-back" href="../../../envinorma.models.html#envinorma.models.structured_text.PotentialModification.is_compatible_with">[docs]</a>    <span class="k">def</span> <span class="nf">is_compatible_with</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="s1">&#39;InapplicabilityOrModification&#39;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Whether the two objects are compatible.</span>
+
+<span class="sd">        The two objects are compatible if they are similar or if the conditions of the object</span>
+<span class="sd">        cannot be simultaneously satisfied.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Whether the two objects are compatible.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="n">PotentialModification</span><span class="p">):</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">similar_to</span><span class="p">(</span><span class="n">other</span><span class="p">):</span>
+                <span class="k">return</span> <span class="kc">True</span>
+        <span class="k">return</span> <span class="ow">not</span> <span class="n">could_be_simultaneously_satisfied_with</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">condition</span><span class="p">,</span> <span class="n">other</span><span class="o">.</span><span class="n">condition</span><span class="p">)</span></div></div>
+
+
+<span class="n">InapplicabilityOrModification</span> <span class="o">=</span> <span class="n">Union</span><span class="p">[</span><span class="n">PotentialInapplicability</span><span class="p">,</span> <span class="n">PotentialModification</span><span class="p">]</span>
 
 
 <div class="viewcode-block" id="SectionParametrization"><a class="viewcode-back" href="../../../envinorma.models.html#envinorma.models.structured_text.SectionParametrization">[docs]</a><span class="nd">@dataclass</span>
@@ -318,7 +385,14 @@
             <span class="k">for</span> <span class="n">section_id</span><span class="p">,</span> <span class="n">titles_sequence</span> <span class="ow">in</span> <span class="n">section</span><span class="o">.</span><span class="n">titles_sequences</span><span class="p">()</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
         <span class="p">}</span>
         <span class="n">result</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">title</span><span class="o">.</span><span class="n">text</span><span class="p">]</span>
-        <span class="k">return</span> <span class="n">result</span></div></div>
+        <span class="k">return</span> <span class="n">result</span></div>
+
+<div class="viewcode-block" id="StructuredText.parametrization_elements_are_compatible"><a class="viewcode-back" href="../../../envinorma.models.html#envinorma.models.structured_text.StructuredText.parametrization_elements_are_compatible">[docs]</a>    <span class="k">def</span> <span class="nf">parametrization_elements_are_compatible</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="n">elts</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">InapplicabilityOrModification</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">parametrization</span><span class="o">.</span><span class="n">potential_inapplicabilities</span><span class="p">,</span>
+            <span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">parametrization</span><span class="o">.</span><span class="n">potential_modifications</span><span class="p">,</span>
+        <span class="p">]</span>
+        <span class="k">return</span> <span class="nb">all</span><span class="p">([</span><span class="n">elts</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">is_compatible_with</span><span class="p">(</span><span class="n">elts</span><span class="p">[</span><span class="n">j</span><span class="p">])</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">elts</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">elts</span><span class="p">))])</span></div></div>
 </pre></div>
 
            </div>

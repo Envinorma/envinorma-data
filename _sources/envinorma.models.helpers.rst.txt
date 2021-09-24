@@ -12,6 +12,14 @@ envinorma.models.helpers.am\_transfer\_ids module
    :undoc-members:
    :show-inheritance:
 
+envinorma.models.helpers.condition\_satisfiability module
+---------------------------------------------------------
+
+.. automodule:: envinorma.models.helpers.condition_satisfiability
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 envinorma.models.helpers.date\_helpers module
 ---------------------------------------------
 

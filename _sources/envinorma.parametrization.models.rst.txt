@@ -12,14 +12,6 @@ envinorma.parametrization.models.parametrization module
    :undoc-members:
    :show-inheritance:
 
-envinorma.parametrization.models.parametrization\_old module
-------------------------------------------------------------
-
-.. automodule:: envinorma.parametrization.models.parametrization_old
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
 Module contents
 ---------------
 
